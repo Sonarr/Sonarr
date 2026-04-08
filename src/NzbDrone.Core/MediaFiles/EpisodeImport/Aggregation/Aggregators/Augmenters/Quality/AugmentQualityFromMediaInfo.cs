@@ -47,35 +47,35 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augment
 
             if (width >= 3200 || height >= 2100)
             {
-                _logger.Trace("Resolution {0}x{1} considered 2160p", width, height);
+                _logger.Trace("Resolution {Width}x{Height} considered 2160p", width, height);
                 return AugmentQualityResult.SourceAndResolutionOnly(source, sourceConfidence, 2160, Confidence.MediaInfo);
             }
 
             if (width >= 1800 || height >= 1000)
             {
-                _logger.Trace("Resolution {0}x{1} considered 1080p", width, height);
+                _logger.Trace("Resolution {Width}x{Height} considered 1080p", width, height);
                 return AugmentQualityResult.SourceAndResolutionOnly(source, sourceConfidence, 1080, Confidence.MediaInfo);
             }
 
             if (width >= 1200 || height >= 700)
             {
-                _logger.Trace("Resolution {0}x{1} considered 720p", width, height);
+                _logger.Trace("Resolution {Width}x{Height} considered 720p", width, height);
                 return AugmentQualityResult.SourceAndResolutionOnly(source, sourceConfidence, 720, Confidence.MediaInfo);
             }
 
             if (width >= 1000 || height >= 560)
             {
-                _logger.Trace("Resolution {0}x{1} considered 576p", width, height);
+                _logger.Trace("Resolution {Width}x{Height} considered 576p", width, height);
                 return AugmentQualityResult.SourceAndResolutionOnly(source, sourceConfidence, 576, Confidence.MediaInfo);
             }
 
             if (width > 0 && height > 0)
             {
-                _logger.Trace("Resolution {0}x{1} considered 480p", width, height);
+                _logger.Trace("Resolution {Width}x{Height} considered 480p", width, height);
                 return AugmentQualityResult.SourceAndResolutionOnly(source, sourceConfidence, 480, Confidence.MediaInfo);
             }
 
-            _logger.Trace("Resolution {0}x{1}", width, height);
+            _logger.Trace("Resolution {Width}x{Height}", width, height);
 
             return null;
         }

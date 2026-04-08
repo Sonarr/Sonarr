@@ -66,19 +66,19 @@ namespace NzbDrone.Core.MediaFiles
 
             if (!_diskProvider.FolderExists(rootFolder))
             {
-                _logger.Warn("Series' root folder ({0}) doesn't exist.", rootFolder);
+                _logger.Warn("Series' root folder ({RootFolderPath}) doesn't exist.", rootFolder);
                 throw new NzbDroneClientException(HttpStatusCode.Conflict, "Series' root folder ({0}) doesn't exist.", rootFolder);
             }
 
             if (_diskProvider.GetDirectories(rootFolder).Empty())
             {
-                _logger.Warn("Series' root folder ({0}) is empty.", rootFolder);
+                _logger.Warn("Series' root folder ({RootFolderPath}) is empty.", rootFolder);
                 throw new NzbDroneClientException(HttpStatusCode.Conflict, "Series' root folder ({0}) is empty.", rootFolder);
             }
 
             if (_diskProvider.FolderExists(series.Path) && _diskProvider.FileExists(fullPath))
             {
-                _logger.Info("Deleting episode file: {0}", fullPath);
+                _logger.Info("Deleting episode file: {FilePath}", fullPath);
 
                 var subfolder = _diskProvider.GetParentFolder(series.Path).GetRelativePath(_diskProvider.GetParentFolder(fullPath));
 
@@ -108,11 +108,11 @@ namespace NzbDrone.Core.MediaFiles
                     var series = _seriesService.GetSeries(seriesId);
                     var mediaFiles = _mediaFileService.GetFilesBySeries(seriesId);
 
-                    _logger.ProgressDebug("{0}: Deleting episode files}", series.Title);
+                    _logger.ProgressDebug("{SeriesTitle}: Deleting episode files", series.Title);
 
                     if (mediaFiles.Count == 0)
                     {
-                        _logger.Debug("No files found for series: {0}", series.Title);
+                        _logger.Debug("No files found for series: {SeriesTitle}", series.Title);
                         continue;
                     }
 
@@ -120,21 +120,21 @@ namespace NzbDrone.Core.MediaFiles
 
                     if (!_diskProvider.FolderExists(rootFolder))
                     {
-                        _logger.Warn("Series' root folder ({0}) doesn't exist.", rootFolder);
+                        _logger.Warn("Series' root folder ({RootFolderPath}) doesn't exist.", rootFolder);
                         _commandResultReporter.Report(CommandResult.Indeterminate);
                         continue;
                     }
 
                     if (_diskProvider.GetDirectories(rootFolder).Empty())
                     {
-                        _logger.Warn("Series' root folder ({0}) is empty.", rootFolder);
+                        _logger.Warn("Series' root folder ({RootFolderPath}) is empty.", rootFolder);
                         _commandResultReporter.Report(CommandResult.Indeterminate);
                         continue;
                     }
 
                     if (!_diskProvider.FolderExists(series.Path))
                     {
-                        _logger.Warn("Series' folder ({0}) does not exist.", series.Path);
+                        _logger.Warn("Series' folder ({SeriesPath}) does not exist.", series.Path);
                         _commandResultReporter.Report(CommandResult.Indeterminate);
                         continue;
                     }
@@ -145,7 +145,7 @@ namespace NzbDrone.Core.MediaFiles
 
                         if (_diskProvider.FileExists(fullPath))
                         {
-                            _logger.Info("Deleting episode file: {0}", fullPath);
+                            _logger.Info("Deleting episode file: {FilePath}", fullPath);
 
                             var subfolder = _diskProvider.GetParentFolder(series.Path).GetRelativePath(_diskProvider.GetParentFolder(fullPath));
 
@@ -164,11 +164,11 @@ namespace NzbDrone.Core.MediaFiles
                         }
                     }
 
-                    _logger.ProgressDebug("{0}: Deleted episode files", series.Title);
+                    _logger.ProgressDebug("{SeriesTitle}: Deleted episode files", series.Title);
                 }
                 catch (Exception ex)
                 {
-                    _logger.Warn(ex, "Unable to delete files for series with ID: {0}", seriesId);
+                    _logger.Warn(ex, "Unable to delete files for series with ID: {SeriesId}", seriesId);
                     _commandResultReporter.Report(CommandResult.Indeterminate);
                 }
             }
@@ -191,13 +191,13 @@ namespace NzbDrone.Core.MediaFiles
 
                         if (series.Path.IsParentPath(s.Value))
                         {
-                            _logger.Error("Series path: '{0}' is a parent of another series, not deleting files.", series.Path);
+                            _logger.Error("Series path: '{SeriesPath}' is a parent of another series, not deleting files.", series.Path);
                             return;
                         }
 
                         if (series.Path.PathEquals(s.Value))
                         {
-                            _logger.Error("Series path: '{0}' is the same as another series, not deleting files.", series.Path);
+                            _logger.Error("Series path: '{SeriesPath}' is the same as another series, not deleting files.", series.Path);
                             return;
                         }
                     }

@@ -32,7 +32,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         {
             if (localEpisode.ExistingFile)
             {
-                _logger.Debug("{0} is in series folder, skipping check", localEpisode.Path);
+                _logger.Debug("{FilePath} is in series folder, skipping check", localEpisode.Path);
                 return ImportSpecDecision.Accept();
             }
 

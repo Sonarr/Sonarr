@@ -63,13 +63,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                     // If the release was imported after the last grab reject it
                     if (lastImported.Date.After(lastGrabbed.Date))
                     {
-                        _logger.Debug("Episode file previously imported at {0}", lastImported.Date);
+                        _logger.Debug("Episode file previously imported at {ImportDate}", lastImported.Date);
                         return ImportSpecDecision.Reject(ImportRejectionReason.EpisodeAlreadyImported, "Episode file already imported at {0}", lastImported.Date.ToLocalTime());
                     }
                 }
                 else
                 {
-                    _logger.Debug("Episode file previously imported at {0}", lastImported.Date);
+                    _logger.Debug("Episode file previously imported at {ImportDate}", lastImported.Date);
                     return ImportSpecDecision.Reject(ImportRejectionReason.EpisodeAlreadyImported, "Episode file already imported at {0}", lastImported.Date.ToLocalTime());
                 }
             }

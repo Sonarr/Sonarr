@@ -52,7 +52,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
             if (subtitleTitleInfo.TitleFirst && (episodeFileTitle.Contains(subtitleTitleInfo.RawTitle, StringComparison.OrdinalIgnoreCase) || originalEpisodeFileTitle.Contains(subtitleTitleInfo.RawTitle, StringComparison.OrdinalIgnoreCase)))
             {
-                _logger.Debug("Subtitle title '{0}' is in episode file title '{1}'. Removing from subtitle title.", subtitleTitleInfo.RawTitle, episodeFileTitle);
+                _logger.Debug("Subtitle title '{SubtitleTitle}' is in episode file title '{EpisodeFileTitle}'. Removing from subtitle title.", subtitleTitleInfo.RawTitle, episodeFileTitle);
 
                 subtitleTitleInfo = LanguageParser.ParseBasicSubtitle(path);
             }
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
             if (cleanedTags.Count != subtitleTitleInfo.LanguageTags.Count)
             {
-                _logger.Debug("Removed language tags '{0}' from subtitle title '{1}'.", string.Join(", ", subtitleTitleInfo.LanguageTags.Except(cleanedTags)), subtitleTitleInfo.RawTitle);
+                _logger.Debug("Removed language tags '{LanguageTags}' from subtitle title '{SubtitleTitle}'.", string.Join(", ", subtitleTitleInfo.LanguageTags.Except(cleanedTags)), subtitleTitleInfo.RawTitle);
                 subtitleTitleInfo.LanguageTags = cleanedTags;
             }
 

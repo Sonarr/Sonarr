@@ -39,7 +39,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
                     continue;
                 }
 
-                _logger.Trace("Considering Source {0} ({1}) Resolution {2} ({3}) Revision {4} from {5}", augmentedQuality.Source, augmentedQuality.SourceConfidence, augmentedQuality.Resolution, augmentedQuality.ResolutionConfidence, augmentedQuality.Revision, augmentQuality.Name);
+                _logger.Trace("Considering Source {Source} ({SourceConfidence}) Resolution {Resolution} ({ResolutionConfidence}) Revision {Revision} from {AugmenterName}", augmentedQuality.Source, augmentedQuality.SourceConfidence, augmentedQuality.Resolution, augmentedQuality.ResolutionConfidence, augmentedQuality.Revision, augmentQuality.Name);
 
                 if (source == QualitySource.Unknown ||
                     (augmentedQuality.SourceConfidence > sourceConfidence && augmentedQuality.Source != QualitySource.Unknown))
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 }
             }
 
-            _logger.Trace("Selected Source {0} ({1}) Resolution {2} ({3}) Revision {4}", source, sourceConfidence, resolution, resolutionConfidence, revision);
+            _logger.Trace("Selected Source {Source} ({SourceConfidence}) Resolution {Resolution} ({ResolutionConfidence}) Revision {Revision}", source, sourceConfidence, resolution, resolutionConfidence, revision);
 
             var quality = new QualityModel(QualityFinder.FindBySourceAndResolution(source, resolution), revision);
 
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
             quality.RevisionDetectionSource = revisionConfidence == Confidence.Tag ? QualityDetectionSource.Name : QualityDetectionSource.Unknown;
 
-            _logger.Debug("Using quality: {0}", quality);
+            _logger.Debug("Using quality: {Quality}", quality);
 
             localEpisode.Quality = quality;
 

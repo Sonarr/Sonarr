@@ -106,17 +106,17 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
             if (fileRuntime.TotalMinutes.Equals(0))
             {
-                _logger.Error("[{0}] has a runtime of 0, is it a valid video file?", path);
+                _logger.Error("[{FilePath}] has a runtime of 0, is it a valid video file?", path);
                 return DetectSampleResult.Sample;
             }
 
             if (fileRuntime.TotalSeconds < minimumRuntime)
             {
-                _logger.Debug("[{0}] appears to be a sample. Runtime: {1} seconds. Expected at least: {2} seconds", path, fileRuntime, minimumRuntime);
+                _logger.Debug("[{FilePath}] appears to be a sample. Runtime: {Runtime} seconds. Expected at least: {MinimumRuntime} seconds", path, fileRuntime, minimumRuntime);
                 return DetectSampleResult.Sample;
             }
 
-            _logger.Debug("[{0}] does not appear to be a sample. Runtime {1} seconds is more than minimum of {2} seconds", path, fileRuntime, minimumRuntime);
+            _logger.Debug("[{FilePath}] does not appear to be a sample. Runtime {Runtime} seconds is more than minimum of {MinimumRuntime} seconds", path, fileRuntime, minimumRuntime);
             return DetectSampleResult.NotSample;
         }
 

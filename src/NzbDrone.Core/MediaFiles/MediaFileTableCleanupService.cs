@@ -44,14 +44,14 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     if (!filesOnDiskKeys.Contains(episodeFilePath))
                     {
-                        _logger.Debug("File [{0}] no longer exists on disk, removing from db", episodeFilePath);
+                        _logger.Debug("File [{FilePath}] no longer exists on disk, removing from db", episodeFilePath);
                         _mediaFileService.Delete(seriesFile, DeleteMediaFileReason.MissingFromDisk);
                         continue;
                     }
 
                     if (episodes.None(e => e.EpisodeFileId == episodeFile.Id))
                     {
-                        _logger.Debug("File [{0}] is not assigned to any episodes, removing from db", episodeFilePath);
+                        _logger.Debug("File [{FilePath}] is not assigned to any episodes, removing from db", episodeFilePath);
                         _mediaFileService.Delete(episodeFile, DeleteMediaFileReason.NoLinkedEpisodes);
                         continue;
                     }
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, "Unable to cleanup EpisodeFile in DB: {0}", episodeFile.Id);
+                    _logger.Error(ex, "Unable to cleanup EpisodeFile in DB: {EpisodeFileId}", episodeFile.Id);
                 }
             }
 

@@ -151,7 +151,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             if (languageParse.Count <= 1 && languageParse.First() == Language.Unknown && series != null)
             {
                 languageParse = new List<Language> { series.OriginalLanguage };
-                _logger.Debug("Language couldn't be parsed from release, falling back to series original language: {0}", series.OriginalLanguage.Name);
+                _logger.Debug("Language couldn't be parsed from release, falling back to series original language: {OriginalLanguage}", series.OriginalLanguage.Name);
             }
 
             if (episodeIds.Any())
@@ -362,7 +362,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             }
             catch (Exception ex)
             {
-                _logger.Warn(ex, "Failed to process file: {0}", file);
+                _logger.Warn(ex, "Failed to process file: {FilePath}", file);
             }
 
             return new ManualImportItem
@@ -427,11 +427,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
                 if (seasons.Empty())
                 {
-                    _logger.Warn("Expected one season, but found none for: {0}", decision.LocalEpisode.Path);
+                    _logger.Warn("Expected one season, but found none for: {FilePath}", decision.LocalEpisode.Path);
                 }
                 else if (seasons.Count > 1)
                 {
-                    _logger.Warn("Expected one season, but found {0} ({1}) for: {2}", seasons.Count, string.Join(", ", seasons), decision.LocalEpisode.Path);
+                    _logger.Warn("Expected one season, but found {SeasonCount} ({Seasons}) for: {FilePath}", seasons.Count, string.Join(", ", seasons), decision.LocalEpisode.Path);
                 }
                 else
                 {
@@ -484,7 +484,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
         public void Execute(ManualImportCommand message)
         {
-            _logger.ProgressTrace("Manually importing {0} files using mode {1}", message.Files.Count, message.ImportMode);
+            _logger.ProgressTrace("Manually importing {FileCount} files using mode {ImportMode}", message.Files.Count, message.ImportMode);
 
             var imported = new List<ImportResult>();
             var importedTrackedDownload = new List<ManuallyImportedFile>();
@@ -492,7 +492,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
             for (var i = 0; i < message.Files.Count; i++)
             {
-                _logger.ProgressTrace("Processing file {0} of {1}", i + 1, message.Files.Count);
+                _logger.ProgressTrace("Processing file {CurrentFile} of {TotalFiles}", i + 1, message.Files.Count);
 
                 var file = message.Files[i];
                 var series = _seriesService.GetSeries(file.SeriesId);
@@ -571,7 +571,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
             if (imported.Any())
             {
-                _logger.ProgressTrace("Manually imported {0} files", imported.Count);
+                _logger.ProgressTrace("Manually imported {FileCount} files", imported.Count);
             }
 
             var untrackedImports = importedUntrackedDownload.Where(i => i.Result == ImportResultType.Imported).ToList();

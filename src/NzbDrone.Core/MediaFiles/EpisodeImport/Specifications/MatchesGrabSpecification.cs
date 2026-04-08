@@ -35,7 +35,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
             if (unexpected.Any())
             {
-                _logger.Debug("Unexpected episode(s) in file: {0}", FormatEpisode(unexpected));
+                _logger.Debug("Unexpected episode(s) in file: {Episodes}", FormatEpisode(unexpected));
 
                 if (unexpected.Count == 1)
                 {

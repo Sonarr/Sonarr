@@ -75,7 +75,7 @@ namespace NzbDrone.Core.MediaFiles
 
             EnsureEpisodeFolder(episodeFile, series, episodes.Select(v => v.SeasonNumber).First(), filePath);
 
-            _logger.Debug("Renaming episode file: {0} to {1}", episodeFile, filePath);
+            _logger.Debug("Renaming episode file: {SourcePath} to {DestinationPath}", episodeFile, filePath);
 
             return TransferFile(episodeFile, series, episodes, filePath, TransferMode.Move);
         }
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.MediaFiles
 
             EnsureEpisodeFolder(episodeFile, localEpisode, filePath);
 
-            _logger.Debug("Moving episode file: {0} to {1}", episodeFile.Path, filePath);
+            _logger.Debug("Moving episode file: {SourcePath} to {DestinationPath}", episodeFile.Path, filePath);
 
             return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, TransferMode.Move, localEpisode);
         }
@@ -99,11 +99,11 @@ namespace NzbDrone.Core.MediaFiles
 
             if (_configService.CopyUsingHardlinks)
             {
-                _logger.Debug("Attempting to hardlink episode file: {0} to {1}", episodeFile.Path, filePath);
+                _logger.Debug("Attempting to hardlink episode file: {SourcePath} to {DestinationPath}", episodeFile.Path, filePath);
                 return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, TransferMode.HardLinkOrCopy, localEpisode);
             }
 
-            _logger.Debug("Copying episode file: {0} to {1}", episodeFile.Path, filePath);
+            _logger.Debug("Copying episode file: {SourcePath} to {DestinationPath}", episodeFile.Path, filePath);
             return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, TransferMode.Copy, localEpisode);
         }
 
@@ -242,7 +242,7 @@ namespace NzbDrone.Core.MediaFiles
             }
             catch (IOException ex)
             {
-                _logger.Error(ex, "Unable to create directory: {0}", directoryName);
+                _logger.Error(ex, "Unable to create directory: {DirectoryPath}", directoryName);
             }
 
             _mediaFileAttributeService.SetFolderPermissions(directoryName);

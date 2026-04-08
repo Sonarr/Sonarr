@@ -54,7 +54,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             try
             {
-                _logger.Debug("Getting media info from {0}", filename);
+                _logger.Debug("Getting media info from {FilePath}", filename);
 
                 var analysis = FFProbe.Analyse(filename, customArguments: "-probesize 50000000");
                 var primaryVideoStream = GetPrimaryVideoStream(analysis);
@@ -165,7 +165,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to parse media info from file: {0}", filename);
+                _logger.Error(ex, "Unable to parse media info from file: {FilePath}", filename);
             }
 
             return null;

@@ -84,20 +84,20 @@ namespace NzbDrone.Core.MediaFiles
             {
                 if (!_diskProvider.FolderExists(rootFolder))
                 {
-                    _logger.Warn("Series' root folder ({0}) doesn't exist.", rootFolder);
+                    _logger.Warn("Series' root folder ({RootFolderPath}) doesn't exist.", rootFolder);
                     _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RootFolderDoesNotExist));
                     return;
                 }
 
                 if (_diskProvider.FolderEmpty(rootFolder))
                 {
-                    _logger.Warn("Series' root folder ({0}) is empty.", rootFolder);
+                    _logger.Warn("Series' root folder ({RootFolderPath}) is empty.", rootFolder);
                     _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RootFolderIsEmpty));
                     return;
                 }
             }
 
-            _logger.ProgressInfo("Scanning {0}", series.Title);
+            _logger.ProgressInfo("Scanning {SeriesTitle}", series.Title);
 
             if (!seriesFolderExists)
             {
@@ -105,11 +105,11 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     if (_configService.DeleteEmptyFolders)
                     {
-                        _logger.Debug("Not creating missing series folder: {0} because delete empty series folders is enabled", series.Path);
+                        _logger.Debug("Not creating missing series folder: {SeriesPath} because delete empty series folders is enabled", series.Path);
                     }
                     else
                     {
-                        _logger.Debug("Creating missing series folder: {0}", series.Path);
+                        _logger.Debug("Creating missing series folder: {SeriesPath}", series.Path);
 
                         _diskProvider.CreateFolder(series.Path);
                         SetPermissions(series.Path);
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
                 else
                 {
-                    _logger.Debug("Series folder doesn't exist: {0}", series.Path);
+                    _logger.Debug("Series folder doesn't exist: {SeriesPath}", series.Path);
                 }
 
                 CleanMediaFiles(series, new List<string>());
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.MediaFiles
             var videoFilesStopwatch = Stopwatch.StartNew();
             var mediaFileList = FilterPaths(series.Path, GetVideoFiles(series.Path)).ToList();
             videoFilesStopwatch.Stop();
-            _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
+            _logger.Trace("Finished getting episode files for: {SeriesTitle} [{Elapsed}]", series, videoFilesStopwatch.Elapsed);
 
             CleanMediaFiles(series, mediaFileList);
 
@@ -139,7 +139,7 @@ namespace NzbDrone.Core.MediaFiles
             var decisionsStopwatch = Stopwatch.StartNew();
             var decisions = _importDecisionMaker.GetImportDecisions(unmappedFiles, series, false);
             decisionsStopwatch.Stop();
-            _logger.Trace("Import decisions complete for: {0} [{1}]", series, decisionsStopwatch.Elapsed);
+            _logger.Trace("Import decisions complete for: {SeriesTitle} [{Elapsed}]", series, decisionsStopwatch.Elapsed);
             _importApprovedEpisodes.Import(decisions, false);
 
             // Update existing files that have a different file size
@@ -172,7 +172,7 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             fileInfoStopwatch.Stop();
-            _logger.Trace("Reprocessing existing files complete for: {0} [{1}]", series, decisionsStopwatch.Elapsed);
+            _logger.Trace("Reprocessing existing files complete for: {SeriesTitle} [{Elapsed}]", series, decisionsStopwatch.Elapsed);
 
             RemoveEmptySeriesFolder(series.Path);
 
@@ -189,42 +189,42 @@ namespace NzbDrone.Core.MediaFiles
 
         private void CleanMediaFiles(Series series, List<string> mediaFileList)
         {
-            _logger.Debug("{0} Cleaning up media files in DB", series);
+            _logger.Debug("{SeriesTitle} Cleaning up media files in DB", series);
             _mediaFileTableCleanupService.Clean(series, mediaFileList);
         }
 
         private void CompletedScanning(Series series, List<string> possibleExtraFiles)
         {
-            _logger.Info("Completed scanning disk for {0}", series.Title);
+            _logger.Info("Completed scanning disk for {SeriesTitle}", series.Title);
             _eventAggregator.PublishEvent(new SeriesScannedEvent(series, possibleExtraFiles));
         }
 
         public string[] GetVideoFiles(string path, bool allDirectories = true)
         {
-            _logger.Debug("Scanning '{0}' for video files", path);
+            _logger.Debug("Scanning '{FolderPath}' for video files", path);
 
             var filesOnDisk = _diskProvider.GetFiles(path, allDirectories).ToList();
 
             var mediaFileList = filesOnDisk.Where(file => MediaFileExtensions.Extensions.Contains(Path.GetExtension(file)))
                                            .ToList();
 
-            _logger.Trace("{0} files were found in {1}", filesOnDisk.Count, path);
-            _logger.Debug("{0} video files were found in {1}", mediaFileList.Count, path);
+            _logger.Trace("{FileCount} files were found in {FolderPath}", filesOnDisk.Count, path);
+            _logger.Debug("{VideoFileCount} video files were found in {FolderPath}", mediaFileList.Count, path);
 
             return mediaFileList.ToArray();
         }
 
         public string[] GetNonVideoFiles(string path, bool allDirectories = true)
         {
-            _logger.Debug("Scanning '{0}' for non-video files", path);
+            _logger.Debug("Scanning '{FolderPath}' for non-video files", path);
 
             var filesOnDisk = _diskProvider.GetFiles(path, allDirectories).ToList();
 
             var mediaFileList = filesOnDisk.Where(file => !MediaFileExtensions.Extensions.Contains(Path.GetExtension(file)))
                                            .ToList();
 
-            _logger.Trace("{0} files were found in {1}", filesOnDisk.Count, path);
-            _logger.Debug("{0} non-video files were found in {1}", mediaFileList.Count, path);
+            _logger.Trace("{FileCount} files were found in {FolderPath}", filesOnDisk.Count, path);
+            _logger.Debug("{NonVideoFileCount} non-video files were found in {FolderPath}", mediaFileList.Count, path);
 
             return mediaFileList.ToArray();
         }

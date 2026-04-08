@@ -105,7 +105,7 @@ namespace NzbDrone.Core.MediaFiles
 
                 if (!episodesInFile.Any())
                 {
-                    _logger.Warn("File ({0}) is not linked to any episodes", episodeFilePath);
+                    _logger.Warn("File ({FilePath}) is not linked to any episodes", episodeFilePath);
                     continue;
                 }
 
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.MediaFiles
 
                 try
                 {
-                    _logger.Debug("Renaming episode file: {0}", episodeFile);
+                    _logger.Debug("Renaming episode file: {FileName}", episodeFile);
                     _episodeFileMover.MoveEpisodeFile(episodeFile, series);
 
                     _mediaFileService.Update(episodeFile);
@@ -150,21 +150,21 @@ namespace NzbDrone.Core.MediaFiles
                                     PreviousPath = previousPath
                                 });
 
-                    _logger.Debug("Renamed episode file: {0}", episodeFile);
+                    _logger.Debug("Renamed episode file: {FileName}", episodeFile);
 
                     _eventAggregator.PublishEvent(new EpisodeFileRenamedEvent(series, episodeFile, previousPath));
                 }
                 catch (FileAlreadyExistsException ex)
                 {
-                    _logger.Warn("File not renamed, there is already a file at the destination: {0}", ex.Filename);
+                    _logger.Warn("File not renamed, there is already a file at the destination: {DestinationPath}", ex.Filename);
                 }
                 catch (SameFilenameException ex)
                 {
-                    _logger.Debug("File not renamed, source and destination are the same: {0}", ex.Filename);
+                    _logger.Debug("File not renamed, source and destination are the same: {FilePath}", ex.Filename);
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, "Failed to rename file {0}", previousPath);
+                    _logger.Error(ex, "Failed to rename file {FilePath}", previousPath);
                 }
             }
 
@@ -183,9 +183,9 @@ namespace NzbDrone.Core.MediaFiles
             var series = _seriesService.GetSeries(message.SeriesId);
             var episodeFiles = _mediaFileService.Get(message.Files);
 
-            _logger.ProgressInfo("Renaming {0} files for {1}", episodeFiles.Count, series.Title);
+            _logger.ProgressInfo("Renaming {FileCount} files for {SeriesTitle}", episodeFiles.Count, series.Title);
             var renamedFiles = RenameFiles(episodeFiles, series);
-            _logger.ProgressInfo("{0} selected episode files renamed for {1}", renamedFiles.Count, series.Title);
+            _logger.ProgressInfo("{RenamedCount} selected episode files renamed for {SeriesTitle}", renamedFiles.Count, series.Title);
 
             _eventAggregator.PublishEvent(new RenameCompletedEvent());
         }
@@ -198,9 +198,9 @@ namespace NzbDrone.Core.MediaFiles
             foreach (var series in seriesToRename)
             {
                 var episodeFiles = _mediaFileService.GetFilesBySeries(series.Id);
-                _logger.ProgressInfo("Renaming all files in series: {0}", series.Title);
+                _logger.ProgressInfo("Renaming all files in series: {SeriesTitle}", series.Title);
                 var renamedFiles = RenameFiles(episodeFiles, series);
-                _logger.ProgressInfo("{0} episode files renamed for {1}", renamedFiles.Count, series.Title);
+                _logger.ProgressInfo("{RenamedCount} episode files renamed for {SeriesTitle}", renamedFiles.Count, series.Title);
             }
 
             _eventAggregator.PublishEvent(new RenameCompletedEvent());

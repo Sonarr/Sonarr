@@ -79,7 +79,7 @@ namespace NzbDrone.Core.MediaFiles
 
         public List<ImportResult> ProcessPath(string path, ImportMode importMode = ImportMode.Auto, Series series = null, DownloadClientItem downloadClientItem = null)
         {
-            _logger.Debug("Processing path: {0}", path);
+            _logger.Debug("Processing path: {FilePath}", path);
 
             if (_diskProvider.FolderExists(path))
             {
@@ -124,14 +124,14 @@ namespace NzbDrone.Core.MediaFiles
 
                     if (episodeParseResult == null)
                     {
-                        _logger.Warn("Unable to parse file on import: [{0}]", videoFile);
+                        _logger.Warn("Unable to parse file on import: [{FilePath}]", videoFile);
                         return false;
                     }
 
                     if (_detectSample.IsSample(series, videoFile, episodeParseResult.IsPossibleSpecialEpisode) !=
                         DetectSampleResult.Sample)
                     {
-                        _logger.Warn("Non-sample file detected: [{0}]", videoFile);
+                        _logger.Warn("Non-sample file detected: [{FilePath}]", videoFile);
                         return false;
                     }
                 }
@@ -146,12 +146,12 @@ namespace NzbDrone.Core.MediaFiles
             }
             catch (DirectoryNotFoundException e)
             {
-                _logger.Debug(e, "Folder {0} has already been removed", directoryInfo.FullName);
+                _logger.Debug(e, "Folder {FolderPath} has already been removed", directoryInfo.FullName);
                 return false;
             }
             catch (Exception e)
             {
-                _logger.Debug(e, "Unable to determine whether folder {0} should be removed", directoryInfo.FullName);
+                _logger.Debug(e, "Unable to determine whether folder {FolderPath} should be removed", directoryInfo.FullName);
                 return false;
             }
         }
@@ -163,7 +163,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (series == null)
             {
-                _logger.Debug("Unknown Series {0}", cleanedUpName);
+                _logger.Debug("Unknown Series {SeriesTitle}", cleanedUpName);
 
                 return new List<ImportResult>
                        {
@@ -233,7 +233,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
                 catch (IOException e)
                 {
-                    _logger.Debug(e, "Unable to delete folder after importing: {0}", e.Message);
+                    _logger.Debug(e, "Unable to delete folder after importing: {Message}", e.Message);
                 }
             }
             else if (importResults.Empty())
@@ -250,7 +250,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (series == null)
             {
-                _logger.Debug("Unknown Series for file: {0}", fileInfo.Name);
+                _logger.Debug("Unknown Series for file: {FileName}", fileInfo.Name);
 
                 return new List<ImportResult>
                        {
@@ -265,7 +265,7 @@ namespace NzbDrone.Core.MediaFiles
         {
             if (Path.GetFileNameWithoutExtension(fileInfo.Name).StartsWith("._"))
             {
-                _logger.Debug("[{0}] starts with '._', skipping", fileInfo.FullName);
+                _logger.Debug("[{FilePath}] starts with '._', skipping", fileInfo.FullName);
 
                 return new List<ImportResult>
                        {
@@ -318,7 +318,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (extension.IsNullOrWhiteSpace() || !MediaFileExtensions.Extensions.Contains(extension))
             {
-                _logger.Debug("[{0}] has an unsupported extension: '{1}'", fileInfo.FullName, extension);
+                _logger.Debug("[{FilePath}] has an unsupported extension: '{Extension}'", fileInfo.FullName, extension);
 
                 return new List<ImportResult>
                        {
@@ -355,7 +355,7 @@ namespace NzbDrone.Core.MediaFiles
 
         private ImportResult FileIsLockedResult(string videoFile)
         {
-            _logger.Debug("[{0}] is currently locked by another process, skipping", videoFile);
+            _logger.Debug("[{FilePath}] is currently locked by another process, skipping", videoFile);
             return new ImportResult(new ImportDecision(new LocalEpisode { Path = videoFile }, new ImportRejection(ImportRejectionReason.FileLocked, "Locked file, try again later")), "Locked file, try again later");
         }
 
@@ -402,13 +402,13 @@ namespace NzbDrone.Core.MediaFiles
 
                 if (mount == null)
                 {
-                    _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {0}. Unable to find a volume mounted for the path. If you're using a mapped network drive see the FAQ for more info", path);
+                    _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {FilePath}. Unable to find a volume mounted for the path. If you're using a mapped network drive see the FAQ for more info", path);
                     return;
                 }
 
                 if (mount.DriveType == DriveType.Network)
                 {
-                    _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {0}. It's recommended to avoid mapped network drives when running as a Windows service. See the FAQ for more info", path);
+                    _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {FilePath}. It's recommended to avoid mapped network drives when running as a Windows service. See the FAQ for more info", path);
                     return;
                 }
             }
@@ -417,12 +417,12 @@ namespace NzbDrone.Core.MediaFiles
             {
                 if (path.StartsWith(@"\\"))
                 {
-                    _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {0}. Ensure the user running Sonarr has access to the network share", path);
+                    _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {FilePath}. Ensure the user running Sonarr has access to the network share", path);
                     return;
                 }
             }
 
-            _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {0}. Ensure the path exists and the user running Sonarr has the correct permissions to access this file/folder", path);
+            _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {FilePath}. Ensure the path exists and the user running Sonarr has the correct permissions to access this file/folder", path);
         }
     }
 }

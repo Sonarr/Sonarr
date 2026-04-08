@@ -40,41 +40,41 @@ namespace NzbDrone.Core.MediaFiles
 
         public void DeleteFolder(string path)
         {
-            _logger.Info("Attempting to send '{0}' to recycling bin", path);
+            _logger.Info("Attempting to send '{FolderPath}' to recycling bin", path);
             var recyclingBin = _configService.RecycleBin;
 
             if (string.IsNullOrWhiteSpace(recyclingBin))
             {
-                _logger.Info("Recycling Bin has not been configured, deleting permanently. {0}", path);
+                _logger.Info("Recycling Bin has not been configured, deleting permanently. {FolderPath}", path);
                 _diskProvider.DeleteFolder(path, true);
-                _logger.Debug("Folder has been permanently deleted: {0}", path);
+                _logger.Debug("Folder has been permanently deleted: {FolderPath}", path);
             }
             else
             {
                 var destination = Path.Combine(recyclingBin, new DirectoryInfo(path).Name);
 
-                _logger.Debug("Moving '{0}' to '{1}'", path, destination);
+                _logger.Debug("Moving '{SourcePath}' to '{DestinationPath}'", path, destination);
                 _diskTransferService.TransferFolder(path, destination, TransferMode.Move);
 
-                _logger.Debug("Setting last accessed: {0}", path);
+                _logger.Debug("Setting last accessed: {FolderPath}", path);
                 _diskProvider.FolderSetLastWriteTime(destination, DateTime.UtcNow);
                 foreach (var file in _diskProvider.GetFiles(destination, true))
                 {
                     SetLastWriteTime(file, DateTime.UtcNow);
                 }
 
-                _logger.Debug("Folder has been moved to the recycling bin: {0}", destination);
+                _logger.Debug("Folder has been moved to the recycling bin: {DestinationPath}", destination);
             }
         }
 
         public string DeleteFile(string path, string subfolder = "")
         {
-            _logger.Debug("Attempting to send '{0}' to recycling bin", path);
+            _logger.Debug("Attempting to send '{FilePath}' to recycling bin", path);
             var recyclingBin = _configService.RecycleBin;
 
             if (string.IsNullOrWhiteSpace(recyclingBin))
             {
-                _logger.Info("Recycling Bin has not been configured, deleting permanently. {0}", path);
+                _logger.Info("Recycling Bin has not been configured, deleting permanently. {FilePath}", path);
 
                 if (OsInfo.IsWindows)
                 {
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
 
                 _diskProvider.DeleteFile(path);
-                _logger.Debug("File has been permanently deleted: {0}", path);
+                _logger.Debug("File has been permanently deleted: {FilePath}", path);
 
                 return null;
             }
@@ -94,12 +94,12 @@ namespace NzbDrone.Core.MediaFiles
 
                 try
                 {
-                    _logger.Debug("Creating folder {0}", destinationFolder);
+                    _logger.Debug("Creating folder {FolderPath}", destinationFolder);
                     _diskProvider.CreateFolder(destinationFolder);
                 }
                 catch (IOException e)
                 {
-                    _logger.Error(e, "Unable to create the folder '{0}' in the recycling bin for the file '{1}'", destinationFolder, fileInfo.Name);
+                    _logger.Error(e, "Unable to create the folder '{FolderPath}' in the recycling bin for the file '{FileName}'", destinationFolder, fileInfo.Name);
                     throw new RecycleBinException($"Unable to create the folder '{destinationFolder}' in the recycling bin for the file '{fileInfo.Name}'", e);
                 }
 
@@ -119,18 +119,18 @@ namespace NzbDrone.Core.MediaFiles
 
                 try
                 {
-                    _logger.Debug("Moving '{0}' to '{1}'", path, destination);
+                    _logger.Debug("Moving '{SourcePath}' to '{DestinationPath}'", path, destination);
                     _diskTransferService.TransferFile(path, destination, TransferMode.Move);
                 }
                 catch (IOException e)
                 {
-                    _logger.Error(e, "Unable to move '{0}' to the recycling bin: '{1}'", path, destination);
+                    _logger.Error(e, "Unable to move '{SourcePath}' to the recycling bin: '{DestinationPath}'", path, destination);
                     throw new RecycleBinException($"Unable to move '{path}' to the recycling bin: '{destination}'", e);
                 }
 
                 SetLastWriteTime(destination, DateTime.UtcNow);
 
-                _logger.Debug("File has been moved to the recycling bin: {0}", destination);
+                _logger.Debug("File has been moved to the recycling bin: {DestinationPath}", destination);
 
                 return destination;
             }
@@ -175,7 +175,7 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            _logger.Info("Removing items older than {0} days from the recycling bin", cleanupDays);
+            _logger.Info("Removing items older than {CleanupDays} days from the recycling bin", cleanupDays);
 
             var removedFiles = new List<string>();
             var skippedFiles = new List<string>();
@@ -184,19 +184,19 @@ namespace NzbDrone.Core.MediaFiles
             {
                 if (_diskProvider.FileGetLastWrite(file).AddDays(cleanupDays) > DateTime.UtcNow)
                 {
-                    _logger.Debug("File hasn't expired yet, skipping: {0}", file);
+                    _logger.Debug("File hasn't expired yet, skipping: {FilePath}", file);
                     skippedFiles.Add(file);
                     continue;
                 }
 
                 removedFiles.Add(file);
-                _logger.Debug("File expired, deleting: {0}", file);
+                _logger.Debug("File expired, deleting: {FilePath}", file);
                 _diskProvider.DeleteFile(file);
             }
 
             _diskProvider.RemoveEmptySubfolders(_configService.RecycleBin);
 
-            _logger.Debug("Recycling Bin has been cleaned up. Removed: {0}. Skipped: {1}", removedFiles.Count, skippedFiles.Count);
+            _logger.Debug("Recycling Bin has been cleaned up. Removed: {RemovedCount}. Skipped: {SkippedCount}", removedFiles.Count, skippedFiles.Count);
         }
 
         private void SetLastWriteTime(string file, DateTime dateTime)
@@ -204,16 +204,16 @@ namespace NzbDrone.Core.MediaFiles
             // Swallow any IOException that may be thrown due to "Invalid parameter"
             try
             {
-                _logger.Trace("Setting last write time for file: {0}", file);
+                _logger.Trace("Setting last write time for file: {FilePath}", file);
                 _diskProvider.FileSetLastWriteTime(file, dateTime);
             }
             catch (IOException ex)
             {
-                _logger.Warn(ex, "Failed to set last write time for file: {0}", file);
+                _logger.Warn(ex, "Failed to set last write time for file: {FilePath}", file);
             }
             catch (UnauthorizedAccessException ex)
             {
-                _logger.Warn(ex, "Failed to set last write time for file: {0}", file);
+                _logger.Warn(ex, "Failed to set last write time for file: {FilePath}", file);
             }
         }
 

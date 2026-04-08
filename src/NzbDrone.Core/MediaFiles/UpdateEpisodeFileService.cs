@@ -87,7 +87,7 @@ namespace NzbDrone.Core.MediaFiles
                     var mtime = localDate.WithTicksFrom(oldLastWrite);
 
                     _diskProvider.FileSetLastWriteTime(filePath, mtime);
-                    _logger.Debug("Date of file [{0}] changed from '{1}' to '{2}'", filePath, oldLastWrite, mtime);
+                    _logger.Debug("Date of file [{FilePath}] changed from '{OldDate}' to '{NewDate}'", filePath, oldLastWrite, mtime);
 
                     return true;
                 }
@@ -127,11 +127,11 @@ namespace NzbDrone.Core.MediaFiles
 
             if (updated.Any())
             {
-                _logger.ProgressDebug("Changed file date for {0} files of {1} in {2}", updated.Count, episodeFiles.Count, message.Series.Title);
+                _logger.ProgressDebug("Changed file date for {UpdatedCount} files of {TotalCount} in {SeriesTitle}", updated.Count, episodeFiles.Count, message.Series.Title);
             }
             else
             {
-                _logger.ProgressDebug("No file dates changed for {0}", message.Series.Title);
+                _logger.ProgressDebug("No file dates changed for {SeriesTitle}", message.Series.Title);
             }
         }
     }

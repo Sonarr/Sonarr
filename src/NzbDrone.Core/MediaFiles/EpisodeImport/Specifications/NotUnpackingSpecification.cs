@@ -26,7 +26,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         {
             if (localEpisode.ExistingFile)
             {
-                _logger.Debug("{0} is in series folder, skipping unpacking check", localEpisode.Path);
+                _logger.Debug("{FilePath} is in series folder, skipping unpacking check", localEpisode.Path);
                 return ImportSpecDecision.Accept();
             }
 
@@ -39,13 +39,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                     {
                         if (OsInfo.IsNotWindows)
                         {
-                            _logger.Debug("{0} is still being unpacked", localEpisode.Path);
+                            _logger.Debug("{FilePath} is still being unpacked", localEpisode.Path);
                             return ImportSpecDecision.Reject(ImportRejectionReason.Unpacking, "File is still being unpacked");
                         }
 
                         if (_diskProvider.FileGetLastWrite(localEpisode.Path) > DateTime.UtcNow.AddMinutes(-5))
                         {
-                            _logger.Debug("{0} appears to be unpacking still", localEpisode.Path);
+                            _logger.Debug("{FilePath} appears to be unpacking still", localEpisode.Path);
                             return ImportSpecDecision.Reject(ImportRejectionReason.Unpacking, "File is still being unpacked");
                         }
                     }

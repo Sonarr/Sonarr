@@ -70,7 +70,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         {
             var newFiles = filterExistingFiles ? _mediaFileService.FilterExistingFiles(videoFiles.ToList(), series) : videoFiles.ToList();
 
-            _logger.Debug("Analyzing {0}/{1} files.", newFiles.Count, videoFiles.Count);
+            _logger.Debug("Analyzing {NewFileCount}/{TotalFileCount} files.", newFiles.Count, videoFiles.Count);
 
             // If not importing from a scene source (series folder for example), then assume all files are not samples
             // to avoid using media info on every file needlessly (especially if Analyse Media Files is disabled).
@@ -161,18 +161,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Couldn't import file. {0}", localEpisode.Path);
+                _logger.Error(ex, "Couldn't import file. {FilePath}", localEpisode.Path);
 
                 decision = new ImportDecision(localEpisode, new ImportRejection(ImportRejectionReason.Error, "Unexpected error processing file"));
             }
 
             if (decision == null)
             {
-                _logger.Error("Unable to make a decision on {0}", localEpisode.Path);
+                _logger.Error("Unable to make a decision on {FilePath}", localEpisode.Path);
             }
             else if (decision.Rejections.Any())
             {
-                _logger.Debug("File rejected for the following reasons: {0}", string.Join(", ", decision.Rejections));
+                _logger.Debug("File rejected for the following reasons: {Rejections}", string.Join(", ", decision.Rejections));
             }
             else
             {
@@ -197,7 +197,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             {
                 // e.Data.Add("report", remoteEpisode.Report.ToJson());
                 // e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
-                _logger.Error(e, "Couldn't evaluate decision on {0}", localEpisode.Path);
+                _logger.Error(e, "Couldn't evaluate decision on {FilePath}", localEpisode.Path);
                 return new ImportRejection(ImportRejectionReason.DecisionError, $"{spec.GetType().Name}: {e.Message}");
             }
 

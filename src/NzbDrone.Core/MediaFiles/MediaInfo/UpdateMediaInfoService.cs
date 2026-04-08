@@ -73,7 +73,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             if (!_diskProvider.FileExists(path))
             {
-                _logger.Debug("Can't update MediaInfo because '{0}' does not exist", path);
+                _logger.Debug("Can't update MediaInfo because '{FilePath}' does not exist", path);
                 return false;
             }
 
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 _mediaFileService.Update(episodeFile);
             }
 
-            _logger.Debug("Updated MediaInfo for '{0}'", path);
+            _logger.Debug("Updated MediaInfo for '{FilePath}'", path);
 
             return true;
         }

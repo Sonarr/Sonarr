@@ -35,7 +35,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
                     continue;
                 }
 
-                _logger.Trace("Considering Languages {0} ({1}) from {2}", string.Join(", ", augmentedLanguage.Languages ?? new List<Language>()), augmentedLanguage.Confidence, augmentLanguage.Name);
+                _logger.Trace("Considering Languages {Languages} ({Confidence}) from {AugmenterName}", string.Join(", ", augmentedLanguage.Languages ?? new List<Language>()), augmentedLanguage.Confidence, augmentLanguage.Name);
 
                 if (augmentedLanguage?.Languages != null &&
                     augmentedLanguage.Languages.Count > 0 &&
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 }
             }
 
-            _logger.Debug("Selected languages: {0}", string.Join(", ", languages.ToList()));
+            _logger.Debug("Selected languages: {Languages}", string.Join(", ", languages.ToList()));
 
             localEpisode.Languages = languages;
 

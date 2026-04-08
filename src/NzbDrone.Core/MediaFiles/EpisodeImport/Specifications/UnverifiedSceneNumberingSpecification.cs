@@ -23,7 +23,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
             if (localEpisode.Episodes.Any(v => v.UnverifiedSceneNumbering))
             {
-                _logger.Debug("This file uses unverified scene numbers, will not auto-import until numbering is confirmed on TheXEM. Skipping {0}", localEpisode.Path);
+                _logger.Debug("This file uses unverified scene numbers, will not auto-import until numbering is confirmed on TheXEM. Skipping {FilePath}", localEpisode.Path);
                 return ImportSpecDecision.Reject(ImportRejectionReason.UnverifiedSceneMapping, "This show has individual episode mappings on TheXEM but the mapping for this episode has not been confirmed yet by their administrators. TheXEM needs manual input.");
             }
 

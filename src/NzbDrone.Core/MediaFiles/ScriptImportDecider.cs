@@ -84,7 +84,7 @@ namespace NzbDrone.Core.MediaFiles
 
                     if (!_diskProvider.FileExists(fileName))
                     {
-                        _logger.Warn("Script output contains non-existent possible extra file: {0}", fileName);
+                        _logger.Warn("Script output contains non-existent possible extra file: {FilePath}", fileName);
                     }
 
                     possibleExtraFiles.Add(fileName);
@@ -197,11 +197,11 @@ namespace NzbDrone.Core.MediaFiles
                 environmentVariables.Add("Sonarr_DeletedRecycleBinPaths", string.Join("|", oldFiles.Select(e => e.RecycleBinPath ?? string.Empty)));
             }
 
-            _logger.Debug("Executing external script: {0}", _configService.ScriptImportPath);
+            _logger.Debug("Executing external script: {ScriptPath}", _configService.ScriptImportPath);
 
             var processOutput = _processProvider.StartAndCapture(_configService.ScriptImportPath, $"\"{sourcePath}\" \"{destinationFilePath}\"", environmentVariables);
 
-            _logger.Debug("Script Output: \r\n{0}", string.Join("\r\n", processOutput.Lines));
+            _logger.Debug("Script Output: \r\n{ScriptOutput}", string.Join("\r\n", processOutput.Lines));
 
             if (processOutput.ExitCode != 0)
             {
