@@ -1,66 +1,42 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AutoTaggingAppState } from 'App/State/SettingsAppState';
+import React, { useCallback, useState } from 'react';
 import Card from 'Components/Card';
 import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { icons } from 'Helpers/Props';
-import {
-  cloneAutoTagging,
-  deleteAutoTagging,
-  fetchAutoTaggings,
-} from 'Store/Actions/settingsActions';
-import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
 import { useTagList } from 'Tags/useTags';
-import AutoTaggingModel from 'typings/AutoTagging';
-import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
 import AutoTagging from './AutoTagging';
 import EditAutoTaggingModal from './EditAutoTaggingModal';
+import { useSortedAutoTaggings } from './useAutoTaggings';
 import styles from './AutoTaggings.css';
 
 export default function AutoTaggings() {
-  const { error, items, isDeleting, isFetching, isPopulated } = useSelector(
-    createSortedSectionSelector<AutoTaggingModel, AutoTaggingAppState>(
-      'settings.autoTaggings',
-      sortByProp('name')
-    )
-  );
+  const {
+    data: items,
+    error,
+    isFetching,
+    isFetched: isPopulated,
+  } = useSortedAutoTaggings();
 
   const tagList = useTagList();
-  const dispatch = useDispatch();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [tagsFromId, setTagsFromId] = useState<number>();
+  const [cloneId, setCloneId] = useState<number>();
 
-  const onClonePress = useCallback(
-    (id: number) => {
-      dispatch(cloneAutoTagging({ id }));
-
-      setTagsFromId(id);
-      setIsEditModalOpen(true);
-    },
-    [dispatch, setIsEditModalOpen]
-  );
+  const onClonePress = useCallback((id: number) => {
+    setCloneId(id);
+    setIsEditModalOpen(true);
+  }, []);
 
   const onEditPress = useCallback(() => {
+    setCloneId(undefined);
     setIsEditModalOpen(true);
-  }, [setIsEditModalOpen]);
+  }, []);
 
   const onEditModalClose = useCallback(() => {
     setIsEditModalOpen(false);
-  }, [setIsEditModalOpen]);
-
-  const onConfirmDelete = useCallback(
-    (id: number) => {
-      dispatch(deleteAutoTagging({ id }));
-    },
-    [dispatch]
-  );
-
-  useEffect(() => {
-    dispatch(fetchAutoTaggings());
-  }, [dispatch]);
+    setCloneId(undefined);
+  }, []);
 
   return (
     <FieldSet legend={translate('AutoTagging')}>
@@ -76,9 +52,7 @@ export default function AutoTaggings() {
               <AutoTagging
                 key={item.id}
                 {...item}
-                isDeleting={isDeleting}
                 tagList={tagList}
-                onConfirmDeleteAutoTagging={onConfirmDelete}
                 onCloneAutoTaggingPress={onClonePress}
               />
             );
@@ -93,7 +67,7 @@ export default function AutoTaggings() {
 
         <EditAutoTaggingModal
           isOpen={isEditModalOpen}
-          tagsFromId={tagsFromId}
+          cloneId={cloneId}
           onModalClose={onEditModalClose}
         />
       </PageSectionContent>

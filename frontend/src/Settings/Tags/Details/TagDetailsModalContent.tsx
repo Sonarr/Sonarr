@@ -15,6 +15,7 @@ import useSeries from 'Series/useSeries';
 import { useIndexersWithIds } from 'Settings/Indexers/useIndexers';
 import { useConnectionsWithIds } from 'Settings/Notifications/useConnections';
 import { useReleaseProfilesWithIds } from 'Settings/Profiles/Release/useReleaseProfiles';
+import { useAutoTaggingsWithIds } from 'Settings/Tags/AutoTagging/useAutoTaggings';
 import translate from 'Utilities/String/translate';
 import TagDetailsDelayProfile from './TagDetailsDelayProfile';
 import styles from './TagDetailsModalContent.css';
@@ -109,12 +110,7 @@ function TagDetailsModalContent({
     )
   );
 
-  const autoTags = useSelector(
-    createMatchingItemSelector(
-      autoTagIds,
-      (state: AppState) => state.settings.autoTaggings.items
-    )
-  );
+  const autoTags = useAutoTaggingsWithIds(autoTagIds);
 
   return (
     <ModalContent onModalClose={onModalClose}>

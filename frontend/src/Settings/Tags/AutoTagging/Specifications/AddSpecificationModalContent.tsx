@@ -1,6 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
+import React, { useCallback } from 'react';
 import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -9,59 +7,50 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
-import {
-  fetchAutoTaggingSpecificationSchema,
-  selectAutoTaggingSpecificationSchema,
-} from 'Store/Actions/settingsActions';
 import translate from 'Utilities/String/translate';
+import {
+  AutoTaggingSpecification,
+  useAutoTaggingSchema,
+} from '../useAutoTaggings';
 import AddSpecificationItem from './AddSpecificationItem';
 import styles from './AddSpecificationModalContent.css';
 
 interface AddSpecificationModalContentProps {
-  onModalClose: (options?: { specificationSelected: boolean }) => void;
+  onModalClose: (selectedSpec?: AutoTaggingSpecification) => void;
 }
 
 export default function AddSpecificationModalContent({
   onModalClose,
 }: AddSpecificationModalContentProps) {
-  const { isSchemaFetching, isSchemaPopulated, schemaError, schema } =
-    useSelector((state: AppState) => state.settings.autoTaggingSpecifications);
-
-  const dispatch = useDispatch();
+  const { schema, isSchemaFetching, schemaError } = useAutoTaggingSchema();
 
   const onSpecificationSelect = useCallback(
     ({ implementation }: { implementation: string }) => {
-      dispatch(
-        selectAutoTaggingSpecificationSchema({
-          implementation,
-          presetName: name,
-        })
-      );
-      onModalClose({ specificationSelected: true });
+      const selected = schema.find((s) => s.implementation === implementation);
+
+      if (selected) {
+        onModalClose(selected);
+      }
     },
-    [dispatch, onModalClose]
+    [schema, onModalClose]
   );
 
   const handleModalClose = useCallback(() => {
     onModalClose();
   }, [onModalClose]);
 
-  useEffect(() => {
-    dispatch(fetchAutoTaggingSpecificationSchema());
-  }, [dispatch]);
-
   return (
-    <ModalContent onModalClose={onModalClose}>
+    <ModalContent onModalClose={handleModalClose}>
       <ModalHeader>{translate('AddCondition')}</ModalHeader>
 
       <ModalBody>
         {isSchemaFetching ? <LoadingIndicator /> : null}
 
-        {!isSchemaFetching && !!schemaError ? (
+        {!isSchemaFetching && schemaError ? (
           <Alert kind={kinds.DANGER}>{translate('AddConditionError')}</Alert>
         ) : null}
 
-        {isSchemaPopulated && !schemaError ? (
+        {!isSchemaFetching && !schemaError && schema.length ? (
           <div>
             <Alert kind={kinds.INFO}>
               <div>{translate('SupportedAutoTaggingProperties')}</div>
