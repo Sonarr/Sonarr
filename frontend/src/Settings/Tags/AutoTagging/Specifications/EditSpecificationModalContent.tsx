@@ -1,6 +1,4 @@
-import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AutoTaggingSpecificationAppState } from 'App/State/SettingsAppState';
+import React, { useCallback, useMemo } from 'react';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -14,80 +12,128 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import { usePendingChangesStore } from 'Helpers/Hooks/usePendingChangesStore';
+import { usePendingFieldsStore } from 'Helpers/Hooks/usePendingFieldsStore';
 import { inputTypes, kinds } from 'Helpers/Props';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
-import {
-  clearAutoTaggingSpecificationPending,
-  saveAutoTaggingSpecification,
-  setAutoTaggingSpecificationFieldValue,
-  setAutoTaggingSpecificationValue,
-} from 'Store/Actions/settingsActions';
-import { createProviderSettingsSelectorHook } from 'Store/Selectors/createProviderSettingsSelector';
-import { AutoTaggingSpecification } from 'typings/AutoTagging';
+import selectSettings from 'Store/Selectors/selectSettings';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
+import { AutoTaggingSpecification } from '../useAutoTaggings';
 import styles from './EditSpecificationModalContent.css';
 
-export interface EditSpecificationModalContentProps {
-  id?: number;
+interface EditSpecificationModalContentProps {
+  specification: AutoTaggingSpecification;
+  onSave: (spec: AutoTaggingSpecification) => void;
   onDeleteSpecificationPress?: () => void;
   onModalClose: () => void;
 }
 
 function EditSpecificationModalContent({
-  id,
+  specification,
+  onSave,
   onDeleteSpecificationPress,
   onModalClose,
 }: EditSpecificationModalContentProps) {
   const advancedSettings = useShowAdvancedSettings();
 
-  const { item, ...otherFormProps } = useSelector(
-    createProviderSettingsSelectorHook<
-      AutoTaggingSpecification,
-      AutoTaggingSpecificationAppState
-    >('autoTaggingSpecifications', id)
-  );
+  const { pendingChanges, setPendingChange, clearPendingChanges } =
+    usePendingChangesStore<AutoTaggingSpecification>({});
 
-  const dispatch = useDispatch();
+  const {
+    pendingFields,
+    setPendingField,
+    hasPendingFields,
+    clearPendingFields,
+  } = usePendingFieldsStore();
+
+  const {
+    settings: item,
+    validationErrors,
+    validationWarnings,
+  } = useMemo(() => {
+    const combinedPendingChanges = hasPendingFields
+      ? {
+          ...pendingChanges,
+          fields: Object.fromEntries(pendingFields),
+        }
+      : pendingChanges;
+
+    return selectSettings(specification, combinedPendingChanges);
+  }, [specification, pendingChanges, pendingFields, hasPendingFields]);
 
   const onInputChange = useCallback(
     ({ name, value }: InputChanged) => {
-      // @ts-expect-error - actions are not typed
-      dispatch(setAutoTaggingSpecificationValue({ name, value }));
+      setPendingChange(
+        name as keyof AutoTaggingSpecification,
+        value as AutoTaggingSpecification[keyof AutoTaggingSpecification]
+      );
     },
-    [dispatch]
+    [setPendingChange]
   );
 
   const onFieldChange = useCallback(
     ({ name, value }: InputChanged) => {
-      // @ts-expect-error - actions are not typed
-      dispatch(setAutoTaggingSpecificationFieldValue({ name, value }));
+      setPendingField(name, value);
     },
-    [dispatch]
+    [setPendingField]
   );
 
+  const onDeletePress = useCallback(() => {
+    if (onDeleteSpecificationPress) {
+      onDeleteSpecificationPress();
+    }
+  }, [onDeleteSpecificationPress]);
+
   const onCancelPress = useCallback(() => {
-    dispatch(clearAutoTaggingSpecificationPending());
+    clearPendingChanges();
+    clearPendingFields();
     onModalClose();
-  }, [dispatch, onModalClose]);
+  }, [clearPendingChanges, clearPendingFields, onModalClose]);
 
   const onSavePress = useCallback(() => {
-    dispatch(saveAutoTaggingSpecification({ id }));
+    let updatedSpec: AutoTaggingSpecification = {
+      ...specification,
+      ...pendingChanges,
+    };
+
+    if (hasPendingFields) {
+      updatedSpec = {
+        ...updatedSpec,
+        fields: specification.fields.map((f) =>
+          pendingFields.has(f.name)
+            ? { ...f, value: pendingFields.get(f.name) as typeof f.value }
+            : f
+        ),
+      };
+    }
+
+    onSave(updatedSpec);
     onModalClose();
-  }, [dispatch, id, onModalClose]);
+  }, [
+    specification,
+    pendingChanges,
+    pendingFields,
+    hasPendingFields,
+    onSave,
+    onModalClose,
+  ]);
 
   const { implementationName, name, negate, required, fields } = item;
 
   return (
     <ModalContent onModalClose={onCancelPress}>
       <ModalHeader>
-        {id
+        {specification.id
           ? translate('EditConditionImplementation', { implementationName })
           : translate('AddConditionImplementation', { implementationName })}
       </ModalHeader>
 
       <ModalBody>
-        <Form {...otherFormProps}>
+        <Form
+          validationErrors={validationErrors}
+          validationWarnings={validationWarnings}
+        >
           {fields && fields.some((x) => x.label === 'Regular Expression') && (
             <Alert kind={kinds.INFO}>
               <div>
@@ -167,11 +213,11 @@ function EditSpecificationModalContent({
         </Form>
       </ModalBody>
       <ModalFooter>
-        {id ? (
+        {specification.id ? (
           <Button
             className={styles.deleteButton}
             kind={kinds.DANGER}
-            onPress={onDeleteSpecificationPress}
+            onPress={onDeletePress}
           >
             {translate('Delete')}
           </Button>
