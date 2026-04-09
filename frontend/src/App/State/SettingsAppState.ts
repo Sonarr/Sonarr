@@ -5,7 +5,6 @@ import AppSectionState, {
   AppSectionSaveState,
   AppSectionSchemaState,
 } from 'App/State/AppSectionState';
-import AutoTagging, { AutoTaggingSpecification } from 'typings/AutoTagging';
 import CustomFormat from 'typings/CustomFormat';
 import CustomFormatSpecification from 'typings/CustomFormatSpecification';
 import DelayProfile from 'typings/DelayProfile';
@@ -17,17 +16,6 @@ import DownloadClientOptions from 'typings/Settings/DownloadClientOptions';
 type Presets<T> = T & {
   presets: T[];
 };
-
-export interface AutoTaggingAppState
-  extends AppSectionState<AutoTagging>,
-    AppSectionDeleteState,
-    AppSectionSaveState {}
-
-export interface AutoTaggingSpecificationAppState
-  extends AppSectionState<AutoTaggingSpecification>,
-    AppSectionDeleteState,
-    AppSectionSaveState,
-    AppSectionSchemaState<AutoTaggingSpecification> {}
 
 export interface DelayProfileAppState
   extends AppSectionListState<DelayProfile>,
@@ -70,8 +58,6 @@ export interface ImportListOptionsSettingsAppState
     AppSectionSaveState {}
 
 interface SettingsAppState {
-  autoTaggings: AutoTaggingAppState;
-  autoTaggingSpecifications: AutoTaggingSpecificationAppState;
   customFormats: CustomFormatAppState;
   customFormatSpecifications: CustomFormatSpecificationAppState;
   delayProfiles: DelayProfileAppState;

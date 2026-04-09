@@ -1,37 +1,35 @@
-import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import Modal from 'Components/Modal/Modal';
 import { sizes } from 'Helpers/Props';
-import { clearPendingChanges } from 'Store/Actions/baseActions';
-import EditSpecificationModalContent, {
-  EditSpecificationModalContentProps,
-} from './EditSpecificationModalContent';
+import { AutoTaggingSpecification } from '../useAutoTaggings';
+import EditSpecificationModalContent from './EditSpecificationModalContent';
 
-interface EditSpecificationModalProps
-  extends EditSpecificationModalContentProps {
+interface EditSpecificationModalProps {
   isOpen: boolean;
+  specification: AutoTaggingSpecification | null;
+  onSave: (spec: AutoTaggingSpecification) => void;
+  onDeleteSpecificationPress?: () => void;
   onModalClose: () => void;
 }
 
 function EditSpecificationModal({
   isOpen,
+  specification,
+  onSave,
+  onDeleteSpecificationPress,
   onModalClose,
-  ...otherProps
 }: EditSpecificationModalProps) {
-  const dispatch = useDispatch();
-
-  const onWrappedModalClose = useCallback(() => {
-    dispatch(
-      clearPendingChanges({ section: 'settings.autoTaggingSpecifications' })
-    );
-    onModalClose();
-  }, [onModalClose, dispatch]);
+  if (!specification) {
+    return null;
+  }
 
   return (
     <Modal size={sizes.MEDIUM} isOpen={isOpen} onModalClose={onModalClose}>
       <EditSpecificationModalContent
-        {...otherProps}
-        onModalClose={onWrappedModalClose}
+        specification={specification}
+        onSave={onSave}
+        onDeleteSpecificationPress={onDeleteSpecificationPress}
+        onModalClose={onModalClose}
       />
     </Modal>
   );
