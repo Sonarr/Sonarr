@@ -13,6 +13,7 @@
     "AddConditionError": "Neue Bedingung konnte nicht hinzugefügt werden, bitte erneut versuchen.",
     "AddConditionImplementation": "Bedingung hinzufügen - {implementationName}",
     "AddConnection": "Verbindung hinzufügen",
+    "AddConnectionError": "Neue Verbindung konnte nicht hinzugefügt werden. Bitte erneut versuchen.",
     "AddConnectionImplementation": "Verbindung hinzufügen - {implementationName}",
     "AddCustomFilter": "Eigenen Filter hinzufügen",
     "AddCustomFormat": "Eigenes Format hinzufügen",

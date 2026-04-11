@@ -13,6 +13,7 @@
     "AddConditionError": "Невозможно добавить новое условие, попробуйте еще раз.",
     "AddConditionImplementation": "Добавить условие - {implementationName}",
     "AddConnection": "Добавить подключение",
+    "AddConnectionError": "Невозможно добавить новое соединение, пожалуйста, попробуйте еще раз.",
     "AddConnectionImplementation": "Добавить подключение - {implementationName}",
     "AddCustomFilter": "Добавить специальный фильтр",
     "AddCustomFormat": "Добавить свой формат",
