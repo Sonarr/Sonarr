@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.DiskSpace;
 using Sonarr.Http;
@@ -16,8 +18,8 @@ public class DiskSpaceController : Controller
 
     [HttpGet]
     [Produces("application/json")]
-    public List<DiskSpaceResource> GetFreeSpace()
+    public Ok<List<DiskSpaceResource>> GetFreeSpace()
     {
-        return _diskSpaceService.GetFreeSpace().ConvertAll(DiskSpaceResourceMapper.MapToResource);
+        return TypedResults.Ok(_diskSpaceService.GetFreeSpace().ConvertAll(DiskSpaceResourceMapper.MapToResource));
     }
 }

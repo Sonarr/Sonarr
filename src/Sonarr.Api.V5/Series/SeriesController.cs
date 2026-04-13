@@ -1,4 +1,6 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.TPL;
@@ -107,7 +109,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
 
     [HttpGet]
     [Produces("application/json")]
-    public List<SeriesResource> AllSeries(int? tvdbId, [FromQuery] SeriesSubresource[]? includeSubresources = null)
+    public Ok<List<SeriesResource>> AllSeries(int? tvdbId, [FromQuery] SeriesSubresource[]? includeSubresources = null)
     {
         var seriesStats = _seriesStatisticsService.SeriesStatistics();
         var seriesResources = new List<SeriesResource>();
@@ -127,18 +129,18 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
         PopulateAlternateTitles(seriesResources);
         seriesResources.ForEach(LinkRootFolderPath);
 
-        return seriesResources;
+        return TypedResults.Ok(seriesResources);
     }
 
     [NonAction]
-    public override ActionResult<SeriesResource> GetResourceByIdWithErrorHandler(int id)
+    public override Results<Ok<SeriesResource>, NotFound> GetResourceByIdWithErrorHandler(int id)
     {
         return base.GetResourceByIdWithErrorHandler(id);
     }
 
     [RestGetById]
     [Produces("application/json")]
-    public ActionResult<SeriesResource> GetResourceByIdWithErrorHandler(int id, [FromQuery] SeriesSubresource[]? includeSubresources = null)
+    public Results<Ok<SeriesResource>, NotFound> GetResourceByIdWithErrorHandler(int id, [FromQuery] SeriesSubresource[]? includeSubresources = null)
     {
         var includeSeasonImages = includeSubresources.Contains(SeriesSubresource.SeasonImages);
 
@@ -146,11 +148,11 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
         {
             var series = GetSeriesResourceById(id, includeSeasonImages);
 
-            return series == null ? NotFound() : series;
+            return series == null ? TypedResults.NotFound() : TypedResults.Ok(series);
         }
         catch (ModelNotFoundException)
         {
-            return NotFound();
+            return TypedResults.NotFound();
         }
     }
 
@@ -181,17 +183,17 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
     [RestPostById]
     [Consumes("application/json")]
     [Produces("application/json")]
-    public ActionResult<SeriesResource> AddSeries([FromBody] SeriesResource seriesResource)
+    public Results<Created<SeriesResource>, NotFound> AddSeries([FromBody] SeriesResource seriesResource)
     {
         var series = _addSeriesService.AddSeries(seriesResource.ToModel());
 
-        return Created(series.Id);
+        return TypedCreated(series.Id);
     }
 
     [RestPutById]
     [Consumes("application/json")]
     [Produces("application/json")]
-    public ActionResult<SeriesResource> UpdateSeries([FromBody] SeriesResource seriesResource, [FromQuery] bool moveFiles = false)
+    public Results<Accepted<SeriesResource>, NotFound> UpdateSeries([FromBody] SeriesResource seriesResource, [FromQuery] bool moveFiles = false)
     {
         var series = _seriesService.GetSeries(seriesResource.Id);
 
@@ -215,13 +217,13 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
 
         BroadcastResourceChange(ModelAction.Updated, seriesResource);
 
-        return Accepted(seriesResource.Id);
+        return TypedAccepted(seriesResource.Id);
     }
 
     [HttpPut("{id}/season")]
     [Consumes("application/json")]
     [Produces("application/json")]
-    public ActionResult<SeasonResource> UpdateSeasonMonitored([FromRoute] int id, [FromBody] SeasonResource seasonResource)
+    public Results<Ok<SeasonResource>, NotFound> UpdateSeasonMonitored([FromRoute] int id, [FromBody] SeasonResource seasonResource)
     {
         lock (_seriesLockPool.GetLock(id))
         {
@@ -230,7 +232,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
 
             if (season == null)
             {
-                return NotFound();
+                return TypedResults.NotFound();
             }
 
             season.Monitored = seasonResource.Monitored;
@@ -239,16 +241,16 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
 
             BroadcastResourceChange(ModelAction.Updated, series.ToResource());
 
-            return season.ToResource();
+            return TypedResults.Ok(season.ToResource());
         }
     }
 
     [RestDeleteById]
-    public ActionResult DeleteSeries(int id, bool deleteFiles = false, bool addImportListExclusion = false)
+    public NoContent DeleteSeries(int id, bool deleteFiles = false, bool addImportListExclusion = false)
     {
         _seriesService.DeleteSeries(new List<int> { id }, deleteFiles, addImportListExclusion);
 
-        return NoContent();
+        return TypedResults.NoContent();
     }
 
     private SeriesResource? GetSeriesResource(NzbDrone.Core.Tv.Series? series, bool includeSeasonImages)

@@ -1,4 +1,6 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.CustomFormats;
@@ -46,30 +48,30 @@ public class QualityProfileController : RestController<QualityProfileResource>
 
     [RestPostById]
     [Consumes("application/json")]
-    public ActionResult<QualityProfileResource> Create([FromBody] QualityProfileResource resource)
+    public Results<Created<QualityProfileResource>, NotFound> Create([FromBody] QualityProfileResource resource)
     {
         var model = resource.ToModel();
         model = _profileService.Add(model);
-        return Created(model.Id);
+        return TypedCreated(model.Id);
     }
 
     [RestDeleteById]
-    public ActionResult DeleteProfile(int id)
+    public NoContent DeleteProfile(int id)
     {
         _profileService.Delete(id);
 
-        return NoContent();
+        return TypedResults.NoContent();
     }
 
     [RestPutById]
     [Consumes("application/json")]
-    public ActionResult<QualityProfileResource> Update([FromBody] QualityProfileResource resource)
+    public Results<Accepted<QualityProfileResource>, NotFound> Update([FromBody] QualityProfileResource resource)
     {
         var model = resource.ToModel();
 
         _profileService.Update(model);
 
-        return Accepted(model.Id);
+        return TypedAccepted(model.Id);
     }
 
     protected override QualityProfileResource GetResourceById(int id)
@@ -79,8 +81,8 @@ public class QualityProfileController : RestController<QualityProfileResource>
 
     [HttpGet]
     [Produces("application/json")]
-    public List<QualityProfileResource> GetAll()
+    public Ok<List<QualityProfileResource>> GetAll()
     {
-        return _profileService.All().ToResource();
+        return TypedResults.Ok(_profileService.All().ToResource());
     }
 }

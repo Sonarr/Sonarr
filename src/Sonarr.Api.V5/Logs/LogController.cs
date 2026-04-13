@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
@@ -21,11 +23,11 @@ namespace Sonarr.Api.V5.Logs
 
         [HttpGet]
         [Produces("application/json")]
-        public PagingResource<LogResource> GetLogs([FromQuery] PagingRequestResource paging, string? level)
+        public Ok<PagingResource<LogResource>> GetLogs([FromQuery] PagingRequestResource paging, string? level)
         {
             if (!_configFileProvider.LogDbEnabled)
             {
-                return new PagingResource<LogResource>();
+                return TypedResults.Ok(new PagingResource<LogResource>());
             }
 
             var pagingResource = new PagingResource<LogResource>(paging);
@@ -72,7 +74,7 @@ namespace Sonarr.Api.V5.Logs
                 response.SortKey = "time";
             }
 
-            return response;
+            return TypedResults.Ok(response);
         }
     }
 }

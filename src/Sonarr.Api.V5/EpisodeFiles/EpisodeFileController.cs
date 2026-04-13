@@ -1,4 +1,6 @@
 using System.Net;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Datastore.Events;
@@ -57,7 +59,7 @@ public class EpisodeFileController : RestControllerWithSignalR<EpisodeFileResour
 
     [HttpGet]
     [Produces("application/json")]
-    public List<EpisodeFileResource> GetEpisodeFiles(int? seriesId, [FromQuery] List<int>? episodeFileIds)
+    public Results<Ok<List<EpisodeFileResource>>, BadRequest> GetEpisodeFiles(int? seriesId, [FromQuery] List<int>? episodeFileIds)
     {
         if (!seriesId.HasValue && episodeFileIds?.Any() == false)
         {
@@ -71,25 +73,25 @@ public class EpisodeFileController : RestControllerWithSignalR<EpisodeFileResour
 
             if (files == null)
             {
-                return new List<EpisodeFileResource>();
+                return TypedResults.Ok(new List<EpisodeFileResource>());
             }
 
-            return files.ConvertAll(e => e.ToResource(series, _upgradableSpecification, _formatCalculator));
+            return TypedResults.Ok(files.ConvertAll(e => e.ToResource(series, _upgradableSpecification, _formatCalculator)));
         }
         else
         {
             var episodeFiles = _mediaFileService.Get(episodeFileIds);
 
-            return episodeFiles.GroupBy(e => e.SeriesId)
+            return TypedResults.Ok(episodeFiles.GroupBy(e => e.SeriesId)
                                .SelectMany(f => f.ToList()
                                                  .ConvertAll(e => e.ToResource(_seriesService.GetSeries(f.Key), _upgradableSpecification, _formatCalculator)))
-                               .ToList();
+                               .ToList());
         }
     }
 
     [RestPutById]
     [Consumes("application/json")]
-    public ActionResult<EpisodeFileResource> SetQuality([FromBody] EpisodeFileResource episodeFileResource)
+    public Results<Accepted<EpisodeFileResource>, NotFound> SetQuality([FromBody] EpisodeFileResource episodeFileResource)
     {
         var episodeFile = _mediaFileService.Get(episodeFileResource.Id);
         episodeFile.Quality = episodeFileResource.Quality;
@@ -105,11 +107,11 @@ public class EpisodeFileController : RestControllerWithSignalR<EpisodeFileResour
         }
 
         _mediaFileService.Update(episodeFile);
-        return Accepted(episodeFile.Id);
+        return TypedAccepted(episodeFile.Id);
     }
 
     [RestDeleteById]
-    public void DeleteEpisodeFile(int id)
+    public Results<NoContent, NotFound> DeleteEpisodeFile(int id)
     {
         var episodeFile = _mediaFileService.Get(id);
 
@@ -121,11 +123,13 @@ public class EpisodeFileController : RestControllerWithSignalR<EpisodeFileResour
         var series = _seriesService.GetSeries(episodeFile.SeriesId);
 
         _mediaFileDeletionService.DeleteEpisodeFile(series, episodeFile);
+
+        return TypedResults.NoContent();
     }
 
     [HttpDelete("bulk")]
     [Consumes("application/json")]
-    public object DeleteEpisodeFiles([FromBody] EpisodeFileListResource resource)
+    public NoContent DeleteEpisodeFiles([FromBody] EpisodeFileListResource resource)
     {
         var episodeFiles = _mediaFileService.GetFiles(resource.EpisodeFileIds);
         var series = _seriesService.GetSeries(episodeFiles.First().SeriesId);
@@ -135,12 +139,12 @@ public class EpisodeFileController : RestControllerWithSignalR<EpisodeFileResour
             _mediaFileDeletionService.DeleteEpisodeFile(series, episodeFile);
         }
 
-        return NoContent();
+        return TypedResults.NoContent();
     }
 
     [HttpPut("bulk")]
     [Consumes("application/json")]
-    public object SetPropertiesBulk([FromBody] List<EpisodeFileResource> resources)
+    public Ok<List<EpisodeFileResource>> SetPropertiesBulk([FromBody] List<EpisodeFileResource> resources)
     {
         var episodeFiles = _mediaFileService.GetFiles(resources.Select(r => r.Id));
 
@@ -184,7 +188,7 @@ public class EpisodeFileController : RestControllerWithSignalR<EpisodeFileResour
 
         var series = _seriesService.GetSeries(episodeFiles.First().SeriesId);
 
-        return Accepted(episodeFiles.ConvertAll(f => f.ToResource(series, _upgradableSpecification, _formatCalculator)));
+        return TypedResults.Ok(episodeFiles.ConvertAll(f => f.ToResource(series, _upgradableSpecification, _formatCalculator)));
     }
 
     [NonAction]

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Notifications;
 using NzbDrone.SignalR;
@@ -18,13 +19,13 @@ public class ConnectionController : ProviderControllerBase<ConnectionResource, C
     }
 
     [NonAction]
-    public override ActionResult<ConnectionResource> UpdateProvider([FromBody] ConnectionBulkResource providerResource)
+    public override Results<Ok<IEnumerable<ConnectionResource>>, BadRequest> UpdateProvider([FromBody] ConnectionBulkResource providerResource)
     {
         throw new NotImplementedException();
     }
 
     [NonAction]
-    public override ActionResult DeleteProviders([FromBody] ConnectionBulkResource resource)
+    public override NoContent DeleteProviders([FromBody] ConnectionBulkResource resource)
     {
         throw new NotImplementedException();
     }

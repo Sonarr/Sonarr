@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Internal;
@@ -53,9 +55,9 @@ public class SystemController : Controller
 
     [HttpGet("status")]
     [Produces("application/json")]
-    public SystemResource GetStatus()
+    public Ok<SystemResource> GetStatus()
     {
-        return new SystemResource
+        return TypedResults.Ok(new SystemResource
         {
             AppName = BuildInfo.AppName,
             InstanceName = _configFileProvider.InstanceName,
@@ -88,39 +90,39 @@ public class SystemController : Controller
             PackageAuthor = _deploymentInfoProvider.PackageAuthor,
             PackageUpdateMechanism = _deploymentInfoProvider.PackageUpdateMechanism,
             PackageUpdateMechanismMessage = _deploymentInfoProvider.PackageUpdateMechanismMessage
-        };
+        });
     }
 
     [HttpGet("routes")]
     [Produces("application/json")]
-    public IActionResult GetRoutes()
+    public ContentHttpResult GetRoutes()
     {
         using (var sw = new StringWriter())
         {
             _graphWriter.Write(_endpointData, sw);
             var graph = sw.ToString();
-            return Content(graph, "text/plain");
+            return TypedResults.Content(graph, "text/plain");
         }
     }
 
     [HttpGet("routes/duplicate")]
     [Produces("application/json")]
-    public object DuplicateRoutes()
+    public Ok<Dictionary<string, List<string>>> DuplicateRoutes()
     {
-        return _detector.GetDuplicateEndpoints(_endpointData);
+        return TypedResults.Ok(_detector.GetDuplicateEndpoints(_endpointData));
     }
 
     [HttpPost("shutdown")]
-    public object Shutdown()
+    public Ok<object> Shutdown()
     {
         Task.Factory.StartNew(() => _lifecycleService.Shutdown());
-        return new { ShuttingDown = true };
+        return TypedResults.Ok((object)new { ShuttingDown = true });
     }
 
     [HttpPost("restart")]
-    public object Restart()
+    public Ok<object> Restart()
     {
         Task.Factory.StartNew(() => _lifecycleService.Restart());
-        return new { Restarting = true };
+        return TypedResults.Ok((object)new { Restarting = true });
     }
 }

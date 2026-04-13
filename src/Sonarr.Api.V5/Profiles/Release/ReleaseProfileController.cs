@@ -1,4 +1,6 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers;
@@ -52,29 +54,29 @@ public class ReleaseProfileController : RestController<ReleaseProfileResource>
     }
 
     [RestPostById]
-    public ActionResult<ReleaseProfileResource> Create([FromBody] ReleaseProfileResource resource)
+    public Results<Created<ReleaseProfileResource>, NotFound> Create([FromBody] ReleaseProfileResource resource)
     {
         var model = resource.ToModel();
         model = _releaseProfileService.Add(model);
-        return Created(model.Id);
+        return TypedCreated(model.Id);
     }
 
     [RestDeleteById]
-    public ActionResult DeleteProfile(int id)
+    public NoContent DeleteProfile(int id)
     {
         _releaseProfileService.Delete(id);
 
-        return NoContent();
+        return TypedResults.NoContent();
     }
 
     [RestPutById]
-    public ActionResult<ReleaseProfileResource> Update([FromBody] ReleaseProfileResource resource)
+    public Results<Accepted<ReleaseProfileResource>, NotFound> Update([FromBody] ReleaseProfileResource resource)
     {
         var model = resource.ToModel();
 
         _releaseProfileService.Update(model);
 
-        return Accepted(model.Id);
+        return TypedAccepted(model.Id);
     }
 
     protected override ReleaseProfileResource GetResourceById(int id)
@@ -83,8 +85,8 @@ public class ReleaseProfileController : RestController<ReleaseProfileResource>
     }
 
     [HttpGet]
-    public List<ReleaseProfileResource> GetAll()
+    public Ok<List<ReleaseProfileResource>> GetAll()
     {
-        return _releaseProfileService.All().ToResource();
+        return TypedResults.Ok(_releaseProfileService.All().ToResource());
     }
 }

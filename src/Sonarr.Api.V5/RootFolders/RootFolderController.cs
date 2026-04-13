@@ -1,4 +1,6 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Validation.Paths;
@@ -49,25 +51,25 @@ public class RootFolderController : RestControllerWithSignalR<RootFolderResource
 
     [RestPostById]
     [Consumes("application/json")]
-    public ActionResult<RootFolderResource> CreateRootFolder([FromBody] RootFolderResource rootFolderResource)
+    public Results<Created<RootFolderResource>, NotFound> CreateRootFolder([FromBody] RootFolderResource rootFolderResource)
     {
         var model = rootFolderResource.ToModel();
 
-        return Created(_rootFolderService.Add(model).Id);
+        return TypedCreated(_rootFolderService.Add(model).Id);
     }
 
     [HttpGet]
     [Produces("application/json")]
-    public List<RootFolderResource> GetRootFolders()
+    public Ok<List<RootFolderResource>> GetRootFolders()
     {
-        return _rootFolderService.AllWithUnmappedFolders().ToResource();
+        return TypedResults.Ok(_rootFolderService.AllWithUnmappedFolders().ToResource());
     }
 
     [RestDeleteById]
-    public ActionResult DeleteFolder(int id)
+    public NoContent DeleteFolder(int id)
     {
         _rootFolderService.Remove(id);
 
-        return NoContent();
+        return TypedResults.NoContent();
     }
 }

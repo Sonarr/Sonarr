@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Pending;
@@ -20,7 +22,7 @@ namespace Sonarr.Api.V5.Queue
         }
 
         [HttpPost("grab/{id:int}")]
-        public async Task<object> Grab([FromRoute] int id)
+        public async Task<NoContent> Grab([FromRoute] int id)
         {
             var pendingRelease = _pendingReleaseService.FindPendingQueueItem(id);
 
@@ -31,12 +33,12 @@ namespace Sonarr.Api.V5.Queue
 
             await _downloadService.DownloadReport(pendingRelease.RemoteEpisode, null);
 
-            return NoContent();
+            return TypedResults.NoContent();
         }
 
         [HttpPost("grab/bulk")]
         [Consumes("application/json")]
-        public async Task<object> Grab([FromBody] QueueBulkResource resource)
+        public async Task<NoContent> Grab([FromBody] QueueBulkResource resource)
         {
             foreach (var id in resource.Ids)
             {
@@ -50,7 +52,7 @@ namespace Sonarr.Api.V5.Queue
                 await _downloadService.DownloadReport(pendingRelease.RemoteEpisode, null);
             }
 
-            return NoContent();
+            return TypedResults.NoContent();
         }
     }
 }

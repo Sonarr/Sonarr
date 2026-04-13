@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Datastore;
@@ -28,7 +30,7 @@ public class CutoffController : EpisodeControllerWithSignalR
 
     [HttpGet]
     [Produces("application/json")]
-    public PagingResource<EpisodeResource> GetCutoffUnmetEpisodes([FromQuery] PagingRequestResource paging, bool monitored = true, [FromQuery] CutoffSubresource[]? includeSubresources = null)
+    public Ok<PagingResource<EpisodeResource>> GetCutoffUnmetEpisodes([FromQuery] PagingRequestResource paging, bool monitored = true, [FromQuery] CutoffSubresource[]? includeSubresources = null)
     {
         var pagingResource = new PagingResource<EpisodeResource>(paging);
         var pagingSpec = pagingResource.MapToPagingSpec<EpisodeResource, Episode>(
@@ -56,6 +58,6 @@ public class CutoffController : EpisodeControllerWithSignalR
 
         var resource = pagingSpec.ApplyToPage(_episodeCutoffService.EpisodesWhereCutoffUnmet, v => MapToResource(v, includeSeries, includeEpisodeFile, includeImages));
 
-        return resource;
+        return TypedResults.Ok(resource);
     }
 }

@@ -1,4 +1,6 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Validation.Paths;
@@ -47,33 +49,33 @@ public class RemotePathMappingController : RestController<RemotePathMappingResou
 
     [RestPostById]
     [Consumes("application/json")]
-    public ActionResult<RemotePathMappingResource> CreateMapping([FromBody] RemotePathMappingResource resource)
+    public Results<Created<RemotePathMappingResource>, NotFound> CreateMapping([FromBody] RemotePathMappingResource resource)
     {
         var model = resource.ToModel();
 
-        return Created(_remotePathMappingService.Add(model).Id);
+        return TypedCreated(_remotePathMappingService.Add(model).Id);
     }
 
     [HttpGet]
     [Produces("application/json")]
-    public List<RemotePathMappingResource> GetMappings()
+    public Ok<List<RemotePathMappingResource>> GetMappings()
     {
-        return _remotePathMappingService.All().ToResource();
+        return TypedResults.Ok(_remotePathMappingService.All().ToResource());
     }
 
     [RestDeleteById]
-    public ActionResult DeleteMapping(int id)
+    public NoContent DeleteMapping(int id)
     {
         _remotePathMappingService.Remove(id);
 
-        return NoContent();
+        return TypedResults.NoContent();
     }
 
     [RestPutById]
-    public ActionResult<RemotePathMappingResource> UpdateMapping([FromBody] RemotePathMappingResource resource)
+    public Results<Ok<RemotePathMappingResource>, NotFound> UpdateMapping([FromBody] RemotePathMappingResource resource)
     {
         var mapping = resource.ToModel();
 
-        return Accepted(_remotePathMappingService.Update(mapping));
+        return TypedResults.Ok(_remotePathMappingService.Update(mapping).ToResource());
     }
 }

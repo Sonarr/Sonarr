@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.HealthCheck;
@@ -23,7 +24,7 @@ namespace Sonarr.Api.V3.Health
         }
 
         [NonAction]
-        public override ActionResult<HealthResource> GetResourceByIdWithErrorHandler(int id)
+        public override Results<Ok<HealthResource>, NotFound> GetResourceByIdWithErrorHandler(int id)
         {
             return base.GetResourceByIdWithErrorHandler(id);
         }

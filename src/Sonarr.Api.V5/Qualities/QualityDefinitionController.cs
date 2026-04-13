@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Messaging.Events;
@@ -29,7 +31,7 @@ public class QualityDefinitionController :
     }
 
     [RestPutById]
-    public ActionResult<QualityDefinitionResource> Update([FromBody] QualityDefinitionResource resource)
+    public Results<Accepted<QualityDefinitionResource>, NotFound> Update([FromBody] QualityDefinitionResource resource)
     {
         var model = resource.ToModel();
         _qualityDefinitionService.Update(model);
@@ -39,7 +41,7 @@ public class QualityDefinitionController :
             _qualityProfileService.UpdateAllSizeLimits(new QualityProfileSizeLimit(model));
         }
 
-        return Accepted(model.Id);
+        return TypedAccepted(model.Id);
     }
 
     protected override QualityDefinitionResource GetResourceById(int id)
@@ -48,13 +50,13 @@ public class QualityDefinitionController :
     }
 
     [HttpGet]
-    public List<QualityDefinitionResource> GetAll()
+    public Ok<List<QualityDefinitionResource>> GetAll()
     {
-        return _qualityDefinitionService.All().ToResource();
+        return TypedResults.Ok(_qualityDefinitionService.All().ToResource());
     }
 
     [HttpPut]
-    public object UpdateMany([FromBody] List<QualityDefinitionResource> resource)
+    public Ok<List<QualityDefinitionResource>> UpdateMany([FromBody] List<QualityDefinitionResource> resource)
     {
         // Read from request
         var qualityDefinitions = resource.ToModel().ToList();
@@ -71,8 +73,7 @@ public class QualityDefinitionController :
             _qualityProfileService.UpdateAllSizeLimits(toUpdate);
         }
 
-        return Accepted(_qualityDefinitionService.All()
-            .ToResource());
+        return TypedResults.Ok(_qualityDefinitionService.All().ToResource());
     }
 
     [NonAction]

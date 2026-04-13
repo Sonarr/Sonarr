@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -50,15 +52,15 @@ namespace Sonarr.Http.REST
 
         [RestGetById]
         [Produces("application/json")]
-        public virtual ActionResult<TResource> GetResourceByIdWithErrorHandler(int id)
+        public virtual Results<Ok<TResource>, NotFound> GetResourceByIdWithErrorHandler(int id)
         {
             try
             {
-                return GetResourceById(id);
+                return TypedResults.Ok(GetResourceById(id));
             }
             catch (ModelNotFoundException)
             {
-                return NotFound();
+                return TypedResults.NotFound();
             }
         }
 
@@ -154,6 +156,20 @@ namespace Sonarr.Http.REST
             {
                 throw new ValidationException(errors);
             }
+        }
+
+        protected Results<Accepted<TResource>, NotFound> TypedAccepted(int id)
+        {
+            var result = GetResourceById(id);
+
+            return TypedResults.Accepted(Url.Action(nameof(GetResourceByIdWithErrorHandler), new { id }), result);
+        }
+
+        protected Results<Created<TResource>, NotFound> TypedCreated(int id)
+        {
+            var result = GetResourceById(id);
+
+            return TypedResults.Created(Url.Action(nameof(GetResourceByIdWithErrorHandler), new { id }), result);
         }
 
         protected ActionResult<TResource> Accepted(int id)

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Tv;
 using Sonarr.Http;
@@ -18,7 +20,7 @@ public class SeasonPassController : Controller
 
     [HttpPost]
     [Consumes("application/json")]
-    public IActionResult UpdateAll([FromBody] SeasonPassResource resource)
+    public NoContent UpdateAll([FromBody] SeasonPassResource resource)
     {
         var seriesToUpdate = _seriesService.GetSeries(resource.Series.Select(s => s.Id));
 
@@ -52,6 +54,6 @@ public class SeasonPassController : Controller
             _episodeMonitoredService.SetEpisodeMonitoredStatus(series, resource.MonitoringOptions.ToModel());
         }
 
-        return NoContent();
+        return TypedResults.NoContent();
     }
 }

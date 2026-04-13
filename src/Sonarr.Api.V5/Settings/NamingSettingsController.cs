@@ -1,5 +1,7 @@
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Organizer;
@@ -36,27 +38,24 @@ public class NamingSettingsController : RestController<NamingSettingsResource>
 
     protected override NamingSettingsResource GetResourceById(int id)
     {
-        return GetNamingConfig();
+        return _namingConfigService.GetConfig().ToResource();
     }
 
     [HttpGet]
-    public NamingSettingsResource GetNamingConfig()
+    public Ok<NamingSettingsResource> GetNamingConfig()
     {
-        var nameSpec = _namingConfigService.GetConfig();
-        var resource = nameSpec.ToResource();
-
-        return resource;
+        return TypedResults.Ok(GetResourceById(1));
     }
 
     [RestPutById]
-    public ActionResult<NamingSettingsResource> UpdateNamingConfig([FromBody] NamingSettingsResource resource)
+    public Results<Accepted<NamingSettingsResource>, NotFound> UpdateNamingConfig([FromBody] NamingSettingsResource resource)
     {
         var nameSpec = resource.ToModel();
         ValidateFormatResult(nameSpec);
 
         _namingConfigService.Save(nameSpec);
 
-        return Accepted(resource.Id);
+        return TypedAccepted(resource.Id);
     }
 
     [HttpGet("examples")]
@@ -64,7 +63,7 @@ public class NamingSettingsController : RestController<NamingSettingsResource>
     {
         if (settings.Id == 0)
         {
-            settings = GetNamingConfig();
+            settings = GetResourceById(1);
         }
 
         var nameSpec = settings.ToModel();

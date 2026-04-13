@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Profiles.Qualities;
@@ -17,7 +18,7 @@ namespace Sonarr.Api.V3.Indexers
         }
 
         [NonAction]
-        public override ActionResult<ReleaseResource> GetResourceByIdWithErrorHandler(int id)
+        public override Results<Ok<ReleaseResource>, NotFound> GetResourceByIdWithErrorHandler(int id)
         {
             return base.GetResourceByIdWithErrorHandler(id);
         }

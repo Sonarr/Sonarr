@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.CustomFilters;
 using Sonarr.Http;
@@ -23,33 +25,33 @@ public class CustomFilterController : RestController<CustomFilterResource>
 
     [HttpGet]
     [Produces("application/json")]
-    public List<CustomFilterResource> GetCustomFilters()
+    public Ok<List<CustomFilterResource>> GetCustomFilters()
     {
-        return _customFilterService.All().ToResource();
+        return TypedResults.Ok(_customFilterService.All().ToResource());
     }
 
     [RestPostById]
     [Consumes("application/json")]
-    public ActionResult<CustomFilterResource> AddCustomFilter([FromBody] CustomFilterResource resource)
+    public Results<Created<CustomFilterResource>, NotFound> AddCustomFilter([FromBody] CustomFilterResource resource)
     {
         var customFilter = _customFilterService.Add(resource.ToModel());
 
-        return Created(customFilter.Id);
+        return TypedCreated(customFilter.Id);
     }
 
     [RestPutById]
     [Consumes("application/json")]
-    public ActionResult<CustomFilterResource> UpdateCustomFilter([FromBody] CustomFilterResource resource)
+    public Results<Accepted<CustomFilterResource>, NotFound> UpdateCustomFilter([FromBody] CustomFilterResource resource)
     {
         _customFilterService.Update(resource.ToModel());
-        return Accepted(resource.Id);
+        return TypedAccepted(resource.Id);
     }
 
     [RestDeleteById]
-    public ActionResult DeleteCustomResource(int id)
+    public NoContent DeleteCustomResource(int id)
     {
         _customFilterService.Delete(id);
 
-        return NoContent();
+        return TypedResults.NoContent();
     }
 }

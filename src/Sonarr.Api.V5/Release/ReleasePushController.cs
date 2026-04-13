@@ -1,5 +1,7 @@
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using NzbDrone.Common.Extensions;
@@ -50,7 +52,7 @@ public class ReleasePushController : RestController<ReleasePushResource>
 
     [HttpPost]
     [Consumes("application/json")]
-    public ActionResult<ReleaseResource> Create([FromBody] ReleasePushResource release)
+    public Results<Ok<ReleaseResource>, BadRequest> Create([FromBody] ReleasePushResource release)
     {
         _logger.Info("Release pushed: {0} - {1}", release.Title, release.DownloadUrl ?? release.MagnetUrl);
 
@@ -80,7 +82,7 @@ public class ReleasePushController : RestController<ReleasePushResource>
             throw new ValidationException(new List<ValidationFailure> { new("Title", "Unable to parse", release.Title) });
         }
 
-        return decision.MapDecision(1, _qualityProfile);
+        return TypedResults.Ok(decision.MapDecision(1, _qualityProfile));
     }
 
     private void ResolveIndexer(ReleaseInfo release)

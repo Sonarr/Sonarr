@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
@@ -23,7 +25,7 @@ namespace Sonarr.Api.V5.Update
 
         [HttpGet]
         [Produces("application/json")]
-        public List<UpdateResource> GetRecentUpdates()
+        public Ok<List<UpdateResource>> GetRecentUpdates()
         {
             var resources = _recentUpdateProvider.GetRecentUpdatePackages()
                                                  .OrderByDescending(u => u.Version)
@@ -48,7 +50,7 @@ namespace Sonarr.Api.V5.Update
 
                 if (!_configFileProvider.LogDbEnabled)
                 {
-                    return resources;
+                    return TypedResults.Ok(resources);
                 }
 
                 var updateHistory = _updateHistoryService.InstalledSince(resources.Last().ReleaseDate);
@@ -65,7 +67,7 @@ namespace Sonarr.Api.V5.Update
                 }
             }
 
-            return resources;
+            return TypedResults.Ok(resources);
         }
     }
 }

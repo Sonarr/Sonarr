@@ -1,4 +1,6 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Messaging.Commands;
@@ -23,7 +25,7 @@ public class SeriesEditorController : Controller
     }
 
     [HttpPut]
-    public object SaveAll([FromBody] SeriesEditorResource resource)
+    public Results<Ok<List<SeriesResource>>, BadRequest> SaveAll([FromBody] SeriesEditorResource resource)
     {
         var seriesToUpdate = _seriesService.GetSeries(resource.SeriesIds);
         var seriesToMove = new List<BulkMoveSeries>();
@@ -101,14 +103,14 @@ public class SeriesEditorController : Controller
             });
         }
 
-        return Accepted(_seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles).ToResource());
+        return TypedResults.Ok(_seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles).ToResource());
     }
 
     [HttpDelete]
-    public object DeleteSeries([FromBody] SeriesEditorResource resource)
+    public NoContent DeleteSeries([FromBody] SeriesEditorResource resource)
     {
         _seriesService.DeleteSeries(resource.SeriesIds, resource.DeleteFiles, resource.AddImportListExclusion);
 
-        return NoContent();
+        return TypedResults.NoContent();
     }
 }

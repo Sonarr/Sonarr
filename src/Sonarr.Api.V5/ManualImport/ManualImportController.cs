@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Languages;
@@ -20,14 +22,14 @@ public class ManualImportController : Controller
 
     [HttpGet]
     [Produces("application/json")]
-    public List<ManualImportResource> GetMediaFiles(string? folder, [FromQuery] string[]? downloadIds, int? seriesId, int? seasonNumber, bool filterExistingFiles = true)
+    public Ok<List<ManualImportResource>> GetMediaFiles(string? folder, [FromQuery] string[]? downloadIds, int? seriesId, int? seasonNumber, bool filterExistingFiles = true)
     {
         if (seriesId.HasValue && downloadIds == null)
         {
-            return _manualImportService.GetMediaFiles(seriesId.Value, seasonNumber)
+            return TypedResults.Ok(_manualImportService.GetMediaFiles(seriesId.Value, seasonNumber)
                 .ToResource()
                 .Select(AddQualityWeight)
-                .ToList();
+                .ToList());
         }
 
         if (downloadIds != null && downloadIds.Any())
@@ -39,20 +41,20 @@ public class ManualImportController : Controller
                 files.AddRange(_manualImportService.GetMediaFiles(null, downloadId, seriesId, filterExistingFiles));
             }
 
-            return files.ToResource()
+            return TypedResults.Ok(files.ToResource()
                 .Select(AddQualityWeight)
-                .ToList();
+                .ToList());
         }
 
-        return _manualImportService.GetMediaFiles(folder, null, seriesId, filterExistingFiles)
+        return TypedResults.Ok(_manualImportService.GetMediaFiles(folder, null, seriesId, filterExistingFiles)
             .ToResource()
             .Select(AddQualityWeight)
-            .ToList();
+            .ToList());
     }
 
     [HttpPost]
     [Consumes("application/json")]
-    public List<ManualImportResource> ReprocessItems([FromBody] List<ManualImportReprocessResource> items)
+    public Results<Ok<List<ManualImportResource>>, BadRequest> ReprocessItems([FromBody] List<ManualImportReprocessResource> items)
     {
         if (items is { Count: 0 })
         {
@@ -95,7 +97,7 @@ public class ManualImportController : Controller
             updatedItems.Add(processedItem);
         }
 
-        return updatedItems.ToResource();
+        return TypedResults.Ok(updatedItems.ToResource());
     }
 
     private ManualImportResource AddQualityWeight(ManualImportResource item)

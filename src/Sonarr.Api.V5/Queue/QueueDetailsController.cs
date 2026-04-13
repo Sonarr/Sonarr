@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Events;
@@ -25,7 +27,7 @@ namespace Sonarr.Api.V5.Queue
         }
 
         [NonAction]
-        public override ActionResult<QueueResource> GetResourceByIdWithErrorHandler(int id)
+        public override Results<Ok<QueueResource>, NotFound> GetResourceByIdWithErrorHandler(int id)
         {
             return base.GetResourceByIdWithErrorHandler(id);
         }
@@ -37,7 +39,7 @@ namespace Sonarr.Api.V5.Queue
 
         [HttpGet]
         [Produces("application/json")]
-        public List<QueueResource> GetQueue(int? seriesId, [FromQuery]List<int> episodeIds, [FromQuery] QueueSubresource[]? includeSubresources = null)
+        public Ok<List<QueueResource>> GetQueue(int? seriesId, [FromQuery]List<int> episodeIds, [FromQuery] QueueSubresource[]? includeSubresources = null)
         {
             var queue = _queueService.GetQueue();
             var pending = _pendingReleaseService.GetPendingQueue();
@@ -47,17 +49,17 @@ namespace Sonarr.Api.V5.Queue
 
             if (seriesId.HasValue)
             {
-                return fullQueue.Where(q => q.Series?.Id == seriesId).ToResource(includeSeries, includeEpisodes);
+                return TypedResults.Ok(fullQueue.Where(q => q.Series?.Id == seriesId).ToResource(includeSeries, includeEpisodes));
             }
 
             if (episodeIds.Any())
             {
-                return fullQueue.Where(q => q.Episodes.Any() &&
+                return TypedResults.Ok(fullQueue.Where(q => q.Episodes.Any() &&
                                             episodeIds.IntersectBy(e => e, q.Episodes, e => e.Id, null).Any())
-                    .ToResource(includeSeries, includeEpisodes);
+                    .ToResource(includeSeries, includeEpisodes));
             }
 
-            return fullQueue.ToResource(includeSeries, includeEpisodes);
+            return TypedResults.Ok(fullQueue.ToResource(includeSeries, includeEpisodes));
         }
 
         [NonAction]

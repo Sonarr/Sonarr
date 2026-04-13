@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.CustomFormats;
@@ -24,7 +26,7 @@ public class BlocklistController : Controller
 
     [HttpGet]
     [Produces("application/json")]
-    public PagingResource<BlocklistResource> GetBlocklist([FromQuery] PagingRequestResource paging, [FromQuery] int[]? seriesIds = null, [FromQuery] DownloadProtocol[]? protocols = null)
+    public Ok<PagingResource<BlocklistResource>> GetBlocklist([FromQuery] PagingRequestResource paging, [FromQuery] int[]? seriesIds = null, [FromQuery] DownloadProtocol[]? protocols = null)
     {
         var pagingResource = new PagingResource<BlocklistResource>(paging);
         var pagingSpec = pagingResource.MapToPagingSpec<BlocklistResource, NzbDrone.Core.Blocklisting.Blocklist>(
@@ -48,23 +50,23 @@ public class BlocklistController : Controller
             pagingSpec.FilterExpressions.Add(b => protocols.Contains(b.Protocol));
         }
 
-        return pagingSpec.ApplyToPage(b => _blocklistService.Paged(pagingSpec), b => BlocklistResourceMapper.MapToResource(b, _formatCalculator));
+        return TypedResults.Ok(pagingSpec.ApplyToPage(b => _blocklistService.Paged(pagingSpec), b => BlocklistResourceMapper.MapToResource(b, _formatCalculator)));
     }
 
     [RestDeleteById]
-    public ActionResult DeleteBlocklist(int id)
+    public NoContent DeleteBlocklist(int id)
     {
         _blocklistService.Delete(id);
 
-        return NoContent();
+        return TypedResults.NoContent();
     }
 
     [HttpDelete("bulk")]
     [Produces("application/json")]
-    public ActionResult Remove([FromBody] BlocklistBulkResource resource)
+    public NoContent Remove([FromBody] BlocklistBulkResource resource)
     {
         _blocklistService.Delete(resource.Ids);
 
-        return NoContent();
+        return TypedResults.NoContent();
     }
 }

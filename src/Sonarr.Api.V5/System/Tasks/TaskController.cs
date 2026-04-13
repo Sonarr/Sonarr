@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Events;
@@ -22,12 +24,12 @@ public class TaskController : RestControllerWithSignalR<TaskResource, ScheduledT
 
     [HttpGet]
     [Produces("application/json")]
-    public ActionResult<List<TaskResource>> GetAll()
+    public Ok<List<TaskResource>> GetAll()
     {
-        return _taskManager.GetAll()
+        return TypedResults.Ok(_taskManager.GetAll()
                                .Select(ConvertToResource)
                                .OrderBy(t => t.Name)
-                               .ToList();
+                               .ToList());
     }
 
     protected override TaskResource? GetResourceById(int id)

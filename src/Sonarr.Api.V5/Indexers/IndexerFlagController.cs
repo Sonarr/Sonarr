@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Parser.Model;
 using Sonarr.Http;
@@ -8,12 +10,12 @@ namespace Sonarr.Api.V5.Indexers;
 public class IndexerFlagController : Controller
 {
     [HttpGet]
-    public List<IndexerFlagResource> GetAll()
+    public Ok<List<IndexerFlagResource>> GetAll()
     {
-        return Enum.GetValues(typeof(IndexerFlags)).Cast<IndexerFlags>().Select(f => new IndexerFlagResource
+        return TypedResults.Ok(Enum.GetValues(typeof(IndexerFlags)).Cast<IndexerFlags>().Select(f => new IndexerFlagResource
         {
             Id = (int)f,
             Name = f.ToString()
-        }).ToList();
+        }).ToList());
     }
 }

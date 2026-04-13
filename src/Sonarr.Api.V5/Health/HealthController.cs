@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.HealthCheck;
@@ -21,7 +23,7 @@ public class HealthController : RestControllerWithSignalR<HealthResource, Health
     }
 
     [NonAction]
-    public override ActionResult<HealthResource> GetResourceByIdWithErrorHandler(int id)
+    public override Results<Ok<HealthResource>, NotFound> GetResourceByIdWithErrorHandler(int id)
     {
         return base.GetResourceByIdWithErrorHandler(id);
     }
@@ -33,9 +35,9 @@ public class HealthController : RestControllerWithSignalR<HealthResource, Health
 
     [HttpGet]
     [Produces("application/json")]
-    public List<HealthResource> GetHealth()
+    public Ok<List<HealthResource>> GetHealth()
     {
-        return _healthCheckService.Results().ToResource();
+        return TypedResults.Ok(_healthCheckService.Results().ToResource());
     }
 
     [NonAction]
