@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.CustomFormats;
@@ -28,7 +30,7 @@ namespace Sonarr.Api.V5.Calendar
 
         [HttpGet]
         [Produces("application/json")]
-        public List<EpisodeResource> GetCalendar(DateTime? start, DateTime? end, bool includeUnmonitored = false, bool includeSpecials = true, string tags = "", [FromQuery] CalendarSubresource[]? includeSubresources = null)
+        public Ok<List<EpisodeResource>> GetCalendar(DateTime? start, DateTime? end, bool includeUnmonitored = false, bool includeSpecials = true, string tags = "", [FromQuery] CalendarSubresource[]? includeSubresources = null)
         {
             var startUse = start ?? DateTime.Today;
             var endUse = end ?? DateTime.Today.AddDays(2);
@@ -65,7 +67,7 @@ namespace Sonarr.Api.V5.Calendar
 
             var resources = MapToResource(result, includeSeries, includeEpisodeFile, includeEpisodeImages);
 
-            return resources.OrderBy(e => e.AirDateUtc).ToList();
+            return TypedResults.Ok(resources.OrderBy(e => e.AirDateUtc).ToList());
         }
     }
 }

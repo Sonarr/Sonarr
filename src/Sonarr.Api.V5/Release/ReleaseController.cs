@@ -1,4 +1,6 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using NzbDrone.Common.Cache;
@@ -71,7 +73,7 @@ public class ReleaseController : RestController<ReleaseResource>
     }
 
     [NonAction]
-    public override ActionResult<ReleaseResource> GetResourceByIdWithErrorHandler(int id)
+    public override Results<Ok<ReleaseResource>, NotFound> GetResourceByIdWithErrorHandler(int id)
     {
         return base.GetResourceByIdWithErrorHandler(id);
     }
@@ -83,7 +85,7 @@ public class ReleaseController : RestController<ReleaseResource>
 
     [HttpPost]
     [Consumes("application/json")]
-    public async Task<object> DownloadRelease([FromBody] ReleaseGrabResource release)
+    public async Task<Results<Ok<ReleaseGrabResource>, NotFound>> DownloadRelease([FromBody] ReleaseGrabResource release)
     {
         var remoteEpisode = _remoteEpisodeCache.Find(GetCacheKey(release));
 
@@ -182,24 +184,24 @@ public class ReleaseController : RestController<ReleaseResource>
             throw new NzbDroneClientException(HttpStatusCode.Conflict, "Getting release from indexer failed");
         }
 
-        return release;
+        return TypedResults.Ok(release);
     }
 
     [HttpGet]
     [Produces("application/json")]
-    public async Task<List<ReleaseResource>> GetReleases(int? seriesId, int? episodeId, int? seasonNumber)
+    public async Task<Results<Ok<List<ReleaseResource>>, BadRequest>> GetReleases(int? seriesId, int? episodeId, int? seasonNumber)
     {
         if (episodeId.HasValue)
         {
-            return await GetEpisodeReleases(episodeId.Value);
+            return TypedResults.Ok(await GetEpisodeReleases(episodeId.Value));
         }
 
         if (seriesId.HasValue && seasonNumber.HasValue)
         {
-            return await GetSeasonReleases(seriesId.Value, seasonNumber.Value);
+            return TypedResults.Ok(await GetSeasonReleases(seriesId.Value, seasonNumber.Value));
         }
 
-        return await GetRss();
+        return TypedResults.Ok(await GetRss());
     }
 
     private async Task<List<ReleaseResource>> GetEpisodeReleases(int episodeId)

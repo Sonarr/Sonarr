@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Serializer;
@@ -46,7 +48,7 @@ public class CommandController : RestControllerWithSignalR<CommandResource, Comm
     [RestPostById]
     [Consumes("application/json")]
     [Produces("application/json")]
-    public ActionResult<CommandResource> StartCommand([FromBody] CommandResource commandResource)
+    public Results<Created<CommandResource>, NotFound> StartCommand([FromBody] CommandResource commandResource)
     {
         var commandType =
             _knownTypes.GetImplementations(typeof(Command))
@@ -70,24 +72,26 @@ public class CommandController : RestControllerWithSignalR<CommandResource, Comm
 
             var trackedCommand = _commandQueueManager.Push(command, commandResource.Priority, CommandTrigger.Manual);
 
-            return Created(trackedCommand.Id);
+            return TypedCreated(trackedCommand.Id);
         }
     }
 
     [HttpGet]
     [Produces("application/json")]
-    public List<CommandResource> GetStartedCommands()
+    public Ok<List<CommandResource>> GetStartedCommands()
     {
-        return _commandQueueManager.All()
+        return TypedResults.Ok(_commandQueueManager.All()
             .OrderBy(c => c.Status, _commandPriorityComparer)
             .ThenByDescending(c => c.Priority)
-            .ToResource();
+            .ToResource());
     }
 
     [RestDeleteById]
-    public void CancelCommand(int id)
+    public NoContent CancelCommand(int id)
     {
         _commandQueueManager.Cancel(id);
+
+        return TypedResults.NoContent();
     }
 
     [NonAction]

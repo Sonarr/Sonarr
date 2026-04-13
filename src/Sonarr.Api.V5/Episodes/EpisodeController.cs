@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine.Specifications;
@@ -23,7 +25,7 @@ public class EpisodeController : EpisodeControllerWithSignalR
 
     [HttpGet]
     [Produces("application/json")]
-    public List<EpisodeResource> GetEpisodes(int? seriesId, int? seasonNumber, [FromQuery]List<int> episodeIds, int? episodeFileId, [FromQuery] EpisodeSubresource[]? includeSubresources = null)
+    public Results<Ok<List<EpisodeResource>>, BadRequest> GetEpisodes(int? seriesId, int? seasonNumber, [FromQuery]List<int> episodeIds, int? episodeFileId, [FromQuery] EpisodeSubresource[]? includeSubresources = null)
     {
         var includeSeries = includeSubresources.Contains(EpisodeSubresource.Series);
         var includeEpisodeFile = includeSubresources.Contains(EpisodeSubresource.EpisodeFile);
@@ -33,18 +35,18 @@ public class EpisodeController : EpisodeControllerWithSignalR
         {
             if (seasonNumber.HasValue)
             {
-                return MapToResource(_episodeService.GetEpisodesBySeason(seriesId.Value, seasonNumber.Value), includeSeries, includeEpisodeFile, includeImages);
+                return TypedResults.Ok(MapToResource(_episodeService.GetEpisodesBySeason(seriesId.Value, seasonNumber.Value), includeSeries, includeEpisodeFile, includeImages));
             }
 
-            return MapToResource(_episodeService.GetEpisodeBySeries(seriesId.Value), includeSeries, includeEpisodeFile, includeImages);
+            return TypedResults.Ok(MapToResource(_episodeService.GetEpisodeBySeries(seriesId.Value), includeSeries, includeEpisodeFile, includeImages));
         }
         else if (episodeIds.Any())
         {
-            return MapToResource(_episodeService.GetEpisodes(episodeIds), includeSeries, includeEpisodeFile, includeImages);
+            return TypedResults.Ok(MapToResource(_episodeService.GetEpisodes(episodeIds), includeSeries, includeEpisodeFile, includeImages));
         }
         else if (episodeFileId.HasValue)
         {
-            return MapToResource(_episodeService.GetEpisodesByFileId(episodeFileId.Value), includeSeries, includeEpisodeFile, includeImages);
+            return TypedResults.Ok(MapToResource(_episodeService.GetEpisodesByFileId(episodeFileId.Value), includeSeries, includeEpisodeFile, includeImages));
         }
 
         throw new BadRequestException("seriesId or episodeIds must be provided");
@@ -52,18 +54,18 @@ public class EpisodeController : EpisodeControllerWithSignalR
 
     [RestPutById]
     [Consumes("application/json")]
-    public ActionResult<EpisodeResource> SetEpisodeMonitored([FromRoute] int id, [FromBody] EpisodeResource resource)
+    public Ok<EpisodeResource> SetEpisodeMonitored([FromRoute] int id, [FromBody] EpisodeResource resource)
     {
         _episodeService.SetEpisodeMonitored(id, resource.Monitored);
 
         resource = MapToResource(_episodeService.GetEpisode(id), false, false, false);
 
-        return Accepted(resource);
+        return TypedResults.Ok(resource);
     }
 
     [HttpPut("monitor")]
     [Consumes("application/json")]
-    public IActionResult SetEpisodesMonitored([FromBody] EpisodesMonitoredResource resource, [FromQuery] EpisodeSubresource[]? includeSubresources = null)
+    public Ok<List<EpisodeResource>> SetEpisodesMonitored([FromBody] EpisodesMonitoredResource resource, [FromQuery] EpisodeSubresource[]? includeSubresources = null)
     {
         var includeImages = includeSubresources.Contains(EpisodeSubresource.Images);
 
@@ -78,6 +80,6 @@ public class EpisodeController : EpisodeControllerWithSignalR
 
         var resources = MapToResource(_episodeService.GetEpisodes(resource.EpisodeIds), false, false, includeImages);
 
-        return Accepted(resources);
+        return TypedResults.Ok(resources);
     }
 }

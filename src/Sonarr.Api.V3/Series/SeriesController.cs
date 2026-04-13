@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DataAugmentation.Scene;
@@ -130,7 +131,7 @@ namespace Sonarr.Api.V3.Series
         }
 
         [NonAction]
-        public override ActionResult<SeriesResource> GetResourceByIdWithErrorHandler(int id)
+        public override Results<Ok<SeriesResource>, NotFound> GetResourceByIdWithErrorHandler(int id)
         {
             return base.GetResourceByIdWithErrorHandler(id);
         }

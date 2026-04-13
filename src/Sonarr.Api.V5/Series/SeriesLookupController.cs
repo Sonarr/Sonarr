@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.ImportLists.Exclusions;
 using NzbDrone.Core.MediaCover;
@@ -25,10 +27,10 @@ public class SeriesLookupController : Controller
     }
 
     [HttpGet]
-    public IEnumerable<SeriesResource> Search([FromQuery] string term)
+    public Ok<IEnumerable<SeriesResource>> Search([FromQuery] string term)
     {
         var tvDbResults = _searchProxy.SearchForNewSeries(term);
-        return MapToResource(tvDbResults);
+        return TypedResults.Ok(MapToResource(tvDbResults));
     }
 
     private IEnumerable<SeriesResource> MapToResource(IEnumerable<NzbDrone.Core.Tv.Series> series)

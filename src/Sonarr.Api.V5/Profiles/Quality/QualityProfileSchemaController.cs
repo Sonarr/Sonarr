@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Profiles.Qualities;
 using Sonarr.Http;
@@ -15,11 +17,11 @@ namespace Sonarr.Api.V5.Profiles.Quality
         }
 
         [HttpGet]
-        public QualityProfileResource GetSchema()
+        public Ok<QualityProfileResource> GetSchema()
         {
             var qualityProfile = _profileService.GetDefaultProfile(string.Empty);
 
-            return qualityProfile.ToResource();
+            return TypedResults.Ok(qualityProfile.ToResource());
         }
     }
 }

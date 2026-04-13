@@ -2,6 +2,8 @@ using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tags;
@@ -25,7 +27,7 @@ public class CalendarFeedController : Controller
     }
 
     [HttpGet("Sonarr.ics")]
-    public IActionResult GetCalendarFeed(int pastDays = 7, int futureDays = 28, string tags = "", bool unmonitored = false, bool premieresOnly = false, bool asAllDay = false, bool includeSpecials = true)
+    public ContentHttpResult GetCalendarFeed(int pastDays = 7, int futureDays = 28, string tags = "", bool unmonitored = false, bool premieresOnly = false, bool asAllDay = false, bool includeSpecials = true)
     {
         var start = DateTime.Today.AddDays(-pastDays);
         var end = DateTime.Today.AddDays(futureDays);
@@ -96,6 +98,6 @@ public class CalendarFeedController : Controller
         var serializer = (IStringSerializer)new SerializerFactory().Build(calendar.GetType(), new SerializationContext());
         var icalendar = serializer.SerializeToString(calendar);
 
-        return Content(icalendar, "text/calendar");
+        return TypedResults.Content(icalendar, "text/calendar");
     }
 }

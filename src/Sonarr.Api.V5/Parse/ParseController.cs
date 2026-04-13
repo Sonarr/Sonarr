@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.CustomFormats;
@@ -28,24 +30,24 @@ public class ParseController : Controller
 
     [HttpGet]
     [Produces("application/json")]
-    public ParseResource Parse(string? title, string? path)
+    public Ok<ParseResource> Parse(string? title, string? path)
     {
         if (title.IsNullOrWhiteSpace())
         {
-            return new ParseResource
+            return TypedResults.Ok(new ParseResource
             {
                 Title = title
-            };
+            });
         }
 
         var parsedEpisodeInfo = path.IsNotNullOrWhiteSpace() ? Parser.ParsePath(path) : Parser.ParseTitle(title);
 
         if (parsedEpisodeInfo == null)
         {
-            return new ParseResource
+            return TypedResults.Ok(new ParseResource
             {
                 Title = title
-            };
+            });
         }
 
         var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0, 0, null);
@@ -57,7 +59,7 @@ public class ParseController : Controller
             remoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(remoteEpisode, 0);
             remoteEpisode.CustomFormatScore = remoteEpisode.Series?.QualityProfile?.Value.CalculateCustomFormatScore(remoteEpisode.CustomFormats) ?? 0;
 
-            return new ParseResource
+            return TypedResults.Ok(new ParseResource
             {
                 Title = title,
                 ParsedEpisodeInfo = remoteEpisode.ParsedEpisodeInfo,
@@ -66,15 +68,15 @@ public class ParseController : Controller
                 Languages = remoteEpisode.Languages,
                 CustomFormats = remoteEpisode.CustomFormats?.ToResource(false),
                 CustomFormatScore = remoteEpisode.CustomFormatScore
-            };
+            });
         }
         else
         {
-            return new ParseResource
+            return TypedResults.Ok(new ParseResource
             {
                 Title = title,
                 ParsedEpisodeInfo = parsedEpisodeInfo
-            };
+            });
         }
     }
 }

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.MediaFiles;
 using Sonarr.Http;
@@ -17,19 +19,19 @@ public class RenameEpisodeController : Controller
 
     [HttpGet]
     [Produces("application/json")]
-    public List<RenameEpisodeResource> GetEpisodes(int seriesId, int? seasonNumber)
+    public Ok<List<RenameEpisodeResource>> GetEpisodes(int seriesId, int? seasonNumber)
     {
         if (seasonNumber.HasValue)
         {
-            return _renameEpisodeFileService.GetRenamePreviews(seriesId, seasonNumber.Value).ToResource();
+            return TypedResults.Ok(_renameEpisodeFileService.GetRenamePreviews(seriesId, seasonNumber.Value).ToResource());
         }
 
-        return _renameEpisodeFileService.GetRenamePreviews(seriesId).ToResource();
+        return TypedResults.Ok(_renameEpisodeFileService.GetRenamePreviews(seriesId).ToResource());
     }
 
     [HttpGet("bulk")]
     [Produces("application/json")]
-    public List<RenameEpisodeResource> GetEpisodes([FromQuery] List<int> seriesIds)
+    public Results<Ok<List<RenameEpisodeResource>>, BadRequest> GetEpisodes([FromQuery] List<int> seriesIds)
     {
         if (seriesIds is { Count: 0 })
         {
@@ -41,6 +43,6 @@ public class RenameEpisodeController : Controller
             throw new BadRequestException("seriesIds must be positive integers");
         }
 
-        return _renameEpisodeFileService.GetRenamePreviews(seriesIds).ToResource();
+        return TypedResults.Ok(_renameEpisodeFileService.GetRenamePreviews(seriesIds).ToResource());
     }
 }

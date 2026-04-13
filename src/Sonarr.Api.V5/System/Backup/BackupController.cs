@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Crypto;
 using NzbDrone.Common.Disk;
@@ -29,7 +31,7 @@ public class BackupController : Controller
 
     [HttpGet]
     [Produces("application/json")]
-    public ActionResult<List<BackupResource>> GetAll()
+    public Ok<List<BackupResource>> GetAll()
     {
         var backups = _backupService.GetBackups();
 
@@ -45,11 +47,11 @@ public class BackupController : Controller
             .OrderByDescending(b => b.Time)
             .ToList();
 
-        return resources;
+        return TypedResults.Ok(resources);
     }
 
     [RestDeleteById]
-    public ActionResult Delete(int id)
+    public Results<NoContent, NotFound> Delete(int id)
     {
         var backup = GetBackupById(id);
 
@@ -67,30 +69,30 @@ public class BackupController : Controller
 
         _diskProvider.DeleteFile(path);
 
-        return NoContent();
+        return TypedResults.NoContent();
     }
 
     [HttpPost("restore/{id:int}")]
     [Produces("application/json")]
-    public ActionResult<object> Restore([FromRoute] int id)
+    public Results<Ok<object>, NotFound> Restore([FromRoute] int id)
     {
         var backup = GetBackupById(id);
 
         if (backup == null)
         {
-            return NotFound();
+            return TypedResults.NotFound();
         }
 
         var path = GetBackupPath(backup);
         _backupService.Restore(path);
 
-        return new { RestartRequired = true };
+        return TypedResults.Ok((object)new { RestartRequired = true });
     }
 
     [HttpPost("restore/upload")]
     [Produces("application/json")]
     [RequestFormLimits(MultipartBodyLengthLimit = 5000000000)]
-    public ActionResult<object> RestoreUpload()
+    public Results<Ok<object>, BadRequest<object>> RestoreUpload()
     {
         var files = Request.Form.Files;
 
@@ -104,7 +106,7 @@ public class BackupController : Controller
 
         if (!ValidExtensions.Contains(extension))
         {
-            return BadRequest(new { error = $"Invalid extension, must be one of: {string.Join(", ", ValidExtensions)}" });
+            return TypedResults.BadRequest((object)new { error = $"Invalid extension, must be one of: {string.Join(", ", ValidExtensions)}" });
         }
 
         var path = Path.Combine(_appFolderInfo.TempFolder, $"sonarr_backup_restore{extension}");
@@ -113,7 +115,7 @@ public class BackupController : Controller
         _backupService.Restore(path);
         _diskProvider.DeleteFile(path);
 
-        return new { RestartRequired = true };
+        return TypedResults.Ok((object)new { RestartRequired = true });
     }
 
     private string GetBackupPath(NzbDrone.Core.Backup.Backup backup)

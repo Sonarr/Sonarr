@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Blocklisting;
@@ -57,7 +59,7 @@ namespace Sonarr.Api.V5.Queue
         }
 
         [NonAction]
-        public override ActionResult<QueueResource> GetResourceByIdWithErrorHandler(int id)
+        public override Results<Ok<QueueResource>, NotFound> GetResourceByIdWithErrorHandler(int id)
         {
             return base.GetResourceByIdWithErrorHandler(id);
         }
@@ -68,7 +70,7 @@ namespace Sonarr.Api.V5.Queue
         }
 
         [RestDeleteById]
-        public ActionResult RemoveAction(int id, string? message = null, bool removeFromClient = true, bool blocklist = false, bool skipRedownload = false, bool changeCategory = false)
+        public Results<NoContent, NotFound> RemoveAction(int id, string? message = null, bool removeFromClient = true, bool blocklist = false, bool skipRedownload = false, bool changeCategory = false)
         {
             var pendingRelease = _pendingReleaseService.FindPendingQueueItem(id);
 
@@ -76,7 +78,7 @@ namespace Sonarr.Api.V5.Queue
             {
                 Remove(pendingRelease, message, blocklist);
 
-                return NoContent();
+                return TypedResults.NoContent();
             }
 
             var trackedDownload = GetTrackedDownload(id);
@@ -89,11 +91,11 @@ namespace Sonarr.Api.V5.Queue
             Remove(trackedDownload, message, removeFromClient, blocklist, skipRedownload, changeCategory);
             _trackedDownloadService.StopTracking(trackedDownload.DownloadItem.DownloadId);
 
-            return NoContent();
+            return TypedResults.NoContent();
         }
 
         [HttpDelete("bulk")]
-        public object RemoveMany([FromBody] QueueBulkResource resource, [FromQuery] string? message, [FromQuery] bool removeFromClient = true, [FromQuery] bool blocklist = false, [FromQuery] bool skipRedownload = false, [FromQuery] bool changeCategory = false)
+        public NoContent RemoveMany([FromBody] QueueBulkResource resource, [FromQuery] string? message, [FromQuery] bool removeFromClient = true, [FromQuery] bool blocklist = false, [FromQuery] bool skipRedownload = false, [FromQuery] bool changeCategory = false)
         {
             var trackedDownloadIds = new List<string>();
             var pendingToRemove = new List<NzbDrone.Core.Queue.Queue>();
@@ -130,12 +132,12 @@ namespace Sonarr.Api.V5.Queue
 
             _trackedDownloadService.StopTracking(trackedDownloadIds);
 
-            return NoContent();
+            return TypedResults.NoContent();
         }
 
         [HttpGet]
         [Produces("application/json")]
-        public PagingResource<QueueResource> GetQueue([FromQuery] PagingRequestResource paging, bool includeUnknownSeriesItems = true, [FromQuery] int[]? seriesIds = null, DownloadProtocol? protocol = null, [FromQuery] int[]? languages = null, [FromQuery] int[]? quality = null, [FromQuery] QueueStatus[]? status = null, [FromQuery] QueueSubresource[]? includeSubresources = null)
+        public Ok<PagingResource<QueueResource>> GetQueue([FromQuery] PagingRequestResource paging, bool includeUnknownSeriesItems = true, [FromQuery] int[]? seriesIds = null, DownloadProtocol? protocol = null, [FromQuery] int[]? languages = null, [FromQuery] int[]? quality = null, [FromQuery] QueueStatus[]? status = null, [FromQuery] QueueSubresource[]? includeSubresources = null)
         {
             var pagingResource = new PagingResource<QueueResource>(paging);
             var pagingSpec = pagingResource.MapToPagingSpec<QueueResource, NzbDrone.Core.Queue.Queue>(
@@ -167,7 +169,7 @@ namespace Sonarr.Api.V5.Queue
             var includeSeries = includeSubresources.Contains(QueueSubresource.Series);
             var includeEpisodes = includeSubresources.Contains(QueueSubresource.Episodes);
 
-            return pagingSpec.ApplyToPage((spec) => GetQueue(spec, seriesIds?.ToHashSet() ?? [], protocol, languages?.ToHashSet() ?? [], quality?.ToHashSet() ?? [], status?.ToHashSet() ?? [], includeUnknownSeriesItems), (q) => MapToResource(q, includeSeries, includeEpisodes));
+            return TypedResults.Ok(pagingSpec.ApplyToPage((spec) => GetQueue(spec, seriesIds?.ToHashSet() ?? [], protocol, languages?.ToHashSet() ?? [], quality?.ToHashSet() ?? [], status?.ToHashSet() ?? [], includeUnknownSeriesItems), (q) => MapToResource(q, includeSeries, includeEpisodes)));
         }
 
         private PagingSpec<NzbDrone.Core.Queue.Queue> GetQueue(PagingSpec<NzbDrone.Core.Queue.Queue> pagingSpec, HashSet<int> seriesIds, DownloadProtocol? protocol, HashSet<int> languages, HashSet<int> quality, HashSet<QueueStatus> status, bool includeUnknownSeriesItems)

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Tags;
 using Sonarr.Http;
@@ -22,8 +24,8 @@ public class TagDetailsController : RestController<TagDetailsResource>
 
     [HttpGet]
     [Produces("application/json")]
-    public List<TagDetailsResource> GetAll()
+    public Ok<List<TagDetailsResource>> GetAll()
     {
-        return _tagService.Details().ToResource();
+        return TypedResults.Ok(_tagService.Details().ToResource());
     }
 }

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Localization;
 using Sonarr.Http;
@@ -17,25 +19,25 @@ public class LocalizationController : RestController<LocalizationResource>
 
     protected override LocalizationResource GetResourceById(int id)
     {
-        return GetLocalization();
+        return _localizationService.GetLocalizationDictionary().ToResource();
     }
 
     [HttpGet]
     [Produces("application/json")]
-    public LocalizationResource GetLocalization()
+    public Ok<LocalizationResource> GetLocalization()
     {
-        return _localizationService.GetLocalizationDictionary().ToResource();
+        return TypedResults.Ok(GetResourceById(1));
     }
 
     [HttpGet("language")]
     [Produces("application/json")]
-    public LocalizationLanguageResource GetLanguage()
+    public Ok<LocalizationLanguageResource> GetLanguage()
     {
         var identifier = _localizationService.GetLanguageIdentifier();
 
-        return new LocalizationLanguageResource
+        return TypedResults.Ok(new LocalizationLanguageResource
         {
             Identifier = identifier
-        };
+        });
     }
 }

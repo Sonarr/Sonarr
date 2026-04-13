@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -24,7 +26,7 @@ public abstract class LogFileControllerBase : Controller
 
     [HttpGet]
     [Produces("application/json")]
-    public List<LogFileResource> GetLogFilesResponse()
+    public Ok<List<LogFileResource>> GetLogFilesResponse()
     {
         var result = new List<LogFileResource>();
 
@@ -45,12 +47,12 @@ public abstract class LogFileControllerBase : Controller
             });
         }
 
-        return result.OrderByDescending(l => l.LastWriteTime).ToList();
+        return TypedResults.Ok(result.OrderByDescending(l => l.LastWriteTime).ToList());
     }
 
     [HttpGet(@"{filename:regex([[-.a-zA-Z0-9]]+?\.txt)}")]
     [Produces("text/plain")]
-    public IActionResult GetLogFileResponse(string filename)
+    public Results<PhysicalFileHttpResult, NotFound> GetLogFileResponse(string filename)
     {
         LogManager.Flush();
 
@@ -58,10 +60,10 @@ public abstract class LogFileControllerBase : Controller
 
         if (!_diskProvider.FileExists(filePath))
         {
-            return NotFound();
+            return TypedResults.NotFound();
         }
 
-        return PhysicalFile(filePath, "text/plain");
+        return TypedResults.PhysicalFile(filePath, "text/plain");
     }
 
     protected abstract IEnumerable<string> GetLogFiles();

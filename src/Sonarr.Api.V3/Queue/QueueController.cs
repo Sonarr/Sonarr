@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Blocklisting;
@@ -61,7 +62,7 @@ namespace Sonarr.Api.V3.Queue
         }
 
         [NonAction]
-        public override ActionResult<QueueResource> GetResourceByIdWithErrorHandler(int id)
+        public override Results<Ok<QueueResource>, NotFound> GetResourceByIdWithErrorHandler(int id)
         {
             return base.GetResourceByIdWithErrorHandler(id);
         }

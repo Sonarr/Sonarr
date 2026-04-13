@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Download.Pending;
@@ -28,7 +29,7 @@ namespace Sonarr.Api.V3.Queue
         }
 
         [NonAction]
-        public override ActionResult<QueueResource> GetResourceByIdWithErrorHandler(int id)
+        public override Results<Ok<QueueResource>, NotFound> GetResourceByIdWithErrorHandler(int id)
         {
             return base.GetResourceByIdWithErrorHandler(id);
         }

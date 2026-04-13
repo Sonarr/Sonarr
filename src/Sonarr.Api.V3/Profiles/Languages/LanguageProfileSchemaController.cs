@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Languages;
 using Sonarr.Http;
@@ -33,7 +34,7 @@ namespace Sonarr.Api.V3.Profiles.Languages
         }
 
         [NonAction]
-        public override ActionResult<LanguageProfileResource> GetResourceByIdWithErrorHandler(int id)
+        public override Results<Ok<LanguageProfileResource>, NotFound> GetResourceByIdWithErrorHandler(int id)
         {
             return base.GetResourceByIdWithErrorHandler(id);
         }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Download.Pending;
@@ -29,7 +30,7 @@ namespace Sonarr.Api.V5.Queue
         }
 
         [NonAction]
-        public override ActionResult<QueueStatusResource> GetResourceByIdWithErrorHandler(int id)
+        public override Results<Ok<QueueStatusResource>, NotFound> GetResourceByIdWithErrorHandler(int id)
         {
             return base.GetResourceByIdWithErrorHandler(id);
         }

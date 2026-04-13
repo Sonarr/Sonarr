@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv;
@@ -19,14 +21,14 @@ public class SeriesFolderController : Controller
 
     [HttpGet("{id}/folder")]
     [Produces("application/json")]
-    public object GetFolder([FromRoute] int id)
+    public Ok<object> GetFolder([FromRoute] int id)
     {
         var series = _seriesService.GetSeries(id);
         var folder = _fileNameBuilder.GetSeriesFolder(series);
 
-        return new
+        return TypedResults.Ok((object)new
         {
             folder
-        };
+        });
     }
 }

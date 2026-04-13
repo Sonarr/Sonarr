@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
@@ -24,38 +26,38 @@ public class FileSystemController : Controller
 
     [HttpGet]
     [Produces("application/json")]
-    public IActionResult GetContents(string? path, bool includeFiles = false, bool allowFoldersWithoutTrailingSlashes = false)
+    public Ok<FileSystemResult> GetContents(string? path, bool includeFiles = false, bool allowFoldersWithoutTrailingSlashes = false)
     {
-        return Ok(_fileSystemLookupService.LookupContents(path, includeFiles, allowFoldersWithoutTrailingSlashes));
+        return TypedResults.Ok(_fileSystemLookupService.LookupContents(path, includeFiles, allowFoldersWithoutTrailingSlashes));
     }
 
     [HttpGet("type")]
     [Produces("application/json")]
-    public object GetEntityType(string path)
+    public Ok<object> GetEntityType(string path)
     {
         if (_diskProvider.FileExists(path))
         {
-            return new { type = "file" };
+            return TypedResults.Ok((object)new { type = "file" });
         }
 
         // Return folder even if it doesn't exist on disk to avoid leaking anything from the UI about the underlying system
-        return new { type = "folder" };
+        return TypedResults.Ok((object)new { type = "folder" });
     }
 
     [HttpGet("mediafiles")]
     [Produces("application/json")]
-    public object GetMediaFiles(string path)
+    public Ok<IEnumerable<object>> GetMediaFiles(string path)
     {
         if (!_diskProvider.FolderExists(path))
         {
-            return Array.Empty<string>();
+            return TypedResults.Ok(Enumerable.Empty<object>());
         }
 
-        return _diskScanService.GetVideoFiles(path).Select(f => new
+        return TypedResults.Ok(_diskScanService.GetVideoFiles(path).Select(object (f) => new
         {
             Path = f,
             RelativePath = path.GetRelativePath(f),
             Name = Path.GetFileName(f)
-        });
+        }));
     }
 }

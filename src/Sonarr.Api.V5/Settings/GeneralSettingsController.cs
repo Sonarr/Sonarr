@@ -1,5 +1,5 @@
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
@@ -102,7 +102,7 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
         return resource;
     }
 
-    public override ActionResult<GeneralSettingsResource> SaveSettings(GeneralSettingsResource resource)
+    public override Results<Accepted<GeneralSettingsResource>, NotFound> SaveSettings(GeneralSettingsResource resource)
     {
         if (resource.Username.IsNotNullOrWhiteSpace() && resource.Password.IsNotNullOrWhiteSpace())
         {

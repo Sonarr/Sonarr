@@ -1,4 +1,6 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.ImportLists.Exclusions;
@@ -33,7 +35,7 @@ public class ImportListExclusionController : RestController<ImportListExclusionR
 
     [HttpGet]
     [Produces("application/json")]
-    public PagingResource<ImportListExclusionResource> GetImportListExclusions([FromQuery] PagingRequestResource paging)
+    public Ok<PagingResource<ImportListExclusionResource>> GetImportListExclusions([FromQuery] PagingRequestResource paging)
     {
         var pagingResource = new PagingResource<ImportListExclusionResource>(paging);
         var pageSpec = pagingResource.MapToPagingSpec<ImportListExclusionResource, ImportListExclusion>(
@@ -46,41 +48,41 @@ public class ImportListExclusionController : RestController<ImportListExclusionR
             "id",
             SortDirection.Descending);
 
-        return pageSpec.ApplyToPage(_importListExclusionService.Paged, ImportListExclusionResourceMapper.ToResource);
+        return TypedResults.Ok(pageSpec.ApplyToPage(_importListExclusionService.Paged, ImportListExclusionResourceMapper.ToResource));
     }
 
     [RestPostById]
     [Consumes("application/json")]
-    public ActionResult<ImportListExclusionResource> AddImportListExclusion([FromBody] ImportListExclusionResource resource)
+    public Results<Created<ImportListExclusionResource>, NotFound> AddImportListExclusion([FromBody] ImportListExclusionResource resource)
     {
         var importListExclusion = _importListExclusionService.Add(resource.ToModel());
 
-        return Created(importListExclusion.Id);
+        return TypedCreated(importListExclusion.Id);
     }
 
     [RestPutById]
     [Consumes("application/json")]
-    public ActionResult<ImportListExclusionResource> UpdateImportListExclusion([FromBody] ImportListExclusionResource resource)
+    public Results<Accepted<ImportListExclusionResource>, NotFound> UpdateImportListExclusion([FromBody] ImportListExclusionResource resource)
     {
         _importListExclusionService.Update(resource.ToModel());
 
-        return Accepted(resource.Id);
+        return TypedAccepted(resource.Id);
     }
 
     [RestDeleteById]
-    public ActionResult DeleteImportListExclusion(int id)
+    public NoContent DeleteImportListExclusion(int id)
     {
         _importListExclusionService.Delete(id);
 
-        return NoContent();
+        return TypedResults.NoContent();
     }
 
     [HttpDelete("bulk")]
     [Consumes("application/json")]
-    public ActionResult DeleteImportListExclusions([FromBody] ImportListExclusionBulkResource resource)
+    public NoContent DeleteImportListExclusions([FromBody] ImportListExclusionBulkResource resource)
     {
         _importListExclusionService.Delete(resource.Ids.ToList());
 
-        return NoContent();
+        return TypedResults.NoContent();
     }
 }

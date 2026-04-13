@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Extras.Metadata;
 using NzbDrone.SignalR;
@@ -18,13 +19,13 @@ public class MetadataController : ProviderControllerBase<MetadataResource, Metad
     }
 
     [NonAction]
-    public override ActionResult<MetadataResource> UpdateProvider([FromBody] MetadataBulkResource providerResource)
+    public override Results<Ok<IEnumerable<MetadataResource>>, BadRequest> UpdateProvider([FromBody] MetadataBulkResource providerResource)
     {
         throw new NotImplementedException();
     }
 
     [NonAction]
-    public override ActionResult DeleteProviders([FromBody] MetadataBulkResource resource)
+    public override NoContent DeleteProviders([FromBody] MetadataBulkResource resource)
     {
         throw new NotImplementedException();
     }

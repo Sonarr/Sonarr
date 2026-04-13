@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Tv;
 using Sonarr.Http;
@@ -15,11 +17,11 @@ namespace Sonarr.Api.V5.Series
         }
 
         [HttpPost]
-        public object Import([FromBody] List<SeriesResource> resource)
+        public Ok<List<SeriesResource>> Import([FromBody] List<SeriesResource> resource)
         {
             var newSeries = resource.ToModel();
 
-            return _addSeriesService.AddSeries(newSeries).ToResource();
+            return TypedResults.Ok(_addSeriesService.AddSeries(newSeries).ToResource());
         }
     }
 }
