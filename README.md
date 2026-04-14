@@ -62,6 +62,11 @@ This generally happens on usenet indexers that include a tvdbId in releases that
 
 Sonarr's default anime season search is **VERY** slow since it also searches for each episode individually. This setting allows you to bypass that and just search by season, which most indexers support. This significantly improves the search experience for anime.
 
+#### FIX_REPAIR_REIMPORT
+⚠️ Testing, not ready for use.
+
+This fixes a bug where Sonarr does not re-import torrents that have been previously deleted and grabbed again. This should be enabled if you use tools like decypharr to repair broken torrents/links.
+
 ## Contributing
 
 Feel free to open issues or pull requests for any changes you'd like to see.

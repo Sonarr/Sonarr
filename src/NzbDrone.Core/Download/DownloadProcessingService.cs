@@ -40,6 +40,14 @@ namespace NzbDrone.Core.Download
 
             foreach (var trackedDownload in trackedDownloads)
             {
+                // Stop tracking downloads in the cache after they're complete. If we still track these, repairs don't work correctly when the same hash is grabbed.
+                var stopTrackingAfterImport = bool.TryParse(Environment.GetEnvironmentVariable("FIX_REPAIR_REIMPORT"), out var enabled) && enabled;
+
+                if (stopTrackingAfterImport)
+                {
+                    _trackedDownloadService.StopTracking(trackedDownload.DownloadItem.DownloadId);
+                }
+
                 _eventAggregator.PublishEvent(new DownloadCanBeRemovedEvent(trackedDownload));
             }
         }
