@@ -36,6 +36,7 @@ This fork provides two categories of changes:
 
 - ffprobe issues: There's a bug in VideoFileInfoReader that causes ffprobe to read the entire file during HDR analysis if the video stream is at a non-zero index. This is especially problematic for remote files since it uses bandwidth unnecessarily.
 - RefreshMonitoredDownloadsCommand: Tools like decypharr and nzbdav issue this command after processing a download. But when this command is issued through the API or through the UI, it has a `Normal` priority, causing a buildup of queue items if lots of searches are triggered at once.
+- Fix a bug where Sonarr silently ignores torrents that have been previously imported, deleted and then grabbed again. Without this, repairs from tools like decypharr don't work reliably.
 
 ## Tweaks
 These are small changes to Sonarr behavior to optimize for debrid/usenet streaming setups. These can be turned on through environment variables. 
@@ -61,11 +62,6 @@ This generally happens on usenet indexers that include a tvdbId in releases that
 #### FIX_ANIME_SEASON_SEARCH
 
 Sonarr's default anime season search is **VERY** slow since it also searches for each episode individually. This setting allows you to bypass that and just search by season, which most indexers support. This significantly improves the search experience for anime.
-
-#### FIX_REPAIR_REIMPORT
-⚠️ Testing, not ready for use.
-
-This fixes a bug where Sonarr does not re-import torrents that have been previously deleted and grabbed again. This should be enabled if you use tools like decypharr to repair broken torrents/links.
 
 ## Contributing
 
