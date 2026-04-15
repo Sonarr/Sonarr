@@ -155,6 +155,15 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
         </SortMenuItem>
 
         <SortMenuItem
+          name="averageSizePerEpisode"
+          sortKey={sortKey}
+          sortDirection={sortDirection}
+          onPress={onSortSelect}
+        >
+          {translate('AverageSizePerEpisode')}
+        </SortMenuItem>
+
+        <SortMenuItem
           name="tags"
           sortKey={sortKey}
           sortDirection={sortDirection}

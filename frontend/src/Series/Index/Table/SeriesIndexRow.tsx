@@ -396,6 +396,17 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
           );
         }
 
+        if (name === 'averageSizePerEpisode') {
+          const averageSize =
+            totalEpisodeCount > 0 ? sizeOnDisk / totalEpisodeCount : 0;
+
+          return (
+            <VirtualTableRowCell key={name} className={styles[name]}>
+              {averageSize ? formatBytes(averageSize) : null}
+            </VirtualTableRowCell>
+          );
+        }
+
         if (name === 'genres') {
           const joinedGenres = genres.join(', ');
 

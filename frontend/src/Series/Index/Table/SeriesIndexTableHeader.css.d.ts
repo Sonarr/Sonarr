@@ -3,6 +3,7 @@
 interface CssExports {
   'actions': string;
   'added': string;
+  'averageSizePerEpisode': string;
   'banner': string;
   'bannerGrow': string;
   'certification': string;
