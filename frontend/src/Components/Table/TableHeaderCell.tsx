@@ -45,9 +45,11 @@ function TableHeaderCell({
     if (!isSortable) {
       return undefined;
     }
+
     if (!isSorting) {
       return 'none';
     }
+
     return sortDirection === sortDirections.ASCENDING
       ? 'ascending'
       : 'descending';
@@ -74,9 +76,9 @@ function TableHeaderCell({
     >
       {children}
 
-      {isSorting && (
+      {isSorting ? (
         <Icon name={sortIcon} className={styles.sortIcon} aria-hidden={true} />
-      )}
+      ) : null}
     </Link>
   ) : (
     <th className={className} scope="col">
