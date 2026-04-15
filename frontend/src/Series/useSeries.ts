@@ -113,6 +113,14 @@ const SORT_PREDICATES = {
     return item.statistics?.sizeOnDisk ?? 0;
   },
 
+  averageSizePerEpisode: (item: Series, _direction: SortDirection) => {
+    const totalEpisodeCount = item.statistics?.totalEpisodeCount ?? 0;
+
+    return totalEpisodeCount > 0
+      ? (item.statistics?.sizeOnDisk ?? 0) / totalEpisodeCount
+      : 0;
+  },
+
   network: (item: Series, _direction: SortDirection) => {
     const network = item.network;
 
@@ -256,6 +264,20 @@ const FILTER_PREDICATES = {
     const predicate = getFilterTypePredicate(type);
     const sizeOnDisk = item.statistics?.sizeOnDisk ?? 0;
     return predicate(sizeOnDisk, filterValue);
+  },
+
+  averageSizePerEpisode: (
+    item: Series,
+    filterValue: number,
+    type: FilterType
+  ) => {
+    const predicate = getFilterTypePredicate(type);
+    const totalEpisodeCount = item.statistics?.totalEpisodeCount ?? 0;
+    const averageSize =
+      totalEpisodeCount > 0
+        ? (item.statistics?.sizeOnDisk ?? 0) / totalEpisodeCount
+        : 0;
+    return predicate(averageSize, filterValue);
   },
 
   hasMissingSeason: (item: Series, filterValue: boolean, type: FilterType) => {
@@ -441,6 +463,12 @@ export const FILTER_BUILDER: FilterBuilderProp<Series>[] = [
   {
     name: 'sizeOnDisk',
     label: () => translate('SizeOnDisk'),
+    type: filterBuilderTypes.NUMBER,
+    valueType: filterBuilderValueTypes.BYTES,
+  },
+  {
+    name: 'averageSizePerEpisode',
+    label: () => translate('AverageSizePerEpisode'),
     type: filterBuilderTypes.NUMBER,
     valueType: filterBuilderValueTypes.BYTES,
   },

@@ -192,6 +192,12 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
           isVisible: false,
         },
         {
+          name: 'averageSizePerEpisode',
+          label: () => translate('AverageSize'),
+          isSortable: true,
+          isVisible: false,
+        },
+        {
           name: 'genres',
           label: () => translate('Genres'),
           isSortable: false,
