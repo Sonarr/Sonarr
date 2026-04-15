@@ -254,6 +254,18 @@ const FILTER_PREDICATES = {
     return predicate(releaseGroups, filterValue);
   },
 
+  episodeFileQualities: (
+    item: Series,
+    filterValue: number[],
+    type: FilterType
+  ) => {
+    const episodeFileQualities = (
+      item.statistics?.episodeFileQualities ?? []
+    ).map((q) => q.id);
+    const predicate = getFilterTypePredicate(type);
+    return predicate(episodeFileQualities, filterValue);
+  },
+
   seasonCount: (item: Series, filterValue: number, type: FilterType) => {
     const predicate = getFilterTypePredicate(type);
     const seasonCount = item.statistics?.seasonCount ?? 0;
@@ -520,6 +532,12 @@ export const FILTER_BUILDER: FilterBuilderProp<Series>[] = [
     name: 'releaseGroups',
     label: () => translate('ReleaseGroups'),
     type: filterBuilderTypes.ARRAY,
+  },
+  {
+    name: 'episodeFileQualities',
+    label: () => translate('EpisodeFileQualities'),
+    type: filterBuilderTypes.ARRAY,
+    valueType: filterBuilderValueTypes.QUALITY,
   },
   {
     name: 'ratings',

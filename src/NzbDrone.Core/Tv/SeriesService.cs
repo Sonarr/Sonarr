@@ -28,6 +28,7 @@ namespace NzbDrone.Core.Tv
         Dictionary<int, string> GetAllSeriesPaths();
         Dictionary<int, List<int>> GetAllSeriesTags();
         List<Series> AllForTag(int tagId);
+        Dictionary<int, int> GetAllSeriesQualityProfiles();
         Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true, bool publishUpdatedEvent = true);
         List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder);
         bool SeriesPathExists(string folder);
@@ -184,6 +185,11 @@ namespace NzbDrone.Core.Tv
         public Dictionary<int, List<int>> GetAllSeriesTags()
         {
             return _seriesRepository.AllSeriesTags();
+        }
+
+        public Dictionary<int, int> GetAllSeriesQualityProfiles()
+        {
+            return _seriesRepository.AllSeriesQualityProfiles();
         }
 
         public List<Series> AllForTag(int tagId)

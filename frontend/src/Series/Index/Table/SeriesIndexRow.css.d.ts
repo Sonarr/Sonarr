@@ -11,6 +11,7 @@ interface CssExports {
   'certification': string;
   'checkInput': string;
   'episodeCount': string;
+  'episodeFileQualities': string;
   'episodeProgress': string;
   'genres': string;
   'latestSeason': string;
