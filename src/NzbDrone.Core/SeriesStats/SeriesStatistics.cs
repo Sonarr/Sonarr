@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.SeriesStats
 {
@@ -16,6 +17,7 @@ namespace NzbDrone.Core.SeriesStats
         public int MonitoredEpisodeCount { get; set; }
         public long SizeOnDisk { get; set; }
         public List<string> ReleaseGroups { get; set; }
+        public List<Quality> EpisodeFileQualities { get; set; }
         public List<SeasonStatistics> SeasonStatistics { get; set; }
     }
 }

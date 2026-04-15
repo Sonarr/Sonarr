@@ -1,5 +1,6 @@
 import ModelBase from 'App/ModelBase';
 import Language from 'Language/Language';
+import Quality from 'Quality/Quality';
 
 export type SeriesType = 'anime' | 'daily' | 'standard';
 export type SeriesMonitor =
@@ -34,6 +35,7 @@ export interface Statistics {
   percentOfEpisodes: number;
   previousAiring?: Date;
   releaseGroups: string[];
+  episodeFileQualities: Quality[];
   sizeOnDisk: number;
   totalEpisodeCount: number;
   monitoredEpisodeCount: number;

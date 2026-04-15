@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Tv
         List<int> AllSeriesTvdbIds();
         Dictionary<int, string> AllSeriesPaths();
         Dictionary<int, List<int>> AllSeriesTags();
+        Dictionary<int, int> AllSeriesQualityProfiles();
     }
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
@@ -108,6 +109,15 @@ namespace NzbDrone.Core.Tv
             {
                 var strSql = "SELECT \"Id\" AS Key, \"Tags\" AS Value FROM \"Series\" WHERE \"Tags\" IS NOT NULL";
                 return conn.Query<KeyValuePair<int, List<int>>>(strSql).ToDictionary(x => x.Key, x => x.Value);
+            }
+        }
+
+        public Dictionary<int, int> AllSeriesQualityProfiles()
+        {
+            using (var conn = _database.OpenConnection())
+            {
+                var strSql = "SELECT \"Id\" AS Key, \"QualityProfileId\" AS Value FROM \"Series\"";
+                return conn.Query<KeyValuePair<int, int>>(strSql).ToDictionary(x => x.Key, x => x.Value);
             }
         }
 

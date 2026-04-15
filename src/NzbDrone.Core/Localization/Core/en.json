@@ -668,6 +668,7 @@
   "EpisodeFileDeleted": "Episode File Deleted",
   "EpisodeFileDeletedTooltip": "Episode file deleted",
   "EpisodeFileMissingTooltip": "Episode file missing",
+  "EpisodeFileQualities": "Episode File Qualities",
   "EpisodeFileRenamed": "Episode File Renamed",
   "EpisodeFileRenamedTooltip": "Episode file renamed",
   "EpisodeFilesLoadError": "Unable to load episode files",

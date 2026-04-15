@@ -1,3 +1,4 @@
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.SeriesStats;
 
 namespace Sonarr.Api.V5.Series;
@@ -12,6 +13,7 @@ public class SeasonStatisticsResource
     public int MonitoredEpisodeCount { get; set; }
     public long SizeOnDisk { get; set; }
     public List<string>? ReleaseGroups { get; set; }
+    public List<Quality>? EpisodeFileQualities { get; set; }
 
     public decimal PercentOfEpisodes
     {
@@ -40,7 +42,8 @@ public static class SeasonStatisticsResourceMapper
             TotalEpisodeCount = model.TotalEpisodeCount,
             MonitoredEpisodeCount = model.MonitoredEpisodeCount,
             SizeOnDisk = model.SizeOnDisk,
-            ReleaseGroups = model.ReleaseGroups
+            ReleaseGroups = model.ReleaseGroups,
+            EpisodeFileQualities = model.EpisodeFileQualities
         };
     }
 }

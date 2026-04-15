@@ -149,6 +149,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
     totalEpisodeCount = 0,
     sizeOnDisk = 0,
     releaseGroups = [],
+    episodeFileQualities = [],
   } = statistics;
 
   return (
@@ -443,6 +444,25 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
           return (
             <VirtualTableRowCell key={name} className={styles[name]}>
               <span title={joinedReleaseGroups}>{truncatedReleaseGroups}</span>
+            </VirtualTableRowCell>
+          );
+        }
+
+        if (name === 'episodeFileQualities') {
+          const joinedQualities = episodeFileQualities
+            .map((q) => q.name)
+            .join(', ');
+          const truncatedQualities =
+            episodeFileQualities.length > 3
+              ? `${episodeFileQualities
+                  .slice(0, 3)
+                  .map((q) => q.name)
+                  .join(', ')}...`
+              : joinedQualities;
+
+          return (
+            <VirtualTableRowCell key={name} className={styles[name]}>
+              <span title={joinedQualities}>{truncatedQualities}</span>
             </VirtualTableRowCell>
           );
         }

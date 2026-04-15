@@ -8,6 +8,7 @@ interface CssExports {
   'bannerGrow': string;
   'certification': string;
   'episodeCount': string;
+  'episodeFileQualities': string;
   'episodeProgress': string;
   'genres': string;
   'latestSeason': string;

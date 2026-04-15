@@ -237,7 +237,7 @@ namespace Sonarr.Api.V3.Series
 
         private void FetchAndLinkSeriesStatistics(SeriesResource resource)
         {
-            LinkSeriesStatistics(resource, _seriesStatisticsService.SeriesStatistics(resource.Id));
+            LinkSeriesStatistics(resource, _seriesStatisticsService.SeriesStatistics(resource.Id, resource.QualityProfileId));
         }
 
         private void LinkSeriesStatistics(List<SeriesResource> resources, Dictionary<int, SeriesStatistics> seriesStatistics)
