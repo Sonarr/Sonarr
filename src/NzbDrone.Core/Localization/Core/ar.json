@@ -1,4 +1,5 @@
 {
+    "About": "نبدة عن",
     "AddAutoTag": "أضف كلمات دلالية تلقائيا",
     "AddCondition": "إضافة شرط",
     "AutoTaggingNegateHelpText": "إذا تم تحديده ، فلن يتم تطبيق التنسيق المخصص إذا تطابق شرط {implementationName} هذا.",
