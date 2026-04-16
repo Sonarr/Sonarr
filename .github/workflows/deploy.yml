@@ -73,7 +73,6 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         latest: true
-        prerelease: ${{ inputs.branch != 'develop' }}
 
     - name: Generate Release Notes
       id: generate-release-notes
