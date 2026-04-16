@@ -12,14 +12,17 @@ namespace NzbDrone.Core.Download
     {
         private readonly IConfigService _configService;
         private readonly IProvideDownloadClient _downloadClientProvider;
+        private readonly ITrackedDownloadService _trackedDownloadService;
         private readonly Logger _logger;
 
         public DownloadEventHub(IConfigService configService,
             IProvideDownloadClient downloadClientProvider,
+            ITrackedDownloadService trackedDownloadService,
             Logger logger)
         {
             _configService = configService;
             _downloadClientProvider = downloadClientProvider;
+            _trackedDownloadService = trackedDownloadService;
             _logger = logger;
         }
 
@@ -91,6 +94,9 @@ namespace NzbDrone.Core.Download
                 _logger.Debug("[{0}] Removing download from {1} history", trackedDownload.DownloadItem.Title, trackedDownload.DownloadItem.DownloadClientInfo.Name);
                 downloadClient.RemoveItem(trackedDownload.DownloadItem, true);
                 trackedDownload.DownloadItem.Removed = true;
+
+                // Stop tracking downloads in the cache after they're complete. If we still track these, repairs don't work correctly when the same hash is grabbed.
+                _trackedDownloadService.StopTracking(trackedDownload.DownloadItem.DownloadId);
             }
             catch (NotSupportedException)
             {

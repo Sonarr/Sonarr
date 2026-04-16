@@ -73,7 +73,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         latest: true
-        prerelease: ${{ inputs.branch != 'main' }}
+        prerelease: ${{ inputs.branch != 'develop' }}
 
     - name: Generate Release Notes
       id: generate-release-notes
@@ -99,7 +99,7 @@ jobs:
         generateReleaseNotes: false
         body: ${{ steps.generate-release-notes.outputs.result }}
         name: ${{ inputs.version }}
-        prerelease: ${{ inputs.branch != 'main' }}
+        prerelease: ${{ inputs.branch != 'develop' }}
         skipIfReleaseExists: true
         tag: v${{ inputs.version }}
 
@@ -136,8 +136,6 @@ jobs:
         images: ${{ env.IMAGE_NAME }}
         tags: |
           type=raw,value=${{ inputs.version }}
-          type=raw,value=latest,enable=${{ inputs.branch == 'main' }}
-          type=raw,value=develop,enable=${{ inputs.branch == 'develop' }}
           type=raw,value=${{ inputs.branch }}
 
     - name: Build and push
