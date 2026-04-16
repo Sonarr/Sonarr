@@ -42,8 +42,8 @@ namespace NzbDrone.Core.Test.TvTests
                   .Returns(_series);
 
             Mocker.GetMock<IProvideSeriesInfo>()
-                  .Setup(s => s.GetSeriesInfo(It.IsAny<int>()))
-                  .Callback<int>(p => { throw new SeriesNotFoundException(p); });
+                  .Setup(s => s.GetSeriesInfo(It.IsAny<int>(), It.IsAny<int>()))
+                  .Callback<int, int>((p, _) => { throw new SeriesNotFoundException(p); });
 
             Mocker.GetMock<IAutoTaggingService>()
                 .Setup(s => s.GetTagChanges(_series))
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.TvTests
         private void GivenNewSeriesInfo(Series series)
         {
             Mocker.GetMock<IProvideSeriesInfo>()
-                  .Setup(s => s.GetSeriesInfo(_series.TvdbId))
+                  .Setup(s => s.GetSeriesInfo(_series.TvdbId, _series.TmdbId))
                   .Returns(new Tuple<Series, List<Episode>>(series, new List<Episode>()));
         }
 
@@ -250,7 +250,7 @@ namespace NzbDrone.Core.Test.TvTests
         public void should_rescan_series_if_updating_fails()
         {
             Mocker.GetMock<IProvideSeriesInfo>()
-                  .Setup(s => s.GetSeriesInfo(_series.Id))
+                  .Setup(s => s.GetSeriesInfo(_series.Id, It.IsAny<int>()))
                   .Throws(new IOException());
 
             Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
@@ -265,7 +265,7 @@ namespace NzbDrone.Core.Test.TvTests
         public void should_not_rescan_series_if_updating_fails_with_series_not_found()
         {
             Mocker.GetMock<IProvideSeriesInfo>()
-                  .Setup(s => s.GetSeriesInfo(_series.Id))
+                  .Setup(s => s.GetSeriesInfo(_series.Id, It.IsAny<int>()))
                   .Throws(new SeriesNotFoundException(_series.Id));
 
             Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));

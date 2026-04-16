@@ -11,6 +11,7 @@ using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Security;
 
@@ -374,6 +375,20 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueInt("UILanguage", (int)Language.English); }
 
             set { SetValue("UILanguage", value); }
+        }
+
+        public MetadataSourceType MetadataSource
+        {
+            get { return GetValueEnum("MetadataSource", MetadataSourceType.Tvdb); }
+
+            set { SetValue("MetadataSource", value); }
+        }
+
+        public string TmdbApiKey
+        {
+            get { return GetValue("TmdbApiKey", string.Empty); }
+
+            set { SetValue("TmdbApiKey", value); }
         }
 
         public bool CleanupMetadataImages

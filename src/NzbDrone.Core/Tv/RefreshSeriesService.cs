@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Tv
 
             try
             {
-                var tuple = _seriesInfo.GetSeriesInfo(series.TvdbId);
+                var tuple = _seriesInfo.GetSeriesInfo(series.TvdbId, series.TmdbId);
                 seriesInfo = tuple.Item1;
                 episodes = tuple.Item2;
             }

@@ -3,6 +3,7 @@ using NzbDrone.Common.Http.Proxy;
 using NzbDrone.Core.ImportLists;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
+using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Security;
 
@@ -72,6 +73,10 @@ namespace NzbDrone.Core.Configuration
         bool ShowRelativeDates { get; set; }
         bool EnableColorImpairedMode { get; set; }
         int UILanguage { get; set; }
+
+        // Metadata source
+        MetadataSourceType MetadataSource { get; set; }
+        string TmdbApiKey { get; set; }
 
         // Internal
         bool CleanupMetadataImages { get; set; }

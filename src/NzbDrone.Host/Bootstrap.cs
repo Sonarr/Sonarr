@@ -24,6 +24,7 @@ using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.Options;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore.Extensions;
+using NzbDrone.Core.MetadataSource;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 using PostgresOptions = NzbDrone.Core.Datastore.PostgresOptions;
@@ -90,8 +91,12 @@ namespace NzbDrone.Host
                     c.AutoAddServices(ASSEMBLIES)
                         .AddNzbDroneLogger()
                         .AddDatabase()
-                        .AddStartupContext(startupContext)
-                        .Resolve<UtilityModeRouter>()
+                        .AddStartupContext(startupContext);
+
+                    c.RegisterDelegate<IProvideSeriesInfo>(r => r.Resolve<MetadataSourceSelector>(), Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.Replace);
+                    c.RegisterDelegate<ISearchForNewSeries>(r => r.Resolve<MetadataSourceSelector>(), Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.Replace);
+
+                    c.Resolve<UtilityModeRouter>()
                         .Route(appMode);
 
                     if (config.GetValue(nameof(ConfigFileProvider.LogDbEnabled), true))
@@ -170,6 +175,9 @@ namespace NzbDrone.Host
                         .AddNzbDroneLogger()
                         .AddDatabase()
                         .AddStartupContext(context);
+
+                    c.RegisterDelegate<IProvideSeriesInfo>(r => r.Resolve<MetadataSourceSelector>(), Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.Replace);
+                    c.RegisterDelegate<ISearchForNewSeries>(r => r.Resolve<MetadataSourceSelector>(), Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.Replace);
 
                     if (logDbEnabled)
                     {

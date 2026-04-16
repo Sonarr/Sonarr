@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Test.TvTests
         private void GivenValidSeries(int tvdbId)
         {
             Mocker.GetMock<IProvideSeriesInfo>()
-                  .Setup(s => s.GetSeriesInfo(tvdbId))
+                  .Setup(s => s.GetSeriesInfo(tvdbId, It.IsAny<int>()))
                   .Returns(new Tuple<Series, List<Episode>>(_fakeSeries, new List<Episode>()));
         }
 
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Test.TvTests
             };
 
             Mocker.GetMock<IProvideSeriesInfo>()
-                  .Setup(s => s.GetSeriesInfo(newSeries.TvdbId))
+                  .Setup(s => s.GetSeriesInfo(newSeries.TvdbId, It.IsAny<int>()))
                   .Throws(new SeriesNotFoundException(newSeries.TvdbId));
 
             Mocker.GetMock<IAddSeriesValidator>()
