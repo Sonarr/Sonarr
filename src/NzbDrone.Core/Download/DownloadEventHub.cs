@@ -31,7 +31,6 @@ namespace NzbDrone.Core.Download
             var trackedDownload = message.TrackedDownload;
 
             if (trackedDownload == null ||
-                message.TrackedDownload.DownloadItem.Removed ||
                 !trackedDownload.DownloadItem.CanBeRemoved)
             {
                 return;
@@ -56,8 +55,7 @@ namespace NzbDrone.Core.Download
 
             MarkItemAsImported(trackedDownload, downloadClient);
 
-            if (trackedDownload.DownloadItem.Removed ||
-                !trackedDownload.DownloadItem.CanBeRemoved ||
+            if (!trackedDownload.DownloadItem.CanBeRemoved ||
                 trackedDownload.DownloadItem.Status == DownloadItemStatus.Downloading)
             {
                 return;
@@ -77,8 +75,7 @@ namespace NzbDrone.Core.Download
             var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
             var definition = downloadClient.Definition as DownloadClientDefinition;
 
-            if (trackedDownload.DownloadItem.Removed ||
-                !trackedDownload.DownloadItem.CanBeRemoved ||
+            if (!trackedDownload.DownloadItem.CanBeRemoved ||
                 !definition.RemoveCompletedDownloads)
             {
                 return;

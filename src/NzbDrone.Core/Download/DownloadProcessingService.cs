@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Download
         private void RemoveCompletedDownloads()
         {
             var trackedDownloads = _trackedDownloadService.GetTrackedDownloads()
-                                                          .Where(t => !t.DownloadItem.Removed && t.DownloadItem.CanBeRemoved && t.State == TrackedDownloadState.Imported)
+                                                          .Where(t => t.DownloadItem.CanBeRemoved && t.State == TrackedDownloadState.Imported)
                                                           .ToList();
 
             foreach (var trackedDownload in trackedDownloads)
