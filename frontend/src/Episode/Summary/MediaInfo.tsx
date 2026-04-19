@@ -23,7 +23,10 @@ function MediaInfo(props: MediaInfoProps) {
 
         if (key === 'audioStreams') {
           return value.map((audioStream, index) => {
-            const language = getLanguageName(audioStream.language);
+            const language =
+              audioStream.language === 'und'
+                ? translate('Unknown')
+                : getLanguageName(audioStream.language);
 
             let line = `${language}`;
 
