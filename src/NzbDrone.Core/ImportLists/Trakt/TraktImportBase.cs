@@ -40,7 +40,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
             Settings.Validate().Filter("AccessToken", "RefreshToken").ThrowOnError();
             _logger.Trace($"Access token expires at {Settings.Expires}");
 
-            if (Settings.Expires < DateTime.UtcNow.AddMinutes(5))
+            if (Settings.Expires < DateTime.UtcNow.AddHours(24))
             {
                 RefreshToken();
             }
