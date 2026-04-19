@@ -31,7 +31,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         public static string FormatAudioCodec(MediaInfoAudioStreamModel audioStream, string sceneName)
         {
-            if (audioStream.Format == null)
+            if (audioStream?.Format == null)
             {
                 return null;
             }
@@ -155,7 +155,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         public static string FormatVideoCodec(MediaInfoModel mediaInfo, string sceneName)
         {
-            if (mediaInfo.VideoFormat == null)
+            if (mediaInfo?.VideoFormat == null)
             {
                 return null;
             }
@@ -270,7 +270,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         private static decimal? FormatAudioChannelsFromAudioChannelPositions(MediaInfoAudioStreamModel audioStream)
         {
-            if (audioStream.ChannelPositions == null)
+            if (audioStream?.ChannelPositions == null)
             {
                 return 0;
             }
