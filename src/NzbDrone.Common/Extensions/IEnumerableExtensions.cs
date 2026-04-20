@@ -78,7 +78,8 @@ namespace NzbDrone.Common.Extensions
             return result;
         }
 
-        public static void AddIfNotNull<TSource>(this List<TSource> source, TSource item)
+        #nullable enable
+        public static void AddIfNotNull<TSource>(this List<TSource> source, TSource? item)
         {
             if (item == null)
             {
@@ -87,6 +88,7 @@ namespace NzbDrone.Common.Extensions
 
             source.Add(item);
         }
+        #nullable disable
 
         public static bool Empty<TSource>(this IEnumerable<TSource> source)
         {
