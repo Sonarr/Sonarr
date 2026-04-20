@@ -109,9 +109,10 @@ function BlocklistContent() {
   const handleClearBlocklistConfirmed = useCallback(() => {
     executeCommand({ name: CommandNames.ClearBlocklist }, () => {
       goToPage(1);
+      refetch();
     });
     setIsConfirmClearModalOpen(false);
-  }, [setIsConfirmClearModalOpen, goToPage, executeCommand]);
+  }, [setIsConfirmClearModalOpen, executeCommand, goToPage, refetch]);
 
   const handleConfirmClearModalClose = useCallback(() => {
     setIsConfirmClearModalOpen(false);
