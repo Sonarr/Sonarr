@@ -29,6 +29,8 @@ import Queue, {
   QueueTrackedDownloadStatus,
   StatusMessage,
 } from 'typings/Queue';
+import formatDateTime from 'Utilities/Date/formatDateTime';
+import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import formatBytes from 'Utilities/Number/formatBytes';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import translate from 'Utilities/String/translate';
@@ -106,7 +108,7 @@ function QueueRow(props: QueueRowProps) {
 
   const series = useSingleSeries(seriesId);
   const episodes = useEpisodesWithIds(episodeIds);
-  const { showRelativeDates, shortDateFormat, timeFormat } =
+  const { showRelativeDates, shortDateFormat, longDateFormat, timeFormat } =
     useUiSettingsValues();
   const { removeQueueItem, isRemoving } = useRemoveQueueItem(id);
   const { grabQueueItem, isGrabbing, grabError } = useGrabQueueItem(id);
@@ -248,17 +250,39 @@ function QueueRow(props: QueueRowProps) {
 
           return (
             <TableRowCell key={name}>
-              <RelativeDateCell
-                key={name}
-                component="span"
-                date={episodes[0].airDateUtc}
-              />
-              {' - '}
-              <RelativeDateCell
-                key={name}
-                component="span"
-                date={episodes[episodes.length - 1].airDateUtc}
-              />
+              <span
+                title={`${formatDateTime(
+                  episodes[0].airDateUtc,
+                  longDateFormat,
+                  timeFormat,
+                  {
+                    includeRelativeDay: !showRelativeDates,
+                  }
+                )} - ${formatDateTime(
+                  episodes[episodes.length - 1].airDateUtc,
+                  longDateFormat,
+                  timeFormat,
+                  {
+                    includeRelativeDay: !showRelativeDates,
+                  }
+                )}`}
+              >
+                {getRelativeDate({
+                  date: episodes[0].airDateUtc,
+                  shortDateFormat,
+                  showRelativeDates,
+                  timeFormat,
+                  timeForToday: true,
+                })}
+                {' - '}
+                {getRelativeDate({
+                  date: episodes[episodes.length - 1].airDateUtc,
+                  shortDateFormat,
+                  showRelativeDates,
+                  timeFormat,
+                  timeForToday: true,
+                })}
+              </span>
             </TableRowCell>
           );
         }
