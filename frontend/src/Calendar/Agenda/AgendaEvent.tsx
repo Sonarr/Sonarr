@@ -154,10 +154,7 @@ function AgendaEvent(props: AgendaEventProps) {
 
           {queueItem ? (
             <span className={styles.statusIcon}>
-              <CalendarEventQueueDetails
-                seasonNumber={seasonNumber}
-                {...queueItem}
-              />
+              <CalendarEventQueueDetails {...queueItem} />
             </span>
           ) : null}
 

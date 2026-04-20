@@ -89,15 +89,15 @@ export function useQueueDetailsForSeries(
           return acc;
         }
 
-        if (seasonNumber != null && item.seasonNumber !== seasonNumber) {
+        if (
+          seasonNumber != null &&
+          !item.seasonNumbers?.includes(seasonNumber)
+        ) {
           return acc;
         }
 
-        acc.count++;
-
-        if (item.episodeHasFile) {
-          acc.episodesWithFiles++;
-        }
+        acc.count += item.episodeIds.length;
+        acc.episodesWithFiles += item.episodesWithFilesCount;
 
         return acc;
       },

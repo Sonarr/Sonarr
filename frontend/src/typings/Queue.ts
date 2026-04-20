@@ -42,15 +42,13 @@ interface Queue extends ModelBase {
   protocol: DownloadProtocol;
   downloadClient: string;
   outputPath: string;
-  episodeHasFile: boolean;
+  episodesWithFilesCount: number;
   seriesId?: number;
-  episodeId?: number;
   episodeIds: number[];
-  seasonNumber?: number;
   seasonNumbers: number[];
   downloadClientHasPostImportCategory: boolean;
   isFullSeason: boolean;
-  episode?: Episode;
+  episodes?: Episode[];
 }
 
 export default Queue;

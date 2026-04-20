@@ -365,7 +365,7 @@ function QueueContent() {
           selectedIds.every((id: number) => {
             const item = records.find((i) => i.id === id);
 
-            return !!(item && item.seriesId && item.episodeId);
+            return !!(item && item.seriesId && item.episodeIds.length);
           })
         }
         isPending={
