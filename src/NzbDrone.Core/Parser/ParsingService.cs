@@ -144,7 +144,7 @@ namespace NzbDrone.Core.Parser
             {
                 var series = _seriesService.FindByTvdbId(tvdbId.Value);
 
-                if (series.Year == year)
+                if (series != null && series.Year == year)
                 {
                     return series;
                 }
