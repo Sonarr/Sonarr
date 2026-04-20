@@ -109,7 +109,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
             }
             catch (HttpException)
             {
-                _logger.Warn($"Error refreshing trakt access token");
+                _logger.Warn("Error retrieving Trakt user settings");
             }
 
             return null;
@@ -125,26 +125,22 @@ namespace NzbDrone.Core.ImportLists.Trakt
                 .AddQueryParam("refresh_token", Settings.RefreshToken)
                 .Build();
 
-            try
+            var response = _httpClient.Get<RefreshRequestResponse>(request);
+
+            if (response?.Resource == null)
             {
-                var response = _httpClient.Get<RefreshRequestResponse>(request);
-
-                if (response != null && response.Resource != null)
-                {
-                    var token = response.Resource;
-                    Settings.AccessToken = token.AccessToken;
-                    Settings.Expires = DateTime.UtcNow.AddSeconds(token.ExpiresIn);
-                    Settings.RefreshToken = token.RefreshToken ?? Settings.RefreshToken;
-
-                    if (Definition.Id > 0)
-                    {
-                        _importListRepository.UpdateSettings((ImportListDefinition)Definition);
-                    }
-                }
+                _logger.Warn("Trakt token refresh returned an empty response");
+                return;
             }
-            catch (HttpException)
+
+            var token = response.Resource;
+            Settings.AccessToken = token.AccessToken;
+            Settings.Expires = DateTime.UtcNow.AddSeconds(token.ExpiresIn);
+            Settings.RefreshToken = token.RefreshToken ?? Settings.RefreshToken;
+
+            if (Definition.Id > 0)
             {
-                _logger.Warn($"Error refreshing trakt access token");
+                _importListRepository.UpdateSettings((ImportListDefinition)Definition);
             }
         }
     }
