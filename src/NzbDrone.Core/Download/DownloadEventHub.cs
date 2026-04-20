@@ -12,14 +12,17 @@ namespace NzbDrone.Core.Download
     {
         private readonly IConfigService _configService;
         private readonly IProvideDownloadClient _downloadClientProvider;
+        private readonly ITrackedDownloadService _trackedDownloadService;
         private readonly Logger _logger;
 
         public DownloadEventHub(IConfigService configService,
             IProvideDownloadClient downloadClientProvider,
+            ITrackedDownloadService trackedDownloadService,
             Logger logger)
         {
             _configService = configService;
             _downloadClientProvider = downloadClientProvider;
+            _trackedDownloadService = trackedDownloadService;
             _logger = logger;
         }
 
@@ -28,7 +31,6 @@ namespace NzbDrone.Core.Download
             var trackedDownload = message.TrackedDownload;
 
             if (trackedDownload == null ||
-                message.TrackedDownload.DownloadItem.Removed ||
                 !trackedDownload.DownloadItem.CanBeRemoved)
             {
                 return;
@@ -53,8 +55,7 @@ namespace NzbDrone.Core.Download
 
             MarkItemAsImported(trackedDownload, downloadClient);
 
-            if (trackedDownload.DownloadItem.Removed ||
-                !trackedDownload.DownloadItem.CanBeRemoved ||
+            if (!trackedDownload.DownloadItem.CanBeRemoved ||
                 trackedDownload.DownloadItem.Status == DownloadItemStatus.Downloading)
             {
                 return;
@@ -74,8 +75,7 @@ namespace NzbDrone.Core.Download
             var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
             var definition = downloadClient.Definition as DownloadClientDefinition;
 
-            if (trackedDownload.DownloadItem.Removed ||
-                !trackedDownload.DownloadItem.CanBeRemoved ||
+            if (!trackedDownload.DownloadItem.CanBeRemoved ||
                 !definition.RemoveCompletedDownloads)
             {
                 return;
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Download
             {
                 _logger.Debug("[{0}] Removing download from {1} history", trackedDownload.DownloadItem.Title, trackedDownload.DownloadItem.DownloadClientInfo.Name);
                 downloadClient.RemoveItem(trackedDownload.DownloadItem, true);
-                trackedDownload.DownloadItem.Removed = true;
+                _trackedDownloadService.StopTracking(trackedDownload.DownloadItem.DownloadId);
             }
             catch (NotSupportedException)
             {

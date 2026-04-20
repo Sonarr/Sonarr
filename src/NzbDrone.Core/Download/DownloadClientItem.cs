@@ -23,7 +23,6 @@ namespace NzbDrone.Core.Download
         public bool IsEncrypted { get; set; }
         public bool CanMoveFiles { get; set; }
         public bool CanBeRemoved { get; set; }
-        public bool Removed { get; set; }
 
         public DownloadClientItem Clone()
         {
