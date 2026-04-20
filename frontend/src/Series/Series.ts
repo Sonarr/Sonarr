@@ -37,7 +37,6 @@ export interface Statistics {
   sizeOnDisk: number;
   totalEpisodeCount: number;
   monitoredEpisodeCount: number;
-  lastAired?: string;
 }
 
 export interface Season {
@@ -71,7 +70,8 @@ interface Series extends ModelBase {
   certification: string;
   cleanTitle: string;
   ended: boolean;
-  firstAired: string;
+  firstAired?: string;
+  lastAired?: string;
   genres: string[];
   images: Image[];
   imdbId?: string;
