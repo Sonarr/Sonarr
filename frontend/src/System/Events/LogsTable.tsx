@@ -38,6 +38,7 @@ function LogsTable() {
     isLoading,
     page,
     goToPage,
+    refetch,
   } = useEvents();
 
   const { columns, pageSize, sortKey, sortDirection, selectedFilterKey } =
@@ -77,18 +78,15 @@ function LogsTable() {
 
   const handleRefreshPress = useCallback(() => {
     goToPage(1);
-  }, [goToPage]);
+    refetch();
+  }, [goToPage, refetch]);
 
   const handleClearLogsPress = useCallback(() => {
-    executeCommand(
-      {
-        name: CommandNames.ClearLog,
-      },
-      () => {
-        goToPage(1);
-      }
-    );
-  }, [executeCommand, goToPage]);
+    executeCommand({ name: CommandNames.ClearLog }, () => {
+      goToPage(1);
+      refetch();
+    });
+  }, [executeCommand, goToPage, refetch]);
 
   return (
     <PageContent title={translate('Logs')}>
