@@ -115,7 +115,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
 
         if (tvdbId.HasValue)
         {
-            seriesResources.AddIfNotNull(_seriesService.FindByTvdbId(tvdbId.Value).ToResource(includeSeasonImages));
+            seriesResources.AddIfNotNull(_seriesService.FindByTvdbId(tvdbId.Value)?.ToResource(includeSeasonImages));
         }
         else
         {
