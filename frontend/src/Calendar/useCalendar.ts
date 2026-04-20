@@ -118,7 +118,7 @@ const useCalendar = () => {
         return acc;
       },
       {
-        includeUnmonitored: false,
+        includeUnmonitored: true,
         includeSpecials: true,
       }
     );
