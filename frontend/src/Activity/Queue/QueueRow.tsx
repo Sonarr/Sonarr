@@ -369,6 +369,7 @@ function QueueRow(props: QueueRowProps) {
               {showInteractiveImport ? (
                 <IconButton
                   name={icons.INTERACTIVE}
+                  aria-label={translate('InteractiveSearch')}
                   onPress={handleInteractiveImportPress}
                 />
               ) : null}
@@ -377,6 +378,7 @@ function QueueRow(props: QueueRowProps) {
                 <SpinnerIconButton
                   name={icons.DOWNLOAD}
                   kind={grabError ? kinds.DANGER : kinds.DEFAULT}
+                  aria-label={translate('Grab')}
                   isSpinning={isGrabbing}
                   onPress={handleGrabPress}
                 />

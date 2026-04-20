@@ -124,6 +124,7 @@ function EpisodeFileRow(props: EpisodeFileRowProps) {
 
               <IconButton
                 title={translate('DeleteEpisodeFromDisk')}
+                aria-label={translate('DeleteEpisodeFromDisk')}
                 name={icons.REMOVE}
                 onPress={setRemoveEpisodeFileModalOpen}
               />

@@ -83,6 +83,7 @@ function CustomFormat({
           <IconButton
             className={styles.cloneButton}
             title={translate('CloneCustomFormat')}
+            aria-label={translate('CloneCustomFormat')}
             name={icons.CLONE}
             onPress={handleCloneCustomFormatPressHandler}
           />
@@ -90,6 +91,7 @@ function CustomFormat({
           <IconButton
             className={styles.cloneButton}
             title={translate('ExportCustomFormat')}
+            aria-label={translate('ExportCustomFormat')}
             name={icons.EXPORT}
             onPress={handleExportCustomFormatPress}
           />

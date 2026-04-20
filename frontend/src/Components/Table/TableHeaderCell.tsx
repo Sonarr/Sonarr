@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons, sortDirections } from 'Helpers/Props';
@@ -41,6 +41,20 @@ function TableHeaderCell({
       ? icons.SORT_ASCENDING
       : icons.SORT_DESCENDING;
 
+  const ariaSortValue = useMemo(() => {
+    if (!isSortable) {
+      return undefined;
+    }
+
+    if (!isSorting) {
+      return 'none';
+    }
+
+    return sortDirection === sortDirections.ASCENDING
+      ? 'ascending'
+      : 'descending';
+  }, [isSorting, sortDirection, isSortable]);
+
   const handlePress = useCallback(() => {
     if (fixedSortDirection) {
       onSortPress?.(name, fixedSortDirection);
@@ -56,14 +70,20 @@ function TableHeaderCell({
       className={className}
       // label={typeof label === 'function' ? label() : label}
       title={typeof columnLabel === 'function' ? columnLabel() : columnLabel}
+      scope="col"
+      aria-sort={ariaSortValue}
       onPress={handlePress}
     >
       {children}
 
-      {isSorting && <Icon name={sortIcon} className={styles.sortIcon} />}
+      {isSorting ? (
+        <Icon name={sortIcon} className={styles.sortIcon} aria-hidden={true} />
+      ) : null}
     </Link>
   ) : (
-    <th className={className}>{children}</th>
+    <th className={className} scope="col">
+      {children}
+    </th>
   );
 }
 

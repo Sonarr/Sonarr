@@ -94,6 +94,7 @@ function ManageCustomFormatsModalRow({
       <TableRowCell className={styles.actions}>
         <IconButton
           name={icons.EDIT}
+          aria-label={translate('Edit')}
           onPress={handleEditCustomFormatModalOpen}
         />
       </TableRowCell>

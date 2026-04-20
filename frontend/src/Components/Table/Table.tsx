@@ -7,6 +7,7 @@ import { icons, scrollDirections } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import { CheckInputChanged } from 'typings/inputs';
 import { TableOptionsChangePayload } from 'typings/Table';
+import translate from 'Utilities/String/translate';
 import Column from './Column';
 import TableHeader from './TableHeader';
 import TableHeaderCell from './TableHeaderCell';
@@ -94,7 +95,10 @@ function Table({
                     canModifyColumns={canModifyColumns}
                     onTableOptionChange={onTableOptionChange}
                   >
-                    <IconButton name={icons.ADVANCED_SETTINGS} />
+                    <IconButton
+                      name={icons.ADVANCED_SETTINGS}
+                      aria-label={translate('AdvancedSettings')}
+                    />
                   </TableOptionsModalWrapper>
                 </TableHeaderCell>
               );

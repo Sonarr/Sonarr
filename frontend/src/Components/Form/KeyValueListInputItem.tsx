@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import IconButton from 'Components/Link/IconButton';
 import { icons } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import TextInput from './TextInput';
 import styles from './KeyValueListInputItem.css';
 
@@ -77,6 +78,7 @@ function KeyValueListInputItem({
         {isNew ? null : (
           <IconButton
             name={icons.REMOVE}
+            aria-label={translate('Remove')}
             tabIndex={-1}
             onPress={handleRemovePress}
           />
