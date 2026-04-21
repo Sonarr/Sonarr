@@ -1,0 +1,26 @@
+name: Close stale draft PRs
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  close-stale-drafts:
+    runs-on: ubuntu-latest
+    if: github.repository == 'Sonarr/Sonarr'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Close draft PRs inactive for 90+ days
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          cutoff=$(date -u -d '90 days ago' +%Y-%m-%dT%H:%M:%SZ)
+          gh pr list --draft --state open --limit 1000 \
+            --json number,updatedAt \
+            --jq ".[] | select(.updatedAt < \"$cutoff\") | .number" \
+          | while read -r pr; do
+              gh pr close "$pr" --comment ":wave: This draft pull request has been closed automatically because it has not had any activity in 90 days. If you are still working on this, please update it and let us know so we can reopen it."
+            done
