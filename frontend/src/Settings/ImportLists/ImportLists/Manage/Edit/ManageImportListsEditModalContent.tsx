@@ -17,6 +17,7 @@ interface SavePayload {
   enableAutomaticAdd?: boolean;
   qualityProfileId?: number;
   rootFolderPath?: string;
+  retroApplyTags?: boolean;
 }
 
 interface ManageImportListsEditModalContentProps {
@@ -59,6 +60,7 @@ function ManageImportListsEditModalContent(
     NO_CHANGE
   );
   const [rootFolderPath, setRootFolderPath] = useState(NO_CHANGE);
+  const [retroApplyTags, setRetroApplyTags] = useState(NO_CHANGE);
 
   const save = useCallback(() => {
     let hasChanges = false;
@@ -78,6 +80,10 @@ function ManageImportListsEditModalContent(
       hasChanges = true;
       payload.rootFolderPath = rootFolderPath;
     }
+    if (retroApplyTags !== NO_CHANGE) {
+      hasChanges = true;
+      payload.retroApplyTags = retroApplyTags === 'enabled';
+    }
 
     if (hasChanges) {
       onSavePress(payload);
@@ -88,6 +94,7 @@ function ManageImportListsEditModalContent(
     enableAutomaticAdd,
     qualityProfileId,
     rootFolderPath,
+    retroApplyTags,
     onSavePress,
     onModalClose,
   ]);
@@ -103,6 +110,8 @@ function ManageImportListsEditModalContent(
       case 'rootFolderPath':
         setRootFolderPath(value as string);
         break;
+      case 'retroApplyTags':
+        setRetroApplyTags(value as string);
       default:
         console.warn(`EditImportListModalContent Unknown Input: '${name}'`);
     }
@@ -150,6 +159,18 @@ function ManageImportListsEditModalContent(
             includeNoChange={true}
             includeNoChangeDisabled={false}
             selectedValueOptions={{ includeFreeSpace: false }}
+            onChange={onInputChange}
+          />
+        </FormGroup>
+        
+        <FormGroup>
+          <FormLabel>{translate('RetroApplyTags')}</FormLabel>
+
+          <FormInputGroup
+            type={inputTypes.SELECT}
+            name="retroApplyTags"
+            value={retroApplyTags}
+            values={autoAddOptions}
             onChange={onInputChange}
           />
         </FormGroup>

@@ -3,6 +3,7 @@
 .enableAutomaticAdd,
 .qualityProfileId,
 .rootFolderPath,
+.retroApply,
 .implementation {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 

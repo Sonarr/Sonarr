@@ -65,6 +65,12 @@ const COLUMNS = [
     isSortable: true,
     isVisible: true,
   },
+  {
+    name: 'retroApplyTags',
+    label: () => translate('RetroApplyTags'),
+    isSortable: true,
+    isVisible: true,
+  },
 ];
 
 interface ManageImportListsModalContentProps {

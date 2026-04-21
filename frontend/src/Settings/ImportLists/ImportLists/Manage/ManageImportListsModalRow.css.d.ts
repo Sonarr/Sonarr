@@ -5,6 +5,7 @@ interface CssExports {
   'implementation': string;
   'name': string;
   'qualityProfileId': string;
+  'retroApply': string;
   'rootFolderPath': string;
   'tags': string;
 }
