@@ -22,7 +22,7 @@ public class ManualImportController : Controller
 
     [HttpGet]
     [Produces("application/json")]
-    public Ok<List<ManualImportResource>> GetMediaFiles(string? folder, [FromQuery] string[]? downloadIds, int? seriesId, int? seasonNumber, bool filterExistingFiles = true)
+    public Ok<List<ManualImportResource>> GetMediaFiles(string? folder, int? seriesId, int? seasonNumber, [FromQuery] string[]? downloadIds = null, bool filterExistingFiles = true)
     {
         if (seriesId.HasValue && downloadIds == null)
         {
