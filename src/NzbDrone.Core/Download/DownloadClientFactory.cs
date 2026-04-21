@@ -60,9 +60,9 @@ namespace NzbDrone.Core.Download
         {
             var all = All();
             var clientByName = name.IsNullOrWhiteSpace() ? null : all.FirstOrDefault(c => c.Name.EqualsIgnoreCase(name));
-            var clientById = id.HasValue ? all.FirstOrDefault(c => c.Id == id.Value) : null;
+            var clientById = id is > 0 ? all.FirstOrDefault(c => c.Id == id.Value) : null;
 
-            if (id.HasValue && clientById == null)
+            if (id is > 0 && clientById == null)
             {
                 throw new ResolveDownloadClientException("Download client with ID '{0}' could not be found", id.Value);
             }
