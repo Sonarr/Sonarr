@@ -80,7 +80,7 @@ function ManageImportListsModalRow(props: ManageImportListsModalRowProps) {
       <TableRowCell className={styles.tags}>
         <SeriesTagList tags={tags} />
       </TableRowCell>
-      
+
       <TableRowCell className={styles.retroApply}>
         {retroApplyTags ? translate('Yes') : translate('No')}
       </TableRowCell>

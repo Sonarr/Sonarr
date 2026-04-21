@@ -112,6 +112,7 @@ function ManageImportListsEditModalContent(
         break;
       case 'retroApplyTags':
         setRetroApplyTags(value as string);
+        break;
       default:
         console.warn(`EditImportListModalContent Unknown Input: '${name}'`);
     }
@@ -162,7 +163,7 @@ function ManageImportListsEditModalContent(
             onChange={onInputChange}
           />
         </FormGroup>
-        
+
         <FormGroup>
           <FormLabel>{translate('RetroApplyTags')}</FormLabel>
 

@@ -305,7 +305,7 @@ function EditImportListModalContent({
                 onChange={handleInputChange}
               />
             </FormGroup>
-            
+
             {fields?.length ? (
               <div>
                 {fields.map((field) => {
