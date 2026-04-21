@@ -8,7 +8,9 @@ function useScrollPosition(key?: string) {
   const { action } = useHistory();
 
   // Reset window scroll on PUSH/REPLACE (mobile's scroll container).
-  // Skip POP so the browser (mobile) and memorized `initialScrollTop` (desktop inner) can restore.
+  // Reset the scroll position unless we're going back, this will allow the scroll
+  // position to reset when moving forward (PUSH/REPLACE) and restore when
+  // moving backwards (POP).
   useEffect(() => {
     if (action !== 'POP') {
       window.scrollTo(0, 0);
