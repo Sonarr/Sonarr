@@ -22,6 +22,7 @@ import ProtocolFilterBuilderRowValue from './ProtocolFilterBuilderRowValue';
 import QualityFilterBuilderRowValue from './QualityFilterBuilderRowValue';
 import QualityProfileFilterBuilderRowValue from './QualityProfileFilterBuilderRowValue';
 import QueueStatusFilterBuilderRowValue from './QueueStatusFilterBuilderRowValue';
+import ReleaseTypeFilterBuilderRowValue from './ReleaseTypeFilterBuilderRowValue';
 import SeriesFilterBuilderRowValue from './SeriesFilterBuilderRowValue';
 import SeriesStatusFilterBuilderRowValue from './SeriesStatusFilterBuilderRowValue';
 import SeriesTypeFilterBuilderRowValue from './SeriesTypeFilterBuilderRowValue';
@@ -112,6 +113,9 @@ function getRowValueConnector<T>(
 
     case filterBuilderValueTypes.MONITORED_STATUS:
       return MonitoredStatusFilterBuilderRowValue;
+
+    case filterBuilderValueTypes.RELEASE_TYPES:
+      return ReleaseTypeFilterBuilderRowValue;
 
     case filterBuilderValueTypes.SERIES:
       return SeriesFilterBuilderRowValue;

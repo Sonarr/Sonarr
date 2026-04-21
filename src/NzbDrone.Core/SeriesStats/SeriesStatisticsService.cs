@@ -70,6 +70,7 @@ namespace NzbDrone.Core.SeriesStats
                 MonitoredEpisodeCount = seasonStatistics.Sum(s => s.MonitoredEpisodeCount),
                 SizeOnDisk = seasonStatistics.Sum(s => s.SizeOnDisk),
                 ReleaseGroups = seasonStatistics.SelectMany(s => s.ReleaseGroups).Distinct().ToList(),
+                ReleaseTypes = seasonStatistics.SelectMany(s => s.ReleaseTypes).Distinct().OrderBy(s => s).ToList(),
                 EpisodeFileQualities = SortQualities(seasonStatistics.SelectMany(s => s.EpisodeFileQualities).Distinct().ToList(), profile)
             };
 

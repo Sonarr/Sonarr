@@ -222,6 +222,12 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
           isVisible: false,
         },
         {
+          name: 'releaseTypes',
+          label: () => translate('ReleaseTypes'),
+          isSortable: false,
+          isVisible: false,
+        },
+        {
           name: 'episodeFileQualities',
           label: () => translate('EpisodeFileQualities'),
           isSortable: false,

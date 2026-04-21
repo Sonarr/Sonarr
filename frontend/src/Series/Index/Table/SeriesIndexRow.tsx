@@ -13,6 +13,7 @@ import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
 import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
 import VirtualTableSelectCell from 'Components/Table/Cells/VirtualTableSelectCell';
 import Column from 'Components/Table/Column';
+import getReleaseTypeName from 'Episode/getReleaseTypeName';
 import { icons } from 'Helpers/Props';
 import useCountryName from 'Internationalization/useCountryName';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
@@ -149,6 +150,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
     totalEpisodeCount = 0,
     sizeOnDisk = 0,
     releaseGroups = [],
+    releaseTypes = [],
     episodeFileQualities = [],
   } = statistics;
 
@@ -444,6 +446,25 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
           return (
             <VirtualTableRowCell key={name} className={styles[name]}>
               <span title={joinedReleaseGroups}>{truncatedReleaseGroups}</span>
+            </VirtualTableRowCell>
+          );
+        }
+
+        if (name === 'releaseTypes') {
+          const joinedReleaseTypes = releaseTypes
+            .map(getReleaseTypeName)
+            .join(', ');
+          const truncatedReleaseTypes =
+            releaseTypes.length > 3
+              ? `${releaseTypes
+                  .slice(0, 3)
+                  .map(getReleaseTypeName)
+                  .join(', ')}...`
+              : joinedReleaseTypes;
+
+          return (
+            <VirtualTableRowCell key={name} className={styles[name]}>
+              <span title={joinedReleaseTypes}>{truncatedReleaseTypes}</span>
             </VirtualTableRowCell>
           );
         }

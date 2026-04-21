@@ -1,3 +1,4 @@
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.SeriesStats;
 
@@ -12,6 +13,7 @@ public class SeriesStatisticsResource
     public int MonitoredEpisodeCount { get; set; }
     public long SizeOnDisk { get; set; }
     public List<string>? ReleaseGroups { get; set; }
+    public List<ReleaseType>? ReleaseTypes { get; set; }
     public List<Quality>? EpisodeFileQualities { get; set; }
 
     public decimal PercentOfEpisodes
@@ -41,6 +43,7 @@ public static class SeriesStatisticsResourceMapper
             MonitoredEpisodeCount = model.MonitoredEpisodeCount,
             SizeOnDisk = model.SizeOnDisk,
             ReleaseGroups = model.ReleaseGroups,
+            ReleaseTypes = model.ReleaseTypes,
             EpisodeFileQualities = model.EpisodeFileQualities
         };
     }
