@@ -295,7 +295,7 @@ function EditImportListModalContent({
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>{translate('RadarrRetroactiveApply')}</FormLabel>
+              <FormLabel>{translate('RetroApplyTags')}</FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}

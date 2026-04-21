@@ -279,7 +279,7 @@ namespace NzbDrone.Core.ImportLists
                 if (preCount != series.Tags.Count)
                 {
                     _seriesService.UpdateSeries(series);
-                    _logger.Debug("{0} [{1}] Retro-Actively added tags to movie", report.TmdbId, report.Title);
+                    _logger.Debug("{0} [{1}] Retro-Actively added tags to series", report.TmdbId, report.Title);
                 }
             }
         }
