@@ -27,6 +27,7 @@ interface CssExports {
   'qualityProfileId': string;
   'ratings': string;
   'releaseGroups': string;
+  'releaseTypes': string;
   'seasonCount': string;
   'seasonFolder': string;
   'seriesType': string;

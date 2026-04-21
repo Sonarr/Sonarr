@@ -1,4 +1,5 @@
 import ModelBase from 'App/ModelBase';
+import ReleaseType from 'InteractiveImport/ReleaseType';
 import Language from 'Language/Language';
 import Quality from 'Quality/Quality';
 
@@ -35,6 +36,7 @@ export interface Statistics {
   percentOfEpisodes: number;
   previousAiring?: Date;
   releaseGroups: string[];
+  releaseTypes: ReleaseType[];
   episodeFileQualities: Quality[];
   sizeOnDisk: number;
   totalEpisodeCount: number;

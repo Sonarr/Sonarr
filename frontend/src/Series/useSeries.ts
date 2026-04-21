@@ -254,6 +254,12 @@ const FILTER_PREDICATES = {
     return predicate(releaseGroups, filterValue);
   },
 
+  releaseTypes: (item: Series, filterValue: string[], type: FilterType) => {
+    const releaseTypes = item.statistics?.releaseTypes ?? [];
+    const predicate = getFilterTypePredicate(type);
+    return predicate(releaseTypes, filterValue);
+  },
+
   episodeFileQualities: (
     item: Series,
     filterValue: number[],
@@ -532,6 +538,12 @@ export const FILTER_BUILDER: FilterBuilderProp<Series>[] = [
     name: 'releaseGroups',
     label: () => translate('ReleaseGroups'),
     type: filterBuilderTypes.ARRAY,
+  },
+  {
+    name: 'releaseTypes',
+    label: () => translate('ReleaseTypes'),
+    type: filterBuilderTypes.ARRAY,
+    valueType: filterBuilderValueTypes.RELEASE_TYPES,
   },
   {
     name: 'episodeFileQualities',

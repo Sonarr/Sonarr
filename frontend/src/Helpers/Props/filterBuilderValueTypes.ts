@@ -10,6 +10,7 @@ export const QUALITY = 'quality';
 export const QUALITY_PROFILE = 'qualityProfile';
 export const QUEUE_STATUS = 'queueStatus';
 export const MONITORED_STATUS = 'monitoredStatus';
+export const RELEASE_TYPES = 'releaseTypes';
 export const SERIES = 'series';
 export const SERIES_STATUS = 'seriesStatus';
 export const SERIES_TYPES = 'seriesType';
@@ -28,6 +29,7 @@ export type FilterBuildValueType =
   | 'qualityProfile'
   | 'queueStatus'
   | 'monitoredStatus'
+  | 'releaseTypes'
   | 'series'
   | 'seriesStatus'
   | 'seriesType'
