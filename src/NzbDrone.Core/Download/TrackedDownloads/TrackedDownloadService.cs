@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         {
             var existingItem = Find(downloadItem.DownloadId);
 
-            if (existingItem != null && existingItem.State != TrackedDownloadState.Downloading)
+            if (existingItem != null && CanReuseTrackedDownload(existingItem, downloadItem))
             {
                 LogItemChange(existingItem, existingItem.DownloadItem, downloadItem);
 
@@ -220,6 +220,32 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             {
                 trackedDownload.IsTrackable = false;
             }
+        }
+
+        private static bool CanReuseTrackedDownload(TrackedDownload existingItem, DownloadClientItem downloadItem)
+        {
+            if (existingItem.State != TrackedDownloadState.Downloading)
+            {
+                return true;
+            }
+
+            return IsStableWaitingDownload(downloadItem) &&
+                   HasSameDownloadIdentity(existingItem.DownloadItem, downloadItem);
+        }
+
+        private static bool IsStableWaitingDownload(DownloadClientItem downloadItem)
+        {
+            return downloadItem.Status == DownloadItemStatus.Queued ||
+                   downloadItem.Status == DownloadItemStatus.Paused;
+        }
+
+        private static bool HasSameDownloadIdentity(DownloadClientItem existingItem, DownloadClientItem downloadItem)
+        {
+            return existingItem.DownloadId == downloadItem.DownloadId &&
+                   existingItem.Title == downloadItem.Title &&
+                   existingItem.Category == downloadItem.Category &&
+                   existingItem.TotalSize == downloadItem.TotalSize &&
+                   existingItem.DownloadClientInfo?.Id == downloadItem.DownloadClientInfo?.Id;
         }
 
         private void LogItemChange(TrackedDownload trackedDownload, DownloadClientItem existingItem, DownloadClientItem downloadItem)

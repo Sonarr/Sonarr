@@ -36,6 +36,143 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
                 });
         }
 
+        private static DownloadClientDefinition CreateDownloadClient()
+        {
+            return new DownloadClientDefinition()
+            {
+                Id = 1,
+                Protocol = DownloadProtocol.Usenet
+            };
+        }
+
+        private static DownloadClientItem CreateDownloadItem(DownloadItemStatus status)
+        {
+            return new DownloadClientItem()
+            {
+                Title = "TV Series S01E01",
+                DownloadId = "35238",
+                Category = "sonarr",
+                TotalSize = 1000,
+                RemainingSize = 500,
+                Status = status,
+                DownloadClientInfo = new DownloadClientItemClientInfo
+                {
+                    Id = 1,
+                    Type = "NZBGet",
+                    Name = "NZBGet",
+                    Protocol = DownloadProtocol.Usenet
+                }
+            };
+        }
+
+        private void GivenTrackedDownloadCanBeMapped()
+        {
+            Mocker.GetMock<IHistoryService>()
+                  .Setup(s => s.FindByDownloadId(It.IsAny<string>()))
+                  .Returns(new List<EpisodeHistory>());
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), null))
+                  .Returns(new RemoteEpisode
+                  {
+                      Release = new ReleaseInfo { Title = "TV Series S01E01" },
+                      Series = new Series() { Id = 5 },
+                      Episodes = new List<Episode> { new Episode { Id = 4 } },
+                      ParsedEpisodeInfo = new ParsedEpisodeInfo()
+                      {
+                          SeriesTitle = "TV Series",
+                          SeasonNumber = 1,
+                          EpisodeNumbers = new[] { 1 }
+                      },
+                      MappedSeasonNumber = 1
+                  });
+        }
+
+        [Test]
+        public void should_reuse_stable_queued_downloading_tracked_download()
+        {
+            GivenTrackedDownloadCanBeMapped();
+
+            var client = CreateDownloadClient();
+            var item = CreateDownloadItem(DownloadItemStatus.Queued);
+            var updatedItem = CreateDownloadItem(DownloadItemStatus.Queued);
+            updatedItem.RemainingSize = 250;
+
+            var trackedDownload = Subject.TrackDownload(client, item);
+            var refreshedTrackedDownload = Subject.TrackDownload(client, updatedItem);
+
+            refreshedTrackedDownload.Should().BeSameAs(trackedDownload);
+            refreshedTrackedDownload.DownloadItem.Should().BeSameAs(updatedItem);
+
+            Mocker.GetMock<IHistoryService>()
+                  .Verify(s => s.FindByDownloadId(It.IsAny<string>()), Times.Once());
+
+            Mocker.GetMock<IParsingService>()
+                  .Verify(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), null), Times.Once());
+        }
+
+        [Test]
+        public void should_reuse_stable_paused_downloading_tracked_download()
+        {
+            GivenTrackedDownloadCanBeMapped();
+
+            var client = CreateDownloadClient();
+            var item = CreateDownloadItem(DownloadItemStatus.Paused);
+            var updatedItem = CreateDownloadItem(DownloadItemStatus.Paused);
+            updatedItem.RemainingSize = 250;
+
+            var trackedDownload = Subject.TrackDownload(client, item);
+            var refreshedTrackedDownload = Subject.TrackDownload(client, updatedItem);
+
+            refreshedTrackedDownload.Should().BeSameAs(trackedDownload);
+            refreshedTrackedDownload.DownloadItem.Should().BeSameAs(updatedItem);
+
+            Mocker.GetMock<IHistoryService>()
+                  .Verify(s => s.FindByDownloadId(It.IsAny<string>()), Times.Once());
+
+            Mocker.GetMock<IParsingService>()
+                  .Verify(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), null), Times.Once());
+        }
+
+        [Test]
+        public void should_reprocess_when_waiting_download_starts_downloading()
+        {
+            GivenTrackedDownloadCanBeMapped();
+
+            var client = CreateDownloadClient();
+            var item = CreateDownloadItem(DownloadItemStatus.Queued);
+            var updatedItem = CreateDownloadItem(DownloadItemStatus.Downloading);
+
+            Subject.TrackDownload(client, item);
+            Subject.TrackDownload(client, updatedItem);
+
+            Mocker.GetMock<IHistoryService>()
+                  .Verify(s => s.FindByDownloadId(It.IsAny<string>()), Times.Exactly(2));
+
+            Mocker.GetMock<IParsingService>()
+                  .Verify(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), null), Times.Exactly(2));
+        }
+
+        [Test]
+        public void should_reprocess_when_waiting_download_identity_changes()
+        {
+            GivenTrackedDownloadCanBeMapped();
+
+            var client = CreateDownloadClient();
+            var item = CreateDownloadItem(DownloadItemStatus.Queued);
+            var updatedItem = CreateDownloadItem(DownloadItemStatus.Queued);
+            updatedItem.TotalSize = 2000;
+
+            Subject.TrackDownload(client, item);
+            Subject.TrackDownload(client, updatedItem);
+
+            Mocker.GetMock<IHistoryService>()
+                  .Verify(s => s.FindByDownloadId(It.IsAny<string>()), Times.Exactly(2));
+
+            Mocker.GetMock<IParsingService>()
+                  .Verify(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), null), Times.Exactly(2));
+        }
+
         [Test]
         public void should_track_downloads_using_the_source_title_if_it_cannot_be_found_using_the_download_title()
         {
