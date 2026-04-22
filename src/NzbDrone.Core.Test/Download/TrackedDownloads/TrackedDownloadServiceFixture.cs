@@ -101,6 +101,7 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
             var trackedDownload = Subject.TrackDownload(client, item);
             var refreshedTrackedDownload = Subject.TrackDownload(client, updatedItem);
 
+            trackedDownload.State.Should().Be(TrackedDownloadState.Downloading);
             refreshedTrackedDownload.Should().BeSameAs(trackedDownload);
             refreshedTrackedDownload.DownloadItem.Should().BeSameAs(updatedItem);
 
@@ -124,6 +125,7 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
             var trackedDownload = Subject.TrackDownload(client, item);
             var refreshedTrackedDownload = Subject.TrackDownload(client, updatedItem);
 
+            trackedDownload.State.Should().Be(TrackedDownloadState.Downloading);
             refreshedTrackedDownload.Should().BeSameAs(trackedDownload);
             refreshedTrackedDownload.DownloadItem.Should().BeSameAs(updatedItem);
 
