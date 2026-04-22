@@ -79,6 +79,11 @@ namespace NzbDrone.Core.Notifications.Pushcut
             _proxy.SendNotification(MANUAL_INTERACTION_REQUIRED_TITLE_BRANDED, manualInteractionRequiredMessage.Message, null, [], Settings);
         }
 
+        public override void OnDownloadComplete(DownloadCompleteMessage message)
+        {
+            _proxy.SendNotification(DOWNLOAD_COMPLETE_TITLE_BRANDED, message.Message, null, [], Settings);
+        }
+
         private string GetPosterUrl(Series series)
         {
             return series.Images.FirstOrDefault(x => x.CoverType == MediaCoverTypes.Poster)?.RemoteUrl;

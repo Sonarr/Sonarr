@@ -123,6 +123,8 @@ namespace NzbDrone.Core.Download
             }
 
             trackedDownload.State = TrackedDownloadState.ImportPending;
+
+            _eventAggregator.PublishEvent(new DownloadClientItemCompletedEvent(trackedDownload));
         }
 
         public void Import(TrackedDownload trackedDownload)

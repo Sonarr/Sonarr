@@ -19,6 +19,7 @@ namespace Sonarr.Api.V3.Notifications
         public bool OnHealthRestored { get; set; }
         public bool OnApplicationUpdate { get; set; }
         public bool OnManualInteractionRequired { get; set; }
+        public bool OnDownloadComplete { get; set; }
         public bool SupportsOnGrab { get; set; }
         public bool SupportsOnDownload { get; set; }
         public bool SupportsOnUpgrade { get; set; }
@@ -32,6 +33,7 @@ namespace Sonarr.Api.V3.Notifications
         public bool SupportsOnHealthRestored { get; set; }
         public bool SupportsOnApplicationUpdate { get; set; }
         public bool SupportsOnManualInteractionRequired { get; set; }
+        public bool SupportsOnDownloadComplete { get; set; }
         public string TestCommand { get; set; }
     }
 
@@ -60,6 +62,7 @@ namespace Sonarr.Api.V3.Notifications
             resource.OnHealthRestored = definition.OnHealthRestored;
             resource.OnApplicationUpdate = definition.OnApplicationUpdate;
             resource.OnManualInteractionRequired = definition.OnManualInteractionRequired;
+            resource.OnDownloadComplete = definition.OnDownloadComplete;
             resource.SupportsOnGrab = definition.SupportsOnGrab;
             resource.SupportsOnDownload = definition.SupportsOnDownload;
             resource.SupportsOnUpgrade = definition.SupportsOnUpgrade;
@@ -73,6 +76,7 @@ namespace Sonarr.Api.V3.Notifications
             resource.SupportsOnHealthRestored = definition.SupportsOnHealthRestored;
             resource.SupportsOnApplicationUpdate = definition.SupportsOnApplicationUpdate;
             resource.SupportsOnManualInteractionRequired = definition.SupportsOnManualInteractionRequired;
+            resource.SupportsOnDownloadComplete = definition.SupportsOnDownloadComplete;
 
             return resource;
         }
@@ -100,6 +104,7 @@ namespace Sonarr.Api.V3.Notifications
             definition.OnHealthRestored = resource.OnHealthRestored;
             definition.OnApplicationUpdate = resource.OnApplicationUpdate;
             definition.OnManualInteractionRequired = resource.OnManualInteractionRequired;
+            definition.OnDownloadComplete = resource.OnDownloadComplete;
             definition.SupportsOnGrab = resource.SupportsOnGrab;
             definition.SupportsOnDownload = resource.SupportsOnDownload;
             definition.SupportsOnUpgrade = resource.SupportsOnUpgrade;
@@ -113,6 +118,7 @@ namespace Sonarr.Api.V3.Notifications
             definition.SupportsOnHealthRestored = resource.SupportsOnHealthRestored;
             definition.SupportsOnApplicationUpdate = resource.SupportsOnApplicationUpdate;
             definition.SupportsOnManualInteractionRequired = resource.SupportsOnManualInteractionRequired;
+            definition.SupportsOnDownloadComplete = resource.SupportsOnDownloadComplete;
 
             return definition;
         }

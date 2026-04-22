@@ -321,6 +321,22 @@ namespace NzbDrone.Core.Notifications.CustomScript
             ExecuteScript(environmentVariables);
         }
 
+        public override void OnDownloadComplete(DownloadCompleteMessage message)
+        {
+            var series = message.Series;
+            var environmentVariables = new StringDictionary();
+
+            AddInstanceVariables(environmentVariables, "DownloadComplete");
+            AddSeriesVariables(environmentVariables, series);
+
+            environmentVariables.Add("Sonarr_Download_Client", message.DownloadClientInfo?.Name ?? string.Empty);
+            environmentVariables.Add("Sonarr_Download_Client_Type", message.DownloadClientInfo?.Type ?? string.Empty);
+            environmentVariables.Add("Sonarr_Download_Id", message.DownloadId ?? string.Empty);
+            environmentVariables.Add("Sonarr_Download_SourcePath", message.SourcePath ?? string.Empty);
+
+            ExecuteScript(environmentVariables);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

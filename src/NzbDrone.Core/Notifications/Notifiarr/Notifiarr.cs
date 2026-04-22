@@ -80,6 +80,11 @@ namespace NzbDrone.Core.Notifications.Notifiarr
             _proxy.SendNotification(BuildManualInteractionRequiredPayload(message), Settings);
         }
 
+        public override void OnDownloadComplete(DownloadCompleteMessage message)
+        {
+            _proxy.SendNotification(BuildOnDownloadCompletePayload(message), Settings);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

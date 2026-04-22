@@ -217,6 +217,22 @@ namespace NzbDrone.Core.Notifications.Webhook
             };
         }
 
+        protected WebhookDownloadCompletePayload BuildOnDownloadCompletePayload(DownloadCompleteMessage message)
+        {
+            return new WebhookDownloadCompletePayload
+            {
+                EventType = WebhookEventType.DownloadComplete,
+                InstanceName = _configFileProvider.InstanceName,
+                ApplicationUrl = _configService.ApplicationUrl,
+                Series = GetSeries(message.Series),
+                Episodes = message.Episodes?.ConvertAll(x => new WebhookEpisode(x)),
+                DownloadClient = message.DownloadClientInfo?.Name,
+                DownloadClientType = message.DownloadClientInfo?.Type,
+                DownloadId = message.DownloadId,
+                SourcePath = message.SourcePath
+            };
+        }
+
         protected WebhookPayload BuildTestPayload()
         {
             return new WebhookGrabPayload

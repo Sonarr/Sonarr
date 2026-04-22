@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Notifications
           IHandle<EpisodeImportedEvent>,
           IHandle<DownloadCompletedEvent>,
           IHandle<UntrackedDownloadCompletedEvent>,
+          IHandle<DownloadClientItemCompletedEvent>,
           IHandle<SeriesRenamedEvent>,
           IHandle<SeriesAddCompletedEvent>,
           IHandle<SeriesDeletedEvent>,
@@ -377,6 +378,51 @@ namespace NzbDrone.Core.Notifications
                 {
                     _notificationStatusService.RecordFailure(notification.Definition.Id);
                     _logger.Error(ex, "Unable to send OnManualInteractionRequired notification to {0}", notification.Definition.Name);
+                }
+            }
+        }
+
+        public void Handle(DownloadClientItemCompletedEvent message)
+        {
+            var trackedDownload = message.TrackedDownload;
+            var series = trackedDownload.RemoteEpisode?.Series;
+            var episodes = trackedDownload.RemoteEpisode?.Episodes;
+            var quality = trackedDownload.RemoteEpisode?.ParsedEpisodeInfo?.Quality;
+
+            var mess = series != null && episodes != null && quality != null
+                ? GetMessage(series, episodes, quality)
+                : trackedDownload.DownloadItem.Title;
+
+            if (mess.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
+            var downloadCompleteMessage = new DownloadCompleteMessage
+            {
+                Message = mess,
+                Series = series,
+                Episodes = episodes,
+                Quality = quality,
+                DownloadClientInfo = trackedDownload.DownloadItem.DownloadClientInfo,
+                DownloadId = trackedDownload.DownloadItem.DownloadId,
+                SourcePath = trackedDownload.DownloadItem.OutputPath.FullPath
+            };
+
+            foreach (var notification in _notificationFactory.OnDownloadCompleteEnabled())
+            {
+                try
+                {
+                    if (series == null || ShouldHandleSeries(notification.Definition, series))
+                    {
+                        notification.OnDownloadComplete(downloadCompleteMessage);
+                        _notificationStatusService.RecordSuccess(notification.Definition.Id);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _notificationStatusService.RecordFailure(notification.Definition.Id);
+                    _logger.Warn(ex, "Unable to send OnDownloadComplete notification to: " + notification.Definition.Name);
                 }
             }
         }

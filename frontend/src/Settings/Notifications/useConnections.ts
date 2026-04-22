@@ -28,6 +28,7 @@ export interface NotificationModel extends Provider {
   onHealthRestored: boolean;
   onApplicationUpdate: boolean;
   onManualInteractionRequired: boolean;
+  onDownloadComplete: boolean;
   supportsOnGrab: boolean;
   supportsOnDownload: boolean;
   supportsOnUpgrade: boolean;
@@ -41,6 +42,7 @@ export interface NotificationModel extends Provider {
   supportsOnHealthRestored: boolean;
   supportsOnApplicationUpdate: boolean;
   supportsOnManualInteractionRequired: boolean;
+  supportsOnDownloadComplete: boolean;
   tags: number[];
 }
 
@@ -111,6 +113,7 @@ export const useManageConnection = (
           onApplicationUpdate: schema.supportsOnApplicationUpdate || false,
           onManualInteractionRequired:
             schema.supportsOnManualInteractionRequired || false,
+          onDownloadComplete: schema.supportsOnDownloadComplete || false,
         }
       : ({} as NotificationModel),
     PATH

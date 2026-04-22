@@ -116,6 +116,14 @@ namespace NzbDrone.Core.Notifications.Emby
             }
         }
 
+        public override void OnDownloadComplete(DownloadCompleteMessage message)
+        {
+            if (Settings.Notify)
+            {
+                _mediaBrowserService.Notify(Settings, DOWNLOAD_COMPLETE_TITLE_BRANDED, message.Message);
+            }
+        }
+
         public override void ProcessQueue()
         {
             _updateQueue.ProcessQueue(Settings.Host, (items) =>

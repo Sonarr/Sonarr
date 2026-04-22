@@ -33,6 +33,7 @@ function NotificationEventItems({
     onHealthRestored,
     onApplicationUpdate,
     onManualInteractionRequired,
+    onDownloadComplete,
     supportsOnGrab,
     supportsOnDownload,
     supportsOnUpgrade,
@@ -44,6 +45,7 @@ function NotificationEventItems({
     supportsOnEpisodeFileDeleteForUpgrade,
     supportsOnApplicationUpdate,
     supportsOnManualInteractionRequired,
+    supportsOnDownloadComplete,
     supportsOnHealthIssue,
     supportsOnHealthRestored,
     includeHealthWarnings,
@@ -65,6 +67,17 @@ function NotificationEventItems({
               helpText={translate('OnGrab')}
               isDisabled={!supportsOnGrab.value}
               {...onGrab}
+              onChange={onInputChange}
+            />
+          </div>
+
+          <div>
+            <FormInputGroup
+              type={inputTypes.CHECK}
+              name="onDownloadComplete"
+              helpText={translate('OnDownloadComplete')}
+              isDisabled={!supportsOnDownloadComplete.value}
+              {...onDownloadComplete}
               onChange={onInputChange}
             />
           </div>

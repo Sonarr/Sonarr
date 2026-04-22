@@ -95,6 +95,13 @@ namespace NzbDrone.Core.Notifications.Email
             SendEmail(Settings, MANUAL_INTERACTION_REQUIRED_TITLE_BRANDED, body);
         }
 
+        public override void OnDownloadComplete(DownloadCompleteMessage message)
+        {
+            var body = $"{message.Message}";
+
+            SendEmail(Settings, DOWNLOAD_COMPLETE_TITLE_BRANDED, body);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

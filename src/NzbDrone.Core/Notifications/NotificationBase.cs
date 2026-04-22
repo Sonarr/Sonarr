@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Notifications
         protected const string HEALTH_RESTORED_TITLE = "Health Check Restored";
         protected const string APPLICATION_UPDATE_TITLE = "Application Updated";
         protected const string MANUAL_INTERACTION_REQUIRED_TITLE = "Manual Interaction";
+        protected const string DOWNLOAD_COMPLETE_TITLE = "Download Complete";
 
         protected const string EPISODE_GRABBED_TITLE_BRANDED = "Sonarr - " + EPISODE_GRABBED_TITLE;
         protected const string EPISODE_DOWNLOADED_TITLE_BRANDED = "Sonarr - " + EPISODE_DOWNLOADED_TITLE;
@@ -31,6 +32,7 @@ namespace NzbDrone.Core.Notifications
         protected const string HEALTH_RESTORED_TITLE_BRANDED = "Sonarr - " + HEALTH_RESTORED_TITLE;
         protected const string APPLICATION_UPDATE_TITLE_BRANDED = "Sonarr - " + APPLICATION_UPDATE_TITLE;
         protected const string MANUAL_INTERACTION_REQUIRED_TITLE_BRANDED = "Sonarr - " + MANUAL_INTERACTION_REQUIRED_TITLE;
+        protected const string DOWNLOAD_COMPLETE_TITLE_BRANDED = "Sonarr - " + DOWNLOAD_COMPLETE_TITLE;
 
         public abstract string Name { get; }
 
@@ -89,6 +91,10 @@ namespace NzbDrone.Core.Notifications
         {
         }
 
+        public virtual void OnDownloadComplete(DownloadCompleteMessage message)
+        {
+        }
+
         public virtual void ProcessQueue()
         {
         }
@@ -106,6 +112,7 @@ namespace NzbDrone.Core.Notifications
         public bool SupportsOnHealthRestored => HasConcreteImplementation("OnHealthRestored");
         public bool SupportsOnApplicationUpdate => HasConcreteImplementation("OnApplicationUpdate");
         public bool SupportsOnManualInteractionRequired => HasConcreteImplementation("OnManualInteractionRequired");
+        public bool SupportsOnDownloadComplete => HasConcreteImplementation("OnDownloadComplete");
 
         protected TSettings Settings => (TSettings)Definition.Settings;
 

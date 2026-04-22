@@ -79,6 +79,11 @@ namespace NzbDrone.Core.Notifications.Gotify
             SendNotification(MANUAL_INTERACTION_REQUIRED_TITLE, message.Message, message.Series);
         }
 
+        public override void OnDownloadComplete(DownloadCompleteMessage message)
+        {
+            SendNotification(DOWNLOAD_COMPLETE_TITLE, message.Message, message.Series);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

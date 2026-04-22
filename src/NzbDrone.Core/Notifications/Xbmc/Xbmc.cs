@@ -100,6 +100,11 @@ namespace NzbDrone.Core.Notifications.Xbmc
             Notify(Settings, MANUAL_INTERACTION_REQUIRED_TITLE, message.Message);
         }
 
+        public override void OnDownloadComplete(DownloadCompleteMessage message)
+        {
+            Notify(Settings, DOWNLOAD_COMPLETE_TITLE_BRANDED, message.Message);
+        }
+
         public override string Name => "Kodi";
 
         public override void ProcessQueue()

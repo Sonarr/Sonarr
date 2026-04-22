@@ -68,6 +68,11 @@ namespace NzbDrone.Core.Notifications.Twitter
             _twitterService.SendNotification($"Manual Interaction Required: {message.Message}", Settings);
         }
 
+        public override void OnDownloadComplete(DownloadCompleteMessage message)
+        {
+            _twitterService.SendNotification($"Download Complete: {message.Message}", Settings);
+        }
+
         public override object RequestAction(string action, IDictionary<string, string> query)
         {
             if (action == "startOAuth")

@@ -70,6 +70,11 @@ namespace NzbDrone.Core.Notifications.Apprise
             _proxy.SendNotification(MANUAL_INTERACTION_REQUIRED_TITLE, message.Message, GetPosterUrl(message.Series), Settings);
         }
 
+        public override void OnDownloadComplete(DownloadCompleteMessage message)
+        {
+            _proxy.SendNotification(DOWNLOAD_COMPLETE_TITLE, message.Message, GetPosterUrl(message.Series), Settings);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

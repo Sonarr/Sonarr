@@ -109,6 +109,15 @@ namespace NzbDrone.Core.Notifications.Telegram
             _proxy.SendNotification(title, message.Message, links, Settings);
         }
 
+        public override void OnDownloadComplete(DownloadCompleteMessage message)
+        {
+            var title = Settings.IncludeAppNameInTitle ? DOWNLOAD_COMPLETE_TITLE_BRANDED : DOWNLOAD_COMPLETE_TITLE;
+            title = Settings.IncludeInstanceNameInTitle ? $"{title} - {InstanceName}" : title;
+            var links = GetLinks(message.Series);
+
+            _proxy.SendNotification(title, message.Message, links, Settings);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

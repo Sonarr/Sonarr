@@ -78,6 +78,11 @@ namespace NzbDrone.Core.Notifications.Mailgun
             _proxy.SendNotification(MANUAL_INTERACTION_REQUIRED_TITLE, message.Message, Settings);
         }
 
+        public override void OnDownloadComplete(DownloadCompleteMessage message)
+        {
+            _proxy.SendNotification(DOWNLOAD_COMPLETE_TITLE, message.Message, Settings);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

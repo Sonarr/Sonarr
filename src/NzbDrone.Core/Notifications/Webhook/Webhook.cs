@@ -78,6 +78,11 @@ namespace NzbDrone.Core.Notifications.Webhook
             _proxy.SendWebhook(BuildManualInteractionRequiredPayload(message), Settings);
         }
 
+        public override void OnDownloadComplete(DownloadCompleteMessage message)
+        {
+            _proxy.SendWebhook(BuildOnDownloadCompletePayload(message), Settings);
+        }
+
         public override string Name => "Webhook";
 
         public override ValidationResult Test()

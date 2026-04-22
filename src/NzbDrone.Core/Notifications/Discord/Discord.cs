@@ -623,6 +623,41 @@ namespace NzbDrone.Core.Notifications.Discord
             _proxy.SendPayload(payload, Settings);
         }
 
+        public override void OnDownloadComplete(DownloadCompleteMessage message)
+        {
+            var embed = new Embed
+            {
+                Author = new DiscordAuthor
+                {
+                    Name = Settings.Author.IsNullOrWhiteSpace() ? _configFileProvider.InstanceName : Settings.Author,
+                    IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
+                },
+                Title = message.Series?.Title ?? message.Message,
+                Description = "Download Complete",
+                Timestamp = DateTime.UtcNow.ToString("O"),
+                Color = (int)DiscordColors.Standard,
+                Fields = new List<DiscordField>()
+                {
+                    new()
+                    {
+                        Name = "Download Client",
+                        Value = message.DownloadClientInfo?.Name ?? string.Empty,
+                        Inline = true
+                    },
+                    new()
+                    {
+                        Name = "Source Path",
+                        Value = message.SourcePath ?? string.Empty,
+                        Inline = true
+                    }
+                },
+            };
+
+            var payload = CreatePayload(null, new List<Embed> { embed });
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

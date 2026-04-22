@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Notifications
         void OnHealthRestored(HealthCheck.HealthCheck previousCheck);
         void OnApplicationUpdate(ApplicationUpdateMessage updateMessage);
         void OnManualInteractionRequired(ManualInteractionRequiredMessage message);
+        void OnDownloadComplete(DownloadCompleteMessage message);
         void ProcessQueue();
         bool SupportsOnGrab { get; }
         bool SupportsOnDownload { get; }
@@ -34,5 +35,6 @@ namespace NzbDrone.Core.Notifications
         bool SupportsOnHealthRestored { get; }
         bool SupportsOnApplicationUpdate { get; }
         bool SupportsOnManualInteractionRequired { get; }
+        bool SupportsOnDownloadComplete { get; }
     }
 }
