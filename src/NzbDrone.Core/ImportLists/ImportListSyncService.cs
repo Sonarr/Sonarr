@@ -230,6 +230,8 @@ namespace NzbDrone.Core.ImportLists
                     continue;
                 }
 
+                UpdateExistingTagSeriesRecord(seriesToAdd, item, importList);
+
                 // Append Series if not already in DB or already on add list
                 if (seriesToAdd.All(s => s.TvdbId != item.TvdbId))
                 {
@@ -264,6 +266,19 @@ namespace NzbDrone.Core.ImportLists
             _logger.ProgressInfo("Import List Sync Completed. Items found: {0}, Series added: {1}", items.Count, seriesToAdd.Count);
         }
 
+        private void UpdateExistingTagSeriesRecord(List<Series> existingList, ImportListItemInfo item, ImportListDefinition importList)
+        {
+            var existing = existingList.FirstOrDefault(s => s.TvdbId == item.TvdbId);
+
+            if (existing != null)
+            {
+                foreach (var tag in importList.Tags)
+                {
+                    existing.Tags.Add(tag);
+                }
+            }
+        }
+
         private void TagExisting(ImportListDefinition importList, ImportListItemInfo report)
         {
             if (importList.TagExisting)
@@ -279,7 +294,7 @@ namespace NzbDrone.Core.ImportLists
                 if (preCount != series.Tags.Count)
                 {
                     _seriesService.UpdateSeries(series);
-                    _logger.Debug("{0} [{1}] Retroactively added tags to series", report.TmdbId, report.Title);
+                    _logger.Debug("{0} [{1}] tagged existing series", report.TmdbId, report.Title);
                 }
             }
         }
