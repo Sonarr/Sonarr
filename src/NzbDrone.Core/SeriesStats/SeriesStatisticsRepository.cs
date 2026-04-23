@@ -109,9 +109,9 @@ namespace NzbDrone.Core.SeriesStats
                 .Select(@"""SeriesId"",
                             ""SeasonNumber"",
                             SUM(COALESCE(""Size"", 0)) AS SizeOnDisk,
-                            string_agg(""ReleaseGroup"", '|') AS ReleaseGroupsString,
-                            string_agg(""ReleaseType""::text, '|') AS ReleaseTypesString,
-                            string_agg(""Quality""::json->>'quality', '|') AS EpisodeFileQualitiesString")
+                            string_agg(DISTINCT ""ReleaseGroup"", '|') AS ReleaseGroupsString,
+                            string_agg(DISTINCT ""ReleaseType""::text, '|') AS ReleaseTypesString,
+                            string_agg(DISTINCT ""Quality""::json->>'quality', '|') AS EpisodeFileQualitiesString")
                 .GroupBy<EpisodeFile>(x => x.SeriesId)
                 .GroupBy<EpisodeFile>(x => x.SeasonNumber);
         }
