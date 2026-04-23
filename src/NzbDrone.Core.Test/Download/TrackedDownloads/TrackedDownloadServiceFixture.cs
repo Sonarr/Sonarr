@@ -88,38 +88,15 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
                   });
         }
 
-        [Test]
-        public void should_reuse_stable_queued_downloading_tracked_download()
+        [TestCase(DownloadItemStatus.Queued)]
+        [TestCase(DownloadItemStatus.Paused)]
+        public void should_reuse_stable_waiting_downloading_tracked_download(DownloadItemStatus status)
         {
             GivenTrackedDownloadCanBeMapped();
 
             var client = CreateDownloadClient();
-            var item = CreateDownloadItem(DownloadItemStatus.Queued);
-            var updatedItem = CreateDownloadItem(DownloadItemStatus.Queued);
-            updatedItem.RemainingSize = 250;
-
-            var trackedDownload = Subject.TrackDownload(client, item);
-            var refreshedTrackedDownload = Subject.TrackDownload(client, updatedItem);
-
-            trackedDownload.State.Should().Be(TrackedDownloadState.Downloading);
-            refreshedTrackedDownload.Should().BeSameAs(trackedDownload);
-            refreshedTrackedDownload.DownloadItem.Should().BeSameAs(updatedItem);
-
-            Mocker.GetMock<IHistoryService>()
-                  .Verify(s => s.FindByDownloadId(It.IsAny<string>()), Times.Once());
-
-            Mocker.GetMock<IParsingService>()
-                  .Verify(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), null), Times.Once());
-        }
-
-        [Test]
-        public void should_reuse_stable_paused_downloading_tracked_download()
-        {
-            GivenTrackedDownloadCanBeMapped();
-
-            var client = CreateDownloadClient();
-            var item = CreateDownloadItem(DownloadItemStatus.Paused);
-            var updatedItem = CreateDownloadItem(DownloadItemStatus.Paused);
+            var item = CreateDownloadItem(status);
+            var updatedItem = CreateDownloadItem(status);
             updatedItem.RemainingSize = 250;
 
             var trackedDownload = Subject.TrackDownload(client, item);
@@ -541,6 +518,74 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
             var trackedDownloads = Subject.GetTrackedDownloads();
             trackedDownloads.Should().HaveCount(1);
             trackedDownloads.First().RemoteEpisode.Should().BeNull();
+        }
+
+        [Test]
+        public void should_update_tracked_download_when_series_edited()
+        {
+            var originalSeries = new Series { Id = 5, TvdbId = 10, Title = "TV Series" };
+            var updatedSeries = new Series { Id = 5, TvdbId = 10, Title = "TV Series Updated" };
+
+            var remoteEpisode = new RemoteEpisode
+            {
+                Series = originalSeries,
+                Episodes = new List<Episode> { new Episode { Id = 4 } },
+                ParsedEpisodeInfo = new ParsedEpisodeInfo
+                {
+                    SeriesTitle = "TV Series",
+                    SeasonNumber = 1,
+                    EpisodeNumbers = new[] { 1 }
+                }
+            };
+
+            var updatedRemoteEpisode = new RemoteEpisode
+            {
+                Series = updatedSeries,
+                Episodes = new List<Episode> { new Episode { Id = 4 } },
+                ParsedEpisodeInfo = new ParsedEpisodeInfo
+                {
+                    SeriesTitle = "TV Series",
+                    SeasonNumber = 1,
+                    EpisodeNumbers = new[] { 1 }
+                }
+            };
+
+            Mocker.GetMock<IParsingService>()
+                  .SetupSequence(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), null))
+                  .Returns(remoteEpisode)
+                  .Returns(updatedRemoteEpisode);
+
+            Mocker.GetMock<IHistoryService>()
+                  .Setup(s => s.FindByDownloadId(It.IsAny<string>()))
+                  .Returns(new List<EpisodeHistory>());
+
+            var client = new DownloadClientDefinition
+            {
+                Id = 1,
+                Protocol = DownloadProtocol.Torrent
+            };
+
+            var item = new DownloadClientItem
+            {
+                Title = "TV Series - S01E01",
+                DownloadId = "12345",
+                DownloadClientInfo = new DownloadClientItemClientInfo
+                {
+                    Id = 1,
+                    Type = "Blackhole",
+                    Name = "Blackhole Client",
+                    Protocol = DownloadProtocol.Torrent
+                }
+            };
+
+            Subject.TrackDownload(client, item);
+
+            Subject.Handle(new SeriesEditedEvent(updatedSeries, originalSeries));
+
+            var trackedDownloads = Subject.GetTrackedDownloads();
+            trackedDownloads.Should().HaveCount(1);
+            trackedDownloads.First().RemoteEpisode.Should().BeSameAs(updatedRemoteEpisode);
+            trackedDownloads.First().RemoteEpisode.Series.Title.Should().Be("TV Series Updated");
         }
 
         [Test]

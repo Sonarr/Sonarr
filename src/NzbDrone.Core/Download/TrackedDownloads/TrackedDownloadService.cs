@@ -28,6 +28,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
     public class TrackedDownloadService : ITrackedDownloadService,
                                           IHandle<EpisodeInfoRefreshedEvent>,
+                                          IHandle<SeriesEditedEvent>,
                                           IHandle<SeriesAddedEvent>,
                                           IHandle<SeriesDeletedEvent>
     {
@@ -283,6 +284,16 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             _aggregationService.Augment(trackedDownload.RemoteEpisode);
         }
 
+        private void RefreshCachedItems(List<TrackedDownload> cachedItems)
+        {
+            if (cachedItems.Any())
+            {
+                cachedItems.ForEach(UpdateCachedItem);
+
+                _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()));
+            }
+        }
+
         private static TrackedDownloadState GetStateFromHistory(DownloadHistoryEventType eventType)
         {
             switch (eventType)
@@ -323,6 +334,17 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             }
         }
 
+        public void Handle(SeriesEditedEvent message)
+        {
+            var cachedItems = _cache.Values
+                .Where(t =>
+                    t.RemoteEpisode?.Series != null &&
+                    (t.RemoteEpisode.Series.Id == message.Series?.Id || t.RemoteEpisode.Series.TvdbId == message.Series?.TvdbId))
+                .ToList();
+
+            RefreshCachedItems(cachedItems);
+        }
+
         public void Handle(SeriesAddedEvent message)
         {
             var cachedItems = _cache.Values
@@ -331,12 +353,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                     message.Series?.TvdbId == t.RemoteEpisode.Series.TvdbId)
                 .ToList();
 
-            if (cachedItems.Any())
-            {
-                cachedItems.ForEach(UpdateCachedItem);
-
-                _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()));
-            }
+            RefreshCachedItems(cachedItems);
         }
 
         public void Handle(SeriesDeletedEvent message)
@@ -347,12 +364,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                     message.Series.Any(s => s.Id == t.RemoteEpisode.Series.Id || s.TvdbId == t.RemoteEpisode.Series.TvdbId))
                 .ToList();
 
-            if (cachedItems.Any())
-            {
-                cachedItems.ForEach(UpdateCachedItem);
-
-                _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()));
-            }
+            RefreshCachedItems(cachedItems);
         }
     }
 }
