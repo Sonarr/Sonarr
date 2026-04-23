@@ -66,8 +66,8 @@ const COLUMNS = [
     isVisible: true,
   },
   {
-    name: 'retroApplyTags',
-    label: () => translate('RetroApplyTags'),
+    name: 'tagExisting',
+    label: () => translate('TagExisting'),
     isSortable: true,
     isVisible: true,
   },

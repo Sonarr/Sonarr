@@ -8,7 +8,7 @@ namespace Sonarr.Api.V3.ImportLists
         public bool? EnableAutomaticAdd { get; set; }
         public string RootFolderPath { get; set; }
         public int? QualityProfileId { get; set; }
-        public bool? RetroApplyTags { get; set; }
+        public bool? TagExisting { get; set; }
     }
 
     public class ImportListBulkResourceMapper : ProviderBulkResourceMapper<ImportListBulkResource, ImportListDefinition>
@@ -25,7 +25,7 @@ namespace Sonarr.Api.V3.ImportLists
                 existing.EnableAutomaticAdd = resource.EnableAutomaticAdd ?? existing.EnableAutomaticAdd;
                 existing.RootFolderPath = resource.RootFolderPath ?? existing.RootFolderPath;
                 existing.QualityProfileId = resource.QualityProfileId ?? existing.QualityProfileId;
-                existing.RetroApplyTags = resource.RetroApplyTags ?? existing.RetroApplyTags;
+                existing.TagExisting = resource.TagExisting ?? existing.TagExisting;
             });
 
             return existingDefinitions;
