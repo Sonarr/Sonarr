@@ -5,8 +5,8 @@ interface CssExports {
   'implementation': string;
   'name': string;
   'qualityProfileId': string;
-  'retroApply': string;
   'rootFolderPath': string;
+  'tagExisting': string;
   'tags': string;
 }
 export const cssExports: CssExports;

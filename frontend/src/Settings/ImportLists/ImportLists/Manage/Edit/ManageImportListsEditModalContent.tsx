@@ -17,7 +17,7 @@ interface SavePayload {
   enableAutomaticAdd?: boolean;
   qualityProfileId?: number;
   rootFolderPath?: string;
-  retroApplyTags?: boolean;
+  tagExisting?: boolean;
 }
 
 interface ManageImportListsEditModalContentProps {
@@ -60,7 +60,7 @@ function ManageImportListsEditModalContent(
     NO_CHANGE
   );
   const [rootFolderPath, setRootFolderPath] = useState(NO_CHANGE);
-  const [retroApplyTags, setRetroApplyTags] = useState(NO_CHANGE);
+  const [tagExisting, setTagExisting] = useState(NO_CHANGE);
 
   const save = useCallback(() => {
     let hasChanges = false;
@@ -80,9 +80,9 @@ function ManageImportListsEditModalContent(
       hasChanges = true;
       payload.rootFolderPath = rootFolderPath;
     }
-    if (retroApplyTags !== NO_CHANGE) {
+    if (tagExisting !== NO_CHANGE) {
       hasChanges = true;
-      payload.retroApplyTags = retroApplyTags === 'enabled';
+      payload.tagExisting = tagExisting === 'enabled';
     }
 
     if (hasChanges) {
@@ -94,7 +94,7 @@ function ManageImportListsEditModalContent(
     enableAutomaticAdd,
     qualityProfileId,
     rootFolderPath,
-    retroApplyTags,
+    tagExisting,
     onSavePress,
     onModalClose,
   ]);
@@ -110,8 +110,8 @@ function ManageImportListsEditModalContent(
       case 'rootFolderPath':
         setRootFolderPath(value as string);
         break;
-      case 'retroApplyTags':
-        setRetroApplyTags(value as string);
+      case 'tagExisting':
+        setTagExisting(value as string);
         break;
       default:
         console.warn(`EditImportListModalContent Unknown Input: '${name}'`);
@@ -165,12 +165,12 @@ function ManageImportListsEditModalContent(
         </FormGroup>
 
         <FormGroup>
-          <FormLabel>{translate('RetroApplyTags')}</FormLabel>
+          <FormLabel>{translate('TagExisting')}</FormLabel>
 
           <FormInputGroup
             type={inputTypes.SELECT}
-            name="retroApplyTags"
-            value={retroApplyTags}
+            name="tagExisting"
+            value={tagExisting}
             values={autoAddOptions}
             onChange={onInputChange}
           />

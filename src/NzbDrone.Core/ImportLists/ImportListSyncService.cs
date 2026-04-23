@@ -225,7 +225,7 @@ namespace NzbDrone.Core.ImportLists
                 // Break if Series Exists in DB
                 if (existingTvdbIds.Any(x => x == item.TvdbId))
                 {
-                    RetroApplyTags(importList, item);
+                    TagExisting(importList, item);
                     _logger.Debug("{0} [{1}] Rejected, series exists in database", item.TvdbId, item.Title);
                     continue;
                 }
@@ -264,9 +264,9 @@ namespace NzbDrone.Core.ImportLists
             _logger.ProgressInfo("Import List Sync Completed. Items found: {0}, Series added: {1}", items.Count, seriesToAdd.Count);
         }
 
-        private void RetroApplyTags(ImportListDefinition importList, ImportListItemInfo report)
+        private void TagExisting(ImportListDefinition importList, ImportListItemInfo report)
         {
-            if (importList.RetroApplyTags)
+            if (importList.TagExisting)
             {
                 var series = _seriesService.FindByTvdbId(report.TvdbId);
 

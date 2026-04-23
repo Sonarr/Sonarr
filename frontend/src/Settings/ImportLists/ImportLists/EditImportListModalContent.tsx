@@ -71,7 +71,7 @@ function EditImportListModalContent({
     qualityProfileId,
     seriesType,
     seasonFolder,
-    retroApplyTags,
+    tagExisting,
     tags,
     fields,
   } = item;
