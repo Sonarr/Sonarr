@@ -176,6 +176,66 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
         }
 
         [Test]
+        public void should_reprocess_when_waiting_download_has_warning_status()
+        {
+            GivenTrackedDownloadCanBeMapped();
+
+            var client = CreateDownloadClient();
+            var item = CreateDownloadItem(DownloadItemStatus.Queued);
+            var updatedItem = CreateDownloadItem(DownloadItemStatus.Queued);
+            updatedItem.RemainingSize = 250;
+
+            var trackedDownload = Subject.TrackDownload(client, item);
+            trackedDownload.Warn("Temporary warning");
+
+            var refreshedTrackedDownload = Subject.TrackDownload(client, updatedItem);
+
+            refreshedTrackedDownload.Should().NotBeSameAs(trackedDownload);
+
+            Mocker.GetMock<IHistoryService>()
+                  .Verify(s => s.FindByDownloadId(It.IsAny<string>()), Times.Exactly(2));
+
+            Mocker.GetMock<IParsingService>()
+                  .Verify(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), null), Times.Exactly(2));
+        }
+
+        [Test]
+        public void should_reprocess_when_waiting_download_is_not_mapped()
+        {
+            Mocker.GetMock<IHistoryService>()
+                  .Setup(s => s.FindByDownloadId(It.IsAny<string>()))
+                  .Returns(new List<EpisodeHistory>());
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), null))
+                  .Returns(new RemoteEpisode
+                  {
+                      ParsedEpisodeInfo = new ParsedEpisodeInfo
+                      {
+                          SeriesTitle = "TV Series",
+                          SeasonNumber = 1,
+                          EpisodeNumbers = new[] { 1 }
+                      }
+                  });
+
+            var client = CreateDownloadClient();
+            var item = CreateDownloadItem(DownloadItemStatus.Queued);
+            var updatedItem = CreateDownloadItem(DownloadItemStatus.Queued);
+            updatedItem.RemainingSize = 250;
+
+            var trackedDownload = Subject.TrackDownload(client, item);
+            var refreshedTrackedDownload = Subject.TrackDownload(client, updatedItem);
+
+            refreshedTrackedDownload.Should().NotBeSameAs(trackedDownload);
+
+            Mocker.GetMock<IHistoryService>()
+                  .Verify(s => s.FindByDownloadId(It.IsAny<string>()), Times.Exactly(2));
+
+            Mocker.GetMock<IParsingService>()
+                  .Verify(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), null), Times.Exactly(2));
+        }
+
+        [Test]
         public void should_track_downloads_using_the_source_title_if_it_cannot_be_found_using_the_download_title()
         {
             GivenDownloadHistory();
