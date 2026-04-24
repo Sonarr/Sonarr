@@ -77,12 +77,12 @@ namespace Sonarr.Api.V3.Calendar
 
                 if (asAllDay)
                 {
-                    occurrence.Start = new CalDateTime(episode.AirDateUtc.Value.ToLocalTime()) { HasTime = false };
+                    occurrence.Start = new CalDateTime(episode.AirDateUtc.Value.ToLocalTime(), false);
                 }
                 else
                 {
-                    occurrence.Start = new CalDateTime(episode.AirDateUtc.Value) { HasTime = true };
-                    occurrence.End = new CalDateTime(episode.AirDateUtc.Value.AddMinutes(series.Runtime)) { HasTime = true };
+                    occurrence.Start = new CalDateTime(episode.AirDateUtc.Value, true);
+                    occurrence.End = new CalDateTime(episode.AirDateUtc.Value.AddMinutes(series.Runtime), true);
                 }
 
                 switch (series.SeriesType)
@@ -96,10 +96,10 @@ namespace Sonarr.Api.V3.Calendar
                 }
             }
 
-            var serializer = (IStringSerializer)new SerializerFactory().Build(calendar.GetType(), new SerializationContext());
-            var icalendar = serializer.SerializeToString(calendar);
+            var serializer = new SerializerFactory().Build(calendar.GetType(), new SerializationContext()) as IStringSerializer;
+            var icalendar = serializer?.SerializeToString(calendar);
 
-            return Content(icalendar, "text/calendar");
+            return icalendar is null ? NoContent() : Content(icalendar, "text/calendar");
         }
     }
 }
