@@ -34,6 +34,7 @@ public class BlocklistController : Controller
             {
                 "date",
                 "indexer",
+                "quality",
                 "series.sortTitle",
                 "sourceTitle"
             },

@@ -46,7 +46,8 @@ public class CutoffController : EpisodeControllerWithSignalR
             {
                 "episodes.airDateUtc",
                 "episodes.lastSearchTime",
-                "series.sortTitle"
+                "series.sortTitle",
+                "quality"
             },
             "episodes.airDateUtc",
             SortDirection.Ascending);

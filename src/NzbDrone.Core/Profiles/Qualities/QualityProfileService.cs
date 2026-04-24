@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Profiles.Qualities
         private readonly IImportListFactory _importListFactory;
         private readonly ICustomFormatService _formatService;
         private readonly ISeriesService _seriesService;
+        private readonly IQualityProfileRankService _rankService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
@@ -40,6 +41,7 @@ namespace NzbDrone.Core.Profiles.Qualities
                                      IImportListFactory importListFactory,
                                      ICustomFormatService formatService,
                                      ISeriesService seriesService,
+                                     IQualityProfileRankService rankService,
                                      IEventAggregator eventAggregator,
                                      Logger logger)
         {
@@ -47,18 +49,22 @@ namespace NzbDrone.Core.Profiles.Qualities
             _importListFactory = importListFactory;
             _formatService = formatService;
             _seriesService = seriesService;
+            _rankService = rankService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
         public QualityProfile Add(QualityProfile profile)
         {
-            return _qualityProfileRepository.Insert(profile);
+            var saved = _qualityProfileRepository.Insert(profile);
+            _rankService.UpdateRanksForProfile(saved);
+            return saved;
         }
 
         public void Update(QualityProfile profile)
         {
             _qualityProfileRepository.Update(profile);
+            _rankService.UpdateRanksForProfile(profile);
             _eventAggregator.PublishEvent(new QualityProfileUpdatedEvent(profile.Id));
         }
 
@@ -71,6 +77,7 @@ namespace NzbDrone.Core.Profiles.Qualities
             }
 
             _qualityProfileRepository.Delete(id);
+            _rankService.DeleteRanksForProfile(id);
         }
 
         public List<QualityProfile> All()
@@ -90,8 +97,12 @@ namespace NzbDrone.Core.Profiles.Qualities
 
         public void Handle(ApplicationStartedEvent message)
         {
-            if (All().Any())
+            var profiles = All();
+
+            if (profiles.Any())
             {
+                _rankService.SeedAll(profiles);
+
                 return;
             }
 

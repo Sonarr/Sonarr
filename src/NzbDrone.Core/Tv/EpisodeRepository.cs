@@ -127,17 +127,14 @@ namespace NzbDrone.Core.Tv
 
         public PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, bool includeSpecials, HashSet<int> seriesTags = null, List<int> quality = null)
         {
-            var startingSeasonNumber = 1;
+            var startingSeasonNumber = includeSpecials ? 0 : 1;
+            var sortingByQuality = string.Equals(pagingSpec.SortKey, "quality", StringComparison.OrdinalIgnoreCase);
+            var customSortExpression = sortingByQuality ? "MAX(COALESCE(\"r\".\"Score\", -1))" : null;
 
-            if (includeSpecials)
-            {
-                startingSeasonNumber = 0;
-            }
-
-            pagingSpec.Records = GetPagedRecords(EpisodesWhereCutoffUnmetBuilder(qualitiesBelowCutoff, startingSeasonNumber, seriesTags, quality), pagingSpec, PagedQuery);
+            pagingSpec.Records = GetPagedRecords(EpisodesWhereCutoffUnmetBuilder(qualitiesBelowCutoff, startingSeasonNumber, seriesTags, quality, sortingByQuality), pagingSpec, PagedQuery, customSortExpression);
 
             var countTemplate = $"SELECT COUNT(*) FROM (SELECT /**select**/ FROM \"{TableMapping.Mapper.TableNameMapping(typeof(Episode))}\" /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/ /**groupby**/ /**having**/) AS \"Inner\"";
-            pagingSpec.TotalRecords = GetPagedRecordCount(EpisodesWhereCutoffUnmetBuilder(qualitiesBelowCutoff, startingSeasonNumber, seriesTags, quality).Select(typeof(Episode)), pagingSpec, countTemplate);
+            pagingSpec.TotalRecords = GetPagedRecordCount(EpisodesWhereCutoffUnmetBuilder(qualitiesBelowCutoff, startingSeasonNumber, seriesTags, quality, sortingByQuality).Select(typeof(Episode)), pagingSpec, countTemplate);
 
             return pagingSpec;
         }
@@ -318,7 +315,7 @@ namespace NzbDrone.Core.Tv
                                  currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
-        private SqlBuilder EpisodesWhereCutoffUnmetBuilder(List<QualitiesBelowCutoff> qualitiesBelowCutoff, int startingSeasonNumber, HashSet<int> seriesTags, List<int> qualities)
+        private SqlBuilder EpisodesWhereCutoffUnmetBuilder(List<QualitiesBelowCutoff> qualitiesBelowCutoff, int startingSeasonNumber, HashSet<int> seriesTags, List<int> qualities, bool joinQualityRanks)
         {
             var builder = Builder()
                 .Join<Episode, Series>((e, s) => e.SeriesId == s.Id)
@@ -339,9 +336,23 @@ namespace NzbDrone.Core.Tv
                 builder = builder.Where(BuildQualityFilterWhereClause(qualities));
             }
 
-            return builder
+            builder = builder
                 .GroupBy<Episode>(e => e.Id)
                 .GroupBy<Series>(s => s.Id);
+
+            if (joinQualityRanks)
+            {
+                var qualityIdExpr = _database.DatabaseType == DatabaseType.PostgreSQL
+                    ? "(\"EpisodeFiles\".\"Quality\"::jsonb ->> 'quality')::int"
+                    : "json_extract(\"EpisodeFiles\".\"Quality\", '$.quality')";
+
+                builder.LeftJoin(
+                    $"\"QualityProfileQualityRanks\" AS \"r\" " +
+                    $"ON \"r\".\"ProfileId\" = \"Series\".\"QualityProfileId\" " +
+                    $"AND \"r\".\"QualityId\" = {qualityIdExpr}");
+            }
+
+            return builder;
         }
 
         private string BuildQualityCutoffWhereClause(List<QualitiesBelowCutoff> qualitiesBelowCutoff)
