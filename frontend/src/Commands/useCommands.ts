@@ -2,7 +2,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo, useRef } from 'react';
 import { showMessage } from 'App/messagesStore';
 import Command, { CommandBody, NewCommandBody } from 'Commands/Command';
-import useApiMutation from 'Helpers/Hooks/useApiMutation';
+import useApiMutation, {
+  addOrUpdateQueryClientItem,
+} from 'Helpers/Hooks/useApiMutation';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import {
   ERROR,
@@ -45,11 +47,8 @@ export const useExecuteCommand = () => {
     path: '/command',
     mutationOptions: {
       onSuccess: (newCommand: Command) => {
-        queryClient.setQueryData<Command[]>(
-          ['/command'],
-          (oldCommands = []) => {
-            return [...oldCommands, newCommand];
-          }
+        queryClient.setQueryData<Command[]>(['/command'], (oldCommands = []) =>
+          addOrUpdateQueryClientItem(oldCommands, newCommand, 'id')
         );
       },
     },

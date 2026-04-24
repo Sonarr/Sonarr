@@ -1,6 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 import ModelBase from 'App/ModelBase';
-import useApiMutation from 'Helpers/Hooks/useApiMutation';
+import useApiMutation, {
+  addOrUpdateQueryClientItem,
+} from 'Helpers/Hooks/useApiMutation';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 
 export interface UnmappedFolder {
@@ -86,9 +88,8 @@ export const useAddRootFolder = () => {
       onSuccess: (newRootFolder) => {
         queryClient.setQueryData<RootFolder[]>(
           ['/rootFolder'],
-          (oldRootFolders = []) => {
-            return [...oldRootFolders, newRootFolder];
-          }
+          (oldRootFolders = []) =>
+            addOrUpdateQueryClientItem(oldRootFolders, newRootFolder, 'id')
         );
       },
     },

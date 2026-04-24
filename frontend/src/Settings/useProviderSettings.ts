@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import ModelBase from 'App/ModelBase';
 import useApiMutation, {
+  addOrUpdateQueryClientItem,
   getValidationFailures,
 } from 'Helpers/Hooks/useApiMutation';
 import useApiQuery, { QueryOptions } from 'Helpers/Hooks/useApiQuery';
@@ -121,19 +122,9 @@ export const useSaveProviderSettings = <T extends ModelBase>(
       });
     },
     onSuccess: (updatedSettings: T) => {
-      queryClient.setQueryData<T[]>([path], (oldData = []) => {
-        const existingIndex = oldData.findIndex(
-          (item) => item.id === updatedSettings.id
-        );
-
-        if (existingIndex === -1) {
-          return [...oldData, updatedSettings];
-        }
-
-        return oldData.map((item) =>
-          item.id === updatedSettings.id ? updatedSettings : item
-        );
-      });
+      queryClient.setQueryData<T[]>([path], (oldData = []) =>
+        addOrUpdateQueryClientItem(oldData, updatedSettings, 'id')
+      );
       onSuccess?.(updatedSettings);
     },
     onError,
