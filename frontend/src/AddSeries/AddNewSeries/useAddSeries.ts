@@ -1,7 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
 import AddSeries from 'AddSeries/AddSeries';
 import { AddSeriesOptions } from 'AddSeries/addSeriesOptionsStore';
-import useApiMutation from 'Helpers/Hooks/useApiMutation';
+import useApiMutation, {
+  addOrUpdateQueryClientItem,
+} from 'Helpers/Hooks/useApiMutation';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import Series from 'Series/Series';
 
@@ -42,13 +44,9 @@ export const useAddSeries = () => {
       method: 'POST',
       mutationOptions: {
         onSuccess: (newSeries) => {
-          queryClient.setQueryData<Series[]>(['/series'], (oldSeries) => {
-            if (!oldSeries) {
-              return [newSeries];
-            }
-
-            return [...oldSeries, newSeries];
-          });
+          queryClient.setQueryData<Series[]>(['/series'], (oldSeries = []) =>
+            addOrUpdateQueryClientItem(oldSeries, newSeries, 'id')
+          );
         },
       },
     }

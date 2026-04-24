@@ -1,5 +1,6 @@
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import ModelBase from 'App/ModelBase';
 import { ValidationFailures } from 'Store/Selectors/selectSettings';
 import {
   ValidationError,
@@ -70,4 +71,17 @@ export function getValidationFailures(
       warnings: [],
     }
   );
+}
+
+export function addOrUpdateQueryClientItem<
+  T extends ModelBase,
+  K extends keyof T
+>(oldData: T[] = [], newItem: T, key: K) {
+  const existingIndex = oldData.findIndex((item) => item[key] === newItem[key]);
+
+  if (existingIndex === -1) {
+    return [...oldData, newItem];
+  }
+
+  return oldData.map((item) => (item[key] === newItem[key] ? newItem : item));
 }
