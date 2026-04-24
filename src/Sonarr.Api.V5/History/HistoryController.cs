@@ -71,7 +71,8 @@ public class HistoryController : Controller
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
                 "date",
-                "series.sortTitle"
+                "series.sortTitle",
+                "quality"
             },
             "date",
             SortDirection.Descending);
