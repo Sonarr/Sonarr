@@ -302,12 +302,7 @@ function SignalRListener() {
       if (body.action === 'updated') {
         const updatedItem = body.resource as Series;
 
-        updateQueryClientItem(
-          queryClient,
-          ['/series'],
-          updatedItem,
-          false // Don't add the series to the list if it doesn't exist. Series should already be in the list since they are included in the calendar and series details.
-        );
+        updateQueryClientItem(queryClient, ['/series'], updatedItem, true);
 
         repopulatePage('seriesUpdated');
       } else if (body.action === 'deleted') {
