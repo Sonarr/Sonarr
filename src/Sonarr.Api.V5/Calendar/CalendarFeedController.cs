@@ -27,7 +27,7 @@ public class CalendarFeedController : Controller
     }
 
     [HttpGet("Sonarr.ics")]
-    public ContentHttpResult GetCalendarFeed(int pastDays = 7, int futureDays = 28, string tags = "", bool unmonitored = false, bool premieresOnly = false, bool asAllDay = false, bool includeSpecials = true)
+    public Results<ContentHttpResult, NoContent> GetCalendarFeed(int pastDays = 7, int futureDays = 28, string tags = "", bool unmonitored = false, bool premieresOnly = false, bool asAllDay = false, bool includeSpecials = true)
     {
         var start = DateTime.Today.AddDays(-pastDays);
         var end = DateTime.Today.AddDays(futureDays);
@@ -76,12 +76,12 @@ public class CalendarFeedController : Controller
 
             if (asAllDay)
             {
-                occurrence.Start = new CalDateTime(episode.AirDateUtc!.Value.ToLocalTime()) { HasTime = false };
+                occurrence.Start = new CalDateTime(episode.AirDateUtc!.Value.ToLocalTime(), false);
             }
             else
             {
-                occurrence.Start = new CalDateTime(episode.AirDateUtc!.Value) { HasTime = true };
-                occurrence.End = new CalDateTime(episode.AirDateUtc.Value.AddMinutes(series.Runtime)) { HasTime = true };
+                occurrence.Start = new CalDateTime(episode.AirDateUtc!.Value, true);
+                occurrence.End = new CalDateTime(episode.AirDateUtc.Value.AddMinutes(series.Runtime), true);
             }
 
             switch (series.SeriesType)
@@ -95,9 +95,9 @@ public class CalendarFeedController : Controller
             }
         }
 
-        var serializer = (IStringSerializer)new SerializerFactory().Build(calendar.GetType(), new SerializationContext());
-        var icalendar = serializer.SerializeToString(calendar);
+        var serializer = new SerializerFactory().Build(calendar.GetType(), new SerializationContext()) as IStringSerializer;
+        var icalendar = serializer?.SerializeToString(calendar);
 
-        return TypedResults.Content(icalendar, "text/calendar");
+        return icalendar is null ? TypedResults.NoContent() : TypedResults.Content(icalendar, "text/calendar");
     }
 }
