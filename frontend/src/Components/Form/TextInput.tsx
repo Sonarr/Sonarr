@@ -8,6 +8,7 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
+import useCombinedRefs from 'Helpers/Hooks/useCombinedRefs';
 import { FileInputChanged, InputChanged } from 'typings/inputs';
 import styles from './TextInput.css';
 
@@ -65,21 +66,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps | FileInputProps>(
     ref
   ) => {
     const inputRef = useRef<HTMLInputElement>(null);
-
-    const setRef = useCallback(
-      (node: HTMLInputElement | null) => {
-        (inputRef as React.MutableRefObject<HTMLInputElement | null>).current =
-          node;
-        if (typeof ref === 'function') {
-          ref(node);
-        } else if (ref) {
-          (ref as React.MutableRefObject<HTMLInputElement | null>).current =
-            node;
-        }
-      },
-      [ref]
-    );
-
+    const combinedRef = useCombinedRefs(ref, inputRef);
     const selectionTimeout = useRef<ReturnType<typeof setTimeout>>();
     const selectionStart = useRef<number | null>();
     const selectionEnd = useRef<number | null>();
@@ -172,7 +159,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps | FileInputProps>(
 
     return (
       <input
-        ref={setRef}
+        ref={combinedRef}
         type={type}
         readOnly={readOnly}
         autoFocus={autoFocus}
