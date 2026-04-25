@@ -7,6 +7,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.DataAugmentation.Scene;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
@@ -32,6 +33,7 @@ namespace NzbDrone.Core.IndexerSearch
         private readonly ISeriesService _seriesService;
         private readonly IEpisodeService _episodeService;
         private readonly IMakeDownloadDecision _makeDownloadDecision;
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
         public ReleaseSearchService(IIndexerFactory indexerFactory,
@@ -39,6 +41,7 @@ namespace NzbDrone.Core.IndexerSearch
                                 ISeriesService seriesService,
                                 IEpisodeService episodeService,
                                 IMakeDownloadDecision makeDownloadDecision,
+                                IConfigService configService,
                                 Logger logger)
         {
             _indexerFactory = indexerFactory;
@@ -46,6 +49,7 @@ namespace NzbDrone.Core.IndexerSearch
             _seriesService = seriesService;
             _episodeService = episodeService;
             _makeDownloadDecision = makeDownloadDecision;
+            _configService = configService;
             _logger = logger;
         }
 
@@ -421,9 +425,44 @@ namespace NzbDrone.Core.IndexerSearch
                 downloadDecisions.AddRange(decisions);
             }
 
-            foreach (var episode in episodesToSearch)
+            // Only skip per-episode fallback if we got approved season results.
+            // Indexers like AB return all results for a title regardless of season
+            // params, so raw result count alone is not reliable.
+            // For interactive search, always run per-episode so the user can see
+            // and pick individual releases regardless of whether a pack was found.
+            if (!interactiveSearch && downloadDecisions.Any(d => d.Approved))
             {
-                downloadDecisions.AddRange(await SearchAnime(series, episode, monitoredOnly, userInvokedSearch, interactiveSearch, true));
+                _logger.Debug("Season search returned approved results for {0}, skipping per-episode search for {1} episodes", series.Title, episodesToSearch.Count);
+            }
+            else
+            {
+                var fallbackSetting = _configService.AnimeSeasonSearchFallback;
+                var allEpisodesAired = episodesToSearch.All(e => e.AirDateUtc.HasValue && e.AirDateUtc.Value.Before(DateTime.UtcNow));
+
+                var shouldFallback = interactiveSearch || (fallbackSetting switch
+                {
+                    AnimeSeasonSearchFallback.Never => false,
+                    AnimeSeasonSearchFallback.Always => true,
+                    AnimeSeasonSearchFallback.FullSeasonAired => allEpisodesAired,
+                    AnimeSeasonSearchFallback.FullSeasonNotAired => !allEpisodesAired,
+                    _ => !allEpisodesAired
+                });
+
+                if (shouldFallback)
+                {
+                    _logger.Debug("No approved season results for {0}, falling back to per-episode search for {1} episodes (fallback: {2}, allAired: {3})",
+                        series.Title, episodesToSearch.Count, fallbackSetting, allEpisodesAired);
+
+                    foreach (var episode in episodesToSearch)
+                    {
+                        downloadDecisions.AddRange(await SearchAnime(series, episode, monitoredOnly, userInvokedSearch, interactiveSearch, true));
+                    }
+                }
+                else
+                {
+                    _logger.Debug("No approved season results for {0}, per-episode fallback skipped (fallback: {1}, allAired: {2})",
+                        series.Title, fallbackSetting, allEpisodesAired);
+                }
             }
 
             return DeDupeDecisions(downloadDecisions);

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using NzbDrone.Common.Http.Proxy;
 using NzbDrone.Core.ImportLists;
+using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Qualities;
@@ -51,6 +52,9 @@ namespace NzbDrone.Core.Configuration
         bool SetPermissionsLinux { get; set; }
         string ChmodFolder { get; set; }
         string ChownGroup { get; set; }
+
+        // Anime Season Search
+        AnimeSeasonSearchFallback AnimeSeasonSearchFallback { get; set; }
 
         // Indexers
         int Retention { get; set; }
