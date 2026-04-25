@@ -14,7 +14,6 @@ import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
-import withScrollPosition from 'Components/withScrollPosition';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, icons, kinds } from 'Helpers/Props';
 import { DESCENDING } from 'Helpers/Props/sortDirections';
@@ -27,7 +26,6 @@ import {
   useSeriesOptions,
 } from 'Series/seriesOptionsStore';
 import { FILTERS, useSeriesIndex } from 'Series/useSeries';
-import scrollPositions from 'Store/scrollPositions';
 import { TableOptionsChangePayload } from 'typings/Table';
 import translate from 'Utilities/String/translate';
 import SeriesIndexFilterMenu from './Menus/SeriesIndexFilterMenu';
@@ -60,11 +58,7 @@ function getViewComponent(view: string) {
   return SeriesIndexTable;
 }
 
-interface SeriesIndexProps {
-  initialScrollTop?: number;
-}
-
-const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
+function SeriesIndex() {
   const {
     isLoading: isFetching,
     isFetched,
@@ -148,13 +142,9 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
     [setJumpToCharacter]
   );
 
-  const onScroll = useCallback(
-    ({ scrollTop }: { scrollTop: number }) => {
-      setJumpToCharacter(undefined);
-      scrollPositions.seriesIndex = scrollTop;
-    },
-    [setJumpToCharacter]
-  );
+  const onScroll = useCallback(() => {
+    setJumpToCharacter(undefined);
+  }, [setJumpToCharacter]);
 
   const jumpBarItems: PageJumpBarItems = useMemo(() => {
     // Reset if not sorting by sortTitle
@@ -296,7 +286,7 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               innerClassName={styles[`${view}InnerContentBody`]}
-              initialScrollTop={props.initialScrollTop}
+              scrollPositionKey="seriesIndex"
               onScroll={onScroll}
             >
               {isFetching && !isFetched ? <LoadingIndicator /> : null}
@@ -353,6 +343,6 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
       </SelectProvider>
     </QueueDetailsProvider>
   );
-}, 'seriesIndex');
+}
 
 export default SeriesIndex;
