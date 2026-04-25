@@ -26,7 +26,9 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
 
         private IEnumerable<ImportListRequest> GetSeriesRequest()
         {
-            var requestBuilder = new HttpRequestBuilder(_settings.BaseUrl.Trim());
+            var link = _settings.BaseUrl.Trim();
+
+            var userName = _settings.Username.IsNotNullOrWhiteSpace() ? _settings.Username.Trim() : _settings.AuthUser.Trim();
 
             switch (_settings.TraktListType)
             {
@@ -39,36 +41,37 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
                         _ => "rank"
                     };
 
-                    requestBuilder
-                        .Resource("/users/{userName}/watchlist/shows/{sorting}")
-                        .SetSegment("sorting", watchSorting);
+                    link += $"/users/{userName}/watchlist/shows/{watchSorting}";
                     break;
                 case (int)TraktUserListType.UserWatchedList:
-                    requestBuilder
-                        .Resource("/users/{userName}/watched/shows")
-                        .AddQueryParam("extended", "full");
+                    link += $"/users/{userName}/watched/shows";
                     break;
                 case (int)TraktUserListType.UserCollectionList:
-                    requestBuilder.Resource("/users/{userName}/collection/shows");
+                    link += $"/users/{userName}/collection/shows";
                     break;
             }
 
-            var userName = _settings.Username.IsNotNullOrWhiteSpace() ? _settings.Username.Trim() : _settings.AuthUser.Trim();
+            var filterParams = TraktQueryHelper.BuildFilterParameters(_settings.Rating, _settings.Genres, _settings.Years, _settings.Limit, _settings.TraktAdditionalParameters);
 
-            requestBuilder
-                .SetSegment("userName", userName)
-                .Accept(HttpAccept.Json)
-                .WithRateLimit(4)
-                .SetHeader("trakt-api-version", "2")
-                .SetHeader("trakt-api-key", _clientId)
-                .AddQueryParam("limit", _settings.Limit.ToString());
+            // Add extended parameter for watched list
+            if (_settings.TraktListType == (int)TraktUserListType.UserWatchedList)
+            {
+                filterParams["extended"] = "full";
+            }
+
+            link += "?" + filterParams.ToQueryString();
+
+            var request = new ImportListRequest(link, HttpAccept.Json);
+
+            request.HttpRequest.Headers.Add("trakt-api-version", "2");
+            request.HttpRequest.Headers.Add("trakt-api-key", _clientId);
 
             if (_settings.AccessToken.IsNotNullOrWhiteSpace())
             {
-                requestBuilder.SetHeader("Authorization", $"Bearer {_settings.AccessToken}");
+                request.HttpRequest.Headers.Add("Authorization", $"Bearer {_settings.AccessToken}");
             }
 
-            yield return new ImportListRequest(requestBuilder.Build());
+            yield return request;
         }
     }
 }

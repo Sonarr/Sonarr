@@ -20,21 +20,31 @@ namespace NzbDrone.Core.ImportLists.Trakt.List
 
         private IEnumerable<ImportListRequest> GetSeriesRequest()
         {
-            var link = Settings.BaseUrl.Trim();
+            var requestBuilder = new HttpRequestBuilder(Settings.BaseUrl.Trim());
 
-            link += $"/users/{Settings.Username.Trim()}/lists/{Settings.Listname.ToUrlSlug()}/items/show,season,episode?limit={Settings.Limit}";
+            requestBuilder
+                .Resource("/users/{userName}/lists/{listName}/items/show,season,episode")
+                .SetSegment("userName", Settings.Username.Trim())
+                .SetSegment("listName", Settings.Listname.ToUrlSlug())
+                .Accept(HttpAccept.Json);
 
-            var request = new ImportListRequest(link, HttpAccept.Json);
+            var filterParams = TraktQueryHelper.BuildFilterParameters(Settings.Rating, Settings.Genres, Settings.Years, Settings.Limit, Settings.TraktAdditionalParameters);
 
-            request.HttpRequest.Headers.Add("trakt-api-version", "2");
-            request.HttpRequest.Headers.Add("trakt-api-key", ClientId);
+            foreach (var param in filterParams)
+            {
+                requestBuilder.AddQueryParam(param.Key, param.Value);
+            }
+
+            requestBuilder
+                .SetHeader("trakt-api-version", "2")
+                .SetHeader("trakt-api-key", ClientId);
 
             if (Settings.AccessToken.IsNotNullOrWhiteSpace())
             {
-                request.HttpRequest.Headers.Add("Authorization", "Bearer " + Settings.AccessToken);
+                requestBuilder.SetHeader("Authorization", $"Bearer {Settings.AccessToken}");
             }
 
-            yield return request;
+            yield return new ImportListRequest(requestBuilder.Build());
         }
     }
 }
