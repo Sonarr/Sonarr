@@ -1,0 +1,31 @@
+name: Wrong Base Branch
+
+on:
+  pull_request_target:
+    types:
+      - opened
+
+jobs:
+  comment:
+    name: Comment on PRs targeting non-default branch
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.pull_request.base.ref != github.event.repository.default_branch &&
+      !contains(fromJSON('["OWNER", "MEMBER"]'), github.event.pull_request.author_association)
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Add comment
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} --body ":wave: @${{ github.event.pull_request.user.login }}, thanks for your contribution!
+
+          This PR targets \`${{ github.event.pull_request.base.ref }}\`, but all features and bug fixes must target the default branch (\`${{ github.event.repository.default_branch }}\`).
+
+          Please:
+          1. Rebase your changes onto \`${{ github.event.repository.default_branch }}\` (for example: \`git rebase --onto origin/${{ github.event.repository.default_branch }} ${{ github.event.pull_request.base.ref }}\`).
+          2. Update this PR to target \`${{ github.event.repository.default_branch }}\` using the *Edit* button next to the PR title.
+
+          **Please do not close this PR and open a new one** — you can change the base branch on the existing PR directly."
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
