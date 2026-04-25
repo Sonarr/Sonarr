@@ -500,7 +500,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         }
 
         [Test]
-        public void should_reject_if_download_is_multi_season()
+        public void should_process_multi_season_download()
         {
             GivenValidSeries();
 
@@ -511,19 +511,21 @@ namespace NzbDrone.Core.Test.MediaFiles
             Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(folderName))
                 .Returns(true);
 
-            var result = Subject.ProcessPath(folderName, ImportMode.Auto, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
-
-            result.Count.Should().Be(1);
-            result.First().Result.Should().Be(ImportResultType.Rejected);
-            result.First().ImportDecision.Rejections.First().Reason.Should().Be(ImportRejectionReason.MultiSeason);
-
-            Mocker.GetMock<IParsingService>().Setup(c => c.GetSeries("foldername")).Returns((Series)null);
+            var imported = new List<ImportDecision>();
 
             Mocker.GetMock<IMakeImportDecision>()
-                .Verify(c => c.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<bool>(), true),
-                    Times.Never());
+                .Setup(s => s.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<bool>()))
+                .Returns(imported);
 
-            VerifyNoImport();
+            Mocker.GetMock<IImportApprovedEpisodes>()
+                .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true, It.IsAny<DownloadClientItem>(), ImportMode.Auto))
+                .Returns(imported.Select(i => new ImportResult(i)).ToList());
+
+            Subject.ProcessPath(folderName, ImportMode.Auto, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                .Verify(c => c.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<bool>()),
+                    Times.Once());
         }
 
         private void VerifyNoImport()

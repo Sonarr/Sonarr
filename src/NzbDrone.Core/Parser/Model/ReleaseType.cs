@@ -13,6 +13,9 @@ namespace NzbDrone.Core.Parser.Model
         MultiEpisode = 2,
 
         [FieldOption(label: "Season Pack")]
-        SeasonPack = 3
+        SeasonPack = 3,
+
+        [FieldOption(label: "Multi-Season Pack")]
+        MultiSeasonPack = 4
     }
 }

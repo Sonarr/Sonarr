@@ -54,7 +54,9 @@ namespace Sonarr.Api.V5.Queue
                 Id = model.Id,
                 SeriesId = model.Series?.Id,
                 EpisodeIds = model.Episodes?.Select(e => e.Id).ToList() ?? [],
-                SeasonNumbers = model.SeasonNumber.HasValue ? [model.SeasonNumber.Value] : [],
+                SeasonNumbers = model.Episodes?.Select(e => e.SeasonNumber).Distinct().OrderBy(s => s).ToList() is { Count: > 0 } seasonNumbers
+                    ? seasonNumbers
+                    : (model.SeasonNumber.HasValue ? [model.SeasonNumber.Value] : []),
                 Series = includeSeries && model.Series != null ? model.Series.ToResource() : null,
                 Episodes = includeEpisodes ? model.Episodes?.ToResource() : null,
                 Languages = model.Languages,
