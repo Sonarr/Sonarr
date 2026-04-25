@@ -266,8 +266,10 @@ namespace NzbDrone.Core.Datastore
             }
 
             using (var conn = _database.OpenConnection())
+            using (var tran = conn.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                UpdateFields(conn, null, models, _properties);
+                UpdateFields(conn, tran, models, _properties);
+                tran.Commit();
             }
         }
 
@@ -371,8 +373,10 @@ namespace NzbDrone.Core.Datastore
             var propertiesToUpdate = properties.Select(x => x.GetMemberName()).ToList();
 
             using (var conn = _database.OpenConnection())
+            using (var tran = conn.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                UpdateFields(conn, null, models, propertiesToUpdate);
+                UpdateFields(conn, tran, models, propertiesToUpdate);
+                tran.Commit();
             }
 
             foreach (var model in models)
