@@ -44,6 +44,13 @@
   cursor: default;
 }
 
+.externalPriorityScore {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  width: 55px;
+  font-weight: bold;
+}
+
 .rejected,
 .indexerFlags {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';

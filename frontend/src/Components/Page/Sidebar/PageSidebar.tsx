@@ -146,6 +146,10 @@ const LINKS: SidebarItem[] = [
         to: '/settings/connect',
       },
       {
+        title: () => translate('ExternalDecisions'),
+        to: '/settings/externaldecisions',
+      },
+      {
         title: () => translate('Metadata'),
         to: '/settings/metadata',
       },

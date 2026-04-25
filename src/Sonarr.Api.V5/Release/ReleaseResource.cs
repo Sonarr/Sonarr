@@ -26,6 +26,7 @@ public class ReleaseResource : RestResource
     public int ReleaseWeight { get; set; }
     public List<CustomFormatResource>? CustomFormats { get; set; }
     public int CustomFormatScore { get; set; }
+    public int ExternalPriorityScore { get; set; }
     public AlternateTitleResource? SceneMapping { get; set; }
 }
 
@@ -52,6 +53,7 @@ public static class ReleaseResourceMapper
             EpisodeRequested = remoteEpisode.EpisodeRequested,
             DownloadAllowed = remoteEpisode.DownloadAllowed,
             CustomFormatScore = remoteEpisode.CustomFormatScore,
+            ExternalPriorityScore = remoteEpisode.ExternalPriorityScore,
             CustomFormats = remoteEpisode.CustomFormats?.ToResource(false),
             SceneMapping = remoteEpisode.SceneMapping?.ToResource(),
         };
