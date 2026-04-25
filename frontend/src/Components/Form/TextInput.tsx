@@ -2,11 +2,13 @@ import classNames from 'classnames';
 import React, {
   ChangeEvent,
   FocusEvent,
+  forwardRef,
   SyntheticEvent,
   useCallback,
   useEffect,
   useRef,
 } from 'react';
+import useCombinedRefs from 'Helpers/Hooks/useCombinedRefs';
 import { FileInputChanged, InputChanged } from 'typings/inputs';
 import styles from './TextInput.css';
 
@@ -39,147 +41,153 @@ export interface FileInputProps extends CommonTextInputProps {
   onChange: (change: FileInputChanged) => void;
 }
 
-function TextInput({
-  className = styles.input,
-  type = 'text',
-  readOnly = false,
-  autoFocus = false,
-  placeholder,
-  name,
-  value = '',
-  hasError,
-  hasWarning,
-  hasButton,
-  step,
-  min,
-  max,
-  onBlur,
-  onFocus,
-  onCopy,
-  onChange,
-  onSelectionChange,
-}: TextInputProps | FileInputProps): JSX.Element {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const selectionTimeout = useRef<ReturnType<typeof setTimeout>>();
-  const selectionStart = useRef<number | null>();
-  const selectionEnd = useRef<number | null>();
-  const isMouseTarget = useRef(false);
+const TextInput = forwardRef<HTMLInputElement, TextInputProps | FileInputProps>(
+  (
+    {
+      className = styles.input,
+      type = 'text',
+      readOnly = false,
+      autoFocus = false,
+      placeholder,
+      name,
+      value = '',
+      hasError,
+      hasWarning,
+      hasButton,
+      step,
+      min,
+      max,
+      onBlur,
+      onFocus,
+      onCopy,
+      onChange,
+      onSelectionChange,
+    }: TextInputProps | FileInputProps,
+    ref
+  ) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+    const combinedRef = useCombinedRefs(ref, inputRef);
+    const selectionTimeout = useRef<ReturnType<typeof setTimeout>>();
+    const selectionStart = useRef<number | null>();
+    const selectionEnd = useRef<number | null>();
+    const isMouseTarget = useRef(false);
 
-  const selectionChanged = useCallback(() => {
-    if (selectionTimeout.current) {
-      clearTimeout(selectionTimeout.current);
-    }
-
-    selectionTimeout.current = setTimeout(() => {
-      if (!inputRef.current) {
-        return;
+    const selectionChanged = useCallback(() => {
+      if (selectionTimeout.current) {
+        clearTimeout(selectionTimeout.current);
       }
 
-      const start = inputRef.current.selectionStart;
-      const end = inputRef.current.selectionEnd;
+      selectionTimeout.current = setTimeout(() => {
+        if (!inputRef.current) {
+          return;
+        }
 
-      const selectionChanged =
-        selectionStart.current !== start || selectionEnd.current !== end;
+        const start = inputRef.current.selectionStart;
+        const end = inputRef.current.selectionEnd;
 
-      selectionStart.current = start;
-      selectionEnd.current = end;
+        const selectionChanged =
+          selectionStart.current !== start || selectionEnd.current !== end;
 
-      if (selectionChanged) {
-        onSelectionChange?.(start, end);
+        selectionStart.current = start;
+        selectionEnd.current = end;
+
+        if (selectionChanged) {
+          onSelectionChange?.(start, end);
+        }
+      }, 10);
+    }, [onSelectionChange]);
+
+    const handleChange = useCallback(
+      (event: ChangeEvent<HTMLInputElement>) => {
+        onChange({
+          name,
+          value: event.target.value,
+          files: type === 'file' ? event.target.files : undefined,
+        });
+      },
+      [name, type, onChange]
+    );
+
+    const handleFocus = useCallback(
+      (event: FocusEvent<HTMLInputElement, Element>) => {
+        onFocus?.(event);
+
+        selectionChanged();
+      },
+      [selectionChanged, onFocus]
+    );
+
+    const handleKeyUp = useCallback(() => {
+      selectionChanged();
+    }, [selectionChanged]);
+
+    const handleMouseDown = useCallback(() => {
+      isMouseTarget.current = true;
+    }, []);
+
+    const handleMouseUp = useCallback(() => {
+      selectionChanged();
+    }, [selectionChanged]);
+
+    const handleWheel = useCallback(() => {
+      if (type === 'number') {
+        inputRef.current?.blur();
       }
-    }, 10);
-  }, [onSelectionChange]);
+    }, [type]);
 
-  const handleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      onChange({
-        name,
-        value: event.target.value,
-        files: type === 'file' ? event.target.files : undefined,
-      });
-    },
-    [name, type, onChange]
-  );
+    const handleDocumentMouseUp = useCallback(() => {
+      if (isMouseTarget.current) {
+        selectionChanged();
+      }
 
-  const handleFocus = useCallback(
-    (event: FocusEvent<HTMLInputElement, Element>) => {
-      onFocus?.(event);
+      isMouseTarget.current = false;
+    }, [selectionChanged]);
 
-      selectionChanged();
-    },
-    [selectionChanged, onFocus]
-  );
+    useEffect(() => {
+      window.addEventListener('mouseup', handleDocumentMouseUp);
 
-  const handleKeyUp = useCallback(() => {
-    selectionChanged();
-  }, [selectionChanged]);
+      return () => {
+        window.removeEventListener('mouseup', handleDocumentMouseUp);
+      };
+    }, [handleDocumentMouseUp]);
 
-  const handleMouseDown = useCallback(() => {
-    isMouseTarget.current = true;
-  }, []);
+    useEffect(() => {
+      return () => {
+        clearTimeout(selectionTimeout.current);
+      };
+    }, []);
 
-  const handleMouseUp = useCallback(() => {
-    selectionChanged();
-  }, [selectionChanged]);
-
-  const handleWheel = useCallback(() => {
-    if (type === 'number') {
-      inputRef.current?.blur();
-    }
-  }, [type]);
-
-  const handleDocumentMouseUp = useCallback(() => {
-    if (isMouseTarget.current) {
-      selectionChanged();
-    }
-
-    isMouseTarget.current = false;
-  }, [selectionChanged]);
-
-  useEffect(() => {
-    window.addEventListener('mouseup', handleDocumentMouseUp);
-
-    return () => {
-      window.removeEventListener('mouseup', handleDocumentMouseUp);
-    };
-  }, [handleDocumentMouseUp]);
-
-  useEffect(() => {
-    return () => {
-      clearTimeout(selectionTimeout.current);
-    };
-  }, []);
-
-  return (
-    <input
-      ref={inputRef}
-      type={type}
-      readOnly={readOnly}
-      autoFocus={autoFocus}
-      placeholder={placeholder}
-      className={classNames(
-        className,
-        readOnly && styles.readOnly,
-        hasError && styles.hasError,
-        hasWarning && styles.hasWarning,
-        hasButton && styles.hasButton
-      )}
-      name={name}
-      value={value}
-      step={step}
-      min={min}
-      max={max}
-      onChange={handleChange}
-      onFocus={handleFocus}
-      onBlur={onBlur}
-      onCopy={onCopy}
-      onCut={onCopy}
-      onKeyUp={handleKeyUp}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onWheel={handleWheel}
-    />
-  );
-}
+    return (
+      <input
+        ref={combinedRef}
+        type={type}
+        readOnly={readOnly}
+        autoFocus={autoFocus}
+        placeholder={placeholder}
+        className={classNames(
+          className,
+          readOnly && styles.readOnly,
+          hasError && styles.hasError,
+          hasWarning && styles.hasWarning,
+          hasButton && styles.hasButton
+        )}
+        name={name}
+        value={value}
+        step={step}
+        min={min}
+        max={max}
+        onChange={handleChange}
+        onFocus={handleFocus}
+        onBlur={onBlur}
+        onCopy={onCopy}
+        onCut={onCopy}
+        onKeyUp={handleKeyUp}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onWheel={handleWheel}
+      />
+    );
+  }
+);
 
 export default TextInput;
