@@ -23,7 +23,7 @@ namespace NzbDrone.Integration.Test.Client
         {
             var request = BuildRequest("editor");
             request.AddJsonBody(series);
-            return Put<List<SeriesResource>>(request);
+            return Put<List<SeriesResource>>(request, HttpStatusCode.OK);
         }
 
         public SeriesResource Get(string slug, HttpStatusCode statusCode = HttpStatusCode.OK)

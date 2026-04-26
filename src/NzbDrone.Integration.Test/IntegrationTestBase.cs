@@ -99,7 +99,7 @@ namespace NzbDrone.Integration.Test
 
         protected virtual void InitRestClients()
         {
-            RestClient = new RestClient(RootUrl + "api/v3/");
+            RestClient = new RestClient(RootUrl + "api/v5/");
             RestClient.AddDefaultHeader("Authentication", ApiKey);
             RestClient.AddDefaultHeader("X-Api-Key", ApiKey);
 
