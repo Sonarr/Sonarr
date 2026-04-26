@@ -95,6 +95,7 @@ namespace Sonarr.Api.V5.Queue
         }
 
         [HttpDelete("bulk")]
+        [Consumes("application/json")]
         public NoContent RemoveMany([FromBody] QueueBulkResource resource, [FromQuery] string? message, [FromQuery] bool removeFromClient = true, [FromQuery] bool blocklist = false, [FromQuery] bool skipRedownload = false, [FromQuery] bool changeCategory = false)
         {
             var trackedDownloadIds = new List<string>();
