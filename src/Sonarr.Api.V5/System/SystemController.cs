@@ -116,13 +116,13 @@ public class SystemController : Controller
     public Ok<object> Shutdown()
     {
         Task.Factory.StartNew(() => _lifecycleService.Shutdown());
-        return TypedResults.Ok((object)new { ShuttingDown = true });
+        return TypedResults.Ok<object>(new { ShuttingDown = true });
     }
 
     [HttpPost("restart")]
     public Ok<object> Restart()
     {
         Task.Factory.StartNew(() => _lifecycleService.Restart());
-        return TypedResults.Ok((object)new { Restarting = true });
+        return TypedResults.Ok<object>(new { Restarting = true });
     }
 }

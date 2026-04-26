@@ -86,7 +86,7 @@ public class BackupController : Controller
         var path = GetBackupPath(backup);
         _backupService.Restore(path);
 
-        return TypedResults.Ok((object)new { RestartRequired = true });
+        return TypedResults.Ok<object>(new { RestartRequired = true });
     }
 
     [HttpPost("restore/upload")]
@@ -106,7 +106,7 @@ public class BackupController : Controller
 
         if (!ValidExtensions.Contains(extension))
         {
-            return TypedResults.BadRequest((object)new { error = $"Invalid extension, must be one of: {string.Join(", ", ValidExtensions)}" });
+            return TypedResults.BadRequest<object>(new { error = $"Invalid extension, must be one of: {string.Join(", ", ValidExtensions)}" });
         }
 
         var path = Path.Combine(_appFolderInfo.TempFolder, $"sonarr_backup_restore{extension}");
@@ -115,7 +115,7 @@ public class BackupController : Controller
         _backupService.Restore(path);
         _diskProvider.DeleteFile(path);
 
-        return TypedResults.Ok((object)new { RestartRequired = true });
+        return TypedResults.Ok<object>(new { RestartRequired = true });
     }
 
     private string GetBackupPath(NzbDrone.Core.Backup.Backup backup)

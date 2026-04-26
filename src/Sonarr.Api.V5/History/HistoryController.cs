@@ -163,7 +163,7 @@ public class HistoryController : Controller
             }).ToList());
     }
 
-    [HttpPost("failed/{id}")]
+    [HttpPost("failed/{id:int}")]
     public NoContent MarkAsFailed([FromRoute] int id)
     {
         _failedDownloadService.MarkAsFailed(id);

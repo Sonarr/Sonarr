@@ -22,6 +22,7 @@ public class LanguageController : RestController<LanguageResource>
     }
 
     [HttpGet]
+    [Produces("application/json")]
     public Ok<List<LanguageResource>> GetAll()
     {
         var languageResources = Language.All.Select(l => new LanguageResource

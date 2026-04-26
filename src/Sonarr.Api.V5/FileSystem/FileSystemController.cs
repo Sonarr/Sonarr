@@ -37,11 +37,11 @@ public class FileSystemController : Controller
     {
         if (_diskProvider.FileExists(path))
         {
-            return TypedResults.Ok((object)new { type = "file" });
+            return TypedResults.Ok<object>(new { type = "file" });
         }
 
         // Return folder even if it doesn't exist on disk to avoid leaking anything from the UI about the underlying system
-        return TypedResults.Ok((object)new { type = "folder" });
+        return TypedResults.Ok<object>(new { type = "folder" });
     }
 
     [HttpGet("mediafiles")]

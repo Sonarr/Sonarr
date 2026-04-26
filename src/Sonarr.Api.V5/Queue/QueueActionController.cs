@@ -22,7 +22,7 @@ namespace Sonarr.Api.V5.Queue
         }
 
         [HttpPost("grab/{id:int}")]
-        public async Task<NoContent> Grab([FromRoute] int id)
+        public async Task<Results<NoContent, NotFound>> Grab([FromRoute] int id)
         {
             var pendingRelease = _pendingReleaseService.FindPendingQueueItem(id);
 
@@ -38,7 +38,7 @@ namespace Sonarr.Api.V5.Queue
 
         [HttpPost("grab/bulk")]
         [Consumes("application/json")]
-        public async Task<NoContent> Grab([FromBody] QueueBulkResource resource)
+        public async Task<Results<NoContent, NotFound>> Grab([FromBody] QueueBulkResource resource)
         {
             foreach (var id in resource.Ids)
             {
