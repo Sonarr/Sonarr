@@ -19,13 +19,13 @@ public class ConnectionController : ProviderControllerBase<ConnectionResource, C
     }
 
     [NonAction]
-    public override Results<Ok<IEnumerable<ConnectionResource>>, BadRequest> UpdateProvider([FromBody] ConnectionBulkResource providerResource)
+    public override Task<Results<Ok<IEnumerable<ConnectionResource>>, BadRequest>> UpdateProvider([FromBody] ConnectionBulkResource providerResource, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
 
     [NonAction]
-    public override NoContent DeleteProviders([FromBody] ConnectionBulkResource resource)
+    public override Task<NoContent> DeleteProviders([FromBody] ConnectionBulkResource resource, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

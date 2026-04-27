@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using Dapper;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Reflection;
@@ -68,6 +70,38 @@ namespace NzbDrone.Core.ThingiProvider
             }
 
             return results;
+        }
+
+        protected override async IAsyncEnumerable<TProviderDefinition> QueryAsync(SqlBuilder builder, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var type = typeof(TProviderDefinition);
+            var sql = builder.Select(type).AddSelectTemplate(type);
+
+            await using var conn = await _database.OpenConnectionAsync(cancellationToken);
+            await using var reader = await conn.ExecuteReaderAsync(sql.RawSql, sql.Parameters);
+
+            var parser = reader.GetRowParser<TProviderDefinition>(typeof(TProviderDefinition));
+            var settingsIndex = reader.GetOrdinal(nameof(ProviderDefinition.Settings));
+
+            while (await reader.ReadAsync(cancellationToken))
+            {
+                var body = await reader.IsDBNullAsync(settingsIndex, cancellationToken) ? null : reader.GetString(settingsIndex);
+                var item = parser(reader);
+                var impType = typeof(IProviderConfig).Assembly.FindTypeByName(item.ConfigContract);
+
+                if (body.IsNullOrWhiteSpace() || impType == null)
+                {
+                    item.Settings = NullConfig.Instance;
+                }
+                else
+                {
+                    item.Settings = (IProviderConfig)JsonSerializer.Deserialize(body, impType, _serializerSettings);
+                }
+
+                yield return item;
+            }
         }
     }
 }

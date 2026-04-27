@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
@@ -40,6 +41,11 @@ namespace NzbDrone.Core.Indexers
         protected override List<IndexerDefinition> Active()
         {
             return base.Active().Where(c => c.Enable).ToList();
+        }
+
+        protected override IAsyncEnumerable<IndexerDefinition> ActiveAsync(CancellationToken cancellationToken = default)
+        {
+            return base.ActiveAsync(cancellationToken).Where(c => c.Enable);
         }
 
         public override void SetProviderCharacteristics(IIndexer provider, IndexerDefinition definition)
