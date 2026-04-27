@@ -34,7 +34,7 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
   const [proper, setProper] = useState(props.proper);
   const [real, setReal] = useState(props.real);
 
-  const { schema, isSchemaFetching, isSchemaFetched, schemaError } =
+  const { schema, isSchemaLoading, isSchemaFetched, schemaError } =
     useQualityProfileSchema(true);
 
   const items = useMemo(() => {
@@ -91,9 +91,9 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
       <ModalHeader>{modalTitle} - Select Quality</ModalHeader>
 
       <ModalBody>
-        {isSchemaFetching ? <LoadingIndicator /> : null}
+        {isSchemaLoading ? <LoadingIndicator /> : null}
 
-        {!isSchemaFetching && schemaError ? (
+        {!isSchemaLoading && schemaError ? (
           <Alert kind={kinds.DANGER}>{translate('QualitiesLoadError')}</Alert>
         ) : null}
 
