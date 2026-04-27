@@ -5,8 +5,8 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import Column from 'Components/Table/Column';
 import TableRow from 'Components/Table/TableRow';
+import { ImportListModel } from 'Settings/ImportLists/ImportLists/useImportLists';
 import { useQualityProfile } from 'Settings/Profiles/Quality/useQualityProfiles';
-import ImportList from 'typings/ImportList';
 import { SelectStateInputProps } from 'typings/props';
 import translate from 'Utilities/String/translate';
 import styles from './ManageImportListsModalRow.css';
@@ -33,7 +33,7 @@ function ManageImportListsModalRow(props: ManageImportListsModalRowProps) {
     tags,
   } = props;
 
-  const { toggleSelected, useIsSelected } = useSelect<ImportList>();
+  const { toggleSelected, useIsSelected } = useSelect<ImportListModel>();
   const isSelected = useIsSelected(id);
 
   const qualityProfile = useQualityProfile(qualityProfileId);

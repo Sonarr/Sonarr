@@ -14,6 +14,7 @@ import Episode from 'Episode/Episode';
 import { EpisodeFile } from 'EpisodeFile/EpisodeFile';
 import { PagedQueryResponse } from 'Helpers/Hooks/usePagedApiQuery';
 import Series from 'Series/Series';
+import { ImportListModel } from 'Settings/ImportLists/ImportLists/useImportLists';
 import { IndexerModel } from 'Settings/Indexers/useIndexers';
 import { NotificationModel } from 'Settings/Notifications/useConnections';
 import { removeItem, updateItem } from 'Store/Actions/baseActions';
@@ -191,12 +192,12 @@ function SignalRListener() {
     }
 
     if (name === 'importlist') {
-      const section = 'settings.importLists';
+      const updatedItem = body.resource as ImportListModel;
 
       if (body.action === 'created' || body.action === 'updated') {
-        dispatch(updateItem({ section, ...body.resource }));
+        updateQueryClientItem(queryClient, ['/importlist'], updatedItem, true);
       } else if (body.action === 'deleted') {
-        dispatch(removeItem({ section, id: body.resource.id }));
+        removeQueryClientItem(queryClient, ['/importlist'], body.resource.id);
       }
 
       return;

@@ -1,38 +1,24 @@
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import MenuItem, { MenuItemProps } from 'Components/Menu/MenuItem';
-import { selectImportListSchema } from 'Store/Actions/settingsActions';
+import MenuItem from 'Components/Menu/MenuItem';
+import { SelectedSchema } from 'Settings/useProviderSchema';
 
-interface AddImportListPresetMenuItemProps
-  extends Omit<MenuItemProps, 'children'> {
+interface AddImportListPresetMenuItemProps {
   name: string;
   implementation: string;
   implementationName: string;
-  minRefreshInterval: string;
-  onPress: () => void;
+  onPress: (selectedSchema: SelectedSchema) => void;
 }
 
 function AddImportListPresetMenuItem({
   name,
   implementation,
   implementationName,
-  minRefreshInterval,
   onPress,
   ...otherProps
 }: AddImportListPresetMenuItemProps) {
-  const dispatch = useDispatch();
-
   const handlePress = useCallback(() => {
-    dispatch(
-      selectImportListSchema({
-        implementation,
-        implementationName,
-        presetName: name,
-      })
-    );
-
-    onPress();
-  }, [name, implementation, implementationName, dispatch, onPress]);
+    onPress({ implementation, implementationName, presetName: name });
+  }, [name, implementation, implementationName, onPress]);
 
   return (
     <MenuItem {...otherProps} onPress={handlePress}>

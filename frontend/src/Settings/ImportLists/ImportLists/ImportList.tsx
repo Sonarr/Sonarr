@@ -1,16 +1,15 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import { icons, kinds } from 'Helpers/Props';
-import { deleteImportList } from 'Store/Actions/settingsActions';
 import { useTagList } from 'Tags/useTags';
 import formatShortTimeSpan from 'Utilities/Date/formatShortTimeSpan';
 import translate from 'Utilities/String/translate';
 import EditImportListModal from './EditImportListModal';
+import { useDeleteImportList } from './useImportLists';
 import styles from './ImportList.css';
 
 interface ImportListProps {
@@ -30,8 +29,8 @@ function ImportList({
   minRefreshInterval,
   onCloneImportListPress,
 }: ImportListProps) {
-  const dispatch = useDispatch();
   const tagList = useTagList();
+  const { deleteImportList } = useDeleteImportList(id);
 
   const [isEditImportListModalOpen, setIsEditImportListModalOpen] =
     useState(false);
@@ -57,8 +56,8 @@ function ImportList({
   }, []);
 
   const handleConfirmDeleteImportList = useCallback(() => {
-    dispatch(deleteImportList({ id }));
-  }, [id, dispatch]);
+    deleteImportList();
+  }, [deleteImportList]);
 
   const handleCloneImportListPress = useCallback(() => {
     onCloneImportListPress(id);
