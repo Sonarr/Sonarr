@@ -294,7 +294,7 @@ namespace NzbDrone.Core.ImportLists
                 if (preCount != series.Tags.Count)
                 {
                     _seriesService.UpdateSeries(series);
-                    _logger.Debug("{0} [{1}] tagged existing series", report.TmdbId, report.Title);
+                    _logger.Debug("{0} [{1}] tagged existing series", report.TvdbId, report.Title);
                 }
             }
         }
