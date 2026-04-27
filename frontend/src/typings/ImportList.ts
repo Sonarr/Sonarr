@@ -16,6 +16,7 @@ interface ImportList extends Provider {
   minRefreshInterval: string;
   name: string;
   tags: number[];
+  tagExisting: boolean;
 }
 
 export default ImportList;

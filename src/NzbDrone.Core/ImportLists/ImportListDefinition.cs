@@ -17,6 +17,7 @@ namespace NzbDrone.Core.ImportLists
         public SeriesTypes SeriesType { get; set; }
         public bool SeasonFolder { get; set; }
         public string RootFolderPath { get; set; }
+        public bool TagExisting { get; set; }
 
         [MemberwiseEqualityIgnore]
         public override bool Enable => EnableAutomaticAdd;

@@ -1871,6 +1871,8 @@
   "Result": "Result",
   "Retention": "Retention",
   "RetentionHelpText": "Usenet only: Set to zero to set for unlimited retention",
+  "TagExistingHelpText": "Apply tags to series already in {appName}",
+  "TagExisting": "Tag Existing",
   "RetryingDownloadOn": "Retrying download on {date} at {time}",
   "RootFolder": "Root Folder",
   "RootFolderEmptyHealthCheckMessage": "Empty root folder: {rootFolderPath}",

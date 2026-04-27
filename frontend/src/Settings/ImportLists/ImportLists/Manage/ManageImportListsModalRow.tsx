@@ -18,6 +18,7 @@ interface ManageImportListsModalRowProps {
   qualityProfileId: number;
   implementation: string;
   tags: number[];
+  tagExisting: boolean;
   enableAutomaticAdd: boolean;
   columns: Column[];
 }
@@ -31,6 +32,7 @@ function ManageImportListsModalRow(props: ManageImportListsModalRowProps) {
     implementation,
     enableAutomaticAdd,
     tags,
+    tagExisting,
   } = props;
 
   const { toggleSelected, useIsSelected } = useSelect<ImportList>();
@@ -77,6 +79,10 @@ function ManageImportListsModalRow(props: ManageImportListsModalRowProps) {
 
       <TableRowCell className={styles.tags}>
         <SeriesTagList tags={tags} />
+      </TableRowCell>
+
+      <TableRowCell className={styles.tagExisting}>
+        {tagExisting ? translate('Yes') : translate('No')}
       </TableRowCell>
     </TableRow>
   );

@@ -225,9 +225,12 @@ namespace NzbDrone.Core.ImportLists
                 // Break if Series Exists in DB
                 if (existingTvdbIds.Any(x => x == item.TvdbId))
                 {
+                    TagExisting(importList, item);
                     _logger.Debug("{0} [{1}] Rejected, series exists in database", item.TvdbId, item.Title);
                     continue;
                 }
+
+                UpdateExistingTagSeriesRecord(seriesToAdd, item, importList);
 
                 // Append Series if not already in DB or already on add list
                 if (seriesToAdd.All(s => s.TvdbId != item.TvdbId))
@@ -261,6 +264,39 @@ namespace NzbDrone.Core.ImportLists
             _addSeriesService.AddSeries(seriesToAdd, true);
 
             _logger.ProgressInfo("Import List Sync Completed. Items found: {0}, Series added: {1}", items.Count, seriesToAdd.Count);
+        }
+
+        private void UpdateExistingTagSeriesRecord(List<Series> existingList, ImportListItemInfo item, ImportListDefinition importList)
+        {
+            var existing = existingList.FirstOrDefault(s => s.TvdbId == item.TvdbId);
+
+            if (existing != null)
+            {
+                foreach (var tag in importList.Tags)
+                {
+                    existing.Tags.Add(tag);
+                }
+            }
+        }
+
+        private void TagExisting(ImportListDefinition importList, ImportListItemInfo report)
+        {
+            if (importList.TagExisting)
+            {
+                var series = _seriesService.FindByTvdbId(report.TvdbId);
+
+                var preCount = series.Tags.Count;
+                foreach (var tag in importList.Tags)
+                {
+                    series.Tags.Add(tag);
+                }
+
+                if (preCount != series.Tags.Count)
+                {
+                    _seriesService.UpdateSeries(series);
+                    _logger.Debug("{0} [{1}] tagged existing series", report.TvdbId, report.Title);
+                }
+            }
         }
 
         public void Execute(ImportListSyncCommand message)
