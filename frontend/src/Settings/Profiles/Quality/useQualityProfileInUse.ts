@@ -1,13 +1,10 @@
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
 import useSeries from 'Series/useSeries';
+import { useImportListsData } from 'Settings/ImportLists/ImportLists/useImportLists';
 
 function useQualityProfileInUse(id: number | undefined) {
   const { data: series = [] } = useSeries();
-  const importLists = useSelector(
-    (state: AppState) => state.settings.importLists.items
-  );
+  const importLists = useImportListsData();
 
   return useMemo(() => {
     if (!id) {

@@ -1,46 +1,35 @@
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import Button from 'Components/Link/Button';
 import Link from 'Components/Link/Link';
 import Menu from 'Components/Menu/Menu';
 import MenuContent from 'Components/Menu/MenuContent';
 import { sizes } from 'Helpers/Props';
-import { selectImportListSchema } from 'Store/Actions/settingsActions';
-import ImportList from 'typings/ImportList';
+import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import AddImportListPresetMenuItem from './AddImportListPresetMenuItem';
+import { ImportListModel } from './useImportLists';
 import styles from './AddImportListItem.css';
 
 interface AddImportListItemProps {
   implementation: string;
   implementationName: string;
-  minRefreshInterval: string;
   infoLink: string;
-  presets?: ImportList[];
-  onImportListSelect: () => void;
+  presets?: ImportListModel[];
+  onImportListSelect: (selectedSchema: SelectedSchema) => void;
 }
 
 function AddImportListItem({
   implementation,
   implementationName,
-  minRefreshInterval,
   infoLink,
   presets,
   onImportListSelect,
 }: AddImportListItemProps) {
-  const dispatch = useDispatch();
   const hasPresets = !!(presets && presets.length);
 
   const handleImportListSelect = useCallback(() => {
-    dispatch(
-      selectImportListSchema({
-        implementation,
-        implementationName,
-      })
-    );
-
-    onImportListSelect();
-  }, [implementation, implementationName, dispatch, onImportListSelect]);
+    onImportListSelect({ implementation, implementationName });
+  }, [implementation, implementationName, onImportListSelect]);
 
   return (
     <div className={styles.list}>
@@ -69,7 +58,6 @@ function AddImportListItem({
                         name={preset.name}
                         implementation={implementation}
                         implementationName={implementationName}
-                        minRefreshInterval={minRefreshInterval}
                         onPress={onImportListSelect}
                       />
                     );
