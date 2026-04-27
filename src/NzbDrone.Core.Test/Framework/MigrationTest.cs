@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Threading.Tasks;
 using FluentMigrator;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
@@ -29,6 +30,11 @@ namespace NzbDrone.Core.Test.Framework
         protected virtual IDbConnection WithDapperMigrationTestDb(Action<TMigration> beforeMigration = null)
         {
             return WithMigrationAction(beforeMigration).OpenConnection();
+        }
+
+        protected virtual async Task<IDbConnection> WithDapperMigrationTestDbAsync(Action<TMigration> beforeMigration = null)
+        {
+            return await WithMigrationAction(beforeMigration).OpenConnectionAsync();
         }
 
         protected override void SetupLogging()

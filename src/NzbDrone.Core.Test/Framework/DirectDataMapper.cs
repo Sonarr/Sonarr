@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore;
 
@@ -10,9 +12,13 @@ namespace NzbDrone.Core.Test.Framework
     public interface IDirectDataMapper
     {
         List<Dictionary<string, object>> Query(string sql);
+        Task<List<Dictionary<string, object>>> QueryAsync(string sql, CancellationToken cancellationToken = default);
         List<T> Query<T>(string sql)
             where T : new();
+        Task<List<T>> QueryAsync<T>(string sql, CancellationToken cancellationToken = default)
+            where T : new();
         T QueryScalar<T>(string sql);
+        Task<T> QueryScalarAsync<T>(string sql, CancellationToken cancellationToken = default);
     }
 
     public class DirectDataMapper : IDirectDataMapper
@@ -38,9 +44,28 @@ namespace NzbDrone.Core.Test.Framework
             }
         }
 
+        public async Task<DataTable> GetDataTableAsync(string sql, CancellationToken cancellationToken = default)
+        {
+            await using var connection = await _database.OpenConnectionAsync(cancellationToken);
+            await using var cmd = connection.CreateCommand();
+
+            var dataTable = new DataTable();
+            cmd.CommandText = sql;
+            dataTable.Load(await cmd.ExecuteReaderAsync(cancellationToken));
+
+            return dataTable;
+        }
+
         public List<Dictionary<string, object>> Query(string sql)
         {
             var dataTable = GetDataTable(sql);
+
+            return dataTable.Rows.Cast<DataRow>().Select(MapToDictionary).ToList();
+        }
+
+        public async Task<List<Dictionary<string, object>>> QueryAsync(string sql, CancellationToken cancellationToken = default)
+        {
+            var dataTable = await GetDataTableAsync(sql, cancellationToken);
 
             return dataTable.Rows.Cast<DataRow>().Select(MapToDictionary).ToList();
         }
@@ -53,9 +78,24 @@ namespace NzbDrone.Core.Test.Framework
             return dataTable.Rows.Cast<DataRow>().Select(MapToObject<T>).ToList();
         }
 
+        public async Task<List<T>> QueryAsync<T>(string sql, CancellationToken cancellationToken = default)
+            where T : new()
+        {
+            var dataTable = await GetDataTableAsync(sql, cancellationToken);
+
+            return dataTable.Rows.Cast<DataRow>().Select(MapToObject<T>).ToList();
+        }
+
         public T QueryScalar<T>(string sql)
         {
             var dataTable = GetDataTable(sql);
+
+            return dataTable.Rows.Cast<DataRow>().Select(d => MapValue(d, 0, typeof(T))).Cast<T>().FirstOrDefault();
+        }
+
+        public async Task<T> QueryScalarAsync<T>(string sql, CancellationToken cancellationToken = default)
+        {
+            var dataTable = await GetDataTableAsync(sql, cancellationToken);
 
             return dataTable.Rows.Cast<DataRow>().Select(d => MapValue(d, 0, typeof(T))).Cast<T>().FirstOrDefault();
         }
