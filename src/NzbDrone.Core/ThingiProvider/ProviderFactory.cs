@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
@@ -37,6 +39,11 @@ namespace NzbDrone.Core.ThingiProvider
         public List<TProviderDefinition> All()
         {
             return _providerRepository.All().ToList();
+        }
+
+        public IAsyncEnumerable<TProviderDefinition> AllAsync(CancellationToken cancellationToken = default)
+        {
+            return _providerRepository.AllAsync(cancellationToken);
         }
 
         public IEnumerable<TProviderDefinition> GetDefaultDefinitions()
@@ -91,9 +98,19 @@ namespace NzbDrone.Core.ThingiProvider
             return Active().Select(GetInstance).ToList();
         }
 
+        public IAsyncEnumerable<TProvider> GetAvailableProvidersAsync(CancellationToken cancellationToken = default)
+        {
+            return ActiveAsync(cancellationToken).Select(GetInstance);
+        }
+
         public bool Exists(int id)
         {
             return _providerRepository.Find(id) != null;
+        }
+
+        public async Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return await _providerRepository.FindAsync(id, cancellationToken) is not null;
         }
 
         public TProviderDefinition Get(int id)
@@ -101,14 +118,29 @@ namespace NzbDrone.Core.ThingiProvider
             return _providerRepository.Get(id);
         }
 
+        public async Task<TProviderDefinition> GetAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return await _providerRepository.GetAsync(id, cancellationToken);
+        }
+
         public IEnumerable<TProviderDefinition> Get(IEnumerable<int> ids)
         {
             return _providerRepository.Get(ids);
         }
 
+        public IAsyncEnumerable<TProviderDefinition> GetAsync(IEnumerable<int> ids, CancellationToken cancellationToken = default)
+        {
+            return _providerRepository.GetAsync(ids, cancellationToken);
+        }
+
         public TProviderDefinition Find(int id)
         {
             return _providerRepository.Find(id);
+        }
+
+        public async Task<TProviderDefinition> FindAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return await _providerRepository.FindAsync(id, cancellationToken);
         }
 
         public virtual TProviderDefinition Create(TProviderDefinition definition)
@@ -119,9 +151,23 @@ namespace NzbDrone.Core.ThingiProvider
             return result;
         }
 
+        public virtual async Task<TProviderDefinition> CreateAsync(TProviderDefinition definition, CancellationToken cancellationToken = default)
+        {
+            var result = await _providerRepository.InsertAsync(definition, cancellationToken);
+            _eventAggregator.PublishEvent(new ProviderAddedEvent<TProvider>(result));
+
+            return result;
+        }
+
         public virtual void Update(TProviderDefinition definition)
         {
             _providerRepository.Update(definition);
+            _eventAggregator.PublishEvent(new ProviderUpdatedEvent<TProvider>(definition));
+        }
+
+        public virtual async Task UpdateAsync(TProviderDefinition definition, CancellationToken cancellationToken = default)
+        {
+            await _providerRepository.UpdateAsync(definition, cancellationToken);
             _eventAggregator.PublishEvent(new ProviderUpdatedEvent<TProvider>(definition));
         }
 
@@ -137,15 +183,43 @@ namespace NzbDrone.Core.ThingiProvider
             return definitions;
         }
 
+        public virtual async Task<IEnumerable<TProviderDefinition>> UpdateAsync(IEnumerable<TProviderDefinition> definitions, CancellationToken cancellationToken = default)
+        {
+            await _providerRepository.UpdateManyAsync(definitions.ToList(), cancellationToken);
+
+            foreach (var definition in definitions)
+            {
+                _eventAggregator.PublishEvent(new ProviderUpdatedEvent<TProvider>(definition));
+            }
+
+            return definitions;
+        }
+
         public void Delete(int id)
         {
             _providerRepository.Delete(id);
             _eventAggregator.PublishEvent(new ProviderDeletedEvent<TProvider>(id));
         }
 
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
+        {
+            await _providerRepository.DeleteAsync(id, cancellationToken);
+            _eventAggregator.PublishEvent(new ProviderDeletedEvent<TProvider>(id));
+        }
+
         public void Delete(IEnumerable<int> ids)
         {
             _providerRepository.DeleteMany(ids);
+
+            foreach (var id in ids)
+            {
+                _eventAggregator.PublishEvent(new ProviderDeletedEvent<TProvider>(id));
+            }
+        }
+
+        public async Task DeleteAsync(IEnumerable<int> ids, CancellationToken cancellationToken = default)
+        {
+            await _providerRepository.DeleteManyAsync(ids, cancellationToken);
 
             foreach (var id in ids)
             {
@@ -185,6 +259,11 @@ namespace NzbDrone.Core.ThingiProvider
             return All().Where(c => c.Settings.Validate().IsValid).ToList();
         }
 
+        protected virtual IAsyncEnumerable<TProviderDefinition> ActiveAsync(CancellationToken cancellationToken = default)
+        {
+            return AllAsync(cancellationToken).Where(c => c.Settings.Validate().IsValid);
+        }
+
         public void SetProviderCharacteristics(TProviderDefinition definition)
         {
             GetInstance(definition);
@@ -211,6 +290,11 @@ namespace NzbDrone.Core.ThingiProvider
         {
             return All().Where(p => p.Tags.Contains(tagId))
                         .ToList();
+        }
+
+        public IAsyncEnumerable<TProviderDefinition> AllForTagAsync(int tagId, CancellationToken cancellationToken = default)
+        {
+            return AllAsync(cancellationToken).Where(p => p.Tags.Contains(tagId));
         }
     }
 }

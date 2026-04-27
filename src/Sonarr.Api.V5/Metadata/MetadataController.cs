@@ -19,13 +19,13 @@ public class MetadataController : ProviderControllerBase<MetadataResource, Metad
     }
 
     [NonAction]
-    public override Results<Ok<IEnumerable<MetadataResource>>, BadRequest> UpdateProvider([FromBody] MetadataBulkResource providerResource)
+    public override Task<Results<Ok<IEnumerable<MetadataResource>>, BadRequest>> UpdateProvider([FromBody] MetadataBulkResource providerResource, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
 
     [NonAction]
-    public override NoContent DeleteProviders([FromBody] MetadataBulkResource resource)
+    public override Task<NoContent> DeleteProviders([FromBody] MetadataBulkResource resource, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

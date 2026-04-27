@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
@@ -35,6 +36,11 @@ namespace NzbDrone.Core.Download
         protected override List<DownloadClientDefinition> Active()
         {
             return base.Active().Where(c => c.Enable).ToList();
+        }
+
+        protected override IAsyncEnumerable<DownloadClientDefinition> ActiveAsync(CancellationToken cancellationToken = default)
+        {
+            return base.ActiveAsync(cancellationToken).Where(c => c.Enable);
         }
 
         public override void SetProviderCharacteristics(IDownloadClient provider, DownloadClientDefinition definition)
