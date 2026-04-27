@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -28,22 +29,22 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
         [Test]
-        public void one_to_one()
+        public async Task one_to_one()
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                 .With(c => c.Languages = new List<Language> { Language.English })
                 .With(c => c.Quality = new QualityModel())
                 .BuildNew();
 
-            Db.Insert(episodeFile);
+            await Db.InsertAsync(episodeFile);
 
             var episode = Builder<Episode>.CreateNew()
                                           .With(c => c.EpisodeFileId = episodeFile.Id)
                                           .BuildNew();
 
-            Db.Insert(episode);
+            await Db.InsertAsync(episode);
 
-            var loadedEpisodeFile = Db.Single<Episode>().EpisodeFile.Value;
+            var loadedEpisodeFile = (await Db.SingleAsync<Episode>()).EpisodeFile.Value;
 
             loadedEpisodeFile.Should().NotBeNull();
             loadedEpisodeFile.Should().BeEquivalentTo(episodeFile,
@@ -56,19 +57,19 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
         [Test]
-        public void one_to_one_should_not_query_db_if_foreign_key_is_zero()
+        public async Task one_to_one_should_not_query_db_if_foreign_key_is_zero()
         {
             var episode = Builder<Episode>.CreateNew()
                                           .With(c => c.EpisodeFileId = 0)
                                           .BuildNew();
 
-            Db.Insert(episode);
+            await Db.InsertAsync(episode);
 
-            Db.Single<Episode>().EpisodeFile.Value.Should().BeNull();
+            (await Db.SingleAsync<Episode>()).EpisodeFile.Value.Should().BeNull();
         }
 
         [Test]
-        public void embedded_document_as_json()
+        public async Task embedded_document_as_json()
         {
             var quality = new QualityModel { Quality = Quality.Bluray720p, Revision = new Revision(version: 2) };
 
@@ -78,14 +79,14 @@ namespace NzbDrone.Core.Test.Datastore
                 .With(c => c.Quality = quality)
                 .Build();
 
-            Db.Insert(history);
+            await Db.InsertAsync(history);
 
-            var loadedQuality = Db.Single<EpisodeHistory>().Quality;
+            var loadedQuality = (await Db.SingleAsync<EpisodeHistory>()).Quality;
             loadedQuality.Should().Be(quality);
         }
 
         [Test]
-        public void embedded_list_of_document_with_json()
+        public async Task embedded_list_of_document_with_json()
         {
             var history = Builder<EpisodeHistory>.CreateListOfSize(2)
                 .All()
@@ -96,9 +97,9 @@ namespace NzbDrone.Core.Test.Datastore
             history[0].Quality = new QualityModel(Quality.HDTV1080p, new Revision(version: 2));
             history[1].Quality = new QualityModel(Quality.Bluray720p, new Revision(version: 2));
 
-            Db.InsertMany(history);
+            await Db.InsertManyAsync(history);
 
-            var returnedHistory = Db.All<EpisodeHistory>();
+            var returnedHistory = await Db.AllAsync<EpisodeHistory>();
 
             returnedHistory[0].Quality.Quality.Should().Be(Quality.HDTV1080p);
         }
