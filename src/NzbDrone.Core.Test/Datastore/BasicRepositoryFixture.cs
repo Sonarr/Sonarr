@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -33,277 +34,277 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
         [Test]
-        public void should_be_able_to_insert()
+        public async Task should_be_able_to_insert()
         {
-            Subject.Insert(_basicList[0]);
-            Subject.All().Should().HaveCount(1);
+            await Subject.InsertAsync(_basicList[0]);
+            (await Subject.AllAsync().ToListAsync()).Should().HaveCount(1);
         }
 
         [Test]
-        public void should_be_able_to_insert_many()
+        public async Task should_be_able_to_insert_many()
         {
-            Subject.InsertMany(_basicList);
-            Subject.All().Should().HaveCount(5);
+            await Subject.InsertManyAsync(_basicList);
+            (await Subject.AllAsync().ToListAsync()).Should().HaveCount(5);
         }
 
         [Test]
         public void insert_many_should_throw_if_id_not_zero()
         {
             _basicList[1].Id = 999;
-            Assert.Throws<InvalidOperationException>(() => Subject.InsertMany(_basicList));
+            Assert.ThrowsAsync<InvalidOperationException>(() => Subject.InsertManyAsync(_basicList));
         }
 
         [Test]
-        public void should_be_able_to_get_count()
+        public async Task should_be_able_to_get_count()
         {
-            Subject.InsertMany(_basicList);
-            Subject.Count().Should().Be(_basicList.Count);
+            await Subject.InsertManyAsync(_basicList);
+            (await Subject.CountAsync()).Should().Be(_basicList.Count);
         }
 
         [Test]
-        public void should_be_able_to_find_by_id()
+        public async Task should_be_able_to_find_by_id()
         {
-            Subject.InsertMany(_basicList);
-            var storeObject = Subject.Get(_basicList[1].Id);
+            await Subject.InsertManyAsync(_basicList);
+            var storeObject = await Subject.GetAsync(_basicList[1].Id);
 
             storeObject.Should().BeEquivalentTo(_basicList[1], o => o.IncludingAllRuntimeProperties());
         }
 
         [Test]
-        public void should_be_able_to_update()
+        public async Task should_be_able_to_update()
         {
-            Subject.InsertMany(_basicList);
+            await Subject.InsertManyAsync(_basicList);
 
             var item = _basicList[1];
             item.Interval = 999;
 
-            Subject.Update(item);
+            await Subject.UpdateAsync(item);
 
-            Subject.All().Should().BeEquivalentTo(_basicList);
+            (await Subject.AllAsync().ToListAsync()).Should().BeEquivalentTo(_basicList);
         }
 
         [Test]
-        public void should_be_able_to_upsert_new()
+        public async Task should_be_able_to_upsert_new()
         {
-            Subject.Upsert(_basicList[0]);
-            Subject.All().Should().HaveCount(1);
+            await Subject.UpsertAsync(_basicList[0]);
+            (await Subject.AllAsync().ToListAsync()).Should().HaveCount(1);
         }
 
         [Test]
-        public void should_be_able_to_upsert_existing()
+        public async Task should_be_able_to_upsert_existing()
         {
-            Subject.InsertMany(_basicList);
+            await Subject.InsertManyAsync(_basicList);
 
             var item = _basicList[1];
             item.Interval = 999;
 
-            Subject.Upsert(item);
+            await Subject.UpsertAsync(item);
 
-            Subject.All().Should().BeEquivalentTo(_basicList);
+            (await Subject.AllAsync().ToListAsync()).Should().BeEquivalentTo(_basicList);
         }
 
         [Test]
-        public void should_be_able_to_update_single_field()
+        public async Task should_be_able_to_update_single_field()
         {
-            Subject.InsertMany(_basicList);
+            await Subject.InsertManyAsync(_basicList);
 
             var item = _basicList[1];
             var executionBackup = item.LastExecution;
             item.Interval = 999;
             item.LastExecution = DateTime.UtcNow;
 
-            Subject.SetFields(item, x => x.Interval);
+            await Subject.SetFieldsAsync(item, x => x.Interval);
 
             item.LastExecution = executionBackup;
-            Subject.All().Should().BeEquivalentTo(_basicList);
+            (await Subject.AllAsync().ToListAsync()).Should().BeEquivalentTo(_basicList);
         }
 
         [Test]
-        public void set_fields_should_throw_if_id_zero()
+        public async Task set_fields_should_throw_if_id_zero()
         {
-            Subject.InsertMany(_basicList);
+            await Subject.InsertManyAsync(_basicList);
             _basicList[1].Id = 0;
             _basicList[1].LastExecution = DateTime.UtcNow;
 
-            Assert.Throws<InvalidOperationException>(() => Subject.SetFields(_basicList[1], x => x.Interval));
+            Assert.ThrowsAsync<InvalidOperationException>(() => Subject.SetFieldsAsync(_basicList[1], x => x.Interval));
         }
 
         [Test]
-        public void should_be_able_to_delete_model_by_id()
+        public async Task should_be_able_to_delete_model_by_id()
         {
-            Subject.InsertMany(_basicList);
-            Subject.All().Should().HaveCount(5);
+            await Subject.InsertManyAsync(_basicList);
+            (await Subject.AllAsync().ToListAsync()).Should().HaveCount(5);
 
-            Subject.Delete(_basicList[0].Id);
-            Subject.All().Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(1).Select(x => x.Id));
+            await Subject.DeleteAsync(_basicList[0].Id);
+            (await Subject.AllAsync().ToListAsync()).Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(1).Select(x => x.Id));
         }
 
         [Test]
-        public void should_be_able_to_delete_model_by_object()
+        public async Task should_be_able_to_delete_model_by_object()
         {
-            Subject.InsertMany(_basicList);
-            Subject.All().Should().HaveCount(5);
+            await Subject.InsertManyAsync(_basicList);
+            (await Subject.AllAsync().ToListAsync()).Should().HaveCount(5);
 
-            Subject.Delete(_basicList[0]);
-            Subject.All().Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(1).Select(x => x.Id));
+            await Subject.DeleteAsync(_basicList[0]);
+            (await Subject.AllAsync().ToListAsync()).Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(1).Select(x => x.Id));
         }
 
         [Test]
-        public void get_many_should_return_empty_list_if_no_ids()
+        public async Task get_many_should_return_empty_list_if_no_ids()
         {
-            Subject.Get(new List<int>()).Should().BeEquivalentTo(new List<ScheduledTask>());
+            (await Subject.GetAsync(new List<int>()).ToListAsync()).Should().BeEquivalentTo(new List<ScheduledTask>());
         }
 
         [Test]
-        public void get_many_should_throw_if_not_all_found()
+        public async Task get_many_should_throw_if_not_all_found()
         {
-            Subject.InsertMany(_basicList);
-            Assert.Throws<ApplicationException>(() => Subject.Get(new[] { 999 }));
+            await Subject.InsertManyAsync(_basicList);
+            Assert.ThrowsAsync<ApplicationException>(async () => await Subject.GetAsync([999]).ToListAsync());
         }
 
         [Test]
-        public void should_be_able_to_find_by_multiple_id()
+        public async Task should_be_able_to_find_by_multiple_id()
         {
-            Subject.InsertMany(_basicList);
-            var storeObject = Subject.Get(_basicList.Take(2).Select(x => x.Id));
+            await Subject.InsertManyAsync(_basicList);
+            var storeObject = await Subject.GetAsync(_basicList.Take(2).Select(x => x.Id)).ToListAsync();
             storeObject.Select(x => x.Id).Should().BeEquivalentTo(_basicList.Take(2).Select(x => x.Id));
         }
 
         [Test]
-        public void should_be_able_to_update_many()
+        public async Task should_be_able_to_update_many()
         {
-            Subject.InsertMany(_basicList);
+            await Subject.InsertManyAsync(_basicList);
             _basicList.ForEach(x => x.Interval = 999);
 
-            Subject.UpdateMany(_basicList);
-            Subject.All().Should().BeEquivalentTo(_basicList);
+            await Subject.UpdateManyAsync(_basicList);
+            (await Subject.AllAsync().ToListAsync()).Should().BeEquivalentTo(_basicList);
         }
 
         [Test]
-        public void update_many_should_throw_if_id_zero()
+        public async Task update_many_should_throw_if_id_zero()
         {
-            Subject.InsertMany(_basicList);
+            await Subject.InsertManyAsync(_basicList);
             _basicList[1].Id = 0;
-            Assert.Throws<InvalidOperationException>(() => Subject.UpdateMany(_basicList));
+            Assert.ThrowsAsync<InvalidOperationException>(() => Subject.UpdateManyAsync(_basicList));
         }
 
         [Test]
-        public void should_be_able_to_update_many_single_field()
+        public async Task should_be_able_to_update_many_single_field()
         {
-            Subject.InsertMany(_basicList);
+            await Subject.InsertManyAsync(_basicList);
 
             var executionBackup = _basicList.Select(x => x.LastExecution).ToList();
             _basicList.ForEach(x => x.Interval = 999);
             _basicList.ForEach(x => x.LastExecution = DateTime.UtcNow);
 
-            Subject.SetFields(_basicList, x => x.Interval);
+            await Subject.SetFieldsAsync(_basicList, x => x.Interval);
 
             for (var i = 0; i < _basicList.Count; i++)
             {
                 _basicList[i].LastExecution = executionBackup[i];
             }
 
-            Subject.All().Should().BeEquivalentTo(_basicList);
+            (await Subject.AllAsync().ToListAsync()).Should().BeEquivalentTo(_basicList);
         }
 
         [Test]
-        public void set_fields_should_throw_if_any_id_zero()
+        public async Task set_fields_should_throw_if_any_id_zero()
         {
-            Subject.InsertMany(_basicList);
+            await Subject.InsertManyAsync(_basicList);
             _basicList.ForEach(x => x.Interval = 999);
             _basicList[1].Id = 0;
 
-            Assert.Throws<InvalidOperationException>(() => Subject.SetFields(_basicList, x => x.Interval));
+            Assert.ThrowsAsync<InvalidOperationException>(() => Subject.SetFieldsAsync(_basicList, x => x.Interval));
         }
 
         [Test]
-        public void should_be_able_to_delete_many_by_model()
+        public async Task should_be_able_to_delete_many_by_model()
         {
-            Subject.InsertMany(_basicList);
-            Subject.All().Should().HaveCount(5);
+            await Subject.InsertManyAsync(_basicList);
+            (await Subject.AllAsync().ToListAsync()).Should().HaveCount(5);
 
-            Subject.DeleteMany(_basicList.Take(2).ToList());
-            Subject.All().Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(2).Select(x => x.Id));
+            await Subject.DeleteManyAsync(_basicList.Take(2).ToList());
+            (await Subject.AllAsync().ToListAsync()).Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(2).Select(x => x.Id));
         }
 
         [Test]
-        public void should_be_able_to_delete_many_by_id()
+        public async Task should_be_able_to_delete_many_by_id()
         {
-            Subject.InsertMany(_basicList);
-            Subject.All().Should().HaveCount(5);
+            await Subject.InsertManyAsync(_basicList);
+            (await Subject.AllAsync().ToListAsync()).Should().HaveCount(5);
 
-            Subject.DeleteMany(_basicList.Take(2).Select(x => x.Id).ToList());
-            Subject.All().Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(2).Select(x => x.Id));
+            await Subject.DeleteManyAsync(_basicList.Take(2).Select(x => x.Id).ToList());
+            (await Subject.AllAsync().ToListAsync()).Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(2).Select(x => x.Id));
         }
 
         [Test]
-        public void purge_should_delete_all()
+        public async Task purge_should_delete_all()
         {
-            Subject.InsertMany(_basicList);
+            await Subject.InsertManyAsync(_basicList);
 
             AllStoredModels.Should().HaveCount(5);
 
-            Subject.Purge();
+            await Subject.PurgeAsync();
 
             AllStoredModels.Should().BeEmpty();
         }
 
         [Test]
-        public void has_items_should_return_false_with_no_items()
+        public async Task has_items_should_return_false_with_no_items()
         {
-            Subject.HasItems().Should().BeFalse();
+            (await Subject.HasItemsAsync()).Should().BeFalse();
         }
 
         [Test]
-        public void has_items_should_return_true_with_items()
+        public async Task has_items_should_return_true_with_items()
         {
-            Subject.InsertMany(_basicList);
-            Subject.HasItems().Should().BeTrue();
+            await Subject.InsertManyAsync(_basicList);
+            (await Subject.HasItemsAsync()).Should().BeTrue();
         }
 
         [Test]
         public void single_should_throw_on_empty()
         {
-            Assert.Throws<InvalidOperationException>(() => Subject.Single());
+            Assert.ThrowsAsync<InvalidOperationException>(() => Subject.SingleAsync());
         }
 
         [Test]
-        public void should_be_able_to_get_single()
+        public async Task should_be_able_to_get_single()
         {
-            Subject.Insert(_basicList[0]);
-            Subject.Single().Should().BeEquivalentTo(_basicList[0]);
+            await Subject.InsertAsync(_basicList[0]);
+            (await Subject.SingleAsync()).Should().BeEquivalentTo(_basicList[0]);
         }
 
         [Test]
-        public void single_or_default_on_empty_table_should_return_null()
+        public async Task single_or_default_on_empty_table_should_return_null()
         {
-            Subject.SingleOrDefault().Should().BeNull();
+            (await Subject.SingleOrDefaultAsync()).Should().BeNull();
         }
 
         [Test]
         public void getting_model_with_invalid_id_should_throw()
         {
-            Assert.Throws<ModelNotFoundException>(() => Subject.Get(12));
+            Assert.ThrowsAsync<ModelNotFoundException>(() => Subject.GetAsync(12));
         }
 
         [Test]
-        public void get_all_with_empty_db_should_return_empty_list()
+        public async Task get_all_with_empty_db_should_return_empty_list()
         {
-            Subject.All().Should().BeEmpty();
+            (await Subject.AllAsync().ToListAsync()).Should().BeEmpty();
         }
 
         [Test]
-        public void should_be_able_to_call_ToList_on_empty_queryable()
+        public async Task should_be_able_to_call_ToList_on_empty_queryable()
         {
-            Subject.All().ToList().Should().BeEmpty();
+            (await Subject.AllAsync().ToListAsync()).Should().BeEmpty();
         }
 
         [TestCase(1, 2)]
         [TestCase(2, 2)]
         [TestCase(3, 1)]
-        public void get_paged_should_work(int page, int count)
+        public async Task get_paged_should_work(int page, int count)
         {
-            Subject.InsertMany(_basicList);
+            await Subject.InsertManyAsync(_basicList);
             var data = Subject.GetPaged(new PagingSpec<ScheduledTask>() { Page = page, PageSize = 2, SortKey = "LastExecution", SortDirection = SortDirection.Descending });
 
             data.Page.Should().Be(page);
@@ -315,9 +316,9 @@ namespace NzbDrone.Core.Test.Datastore
         [TestCase(1, 2)]
         [TestCase(2, 2)]
         [TestCase(3, 1)]
-        public void get_paged_should_work_with_null_sort_key(int page, int count)
+        public async Task get_paged_should_work_with_null_sort_key(int page, int count)
         {
-            Subject.InsertMany(_basicList);
+            await Subject.InsertManyAsync(_basicList);
             var data = Subject.GetPaged(new PagingSpec<ScheduledTask>() { Page = page, PageSize = 2, SortDirection = SortDirection.Descending });
 
             data.Page.Should().Be(page);

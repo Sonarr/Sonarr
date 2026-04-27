@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data.Common;
+using System.Threading;
+using System.Threading.Tasks;
 using StackExchange.Profiling;
 using StackExchange.Profiling.Data;
 
@@ -32,6 +34,18 @@ namespace NzbDrone.Core.Datastore
             return new ProfiledDbConnection(connection, MiniProfiler.Current);
         }
 
+        public async Task<DbConnection> OpenConnectionAsync(CancellationToken cancellationToken = default)
+        {
+            var connection = await _database.OpenConnectionAsync(cancellationToken);
+
+            if (_databaseType == DatabaseType.PostgreSQL)
+            {
+                return new ProfiledImplementations.NpgSqlConnection(connection, MiniProfiler.Current);
+            }
+
+            return new ProfiledDbConnection(connection, MiniProfiler.Current);
+        }
+
         public Version Version => _database.Version;
 
         public int Migration => _database.Migration;
@@ -41,6 +55,11 @@ namespace NzbDrone.Core.Datastore
         public void Vacuum()
         {
             _database.Vacuum();
+        }
+
+        public async Task VacuumAsync(CancellationToken cancellationToken = default)
+        {
+            await _database.VacuumAsync(cancellationToken);
         }
     }
 }
