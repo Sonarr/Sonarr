@@ -1,7 +1,5 @@
 import { handleThunks } from 'Store/thunks';
 import createHandleActions from './Creators/createHandleActions';
-import autoTaggings from './Settings/autoTaggings';
-import autoTaggingSpecifications from './Settings/autoTaggingSpecifications';
 import customFormats from './Settings/customFormats';
 import customFormatSpecifications from './Settings/customFormatSpecifications';
 import delayProfiles from './Settings/delayProfiles';
@@ -10,8 +8,6 @@ import downloadClients from './Settings/downloadClients';
 import importListOptions from './Settings/importListOptions';
 import importLists from './Settings/importLists';
 
-export * from './Settings/autoTaggingSpecifications';
-export * from './Settings/autoTaggings';
 export * from './Settings/customFormatSpecifications.js';
 export * from './Settings/customFormats';
 export * from './Settings/delayProfiles';
@@ -30,8 +26,6 @@ export const section = 'settings';
 
 export const defaultState = {
   advancedSettings: false,
-  autoTaggingSpecifications: autoTaggingSpecifications.defaultState,
-  autoTaggings: autoTaggings.defaultState,
   customFormatSpecifications: customFormatSpecifications.defaultState,
   customFormats: customFormats.defaultState,
   delayProfiles: delayProfiles.defaultState,
@@ -49,8 +43,6 @@ export const persistState = [
 // Action Handlers
 
 export const actionHandlers = handleThunks({
-  ...autoTaggingSpecifications.actionHandlers,
-  ...autoTaggings.actionHandlers,
   ...customFormatSpecifications.actionHandlers,
   ...customFormats.actionHandlers,
   ...delayProfiles.actionHandlers,
@@ -64,8 +56,6 @@ export const actionHandlers = handleThunks({
 // Reducers
 
 export const reducers = createHandleActions({
-  ...autoTaggingSpecifications.reducers,
-  ...autoTaggings.reducers,
   ...customFormatSpecifications.reducers,
   ...customFormats.reducers,
   ...delayProfiles.reducers,

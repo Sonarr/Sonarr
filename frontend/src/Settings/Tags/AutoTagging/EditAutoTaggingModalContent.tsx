@@ -1,7 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
-import Alert from 'Components/Alert';
+import React, { useCallback, useEffect, useState } from 'react';
 import Card from 'Components/Card';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
@@ -11,114 +8,107 @@ import FormLabel from 'Components/Form/FormLabel';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
-import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import usePrevious from 'Helpers/Hooks/usePrevious';
 import { icons, inputTypes, kinds } from 'Helpers/Props';
-import {
-  cloneAutoTaggingSpecification,
-  deleteAutoTaggingSpecification,
-  fetchAutoTaggingSpecifications,
-  saveAutoTagging,
-  setAutoTaggingValue,
-} from 'Store/Actions/settingsActions';
-import { createProviderSettingsSelectorHook } from 'Store/Selectors/createProviderSettingsSelector';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import AddSpecificationModal from './Specifications/AddSpecificationModal';
 import EditSpecificationModal from './Specifications/EditSpecificationModal';
 import Specification from './Specifications/Specification';
+import {
+  AutoTagging,
+  AutoTaggingSpecification,
+  useManageAutoTagging,
+} from './useAutoTaggings';
 import styles from './EditAutoTaggingModalContent.css';
 
 export interface EditAutoTaggingModalContentProps {
   id?: number;
-  tagsFromId?: number;
+  cloneId?: number;
   onModalClose: () => void;
   onDeleteAutoTaggingPress?: () => void;
 }
 
 export default function EditAutoTaggingModalContent({
   id,
-  tagsFromId,
+  cloneId,
   onModalClose,
   onDeleteAutoTaggingPress,
 }: EditAutoTaggingModalContentProps) {
   const {
-    error,
     item,
-    isFetching,
-    isSaving,
-    saveError,
     validationErrors,
     validationWarnings,
-  } = useSelector(createProviderSettingsSelectorHook('autoTaggings', id));
+    updateValue,
+    saveAutoTagging,
+    isSaving,
+    saveError,
+    specifications,
+    saveSpecification,
+    deleteSpecification,
+    cloneSpecification,
+  } = useManageAutoTagging(id, cloneId);
 
-  const { isPopulated: specificationsPopulated, items: specifications } =
-    useSelector((state: AppState) => state.settings.autoTaggingSpecifications);
-
-  const dispatch = useDispatch();
   const [isAddSpecificationModalOpen, setIsAddSpecificationModalOpen] =
     useState(false);
   const [isEditSpecificationModalOpen, setIsEditSpecificationModalOpen] =
     useState(false);
+  const [editingSpecification, setEditingSpecification] =
+    useState<AutoTaggingSpecification | null>(null);
 
   const handleAddSpecificationPress = useCallback(() => {
     setIsAddSpecificationModalOpen(true);
-  }, [setIsAddSpecificationModalOpen]);
+  }, []);
 
   const handleAddSpecificationModalClose = useCallback(
-    ({ specificationSelected = false } = {}) => {
+    (selectedSpec?: AutoTaggingSpecification) => {
       setIsAddSpecificationModalOpen(false);
-      setIsEditSpecificationModalOpen(specificationSelected);
+
+      if (selectedSpec) {
+        setEditingSpecification({ ...selectedSpec, id: 0 });
+        setIsEditSpecificationModalOpen(true);
+      }
     },
-    [setIsAddSpecificationModalOpen]
+    []
   );
 
-  const handleEditSpecificationModalClose = useCallback(() => {
+  const handleNewSpecificationModalClose = useCallback(() => {
     setIsEditSpecificationModalOpen(false);
-  }, [setIsEditSpecificationModalOpen]);
+    setEditingSpecification(null);
+  }, []);
+
+  const handleSaveNewSpecification = useCallback(
+    (spec: AutoTaggingSpecification) => {
+      saveSpecification(spec);
+    },
+    [saveSpecification]
+  );
 
   const handleInputChange = useCallback(
     ({ name, value }: InputChanged) => {
-      // @ts-expect-error - actions are not typed
-      dispatch(setAutoTaggingValue({ name, value }));
+      updateValue(
+        name as keyof AutoTagging,
+        value as AutoTagging[keyof AutoTagging]
+      );
     },
-    [dispatch]
+    [updateValue]
   );
 
   const handleSavePress = useCallback(() => {
-    dispatch(saveAutoTagging({ id }));
-  }, [dispatch, id]);
+    saveAutoTagging();
+  }, [saveAutoTagging]);
 
-  const handleCloneSpecificationPress = useCallback(
-    (specId: number) => {
-      dispatch(cloneAutoTaggingSpecification({ id: specId }));
-    },
-    [dispatch]
-  );
-
-  const handleConfirmDeleteSpecification = useCallback(
-    (specId: number) => {
-      dispatch(deleteAutoTaggingSpecification({ id: specId }));
-    },
-    [dispatch]
-  );
+  const wasSaving = usePrevious(isSaving);
 
   useEffect(() => {
-    dispatch(fetchAutoTaggingSpecifications({ id: tagsFromId || id }));
-  }, [id, tagsFromId, dispatch]);
-
-  const isSavingRef = useRef(false);
-
-  useEffect(() => {
-    if (isSavingRef.current && !isSaving && !saveError) {
+    if (wasSaving && !isSaving && !saveError) {
       onModalClose();
     }
-
-    isSavingRef.current = isSaving;
-  }, [isSaving, saveError, onModalClose]);
+  }, [isSaving, wasSaving, saveError, onModalClose]);
 
   const { name, removeTagsAutomatically, tags } = item;
 
@@ -130,96 +120,82 @@ export default function EditAutoTaggingModalContent({
 
       <ModalBody>
         <div>
-          {isFetching ? <LoadingIndicator /> : null}
+          <Form
+            validationErrors={validationErrors}
+            validationWarnings={validationWarnings}
+          >
+            <FormGroup>
+              <FormLabel>{translate('Name')}</FormLabel>
 
-          {!isFetching && !!error ? (
-            <Alert kind={kinds.DANGER}>{translate('AddAutoTagError')}</Alert>
-          ) : null}
+              <FormInputGroup
+                type={inputTypes.TEXT}
+                name="name"
+                {...name}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
 
-          {!isFetching && !error && specificationsPopulated ? (
-            <div>
-              <Form
-                validationErrors={validationErrors}
-                validationWarnings={validationWarnings}
+            <FormGroup>
+              <FormLabel>{translate('RemoveTagsAutomatically')}</FormLabel>
+
+              <FormInputGroup
+                type={inputTypes.CHECK}
+                name="removeTagsAutomatically"
+                helpText={translate('RemoveTagsAutomaticallyHelpText')}
+                {...removeTagsAutomatically}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <FormLabel>{translate('Tags')}</FormLabel>
+
+              <FormInputGroup
+                type={inputTypes.TAG}
+                name="tags"
+                onChange={handleInputChange}
+                {...tags}
+              />
+            </FormGroup>
+          </Form>
+
+          <FieldSet legend={translate('Conditions')}>
+            <div className={styles.autoTaggings}>
+              {specifications.map((specification) => {
+                return (
+                  <Specification
+                    key={specification.id}
+                    {...specification}
+                    onSaveSpecification={saveSpecification}
+                    onCloneSpecificationPress={cloneSpecification}
+                    onConfirmDeleteSpecification={deleteSpecification}
+                  />
+                );
+              })}
+
+              <Card
+                className={styles.addSpecification}
+                onPress={handleAddSpecificationPress}
               >
-                <FormGroup>
-                  <FormLabel>{translate('Name')}</FormLabel>
-
-                  <FormInputGroup
-                    type={inputTypes.TEXT}
-                    name="name"
-                    {...name}
-                    onChange={handleInputChange}
-                  />
-                </FormGroup>
-
-                <FormGroup>
-                  <FormLabel>{translate('RemoveTagsAutomatically')}</FormLabel>
-
-                  <FormInputGroup
-                    type={inputTypes.CHECK}
-                    name="removeTagsAutomatically"
-                    helpText={translate('RemoveTagsAutomaticallyHelpText')}
-                    {...removeTagsAutomatically}
-                    onChange={handleInputChange}
-                  />
-                </FormGroup>
-
-                <FormGroup>
-                  <FormLabel>{translate('Tags')}</FormLabel>
-
-                  <FormInputGroup
-                    type={inputTypes.TAG}
-                    name="tags"
-                    onChange={handleInputChange}
-                    {...tags}
-                  />
-                </FormGroup>
-              </Form>
-
-              <FieldSet legend={translate('Conditions')}>
-                <div className={styles.autoTaggings}>
-                  {specifications.map((specification) => {
-                    return (
-                      <Specification
-                        key={specification.id}
-                        {...specification}
-                        onCloneSpecificationPress={
-                          handleCloneSpecificationPress
-                        }
-                        onConfirmDeleteSpecification={
-                          handleConfirmDeleteSpecification
-                        }
-                      />
-                    );
-                  })}
-
-                  <Card
-                    className={styles.addSpecification}
-                    onPress={handleAddSpecificationPress}
-                  >
-                    <div className={styles.center}>
-                      <Icon name={icons.ADD} size={45} />
-                    </div>
-                  </Card>
+                <div className={styles.center}>
+                  <Icon name={icons.ADD} size={45} />
                 </div>
-              </FieldSet>
-
-              <AddSpecificationModal
-                isOpen={isAddSpecificationModalOpen}
-                onModalClose={handleAddSpecificationModalClose}
-              />
-
-              <EditSpecificationModal
-                isOpen={isEditSpecificationModalOpen}
-                onModalClose={handleEditSpecificationModalClose}
-              />
-
-              {/* <ImportAutoTaggingModal
-                    isOpen={isImportAutoTaggingModalOpen}
-                    onModalClose={onImportAutoTaggingModalClose}
-                  /> */}
+              </Card>
             </div>
+          </FieldSet>
+
+          <AddSpecificationModal
+            isOpen={isAddSpecificationModalOpen}
+            onModalClose={handleAddSpecificationModalClose}
+          />
+
+          {editingSpecification ? (
+            <EditSpecificationModal
+              isOpen={isEditSpecificationModalOpen}
+              specification={editingSpecification}
+              onSave={handleSaveNewSpecification}
+              onModalClose={handleNewSpecificationModalClose}
+            />
           ) : null}
         </div>
       </ModalBody>
@@ -234,13 +210,6 @@ export default function EditAutoTaggingModalContent({
               {translate('Delete')}
             </Button>
           ) : null}
-
-          {/* <Button
-            className={styles.deleteButton}
-            onPress={onImportPress}
-          >
-            Import
-          </Button> */}
         </div>
 
         <Button onPress={onModalClose}>{translate('Cancel')}</Button>

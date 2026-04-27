@@ -4,8 +4,8 @@ import Link from 'Components/Link/Link';
 import Menu from 'Components/Menu/Menu';
 import MenuContent from 'Components/Menu/MenuContent';
 import { sizes } from 'Helpers/Props';
-import { AutoTaggingSpecification } from 'typings/AutoTagging';
 import translate from 'Utilities/String/translate';
+import { AutoTaggingSpecification } from '../useAutoTaggings';
 import AddSpecificationPresetMenuItem from './AddSpecificationPresetMenuItem';
 import styles from './AddSpecificationItem.css';
 
