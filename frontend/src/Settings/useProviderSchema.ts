@@ -17,7 +17,7 @@ export const useProviderSchema = <T extends ModelBase>(
   path: string,
   enabled: boolean = true
 ) => {
-  const { isFetching, isFetched, error, data } = useApiQuery<T[]>({
+  const { isLoading, isFetched, error, data } = useApiQuery<T[]>({
     path: `${path}/schema`,
     queryOptions: {
       enabled,
@@ -25,7 +25,7 @@ export const useProviderSchema = <T extends ModelBase>(
   });
 
   return {
-    isSchemaFetching: isFetching,
+    isSchemaLoading: isLoading,
     isSchemaFetched: isFetched,
     schemaError: error,
     schema: data ?? ([] as T[]),

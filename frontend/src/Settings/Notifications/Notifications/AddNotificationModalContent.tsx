@@ -22,7 +22,7 @@ function AddNotificationModalContent({
   onNotificationSelect,
   onModalClose,
 }: AddNotificationModalContentProps) {
-  const { isSchemaFetching, isSchemaFetched, schemaError, schema } =
+  const { isSchemaLoading, isSchemaFetched, schemaError, schema } =
     useConnectionSchema();
 
   return (
@@ -30,9 +30,9 @@ function AddNotificationModalContent({
       <ModalHeader>{translate('AddConnection')}</ModalHeader>
 
       <ModalBody>
-        {isSchemaFetching && !isSchemaFetched ? <LoadingIndicator /> : null}
+        {isSchemaLoading && !isSchemaFetched ? <LoadingIndicator /> : null}
 
-        {!isSchemaFetching && !!schemaError ? (
+        {!isSchemaLoading && !!schemaError ? (
           <Alert kind={kinds.DANGER}>{translate('AddConnectionError')}</Alert>
         ) : null}
 

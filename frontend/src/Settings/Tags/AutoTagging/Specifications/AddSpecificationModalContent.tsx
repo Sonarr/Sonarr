@@ -22,7 +22,7 @@ interface AddSpecificationModalContentProps {
 export default function AddSpecificationModalContent({
   onModalClose,
 }: AddSpecificationModalContentProps) {
-  const { schema, isSchemaFetching, schemaError } = useAutoTaggingSchema();
+  const { schema, isSchemaLoading, schemaError } = useAutoTaggingSchema();
 
   const onSpecificationSelect = useCallback(
     ({ implementation }: { implementation: string }) => {
@@ -44,13 +44,13 @@ export default function AddSpecificationModalContent({
       <ModalHeader>{translate('AddCondition')}</ModalHeader>
 
       <ModalBody>
-        {isSchemaFetching ? <LoadingIndicator /> : null}
+        {isSchemaLoading ? <LoadingIndicator /> : null}
 
-        {!isSchemaFetching && schemaError ? (
+        {!isSchemaLoading && schemaError ? (
           <Alert kind={kinds.DANGER}>{translate('AddConditionError')}</Alert>
         ) : null}
 
-        {!isSchemaFetching && !schemaError && schema.length ? (
+        {!isSchemaLoading && !schemaError && schema.length ? (
           <div>
             <Alert kind={kinds.INFO}>
               <div>{translate('SupportedAutoTaggingProperties')}</div>

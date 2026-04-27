@@ -24,7 +24,7 @@ function AddImportListModalContent({
   onImportListSelect,
   onModalClose,
 }: AddImportListModalContentProps) {
-  const { isSchemaFetching, isSchemaFetched, schemaError, schema } =
+  const { isSchemaLoading, isSchemaFetched, schemaError, schema } =
     useImportListSchema();
 
   const listGroups = useMemo(() => {
@@ -55,9 +55,9 @@ function AddImportListModalContent({
       <ModalHeader>{translate('AddImportList')}</ModalHeader>
 
       <ModalBody>
-        {isSchemaFetching ? <LoadingIndicator /> : null}
+        {isSchemaLoading ? <LoadingIndicator /> : null}
 
-        {!isSchemaFetching && !!schemaError ? (
+        {!isSchemaLoading && !!schemaError ? (
           <Alert kind={kinds.DANGER}>{translate('AddListError')}</Alert>
         ) : null}
 
