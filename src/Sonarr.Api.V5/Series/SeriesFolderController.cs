@@ -26,7 +26,7 @@ public class SeriesFolderController : Controller
         var series = _seriesService.GetSeries(id);
         var folder = _fileNameBuilder.GetSeriesFolder(series);
 
-        return TypedResults.Ok((object)new
+        return TypedResults.Ok<object>(new
         {
             folder
         });

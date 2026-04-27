@@ -42,12 +42,14 @@ public class NamingSettingsController : RestController<NamingSettingsResource>
     }
 
     [HttpGet]
+    [Produces("application/json")]
     public Ok<NamingSettingsResource> GetNamingConfig()
     {
         return TypedResults.Ok(GetResourceById(1));
     }
 
     [RestPutById]
+    [Consumes("application/json")]
     public Results<Accepted<NamingSettingsResource>, NotFound> UpdateNamingConfig([FromBody] NamingSettingsResource resource)
     {
         var nameSpec = resource.ToModel();
@@ -59,7 +61,8 @@ public class NamingSettingsController : RestController<NamingSettingsResource>
     }
 
     [HttpGet("examples")]
-    public object GetExamples([FromQuery]NamingSettingsResource settings)
+    [Produces("application/json")]
+    public Ok<NamingExampleResource> GetExamples([FromQuery] NamingSettingsResource settings)
     {
         if (settings.Id == 0)
         {
@@ -107,7 +110,7 @@ public class NamingSettingsController : RestController<NamingSettingsResource>
             ? null
             : _filenameSampleService.GetSpecialsFolderSample(nameSpec);
 
-        return sampleResource;
+        return TypedResults.Ok(sampleResource);
     }
 
     private void ValidateFormatResult(NamingConfig nameSpec)
