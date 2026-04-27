@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -25,84 +26,84 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
         [Test]
-        public void should_be_able_to_write_to_database()
+        public async Task should_be_able_to_write_to_database()
         {
-            Subject.Insert(_sampleType);
-            Db.All<ScheduledTask>().Should().HaveCount(1);
+            await Subject.InsertAsync(_sampleType);
+            (await Db.AllAsync<ScheduledTask>()).Should().HaveCount(1);
         }
 
         [Test]
-        public void double_insert_should_fail()
+        public async Task double_insert_should_fail()
         {
-            Subject.Insert(_sampleType);
-            Assert.Throws<InvalidOperationException>(() => Subject.Insert(_sampleType));
+            await Subject.InsertAsync(_sampleType);
+            Assert.ThrowsAsync<InvalidOperationException>(() => Subject.InsertAsync(_sampleType));
         }
 
         [Test]
         public void update_item_with_root_index_0_should_faile()
         {
             _sampleType.Id = 0;
-            Assert.Throws<InvalidOperationException>(() => Subject.Update(_sampleType));
+            Assert.ThrowsAsync<InvalidOperationException>(() => Subject.UpdateAsync(_sampleType));
         }
 
         [Test]
-        public void should_be_able_to_store_empty_list()
+        public async Task should_be_able_to_store_empty_list()
         {
             var series = new List<ScheduledTask>();
 
-            Subject.InsertMany(series);
+            await Subject.InsertManyAsync(series);
         }
 
         [Test]
-        public void new_objects_should_get_id()
+        public async Task new_objects_should_get_id()
         {
             _sampleType.Id = 0;
-            Subject.Insert(_sampleType);
+            await Subject.InsertAsync(_sampleType);
             _sampleType.Id.Should().NotBe(0);
         }
 
         [Test]
-        public void new_object_should_get_new_id()
+        public async Task new_object_should_get_new_id()
         {
             _sampleType.Id = 0;
-            Subject.Insert(_sampleType);
+            await Subject.InsertAsync(_sampleType);
 
-            Db.All<ScheduledTask>().Should().HaveCount(1);
+            (await Db.AllAsync<ScheduledTask>()).Should().HaveCount(1);
             _sampleType.Id.Should().Be(1);
         }
 
         [Test]
-        public void should_read_and_write_in_utc()
+        public async Task should_read_and_write_in_utc()
         {
             var storedTime = DateTime.UtcNow;
 
             _sampleType.LastExecution = storedTime;
 
-            Subject.Insert(_sampleType);
+            await Subject.InsertAsync(_sampleType);
 
             StoredModel.LastExecution.Kind.Should().Be(DateTimeKind.Utc);
             StoredModel.LastExecution.ToLongTimeString().Should().Be(storedTime.ToLongTimeString());
         }
 
         [Test]
-        public void should_convert_all_dates_to_utc()
+        public async Task should_convert_all_dates_to_utc()
         {
             var storedTime = DateTime.Now;
 
             _sampleType.LastExecution = storedTime;
 
-            Subject.Insert(_sampleType);
+            await Subject.InsertAsync(_sampleType);
 
             StoredModel.LastExecution.Kind.Should().Be(DateTimeKind.Utc);
             StoredModel.LastExecution.ToLongTimeString().Should().Be(storedTime.ToUniversalTime().ToLongTimeString());
         }
 
         [Test]
-        public void should_have_id_when_returned_from_database()
+        public async Task should_have_id_when_returned_from_database()
         {
             _sampleType.Id = 0;
-            Subject.Insert(_sampleType);
-            var item = Db.All<ScheduledTask>();
+            await Subject.InsertAsync(_sampleType);
+            var item = await Db.AllAsync<ScheduledTask>();
 
             item.Should().HaveCount(1);
             item.First().Id.Should().NotBe(0);
@@ -111,17 +112,17 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
         [Test]
-        public void should_be_able_to_find_object_by_id()
+        public async Task should_be_able_to_find_object_by_id()
         {
-            Subject.Insert(_sampleType);
-            var item = Db.All<ScheduledTask>().Single(c => c.Id == _sampleType.Id);
+            await Subject.InsertAsync(_sampleType);
+            var item = (await Db.AllAsync<ScheduledTask>()).Single(c => c.Id == _sampleType.Id);
 
             item.Id.Should().NotBe(0);
             item.Id.Should().Be(_sampleType.Id);
         }
 
         [Test]
-        public void set_fields_should_only_update_selected_filed()
+        public async Task set_fields_should_only_update_selected_filed()
         {
             var childModel = new ScheduledTask
             {
@@ -129,15 +130,15 @@ namespace NzbDrone.Core.Test.Datastore
                 Interval = 12
             };
 
-            Subject.Insert(childModel);
+            await Subject.InsertAsync(childModel);
 
             childModel.TypeName = "A";
             childModel.Interval = 0;
 
-            Subject.SetFields(childModel, t => t.TypeName);
+            await Subject.SetFieldsAsync(childModel, t => t.TypeName);
 
-            Db.All<ScheduledTask>().Single().TypeName.Should().Be("A");
-            Db.All<ScheduledTask>().Single().Interval.Should().Be(12);
+            (await Db.AllAsync<ScheduledTask>()).Single().TypeName.Should().Be("A");
+            (await Db.AllAsync<ScheduledTask>()).Single().Interval.Should().Be(12);
         }
     }
 }
