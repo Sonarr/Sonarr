@@ -7,7 +7,7 @@
     <PackageReference Include="FluentValidation" Version="9.5.4" />
     <PackageReference Include="Moq" Version="4.18.4" />
     <PackageReference Include="NLog" Version="5.5.1" />
-    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit" Version="4.5.1" />
     <PackageReference Include="RestSharp" Version="106.15.0" />
   </ItemGroup>
   <ItemGroup>
