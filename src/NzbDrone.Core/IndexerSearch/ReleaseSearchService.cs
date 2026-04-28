@@ -58,7 +58,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         public async Task<List<DownloadDecision>> EpisodeSearch(Episode episode, bool userInvokedSearch, bool interactiveSearch)
         {
-            var series = _seriesService.GetSeries(episode.SeriesId);
+            var series = await _seriesService.GetSeriesAsync(episode.SeriesId);
 
             if (series.SeriesType == SeriesTypes.Daily)
             {
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         public async Task<List<DownloadDecision>> SeasonSearch(int seriesId, int seasonNumber, List<Episode> episodes, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch)
         {
-            var series = _seriesService.GetSeries(seriesId);
+            var series = await _seriesService.GetSeriesAsync(seriesId);
 
             if (series.SeriesType == SeriesTypes.Anime)
             {

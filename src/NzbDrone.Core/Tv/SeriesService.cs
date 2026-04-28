@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.AutoTagging;
@@ -12,27 +14,46 @@ namespace NzbDrone.Core.Tv
     public interface ISeriesService
     {
         Series GetSeries(int seriesId);
+        Task<Series> GetSeriesAsync(int seriesId, CancellationToken cancellationToken = default);
         List<Series> GetSeries(IEnumerable<int> seriesIds);
+        IAsyncEnumerable<Series> GetSeriesAsync(IEnumerable<int> seriesIds, CancellationToken cancellationToken = default);
         Series AddSeries(Series newSeries);
+        Task<Series> AddSeriesAsync(Series newSeries, CancellationToken cancellationToken = default);
         List<Series> AddSeries(List<Series> newSeries);
+        Task<List<Series>> AddSeriesAsync(List<Series> newSeries, CancellationToken cancellationToken = default);
         Series FindByTvdbId(int tvdbId);
+        Task<Series> FindByTvdbIdAsync(int tvRageId, CancellationToken cancellationToken = default);
         Series FindByTvRageId(int tvRageId);
+        Task<Series> FindByTvRageIdAsync(int tvRageId, CancellationToken cancellationToken = default);
         Series FindByImdbId(string imdbId);
+        Task<Series> FindByImdbIdAsync(string imdbId, CancellationToken cancellationToken = default);
         Series FindByTitle(string title);
+        Task<Series> FindByTitleAsync(string title, CancellationToken cancellationToken = default);
         Series FindByTitle(string title, int year);
+        Task<Series> FindByTitleAsync(string title, int year, CancellationToken cancellationToken = default);
         Series FindByTitleInexact(string title);
         Series FindByPath(string path);
+        Task<Series> FindByPathAsync(string path, CancellationToken cancellationToken = default);
         void DeleteSeries(List<int> seriesIds, bool deleteFiles, bool addImportListExclusion);
+        Task DeleteSeriesAsync(List<int> seriesIds, bool deleteFiles, bool addImportListExclusion, CancellationToken cancellationToken = default);
         List<Series> GetAllSeries();
+        IAsyncEnumerable<Series> GetAllSeriesAsync(CancellationToken cancellationToken = default);
         List<int> AllSeriesTvdbIds();
+        Task<List<int>> AllSeriesTvdbIdsAsync(CancellationToken cancellation = default);
         Dictionary<int, string> GetAllSeriesPaths();
+        Task<Dictionary<int, string>> GetAllSeriesPathsAsync(CancellationToken cancellationToken = default);
         Dictionary<int, List<int>> GetAllSeriesTags();
+        Task<Dictionary<int, List<int>>> GetAllSeriesTagsAsync(CancellationToken cancellationToken = default);
         List<Series> AllForTag(int tagId);
+        IAsyncEnumerable<Series> AllForTagAsync(int tagId, CancellationToken cancellationToken = default);
         Dictionary<int, int> GetAllSeriesQualityProfiles();
+        Task<Dictionary<int, int>> GetAllSeriesQualityProfilesAsync(CancellationToken cancellationToken = default);
         Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true, bool publishUpdatedEvent = true);
         List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder);
         bool SeriesPathExists(string folder);
+        Task<bool> SeriesPathExistsAsync(string folder, CancellationToken cancellationToken = default);
         void RemoveAddOptions(Series series);
+        Task RemoveAddOptionsAsync(Series series, CancellationToken cancellationToken = default);
         bool UpdateTags(Series series);
     }
 
@@ -65,15 +86,33 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.Get(seriesId);
         }
 
+        public async Task<Series> GetSeriesAsync(int seriesId, CancellationToken cancellationToken = default)
+        {
+            return await _seriesRepository.GetAsync(seriesId, cancellationToken);
+        }
+
         public List<Series> GetSeries(IEnumerable<int> seriesIds)
         {
             return _seriesRepository.Get(seriesIds).ToList();
+        }
+
+        public IAsyncEnumerable<Series> GetSeriesAsync(IEnumerable<int> seriesIds, CancellationToken cancellationToken = default)
+        {
+            return _seriesRepository.GetAsync(seriesIds, cancellationToken);
         }
 
         public Series AddSeries(Series newSeries)
         {
             _seriesRepository.Insert(newSeries);
             _eventAggregator.PublishEvent(new SeriesAddedEvent(GetSeries(newSeries.Id)));
+
+            return newSeries;
+        }
+
+        public async Task<Series> AddSeriesAsync(Series newSeries, CancellationToken cancellationToken = default)
+        {
+            await _seriesRepository.InsertAsync(newSeries, cancellationToken);
+            _eventAggregator.PublishEvent(new SeriesAddedEvent(await GetSeriesAsync(newSeries.Id, cancellationToken)));
 
             return newSeries;
         }
@@ -86,9 +125,22 @@ namespace NzbDrone.Core.Tv
             return newSeries;
         }
 
+        public async Task<List<Series>> AddSeriesAsync(List<Series> newSeries, CancellationToken cancellationToken = default)
+        {
+            await _seriesRepository.InsertManyAsync(newSeries, cancellationToken);
+            _eventAggregator.PublishEvent(new SeriesImportedEvent(newSeries.Select(s => s.Id).ToList()));
+
+            return newSeries;
+        }
+
         public Series FindByTvdbId(int tvRageId)
         {
             return _seriesRepository.FindByTvdbId(tvRageId);
+        }
+
+        public async Task<Series> FindByTvdbIdAsync(int tvRageId, CancellationToken cancellationToken = default)
+        {
+            return await _seriesRepository.FindByTvdbIdAsync(tvRageId, cancellationToken);
         }
 
         public Series FindByTvRageId(int tvRageId)
@@ -96,14 +148,29 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.FindByTvRageId(tvRageId);
         }
 
+        public async Task<Series> FindByTvRageIdAsync(int tvRageId, CancellationToken cancellationToken = default)
+        {
+            return await _seriesRepository.FindByTvRageIdAsync(tvRageId, cancellationToken);
+        }
+
         public Series FindByImdbId(string imdbId)
         {
             return _seriesRepository.FindByImdbId(imdbId);
         }
 
+        public async Task<Series> FindByImdbIdAsync(string imdbId, CancellationToken cancellationToken = default)
+        {
+            return await _seriesRepository.FindByImdbIdAsync(imdbId, cancellationToken);
+        }
+
         public Series FindByTitle(string title)
         {
             return _seriesRepository.FindByTitle(title.CleanSeriesTitle());
+        }
+
+        public async Task<Series> FindByTitleAsync(string title, CancellationToken cancellationToken = default)
+        {
+            return await _seriesRepository.FindByTitleAsync(title.CleanSeriesTitle(), cancellationToken);
         }
 
         public Series FindByTitleInexact(string title)
@@ -155,9 +222,19 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.FindByPath(path);
         }
 
+        public async Task<Series> FindByPathAsync(string path, CancellationToken cancellationToken = default)
+        {
+            return await _seriesRepository.FindByPathAsync(path, cancellationToken);
+        }
+
         public Series FindByTitle(string title, int year)
         {
             return _seriesRepository.FindByTitle(title.CleanSeriesTitle(), year);
+        }
+
+        public async Task<Series> FindByTitleAsync(string title, int year, CancellationToken cancellationToken = default)
+        {
+            return await _seriesRepository.FindByTitleAsync(title.CleanSeriesTitle(), year, cancellationToken);
         }
 
         public void DeleteSeries(List<int> seriesIds, bool deleteFiles, bool addImportListExclusion)
@@ -167,9 +244,21 @@ namespace NzbDrone.Core.Tv
             _eventAggregator.PublishEvent(new SeriesDeletedEvent(series, deleteFiles, addImportListExclusion));
         }
 
+        public async Task DeleteSeriesAsync(List<int> seriesIds, bool deleteFiles, bool addImportListExclusion, CancellationToken cancellationToken = default)
+        {
+            var series = await _seriesRepository.GetAsync(seriesIds, cancellationToken).ToListAsync(cancellationToken: cancellationToken);
+            await _seriesRepository.DeleteManyAsync(seriesIds, cancellationToken);
+            _eventAggregator.PublishEvent(new SeriesDeletedEvent(series, deleteFiles, addImportListExclusion));
+        }
+
         public List<Series> GetAllSeries()
         {
             return _seriesRepository.All().ToList();
+        }
+
+        public IAsyncEnumerable<Series> GetAllSeriesAsync(CancellationToken cancellationToken = default)
+        {
+            return _seriesRepository.AllAsync(cancellationToken);
         }
 
         public List<int> AllSeriesTvdbIds()
@@ -177,9 +266,19 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.AllSeriesTvdbIds().ToList();
         }
 
+        public async Task<List<int>> AllSeriesTvdbIdsAsync(CancellationToken cancellation = default)
+        {
+            return await _seriesRepository.AllSeriesTvdbIdsAsync(cancellation);
+        }
+
         public Dictionary<int, string> GetAllSeriesPaths()
         {
             return _seriesRepository.AllSeriesPaths();
+        }
+
+        public async Task<Dictionary<int, string>> GetAllSeriesPathsAsync(CancellationToken cancellationToken = default)
+        {
+            return await _seriesRepository.AllSeriesPathsAsync(cancellationToken);
         }
 
         public Dictionary<int, List<int>> GetAllSeriesTags()
@@ -187,15 +286,30 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.AllSeriesTags();
         }
 
+        public async Task<Dictionary<int, List<int>>> GetAllSeriesTagsAsync(CancellationToken cancellationToken = default)
+        {
+            return await _seriesRepository.AllSeriesTagsAsync(cancellationToken);
+        }
+
         public Dictionary<int, int> GetAllSeriesQualityProfiles()
         {
             return _seriesRepository.AllSeriesQualityProfiles();
+        }
+
+        public async Task<Dictionary<int, int>> GetAllSeriesQualityProfilesAsync(CancellationToken cancellationToken = default)
+        {
+            return await _seriesRepository.AllSeriesQualityProfilesAsync(cancellationToken);
         }
 
         public List<Series> AllForTag(int tagId)
         {
             return GetAllSeries().Where(s => s.Tags.Contains(tagId))
                                  .ToList();
+        }
+
+        public IAsyncEnumerable<Series> AllForTagAsync(int tagId, CancellationToken cancellationToken = default)
+        {
+            return GetAllSeriesAsync(cancellationToken).Where(s => s.Tags.Contains(tagId));
         }
 
         // updateEpisodesToMatchSeason is an override for EpisodeMonitoredService to use so a change via Season pass doesn't get nuked by the seasons loop.
@@ -267,9 +381,21 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.SeriesPathExists(folder);
         }
 
+        public async Task<bool> SeriesPathExistsAsync(string folder, CancellationToken cancellationToken = default)
+        {
+            return await _seriesRepository.SeriesPathExistsAsync(folder, cancellationToken);
+        }
+
         public void RemoveAddOptions(Series series)
         {
             _seriesRepository.SetFields(series, s => s.AddOptions);
+        }
+
+        public async Task RemoveAddOptionsAsync(Series series, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            await _seriesRepository.SetFieldsAsync(series, s => s.AddOptions);
         }
 
         public bool UpdateTags(Series series)

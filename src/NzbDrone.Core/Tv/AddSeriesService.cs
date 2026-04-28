@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
 using NLog;
@@ -17,6 +19,7 @@ namespace NzbDrone.Core.Tv
     public interface IAddSeriesService
     {
         Series AddSeries(Series newSeries);
+        Task<Series> AddSeriesAsync(Series newSeries, CancellationToken cancellationToken = default);
         List<Series> AddSeries(List<Series> newSeries, bool ignoreErrors = false);
     }
 
@@ -50,6 +53,19 @@ namespace NzbDrone.Core.Tv
 
             _logger.Info("Adding Series {0} Path: [{1}]", newSeries, newSeries.Path);
             _seriesService.AddSeries(newSeries);
+
+            return newSeries;
+        }
+
+        public async Task<Series> AddSeriesAsync(Series newSeries, CancellationToken cancellationToken = default)
+        {
+            ArgumentNullException.ThrowIfNull(newSeries);
+
+            newSeries = AddSkyhookData(newSeries);
+            newSeries = SetPropertiesAndValidate(newSeries);
+
+            _logger.Info("Adding Series {0} Path: [{1}]", newSeries, newSeries.Path);
+            await _seriesService.AddSeriesAsync(newSeries, cancellationToken);
 
             return newSeries;
         }
