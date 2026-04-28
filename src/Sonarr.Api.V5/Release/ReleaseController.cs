@@ -85,7 +85,7 @@ public class ReleaseController : RestController<ReleaseResource>
 
     [HttpPost]
     [Consumes("application/json")]
-    public async Task<Results<Ok<ReleaseGrabResource>, NotFound>> DownloadRelease([FromBody] ReleaseGrabResource release)
+    public async Task<Results<Ok<ReleaseGrabResource>, NotFound>> DownloadRelease([FromBody] ReleaseGrabResource release, CancellationToken cancellationToken = default)
     {
         var remoteEpisode = _remoteEpisodeCache.Find(GetCacheKey(release));
 
@@ -124,7 +124,7 @@ public class ReleaseController : RestController<ReleaseResource>
                     ReleaseSource = remoteEpisode.ReleaseSource
                 };
 
-                remoteEpisode.Series = _seriesService.GetSeries(overrideInfo.SeriesId!.Value);
+                remoteEpisode.Series = await _seriesService.GetSeriesAsync(overrideInfo.SeriesId!.Value, cancellationToken);
                 remoteEpisode.Episodes = _episodeService.GetEpisodes(overrideInfo.EpisodeIds);
                 remoteEpisode.ParsedEpisodeInfo.Quality = overrideInfo.Quality;
                 remoteEpisode.Languages = overrideInfo.Languages;
@@ -136,12 +136,12 @@ public class ReleaseController : RestController<ReleaseResource>
                 {
                     var episode = _episodeService.GetEpisode(release.SearchInfo.EpisodeId.Value);
 
-                    remoteEpisode.Series = _seriesService.GetSeries(episode.SeriesId);
+                    remoteEpisode.Series = await _seriesService.GetSeriesAsync(episode.SeriesId, cancellationToken);
                     remoteEpisode.Episodes = new List<Episode> { episode };
                 }
                 else if (release.SearchInfo?.SeriesId.HasValue == true)
                 {
-                    var series = _seriesService.GetSeries(release.SearchInfo.SeriesId.Value);
+                    var series = await _seriesService.GetSeriesAsync(release.SearchInfo.SeriesId.Value, cancellationToken);
                     var episodes = _parsingService.GetEpisodes(remoteEpisode.ParsedEpisodeInfo, series, true);
 
                     if (episodes.Empty())

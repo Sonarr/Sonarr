@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -68,7 +69,7 @@ namespace Sonarr.Api.V3.Indexers
 
         [HttpPost]
         [Consumes("application/json")]
-        public async Task<object> DownloadRelease([FromBody] ReleaseResource release)
+        public async Task<object> DownloadRelease([FromBody] ReleaseResource release, CancellationToken cancellationToken = default)
         {
             var remoteEpisode = _remoteEpisodeCache.Find(GetCacheKey(release));
 
@@ -105,7 +106,7 @@ namespace Sonarr.Api.V3.Indexers
                         ReleaseSource = remoteEpisode.ReleaseSource
                     };
 
-                    remoteEpisode.Series = _seriesService.GetSeries(release.SeriesId!.Value);
+                    remoteEpisode.Series = await _seriesService.GetSeriesAsync(release.SeriesId!.Value, cancellationToken);
                     remoteEpisode.Episodes = _episodeService.GetEpisodes(release.EpisodeIds);
                     remoteEpisode.ParsedEpisodeInfo.Quality = release.Quality;
                     remoteEpisode.Languages = release.Languages;
@@ -117,12 +118,12 @@ namespace Sonarr.Api.V3.Indexers
                     {
                         var episode = _episodeService.GetEpisode(release.EpisodeId.Value);
 
-                        remoteEpisode.Series = _seriesService.GetSeries(episode.SeriesId);
+                        remoteEpisode.Series = await _seriesService.GetSeriesAsync(episode.SeriesId, cancellationToken);
                         remoteEpisode.Episodes = new List<Episode> { episode };
                     }
                     else if (release.SeriesId.HasValue)
                     {
-                        var series = _seriesService.GetSeries(release.SeriesId.Value);
+                        var series = await _seriesService.GetSeriesAsync(release.SeriesId.Value, cancellationToken);
                         var episodes = _parsingService.GetEpisodes(remoteEpisode.ParsedEpisodeInfo, series, true);
 
                         if (episodes.Empty())
