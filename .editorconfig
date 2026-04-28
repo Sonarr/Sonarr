@@ -52,6 +52,8 @@ dotnet_diagnostic.IDE0005.severity = error
 dotnet_diagnostic.IDE0007.severity = error
 # Inline variable declaration
 dotnet_diagnostic.IDE0018.severity = error
+# Call async methods when in an async method
+dotnet_diagnostic.CA1849.severity = warning
 
 # Stylecop Rules
 dotnet_diagnostic.SA0001.severity = none
