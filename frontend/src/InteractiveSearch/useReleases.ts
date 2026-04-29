@@ -49,13 +49,11 @@ export interface Release extends ModelBase {
   mappedEpisodeNumbers?: number[];
   mappedAbsoluteEpisodeNumbers?: number[];
   mappedEpisodeInfo: ReleaseEpisode[];
-  publishDate: string;
   episodeRequested: boolean;
   downloadAllowed: boolean;
   releaseWeight: number;
   customFormats: CustomFormat[];
   customFormatScore: number;
-  indexerFlags: number;
   sceneMapping?: AlternateTitle;
 }
 

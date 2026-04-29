@@ -80,7 +80,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     history,
     parsedInfo,
     release,
-    publishDate,
     languages,
     customFormatScore,
     customFormats,
@@ -90,7 +89,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     mappedEpisodeNumbers,
     mappedAbsoluteEpisodeNumbers,
     mappedEpisodeInfo,
-    indexerFlags = 0,
     episodeRequested,
     downloadAllowed,
     searchPayload,
@@ -112,6 +110,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     age,
     ageHours,
     ageMinutes,
+    publishDate,
     title,
     infoUrl,
     indexer,
@@ -119,6 +118,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     seeders,
     leechers,
     protocol,
+    indexerFlags = 0,
   } = release;
 
   const { longDateFormat, timeFormat, timeZone } = useUiSettingsValues();
