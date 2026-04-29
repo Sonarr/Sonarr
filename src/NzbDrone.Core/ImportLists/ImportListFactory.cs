@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Core.Messaging.Events;
@@ -33,6 +34,11 @@ namespace NzbDrone.Core.ImportLists
         protected override List<ImportListDefinition> Active()
         {
             return base.Active().Where(c => c.Enable).ToList();
+        }
+
+        protected override IAsyncEnumerable<ImportListDefinition> ActiveAsync(CancellationToken cancellationToken = default)
+        {
+            return base.ActiveAsync(cancellationToken).Where(c => c.Enable);
         }
 
         public override void SetProviderCharacteristics(IImportList provider, ImportListDefinition definition)

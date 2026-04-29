@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.EnsureThat;
@@ -118,7 +119,7 @@ namespace NzbDrone.Core.Download
             throw new DownloadClientUnavailableException("All '{0}' download clients failed", remoteEpisode.Release.DownloadProtocol);
         }
 
-        private async Task DownloadReport(RemoteEpisode remoteEpisode, IDownloadClient downloadClient)
+        private async Task DownloadReport(RemoteEpisode remoteEpisode, IDownloadClient downloadClient, CancellationToken cancellationToken = default)
         {
             Ensure.That(remoteEpisode.Series, () => remoteEpisode.Series).IsNotNull();
             Ensure.That(remoteEpisode.Episodes, () => remoteEpisode.Episodes).HasItems();
@@ -144,7 +145,7 @@ namespace NzbDrone.Core.Download
 
             if (remoteEpisode.Release.IndexerId > 0)
             {
-                indexer = _indexerFactory.GetInstance(_indexerFactory.Get(remoteEpisode.Release.IndexerId));
+                indexer = _indexerFactory.GetInstance(await _indexerFactory.GetAsync(remoteEpisode.Release.IndexerId, cancellationToken));
             }
 
             string downloadClientId;

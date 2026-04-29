@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
@@ -39,7 +40,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
 
             Mocker.GetMock<IHttpClient>()
                   .Setup(s => s.GetAsync(It.IsAny<HttpRequest>()))
-                  .Returns<HttpRequest>(r => Task.FromResult(new HttpResponse(r, new HttpHeader(), Array.Empty<byte>())));
+                  .Returns<HttpRequest, CancellationToken>((r, _) => Task.FromResult(new HttpResponse(r, new HttpHeader(), Array.Empty<byte>())));
 
             Mocker.GetMock<IRemotePathMappingService>()
                 .Setup(v => v.RemapRemoteToLocal(It.IsAny<string>(), It.IsAny<OsPath>()))

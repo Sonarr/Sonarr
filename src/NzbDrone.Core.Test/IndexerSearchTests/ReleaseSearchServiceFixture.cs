@@ -46,8 +46,8 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             _xemEpisodes = new List<Episode>();
 
             Mocker.GetMock<ISeriesService>()
-                .Setup(v => v.GetSeries(_xemSeries.Id))
-                .Returns(_xemSeries);
+                .Setup(v => v.GetSeriesAsync(_xemSeries.Id))
+                .ReturnsAsync(_xemSeries);
 
             Mocker.GetMock<IEpisodeService>()
                 .Setup(v => v.GetEpisodesBySeason(_xemSeries.Id, It.IsAny<int>()))
@@ -205,8 +205,8 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                 .Build();
 
             Mocker.GetMock<ISeriesService>()
-                .Setup(v => v.GetSeries(_xemSeries.Id))
-                .Returns(_xemSeries);
+                .Setup(v => v.GetSeriesAsync(_xemSeries.Id))
+                .ReturnsAsync(_xemSeries);
 
             WithEpisodes();
 

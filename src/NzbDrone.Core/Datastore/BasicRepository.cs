@@ -5,11 +5,15 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Dapper;
 using NLog;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Datastore.Events;
+using NzbDrone.Core.Datastore.Extensions;
 using NzbDrone.Core.Messaging.Events;
 using Polly;
 using Polly.Retry;
@@ -20,25 +24,45 @@ namespace NzbDrone.Core.Datastore
         where TModel : ModelBase, new()
     {
         IEnumerable<TModel> All();
+        IAsyncEnumerable<TModel> AllAsync(CancellationToken cancellationToken = default);
         int Count();
+        Task<int> CountAsync(CancellationToken cancellationToken = default);
         TModel Find(int id);
+        Task<TModel> FindAsync(int id, CancellationToken cancellationToken = default);
         TModel Get(int id);
+        Task<TModel> GetAsync(int id, CancellationToken cancellationToken = default);
         TModel Insert(TModel model);
+        Task<TModel> InsertAsync(TModel model, CancellationToken cancellationToken = default);
         TModel Update(TModel model);
+        Task<TModel> UpdateAsync(TModel model, CancellationToken cancellationToken = default);
         TModel Upsert(TModel model);
+        Task<TModel> UpsertAsync(TModel model, CancellationToken cancellationToken = default);
         void SetFields(TModel model, params Expression<Func<TModel, object>>[] properties);
+        Task SetFieldsAsync(TModel model, params Expression<Func<TModel, object>>[] properties);
         void Delete(TModel model);
+        Task DeleteAsync(TModel model, CancellationToken cancellationToken = default);
         void Delete(int id);
+        Task DeleteAsync(int id, CancellationToken cancellationToken = default);
         IEnumerable<TModel> Get(IEnumerable<int> ids);
+        IAsyncEnumerable<TModel> GetAsync(IEnumerable<int> ids, CancellationToken cancellationToken = default);
         void InsertMany(IList<TModel> model);
+        Task InsertManyAsync(IList<TModel> models, CancellationToken cancellationToken = default);
         void UpdateMany(IList<TModel> model);
+        Task UpdateManyAsync(IList<TModel> models, CancellationToken cancellationToken = default);
         void SetFields(IList<TModel> models, params Expression<Func<TModel, object>>[] properties);
+        Task SetFieldsAsync(IList<TModel> models, params Expression<Func<TModel, object>>[] properties);
         void DeleteMany(List<TModel> model);
+        Task DeleteManyAsync(List<TModel> models, CancellationToken cancellationToken = default);
         void DeleteMany(IEnumerable<int> ids);
+        Task DeleteManyAsync(IEnumerable<int> ids, CancellationToken cancellationToken = default);
         void Purge(bool vacuum = false);
+        Task PurgeAsync(bool vacuum = false, CancellationToken cancellationToken = default);
         bool HasItems();
+        Task<bool> HasItemsAsync(CancellationToken cancellationToken = default);
         TModel Single();
+        Task<TModel> SingleAsync(CancellationToken cancellationToken = default);
         TModel SingleOrDefault();
+        Task<TModel> SingleOrDefaultAsync(CancellationToken cancellationToken = default);
         PagingSpec<TModel> GetPaged(PagingSpec<TModel> pagingSpec);
     }
 
@@ -95,9 +119,15 @@ namespace NzbDrone.Core.Datastore
 
         protected virtual List<TModel> Query(SqlBuilder builder) => _database.Query<TModel>(builder).ToList();
 
+        protected virtual IAsyncEnumerable<TModel> QueryAsync(SqlBuilder builder, CancellationToken cancellationToken = default) => _database.QueryAsync<TModel>(builder, cancellationToken);
+
         protected virtual List<TModel> QueryDistinct(SqlBuilder builder) => _database.QueryDistinct<TModel>(builder).ToList();
 
+        protected virtual IAsyncEnumerable<TModel> QueryDistinctAsync(SqlBuilder builder, CancellationToken cancellationToken = default) => _database.QueryDistinctAsync<TModel>(builder, cancellationToken);
+
         protected List<TModel> Query(Expression<Func<TModel, bool>> where) => Query(Builder().Where(where));
+
+        protected IAsyncEnumerable<TModel> QueryAsync(Expression<Func<TModel, bool>> where, CancellationToken cancellationToken = default) => QueryAsync(Builder().Where(where), cancellationToken);
 
         public int Count()
         {
@@ -107,9 +137,23 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
+        public async Task<int> CountAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            await using var conn = await _database.OpenConnectionAsync(cancellationToken);
+
+            return await conn.ExecuteScalarAsync<int>($"SELECT COUNT(*) FROM \"{_table}\"");
+        }
+
         public virtual IEnumerable<TModel> All()
         {
             return Query(Builder());
+        }
+
+        public virtual IAsyncEnumerable<TModel> AllAsync(CancellationToken cancellationToken = default)
+        {
+            return QueryAsync(Builder(), cancellationToken);
         }
 
         public TModel Find(int id)
@@ -119,9 +163,26 @@ namespace NzbDrone.Core.Datastore
             return model;
         }
 
+        public async Task<TModel> FindAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return await QueryAsync(x => x.Id == id, cancellationToken).FirstOrDefaultAsync(cancellationToken);
+        }
+
         public TModel Get(int id)
         {
             var model = Find(id);
+
+            if (model == null)
+            {
+                throw new ModelNotFoundException(typeof(TModel), id);
+            }
+
+            return model;
+        }
+
+        public async Task<TModel> GetAsync(int id, CancellationToken cancellationToken = default)
+        {
+            var model = await FindAsync(id, cancellationToken);
 
             if (model == null)
             {
@@ -148,14 +209,45 @@ namespace NzbDrone.Core.Datastore
             return result;
         }
 
+        public async IAsyncEnumerable<TModel> GetAsync(IEnumerable<int> ids, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            if (!ids.Any())
+            {
+                yield break;
+            }
+
+            var result = QueryAsync(x => ids.Contains(x.Id), cancellationToken);
+            var countResult = await result.CountAsync(cancellationToken);
+
+            if (countResult != ids.Count())
+            {
+                throw new ApplicationException($"Expected query to return {ids.Count()} rows but returned {countResult}");
+            }
+
+            await foreach (var model in result)
+            {
+                yield return model;
+            }
+        }
+
         public TModel SingleOrDefault()
         {
             return All().SingleOrDefault();
         }
 
+        public async Task<TModel> SingleOrDefaultAsync(CancellationToken cancellationToken = default)
+        {
+            return await AllAsync(cancellationToken).SingleOrDefaultAsync(cancellationToken);
+        }
+
         public TModel Single()
         {
             return All().Single();
+        }
+
+        public async Task<TModel> SingleAsync(CancellationToken cancellationToken = default)
+        {
+            return await AllAsync(cancellationToken).SingleAsync(cancellationToken);
         }
 
         public TModel Insert(TModel model)
@@ -168,6 +260,23 @@ namespace NzbDrone.Core.Datastore
             using (var conn = _database.OpenConnection())
             {
                 model = Insert(conn, null, model);
+            }
+
+            ModelCreated(model);
+
+            return model;
+        }
+
+        public async Task<TModel> InsertAsync(TModel model, CancellationToken cancellationToken = default)
+        {
+            if (model.Id != 0)
+            {
+                throw new InvalidOperationException("Can't insert model with existing ID " + model.Id);
+            }
+
+            await using (var conn = await _database.OpenConnectionAsync(cancellationToken))
+            {
+                model = await InsertAsync(conn, null, model, cancellationToken);
             }
 
             ModelCreated(model);
@@ -220,6 +329,19 @@ namespace NzbDrone.Core.Datastore
             return model;
         }
 
+        private async Task<TModel> InsertAsync(IDbConnection connection, IDbTransaction transaction, TModel model, CancellationToken cancellationToken = default)
+        {
+            SqlBuilderExtensions.LogQuery(_insertSql, model);
+
+            var multi = await RetryStrategy.ExecuteAsync(async static (state, _) => await state.connection.QueryMultipleAsync(state._insertSql, state.model, state.transaction), (connection, _insertSql, model, transaction), cancellationToken);
+
+            var multiRead = await multi.ReadAsync();
+            var id = (int)(multiRead.First().id ?? multiRead.First().Id);
+            _keyProperty.SetValue(model, id);
+
+            return model;
+        }
+
         public void InsertMany(IList<TModel> models)
         {
             if (models.Any(x => x.Id != 0))
@@ -241,6 +363,24 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
+        public async Task InsertManyAsync(IList<TModel> models, CancellationToken cancellationToken = default)
+        {
+            if (models.Any(x => x.Id != 0))
+            {
+                throw new InvalidOperationException("Can't insert model with existing ID != 0");
+            }
+
+            await using var conn = await _database.OpenConnectionAsync(cancellationToken);
+            await using var tran = await conn.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
+
+            foreach (var model in models)
+            {
+                await InsertAsync(conn, tran, model, cancellationToken);
+            }
+
+            await tran.CommitAsync(cancellationToken);
+        }
+
         public TModel Update(TModel model)
         {
             if (model.Id == 0)
@@ -251,6 +391,23 @@ namespace NzbDrone.Core.Datastore
             using (var conn = _database.OpenConnection())
             {
                 UpdateFields(conn, null, model, _properties);
+            }
+
+            ModelUpdated(model);
+
+            return model;
+        }
+
+        public async Task<TModel> UpdateAsync(TModel model, CancellationToken cancellationToken = default)
+        {
+            if (model.Id == 0)
+            {
+                throw new InvalidOperationException("Can't update model with ID 0");
+            }
+
+            await using (var conn = await _database.OpenConnectionAsync(cancellationToken))
+            {
+                await UpdateFieldsAsync(conn, null, model, _properties, cancellationToken);
             }
 
             ModelUpdated(model);
@@ -273,9 +430,29 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
+        public async Task UpdateManyAsync(IList<TModel> models, CancellationToken cancellationToken = default)
+        {
+            if (models.Any(x => x.Id == 0))
+            {
+                throw new InvalidOperationException("Can't update model with ID 0");
+            }
+
+            await using var conn = await _database.OpenConnectionAsync(cancellationToken);
+            await using var tran = await conn.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
+
+            await UpdateFieldsAsync(conn, tran, models, _properties, cancellationToken);
+
+            await tran.CommitAsync(cancellationToken);
+        }
+
         protected void Delete(Expression<Func<TModel, bool>> where)
         {
             Delete(Builder().Where<TModel>(where));
+        }
+
+        protected async Task DeleteAsync(Expression<Func<TModel, bool>> where, CancellationToken cancellationToken = default)
+        {
+            await DeleteAsync(Builder().Where<TModel>(where), cancellationToken);
         }
 
         protected void Delete(SqlBuilder builder)
@@ -288,14 +465,35 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
+        protected async Task DeleteAsync(SqlBuilder builder, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var sql = builder.AddDeleteTemplate(typeof(TModel));
+
+            await using var conn = await _database.OpenConnectionAsync(cancellationToken);
+
+            await conn.ExecuteAsync(sql.RawSql, sql.Parameters);
+        }
+
         public void Delete(TModel model)
         {
             Delete(model.Id);
         }
 
+        public async Task DeleteAsync(TModel model, CancellationToken cancellationToken = default)
+        {
+            await DeleteAsync(model.Id, cancellationToken);
+        }
+
         public void Delete(int id)
         {
             Delete(x => x.Id == id);
+        }
+
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
+        {
+            await DeleteAsync(x => x.Id == id, cancellationToken);
         }
 
         public void DeleteMany(IEnumerable<int> ids)
@@ -306,9 +504,22 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
+        public async Task DeleteManyAsync(IEnumerable<int> ids, CancellationToken cancellationToken = default)
+        {
+            if (ids.Any())
+            {
+                await DeleteAsync(x => ids.Contains(x.Id), cancellationToken);
+            }
+        }
+
         public void DeleteMany(List<TModel> models)
         {
             DeleteMany(models.Select(m => m.Id));
+        }
+
+        public async Task DeleteManyAsync(List<TModel> models, CancellationToken cancellationToken = default)
+        {
+            await DeleteManyAsync(models.Select(m => m.Id), cancellationToken);
         }
 
         public TModel Upsert(TModel model)
@@ -320,6 +531,20 @@ namespace NzbDrone.Core.Datastore
             }
 
             Update(model);
+            return model;
+        }
+
+        public async Task<TModel> UpsertAsync(TModel model, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (model.Id == 0)
+            {
+                await InsertAsync(model, cancellationToken);
+                return model;
+            }
+
+            await UpdateAsync(model, cancellationToken);
             return model;
         }
 
@@ -336,6 +561,21 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
+        public async Task PurgeAsync(bool vacuum = false, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            await using (var conn = await _database.OpenConnectionAsync(cancellationToken))
+            {
+                await conn.ExecuteAsync($"DELETE FROM \"{_table}\"");
+            }
+
+            if (vacuum)
+            {
+                Vacuum();
+            }
+        }
+
         protected void Vacuum()
         {
             _database.Vacuum();
@@ -344,6 +584,11 @@ namespace NzbDrone.Core.Datastore
         public bool HasItems()
         {
             return Count() > 0;
+        }
+
+        public async Task<bool> HasItemsAsync(CancellationToken cancellationToken = default)
+        {
+            return await CountAsync(cancellationToken) > 0;
         }
 
         public void SetFields(TModel model, params Expression<Func<TModel, object>>[] properties)
@@ -363,6 +608,23 @@ namespace NzbDrone.Core.Datastore
             ModelUpdated(model);
         }
 
+        public async Task SetFieldsAsync(TModel model, params Expression<Func<TModel, object>>[] properties)
+        {
+            if (model.Id == 0)
+            {
+                throw new InvalidOperationException("Attempted to update model without ID");
+            }
+
+            var propertiesToUpdate = properties.Select(x => x.GetMemberName()).ToList();
+
+            await using (var conn = await _database.OpenConnectionAsync())
+            {
+                await UpdateFieldsAsync(conn, null, model, propertiesToUpdate);
+            }
+
+            ModelUpdated(model);
+        }
+
         public void SetFields(IList<TModel> models, params Expression<Func<TModel, object>>[] properties)
         {
             if (models.Any(x => x.Id == 0))
@@ -377,6 +639,28 @@ namespace NzbDrone.Core.Datastore
             {
                 UpdateFields(conn, tran, models, propertiesToUpdate);
                 tran.Commit();
+            }
+
+            foreach (var model in models)
+            {
+                ModelUpdated(model);
+            }
+        }
+
+        public async Task SetFieldsAsync(IList<TModel> models, params Expression<Func<TModel, object>>[] properties)
+        {
+            if (models.Any(x => x.Id == 0))
+            {
+                throw new InvalidOperationException("Attempted to update model without ID");
+            }
+
+            var propertiesToUpdate = properties.Select(x => x.GetMemberName()).ToList();
+
+            await using (var conn = await _database.OpenConnectionAsync())
+            await using (var tran = await conn.BeginTransactionAsync(IsolationLevel.ReadCommitted))
+            {
+                await UpdateFieldsAsync(conn, tran, models, propertiesToUpdate);
+                await tran.CommitAsync();
             }
 
             foreach (var model in models)
@@ -414,6 +698,17 @@ namespace NzbDrone.Core.Datastore
             RetryStrategy.Execute(static (state, _) => state.connection.Execute(state.sql, state.model, transaction: state.transaction), (connection, sql, model, transaction));
         }
 
+        private async Task UpdateFieldsAsync(IDbConnection connection, IDbTransaction transaction, TModel model, List<PropertyInfo> propertiesToUpdate, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var sql = propertiesToUpdate == _properties ? _updateSql : GetUpdateSql(propertiesToUpdate);
+
+            SqlBuilderExtensions.LogQuery(sql, model);
+
+            await RetryStrategy.ExecuteAsync(async static (state, _) => await state.connection.ExecuteAsync(state.sql, state.model, transaction: state.transaction), (connection, sql, model, transaction), cancellationToken);
+        }
+
         private void UpdateFields(IDbConnection connection, IDbTransaction transaction, IList<TModel> models, List<PropertyInfo> propertiesToUpdate)
         {
             var sql = propertiesToUpdate == _properties ? _updateSql : GetUpdateSql(propertiesToUpdate);
@@ -424,6 +719,20 @@ namespace NzbDrone.Core.Datastore
             }
 
             RetryStrategy.Execute(static (state, _) => state.connection.Execute(state.sql, state.models, transaction: state.transaction), (connection, sql, models, transaction));
+        }
+
+        private async Task UpdateFieldsAsync(IDbConnection connection, IDbTransaction transaction, IList<TModel> models, List<PropertyInfo> propertiesToUpdate, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var sql = propertiesToUpdate == _properties ? _updateSql : GetUpdateSql(propertiesToUpdate);
+
+            foreach (var model in models)
+            {
+                SqlBuilderExtensions.LogQuery(sql, model);
+            }
+
+            await RetryStrategy.ExecuteAsync(async static (state, _) => await state.connection.ExecuteAsync(state.sql, state.models, transaction: state.transaction), (connection, sql, models, transaction), cancellationToken);
         }
 
         protected virtual SqlBuilder PagedBuilder() => Builder();
