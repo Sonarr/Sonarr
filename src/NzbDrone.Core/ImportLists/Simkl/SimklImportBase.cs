@@ -4,6 +4,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.ImportLists.Simkl.User;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -110,7 +111,7 @@ namespace NzbDrone.Core.ImportLists.Simkl
 
                 if (response?.Resource != null)
                 {
-                    return response.Resource.TvShows.All;
+                    return (SimklUserShowType)Settings.ShowType == SimklUserShowType.Shows ? response.Resource.TvShows.All : response.Resource.Anime.All;
                 }
             }
             catch (HttpException)

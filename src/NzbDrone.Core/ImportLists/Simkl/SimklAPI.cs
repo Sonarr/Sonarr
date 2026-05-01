@@ -66,6 +66,9 @@ namespace NzbDrone.Core.ImportLists.Simkl
     {
         [JsonProperty("tv_shows")]
         public SimklTvSyncActivityResource TvShows { get; set; }
+
+        [JsonProperty("anime")]
+        public SimklTvSyncActivityResource Anime { get; set; }
     }
 
     public class SimklTvSyncActivityResource
