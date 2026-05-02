@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -93,15 +94,17 @@ namespace NzbDrone.Common.Extensions
             return CollapseSpace.Replace(text, " ").Trim();
         }
 
-        public static bool IsNullOrWhiteSpace(this string text)
+        #nullable enable
+        public static bool IsNullOrWhiteSpace([NotNullWhen(false)] this string? text)
         {
             return string.IsNullOrWhiteSpace(text);
         }
 
-        public static bool IsNotNullOrWhiteSpace(this string text)
+        public static bool IsNotNullOrWhiteSpace([NotNullWhen(true)] this string? text)
         {
             return !string.IsNullOrWhiteSpace(text);
         }
+        #nullable disable
 
         public static bool StartsWithIgnoreCase(this string text, string startsWith)
         {

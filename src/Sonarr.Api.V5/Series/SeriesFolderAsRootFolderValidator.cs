@@ -34,7 +34,7 @@ public class SeriesFolderAsRootFolderValidator : PropertyValidator
             return true;
         }
 
-        var rootFolder = new DirectoryInfo(rootFolderPath!).Name;
+        var rootFolder = new DirectoryInfo(rootFolderPath).Name;
         var series = seriesResource.ToModel();
         var seriesFolder = _fileNameBuilder.GetSeriesFolder(series);
 
