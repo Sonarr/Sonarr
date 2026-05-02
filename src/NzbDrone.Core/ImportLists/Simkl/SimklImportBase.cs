@@ -111,7 +111,16 @@ namespace NzbDrone.Core.ImportLists.Simkl
 
                 if (response?.Resource != null)
                 {
-                    return (SimklUserShowType)Settings.ShowType == SimklUserShowType.Shows ? response.Resource.TvShows.All : response.Resource.Anime.All;
+                    var showType = SimklUserShowType.Shows;
+
+                    if (Settings is SimklUserSettings userSettings)
+                    {
+                        showType = (SimklUserShowType)userSettings.ShowType;
+                    }
+
+                    return showType == SimklUserShowType.Shows
+                        ? response.Resource.TvShows.All
+                        : response.Resource.Anime.All;
                 }
             }
             catch (HttpException)

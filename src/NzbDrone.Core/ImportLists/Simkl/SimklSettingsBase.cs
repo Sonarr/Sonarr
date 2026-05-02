@@ -2,7 +2,6 @@ using System;
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ImportLists.Simkl.User;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.ImportLists.Simkl
@@ -33,7 +32,6 @@ namespace NzbDrone.Core.ImportLists.Simkl
         public SimklSettingsBase()
         {
             SignIn = "startOAuth";
-            ShowType = (int)SimklUserShowType.Shows;
         }
 
         public override string BaseUrl { get; set; } = "https://api.simkl.com";
@@ -52,9 +50,6 @@ namespace NzbDrone.Core.ImportLists.Simkl
 
         [FieldDefinition(99, Label = "ImportListsSimklSettingsAuthenticatewithSimkl", Type = FieldType.OAuth)]
         public string SignIn { get; set; }
-
-        [FieldDefinition(1, Label = "ImportListsSimklSettingsShowType", Type = FieldType.Select, SelectOptions = typeof(SimklUserShowType), HelpText = "ImportListsSimklSettingsShowTypeHelpText")]
-        public int ShowType { get; set; }
 
         public override NzbDroneValidationResult Validate()
         {
