@@ -1,9 +1,9 @@
-using System.Security.Cryptography;
+using System;
 using System.Security.Cryptography.X509Certificates;
 using FluentValidation;
 using FluentValidation.Validators;
 using NLog;
-using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Instrumentation;
 
 namespace Sonarr.Api.V3.Config
@@ -34,22 +34,16 @@ namespace Sonarr.Api.V3.Config
                 return true;
             }
 
-            var certPath = resource.SslCertPath;
-            var keyPath = resource.SslKeyPath;
-            var certPassword = resource.SslCertPassword;
-            var type = X509Certificate2.GetCertContentType(certPath);
-
             try
             {
-                if (type == X509ContentType.Cert)
-                {
-                    X509Certificate2.CreateFromPemFile(certPath, keyPath.IsNullOrWhiteSpace() ? null : keyPath);
-                }
-                else if (type == X509ContentType.Pkcs12)
-                {
-                    X509CertificateLoader.LoadPkcs12FromFile(certPath, certPassword, X509KeyStorageFlags.DefaultKeySet);
-                }
-                else
+                SslCertificateLoader.LoadCertificateContext(resource.SslCertPath, resource.SslKeyPath, resource.SslCertPassword);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var type = X509Certificate2.GetCertContentType(resource.SslCertPath);
+                if (type != X509ContentType.Cert && type != X509ContentType.Pkcs12)
                 {
                     Logger.Debug("Invalid SSL certificate file. Unexpected certificate type: {0}", type);
                     context.MessageFormatter.AppendArgument("passwordOrKey", "password");
@@ -57,10 +51,6 @@ namespace Sonarr.Api.V3.Config
                     return false;
                 }
 
-                return true;
-            }
-            catch (CryptographicException ex)
-            {
                 var passwordOrKey = type == X509ContentType.Cert ? "key" : "password";
 
                 Logger.Debug(ex, "Invalid SSL certificate file or {0}. {1}", passwordOrKey, ex.Message);

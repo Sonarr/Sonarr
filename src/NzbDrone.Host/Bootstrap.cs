@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using DryIoc;
@@ -21,6 +19,7 @@ using NzbDrone.Common.Composition.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.Options;
@@ -289,36 +288,11 @@ namespace NzbDrone.Host
 
         private static SslStreamCertificateContext ValidateSslCertificate(string cert, string key, string password)
         {
-            X509Certificate2Collection certificateCollection;
+            SslStreamCertificateContext certificateContext;
 
             try
             {
-                var type = X509Certificate2.GetCertContentType(cert);
-
-                if (type == X509ContentType.Cert)
-                {
-                    var certificateWithKey = X509Certificate2.CreateFromPemFile(cert, key.IsNullOrWhiteSpace() ? null : key);
-
-                    certificateCollection = new X509Certificate2Collection();
-                    certificateCollection.ImportFromPemFile(cert);
-
-                    var duplicate = certificateCollection.FirstOrDefault(c => c.SerialNumber == certificateWithKey.SerialNumber);
-
-                    if (duplicate != null)
-                    {
-                        certificateCollection.Remove(duplicate);
-                    }
-
-                    certificateCollection.Insert(0, certificateWithKey);
-                }
-                else if (type == X509ContentType.Pkcs12)
-                {
-                    certificateCollection = X509CertificateLoader.LoadPkcs12CollectionFromFile(cert, password, X509KeyStorageFlags.DefaultKeySet);
-                }
-                else
-                {
-                    throw new SonarrStartupException($"Invalid certificate type: {type}");
-                }
+                certificateContext = SslCertificateLoader.LoadCertificateContext(cert, key, password);
             }
             catch (CryptographicException ex)
             {
@@ -335,17 +309,7 @@ namespace NzbDrone.Host
                 throw new SonarrStartupException(ex);
             }
 
-            var leafCert = certificateCollection.FirstOrDefault(c => c.HasPrivateKey);
-
-            if (leafCert == null)
-            {
-                throw new SonarrStartupException(
-                    $"The SSL certificate file {cert} does not contain a certificate with an associated private key");
-            }
-
-            certificateCollection.Remove(leafCert);
-
-            return SslStreamCertificateContext.Create(leafCert, certificateCollection, offline: true);
+            return certificateContext;
         }
 
         private static bool RunWithRestartCheck(IHost host)
