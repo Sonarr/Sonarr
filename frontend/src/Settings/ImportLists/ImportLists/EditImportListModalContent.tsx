@@ -71,8 +71,8 @@ function EditImportListModalContent({
     qualityProfileId,
     seriesType,
     seasonFolder,
-    tagExisting,
     tags,
+    tagExisting,
     fields,
   } = item;
 
