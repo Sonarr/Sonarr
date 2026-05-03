@@ -1,3 +1,4 @@
+using System;
 using System.Data.SQLite;
 using System.Net;
 using System.Threading.Tasks;
@@ -75,6 +76,12 @@ namespace Sonarr.Http.ErrorManagement
                 }
 
                 _logger.Error(sqLiteException, "[{0} {1}]", context.Request.Method, context.Request.Path);
+            }
+            else if (exception is InvalidOperationException invalidOperationException)
+            {
+                _logger.Warn(invalidOperationException, "[{0} {1}]", context.Request.Method, context.Request.Path);
+
+                statusCode = HttpStatusCode.BadRequest;
             }
             else
             {
