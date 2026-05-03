@@ -101,12 +101,14 @@ namespace NzbDrone.Common.Http
     public class HttpResponse<T> : HttpResponse
         where T : new()
     {
+        private readonly Lazy<T> _resource;
+
         public HttpResponse(HttpResponse response)
             : base(response.Request, response.Headers, response.ResponseData, response.StatusCode, response.Version)
         {
-            Resource = Json.Deserialize<T>(response.Content);
+            _resource = new Lazy<T>(() => Json.Deserialize<T>(response.Content));
         }
 
-        public T Resource { get; private set; }
+        public T Resource => _resource.Value;
     }
 }
