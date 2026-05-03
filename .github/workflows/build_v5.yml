@@ -100,7 +100,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Volta
-        uses: volta-cli/action@v4
+        uses: volta-cli/action@v5
 
       - name: Yarn Install
         run: yarn install

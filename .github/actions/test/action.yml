@@ -52,14 +52,14 @@ runs:
         echo "Sonarr__Postgres__Password=postgres" >> "$GITHUB_ENV"
 
     - name: Download Artifact
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v8
       with:
         name: ${{ inputs.artifact }}
         path: _tests
 
     - name: Download Binary Artifact
       if: ${{ inputs.integration_tests }}
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v8
       with:
         name: ${{ inputs.binary_artifact }}
         path: _output
