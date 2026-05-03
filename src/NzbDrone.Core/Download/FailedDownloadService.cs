@@ -40,9 +40,13 @@ namespace NzbDrone.Core.Download
 
             if (downloadId.IsNullOrWhiteSpace())
             {
-                PublishDownloadFailedEvent(history, new List<int> { history.EpisodeId }, message, source, skipRedownload: skipRedownload);
+                if (history.EventType == EpisodeHistoryEventType.Grabbed)
+                {
+                    PublishDownloadFailedEvent(history, new List<int> { history.EpisodeId }, message, source, skipRedownload: skipRedownload);
+                    return;
+                }
 
-                return;
+                throw new InvalidOperationException("Unable to mark download as failed, history item was not grabbed and has no download ID");
             }
 
             var grabbedHistory = new List<EpisodeHistory>();
@@ -57,7 +61,12 @@ namespace NzbDrone.Core.Download
             grabbedHistory.AddRange(GetGrabbedHistory(downloadId));
             grabbedHistory = grabbedHistory.DistinctBy(h => h.Id).ToList();
 
-            PublishDownloadFailedEvent(history, GetEpisodeIds(grabbedHistory), message, source);
+            if (grabbedHistory.Any())
+            {
+                PublishDownloadFailedEvent(grabbedHistory.First(), GetEpisodeIds(grabbedHistory), message, source);
+            }
+
+            throw new InvalidOperationException("Unable to mark download as failed, no grabbed history available");
         }
 
         public void MarkAsFailed(TrackedDownload trackedDownload, string message, string source = null, bool skipRedownload = false)
@@ -68,6 +77,8 @@ namespace NzbDrone.Core.Download
             {
                 PublishDownloadFailedEvent(history.First(), GetEpisodeIds(history), message ?? "Manually marked as failed", source, trackedDownload, skipRedownload: skipRedownload);
             }
+
+            throw new InvalidOperationException("Unable to mark download as failed, no grabbed history available");
         }
 
         public void Check(TrackedDownload trackedDownload)
