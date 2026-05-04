@@ -4,7 +4,7 @@
   "name": "Sonarr",
   "image": "mcr.microsoft.com/devcontainers/dotnet:1-10.0",
   "features": {
-    "ghcr.io/devcontainers/features/node:1": {
+    "ghcr.io/devcontainers/features/node:2": {
       "nodeGypDependencies": true,
       "version": "20",
       "nvmVersion": "latest"
