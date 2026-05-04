@@ -26,5 +26,5 @@
 .actions {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
-  width: 55px;
+  width: 60px;
 }
