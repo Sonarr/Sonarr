@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
@@ -19,15 +18,8 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
                 .WithMessage("Yearly lists are no longer supported");
 #pragma warning restore CS0612
 
-            // Loose validation @TODO
-            RuleFor(c => c.Rating)
-                .Matches(@"^\d+\-\d+$", RegexOptions.IgnoreCase)
-                .When(c => c.Rating.IsNotNullOrWhiteSpace())
-                .WithMessage("Not a valid rating");
-
-            // Loose validation @TODO
             RuleFor(c => c.Years)
-                .Matches(@"^\d+(\-\d+)?$", RegexOptions.IgnoreCase)
+                .Must(BeValidYearRange)
                 .When(c => c.Years.IsNotNullOrWhiteSpace())
                 .WithMessage("Not a valid year or range of years");
         }

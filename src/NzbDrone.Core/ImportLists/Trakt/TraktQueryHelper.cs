@@ -7,11 +7,18 @@ namespace NzbDrone.Core.ImportLists.Trakt
 {
     public static class TraktQueryHelper
     {
+        private static readonly HashSet<string> ReservedFilterParameters = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "genres",
+            "ratings",
+            "years",
+            "limit"
+        };
+
         public static Dictionary<string, string> BuildFilterParameters(string rating, string genres, string years, int limit, string additionalParameters)
         {
             var parameters = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            // Parse additional parameters first (lower priority)
             if (additionalParameters.IsNotNullOrWhiteSpace())
             {
                 var trimmed = additionalParameters.TrimStart('?').TrimStart('&');
@@ -24,11 +31,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
                     {
                         var key = parts[0].Trim();
 
-                        // Skip explicitly handled parameters
-                        if (key.Equals("genres", StringComparison.OrdinalIgnoreCase) ||
-                            key.Equals("ratings", StringComparison.OrdinalIgnoreCase) ||
-                            key.Equals("years", StringComparison.OrdinalIgnoreCase) ||
-                            key.Equals("limit", StringComparison.OrdinalIgnoreCase))
+                        if (ReservedFilterParameters.Contains(key))
                         {
                             continue;
                         }
@@ -56,6 +59,28 @@ namespace NzbDrone.Core.ImportLists.Trakt
             parameters["limit"] = limit.ToString();
 
             return parameters;
+        }
+
+        public static bool ContainsReservedFilterParameters(string additionalParameters)
+        {
+            if (additionalParameters.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            var trimmed = additionalParameters.TrimStart('?').TrimStart('&');
+
+            foreach (var param in trimmed.Split('&', StringSplitOptions.RemoveEmptyEntries))
+            {
+                var parts = param.Split('=', 2);
+
+                if (parts.Length == 2 && parts[0].IsNotNullOrWhiteSpace() && ReservedFilterParameters.Contains(parts[0].Trim()))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static string ToQueryString(this Dictionary<string, string> parameters)

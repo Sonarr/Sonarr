@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
@@ -14,13 +13,8 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
             RuleFor(c => c.TraktWatchedListType).NotNull();
             RuleFor(c => c.AuthUser).NotEmpty();
 
-            RuleFor(c => c.Rating)
-                .Matches(@"^\d+\-\d+$", RegexOptions.IgnoreCase)
-                .When(c => c.Rating.IsNotNullOrWhiteSpace())
-                .WithMessage("Not a valid rating");
-
             RuleFor(c => c.Years)
-                .Matches(@"^\d+(\-\d+)?$", RegexOptions.IgnoreCase)
+                .Must(BeValidYearRange)
                 .When(c => c.Years.IsNotNullOrWhiteSpace())
                 .WithMessage("Not a valid year or range of years");
         }

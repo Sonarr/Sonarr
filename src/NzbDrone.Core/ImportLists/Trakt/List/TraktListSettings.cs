@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
@@ -14,7 +13,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.List
             RuleFor(c => c.Listname).NotEmpty();
 
             RuleFor(c => c.Years)
-                .Matches(@"^\d+(\-\d+)?$", RegexOptions.IgnoreCase)
+                .Must(BeValidYearRange)
                 .When(c => c.Years.IsNotNullOrWhiteSpace())
                 .WithMessage("Not a valid year or range of years");
         }
