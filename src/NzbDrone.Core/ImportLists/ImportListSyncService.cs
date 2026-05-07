@@ -24,7 +24,6 @@ namespace NzbDrone.Core.ImportLists
         private readonly IImportListItemService _importListItemService;
         private readonly IFetchAndParseImportList _listFetcherAndParser;
         private readonly ISearchForNewSeries _seriesSearchService;
-        private readonly ISeriesRepository _seriesRepository;
         private readonly ISeriesService _seriesService;
         private readonly IAddSeriesService _addSeriesService;
         private readonly IConfigService _configService;
@@ -37,7 +36,6 @@ namespace NzbDrone.Core.ImportLists
                               IImportListItemService importListItemService,
                               IFetchAndParseImportList listFetcherAndParser,
                               ISearchForNewSeries seriesSearchService,
-                              ISeriesRepository seriesRepository,
                               ISeriesService seriesService,
                               IAddSeriesService addSeriesService,
                               IConfigService configService,
@@ -49,7 +47,6 @@ namespace NzbDrone.Core.ImportLists
             _importListExclusionService = importListExclusionService;
             _importListItemService = importListItemService;
             _listFetcherAndParser = listFetcherAndParser;
-            _seriesRepository = seriesRepository;
             _seriesSearchService = seriesSearchService;
             _seriesService = seriesService;
             _addSeriesService = addSeriesService;
@@ -296,8 +293,7 @@ namespace NzbDrone.Core.ImportLists
 
                 if (preCount != series.Tags.Count)
                 {
-                    // _seriesService.UpdateSeries(series);
-                    _seriesRepository.SetFields(series, s => s.Tags);
+                    _seriesService.UpdateTags(series);
                     _logger.Debug("{0} [{1}] tagged existing series", report.TvdbId, report.Title);
                 }
             }
