@@ -76,7 +76,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         latest: true
-        prerelease: ${{ inputs.branch != 'main' }}
+        prerelease: ${{ inputs.branch != 'master' }}
 
     - name: Generate Release Notes
       id: generate-release-notes
@@ -102,7 +102,7 @@ jobs:
         generateReleaseNotes: false
         body: ${{ steps.generate-release-notes.outputs.result }}
         name: ${{ inputs.version }}
-        prerelease: ${{ inputs.branch != 'main' }}
+        prerelease: ${{ inputs.branch != 'master' }}
         skipIfReleaseExists: true
         tag: v${{ inputs.version }}
 
