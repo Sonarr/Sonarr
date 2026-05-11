@@ -261,6 +261,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.S01E01.Erste.Begegnungen.German.DD51.Synced.DL.1080p.HBOMaxHD.AVC-TVS", false)]
         [TestCase("Series.Title.S01E05.Tavora.greift.an.German.DL.1080p.DisneyHD.h264-4SF", false)]
         [TestCase("Series.Title.S02E04.German.Dubbed.DL.AAC.1080p.WEB.AVC-GROUP", false)]
+        [TestCase("Tiny.Series.2020.DOC.S01.MULTi.1080p.ATVP.WEB.Atmos.H.265-TFA", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
