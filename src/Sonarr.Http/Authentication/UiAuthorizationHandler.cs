@@ -25,12 +25,12 @@ namespace NzbDrone.Http.Authentication
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, BypassableDenyAnonymousAuthorizationRequirement requirement)
         {
             if (_authenticationRequired == AuthenticationRequiredType.DisabledForLocalAddresses ||
-                    _authenticationRequired == AuthenticationRequiredType.DisabledForLocalHost)
+                    _authenticationRequired == AuthenticationRequiredType.DisabledForLocalhost)
             {
                 if (context.Resource is HttpContext httpContext &&
                     IPAddress.TryParse(httpContext.GetRemoteIP(), out var ipAddress))
                 {
-                    if (_authenticationRequired == AuthenticationRequiredType.DisabledForLocalHost &&
+                    if (_authenticationRequired == AuthenticationRequiredType.DisabledForLocalhost &&
                             ipAddress.isLoopback())
                     {
                         context.Succeed(requirement);

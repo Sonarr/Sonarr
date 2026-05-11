@@ -4,6 +4,6 @@ namespace NzbDrone.Core.Authentication
     {
         Enabled = 0,
         DisabledForLocalAddresses = 1,
-        DisabledForLocalHost = 2,
+        DisabledForLocalhost = 2,
     }
 }
