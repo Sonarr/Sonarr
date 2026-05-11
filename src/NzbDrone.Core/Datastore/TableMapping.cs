@@ -11,6 +11,7 @@ using NzbDrone.Core.CustomFilters;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore.Converters;
+using NzbDrone.Core.DecisionEngine.ExternalDecisions;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.History;
 using NzbDrone.Core.Download.Pending;
@@ -174,6 +175,11 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<ImportListExclusion>("ImportListExclusions").RegisterModel();
 
             Mapper.Entity<AutoTagging.AutoTag>("AutoTagging").RegisterModel();
+
+            Mapper.Entity<ExternalDecisionDefinition>("ExternalDecisions").RegisterModel()
+                  .Ignore(x => x.ImplementationName);
+
+            Mapper.Entity<ExternalDecisionStatus>("ExternalDecisionStatus").RegisterModel();
         }
 
         private static void RegisterMappers()

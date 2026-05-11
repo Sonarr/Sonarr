@@ -91,6 +91,15 @@ const { useOptions, useOption, getOptions, getOption, setOptions, setOption } =
           isVisible: true,
         },
         {
+          name: 'externalPriorityScore',
+          label: createElement(Icon, {
+            name: icons.EXTERNAL_LINK,
+            title: () => translate('ExternalPriorityScore'),
+          }),
+          isSortable: true,
+          isVisible: true,
+        },
+        {
           name: 'indexerFlags',
           label: createElement(Icon, {
             name: icons.FLAG,
