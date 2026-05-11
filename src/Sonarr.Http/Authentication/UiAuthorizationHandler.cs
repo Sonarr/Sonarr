@@ -24,13 +24,13 @@ namespace NzbDrone.Http.Authentication
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, BypassableDenyAnonymousAuthorizationRequirement requirement)
         {
-            if (_authenticationRequired == AuthenticationRequiredType.DisabledForLocalAddresses
+            if (_authenticationRequired == AuthenticationRequiredType.DisabledForLocalAddresses)
             {
                 if (context.Resource is HttpContext httpContext &&
                     IPAddress.TryParse(httpContext.GetRemoteIP(), out var ipAddress))
                 {
                     if (ipAddress.IsLocalAddress() ||
-                             (_configService.TrustCgnatIpAddresses && ipAddress.IsCgnatIpAddress()))
+                        (_configService.TrustCgnatIpAddresses && ipAddress.IsCgnatIpAddress()))
                     {
                         context.Succeed(requirement);
                     }
