@@ -144,24 +144,28 @@ namespace NzbDrone.Core.Localization
 
             var alternativeFilenamePath = Path.Combine(prefix, GetResourceFilename(culture));
 
-            await CopyInto(dictionary, baseFilenamePath).ConfigureAwait(false);
+            await CopyInto(dictionary, baseFilenamePath, true).ConfigureAwait(false);
 
             if (culture.Contains('_'))
             {
                 var languageBaseFilenamePath = Path.Combine(prefix, GetResourceFilename(culture.Split('_')[0]));
-                await CopyInto(dictionary, languageBaseFilenamePath).ConfigureAwait(false);
+                await CopyInto(dictionary, languageBaseFilenamePath, false).ConfigureAwait(false);
             }
 
-            await CopyInto(dictionary, alternativeFilenamePath).ConfigureAwait(false);
+            await CopyInto(dictionary, alternativeFilenamePath, true).ConfigureAwait(false);
 
             return dictionary;
         }
 
-        private async Task CopyInto(IDictionary<string, string> dictionary, string resourcePath)
+        private async Task CopyInto(IDictionary<string, string> dictionary, string resourcePath, bool logMissing)
         {
             if (!File.Exists(resourcePath))
             {
-                _logger.Error("Missing translation/culture resource: {0}", resourcePath);
+                if (logMissing)
+                {
+                    _logger.Error("Missing translation/culture resource: {0}", resourcePath);
+                }
+
                 return;
             }
 
