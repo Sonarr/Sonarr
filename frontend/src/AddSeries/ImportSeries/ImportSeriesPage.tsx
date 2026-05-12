@@ -7,13 +7,9 @@ import ImportSeriesSelectFolder from './SelectFolder/ImportSeriesSelectFolder';
 function ImportSeriesPage() {
   return (
     <Switch>
-      <Route
-        exact={true}
-        path="/add/import"
-        component={ImportSeriesSelectFolder}
-      />
+      <Route path="/add/import" element={<ImportSeriesSelectFolder />} />
 
-      <Route path="/add/import/:rootFolderId" component={ImportSeries} />
+      <Route path="/add/import/:rootFolderId" element={<ImportSeries />} />
     </Switch>
   );
 }

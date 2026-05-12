@@ -1,7 +1,7 @@
 import { QueryClientProvider } from '@tanstack/react-query';
-import { ConnectedRouter, ConnectedRouterProps } from 'connected-react-router';
 import React from 'react';
 import DocumentTitle from 'react-document-title';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import Page from 'Components/Page/Page';
@@ -11,20 +11,19 @@ import { queryClient } from './queryClient';
 
 interface AppProps {
   store: Store;
-  history: ConnectedRouterProps['history'];
 }
 
-function App({ store, history }: AppProps) {
+function App({ store }: AppProps) {
   return (
     <DocumentTitle title={window.Sonarr.instanceName}>
       <QueryClientProvider client={queryClient}>
         <Provider store={store}>
-          <ConnectedRouter history={history}>
+          <BrowserRouter basename={window.Sonarr.urlBase || undefined}>
             <ApplyTheme />
             <Page>
               <AppRoutes />
             </Page>
-          </ConnectedRouter>
+          </BrowserRouter>
         </Provider>
       </QueryClientProvider>
     </DocumentTitle>

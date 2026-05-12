@@ -7,9 +7,9 @@ import UpdateLogFiles from './Update/UpdateLogFiles';
 function Logs() {
   return (
     <Switch>
-      <Route exact={true} path="/system/logs/files" component={AppLogFiles} />
+      <Route path="/system/logs/files" element={<AppLogFiles />} />
 
-      <Route path="/system/logs/files/update" component={UpdateLogFiles} />
+      <Route path="/system/logs/files/update" element={<UpdateLogFiles />} />
     </Switch>
   );
 }

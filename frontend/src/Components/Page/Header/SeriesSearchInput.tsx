@@ -1,4 +1,3 @@
-import { push } from 'connected-react-router';
 import { ExtendedKeyboardEvent } from 'mousetrap';
 import React, {
   FormEvent,
@@ -11,7 +10,7 @@ import React, {
   useState,
 } from 'react';
 import Autosuggest from 'react-autosuggest';
-import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { useDebouncedCallback } from 'use-debounce';
 import Icon from 'Components/Icon';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -113,7 +112,7 @@ function useSeriesSuggestions(tagList: Tag[]) {
 function SeriesSearchInput() {
   const tagList = useTagList();
   const series = useSeriesSuggestions(tagList);
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { bindShortcut, unbindShortcut } = useKeyboardShortcuts();
 
   const [value, setValue] = useState('');
@@ -297,11 +296,7 @@ function SeriesSearchInput() {
         autosuggestRef.current.state;
 
       if (!suggestions.length || highlightedSectionIndex) {
-        dispatch(
-          push(
-            `${window.Sonarr.urlBase}/add/new?term=${encodeURIComponent(value)}`
-          )
-        );
+        navigate(`/add/new?term=${encodeURIComponent(value)}`);
 
         inputRef.current?.blur();
         reset();
@@ -317,16 +312,12 @@ function SeriesSearchInput() {
           ? suggestions[0]
           : suggestions[highlightedSuggestionIndex];
 
-      dispatch(
-        push(
-          `${window.Sonarr.urlBase}/series/${selectedSuggestion.item.titleSlug}`
-        )
-      );
+      navigate(`/series/${selectedSuggestion.item.titleSlug}`);
 
       inputRef.current?.blur();
       reset();
     },
-    [value, suggestions, dispatch, reset]
+    [value, suggestions, navigate, reset]
   );
 
   const handleBlur = useCallback(() => {
@@ -353,19 +344,13 @@ function SeriesSearchInput() {
       { suggestion }: { suggestion: SeriesSuggestion | AddNewSeriesSuggestion }
     ) => {
       if ('type' in suggestion) {
-        dispatch(
-          push(
-            `${window.Sonarr.urlBase}/add/new?term=${encodeURIComponent(value)}`
-          )
-        );
+        navigate(`/add/new?term=${encodeURIComponent(value)}`);
       } else {
         setValue('');
-        dispatch(
-          push(`${window.Sonarr.urlBase}/series/${suggestion.item.titleSlug}`)
-        );
+        navigate(`/series/${suggestion.item.titleSlug}`);
       }
     },
-    [value, dispatch]
+    [value, navigate]
   );
 
   const inputProps = {
