@@ -1,6 +1,7 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import DocumentTitle from 'react-document-title';
+import { Provider } from 'react-redux';
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -8,7 +9,6 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom';
-import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import Page from 'Components/Page/Page';
 import ApplyTheme from './ApplyTheme';

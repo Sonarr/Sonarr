@@ -7,7 +7,7 @@ import UpdateLogFiles from './Update/UpdateLogFiles';
 function Logs() {
   return (
     <Switch>
-      <Route index element={<AppLogFiles />} />
+      <Route index={true} element={<AppLogFiles />} />
 
       <Route path="update" element={<UpdateLogFiles />} />
     </Switch>

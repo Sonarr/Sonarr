@@ -45,9 +45,12 @@ export function appRouteElements() {
 
       <Route path="/add/import/*" element={<ImportSeriesPage />} />
 
-      <Route path="/serieseditor" element={<Navigate to="/" replace />} />
+      <Route
+        path="/serieseditor"
+        element={<Navigate to="/" replace={true} />}
+      />
 
-      <Route path="/seasonpass" element={<Navigate to="/" replace />} />
+      <Route path="/seasonpass" element={<Navigate to="/" replace={true} />} />
 
       <Route path="/series/:titleSlug" element={<SeriesDetailsPage />} />
 
