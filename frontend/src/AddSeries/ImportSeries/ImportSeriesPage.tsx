@@ -7,9 +7,9 @@ import ImportSeriesSelectFolder from './SelectFolder/ImportSeriesSelectFolder';
 function ImportSeriesPage() {
   return (
     <Switch>
-      <Route path="/add/import" element={<ImportSeriesSelectFolder />} />
+      <Route index element={<ImportSeriesSelectFolder />} />
 
-      <Route path="/add/import/:rootFolderId" element={<ImportSeries />} />
+      <Route path=":rootFolderId" element={<ImportSeries />} />
     </Switch>
   );
 }

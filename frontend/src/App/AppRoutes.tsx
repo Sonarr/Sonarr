@@ -7,7 +7,6 @@ import AddNewSeries from 'AddSeries/AddNewSeries/AddNewSeries';
 import ImportSeriesPage from 'AddSeries/ImportSeries/ImportSeriesPage';
 import CalendarPage from 'Calendar/CalendarPage';
 import NotFound from 'Components/NotFound';
-import Switch from 'Components/Router/Switch';
 import SeriesDetailsPage from 'Series/Details/SeriesDetailsPage';
 import SeriesIndex from 'Series/Index/SeriesIndex';
 import CustomFormatSettingsPage from 'Settings/CustomFormats/CustomFormatSettingsPage';
@@ -33,9 +32,9 @@ import Updates from 'System/Updates/Updates';
 import CutoffUnmet from 'Wanted/CutoffUnmet/CutoffUnmet';
 import Missing from 'Wanted/Missing/Missing';
 
-function AppRoutes() {
+export function appRouteElements() {
   return (
-    <Switch>
+    <>
       {/*
         Series
       */}
@@ -138,8 +137,6 @@ function AppRoutes() {
       */}
 
       <Route path="*" element={<NotFound />} />
-    </Switch>
+    </>
   );
 }
-
-export default AppRoutes;
