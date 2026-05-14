@@ -280,7 +280,7 @@ namespace NzbDrone.Core.Organizer
 
         public string GetSeasonFolderSample(NamingConfig nameSpec)
         {
-            return _buildFileNames.GetSeasonFolder(_standardSeries, _episode1.SeasonNumber, nameSpec);
+            return _buildFileNames.GetSeasonFolder(_standardSeries, _episode1.SeasonNumber, nameSpec, 2013);
         }
 
         public string GetSpecialsFolderSample(NamingConfig nameSpec)

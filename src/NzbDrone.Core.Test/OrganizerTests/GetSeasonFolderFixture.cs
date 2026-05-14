@@ -31,5 +31,16 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.GetSeasonFolder(series, seasonNumber, _namingConfig).Should().Be(expected);
         }
+
+        [TestCase("Venture Bros.", 1, 2003, "{Series Title} Season {season:00} ({Season Year})", "Venture Bros. Season 01 (2003)")]
+        [TestCase("Venture Bros.", 1, null, "{Series Title} Season {season:00} ({Season Year})", "Venture Bros. Season 01 (Unknown)")]
+        public void should_use_season_year_token(string seriesTitle, int seasonNumber, int? seasonYear, string format, string expected)
+        {
+            _namingConfig.SeasonFolderFormat = format;
+
+            var series = new Series { Title = seriesTitle };
+
+            Subject.GetSeasonFolder(series, seasonNumber, _namingConfig, seasonYear).Should().Be(expected);
+        }
     }
 }
