@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Tv
 {
     public interface IEpisodeRefreshedService
     {
-        void Search(int seriesId);
+        void Search(Series series);
     }
 
     public class EpisodeRefreshedService : IEpisodeRefreshedService, IHandle<EpisodeInfoRefreshedEvent>
@@ -34,9 +34,9 @@ namespace NzbDrone.Core.Tv
             _searchCache = cacheManager.GetCache<List<int>>(GetType());
         }
 
-        public void Search(int seriesId)
+        public void Search(Series series)
         {
-            var previouslyAired = _searchCache.Find(seriesId.ToString());
+            var previouslyAired = _searchCache.Find(series.Id.ToString());
 
             if (previouslyAired != null && previouslyAired.Any())
             {
@@ -44,11 +44,12 @@ namespace NzbDrone.Core.Tv
 
                 if (missing.Any())
                 {
+                    _logger.Info("Searching for {MissingCount} episodes from '{SeriesTitle}' that were recently added or had absolute episode number added", missing.Count, series.Title);
                     _commandQueueManager.Push(new EpisodeSearchCommand(missing.Select(e => e.Id).ToList()));
                 }
             }
 
-            _searchCache.Remove(seriesId.ToString());
+            _searchCache.Remove(series.Id.ToString());
         }
 
         public void Handle(EpisodeInfoRefreshedEvent message)
