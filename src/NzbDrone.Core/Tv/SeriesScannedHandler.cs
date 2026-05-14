@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Tv
 
             if (addOptions == null)
             {
-                _episodeRefreshedService.Search(series.Id);
+                _episodeRefreshedService.Search(series);
                 return;
             }
 
