@@ -231,7 +231,7 @@ function PageSidebar() {
     transform: isSidebarVisible ? 0 : SIDEBAR_WIDTH * -1,
   });
 
-  const pathname = location.pathname;
+  const { pathname } = location;
 
   const activeParent = useMemo(() => {
     return (
