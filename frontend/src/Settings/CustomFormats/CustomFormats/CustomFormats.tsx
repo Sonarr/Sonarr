@@ -1,58 +1,40 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { CustomFormatAppState } from 'App/State/SettingsAppState';
+import React, { useCallback, useState } from 'react';
 import Card from 'Components/Card';
 import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { icons } from 'Helpers/Props';
-import {
-  cloneCustomFormat,
-  fetchCustomFormats,
-} from 'Store/Actions/settingsActions';
-import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
-import CustomFormatModel from 'typings/CustomFormat';
-import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
 import CustomFormat from './CustomFormat';
 import EditCustomFormatModal from './EditCustomFormatModal';
+import { useSortedCustomFormats } from './useCustomFormats';
 import styles from './CustomFormats.css';
 
 function CustomFormats() {
-  const dispatch = useDispatch();
-
-  const { error, isFetching, isPopulated, isDeleting, items } = useSelector(
-    createSortedSectionSelector<CustomFormatModel, CustomFormatAppState>(
-      'settings.customFormats',
-      sortByProp('name')
-    )
-  );
+  const {
+    data: items,
+    error,
+    isFetching,
+    isFetched: isPopulated,
+  } = useSortedCustomFormats();
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [clonedId, setClonedId] = useState<number>();
+  const [cloneId, setCloneId] = useState<number>();
 
   const handleAddCustomFormatPress = useCallback(() => {
+    setCloneId(undefined);
     setIsEditModalOpen(true);
   }, []);
 
-  const handleCloneCustomFormatPress = useCallback(
-    (id: number) => {
-      dispatch(cloneCustomFormat({ id }));
-
-      setIsEditModalOpen(true);
-      setClonedId(id);
-    },
-    [dispatch]
-  );
+  const handleCloneCustomFormatPress = useCallback((id: number) => {
+    setCloneId(id);
+    setIsEditModalOpen(true);
+  }, []);
 
   const handleEditModalClose = useCallback(() => {
     setIsEditModalOpen(false);
-    setClonedId(undefined);
+    setCloneId(undefined);
   }, []);
-
-  useEffect(() => {
-    dispatch(fetchCustomFormats());
-  }, [dispatch]);
 
   return (
     <FieldSet legend={translate('CustomFormats')}>
@@ -63,16 +45,13 @@ function CustomFormats() {
         error={error}
       >
         <div className={styles.customFormats}>
-          {items.map((item) => {
-            return (
-              <CustomFormat
-                key={item.id}
-                {...item}
-                isDeleting={isDeleting}
-                onCloneCustomFormatPress={handleCloneCustomFormatPress}
-              />
-            );
-          })}
+          {items.map((item) => (
+            <CustomFormat
+              key={item.id}
+              {...item}
+              onCloneCustomFormatPress={handleCloneCustomFormatPress}
+            />
+          ))}
 
           <Card
             className={styles.addCustomFormat}
@@ -85,8 +64,8 @@ function CustomFormats() {
         </div>
 
         <EditCustomFormatModal
+          cloneId={cloneId}
           isOpen={isEditModalOpen}
-          clonedId={clonedId}
           onModalClose={handleEditModalClose}
         />
       </PageSectionContent>

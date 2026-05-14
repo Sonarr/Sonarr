@@ -4,7 +4,7 @@ import ReleaseType from 'InteractiveImport/ReleaseType';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import Series from 'Series/Series';
-import CustomFormat from 'typings/CustomFormat';
+import { CustomFormat } from 'Settings/CustomFormats/CustomFormats/useCustomFormats';
 import Rejection from 'typings/Rejection';
 
 export interface InteractiveImportCommandOptions {

@@ -6,8 +6,13 @@ import {
   useManageProviderSettings,
   useProviderSettings,
 } from 'Settings/useProviderSettings';
-import { QualityProfileFormatItem } from 'typings/CustomFormat';
 import translate from 'Utilities/String/translate';
+
+export interface QualityProfileFormatItem {
+  format: number;
+  name: string;
+  score: number;
+}
 
 export interface QualityProfileQualityItem {
   quality: Quality;

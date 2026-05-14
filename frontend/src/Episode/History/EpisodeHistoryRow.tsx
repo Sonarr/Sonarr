@@ -15,7 +15,7 @@ import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
-import CustomFormat from 'typings/CustomFormat';
+import { CustomFormat } from 'Settings/CustomFormats/CustomFormats/useCustomFormats';
 import { HistoryData, HistoryEventType } from 'typings/History';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import translate from 'Utilities/String/translate';

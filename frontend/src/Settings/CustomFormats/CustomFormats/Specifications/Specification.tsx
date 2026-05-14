@@ -1,71 +1,98 @@
-import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useMemo, useState } from 'react';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import { icons, kinds } from 'Helpers/Props';
-import {
-  cloneCustomFormatSpecification,
-  deleteCustomFormatSpecification,
-} from 'Store/Actions/settingsActions';
+import Field from 'typings/Field';
 import translate from 'Utilities/String/translate';
+import { CustomFormatSpecification } from '../useCustomFormats';
 import EditSpecificationModal from './EditSpecificationModal';
 import styles from './Specification.css';
 
 interface SpecificationProps {
   id: number;
+  implementation: string;
   implementationName: string;
+  infoLink: string;
   name: string;
   negate: boolean;
   required: boolean;
+  fields: Field[];
+  onSaveSpecification: (spec: CustomFormatSpecification) => void;
+  onConfirmDeleteSpecification: (specId: number) => void;
+  onCloneSpecificationPress: (specId: number) => void;
 }
 
 function Specification({
   id,
+  implementation,
   implementationName,
+  infoLink,
   name,
-  required,
   negate,
+  required,
+  fields,
+  onSaveSpecification,
+  onConfirmDeleteSpecification,
+  onCloneSpecificationPress,
 }: SpecificationProps) {
-  const dispatch = useDispatch();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const [isEditSpecificationModalOpen, setIsEditSpecificationModalOpen] =
-    useState(false);
+  const spec = useMemo<CustomFormatSpecification>(
+    () => ({
+      id,
+      implementation,
+      implementationName,
+      infoLink,
+      name,
+      negate,
+      required,
+      fields,
+    }),
+    [
+      id,
+      implementation,
+      implementationName,
+      infoLink,
+      name,
+      negate,
+      required,
+      fields,
+    ]
+  );
 
-  const [isDeleteSpecificationModalOpen, setIsDeleteSpecificationModalOpen] =
-    useState(false);
-
-  const handleEditSpecificationPress = useCallback(() => {
-    setIsEditSpecificationModalOpen(true);
+  const onEditPress = useCallback(() => {
+    setIsEditModalOpen(true);
   }, []);
 
-  const handleEditSpecificationModalClose = useCallback(() => {
-    setIsEditSpecificationModalOpen(false);
+  const onEditModalClose = useCallback(() => {
+    setIsEditModalOpen(false);
   }, []);
 
-  const handleDeleteSpecificationPress = useCallback(() => {
-    setIsEditSpecificationModalOpen(false);
-    setIsDeleteSpecificationModalOpen(true);
+  const onDeletePress = useCallback(() => {
+    setIsEditModalOpen(false);
+    setIsDeleteModalOpen(true);
   }, []);
 
-  const handleDeleteSpecificationModalClose = useCallback(() => {
-    setIsDeleteSpecificationModalOpen(false);
+  const onDeleteModalClose = useCallback(() => {
+    setIsDeleteModalOpen(false);
   }, []);
 
-  const handleCloneSpecificationPress = useCallback(() => {
-    dispatch(cloneCustomFormatSpecification({ id }));
-  }, [id, dispatch]);
+  const onConfirmDelete = useCallback(() => {
+    onConfirmDeleteSpecification(id);
+  }, [id, onConfirmDeleteSpecification]);
 
-  const handleConfirmDeleteSpecification = useCallback(() => {
-    dispatch(deleteCustomFormatSpecification({ id }));
-  }, [id, dispatch]);
+  const onClonePress = useCallback(() => {
+    onCloneSpecificationPress(id);
+  }, [id, onCloneSpecificationPress]);
 
   return (
     <Card
       className={styles.customFormat}
       overlayContent={true}
-      onPress={handleEditSpecificationPress}
+      onPress={onEditPress}
     >
       <div className={styles.nameContainer}>
         <div className={styles.name}>{name}</div>
@@ -75,7 +102,7 @@ function Specification({
           title={translate('CloneCondition')}
           aria-label={translate('CloneCondition')}
           name={icons.CLONE}
-          onPress={handleCloneSpecificationPress}
+          onPress={onClonePress}
         />
       </div>
 
@@ -92,20 +119,21 @@ function Specification({
       </div>
 
       <EditSpecificationModal
-        id={id}
-        isOpen={isEditSpecificationModalOpen}
-        onModalClose={handleEditSpecificationModalClose}
-        onDeleteSpecificationPress={handleDeleteSpecificationPress}
+        isOpen={isEditModalOpen}
+        specification={spec}
+        onSave={onSaveSpecification}
+        onDeleteSpecificationPress={onDeletePress}
+        onModalClose={onEditModalClose}
       />
 
       <ConfirmModal
-        isOpen={isDeleteSpecificationModalOpen}
+        isOpen={isDeleteModalOpen}
         kind={kinds.DANGER}
         title={translate('DeleteCondition')}
         message={translate('DeleteConditionMessageText', { name })}
         confirmLabel={translate('Delete')}
-        onConfirm={handleConfirmDeleteSpecification}
-        onCancel={handleDeleteSpecificationModalClose}
+        onConfirm={onConfirmDelete}
+        onCancel={onDeleteModalClose}
       />
     </Card>
   );

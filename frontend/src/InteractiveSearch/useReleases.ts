@@ -15,7 +15,7 @@ import { SortDirection } from 'Helpers/Props/sortDirections';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import { AlternateTitle } from 'Series/Series';
-import CustomFormat from 'typings/CustomFormat';
+import { CustomFormat } from 'Settings/CustomFormats/CustomFormats/useCustomFormats';
 import Rejection from 'typings/Rejection';
 import sortByProp from 'Utilities/Array/sortByProp';
 import clientSideFilterAndSort from 'Utilities/Filter/clientSideFilterAndSort';
