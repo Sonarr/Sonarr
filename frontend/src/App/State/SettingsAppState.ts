@@ -5,8 +5,6 @@ import AppSectionState, {
   AppSectionSaveState,
   AppSectionSchemaState,
 } from 'App/State/AppSectionState';
-import CustomFormat from 'typings/CustomFormat';
-import CustomFormatSpecification from 'typings/CustomFormatSpecification';
 import DelayProfile from 'typings/DelayProfile';
 import DownloadClient from 'typings/DownloadClient';
 import DownloadClientOptions from 'typings/Settings/DownloadClientOptions';
@@ -32,20 +30,7 @@ export interface DownloadClientOptionsAppState
   extends AppSectionItemState<DownloadClientOptions>,
     AppSectionSaveState {}
 
-export interface CustomFormatAppState
-  extends AppSectionState<CustomFormat>,
-    AppSectionDeleteState,
-    AppSectionSaveState {}
-
-export interface CustomFormatSpecificationAppState
-  extends AppSectionState<CustomFormatSpecification>,
-    AppSectionDeleteState,
-    AppSectionSaveState,
-    AppSectionSchemaState<Presets<CustomFormatSpecification>> {}
-
 interface SettingsAppState {
-  customFormats: CustomFormatAppState;
-  customFormatSpecifications: CustomFormatSpecificationAppState;
   delayProfiles: DelayProfileAppState;
   downloadClients: DownloadClientAppState;
   downloadClientOptions: DownloadClientOptionsAppState;

@@ -1,6 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
+import React, { useCallback, useRef, useState } from 'react';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -14,44 +12,47 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
-import { clearPendingChanges } from 'Store/Actions/baseActions';
-import {
-  clearCustomFormatSpecificationPending,
-  deleteAllCustomFormatSpecification,
-  fetchCustomFormatSpecificationSchema,
-  saveCustomFormatSpecification,
-  selectCustomFormatSpecificationSchema,
-  setCustomFormatSpecificationFieldValue,
-  setCustomFormatSpecificationValue,
-  setCustomFormatValue,
-} from 'Store/Actions/settingsActions';
-import { createProviderSettingsSelectorHook } from 'Store/Selectors/createProviderSettingsSelector';
-import CustomFormatSpecification from 'typings/CustomFormatSpecification';
 import Field from 'typings/Field';
 import { InputChanged } from 'typings/inputs';
 import { ValidationError } from 'typings/pending';
 import translate from 'Utilities/String/translate';
+import {
+  CustomFormat,
+  CustomFormatSpecification,
+  useCustomFormatSchema,
+} from './useCustomFormats';
 import styles from './ImportCustomFormatModalContent.css';
 
+type SchemaItem = CustomFormatSpecification & {
+  presets?: CustomFormatSpecification[];
+};
+
 interface ImportCustomFormatModalContentProps {
+  onImport: (customFormat: CustomFormat) => void;
   onModalClose: () => void;
 }
 
+interface RawSpec {
+  name: string;
+  implementation: string;
+  negate?: boolean;
+  required?: boolean;
+  fields?: Record<string, unknown>;
+}
+
+interface RawCustomFormat {
+  name?: string;
+  includeCustomFormatWhenRenaming?: boolean;
+  specifications?: RawSpec[];
+}
+
 function ImportCustomFormatModalContent({
+  onImport,
   onModalClose,
 }: ImportCustomFormatModalContentProps) {
-  const dispatch = useDispatch();
-
-  const { isFetching, error } = useSelector(
-    createProviderSettingsSelectorHook('customFormats', undefined)
-  );
-
-  const {
-    isPopulated: isSpecificationsPopulated,
-    schema: specificationsSchema,
-  } = useSelector(
-    (state: AppState) => state.settings.customFormatSpecifications
-  );
+  const schemaResult = useCustomFormatSchema();
+  const schema = schemaResult.schema as SchemaItem[];
+  const { isSchemaLoading, schemaError } = schemaResult;
 
   const importTimeout = useRef<ReturnType<typeof setTimeout>>();
   const [json, setJson] = useState('');
@@ -60,118 +61,91 @@ function ImportCustomFormatModalContent({
 
   const handleChange = useCallback(({ value }: InputChanged<string>) => {
     setJson(value);
+    setParseError(undefined);
   }, []);
 
-  const clearPending = useCallback(() => {
-    dispatch(clearPendingChanges({ section: 'settings.customFormats' }));
-    dispatch(clearCustomFormatSpecificationPending());
-    dispatch(deleteAllCustomFormatSpecification());
-  }, [dispatch]);
+  const buildSpec = useCallback(
+    (raw: RawSpec): CustomFormatSpecification => {
+      const schemaSpec = schema.find(
+        (s) => s.implementation === raw.implementation
+      );
 
-  const parseFields = useCallback(
-    (fields: Field[], schema: CustomFormatSpecification) => {
-      for (const [key, value] of Object.entries(fields)) {
-        const field = schema.fields.find((field) => field.name === key);
-        if (!field) {
-          throw new Error(
-            translate('CustomFormatUnknownConditionOption', {
-              key,
-              implementation: schema.implementationName,
-            })
-          );
-        }
-
-        // @ts-expect-error - actions are not typed
-        dispatch(setCustomFormatSpecificationFieldValue({ name: key, value }));
-      }
-    },
-    [dispatch]
-  );
-
-  const parseSpecification = useCallback(
-    (spec: CustomFormatSpecification) => {
-      const selectedImplementation = specificationsSchema.find((s) => {
-        return s.implementation === spec.implementation;
-      });
-
-      if (!selectedImplementation) {
+      if (!schemaSpec) {
         throw new Error(
           translate('CustomFormatUnknownCondition', {
-            implementation: spec.implementation,
+            implementation: raw.implementation,
           })
         );
       }
 
-      dispatch(
-        selectCustomFormatSpecificationSchema({
-          implementation: spec.implementation,
-        })
-      );
+      const fields: Field[] = schemaSpec.fields.map((f) => ({ ...f }));
 
-      for (const [key, value] of Object.entries(spec)) {
-        if (key === 'fields') {
-          parseFields(value, selectedImplementation);
-        } else if (key !== 'id') {
-          // @ts-expect-error - actions are not typed
-          dispatch(setCustomFormatSpecificationValue({ name: key, value }));
+      if (raw.fields) {
+        for (const [key, value] of Object.entries(raw.fields)) {
+          const target = fields.find((f) => f.name === key);
+
+          if (!target) {
+            throw new Error(
+              translate('CustomFormatUnknownConditionOption', {
+                key,
+                implementation: schemaSpec.implementationName,
+              })
+            );
+          }
+
+          target.value = value as Field['value'];
         }
       }
 
-      dispatch(saveCustomFormatSpecification());
+      return {
+        id: 0,
+        name: raw.name,
+        implementation: schemaSpec.implementation,
+        implementationName: schemaSpec.implementationName,
+        infoLink: schemaSpec.infoLink,
+        negate: raw.negate ?? false,
+        required: raw.required ?? false,
+        fields,
+      };
     },
-    [specificationsSchema, dispatch, parseFields]
+    [schema]
   );
 
   const handleImportPress = useCallback(() => {
     setIsSpinning(true);
 
     importTimeout.current = setTimeout(() => {
-      clearPending();
-
       try {
-        const cf = JSON.parse(json);
+        const parsed = JSON.parse(json) as RawCustomFormat;
 
-        for (const [key, value] of Object.entries(cf)) {
-          if (key === 'specifications') {
-            for (const spec of value as CustomFormatSpecification[]) {
-              parseSpecification(spec);
-            }
-          } else if (key !== 'id') {
-            // @ts-expect-error - actions are not typed
-            dispatch(setCustomFormatValue({ name: key, value }));
-          }
-        }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: any) {
-        clearPending();
+        const specifications = (parsed.specifications ?? []).map(buildSpec);
+
+        const customFormat: CustomFormat = {
+          id: 0,
+          name: parsed.name ?? '',
+          includeCustomFormatWhenRenaming:
+            parsed.includeCustomFormatWhenRenaming ?? false,
+          specifications,
+        };
+
+        onImport(customFormat);
+        onModalClose();
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        const stack = err instanceof Error ? err.stack : undefined;
 
         setParseError({
           isWarning: false,
-          errorMessage: err.message,
-          detailedDescription: err.stack,
+          errorMessage: message,
+          detailedDescription: stack,
           propertyName: 'customFormatJson',
           severity: 'error',
         });
-
-        return;
+      } finally {
+        setIsSpinning(false);
       }
-
-      onModalClose();
     }, 250);
-  }, [json, clearPending, dispatch, parseSpecification, onModalClose]);
-
-  useEffect(() => {
-    dispatch(fetchCustomFormatSpecificationSchema());
-  }, [dispatch]);
-
-  useEffect(() => {
-    return () => {
-      if (importTimeout.current) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        clearTimeout(importTimeout.current);
-      }
-    };
-  }, []);
+  }, [json, buildSpec, onImport, onModalClose]);
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -179,15 +153,15 @@ function ImportCustomFormatModalContent({
 
       <ModalBody>
         <div>
-          {isFetching ? <LoadingIndicator /> : null}
+          {isSchemaLoading ? <LoadingIndicator /> : null}
 
-          {!isFetching && error ? (
+          {!isSchemaLoading && schemaError ? (
             <Alert kind={kinds.DANGER}>
               {translate('CustomFormatsLoadError')}
             </Alert>
           ) : null}
 
-          {!isFetching && !error && isSpecificationsPopulated ? (
+          {!isSchemaLoading && !schemaError ? (
             <Form>
               <FormGroup size={sizes.MEDIUM}>
                 <FormLabel>{translate('CustomFormatJson')}</FormLabel>

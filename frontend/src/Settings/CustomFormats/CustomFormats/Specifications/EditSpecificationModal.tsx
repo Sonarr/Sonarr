@@ -1,13 +1,9 @@
-import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import Modal from 'Components/Modal/Modal';
 import { sizes } from 'Helpers/Props';
-import { clearPendingChanges } from 'Store/Actions/baseActions';
 import EditSpecificationModalContent, {
   EditSpecificationModalContentProps,
 } from './EditSpecificationModalContent';
-
-const section = 'settings.customFormatSpecifications';
 
 interface EditSpecificationModalProps
   extends EditSpecificationModalContentProps {
@@ -19,19 +15,11 @@ function EditSpecificationModal({
   onModalClose,
   ...otherProps
 }: EditSpecificationModalProps) {
-  const dispatch = useDispatch();
-
-  const handleModalClose = useCallback(() => {
-    dispatch(clearPendingChanges({ section }));
-
-    onModalClose();
-  }, [dispatch, onModalClose]);
-
   return (
-    <Modal size={sizes.MEDIUM} isOpen={isOpen} onModalClose={handleModalClose}>
+    <Modal size={sizes.MEDIUM} isOpen={isOpen} onModalClose={onModalClose}>
       <EditSpecificationModalContent
         {...otherProps}
-        onModalClose={handleModalClose}
+        onModalClose={onModalClose}
       />
     </Modal>
   );

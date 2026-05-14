@@ -1,7 +1,4 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
+import React, { useMemo } from 'react';
 import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
 import ClipboardButton from 'Components/Link/ClipboardButton';
@@ -11,9 +8,9 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
-import { fetchCustomFormatSpecifications } from 'Store/Actions/settingsActions';
 import Field from 'typings/Field';
 import translate from 'Utilities/String/translate';
+import { useCustomFormat, useCustomFormats } from './useCustomFormats';
 import styles from './ExportCustomFormatModalContent.css';
 
 const omittedProperties = ['id', 'implementationName', 'infoLink'];
@@ -34,21 +31,6 @@ function replacer(key: string, value: unknown) {
   return value;
 }
 
-function createCustomFormatJsonSelector(id: number) {
-  return createSelector(
-    (state: AppState) => state.settings.customFormats,
-    (customFormats) => {
-      const customFormat = customFormats.items.find((i) => i.id === id);
-
-      const json = customFormat
-        ? JSON.stringify(customFormat, replacer, 2)
-        : '';
-
-      return json;
-    }
-  );
-}
-
 export interface ExportCustomFormatModalContentProps {
   id: number;
   onModalClose: () => void;
@@ -58,17 +40,12 @@ function ExportCustomFormatModalContent({
   id,
   onModalClose,
 }: ExportCustomFormatModalContentProps) {
-  const dispatch = useDispatch();
+  const { isLoading, error } = useCustomFormats();
+  const customFormat = useCustomFormat(id);
 
-  const { isFetching, error } = useSelector(
-    (state: AppState) => state.settings.customFormats
-  );
-
-  const json = useSelector(createCustomFormatJsonSelector(id));
-
-  useEffect(() => {
-    dispatch(fetchCustomFormatSpecifications({ id }));
-  }, [id, dispatch]);
+  const json = useMemo(() => {
+    return customFormat ? JSON.stringify(customFormat, replacer, 2) : '';
+  }, [customFormat]);
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -76,15 +53,15 @@ function ExportCustomFormatModalContent({
 
       <ModalBody>
         <div>
-          {isFetching ? <LoadingIndicator /> : null}
+          {isLoading ? <LoadingIndicator /> : null}
 
-          {!isFetching && error ? (
+          {!isLoading && error ? (
             <Alert kind={kinds.DANGER}>
               {translate('CustomFormatsLoadError')}
             </Alert>
           ) : null}
 
-          {!isFetching && !error ? (
+          {!isLoading && !error ? (
             <div>
               <pre>{json}</pre>
             </div>
