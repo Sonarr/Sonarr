@@ -8,6 +8,7 @@ namespace Sonarr.Http.Frontend.Mappers
 {
     public class ManifestMapper : UrlBaseReplacementResourceMapperBase
     {
+        private readonly IAppFolderInfo _appFolderInfo;
         private readonly IConfigFileProvider _configFileProvider;
 
         private string _generatedContent;
@@ -15,11 +16,14 @@ namespace Sonarr.Http.Frontend.Mappers
         public ManifestMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, IConfigFileProvider configFileProvider, Logger logger)
             : base(diskProvider, configFileProvider, logger)
         {
+            _appFolderInfo = appFolderInfo;
             _configFileProvider = configFileProvider;
-            FilePath = Path.Combine(appFolderInfo.StartUpFolder, configFileProvider.UiFolder, "Content", "manifest.json");
         }
 
-        public override string Map(string resourceUrl)
+        protected override string FolderPath => Path.Combine(_appFolderInfo.StartUpFolder, _configFileProvider.UiFolder);
+        protected override string FilePath => Path.Combine(FolderPath, "Content", "manifest.json");
+
+        protected override string MapPath(string resourceUrl)
         {
             return FilePath;
         }

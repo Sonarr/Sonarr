@@ -37,6 +37,12 @@ namespace Sonarr.Http.Frontend.Mappers
 
             var mapper = _diskMappers.Single(m => m.CanHandle(resourceUrl));
             var pathToFile = mapper.Map(resourceUrl);
+
+            if (pathToFile == null)
+            {
+                return resourceUrl;
+            }
+
             var hash = _hashProvider.ComputeMd5(pathToFile).ToBase64();
 
             return resourceUrl + "?h=" + hash.Trim('=');
