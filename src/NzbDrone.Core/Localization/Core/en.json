@@ -1507,6 +1507,8 @@
   "NotificationsPushcutSettingsTimeSensitiveHelpText": "Enable to mark the notification as \"Time Sensitive\"",
   "NotificationsPushoverSettingsDevices": "Devices",
   "NotificationsPushoverSettingsDevicesHelpText": "List of device names (leave blank to send to all devices)",
+  "NotificationsPushoverSettingsEncryptionKey": "Encryption Key",
+  "NotificationsPushoverSettingsEncryptionKeyHelpText": "Optional 64-character hex key (256-bit) to enable end-to-end encryption of the title and message",
   "NotificationsPushoverSettingsExpire": "Expire",
   "NotificationsPushoverSettingsExpireHelpText": "Maximum time to retry Emergency alerts, maximum 86400 seconds",
   "NotificationsPushoverSettingsRetry": "Retry",
