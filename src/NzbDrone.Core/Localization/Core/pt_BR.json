@@ -424,6 +424,7 @@
     "Directory": "Diretório",
     "Disabled": "Desabilitado",
     "DisabledForLocalAddresses": "Desabilitado para endereços locais",
+    "DisabledForLocalhost": "Desabilitado para Localhost",
     "Discord": "Discord",
     "DiskSpace": "Espaço em disco",
     "DoNotBlocklist": "Não coloque na lista de bloqueio",
