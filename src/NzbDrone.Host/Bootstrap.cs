@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -199,7 +201,13 @@ namespace NzbDrone.Host
                         {
                             options.ConfigureHttpsDefaults(configureOptions =>
                             {
-                                configureOptions.ServerCertificate = ValidateSslCertificate(sslCertPath, sslKeyPath, sslCertPassword);
+                                var sslContext = ValidateSslCertificate(sslCertPath, sslKeyPath, sslCertPassword);
+
+                                configureOptions.ServerCertificate = sslContext.TargetCertificate;
+                                configureOptions.OnAuthenticate = (context, authOptions) =>
+                                {
+                                    authOptions.ServerCertificateContext = sslContext;
+                                };
                             });
                         }
                     });
@@ -279,9 +287,9 @@ namespace NzbDrone.Host
             return $"{scheme}://{bindAddress}:{port}";
         }
 
-        private static X509Certificate2 ValidateSslCertificate(string cert, string key, string password)
+        private static SslStreamCertificateContext ValidateSslCertificate(string cert, string key, string password)
         {
-            X509Certificate2 certificate;
+            X509Certificate2Collection certificateCollection;
 
             try
             {
@@ -289,11 +297,23 @@ namespace NzbDrone.Host
 
                 if (type == X509ContentType.Cert)
                 {
-                    certificate = X509Certificate2.CreateFromPemFile(cert, key.IsNullOrWhiteSpace() ? null : key);
+                    var certificateWithKey = X509Certificate2.CreateFromPemFile(cert, key.IsNullOrWhiteSpace() ? null : key);
+
+                    certificateCollection = new X509Certificate2Collection();
+                    certificateCollection.ImportFromPemFile(cert);
+
+                    var duplicate = certificateCollection.FirstOrDefault(c => c.SerialNumber == certificateWithKey.SerialNumber);
+
+                    if (duplicate != null)
+                    {
+                        certificateCollection.Remove(duplicate);
+                    }
+
+                    certificateCollection.Insert(0, certificateWithKey);
                 }
                 else if (type == X509ContentType.Pkcs12)
                 {
-                    certificate = X509CertificateLoader.LoadPkcs12FromFile(cert, password, X509KeyStorageFlags.DefaultKeySet);
+                    certificateCollection = X509CertificateLoader.LoadPkcs12CollectionFromFile(cert, password, X509KeyStorageFlags.DefaultKeySet);
                 }
                 else
                 {
@@ -315,7 +335,17 @@ namespace NzbDrone.Host
                 throw new SonarrStartupException(ex);
             }
 
-            return certificate;
+            var leafCert = certificateCollection.FirstOrDefault(c => c.HasPrivateKey);
+
+            if (leafCert == null)
+            {
+                throw new SonarrStartupException(
+                    $"The SSL certificate file {cert} does not contain a certificate with an associated private key");
+            }
+
+            certificateCollection.Remove(leafCert);
+
+            return SslStreamCertificateContext.Create(leafCert, certificateCollection, offline: true);
         }
 
         private static bool RunWithRestartCheck(IHost host)
