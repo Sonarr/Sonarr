@@ -8,11 +8,9 @@ import { kinds } from 'Helpers/Props';
 import { useImportLists } from 'Settings/ImportLists/ImportLists/useImportLists';
 import { useIndexers } from 'Settings/Indexers/useIndexers';
 import { useConnections } from 'Settings/Notifications/useConnections';
+import { useDelayProfiles } from 'Settings/Profiles/Delay/useDelayProfiles';
 import { useReleaseProfiles } from 'Settings/Profiles/Release/useReleaseProfiles';
-import {
-  fetchDelayProfiles,
-  fetchDownloadClients,
-} from 'Store/Actions/settingsActions';
+import { fetchDownloadClients } from 'Store/Actions/settingsActions';
 import useTagDetails from 'Tags/useTagDetails';
 import useTags, { useSortedTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
@@ -31,13 +29,13 @@ function Tags() {
     error: detailsError,
   } = useTagDetails();
 
+  useDelayProfiles();
   useReleaseProfiles();
   useConnections();
   useIndexers();
   useImportLists();
 
   useEffect(() => {
-    dispatch(fetchDelayProfiles());
     dispatch(fetchDownloadClients());
 
     queryClient.invalidateQueries({ queryKey: ['releaseprofile'] });
