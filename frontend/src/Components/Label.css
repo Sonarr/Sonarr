@@ -106,11 +106,13 @@
 
 .medium {
   padding: 2px 5px;
+  border-radius: 4px;
   font-size: 12px;
 }
 
 .large {
   padding: 3px 7px;
+  border-radius: 6px;
   font-weight: bold;
   font-size: $defaultFontSize;
 }
