@@ -15,6 +15,7 @@ import useSeries from 'Series/useSeries';
 import { useImportListsWithIds } from 'Settings/ImportLists/ImportLists/useImportLists';
 import { useIndexersWithIds } from 'Settings/Indexers/useIndexers';
 import { useConnectionsWithIds } from 'Settings/Notifications/useConnections';
+import { useDelayProfilesWithIds } from 'Settings/Profiles/Delay/useDelayProfiles';
 import { useReleaseProfilesWithIds } from 'Settings/Profiles/Release/useReleaseProfiles';
 import { useAutoTaggingsWithIds } from 'Settings/Tags/AutoTagging/useAutoTaggings';
 import translate from 'Utilities/String/translate';
@@ -89,12 +90,7 @@ function TagDetailsModalContent({
 }: TagDetailsModalContentProps) {
   const series = useMatchingSeries(seriesIds);
 
-  const delayProfiles = useSelector(
-    createMatchingItemSelector(
-      delayProfileIds,
-      (state: AppState) => state.settings.delayProfiles.items
-    )
-  );
+  const delayProfiles = useDelayProfilesWithIds(delayProfileIds);
 
   const importLists = useImportListsWithIds(importListIds);
 
