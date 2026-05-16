@@ -1,14 +1,17 @@
 import React, { HTMLProps, useCallback, useState } from 'react';
 import ReactSlider from 'react-slider';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import NumberInput from 'Components/Form/NumberInput';
 import Label from 'Components/Label';
 import Popover from 'Components/Tooltip/Popover';
 import { kinds, tooltipPositions } from 'Helpers/Props';
 import QualityDefinitionLimits from 'Settings/Quality/Definition/QualityDefinitionLimits';
 import { InputChanged } from 'typings/inputs';
+import { Failure } from 'typings/pending';
 import formatBytes from 'Utilities/Number/formatBytes';
 import roundNumber from 'Utilities/Number/roundNumber';
 import translate from 'Utilities/String/translate';
+import { emptyItemFailures, ItemFailures } from './qualityProfileItemFailures';
 import styles from './QualityProfileItemSize.css';
 
 const MIN = 0;
@@ -16,6 +19,7 @@ const MAX = 400;
 const STEP_SIZE = 0.1;
 const MIN_DISTANCE = 3;
 const SLIDER_MAX = roundNumber(Math.pow(MAX, 1 / 1.1));
+const SLIDER_PREFERRED_DEFAULT = SLIDER_MAX - MIN_DISTANCE;
 
 interface SizeProps {
   minSize: number | null;
@@ -32,6 +36,7 @@ export interface QualityProfileItemSizeProps {
   minSize: number | null;
   preferredSize: number | null;
   maxSize: number | null;
+  failures?: ItemFailures;
   onSizeChange: (props: SizeChanged) => void;
 }
 
@@ -44,9 +49,24 @@ function thumbRenderer(props: HTMLProps<HTMLDivElement>) {
 }
 
 function getSliderValue(value: number | null, defaultValue: number): number {
-  const sliderValue = value ? Math.pow(value, 1 / 1.1) : defaultValue;
+  const sliderValue =
+    value != null && value > 0 ? Math.pow(value, 1 / 1.1) : defaultValue;
 
   return roundNumber(sliderValue);
+}
+
+function renderFailures(failures: Failure[], isError: boolean) {
+  return failures.map((failure, index) => {
+    return (
+      <FormInputHelpText
+        key={`${isError ? 'error' : 'warning'}-${index}`}
+        text={failure.message}
+        isError={isError}
+        isWarning={!isError}
+        isCheckInput={false}
+      />
+    );
+  });
 }
 
 export default function QualityProfileItemSize({
@@ -54,11 +74,12 @@ export default function QualityProfileItemSize({
   minSize,
   maxSize,
   preferredSize,
+  failures = emptyItemFailures(),
   onSizeChange,
 }: QualityProfileItemSizeProps) {
   const [sizes, setSizes] = useState<SizeProps>({
     minSize: getSliderValue(minSize, MIN),
-    preferredSize: getSliderValue(preferredSize, SLIDER_MAX - MIN_DISTANCE),
+    preferredSize: getSliderValue(preferredSize, SLIDER_PREFERRED_DEFAULT),
     maxSize: getSliderValue(maxSize, SLIDER_MAX),
   });
 
@@ -78,11 +99,11 @@ export default function QualityProfileItemSize({
         qualityId: id,
         minSize: roundNumber(Math.pow(sliderMinSize, 1.1)),
         preferredSize:
-          sliderPreferredSize === MAX - MIN_DISTANCE
+          sliderPreferredSize === SLIDER_PREFERRED_DEFAULT
             ? null
             : roundNumber(Math.pow(sliderPreferredSize, 1.1)),
         maxSize:
-          sliderMaxSize === MAX
+          sliderMaxSize === SLIDER_MAX
             ? null
             : roundNumber(Math.pow(sliderMaxSize, 1.1)),
       });
@@ -147,25 +168,34 @@ export default function QualityProfileItemSize({
   const handleAfterSliderChange = useCallback(() => {
     setSizes({
       minSize: getSliderValue(minSize, MIN),
-      maxSize: getSliderValue(maxSize, MAX),
-      preferredSize: getSliderValue(preferredSize, MAX - MIN_DISTANCE),
+      maxSize: getSliderValue(maxSize, SLIDER_MAX),
+      preferredSize: getSliderValue(preferredSize, SLIDER_PREFERRED_DEFAULT),
     });
   }, [minSize, maxSize, preferredSize, setSizes]);
 
-  const minBytes = (sizes.minSize || 0) * 1024 * 1024;
+  const minBytes = (sizes.minSize ?? 0) * 1024 * 1024;
   const minSixty = `${formatBytes(minBytes * 60)}/${translate(
     'HourShorthand'
   )}`;
 
-  const preferredBytes = (sizes.preferredSize || 0) * 1024 * 1024;
+  const preferredBytes = (sizes.preferredSize ?? 0) * 1024 * 1024;
   const preferredSixty = preferredBytes
     ? `${formatBytes(preferredBytes * 60)}/${translate('HourShorthand')}`
     : translate('Unlimited');
 
-  const maxBytes = maxSize && maxSize * 1024 * 1024;
+  const maxBytes = maxSize == null ? null : maxSize * 1024 * 1024;
   const maxSixty = maxBytes
     ? `${formatBytes(maxBytes * 60)}/${translate('HourShorthand')}`
     : translate('Unlimited');
+
+  const allFailures = [
+    ...failures.errors.minSize,
+    ...failures.errors.preferredSize,
+    ...failures.errors.maxSize,
+    ...failures.warnings.minSize,
+    ...failures.warnings.preferredSize,
+    ...failures.warnings.maxSize,
+  ];
 
   return (
     <div className={styles.sizeLimit}>
@@ -225,7 +255,7 @@ export default function QualityProfileItemSize({
             title={translate('MaximumLimits')}
             body={
               <QualityDefinitionLimits
-                bytes={maxBytes}
+                bytes={maxBytes ?? 0}
                 message={translate('NoLimitForAnyRuntime')}
               />
             }
@@ -239,7 +269,7 @@ export default function QualityProfileItemSize({
           <NumberInput
             className={styles.sizeInput}
             name={`${id}.min`}
-            value={minSize || MIN}
+            value={minSize ?? MIN}
             min={MIN}
             max={preferredSize ? preferredSize - 5 : MAX - 5}
             step={0.1}
@@ -256,8 +286,8 @@ export default function QualityProfileItemSize({
         <div className={styles.megabytesPerMinute}>
           <NumberInput
             className={styles.sizeInput}
-            name={`${id}.min`}
-            value={preferredSize || MAX - 5}
+            name={`${id}.preferred`}
+            value={preferredSize ?? MAX - 5}
             min={MIN}
             max={maxSize ? maxSize - 5 : MAX - 5}
             step={0.1}
@@ -276,8 +306,8 @@ export default function QualityProfileItemSize({
           <NumberInput
             className={styles.sizeInput}
             name={`${id}.max`}
-            value={maxSize || MAX}
-            min={(preferredSize || 0) + STEP_SIZE}
+            value={maxSize ?? MAX}
+            min={(preferredSize ?? 0) + STEP_SIZE}
             max={MAX}
             step={0.1}
             isFloat={true}
@@ -291,6 +321,17 @@ export default function QualityProfileItemSize({
           </Label>
         </div>
       </div>
+
+      {allFailures.length > 0 ? (
+        <div className={styles.failures}>
+          {renderFailures(failures.errors.minSize, true)}
+          {renderFailures(failures.errors.preferredSize, true)}
+          {renderFailures(failures.errors.maxSize, true)}
+          {renderFailures(failures.warnings.minSize, false)}
+          {renderFailures(failures.warnings.preferredSize, false)}
+          {renderFailures(failures.warnings.maxSize, false)}
+        </div>
+      ) : null}
     </div>
   );
 }

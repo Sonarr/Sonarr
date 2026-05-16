@@ -7,6 +7,7 @@ import IconButton from 'Components/Link/IconButton';
 import { icons } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
+import { ItemFailures } from './qualityProfileItemFailures';
 import QualityProfileItemSize, { SizeChanged } from './QualityProfileItemSize';
 import styles from './QualityProfileItem.css';
 
@@ -21,6 +22,7 @@ interface QualityProfileItemProps {
   minSize: number | null;
   maxSize: number | null;
   preferredSize: number | null;
+  failures?: ItemFailures;
   isDragging: boolean;
   onCreateGroupPress?: (qualityId: number) => void;
   onItemAllowedChange: (qualityId: number, allowed: boolean) => void;
@@ -39,6 +41,7 @@ function QualityProfileItem({
   maxSize,
   isDragging,
   preferredSize,
+  failures,
   onCreateGroupPress,
   onItemAllowedChange,
   onSizeChange,
@@ -109,6 +112,7 @@ function QualityProfileItem({
             minSize={minSize}
             maxSize={maxSize}
             preferredSize={preferredSize}
+            failures={failures}
             onSizeChange={onSizeChange}
           />
         </div>

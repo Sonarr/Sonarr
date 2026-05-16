@@ -58,3 +58,8 @@
   margin-bottom: 2px;
   padding: 6px;
 }
+
+.failures {
+  flex: 0 0 400px;
+  margin-top: 5px;
+}

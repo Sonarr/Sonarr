@@ -22,6 +22,7 @@ import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import QualityProfileFormatItems from './QualityProfileFormatItems';
 import { DragMoveState } from './QualityProfileItemDragSource';
+import { parseItemFailures } from './qualityProfileItemFailures';
 import QualityProfileItems, {
   EditQualityProfileMode,
 } from './QualityProfileItems';
@@ -69,7 +70,14 @@ function EditQualityProfileModalContent({
     schemaError,
     updateValue,
     saveProvider,
+    validationErrors,
+    validationWarnings,
   } = useManageQualityProfile(id, cloneId);
+
+  const itemFailures = useMemo(
+    () => parseItemFailures(validationErrors, validationWarnings),
+    [validationErrors, validationWarnings]
+  );
 
   const { seriesCount, importListCount } = useQualityProfileInUse(id);
   const isInUse = seriesCount !== 0 || importListCount !== 0;
@@ -654,6 +662,7 @@ function EditQualityProfileModalContent({
                     qualityProfileItems={items.value}
                     errors={items.errors}
                     warnings={items.warnings}
+                    itemFailures={itemFailures}
                     dragQualityIndex={dragQualityIndex}
                     dropQualityIndex={dropQualityIndex}
                     dropPosition={dropPosition}

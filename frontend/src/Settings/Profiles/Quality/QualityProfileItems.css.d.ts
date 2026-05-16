@@ -3,7 +3,9 @@
 interface CssExports {
   'editButtonIcon': string;
   'editGroupsButton': string;
+  'editSizesBadge': string;
   'editSizesButton': string;
+  'modeActions': string;
   'qualities': string;
 }
 export const cssExports: CssExports;
