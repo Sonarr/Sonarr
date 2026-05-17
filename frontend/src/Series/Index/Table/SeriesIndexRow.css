@@ -145,7 +145,7 @@
 }
 
 .ratings {
-  composes: cell from '~Components/Table/Cells/VirtualTableRowCell.css';
+  composes: cell;
 
   flex: 0 0 80px;
 }
