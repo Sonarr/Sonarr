@@ -40,9 +40,7 @@ export const useTagList = () => {
 export const useSortedTagList = () => {
   const tagList = useTagList();
 
-  return useMemo(() => {
-    return tagList.sort(sortByProp('label'));
-  }, [tagList]);
+  return useMemo(() => [...tagList].sort(sortByProp('label')), [tagList]);
 };
 
 export const useAddTag = (onTagCreated?: (tag: Tag) => void) => {

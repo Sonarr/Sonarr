@@ -12,7 +12,7 @@ export interface FilterBuilderProp<T> {
   label: string | (() => string);
   type: FilterBuilderTypes;
   valueType?: string;
-  optionsSelector?: (items: T[]) => FilterBuilderPropOption[];
+  optionsSelector?: (items: ReadonlyArray<T>) => FilterBuilderPropOption[];
 }
 
 export interface PropertyFilter {

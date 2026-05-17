@@ -21,7 +21,10 @@ import translate from 'Utilities/String/translate';
 import TagDetailsDelayProfile from './TagDetailsDelayProfile';
 import styles from './TagDetailsModalContent.css';
 
-function findMatchingItems<T extends ModelBase>(ids: number[], items: T[]) {
+function findMatchingItems<T extends ModelBase>(
+  ids: number[],
+  items: ReadonlyArray<T>
+) {
   return items.filter((s) => {
     return ids.includes(s.id);
   });

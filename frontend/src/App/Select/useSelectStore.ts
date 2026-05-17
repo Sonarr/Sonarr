@@ -57,7 +57,7 @@ function toggleAll<T extends SelectStoreModel<Id>>(
 }
 
 export default function useSelectStore<T extends SelectStoreModel<Id>>(
-  items: SelectStoreModel<T['id']>[]
+  items: ReadonlyArray<SelectStoreModel<T['id']>>
 ) {
   const store = useRef(
     create<SelectStore<T>>(() => initialState(items as T[]))

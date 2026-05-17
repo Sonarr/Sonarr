@@ -16,7 +16,9 @@ const useValues = (
   const qualityProfiles = useQualityProfilesData();
 
   return useMemo(() => {
-    const values: EnhancedSelectInputValue<number | string>[] = qualityProfiles
+    const values: EnhancedSelectInputValue<number | string>[] = [
+      ...qualityProfiles,
+    ]
       .sort(sortByProp('name'))
       .map((qualityProfile) => {
         return {

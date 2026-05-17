@@ -21,7 +21,9 @@ interface AllDetails {
 
 type QueueDetailsFilter = AllDetails | EpisodeDetails | SeriesDetails;
 
-const QueueDetailsContext = createContext<Queue[] | undefined>(undefined);
+const QueueDetailsContext = createContext<ReadonlyArray<Queue> | undefined>(
+  undefined
+);
 
 export default function QueueDetailsProvider({
   children,

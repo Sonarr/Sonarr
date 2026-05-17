@@ -7,9 +7,9 @@ import React, {
 import { EpisodeFile } from './EpisodeFile';
 import useEpisodeFiles, { EpisodeFileFilter } from './useEpisodeFiles';
 
-export const EpisodeFileContext = createContext<EpisodeFile[] | undefined>(
-  undefined
-);
+export const EpisodeFileContext = createContext<
+  ReadonlyArray<EpisodeFile> | undefined
+>(undefined);
 
 export default function EpisodeFileProvider({
   children,

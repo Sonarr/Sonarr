@@ -46,7 +46,7 @@ interface DelayProfileProps {
   torrentDelay: number;
   order: number;
   tags: number[];
-  tagList: Tag[];
+  tagList: ReadonlyArray<Tag>;
   isDraggingDown: boolean;
   isDraggingUp: boolean;
   onDelayProfileDragEnd: (id: number, didDrop: boolean) => void;

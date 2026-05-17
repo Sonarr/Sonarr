@@ -65,7 +65,7 @@ export interface TagInputProps<T extends TagBase> {
   inputContainerClassName?: string;
   name: string;
   tags: T[];
-  tagList: T[];
+  tagList: ReadonlyArray<T>;
   allowNew?: boolean;
   kind?: Kind;
   placeholder?: string;

@@ -15,7 +15,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
-import { Tag, useTagList } from 'Tags/useTags';
+import { useTagList } from 'Tags/useTags';
 import DownloadClient from 'typings/DownloadClient';
 import translate from 'Utilities/String/translate';
 import styles from './TagsModalContent.css';
@@ -32,7 +32,7 @@ function TagsModalContent(props: TagsModalContentProps) {
   const allDownloadClients: DownloadClientAppState = useSelector(
     (state: AppState) => state.settings.downloadClients
   );
-  const tagList: Tag[] = useTagList();
+  const tagList = useTagList();
 
   const [tags, setTags] = useState<number[]>([]);
   const [applyTags, setApplyTags] = useState('add');
