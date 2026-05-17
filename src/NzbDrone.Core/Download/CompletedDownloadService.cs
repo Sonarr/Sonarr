@@ -170,6 +170,11 @@ namespace NzbDrone.Core.Download
 
                 if (_rejectedImportService.Process(trackedDownload, firstResult))
                 {
+                    if (trackedDownload.State != TrackedDownloadState.FailedPending)
+                    {
+                        SetStateToImportBlocked(trackedDownload);
+                    }
+
                     return;
                 }
 
