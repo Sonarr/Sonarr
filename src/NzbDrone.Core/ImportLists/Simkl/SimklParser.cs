@@ -14,10 +14,6 @@ namespace NzbDrone.Core.ImportLists.Simkl
         private ImportListResponse _importResponse;
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(SimklParser));
 
-        public SimklParser()
-        {
-        }
-
         public virtual IList<ImportListItemInfo> ParseResponse(ImportListResponse importResponse)
         {
             _importResponse = importResponse;
@@ -31,7 +27,7 @@ namespace NzbDrone.Core.ImportLists.Simkl
 
             var jsonResponse = Json.Deserialize<SimklResponse>(_importResponse.Content);
 
-            // no shows were return
+            // no shows were returned
             if (jsonResponse == null)
             {
                 return series;
@@ -41,16 +37,14 @@ namespace NzbDrone.Core.ImportLists.Simkl
             {
                 foreach (var show in jsonResponse.Anime)
                 {
-                    var tentativeTvdbId = int.TryParse(show.Show.Ids.Tvdb, out var tvdbId) ? tvdbId : 0;
-
-                    if (tentativeTvdbId > 0 && (show.AnimeType is SimklAnimeType.Tv or SimklAnimeType.Ona or SimklAnimeType.Ova or SimklAnimeType.Special))
+                    if (int.TryParse(show.Show.Ids.Tvdb, out var tvdbId) && tvdbId > 0 && show.AnimeType is SimklAnimeType.Tv or SimklAnimeType.Ona or SimklAnimeType.Ova or SimklAnimeType.Special)
                     {
-                        series.AddIfNotNull(new ImportListItemInfo()
+                        series.AddIfNotNull(new ImportListItemInfo
                         {
                             Title = show.Show.Title,
                             ImdbId = show.Show.Ids.Imdb,
                             TvdbId = tvdbId,
-                            MalId = int.TryParse(show.Show.Ids.Mal, out var malId) ? malId : 0
+                            MalId = int.TryParse(show.Show.Ids.Mal, out var malId) ? malId : 0,
                         });
                     }
                     else
@@ -64,11 +58,11 @@ namespace NzbDrone.Core.ImportLists.Simkl
             {
                 foreach (var show in jsonResponse.Shows)
                 {
-                    series.AddIfNotNull(new ImportListItemInfo()
+                    series.AddIfNotNull(new ImportListItemInfo
                     {
                         Title = show.Show.Title,
                         TvdbId = int.TryParse(show.Show.Ids.Tvdb, out var tvdbId) ? tvdbId : 0,
-                        ImdbId = show.Show.Ids.Imdb
+                        ImdbId = show.Show.Ids.Imdb,
                     });
                 }
             }

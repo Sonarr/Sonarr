@@ -23,7 +23,7 @@ namespace NzbDrone.Core.ImportLists.Simkl.User
 
         public override IImportListRequestGenerator GetRequestGenerator()
         {
-            return new SimklUserRequestGenerator()
+            return new SimklUserRequestGenerator
             {
                 Settings = Settings,
                 ClientId = ClientId
