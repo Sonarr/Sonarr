@@ -60,7 +60,6 @@ namespace NzbDrone.Test.Common
             else
             {
                 Start(Path.Combine(TestContext.CurrentContext.TestDirectory, "bin", consoleExe));
-                EnsureUiContent();
             }
 
             while (true)
@@ -190,17 +189,25 @@ namespace NzbDrone.Test.Common
             ApiKey = apiKey;
         }
 
-        private void EnsureUiContent()
+        public static void EnsureUiContent()
         {
-            // Write a dummy CSS file for testing static resources.
-            // Only needed for release because debug builds can just include the proper UI files.
+            // Writes a dummy CSS file for testing static resources. Only needed for release
+            // builds because debug builds include the proper UI files. Called once per test
+            // assembly via a SetUpFixture so parallel fixtures don't race on the shared file.
+
+            if (BuildInfo.IsDebug)
+            {
+                return;
+            }
+
             var contentDirectory = Path.Combine(TestContext.CurrentContext.TestDirectory, "bin", "UI", "Content");
+            var stylesPath = Path.Combine(contentDirectory, "styles.css");
 
             Directory.CreateDirectory(contentDirectory);
 
-            if (!File.Exists(Path.Combine(contentDirectory, "styles.css")))
+            if (!File.Exists(stylesPath))
             {
-                File.WriteAllText(Path.Combine(contentDirectory, "styles.css"), ".test { display: flex; }");
+                File.WriteAllText(stylesPath, ".test { display: flex; }");
             }
         }
     }
