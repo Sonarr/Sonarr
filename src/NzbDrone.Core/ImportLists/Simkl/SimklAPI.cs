@@ -87,6 +87,6 @@ namespace NzbDrone.Core.ImportLists.Simkl
         Special,
 
         [EnumMember(Value = "music video")]
-        Music
+        MusicVideo
     }
 }

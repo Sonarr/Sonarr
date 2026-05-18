@@ -54,11 +54,9 @@ namespace NzbDrone.Core.ImportLists.Simkl
             // Check to see if user has any activity since last sync, if not return empty to avoid work
             if (lastFetch.HasValue && lastActivity < lastFetch.Value.AddHours(-2))
             {
-                // mark failure to avoid deleting series due to emptyness
+                // mark failure to avoid deleting series due to emptiness
                 return new ImportListFetchResult(new List<ImportListItemInfo>(), true);
             }
-
-            var generator = GetRequestGenerator();
 
             return FetchItems(g => g.GetListItems(), true);
         }
@@ -111,16 +109,17 @@ namespace NzbDrone.Core.ImportLists.Simkl
 
                 if (response?.Resource != null)
                 {
-                    var showType = SimklUserShowType.Shows;
-
-                    if (Settings is SimklUserSettings userSettings)
+                    var showType = Settings switch
                     {
-                        showType = (SimklUserShowType)userSettings.ShowType;
-                    }
+                        SimklUserSettings userSettings => (SimklUserShowType)userSettings.ShowType,
+                        _ => SimklUserShowType.Shows
+                    };
 
-                    return showType == SimklUserShowType.Shows
-                        ? response.Resource.TvShows.All
-                        : response.Resource.Anime.All;
+                    return showType switch
+                    {
+                        SimklUserShowType.Anime => response.Resource.Anime.All,
+                        _ => response.Resource.TvShows.All
+                    };
                 }
             }
             catch (HttpException)
