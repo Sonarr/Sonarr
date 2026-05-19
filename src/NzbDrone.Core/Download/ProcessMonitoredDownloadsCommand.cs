@@ -7,5 +7,7 @@ namespace NzbDrone.Core.Download
         public override bool RequiresDiskAccess => true;
 
         public override bool IsLongRunning => true;
+
+        public override bool BypassQueueLimit => true;
     }
 }

@@ -17,6 +17,7 @@ sonarr:
       - ACCEPT_RELEASE_ANY_UPGRADABLE=true
       - IGNORE_MATCH_BY_ID_WARNING=true
       - FIX_ANIME_SEASON_SEARCH=true
+      - IMPROVE_QUEUE_RESPONSIVENESS=true
     volumes:
       - /path/to/sonarr/data:/config
       # Additional volume mounts for your media, etc
@@ -62,6 +63,10 @@ This generally happens on usenet indexers that include a tvdbId in releases that
 #### FIX_ANIME_SEASON_SEARCH
 
 Sonarr's default anime season search is **VERY** slow since it also searches for each episode individually. This setting allows you to bypass that and just search by season, which most indexers support. This significantly improves the search experience for anime.
+
+#### IMPROVE_QUEUE_RESPONSIVENESS
+
+Improves UI responsiveness for the current state of the activity queue, ensuring the activity queue reflects what's happening in real time, even when many search tasks are queued.
 
 ## Contributing
 
