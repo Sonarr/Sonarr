@@ -1507,6 +1507,8 @@
     "NotificationsPushcutSettingsTimeSensitiveHelpText": "Habilitar para marcas la notificación como \"Sensible al tiempo\"",
     "NotificationsPushoverSettingsDevices": "Dispositivos",
     "NotificationsPushoverSettingsDevicesHelpText": "Lista de nombres de dispositivo (deja en blanco para enviar a todos los dispositivos)",
+    "NotificationsPushoverSettingsEncryptionKey": "Clave de cifrado",
+    "NotificationsPushoverSettingsEncryptionKeyHelpText": "Clave hexadecimal de 64 caracteres (256-bit) opcional para habilitar el cifrado de extremo-a-extremo del título y mensaje",
     "NotificationsPushoverSettingsExpire": "Caduca",
     "NotificationsPushoverSettingsExpireHelpText": "Tiempo máximo para reintentar las alertas de emergencia, máximo 86400 segundos",
     "NotificationsPushoverSettingsRetry": "Reintentar",

@@ -1507,6 +1507,8 @@
     "NotificationsPushcutSettingsTimeSensitiveHelpText": "Habilitar para marcar a notificação como \"Urgente\"",
     "NotificationsPushoverSettingsDevices": "Dispositivos",
     "NotificationsPushoverSettingsDevicesHelpText": "Lista de nomes de dispositivos (deixe em branco para enviar para todos os dispositivos)",
+    "NotificationsPushoverSettingsEncryptionKey": "Chave de criptografia",
+    "NotificationsPushoverSettingsEncryptionKeyHelpText": "Chave hexadecimal opcional de 64 caracteres (256 bits) para habilitar a criptografia de ponto a ponto no título e na mensagem",
     "NotificationsPushoverSettingsExpire": "Expirar",
     "NotificationsPushoverSettingsExpireHelpText": "Tempo máximo para novas tentativas de alerta de Emergência: 86400 segundos",
     "NotificationsPushoverSettingsRetry": "Repetir",
