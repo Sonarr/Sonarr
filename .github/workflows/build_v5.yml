@@ -10,6 +10,7 @@ on:
   pull_request:
     branches:
       - v5-develop
+      - v5-redesign
     paths-ignore:
       - "src/NzbDrone.Core/Localization/Core/**"
       - "src/Sonarr.Api.*/openapi.json"
