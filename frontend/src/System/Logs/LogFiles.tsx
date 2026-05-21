@@ -41,7 +41,7 @@ type LogFileType = 'app' | 'update';
 
 interface LogFilesProps {
   isFetching: boolean;
-  items: LogFile[];
+  items: ReadonlyArray<LogFile>;
   isDeleteFilesExecuting: boolean;
   type: LogFileType;
   onRefreshPress: () => void;

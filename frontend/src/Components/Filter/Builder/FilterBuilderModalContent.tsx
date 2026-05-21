@@ -31,7 +31,7 @@ const NEW_FILTER: PropertyFilter = {
 interface FilterBuilderModalContentProps<T> {
   id: number | null;
   customFilterType: string;
-  sectionItems: T[];
+  sectionItems: ReadonlyArray<T>;
   filterBuilderProps: FilterBuilderProp<T>[];
   customFilters: CustomFilter[];
   dispatchSetFilter: (payload: { selectedFilterKey: string | number }) => void;

@@ -28,7 +28,7 @@ const getSortClause = <T, TSort = null>(
 };
 
 const filter = <T extends ModelBase, TFilter = null, TSort = null>(
-  data: T[],
+  data: ReadonlyArray<T>,
   options: ClientSideFilterAndSortOptions<T, TFilter, TSort>
 ) => {
   const { selectedFilterKey, filters, customFilters, filterPredicates } =
@@ -94,7 +94,7 @@ const filter = <T extends ModelBase, TFilter = null, TSort = null>(
 };
 
 const sort = <T extends ModelBase, TFilter = null, TSort = null>(
-  data: T[],
+  data: ReadonlyArray<T>,
   options: ClientSideFilterAndSortOptions<T, TFilter, TSort>
 ) => {
   const {
@@ -152,7 +152,7 @@ const clientSideFilterAndSort = <
   TFilter = null,
   TSort = null
 >(
-  data: T[],
+  data: ReadonlyArray<T>,
   options: ClientSideFilterAndSortOptions<T, TFilter, TSort>
 ) => {
   const filteredData = filter(data, options);

@@ -1,8 +1,8 @@
 import ModelBase from 'App/ModelBase';
 
 function hasDifferentItemsOrOrder<T extends ModelBase>(
-  prevItems: T[],
-  currentItems: T[],
+  prevItems: ReadonlyArray<T>,
+  currentItems: ReadonlyArray<T>,
   idProp: keyof T = 'id'
 ) {
   if (prevItems === currentItems) {

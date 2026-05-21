@@ -15,7 +15,7 @@ function QualityProfiles() {
   const { data, error, isFetching, isFetched } = useQualityProfiles();
 
   // Sort the data by name
-  const sortedItems = data ? data.sort(sortByProp('name')) : [];
+  const sortedItems = data ? [...data].sort(sortByProp('name')) : [];
 
   const [isQualityProfileModalOpen, setIsQualityProfileModalOpen] =
     useState(false);

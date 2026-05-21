@@ -59,7 +59,7 @@ export const useSortedImportLists = () => {
   const result = useImportLists();
 
   const sortedData = useMemo(
-    () => result.data.sort(sortByProp('name')),
+    () => [...result.data].sort(sortByProp('name')),
     [result.data]
   );
 

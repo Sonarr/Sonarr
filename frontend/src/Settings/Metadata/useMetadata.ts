@@ -45,7 +45,7 @@ export const useSortedMetadata = () => {
   const result = useMetadata();
 
   const sortedData = useMemo(
-    () => result.data.sort(sortByProp('name')),
+    () => [...result.data].sort(sortByProp('name')),
     [result.data]
   );
 

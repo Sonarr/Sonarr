@@ -10,7 +10,7 @@ export interface FilterModalProps<T> {
   customFilters: CustomFilter[];
   customFilterType: string;
   filterBuilderProps: FilterBuilderProp<T>[];
-  sectionItems: T[];
+  sectionItems: ReadonlyArray<T>;
   dispatchSetFilter: (payload: SetFilter) => void;
   onModalClose: () => void;
 }

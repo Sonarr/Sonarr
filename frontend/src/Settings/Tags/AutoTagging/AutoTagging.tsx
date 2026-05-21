@@ -20,7 +20,7 @@ interface AutoTaggingProps {
   name: string;
   specifications: AutoTaggingSpecification[];
   tags: number[];
-  tagList: Tag[];
+  tagList: ReadonlyArray<Tag>;
   onCloneAutoTaggingPress: (id: number) => void;
 }
 

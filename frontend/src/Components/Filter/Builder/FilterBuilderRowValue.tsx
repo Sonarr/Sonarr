@@ -99,9 +99,9 @@ export interface FilterBuilderRowValueProps<
 > {
   filterType: FilterType;
   filterValue: V[];
-  sectionItems: T[];
+  sectionItems: ReadonlyArray<T>;
   selectedFilterBuilderProp: FilterBuilderProp<T>;
-  tagList: FilterBuilderTag<V, TagName>[];
+  tagList: ReadonlyArray<FilterBuilderTag<V, TagName>>;
   onChange: InputOnChange<V[]>;
 }
 

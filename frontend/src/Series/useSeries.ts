@@ -410,7 +410,7 @@ export const FILTER_BUILDER: FilterBuilderProp<Series>[] = [
     name: 'network',
     label: () => translate('Network'),
     type: filterBuilderTypes.ARRAY,
-    optionsSelector: function (items: Series[]) {
+    optionsSelector: function (items: ReadonlyArray<Series>) {
       const tagList = items.reduce<FilterBuilderTag<string, string>[]>(
         (acc, series) => {
           if (series.network) {
@@ -488,7 +488,7 @@ export const FILTER_BUILDER: FilterBuilderProp<Series>[] = [
     name: 'genres',
     label: () => translate('Genres'),
     type: filterBuilderTypes.ARRAY,
-    optionsSelector: function (items: Series[]) {
+    optionsSelector: function (items: ReadonlyArray<Series>) {
       const tagList = items.reduce<FilterBuilderTag<string, string>[]>(
         (acc, series) => {
           series.genres.forEach((genre) => {
@@ -510,7 +510,7 @@ export const FILTER_BUILDER: FilterBuilderProp<Series>[] = [
     name: 'originalLanguage',
     label: () => translate('OriginalLanguage'),
     type: filterBuilderTypes.EXACT,
-    optionsSelector: function (items: Series[]) {
+    optionsSelector: function (items: ReadonlyArray<Series>) {
       const languageList = items.reduce<FilterBuilderTag<string, string>[]>(
         (acc, series) => {
           if (series.originalLanguage) {
