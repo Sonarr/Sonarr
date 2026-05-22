@@ -86,14 +86,14 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
           columnLabel: () => translate('Status'),
           isSortable: true,
           isVisible: true,
-          isModifiable: false,
+          isModifiable: 'disabled',
         },
         {
           name: 'sortTitle',
           label: () => translate('SeriesTitle'),
           isSortable: true,
           isVisible: true,
-          isModifiable: false,
+          isModifiable: 'disabled',
         },
         {
           name: 'seriesType',
@@ -256,7 +256,7 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
           label: '',
           columnLabel: () => translate('Actions'),
           isVisible: true,
-          isModifiable: false,
+          isModifiable: 'disabled',
         },
       ],
     };
