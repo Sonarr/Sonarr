@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
@@ -9,63 +8,55 @@ import FormLabel from 'Components/Form/FormLabel';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
-import { clearPendingChanges } from 'Store/Actions/baseActions';
-import {
-  fetchDownloadClientOptions,
-  saveDownloadClientOptions,
-  setDownloadClientOptionsValue,
-} from 'Store/Actions/settingsActions';
-import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
 import { InputChanged } from 'typings/inputs';
+import {
+  OnChildStateChange,
+  SetChildSave,
+} from 'typings/Settings/SettingsState';
 import translate from 'Utilities/String/translate';
-
-const SECTION = 'downloadClientOptions';
+import { useManageDownloadClientSettings } from './useDownloadClientSettings';
 
 interface DownloadClientOptionsProps {
-  setChildSave(saveCallback: () => void): void;
-  onChildStateChange(payload: unknown): void;
+  setChildSave: SetChildSave;
+  onChildStateChange: OnChildStateChange;
 }
 
 function DownloadClientOptions({
   setChildSave,
   onChildStateChange,
 }: DownloadClientOptionsProps) {
-  const dispatch = useDispatch();
-  const showAdvancedSettings = useShowAdvancedSettings();
-
   const {
     isFetching,
-    isPopulated,
+    isFetched,
     isSaving,
     error,
-    hasPendingChanges,
-    hasSettings,
     settings,
-  } = useSelector(createSettingsSectionSelector(SECTION));
+    hasSettings,
+    hasPendingChanges,
+    saveSettings,
+    updateSetting,
+  } = useManageDownloadClientSettings();
+
+  const showAdvancedSettings = useShowAdvancedSettings();
 
   const handleInputChange = useCallback(
-    (change: InputChanged) => {
-      // @ts-expect-error - actions aren't typed
-      dispatch(setDownloadClientOptionsValue(change));
+    ({ name, value }: InputChanged) => {
+      // @ts-expect-error - InputChanged name/value are not typed as keyof DownloadClientSettingsModel
+      updateSetting(name, value);
     },
-    [dispatch]
+    [updateSetting]
   );
 
   useEffect(() => {
-    dispatch(fetchDownloadClientOptions());
-    setChildSave(() => dispatch(saveDownloadClientOptions()));
-
-    return () => {
-      dispatch(clearPendingChanges({ section: `settings.${SECTION}` }));
-    };
-  }, [dispatch, setChildSave]);
+    setChildSave(saveSettings);
+  }, [saveSettings, setChildSave]);
 
   useEffect(() => {
     onChildStateChange({
       isSaving,
       hasPendingChanges,
     });
-  }, [onChildStateChange, isSaving, hasPendingChanges]);
+  }, [hasPendingChanges, isSaving, onChildStateChange]);
 
   return (
     <div>
@@ -77,68 +68,64 @@ function DownloadClientOptions({
         </Alert>
       ) : null}
 
-      {hasSettings && isPopulated && !error && showAdvancedSettings ? (
-        <div>
-          <FieldSet legend={translate('CompletedDownloadHandling')}>
-            <Form>
+      {hasSettings && isFetched && !error && showAdvancedSettings ? (
+        <FieldSet legend={translate('CompletedDownloadHandling')}>
+          <Form>
+            <FormGroup
+              advancedSettings={showAdvancedSettings}
+              isAdvanced={true}
+              size={sizes.MEDIUM}
+            >
+              <FormLabel>{translate('Enable')}</FormLabel>
+
+              <FormInputGroup
+                type={inputTypes.CHECK}
+                name="enableCompletedDownloadHandling"
+                helpText={translate('EnableCompletedDownloadHandlingHelpText')}
+                onChange={handleInputChange}
+                {...settings.enableCompletedDownloadHandling}
+              />
+            </FormGroup>
+
+            <FormGroup
+              advancedSettings={showAdvancedSettings}
+              isAdvanced={true}
+              size={sizes.MEDIUM}
+            >
+              <FormLabel>{translate('AutoRedownloadFailed')}</FormLabel>
+
+              <FormInputGroup
+                type={inputTypes.CHECK}
+                name="autoRedownloadFailed"
+                helpText={translate('AutoRedownloadFailedHelpText')}
+                onChange={handleInputChange}
+                {...settings.autoRedownloadFailed}
+              />
+            </FormGroup>
+
+            {settings.autoRedownloadFailed.value ? (
               <FormGroup
                 advancedSettings={showAdvancedSettings}
                 isAdvanced={true}
                 size={sizes.MEDIUM}
               >
-                <FormLabel>{translate('Enable')}</FormLabel>
+                <FormLabel>
+                  {translate('AutoRedownloadFailedFromInteractiveSearch')}
+                </FormLabel>
 
                 <FormInputGroup
                   type={inputTypes.CHECK}
-                  name="enableCompletedDownloadHandling"
+                  name="autoRedownloadFailedFromInteractiveSearch"
                   helpText={translate(
-                    'EnableCompletedDownloadHandlingHelpText'
+                    'AutoRedownloadFailedFromInteractiveSearchHelpText'
                   )}
                   onChange={handleInputChange}
-                  {...settings.enableCompletedDownloadHandling}
+                  {...settings.autoRedownloadFailedFromInteractiveSearch}
                 />
               </FormGroup>
-
-              <FormGroup
-                advancedSettings={showAdvancedSettings}
-                isAdvanced={true}
-                size={sizes.MEDIUM}
-              >
-                <FormLabel>{translate('AutoRedownloadFailed')}</FormLabel>
-
-                <FormInputGroup
-                  type={inputTypes.CHECK}
-                  name="autoRedownloadFailed"
-                  helpText={translate('AutoRedownloadFailedHelpText')}
-                  onChange={handleInputChange}
-                  {...settings.autoRedownloadFailed}
-                />
-              </FormGroup>
-
-              {settings.autoRedownloadFailed.value ? (
-                <FormGroup
-                  advancedSettings={showAdvancedSettings}
-                  isAdvanced={true}
-                  size={sizes.MEDIUM}
-                >
-                  <FormLabel>
-                    {translate('AutoRedownloadFailedFromInteractiveSearch')}
-                  </FormLabel>
-
-                  <FormInputGroup
-                    type={inputTypes.CHECK}
-                    name="autoRedownloadFailedFromInteractiveSearch"
-                    helpText={translate(
-                      'AutoRedownloadFailedFromInteractiveSearchHelpText'
-                    )}
-                    onChange={handleInputChange}
-                    {...settings.autoRedownloadFailedFromInteractiveSearch}
-                  />
-                </FormGroup>
-              ) : null}
-            </Form>
-          </FieldSet>
-        </div>
+            ) : null}
+          </Form>
+        </FieldSet>
       ) : null}
     </div>
   );
