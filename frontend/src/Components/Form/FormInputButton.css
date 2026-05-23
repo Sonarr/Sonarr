@@ -1,12 +1,27 @@
 .button {
   composes: button from '~Components/Link/Button.css';
 
-  border-left: none;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  min-width: 38px;
+  height: 38px;
+  border: none;
+  border-left: 1px solid var(--inputBorderColor);
+  border-radius: 0;
+  background-color: var(--paperWarm);
+  color: var(--inkSoft);
+  transition:
+    background-color 160ms cubic-bezier(0.25, 1, 0.5, 1),
+    color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    background-color: var(--paperCard);
+    color: var(--accent);
+  }
 }
 
 .middleButton {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  /* No-op — container handles outer radius via overflow. */
 }

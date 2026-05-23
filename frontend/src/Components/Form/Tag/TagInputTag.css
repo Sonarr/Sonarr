@@ -18,7 +18,7 @@
   display: inline-block;
   margin-left: 4px;
   padding-left: 2px;
-  border-left: 1px solid #eee;
+  border-left: 1px solid var(--hairline);
 }
 
 .editButton {

@@ -2,11 +2,11 @@
   composes: link from '~Components/Link/Link.css';
 
   padding-top: 4px;
-  width: $toolbarButtonWidth;
+  width: var(--toolbarButtonWidth);
   text-align: center;
 
   &:hover {
-    color: var(--toobarButtonHoverColor);
+    color: var(--toolbarButtonHoverColor);
   }
 
   &.isDisabled {

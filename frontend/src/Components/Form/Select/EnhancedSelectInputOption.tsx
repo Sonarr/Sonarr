@@ -74,7 +74,7 @@ function EnhancedSelectInputOption({
 
       {isMobile && (
         <div className={styles.iconContainer}>
-          <Icon name={isSelected ? icons.CHECK_CIRCLE : icons.CIRCLE_OUTLINE} />
+          <Icon name={isSelected ? icons.CHECK_CIRCLE : icons.CIRCLE} />
         </div>
       )}
     </Link>

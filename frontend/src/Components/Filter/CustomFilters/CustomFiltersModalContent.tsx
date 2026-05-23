@@ -29,17 +29,21 @@ function CustomFiltersModalContent({
       <ModalHeader>{translate('CustomFilters')}</ModalHeader>
 
       <ModalBody>
-        {customFilters.map((customFilter) => {
-          return (
-            <CustomFilter
-              key={customFilter.id}
-              id={customFilter.id}
-              label={customFilter.label}
-              dispatchSetFilter={dispatchSetFilter}
-              onEditPress={onEditCustomFilter}
-            />
-          );
-        })}
+        {customFilters.length > 0 ? (
+          <div className={styles.bordered}>
+            {customFilters.map((customFilter) => {
+              return (
+                <CustomFilter
+                  key={customFilter.id}
+                  id={customFilter.id}
+                  label={customFilter.label}
+                  dispatchSetFilter={dispatchSetFilter}
+                  onEditPress={onEditCustomFilter}
+                />
+              );
+            })}
+          </div>
+        ) : null}
 
         <div className={styles.addButtonContainer}>
           <Button onPress={onAddCustomFilter}>

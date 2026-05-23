@@ -1,0 +1,56 @@
+.row {
+  display: grid;
+  align-items: start;
+  padding: 24px 0;
+  column-gap: 32px;
+}
+
+.row + .row {
+  border-top: 1px solid var(--borderColor);
+}
+
+.row:first-child {
+  padding-top: 0;
+}
+
+.row:last-child {
+  padding-bottom: 0;
+}
+
+/* Right layout: 2-column grid; last child (the FormInput) occupies column 2
+   and spans all rows, label/help text flow into column 1. */
+.right {
+  grid-template-columns: minmax(0, 1fr) clamp(280px, 35%, 360px);
+}
+
+.right > :last-child {
+  grid-column: 2;
+  grid-row: 1 / -1;
+
+  align-self: start;
+  min-width: 0;
+}
+
+/* Stacked: single column, input flows below the text stack. */
+.stacked {
+  grid-template-columns: 1fr;
+}
+
+/* Sizes — no per-size variation currently, declared for type compatibility. */
+.extraSmall,
+.small,
+.medium,
+.large {
+  /* empty */
+}
+
+@media only screen and (max-width: 992px) {
+  .right {
+    grid-template-columns: 1fr;
+  }
+
+  .right > :last-child {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
