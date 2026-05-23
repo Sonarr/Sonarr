@@ -1,16 +1,16 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
+import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
-import { kinds } from 'Helpers/Props';
-import { deleteDownloadClient } from 'Store/Actions/settingsActions';
+import { icons, kinds } from 'Helpers/Props';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import EditDownloadClientModal from './EditDownloadClientModal';
+import { useDeleteDownloadClient } from './useDownloadClients';
 import styles from './DownloadClient.css';
 
 interface DownloadClientProps {
@@ -20,6 +20,7 @@ interface DownloadClientProps {
   enable: boolean;
   priority: number;
   tags: number[];
+  onCloneDownloadClientPress: (id: number) => void;
 }
 
 function DownloadClient({
@@ -29,13 +30,13 @@ function DownloadClient({
   enable,
   priority,
   tags,
+  onCloneDownloadClientPress,
 }: DownloadClientProps) {
-  const dispatch = useDispatch();
   const tagList = useTagList();
+  const { deleteDownloadClient } = useDeleteDownloadClient(id);
 
   const [isEditDownloadClientModalOpen, setIsEditDownloadClientModalOpen] =
     useState(false);
-
   const [isDeleteDownloadClientModalOpen, setIsDeleteDownloadClientModalOpen] =
     useState(false);
 
@@ -57,8 +58,12 @@ function DownloadClient({
   }, []);
 
   const handleConfirmDeleteDownloadClient = useCallback(() => {
-    dispatch(deleteDownloadClient({ id }));
-  }, [id, dispatch]);
+    deleteDownloadClient();
+  }, [deleteDownloadClient]);
+
+  const handleCloneDownloadClientPress = useCallback(() => {
+    onCloneDownloadClientPress(id);
+  }, [id, onCloneDownloadClientPress]);
 
   return (
     <Card
@@ -66,7 +71,17 @@ function DownloadClient({
       overlayContent={true}
       onPress={handleEditDownloadClientPress}
     >
-      <div className={styles.name}>{name}</div>
+      <div className={styles.nameContainer}>
+        <div className={styles.name}>{name}</div>
+
+        <IconButton
+          className={styles.cloneButton}
+          title={translate('CloneDownloadClient')}
+          aria-label={translate('CloneDownloadClient')}
+          name={icons.CLONE}
+          onPress={handleCloneDownloadClientPress}
+        />
+      </div>
 
       <div className={styles.enabled}>
         <ProtocolLabel protocol={protocol} />

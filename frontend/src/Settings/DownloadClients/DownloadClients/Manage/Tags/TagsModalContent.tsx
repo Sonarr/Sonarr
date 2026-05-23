@@ -1,8 +1,5 @@
 import { uniq } from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
-import { DownloadClientAppState } from 'App/State/SettingsAppState';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -15,8 +12,8 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
+import { useDownloadClientsData } from 'Settings/DownloadClients/DownloadClients/useDownloadClients';
 import { useTagList } from 'Tags/useTags';
-import DownloadClient from 'typings/DownloadClient';
 import translate from 'Utilities/String/translate';
 import styles from './TagsModalContent.css';
 
@@ -26,12 +23,31 @@ interface TagsModalContentProps {
   onModalClose: () => void;
 }
 
+const applyTagsOptions: EnhancedSelectInputValue<string>[] = [
+  {
+    key: 'add',
+    get value() {
+      return translate('Add');
+    },
+  },
+  {
+    key: 'remove',
+    get value() {
+      return translate('Remove');
+    },
+  },
+  {
+    key: 'replace',
+    get value() {
+      return translate('Replace');
+    },
+  },
+];
+
 function TagsModalContent(props: TagsModalContentProps) {
   const { ids, onModalClose, onApplyTagsPress } = props;
 
-  const allDownloadClients: DownloadClientAppState = useSelector(
-    (state: AppState) => state.settings.downloadClients
-  );
+  const allDownloadClients = useDownloadClientsData();
   const tagList = useTagList();
 
   const [tags, setTags] = useState<number[]>([]);
@@ -39,9 +55,7 @@ function TagsModalContent(props: TagsModalContentProps) {
 
   const downloadClientsTags = useMemo(() => {
     const tags = ids.reduce((acc: number[], id) => {
-      const s = allDownloadClients.items.find(
-        (s: DownloadClient) => s.id === id
-      );
+      const s = allDownloadClients.find((s) => s.id === id);
 
       if (s) {
         acc.push(...s.tags);
@@ -53,44 +67,17 @@ function TagsModalContent(props: TagsModalContentProps) {
     return uniq(tags);
   }, [ids, allDownloadClients]);
 
-  const onTagsChange = useCallback(
-    ({ value }: { value: number[] }) => {
-      setTags(value);
-    },
-    [setTags]
-  );
+  const onTagsChange = useCallback(({ value }: { value: number[] }) => {
+    setTags(value);
+  }, []);
 
-  const onApplyTagsChange = useCallback(
-    ({ value }: { value: string }) => {
-      setApplyTags(value);
-    },
-    [setApplyTags]
-  );
+  const onApplyTagsChange = useCallback(({ value }: { value: string }) => {
+    setApplyTags(value);
+  }, []);
 
   const onApplyPress = useCallback(() => {
     onApplyTagsPress(tags, applyTags);
   }, [tags, applyTags, onApplyTagsPress]);
-
-  const applyTagsOptions: EnhancedSelectInputValue<string>[] = [
-    {
-      key: 'add',
-      get value() {
-        return translate('Add');
-      },
-    },
-    {
-      key: 'remove',
-      get value() {
-        return translate('Remove');
-      },
-    },
-    {
-      key: 'replace',
-      get value() {
-        return translate('Replace');
-      },
-    },
-  ];
 
   return (
     <ModalContent onModalClose={onModalClose}>

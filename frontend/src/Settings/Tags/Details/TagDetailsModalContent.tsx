@@ -1,8 +1,5 @@
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
 import ModelBase from 'App/ModelBase';
-import AppState from 'App/State/AppState';
 import FieldSet from 'Components/FieldSet';
 import Label from 'Components/Label';
 import Button from 'Components/Link/Button';
@@ -12,6 +9,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
 import useSeries from 'Series/useSeries';
+import { useDownloadClientsWithIds } from 'Settings/DownloadClients/DownloadClients/useDownloadClients';
 import { useImportListsWithIds } from 'Settings/ImportLists/ImportLists/useImportLists';
 import { useIndexersWithIds } from 'Settings/Indexers/useIndexers';
 import { useConnectionsWithIds } from 'Settings/Notifications/useConnections';
@@ -52,13 +50,6 @@ function useMatchingSeries(seriesIds: number[]) {
   }, [seriesIds, allSeries]);
 }
 
-function createMatchingItemSelector<T extends ModelBase>(
-  ids: number[],
-  selector: (state: AppState) => T[]
-) {
-  return createSelector(selector, (items) => findMatchingItems<T>(ids, items));
-}
-
 export interface TagDetailsModalContentProps {
   label: string;
   isTagUsed: boolean;
@@ -97,13 +88,7 @@ function TagDetailsModalContent({
   const releaseProfiles = useReleaseProfilesWithIds(releaseProfileIds);
   const notifications = useConnectionsWithIds(notificationIds);
   const indexers = useIndexersWithIds(indexerIds);
-
-  const downloadClients = useSelector(
-    createMatchingItemSelector(
-      downloadClientIds,
-      (state: AppState) => state.settings.downloadClients.items
-    )
-  );
+  const downloadClients = useDownloadClientsWithIds(downloadClientIds);
 
   const autoTags = useAutoTaggingsWithIds(autoTagIds);
 

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
 import Button from 'Components/Link/Button';
@@ -23,8 +22,7 @@ import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import Series from 'Series/Series';
 import { useSingleSeries } from 'Series/useSeries';
-import { fetchDownloadClients } from 'Store/Actions/settingsActions';
-import createEnabledDownloadClientsSelector from 'Store/Selectors/createEnabledDownloadClientsSelector';
+import { useEnabledDownloadClients } from 'Settings/DownloadClients/DownloadClients/useDownloadClients';
 import translate from 'Utilities/String/translate';
 import SelectDownloadClientModal from './DownloadClient/SelectDownloadClientModal';
 import OverrideMatchData from './OverrideMatchData';
@@ -80,11 +78,8 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
   );
   const previousIsGrabbing = usePrevious(isGrabbing);
 
-  const dispatch = useDispatch();
   const series: Series | undefined = useSingleSeries(seriesId);
-  const { items: downloadClients } = useSelector(
-    createEnabledDownloadClientsSelector(protocol)
-  );
+  const { data: downloadClients } = useEnabledDownloadClients(protocol);
 
   const episodeInfo = useMemo(() => {
     return episodes.map((episode) => {
@@ -225,14 +220,6 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
       onModalClose();
     }
   }, [isGrabbing, previousIsGrabbing, onModalClose]);
-
-  useEffect(
-    () => {
-      dispatch(fetchDownloadClients());
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
 
   return (
     <ModalContent onModalClose={onModalClose}>

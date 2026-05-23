@@ -1,6 +1,4 @@
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { DownloadClientAppState } from 'App/State/SettingsAppState';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
@@ -10,7 +8,6 @@ import FormLabel from 'Components/Form/FormLabel';
 import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
-import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
@@ -19,52 +16,46 @@ import usePrevious from 'Helpers/Hooks/usePrevious';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import AdvancedSettingsButton from 'Settings/AdvancedSettingsButton';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
-import {
-  saveDownloadClient,
-  setDownloadClientFieldValue,
-  setDownloadClientValue,
-  testDownloadClient,
-} from 'Store/Actions/settingsActions';
-import { createProviderSettingsSelectorHook } from 'Store/Selectors/createProviderSettingsSelector';
-import DownloadClient from 'typings/DownloadClient';
-import { InputChanged } from 'typings/inputs';
+import { SelectedSchema } from 'Settings/useProviderSchema';
+import { EnhancedSelectInputChanged, InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
+import { useManageDownloadClient } from './useDownloadClients';
 import styles from './EditDownloadClientModalContent.css';
 
 export interface EditDownloadClientModalContentProps {
   id?: number;
+  cloneId?: number;
+  selectedSchema?: SelectedSchema;
   onModalClose: () => void;
   onDeleteDownloadClientPress?: () => void;
 }
 
 function EditDownloadClientModalContent({
   id,
+  cloneId,
+  selectedSchema,
   onModalClose,
   onDeleteDownloadClientPress,
 }: EditDownloadClientModalContentProps) {
-  const dispatch = useDispatch();
   const showAdvancedSettings = useShowAdvancedSettings();
 
   const {
-    isFetching,
-    error,
-    isSaving,
-    isTesting = false,
-    saveError,
     item,
+    updateFieldValue,
+    updateValue,
+    saveProvider,
+    isSaving,
+    saveError,
+    testProvider,
+    isTesting,
     validationErrors,
     validationWarnings,
-  } = useSelector(
-    createProviderSettingsSelectorHook<DownloadClient, DownloadClientAppState>(
-      'downloadClients',
-      id
-    )
-  );
+  } = useManageDownloadClient(id, cloneId, selectedSchema);
 
   const wasSaving = usePrevious(isSaving);
 
   const {
-    implementationName,
+    implementationName = '',
     name,
     enable,
     priority,
@@ -77,30 +68,33 @@ function EditDownloadClientModalContent({
 
   const handleInputChange = useCallback(
     (change: InputChanged) => {
-      // @ts-expect-error - actions are not typed
-      dispatch(setDownloadClientValue(change));
+      // @ts-expect-error - InputChanged is not typed correctly
+      updateValue(change.name, change.value);
     },
-    [dispatch]
+    [updateValue]
   );
 
   const handleFieldChange = useCallback(
-    (change: InputChanged) => {
-      // @ts-expect-error - actions are not typed
-      dispatch(setDownloadClientFieldValue(change));
+    ({
+      name,
+      value,
+      additionalProperties,
+    }: EnhancedSelectInputChanged<unknown>) => {
+      updateFieldValue({ [name]: value, ...additionalProperties });
     },
-    [dispatch]
+    [updateFieldValue]
   );
 
-  const handleTestPress = useCallback(() => {
-    dispatch(testDownloadClient({ id }));
-  }, [id, dispatch]);
-
   const handleSavePress = useCallback(() => {
-    dispatch(saveDownloadClient({ id }));
-  }, [id, dispatch]);
+    saveProvider();
+  }, [saveProvider]);
+
+  const handleTestPress = useCallback(() => {
+    testProvider();
+  }, [testProvider]);
 
   useEffect(() => {
-    if (wasSaving && !isSaving && !saveError) {
+    if (!isSaving && wasSaving && !saveError) {
       onModalClose();
     }
   }, [isSaving, wasSaving, saveError, onModalClose]);
@@ -118,119 +112,106 @@ function EditDownloadClientModalContent({
       </ModalHeader>
 
       <ModalBody>
-        {isFetching ? <LoadingIndicator /> : null}
+        <Form
+          validationErrors={validationErrors}
+          validationWarnings={validationWarnings}
+        >
+          {!!message && (
+            <Alert className={styles.message} kind={message.value.type}>
+              {message.value.message}
+            </Alert>
+          )}
 
-        {!isFetching && !!error ? (
-          <Alert kind={kinds.DANGER}>
-            {translate('AddDownloadClientError')}
-          </Alert>
-        ) : null}
+          <FormGroup>
+            <FormLabel>{translate('Name')}</FormLabel>
 
-        {!isFetching && !error ? (
-          <Form
-            validationErrors={validationErrors}
-            validationWarnings={validationWarnings}
-          >
-            {!!message && (
-              <Alert className={styles.message} kind={message.value.type}>
-                {message.value.message}
-              </Alert>
-            )}
+            <FormInputGroup
+              type={inputTypes.TEXT}
+              name="name"
+              {...name}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
 
-            <FormGroup>
-              <FormLabel>{translate('Name')}</FormLabel>
+          <FormGroup>
+            <FormLabel>{translate('Enable')}</FormLabel>
 
-              <FormInputGroup
-                type={inputTypes.TEXT}
-                name="name"
-                {...name}
-                onChange={handleInputChange}
+            <FormInputGroup
+              type={inputTypes.CHECK}
+              name="enable"
+              {...enable}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
+
+          {fields?.map((field) => {
+            return (
+              <ProviderFieldFormGroup
+                key={field.name}
+                advancedSettings={showAdvancedSettings}
+                provider="downloadClient"
+                providerData={item}
+                {...field}
+                onChange={handleFieldChange}
               />
-            </FormGroup>
+            );
+          })}
 
+          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+            <FormLabel>{translate('ClientPriority')}</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.NUMBER}
+              name="priority"
+              helpText={translate('DownloadClientPriorityHelpText')}
+              min={1}
+              max={50}
+              {...priority}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel>{translate('Tags')}</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.TAG}
+              name="tags"
+              helpText={translate('DownloadClientSeriesTagHelpText')}
+              {...tags}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
+
+          <FieldSet
+            size={sizes.SMALL}
+            legend={translate('CompletedDownloadHandling')}
+          >
             <FormGroup>
-              <FormLabel>{translate('Enable')}</FormLabel>
+              <FormLabel>{translate('RemoveCompleted')}</FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}
-                name="enable"
-                {...enable}
-                onChange={handleInputChange}
-              />
-            </FormGroup>
-
-            {fields.map((field) => {
-              return (
-                <ProviderFieldFormGroup
-                  key={field.name}
-                  advancedSettings={showAdvancedSettings}
-                  provider="downloadClient"
-                  providerData={item}
-                  {...field}
-                  onChange={handleFieldChange}
-                />
-              );
-            })}
-
-            <FormGroup
-              advancedSettings={showAdvancedSettings}
-              isAdvanced={true}
-            >
-              <FormLabel>{translate('ClientPriority')}</FormLabel>
-
-              <FormInputGroup
-                type={inputTypes.NUMBER}
-                name="priority"
-                helpText={translate('DownloadClientPriorityHelpText')}
-                min={1}
-                max={50}
-                {...priority}
+                name="removeCompletedDownloads"
+                helpText={translate('RemoveCompletedDownloadsHelpText')}
+                {...removeCompletedDownloads}
                 onChange={handleInputChange}
               />
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>{translate('Tags')}</FormLabel>
+              <FormLabel>{translate('RemoveFailed')}</FormLabel>
 
               <FormInputGroup
-                type={inputTypes.TAG}
-                name="tags"
-                helpText={translate('DownloadClientSeriesTagHelpText')}
-                {...tags}
+                type={inputTypes.CHECK}
+                name="removeFailedDownloads"
+                helpText={translate('RemoveFailedDownloadsHelpText')}
+                {...removeFailedDownloads}
                 onChange={handleInputChange}
               />
             </FormGroup>
-
-            <FieldSet
-              size={sizes.SMALL}
-              legend={translate('CompletedDownloadHandling')}
-            >
-              <FormGroup>
-                <FormLabel>{translate('RemoveCompleted')}</FormLabel>
-
-                <FormInputGroup
-                  type={inputTypes.CHECK}
-                  name="removeCompletedDownloads"
-                  helpText={translate('RemoveCompletedDownloadsHelpText')}
-                  {...removeCompletedDownloads}
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-
-              <FormGroup>
-                <FormLabel>{translate('RemoveFailed')}</FormLabel>
-
-                <FormInputGroup
-                  type={inputTypes.CHECK}
-                  name="removeFailedDownloads"
-                  helpText={translate('RemoveFailedDownloadsHelpText')}
-                  {...removeFailedDownloads}
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-            </FieldSet>
-          </Form>
-        ) : null}
+          </FieldSet>
+        </Form>
       </ModalBody>
 
       <ModalFooter>

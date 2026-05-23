@@ -1,13 +1,10 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import { icons } from 'Helpers/Props';
 import SettingsToolbar from 'Settings/SettingsToolbar';
-import { testAllDownloadClients } from 'Store/Actions/settingsActions';
 import {
   SaveCallback,
   SettingsStateChange,
@@ -15,14 +12,13 @@ import {
 import translate from 'Utilities/String/translate';
 import DownloadClients from './DownloadClients/DownloadClients';
 import ManageDownloadClientsModal from './DownloadClients/Manage/ManageDownloadClientsModal';
+import { useTestAllDownloadClients } from './DownloadClients/useDownloadClients';
 import DownloadClientOptions from './Options/DownloadClientOptions';
 import RemotePathMappings from './RemotePathMappings/RemotePathMappings';
 
 function DownloadClientSettings() {
-  const dispatch = useDispatch();
-  const isTestingAll = useSelector(
-    (state: AppState) => state.settings.downloadClients.isTestingAll
-  );
+  const { testAllDownloadClients, isTestingAllDownloadClients } =
+    useTestAllDownloadClients();
 
   const saveOptions = useRef<() => void>();
 
@@ -57,9 +53,9 @@ function DownloadClientSettings() {
     saveOptions.current?.();
   }, []);
 
-  const handleTestAllIndexersPress = useCallback(() => {
-    dispatch(testAllDownloadClients());
-  }, [dispatch]);
+  const handleTestAllClientsPress = useCallback(() => {
+    testAllDownloadClients();
+  }, [testAllDownloadClients]);
 
   return (
     <PageContent title={translate('DownloadClientSettings')}>
@@ -73,8 +69,8 @@ function DownloadClientSettings() {
             <PageToolbarButton
               label={translate('TestAllClients')}
               iconName={icons.TEST}
-              isSpinning={isTestingAll}
-              onPress={handleTestAllIndexersPress}
+              isSpinning={isTestingAllDownloadClients}
+              onPress={handleTestAllClientsPress}
             />
 
             <PageToolbarButton

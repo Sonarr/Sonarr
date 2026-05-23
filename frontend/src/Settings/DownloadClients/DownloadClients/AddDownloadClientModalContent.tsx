@@ -1,6 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
+import React, { useMemo } from 'react';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Button from 'Components/Link/Button';
@@ -10,14 +8,17 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
-import { fetchDownloadClientSchema } from 'Store/Actions/settingsActions';
-import DownloadClient from 'typings/DownloadClient';
+import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import AddDownloadClientItem from './AddDownloadClientItem';
+import {
+  DownloadClientModel,
+  useDownloadClientSchema,
+} from './useDownloadClients';
 import styles from './AddDownloadClientModalContent.css';
 
 export interface AddDownloadClientModalContentProps {
-  onDownloadClientSelect: () => void;
+  onDownloadClientSelect: (selectedSchema: SelectedSchema) => void;
   onModalClose: () => void;
 }
 
@@ -25,15 +26,13 @@ function AddDownloadClientModalContent({
   onDownloadClientSelect,
   onModalClose,
 }: AddDownloadClientModalContentProps) {
-  const dispatch = useDispatch();
-
-  const { isSchemaFetching, isSchemaPopulated, schemaError, schema } =
-    useSelector((state: AppState) => state.settings.downloadClients);
+  const { isSchemaLoading, isSchemaFetched, schemaError, schema } =
+    useDownloadClientSchema();
 
   const { usenetDownloadClients, torrentDownloadClients } = useMemo(() => {
     return schema.reduce<{
-      usenetDownloadClients: DownloadClient[];
-      torrentDownloadClients: DownloadClient[];
+      usenetDownloadClients: DownloadClientModel[];
+      torrentDownloadClients: DownloadClientModel[];
     }>(
       (acc, item) => {
         if (item.protocol === 'usenet') {
@@ -51,24 +50,20 @@ function AddDownloadClientModalContent({
     );
   }, [schema]);
 
-  useEffect(() => {
-    dispatch(fetchDownloadClientSchema());
-  }, [dispatch]);
-
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('AddDownloadClient')}</ModalHeader>
 
       <ModalBody>
-        {isSchemaFetching ? <LoadingIndicator /> : null}
+        {isSchemaLoading ? <LoadingIndicator /> : null}
 
-        {!isSchemaFetching && !!schemaError ? (
+        {!isSchemaLoading && !!schemaError ? (
           <Alert kind={kinds.DANGER}>
             {translate('AddDownloadClientError')}
           </Alert>
         ) : null}
 
-        {isSchemaPopulated && !schemaError ? (
+        {isSchemaFetched && !schemaError ? (
           <div>
             <Alert kind={kinds.INFO}>
               <div>{translate('SupportedDownloadClients')}</div>

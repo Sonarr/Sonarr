@@ -1,9 +1,6 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
-import { fetchDownloadClients } from 'Store/Actions/settingsActions';
-import { Protocol } from 'typings/DownloadClient';
+import React, { useMemo } from 'react';
+import DownloadProtocol from 'DownloadClient/DownloadProtocol';
+import { useDownloadClients } from 'Settings/DownloadClients/DownloadClients/useDownloadClients';
 import { EnhancedSelectInputChanged } from 'typings/inputs';
 import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
@@ -11,45 +8,6 @@ import EnhancedSelectInput, {
   EnhancedSelectInputProps,
   EnhancedSelectInputValue,
 } from './EnhancedSelectInput';
-
-function createDownloadClientsSelector(
-  includeAny: boolean,
-  protocol: Protocol
-) {
-  return createSelector(
-    (state: AppState) => state.settings.downloadClients,
-    (downloadClients) => {
-      const { isFetching, isPopulated, error, items } = downloadClients;
-
-      const filteredItems = items.filter((item) => item.protocol === protocol);
-
-      const values = filteredItems
-        .sort(sortByProp('name'))
-        .map((downloadClient) => {
-          return {
-            key: downloadClient.id,
-            value: downloadClient.name,
-            hint: `(${downloadClient.id})`,
-          };
-        });
-
-      if (includeAny) {
-        values.unshift({
-          key: 0,
-          value: `(${translate('Any')})`,
-          hint: '',
-        });
-      }
-
-      return {
-        isFetching,
-        isPopulated,
-        error,
-        values,
-      };
-    }
-  );
-}
 
 export interface DownloadClientSelectInputProps
   extends Omit<
@@ -59,7 +17,7 @@ export interface DownloadClientSelectInputProps
   name: string;
   value: number;
   includeAny?: boolean;
-  protocol?: Protocol;
+  protocol?: DownloadProtocol;
   onChange: (change: EnhancedSelectInputChanged<number>) => void;
 }
 
@@ -68,16 +26,29 @@ function DownloadClientSelectInput({
   protocol = 'torrent',
   ...otherProps
 }: DownloadClientSelectInputProps) {
-  const dispatch = useDispatch();
-  const { isFetching, isPopulated, values } = useSelector(
-    createDownloadClientsSelector(includeAny, protocol)
-  );
+  const { isFetching, data } = useDownloadClients();
 
-  useEffect(() => {
-    if (!isPopulated) {
-      dispatch(fetchDownloadClients());
+  const values = useMemo(() => {
+    const filtered = data.filter((item) => item.protocol === protocol);
+
+    const sorted = [...filtered]
+      .sort(sortByProp('name'))
+      .map((downloadClient) => ({
+        key: downloadClient.id,
+        value: downloadClient.name,
+        hint: `(${downloadClient.id})`,
+      }));
+
+    if (includeAny) {
+      sorted.unshift({
+        key: 0,
+        value: `(${translate('Any')})`,
+        hint: '',
+      });
     }
-  }, [isPopulated, dispatch]);
+
+    return sorted;
+  }, [data, protocol, includeAny]);
 
   return (
     <EnhancedSelectInput
