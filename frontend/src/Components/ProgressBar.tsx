@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import React from 'react';
-import { ColorImpairedConsumer } from 'App/ColorImpairedContext';
 import { Kind } from 'Helpers/Props/kinds';
 import { Size } from 'Helpers/Props/sizes';
 import translate from 'Utilities/String/translate';
@@ -36,58 +35,45 @@ function ProgressBar({
   const actualWidth = width ? `${width}px` : '100%';
 
   return (
-    <ColorImpairedConsumer>
-      {(enableColorImpairedMode) => {
-        return (
-          <div
-            className={classNames(containerClassName, styles[size])}
-            title={title}
-            style={{ width: actualWidth }}
-          >
-            {showText && width ? (
-              <div
-                className={classNames(styles.backTextContainer, styles[kind])}
-                style={{ width: actualWidth }}
-              >
-                <div className={styles.backText}>
-                  <div>{progressText}</div>
-                </div>
-              </div>
-            ) : null}
-
-            <div
-              className={classNames(
-                className,
-                styles[kind],
-                enableColorImpairedMode && 'colorImpaired'
-              )}
-              role="meter"
-              aria-label={translate('ProgressBarProgress', {
-                progress: progress.toFixed(0),
-              })}
-              aria-valuenow={Math.floor(progress)}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              style={{ width: progressPercent }}
-            />
-
-            {showText ? (
-              <div
-                className={classNames(styles.frontTextContainer, styles[kind])}
-                style={{ width: progressPercent }}
-              >
-                <div
-                  className={styles.frontText}
-                  style={{ width: actualWidth }}
-                >
-                  <div>{progressText}</div>
-                </div>
-              </div>
-            ) : null}
+    <div
+      className={classNames(containerClassName, styles[size])}
+      title={title}
+      style={{ width: actualWidth }}
+    >
+      {showText && width ? (
+        <div
+          className={classNames(styles.backTextContainer, styles[kind])}
+          style={{ width: actualWidth }}
+        >
+          <div className={styles.backText}>
+            <div>{progressText}</div>
           </div>
-        );
-      }}
-    </ColorImpairedConsumer>
+        </div>
+      ) : null}
+
+      <div
+        className={classNames(className, styles[kind])}
+        role="meter"
+        aria-label={translate('ProgressBarProgress', {
+          progress: progress.toFixed(0),
+        })}
+        aria-valuenow={Math.floor(progress)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        style={{ width: progressPercent }}
+      />
+
+      {showText ? (
+        <div
+          className={classNames(styles.frontTextContainer, styles[kind])}
+          style={{ width: progressPercent }}
+        >
+          <div className={styles.frontText} style={{ width: actualWidth }}>
+            <div>{progressText}</div>
+          </div>
+        </div>
+      ) : null}
+    </div>
   );
 }
 

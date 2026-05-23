@@ -1,5 +1,0 @@
-.authRequiredAlert {
-  composes: alert from '~Components/Alert.css';
-
-  margin-bottom: 20px;
-}

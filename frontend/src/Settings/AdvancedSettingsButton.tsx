@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import React, { useCallback } from 'react';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
@@ -33,9 +32,7 @@ function AdvancedSettingsButton({ showLabel }: AdvancedSettingsButtonProps) {
     >
       <Icon name={icons.ADVANCED_SETTINGS} size={21} />
 
-      <span
-        className={classNames(styles.indicatorContainer, 'fa-layers fa-fw')}
-      >
+      <span className={styles.indicatorContainer}>
         <Icon
           className={styles.indicatorBackground}
           name={icons.CIRCLE}

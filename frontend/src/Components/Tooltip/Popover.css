@@ -1,14 +1,23 @@
 .title {
-  padding: 10px 20px;
-  border-bottom: 1px solid var(--popoverTitleBorderColor);
-  background-color: var(--popoverTitleBackgroundColor);
-  font-size: 16px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--borderColor);
+  background-color: var(--paperWarm);
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  font-weight: 550;
+  font-size: 13px;
+  font-family: $defaultFontFamily;
+  line-height: 1.3;
 }
 
 .body {
   overflow: auto;
-  padding: 10px;
-  background-color: var(--popoverBodyBackgroundColor);
+  padding: 12px 14px;
+  background-color: var(--paperCard);
+  color: var(--inkSoft);
+  font-size: 13px;
+  font-family: $defaultFontFamily;
+  line-height: 1.5;
 }
 
 .tooltipBody {

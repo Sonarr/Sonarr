@@ -147,7 +147,7 @@ function CalendarEventGroup({
         >
           {isMissingAbsoluteNumber ? (
             <Icon
-              containerClassName={styles.statusIcon}
+              titleWrapperClassName={styles.statusIcon}
               name={icons.WARNING}
               title={translate('EpisodeMissingAbsoluteNumber')}
             />
@@ -155,7 +155,7 @@ function CalendarEventGroup({
 
           {anyDownloading ? (
             <Icon
-              containerClassName={styles.statusIcon}
+              titleWrapperClassName={styles.statusIcon}
               name={icons.DOWNLOADING}
               title={translate('AnEpisodeIsDownloading')}
             />
@@ -163,7 +163,7 @@ function CalendarEventGroup({
 
           {firstEpisode.episodeNumber === 1 && seasonNumber > 0 ? (
             <Icon
-              containerClassName={styles.statusIcon}
+              titleWrapperClassName={styles.statusIcon}
               name={icons.PREMIERE}
               kind={kinds.INFO}
               title={
@@ -176,7 +176,7 @@ function CalendarEventGroup({
 
           {showFinaleIcon && lastEpisode.finaleType ? (
             <Icon
-              containerClassName={styles.statusIcon}
+              titleWrapperClassName={styles.statusIcon}
               name={
                 lastEpisode.finaleType === 'series'
                   ? icons.FINALE_SERIES
