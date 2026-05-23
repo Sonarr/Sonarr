@@ -1,0 +1,80 @@
+/* Runtime mirror of Styles/Variables/{dimensions,fonts}.js.
+ * Legacy CSS resolves $foo via postcss-simple-vars at build time; new CSS reads
+ * var(--foo) at runtime. Keep both in sync. */
+
+:root {
+  /* Page */
+  --pageContentBodyPadding: 32px;
+  --pageContentBodyPaddingSmallScreen: 16px;
+
+  /* Header */
+  --headerHeight: 56px;
+
+  /* Sidebar */
+  --sidebarWidth: 240px;
+
+  /* Toolbar */
+  --toolbarHeight: 52px;
+  --toolbarButtonWidth: 100px;
+  --toolbarSeparatorMargin: 12px;
+
+  /* Break Points */
+  --breakpointExtraSmall: 480px;
+  --breakpointSmall: 768px;
+  --breakpointMedium: 992px;
+  --breakpointLarge: 1200px;
+  --breakpointExtraLarge: 1450px;
+
+  /* Form */
+  --formGroupExtraSmallWidth: 550px;
+  --formGroupSmallWidth: 650px;
+  --formGroupMediumWidth: 800px;
+  --formGroupLargeWidth: 1200px;
+  --formLabelSmallWidth: 150px;
+  --formLabelLargeWidth: 250px;
+  --formLabelRightMarginWidth: 20px;
+
+  /* Quality profile */
+  --dragHandleWidth: 40px;
+  --qualityProfileItemHeight: 30px;
+  --qualityProfileItemDragSourcePadding: 4px;
+
+  /* Progress bar */
+  --progressBarSmallHeight: 5px;
+  --progressBarMediumHeight: 15px;
+  --progressBarLargeHeight: 20px;
+
+  /* Page jump bar */
+  --jumpBarItemHeight: 25px;
+
+  /* Modal */
+  --modalBodyPadding: 30px;
+
+  /* Series index */
+  --seriesIndexColumnPadding: 16px;
+  --seriesIndexColumnPaddingSmallScreen: 8px;
+  --seriesIndexOverviewInfoRowHeight: 21px;
+
+  /* Font families */
+  --defaultFontFamily: "Inter", ui-sans-serif, system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --editorialFontFamily: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --monoSpaceFontFamily: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, "Courier New", monospace;
+
+  /* Font sizes */
+  --extraSmallFontSize: 11px;
+  --smallFontSize: 13px;
+  --defaultFontSize: 15px;
+  --intermediateFontSize: 16px;
+  --largeFontSize: 18px;
+  --lineHeight: 1.55;
+
+  /* Animation */
+  --defaultSpeed: 0.2s;
+  --slowSpeed: 0.6s;
+  --fastSpeed: 0.1s;
+
+  /* Z-indexes */
+  --pageJumpBarZIndex: 10;
+  --modalZIndex: 1000;
+  --popperZIndex: 2000;
+}

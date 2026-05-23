@@ -65,8 +65,10 @@
 }
 
 @media only screen and (max-width: $breakpointSmall) {
-  .option.small {
-    width: 100%;
+  .option {
+    &.small {
+      width: 100%;
+    }
   }
 }
 

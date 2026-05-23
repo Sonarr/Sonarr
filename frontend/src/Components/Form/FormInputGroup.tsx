@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { ElementType, ReactNode, useMemo, useState } from 'react';
 import Link from 'Components/Link/Link';
 import { inputTypes } from 'Helpers/Props';
@@ -242,7 +243,14 @@ function FormInputGroup<T, C extends InputType>(
       setClientWarnings={setClientWarnings}
     >
       <div className={containerClassName}>
-        <div className={className}>
+        <div
+          className={classNames(
+            className,
+            hasButton && styles.hasButtons,
+            hasButton && hasError && styles.hasError,
+            hasButton && hasWarning && styles.hasWarning
+          )}
+        >
           <div className={styles.inputContainer}>
             {/* @ts-expect-error - types are validated already */}
             <InputComponent

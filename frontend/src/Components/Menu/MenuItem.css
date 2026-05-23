@@ -1,18 +1,27 @@
 .menuItem {
   @add-mixin truncate;
-  display: block;
+
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
-  padding: 10px 20px;
+  padding: 8px 12px;
   min-width: 150px;
-  max-width: 250px;
-  background-color: var(--toolbarMenuItemBackgroundColor);
-  color: var(--menuItemColor);
+  max-width: 280px;
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--ink);
+  font-weight: 500;
+  font-size: 14px;
   line-height: 20px;
+  transition:
+    background-color 120ms cubic-bezier(0.25, 1, 0.5, 1),
+    color 120ms cubic-bezier(0.25, 1, 0.5, 1);
+  gap: 10px;
 
   &:hover,
   &:focus {
-    background-color: var(--toolbarMenuItemHoverBackgroundColor);
-    color: var(--menuItemHoverColor);
+    background-color: var(--menuItemHoverBackgroundColor);
+    color: var(--ink);
     text-decoration: none;
   }
 }
