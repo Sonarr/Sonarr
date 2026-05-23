@@ -1,11 +1,12 @@
 .label {
-  display: flex;
-  justify-content: flex-end;
-  margin-right: $formLabelRightMarginWidth;
-  padding-top: 8px;
-  min-height: 35px;
-  text-align: end;
-  font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+  color: var(--inkSoft);
+  letter-spacing: 0;
+  font-weight: 500;
+  font-size: 13px;
+  font-family: $defaultFontFamily;
+  line-height: 1.4;
 }
 
 .hasError {
@@ -16,16 +17,8 @@
   color: var(--advancedFormLabelColor);
 }
 
-@media only screen and (max-width: $breakpointLarge) {
-  .label {
-    justify-content: flex-start;
-  }
-}
-
-.small {
-  flex: 0 0 $formLabelSmallWidth;
-}
-
+.small,
 .large {
-  flex: 0 0 $formLabelLargeWidth;
+  /* Size hints from FormGroup are no longer about flex basis — drop the
+     fixed-width allotments. Kept as classnames so existing markup compiles. */
 }

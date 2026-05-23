@@ -1,13 +1,12 @@
-import { FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React from 'react';
-import Icon, { IconProps } from 'Components/Icon';
+import Icon, { IconName, IconProps } from 'Components/Icon';
 import styles from './LegendIconItem.css';
 
 interface LegendIconItemProps extends Pick<IconProps, 'kind'> {
   name: string;
   fullColorEvents: boolean;
-  icon: FontAwesomeIconProps['icon'];
+  icon: IconName;
   tooltip: string;
 }
 

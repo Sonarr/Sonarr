@@ -40,7 +40,7 @@ function SeriesIndexPosterSelect({
       <span className={styles.checkContainer}>
         <Icon
           className={isSelected ? styles.selected : styles.unselected}
-          name={isSelected ? icons.CHECK_CIRCLE : icons.CIRCLE_OUTLINE}
+          name={isSelected ? icons.CHECK_CIRCLE : icons.CIRCLE}
           size={20}
         />
       </span>

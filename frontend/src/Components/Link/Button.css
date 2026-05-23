@@ -1,125 +1,116 @@
 .button {
-  composes: link from '~./Link.css';
+  composes: link from './Link.css';
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   overflow: hidden;
   border: 1px solid;
-  border-radius: 4px;
+  border-radius: 8px;
   vertical-align: middle;
   text-align: center;
   white-space: nowrap;
-  line-height: normal;
+  letter-spacing: -0.005em;
+  font-weight: 550;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.2;
+  transition:
+    background-color 160ms cubic-bezier(0.25, 1, 0.5, 1),
+    border-color 160ms cubic-bezier(0.25, 1, 0.5, 1),
+    color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+  gap: 6px;
+}
 
-  &:global(.isDisabled) {
-    opacity: 0.65;
-  }
+.button:global(.isDisabled) {
+  opacity: 0.6;
+}
 
-  &:hover {
-    text-decoration: none;
-  }
+.button:hover {
+  text-decoration: none;
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--inputFocusBoxShadowColor);
 }
 
 .danger {
   border-color: var(--dangerBorderColor);
   background-color: var(--dangerBackgroundColor);
   color: var(--white);
+}
 
-  &:focus {
-    border-color: var(--dangerHoverBorderColor);
-  }
-
-  &:hover {
-    border-color: var(--dangerHoverBorderColor);
-    background-color: var(--dangerHoverBackgroundColor);
-    color: var(--white);
-  }
+.danger:hover {
+  border-color: var(--dangerHoverBorderColor);
+  background-color: var(--dangerHoverBackgroundColor);
+  color: var(--white);
 }
 
 .default {
   border-color: var(--defaultBorderColor);
   background-color: var(--defaultBackgroundColor);
   color: var(--defaultColor);
+}
 
-  &:focus {
-    border-color: var(--defaultHoverBorderColor);
-  }
-
-  &:hover {
-    border-color: var(--defaultHoverBorderColor);
-    background-color: var(--defaultHoverBackgroundColor);
-    color: var(--defaultColor);
-  }
+.default:hover {
+  border-color: var(--defaultHoverBorderColor);
+  background-color: var(--defaultHoverBackgroundColor);
+  color: var(--defaultColor);
 }
 
 .primary {
   border-color: var(--primaryBorderColor);
   background-color: var(--primaryBackgroundColor);
-  color: var(--white);
+  color: var(--primaryColor);
+}
 
-  &:focus {
-    border-color: var(--primaryHoverBorderColor);
-  }
-
-  &:hover {
-    border-color: var(--primaryHoverBorderColor);
-    background-color: var(--primaryHoverBackgroundColor);
-    color: var(--white);
-  }
+.primary:hover {
+  border-color: var(--primaryHoverBorderColor);
+  background-color: var(--primaryHoverBackgroundColor);
+  color: var(--primaryColor);
 }
 
 .success {
   border-color: var(--successBorderColor);
   background-color: var(--successBackgroundColor);
   color: var(--white);
+}
 
-  &:focus {
-    border-color: var(--successHoverBorderColor);
-  }
-
-  &:hover {
-    border-color: var(--successHoverBorderColor);
-    background-color: var(--successHoverBackgroundColor);
-    color: var(--white);
-  }
+.success:hover {
+  border-color: var(--successHoverBorderColor);
+  background-color: var(--successHoverBackgroundColor);
+  color: var(--white);
 }
 
 .warning {
   border-color: var(--warningBorderColor);
   background-color: var(--warningBackgroundColor);
   color: var(--white);
-
-  &:focus {
-    border-color: var(--warningHoverBorderColor);
-  }
-
-  &:hover {
-    border-color: var(--warningHoverBorderColor);
-    background-color: var(--warningHoverBackgroundColor);
-    color: var(--white);
-  }
 }
 
-/*
- * Sizes
- */
+.warning:hover {
+  border-color: var(--warningHoverBorderColor);
+  background-color: var(--warningHoverBackgroundColor);
+  color: var(--white);
+}
+
 
 .small {
-  padding: 1px 5px;
-  font-size: $smallFontSize;
+  padding: 4px 10px;
+  font-size: 12px;
 }
 
 .medium {
-  padding: 6px 16px;
-  font-size: $defaultFontSize;
+  padding: 8px 16px;
+  font-size: 14px;
 }
 
 .large {
-  padding: 10px 20px;
-  font-size: $largeFontSize;
+  padding: 11px 20px;
+  font-size: 15px;
 }
 
-/*
- * Sizes
-*/
 
 .left {
   margin-left: -1px;

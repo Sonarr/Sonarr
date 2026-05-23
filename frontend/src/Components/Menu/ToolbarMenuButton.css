@@ -1,22 +1,56 @@
 .menuButton {
   composes: menuButton from '~./MenuButton.css';
 
-  padding-top: 4px;
-  width: $toolbarButtonWidth;
-  height: $toolbarHeight;
-  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+  height: 34px;
+  border-radius: 999px;
+  color: var(--toolbarColor);
+  white-space: nowrap;
+  transition:
+    color 160ms cubic-bezier(0.25, 1, 0.5, 1),
+    background-color 160ms cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow 160ms cubic-bezier(0.25, 1, 0.5, 1),
+    transform 160ms cubic-bezier(0.25, 1, 0.5, 1);
+  gap: 7px;
+
+  /* Suppress the base MenuButton caret — not appropriate on a pill button */
+  &::after {
+    display: none;
+  }
+
+  &:hover {
+    background-color: var(--paperCard);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    color: var(--ink);
+    text-decoration: none;
+    transform: translateY(-1px);
+  }
+}
+
+.inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.iconWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .indicatorContainer {
   position: absolute;
-  top: 10px;
-  right: 12px;
-}
-
-.labelContainer {
-  composes: labelContainer from '~Components/Page/Toolbar/PageToolbarButton.css';
+  top: -3px;
+  right: -3px;
 }
 
 .label {
-  composes: label from '~Components/Page/Toolbar/PageToolbarButton.css';
+  letter-spacing: -0.01em;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1;
 }

@@ -1,57 +1,51 @@
-import {
-  FontAwesomeIcon,
-  FontAwesomeIconProps,
-} from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import React, { ComponentProps } from 'react';
+import { LucideIcon, LucideProps } from 'lucide-react';
+import React from 'react';
 import { kinds } from 'Helpers/Props';
 import { Kind } from 'Helpers/Props/kinds';
 import styles from './Icon.css';
 
-export type IconName = FontAwesomeIconProps['icon'];
+export type IconName = LucideIcon;
 export type IconKind = Extract<Kind, keyof typeof styles>;
 
-export interface IconProps
-  extends Omit<
-    FontAwesomeIconProps,
-    'icon' | 'spin' | 'name' | 'title' | 'size'
-  > {
-  containerClassName?: ComponentProps<'span'>['className'];
+export interface IconProps {
+  titleWrapperClassName?: string;
+  className?: string;
   name: IconName;
   kind?: IconKind;
   size?: number;
-  isSpinning?: FontAwesomeIconProps['spin'];
   title?: string | (() => string) | null;
+  isSpinning?: boolean;
+  filled?: boolean;
 }
 
 export default function Icon({
-  containerClassName,
+  titleWrapperClassName,
   className,
-  name,
+  name: IconComponent,
   kind = kinds.DEFAULT,
   size = 14,
   title,
   isSpinning = false,
-  fixedWidth = false,
-  ...otherProps
+  filled = false,
 }: IconProps) {
-  const icon = (
-    <FontAwesomeIcon
-      className={classNames(className, styles[kind])}
-      icon={name}
-      spin={isSpinning}
-      fixedWidth={fixedWidth}
-      style={{
-        fontSize: `${size}px`,
-      }}
-      {...otherProps}
-    />
-  );
+  const iconProps: LucideProps = {
+    className: classNames(
+      className,
+      styles[kind],
+      isSpinning && styles.spinning
+    ),
+    size,
+    strokeWidth: 2,
+    fill: filled ? 'currentColor' : 'none',
+  };
+
+  const icon = <IconComponent {...iconProps} />;
 
   if (title) {
     return (
       <span
-        className={containerClassName}
+        className={titleWrapperClassName}
         title={typeof title === 'function' ? title() : title}
       >
         {icon}

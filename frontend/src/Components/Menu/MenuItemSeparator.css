@@ -1,6 +1,7 @@
 .separator {
   overflow: hidden;
+  margin: 4px 6px;
   min-height: 1px;
   height: 1px;
-  background-color: var(--themeDarkColor);
+  background-color: var(--borderColor);
 }
