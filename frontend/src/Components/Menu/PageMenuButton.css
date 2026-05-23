@@ -4,14 +4,27 @@
   position: relative;
 
   &:hover {
-    color: #666;
+    color: var(--inkMuted);
   }
+}
+
+.inner {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.iconWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .indicatorContainer {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: -4px;
+  right: -4px;
 }
 
 .label {

@@ -2,7 +2,12 @@
   @add-mixin truncate;
 
   flex-shrink: 0;
-  padding: 15px 50px 15px 30px;
+  padding: 24px 60px 18px 28px;
   border-bottom: 1px solid var(--borderColor);
-  font-size: 18px;
+  color: var(--ink);
+  letter-spacing: -0.018em;
+  font-weight: 600;
+  font-size: 20px;
+  font-family: $defaultFontFamily;
+  line-height: 1.25;
 }

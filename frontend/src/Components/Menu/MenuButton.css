@@ -3,19 +3,25 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  color: var(--inkSoft);
+  transition: color 160ms cubic-bezier(0.25, 1, 0.5, 1);
 
   &::after {
     margin-left: 5px;
+    color: var(--inkFaint);
     content: '\25BE';
   }
 
   &:hover {
-    color: var(--toobarButtonHoverColor);
+    color: var(--accent);
+
+    &::after {
+      color: var(--inkSoft);
+    }
   }
 }
 
 .isDisabled {
   color: var(--disabledColor);
-
   pointer-events: none;
 }
