@@ -47,7 +47,7 @@
 
   z-index: $popperZIndex;
   border: 1px solid var(--inputBorderColor);
-  border-radius: 4px;
+  border-radius: 8px;
   background-color: var(--inputBackgroundColor);
 }
 
@@ -79,7 +79,7 @@
   composes: scroller from '~Components/Scroller/Scroller.css';
 
   border: 1px solid var(--inputBorderColor);
-  border-radius: 4px;
+  border-radius: 8px;
   background-color: var(--inputBackgroundColor);
 }
 

@@ -7,7 +7,7 @@
 }
 
 .readOnly {
-  background-color: #eee;
+  background-color: var(--hairline);
 }
 
 .hasError {
