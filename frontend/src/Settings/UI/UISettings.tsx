@@ -13,7 +13,6 @@ import PageContentBody from 'Components/Page/PageContentBody';
 import { inputTypes, kinds } from 'Helpers/Props';
 import { useFilteredLanguages } from 'Language/useLanguages';
 import SettingsToolbar from 'Settings/SettingsToolbar';
-import themes from 'Styles/Themes';
 import { InputChanged } from 'typings/inputs';
 import timeZoneOptions from 'Utilities/Date/timeZoneOptions';
 import titleCase from 'Utilities/String/titleCase';
@@ -108,7 +107,8 @@ function UISettings() {
     });
   }, [languageItems]);
 
-  const themeOptions = Object.keys(themes).map((theme) => ({
+  // Must stay in sync with the theme selectors in frontend/src/Styles/Themes/themes.css.
+  const themeOptions = ['auto', 'light', 'dark'].map((theme) => ({
     key: theme,
     value: titleCase(theme),
   }));

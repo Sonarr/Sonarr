@@ -1,3 +1,12 @@
+.bordered {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
+  background-color: var(--paperWarm);
+}
+
 .addButtonContainer {
-  margin-top: 15px;
+  margin-top: 12px;
 }

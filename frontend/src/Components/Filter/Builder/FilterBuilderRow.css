@@ -1,6 +1,11 @@
 .filterRow {
   display: flex;
-  margin-bottom: 5px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--borderColor);
+
+  &:first-child {
+    border-top: none;
+  }
 
   &:hover {
     background-color: var(--tableRowHoverBackgroundColor);

@@ -1,27 +1,29 @@
 /* stylelint-disable */
-* {
-  box-sizing: border-box;
-}
-
+*,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-*:focus {
+*:focus { outline: none; }
+*:focus-visible {
   outline: none;
+  box-shadow: 0 0 0 1px var(--accent), 0 0 0 4px var(--inputFocusBoxShadowColor);
+  border-radius: 6px;
 }
 /* stylelint-enable */
 
 html,
 body {
   color: var(--textColor);
-  font-family: 'Roboto', 'open sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font-family: 'Inter', ui-sans-serif, system-ui, 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-size: 14px;
-  line-height: 1.528571429; /* 20/14 */
+  font-size: 15px;
+  line-height: 1.55;
 }
 
 /* Override normalize */
@@ -34,10 +36,10 @@ textarea {
   margin: 0;
   font-size: inherit;
   font-family: inherit;
-  line-height: 1.528571429; /* 20/14 */
+  line-height: 1.55;
 }
 
-/* Better defaults for unordererd lists */
+/* Better defaults for unordered lists */
 
 ul {
   margin: 0;
@@ -52,3 +54,16 @@ ul {
     font-size: 16px;
   }
 }
+
+/* stylelint-disable selector-max-universal, at-rule-empty-line-before */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-delay: 0ms !important;
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+    animation-delay: 0ms !important;
+  }
+}
+/* stylelint-enable selector-max-universal, at-rule-empty-line-before */
