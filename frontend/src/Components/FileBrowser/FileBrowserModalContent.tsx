@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Alert from 'Components/Alert';
-import { PathInputInternal } from 'Components/Form/PathInput';
+import { PathInputInternal } from 'Components/Form/PathInputInternal';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
@@ -13,7 +12,7 @@ import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import { kinds, scrollDirections } from 'Helpers/Props';
+import { scrollDirections } from 'Helpers/Props';
 import usePaths from 'Path/usePaths';
 import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
@@ -106,13 +105,13 @@ function FileBrowserModalContent({
         scrollDirection={scrollDirections.NONE}
       >
         {isWindowsService ? (
-          <Alert className={styles.mappedDrivesWarning} kind={kinds.WARNING}>
+          <p className={styles.mappedDrivesWarning}>
             <InlineMarkdown
               data={translate('MappedNetworkDrivesWindowsService', {
                 url: 'https://wiki.servarr.com/sonarr/faq#why-cant-sonarr-see-my-files-on-a-remote-server',
               })}
             />
-          </Alert>
+          </p>
         ) : null}
 
         <PathInputInternal
@@ -134,9 +133,9 @@ function FileBrowserModalContent({
           scrollDirection="both"
         >
           {error ? (
-            <Alert kind={kinds.DANGER}>
+            <p className={styles.error} role="alert">
               {translate('ErrorLoadingContents')}
-            </Alert>
+            </p>
           ) : null}
 
           {isFetched && !error ? (

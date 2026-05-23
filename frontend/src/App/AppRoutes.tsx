@@ -36,10 +36,17 @@ export function appRouteElements() {
   return (
     <>
       {/*
-        Series
+        Home (v5) — TODO: swap to <HomePage /> when the homepage redesign lands.
+        Until then, "/" aliases to SeriesIndex so the sidebar's "Home" nav resolves.
       */}
 
       <Route path="/" element={<SeriesIndex />} />
+
+      {/*
+        Series
+      */}
+
+      <Route path="/series" element={<SeriesIndex />} />
 
       <Route path="/add/new" element={<AddNewSeries />} />
 
@@ -47,10 +54,13 @@ export function appRouteElements() {
 
       <Route
         path="/serieseditor"
-        element={<Navigate to="/" replace={true} />}
+        element={<Navigate to="/series" replace={true} />}
       />
 
-      <Route path="/seasonpass" element={<Navigate to="/" replace={true} />} />
+      <Route
+        path="/seasonpass"
+        element={<Navigate to="/series" replace={true} />}
+      />
 
       <Route path="/series/:titleSlug" element={<SeriesDetailsPage />} />
 

@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect } from 'react';
 import Alert from 'Components/Alert';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
+import Link from 'Components/Link/Link';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -19,7 +21,6 @@ import { useManageGeneralSettings } from 'Settings/General/useGeneralSettings';
 import useSystemStatus from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import styles from './AuthenticationRequiredModalContent.css';
 
 function onModalClose() {
   // No-op
@@ -67,101 +68,112 @@ export default function AuthenticationRequiredModalContent() {
   return (
     <ModalContent showCloseButton={false} onModalClose={onModalClose}>
       <ModalHeader>{translate('AuthenticationRequired')}</ModalHeader>
-
       <ModalBody>
-        <Alert className={styles.authRequiredAlert} kind={kinds.WARNING}>
-          {translate('AuthenticationRequiredWarning')}
+        <Alert kind={kinds.WARNING}>
+          {translate('AuthenticationRequiredWarning')}{' '}
+          <Link to="https://wiki.servarr.com/sonarr/faq#forced-authentication">
+            {translate('MoreInfo')}
+          </Link>
         </Alert>
 
         {isFetched && !error ? (
           <div>
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('AuthenticationMethod')}</FormLabel>
-
-              <FormInputGroup
-                type={inputTypes.SELECT}
-                name="authenticationMethod"
-                values={authenticationMethodOptions}
-                helpText={translate('AuthenticationMethodHelpText')}
-                helpTextWarning={
+              <FormInputHelpText
+                text={translate('AuthenticationMethodHelpText')}
+              />
+              <FormInputHelpText
+                text={
                   authenticationMethod.value === 'none'
                     ? translate('AuthenticationMethodHelpTextWarning')
                     : undefined
                 }
-                helpLink="https://wiki.servarr.com/sonarr/faq#forced-authentication"
+                isWarning={true}
+              />
+              <FormInput
+                type={inputTypes.SELECT}
+                name="authenticationMethod"
+                values={authenticationMethodOptions}
                 onChange={onInputChange}
                 {...authenticationMethod}
               />
-            </FormGroup>
+            </FormRow>
 
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('AuthenticationRequired')}</FormLabel>
-
-              <FormInputGroup
+              <FormInputHelpText
+                text={translate('AuthenticationRequiredHelpText')}
+              />
+              <FormInput
                 type={inputTypes.SELECT}
                 name="authenticationRequired"
                 values={authenticationRequiredOptions}
-                helpText={translate('AuthenticationRequiredHelpText')}
                 onChange={onInputChange}
                 {...authenticationRequired}
               />
-            </FormGroup>
+            </FormRow>
 
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('Username')}</FormLabel>
-
-              <FormInputGroup
-                type={inputTypes.TEXT}
-                name="username"
-                helpTextWarning={
+              <FormInputHelpText
+                text={
                   username?.value
                     ? undefined
                     : translate('AuthenticationRequiredUsernameHelpTextWarning')
                 }
+                isWarning={true}
+              />
+              <FormInput
+                type={inputTypes.TEXT}
+                name="username"
                 onChange={onInputChange}
                 {...username}
               />
-            </FormGroup>
+            </FormRow>
 
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('Password')}</FormLabel>
-
-              <FormInputGroup
-                type={inputTypes.PASSWORD}
-                name="password"
-                helpTextWarning={
+              <FormInputHelpText
+                text={
                   password?.value
                     ? undefined
                     : translate('AuthenticationRequiredPasswordHelpTextWarning')
                 }
+                isWarning={true}
+              />
+              <FormInput
+                type={inputTypes.PASSWORD}
+                name="password"
                 onChange={onInputChange}
                 {...password}
               />
-            </FormGroup>
+            </FormRow>
 
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('PasswordConfirmation')}</FormLabel>
-
-              <FormInputGroup
-                type={inputTypes.PASSWORD}
-                name="passwordConfirmation"
-                helpTextWarning={
+              <FormInputHelpText
+                text={
                   passwordConfirmation?.value
                     ? undefined
                     : translate(
                         'AuthenticationRequiredPasswordConfirmationHelpTextWarning'
                       )
                 }
+                isWarning={true}
+              />
+              <FormInput
+                type={inputTypes.PASSWORD}
+                name="passwordConfirmation"
                 onChange={onInputChange}
                 {...passwordConfirmation}
               />
-            </FormGroup>
+            </FormRow>
           </div>
         ) : null}
 
         {!isFetched && !error ? <LoadingIndicator /> : null}
       </ModalBody>
-
       <ModalFooter>
         <SpinnerButton
           kind={kinds.PRIMARY}

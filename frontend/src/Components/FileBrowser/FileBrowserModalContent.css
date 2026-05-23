@@ -6,15 +6,21 @@
 }
 
 .mappedDrivesWarning {
-  composes: alert from '~Components/Alert.css';
-
   margin: 0;
   margin-bottom: 20px;
+  color: var(--inkMuted);
+  font-size: 13px;
+}
+
+.error {
+  margin-bottom: 20px;
+  color: var(--dangerColor);
+  font-size: 13px;
 }
 
 .faqLink {
-  color: var(--alertWarningColor);
-  font-weight: bold;
+  color: var(--accent);
+  font-weight: 600;
 }
 
 .pathInput {
