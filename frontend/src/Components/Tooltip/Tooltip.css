@@ -4,21 +4,33 @@
 
 .tooltip {
   position: relative;
+  overflow: hidden;
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
 
   &.default {
-    background-color: var(--popoverBodyBackgroundColor);
-    box-shadow: 0 5px 10px var(--popoverShadowColor);
+    background-color: var(--paperCard);
+    box-shadow:
+      0 12px 32px -12px rgba(0, 0, 0, 0.32),
+      0 2px 8px -2px rgba(0, 0, 0, 0.12);
+    color: var(--ink);
   }
 
   &.inverse {
-    background-color: var(--themeDarkColor);
-    box-shadow: 0 5px 10px var(--popoverShadowInverseColor);
-    color: var(--white);
+    border-color: var(--ink);
+    background-color: var(--ink);
+    box-shadow:
+      0 12px 32px -12px rgba(0, 0, 0, 0.45),
+      0 2px 8px -2px rgba(0, 0, 0, 0.18);
+    color: var(--paper);
   }
 }
 
 .body {
-  padding: 5px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-family: $defaultFontFamily;
+  line-height: 1.5;
 }
 
 @media only screen and (min-width: $breakpointExtraSmall) {

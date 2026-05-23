@@ -169,7 +169,7 @@ function FilterBuilderModalContent<T>({
 
         <div className={styles.label}>{translate('Filters')}</div>
 
-        <div className={styles.rows}>
+        <div className={styles.bordered}>
           {filters.map((filter, index) => {
             return (
               <FilterBuilderRow

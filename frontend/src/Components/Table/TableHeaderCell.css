@@ -1,12 +1,19 @@
 .headerCell {
-  padding: 8px;
+  padding: 12px 10px;
   border: none !important;
+  color: var(--inkMuted);
   text-align: left;
-  font-weight: bold;
+  text-transform: uppercase;
+  white-space: nowrap;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 11px;
+  font-family: $defaultFontFamily;
 }
 
 .sortIcon {
-  margin-left: 10px;
+  margin-left: 8px;
+  color: var(--inkFaint);
 }
 
 @media only screen and (max-width: $breakpointMedium) {
