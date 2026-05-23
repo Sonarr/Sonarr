@@ -1,24 +1,47 @@
 .fieldSet {
-  margin: 0;
-  margin-bottom: 20px;
-  padding: 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 16px;
+  padding: 28px 28px 24px;
   min-width: 0;
-  border: 0;
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
+  background-color: var(--paperCard);
+  gap: 16px;
+}
+
+.fieldSet:last-child {
+  margin-bottom: 0;
 }
 
 .legend {
   display: block;
-  margin-bottom: 21px;
+  margin: 0;
   padding: 0;
   width: 100%;
   border: 0;
-  border-bottom: 1px solid #e5e5e5;
-  color: var(--textColor);
-  font-size: 21px;
-  line-height: inherit;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: 18px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.25;
 
   &.small {
-    color: #909293;
-    font-size: 18px;
+    color: var(--inkMuted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+    font-size: 14px;
   }
+}
+
+.caption {
+  margin: -8px 0 0;
+  max-width: 65ch;
+  color: var(--inkMuted);
+  font-weight: 400;
+  font-size: 13px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.5;
 }

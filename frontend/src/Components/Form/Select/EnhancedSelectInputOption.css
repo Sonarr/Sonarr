@@ -44,7 +44,7 @@
 }
 
 .isDisabled {
-  background-color: #aaa;
+  background-color: var(--inkFaint);
 }
 
 .isHidden {

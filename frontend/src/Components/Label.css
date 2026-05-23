@@ -1,124 +1,173 @@
 .label {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   margin: 2px;
-  border: 1px solid;
-  border-radius: 2px;
-  color: var(--white);
+  padding: 4px 10px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--paperWarm);
+  color: var(--inkSoft);
   text-align: center;
+  text-transform: uppercase;
   white-space: nowrap;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 11px;
+  font-family: $defaultFontFamily;
   line-height: 1;
   cursor: default;
+  gap: 6px;
 }
 
-/** Kinds **/
+.label::before {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background-color: currentColor;
+  content: "";
+  opacity: 0.55;
+}
 
-.danger {
-  border-color: var(--dangerColor);
+.label:empty::before {
+  display: none;
+}
+
+/** Kinds — dot color via custom property, bg stays paper-warm. **/
+
+.danger::before {
   background-color: var(--dangerColor);
-
-  &.outline {
-    color: var(--dangerColor);
-  }
+  opacity: 1;
 }
 
-.default {
-  border-color: var(--themeLightColor);
-  background-color: var(--themeLightColor);
-
-  &.outline {
-    color: var(--themeLightColor);
-  }
+.default::before {
+  background-color: var(--inkMuted);
+  opacity: 0.6;
 }
 
-.disabled {
-  border-color: var(--disabledColor);
-  background-color: var(--disabledColor);
-
-  &.outline {
-    color: var(--white);
-  }
+.disabled::before {
+  background-color: var(--inkMuted);
+  opacity: 0.4;
 }
 
-.info {
-  border-color: var(--infoColor);
+.info::before {
   background-color: var(--infoColor);
-  color: var(--infoTextColor);
-
-  &.outline {
-    color: var(--infoColor);
-  }
+  opacity: 1;
 }
 
 .inverse {
-  border-color: var(--inverseLabelColor);
-  background-color: var(--inverseLabelColor);
-  color: var(--inverseLabelTextColor);
-
-  &.outline {
-    background-color: var(--inverseLabelTextColor) !important;
-    color: var(--inverseLabelColor);
-  }
+  background-color: var(--ink);
+  color: var(--paper);
 }
 
-.primary {
-  border-color: var(--primaryColor);
-  background-color: var(--primaryColor);
+.inverse::before {
+  background-color: var(--paper);
+  opacity: 0.85;
+}
 
-  &.outline {
-    color: var(--primaryColor);
-  }
+.primary::before {
+  background-color: var(--primaryColor);
+  opacity: 1;
+}
+
+.success::before {
+  background-color: var(--successColor);
+  opacity: 1;
+}
+
+.warning::before {
+  background-color: var(--warningColor);
+  opacity: 1;
+}
+
+.purple::before {
+  background-color: var(--purple);
+  opacity: 1;
+}
+
+.danger {
+  color: var(--ink);
 }
 
 .success {
-  border-color: var(--successColor);
-  background-color: var(--successColor);
-  color: #eee;
-
-  &.outline {
-    color: var(--successColor);
-  }
+  color: var(--ink);
 }
 
 .warning {
-  border-color: var(--warningColor);
-  background-color: var(--warningColor);
+  color: var(--ink);
+}
 
-  &.outline {
-    color: var(--warningColor);
-  }
+.info {
+  color: var(--ink);
+}
+
+.primary {
+  color: var(--ink);
 }
 
 .purple {
-  border-color: var(--purple);
-  background-color: var(--purple);
-
-  &.outline {
-    color: var(--purple);
-  }
+  color: var(--ink);
 }
 
 /** Sizes **/
 
 .small {
-  padding: 1px 3px;
-  font-size: 11px;
+  padding: 3px 8px;
+  letter-spacing: 0.08em;
+  font-size: 10px;
 }
 
 .medium {
-  padding: 2px 5px;
-  border-radius: 4px;
-  font-size: 12px;
+  padding: 4px 10px;
+  font-size: 11px;
 }
 
 .large {
-  padding: 3px 7px;
-  border-radius: 6px;
-  font-weight: bold;
-  font-size: $defaultFontSize;
+  padding: 5px 12px;
+  letter-spacing: 0.04em;
+  font-size: 12px;
 }
 
-/** Outline **/
+/** Outline — text-only variant, used for non-state chips like genre. **/
 
 .outline {
-  background-color: var(--disabledLabelColor);
+  border: 1px solid var(--borderColor);
+  background-color: transparent;
+  color: var(--inkSoft);
+
+  &.danger {
+    border-color: var(--dangerColor);
+    color: var(--dangerColor);
+  }
+
+  &.success {
+    border-color: var(--successColor);
+    color: var(--successColor);
+  }
+
+  &.warning {
+    border-color: var(--warningColor);
+    color: var(--warningColor);
+  }
+
+  &.info {
+    border-color: var(--infoColor);
+    color: var(--infoColor);
+  }
+
+  &.primary {
+    border-color: var(--primaryColor);
+    color: var(--primaryColor);
+  }
+
+  &.purple {
+    border-color: var(--purple);
+    color: var(--purple);
+  }
+
+  &.disabled {
+    border-color: var(--borderColor);
+    color: var(--inkMuted);
+  }
 }

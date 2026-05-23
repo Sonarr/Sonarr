@@ -1,3 +1,99 @@
+/* Self-hosted woff2 files live next to this stylesheet — no third-party
+ * network calls. Legacy Roboto / Ubuntu Mono @font-face rules below remain
+ * for surfaces that still reference those families. */
+
+@font-face {
+  font-weight: 400;
+  font-style: normal;
+  font-family: 'Inter';
+  font-display: swap;
+
+  src: url('inter-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-weight: 500;
+  font-style: normal;
+  font-family: 'Inter';
+  font-display: swap;
+
+  src: url('inter-latin-500-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-weight: 600;
+  font-style: normal;
+  font-family: 'Inter';
+  font-display: swap;
+
+  src: url('inter-latin-600-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-weight: 700;
+  font-style: normal;
+  font-family: 'Inter';
+  font-display: swap;
+
+  src: url('inter-latin-700-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-weight: 400;
+  font-style: normal;
+  font-family: 'Fraunces';
+  font-display: swap;
+
+  src: url('fraunces-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-weight: 500;
+  font-style: normal;
+  font-family: 'Fraunces';
+  font-display: swap;
+
+  src: url('fraunces-latin-500-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-weight: 400;
+  font-style: italic;
+  font-family: 'Fraunces';
+  font-display: swap;
+
+  src: url('fraunces-latin-400-italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-weight: 500;
+  font-style: italic;
+  font-family: 'Fraunces';
+  font-display: swap;
+
+  src: url('fraunces-latin-500-italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-weight: 400;
+  font-style: normal;
+  font-family: 'JetBrains Mono';
+  font-display: swap;
+
+  src: url('jetbrains-mono-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-weight: 500;
+  font-style: normal;
+  font-family: 'JetBrains Mono';
+  font-display: swap;
+
+  src: url('jetbrains-mono-latin-500-normal.woff2') format('woff2');
+}
+
+/* Legacy fonts kept for transitional compat. New code never references these. */
+
 @font-face {
   font-weight: 300;
   font-style: normal;

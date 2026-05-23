@@ -4,13 +4,23 @@
 
 .label {
   margin-bottom: 5px;
-  font-weight: bold;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 12px;
 }
 
 .labelInputContainer {
   width: 300px;
 }
 
-.rows {
-  margin-bottom: 100px;
+.bordered {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-bottom: 24px;
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
+  background-color: var(--paperWarm);
 }

@@ -5,19 +5,28 @@
   flex-grow: 1;
   width: 100%;
   background-color: var(--modalBackgroundColor);
+  color: var(--ink);
 }
 
 .closeButton {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 12px;
+  right: 12px;
   z-index: 1;
-  width: 60px;
-  height: 60px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  color: var(--inkMuted);
   text-align: center;
-  line-height: 60px;
+  transition:
+    background-color 160ms cubic-bezier(0.25, 1, 0.5, 1),
+    color 160ms cubic-bezier(0.25, 1, 0.5, 1);
 
   &:hover {
-    color: var(--modalCloseButtonHoverColor);
+    background-color: var(--paperWarm);
+    color: var(--ink);
   }
 }
