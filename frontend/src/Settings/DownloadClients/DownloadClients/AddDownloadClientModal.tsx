@@ -11,13 +11,13 @@ interface AddDownloadClientModalProps
 
 function AddDownloadClientModal({
   isOpen,
+  onDownloadClientSelect,
   onModalClose,
-  ...otherProps
 }: AddDownloadClientModalProps) {
   return (
     <Modal isOpen={isOpen} onModalClose={onModalClose}>
       <AddDownloadClientModalContent
-        {...otherProps}
+        onDownloadClientSelect={onDownloadClientSelect}
         onModalClose={onModalClose}
       />
     </Modal>

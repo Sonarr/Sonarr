@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
-import { DownloadClientAppState } from 'App/State/SettingsAppState';
 import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
@@ -16,12 +14,16 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { kinds } from 'Helpers/Props';
 import {
-  bulkDeleteDownloadClients,
-  bulkEditDownloadClients,
+  DownloadClientModel,
+  useBulkDeleteDownloadClients,
+  useBulkEditDownloadClients,
+  useDownloadClientsData,
+  useSortedDownloadClients,
+} from 'Settings/DownloadClients/DownloadClients/useDownloadClients';
+import {
   setManageDownloadClientsSort,
-} from 'Store/Actions/settingsActions';
-import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
-import DownloadClient from 'typings/DownloadClient';
+  useManageDownloadClientsOptions,
+} from 'Settings/DownloadClients/useManageDownloadClientsOptionsStore';
 import { CheckInputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
@@ -75,7 +77,7 @@ const COLUMNS: Column[] = [
   },
   {
     name: 'tags',
-    label: 'Tags',
+    label: () => translate('Tags'),
     isSortable: true,
     isVisible: true,
   },
@@ -85,29 +87,15 @@ interface ManageDownloadClientsModalContentProps {
   onModalClose(): void;
 }
 
-interface ManageDownloadClientsModalContentInnerProps {
-  onModalClose: () => void;
-}
-
 function ManageDownloadClientsModalContentInner({
   onModalClose,
-}: ManageDownloadClientsModalContentInnerProps) {
-  const dispatch = useDispatch();
-  const {
-    isFetching,
-    isPopulated,
-    isDeleting,
-    isSaving,
-    error,
-    items,
-    sortKey,
-    sortDirection,
-  }: DownloadClientAppState = useSelector(
-    createClientSideCollectionSelector(
-      'settings.downloadClients',
-      'manageDownloadClients'
-    )
-  );
+}: ManageDownloadClientsModalContentProps) {
+  const { sortKey, sortDirection } = useManageDownloadClientsOptions();
+  const { data, isFetching, isFetched, error } = useSortedDownloadClients();
+
+  const { isDeleting, bulkDeleteDownloadClients } =
+    useBulkDeleteDownloadClients();
+  const { isSaving, bulkEditDownloadClients } = useBulkEditDownloadClients();
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -123,74 +111,67 @@ function ManageDownloadClientsModalContentInner({
     selectAll,
     unselectAll,
     useSelectedIds,
-  } = useSelect<DownloadClient>();
+  } = useSelect<DownloadClientModel>();
 
   const selectedIds = useSelectedIds();
 
-  const onSortPress = useCallback(
-    (value: string) => {
-      dispatch(setManageDownloadClientsSort({ sortKey: value }));
-    },
-    [dispatch]
-  );
+  const onSortPress = useCallback((value: string) => {
+    setManageDownloadClientsSort({ sortKey: value });
+  }, []);
 
   const onDeletePress = useCallback(() => {
     setIsDeleteModalOpen(true);
-  }, [setIsDeleteModalOpen]);
+  }, []);
 
   const onDeleteModalClose = useCallback(() => {
     setIsDeleteModalOpen(false);
-  }, [setIsDeleteModalOpen]);
+  }, []);
 
   const onEditPress = useCallback(() => {
     setIsEditModalOpen(true);
-  }, [setIsEditModalOpen]);
+  }, []);
 
   const onEditModalClose = useCallback(() => {
     setIsEditModalOpen(false);
-  }, [setIsEditModalOpen]);
+  }, []);
 
   const onConfirmDelete = useCallback(() => {
-    dispatch(bulkDeleteDownloadClients({ ids: getSelectedIds() }));
+    bulkDeleteDownloadClients({ ids: getSelectedIds() });
     setIsDeleteModalOpen(false);
-  }, [getSelectedIds, dispatch]);
+  }, [bulkDeleteDownloadClients, getSelectedIds]);
 
   const onSavePress = useCallback(
     (payload: object) => {
       setIsEditModalOpen(false);
 
-      dispatch(
-        bulkEditDownloadClients({
-          ids: getSelectedIds(),
-          ...payload,
-        })
-      );
+      bulkEditDownloadClients({
+        ids: getSelectedIds(),
+        ...payload,
+      });
     },
-    [getSelectedIds, dispatch]
+    [getSelectedIds, bulkEditDownloadClients]
   );
 
   const onTagsPress = useCallback(() => {
     setIsTagsModalOpen(true);
-  }, [setIsTagsModalOpen]);
+  }, []);
 
   const onTagsModalClose = useCallback(() => {
     setIsTagsModalOpen(false);
-  }, [setIsTagsModalOpen]);
+  }, []);
 
   const onApplyTagsPress = useCallback(
     (tags: number[], applyTags: string) => {
       setIsSavingTags(true);
       setIsTagsModalOpen(false);
 
-      dispatch(
-        bulkEditDownloadClients({
-          ids: getSelectedIds(),
-          tags,
-          applyTags,
-        })
-      );
+      bulkEditDownloadClients({
+        ids: getSelectedIds(),
+        tags,
+        applyTags,
+      });
     },
-    [getSelectedIds, dispatch]
+    [getSelectedIds, bulkEditDownloadClients]
   );
 
   const onSelectAllChange = useCallback(
@@ -217,11 +198,11 @@ function ManageDownloadClientsModalContentInner({
 
         {error ? <div>{errorMessage}</div> : null}
 
-        {isPopulated && !error && !items.length ? (
+        {isFetched && !error && !data.length ? (
           <Alert kind={kinds.INFO}>{translate('NoDownloadClientsFound')}</Alert>
         ) : null}
 
-        {isPopulated && !!items.length && !isFetching && !isFetching ? (
+        {isFetched && !!data.length && !isFetching ? (
           <Table
             columns={COLUMNS}
             horizontalScroll={true}
@@ -234,7 +215,7 @@ function ManageDownloadClientsModalContentInner({
             onSortPress={onSortPress}
           >
             <TableBody>
-              {items.map((item) => {
+              {data.map((item) => {
                 return (
                   <ManageDownloadClientsModalRow
                     key={item.id}
@@ -308,19 +289,14 @@ function ManageDownloadClientsModalContentInner({
   );
 }
 
-function ManageDownloadClientsModalContent({
-  onModalClose,
-}: ManageDownloadClientsModalContentProps) {
-  const { items }: DownloadClientAppState = useSelector(
-    createClientSideCollectionSelector(
-      'settings.downloadClients',
-      'manageDownloadClients'
-    )
-  );
+function ManageDownloadClientsModalContent(
+  props: ManageDownloadClientsModalContentProps
+) {
+  const items = useDownloadClientsData();
 
   return (
     <SelectProvider items={items}>
-      <ManageDownloadClientsModalContentInner onModalClose={onModalClose} />
+      <ManageDownloadClientsModalContentInner {...props} />
     </SelectProvider>
   );
 }
