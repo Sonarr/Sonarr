@@ -4,7 +4,9 @@ We're always looking for people to help make Sonarr even better, there are a num
 
 ## Reporting Issues
 
-Please file bug reports and feature requests through the [issue forms](https://github.com/Sonarr/Sonarr/issues/new/choose). The forms apply the required `needs-triage` label server-side; issues opened via the REST API (including `gh issue create --body-file`) are auto-closed because labels are silently dropped for users without push access.
+- Use the [issue forms](https://github.com/Sonarr/Sonarr/issues/new/choose) to file bug reports and feature requests — not the REST API or `gh issue create`.
+- The forms apply the required `needs-triage` label server-side. The REST API silently drops the `labels` parameter for users without push access, which leaves the issue unlabeled.
+- Unlabeled issues are auto-closed by [`.github/workflows/close_invalid_issues.yml`](./.github/workflows/close_invalid_issues.yml) on the `opened` event.
 
 ## Documentation
 
