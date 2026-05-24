@@ -596,9 +596,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             {
                 var trackedDownload = groupedTrackedDownload.First().TrackedDownload;
                 var importedSeries = imported.First().ImportDecision.LocalEpisode.Series;
-                var outputPath = trackedDownload.ImportItem.OutputPath.FullPath;
+                var outputPath = trackedDownload.ImportItem?.OutputPath?.FullPath;
 
-                if (_diskProvider.FolderExists(outputPath))
+                if (outputPath.IsNotNullOrWhiteSpace() && _diskProvider.FolderExists(outputPath))
                 {
                     if (_downloadedEpisodesImportService.ShouldDeleteFolder(
                             new DirectoryInfo(outputPath), importedSeries) &&
