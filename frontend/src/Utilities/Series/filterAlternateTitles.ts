@@ -59,18 +59,9 @@ function filterAlternateTitles(
         : alternateTitle.sceneSeasonNumber;
       // Select scene or tvdb on the episode
       const mappedSeasonNumber =
-        alternateTitle.sceneOrigin === 'tvdb'
-          ? seasonNumber
-          : sceneSeasonNumber;
-
-      // Add season titles with no mappedSeasonNumber
-      if (
-        mappedSeasonNumber === undefined &&
-        alternateTitle.seasonNumber === seasonNumber
-      ) {
-        seasonTitles.push(alternateTitle);
-        return;
-      }
+        alternateTitle.sceneOrigin !== 'tvdb' && sceneSeasonNumber !== undefined
+          ? sceneSeasonNumber
+          : seasonNumber;
 
       if (
         mappedSeasonNumber !== undefined &&
