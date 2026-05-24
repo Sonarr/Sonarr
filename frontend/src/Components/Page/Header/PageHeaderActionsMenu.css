@@ -1,20 +1,30 @@
 .menuButton {
-  margin-right: 15px;
-  width: 30px;
-  height: 60px;
-  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+  width: var(--chromeChipSize);
+  height: var(--chromeChipSize);
+  border-radius: 6px;
+  color: var(--inkSoft);
+  transition:
+    color var(--transitionSmooth),
+    background-color var(--transitionSmooth);
 
   &:hover {
-    color: var(--themeDarkColor);
+    background-color: var(--menuItemHoverBackgroundColor);
+    color: var(--ink);
   }
 }
 
 .itemIcon {
-  margin-right: 8px;
+  margin-right: 0;
+  width: 16px;
+  color: var(--inkMuted);
 }
 
 @media only screen and (max-width: $breakpointSmall) {
   .menuButton {
-    margin-right: 5px;
+    margin-right: 0;
   }
 }
