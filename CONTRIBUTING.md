@@ -2,6 +2,10 @@
 
 We're always looking for people to help make Sonarr even better, there are a number of ways to contribute.
 
+## Reporting Issues
+
+Please file bug reports and feature requests through the [issue forms](https://github.com/Sonarr/Sonarr/issues/new/choose). The forms apply the required `needs-triage` label server-side; issues opened via the REST API (including `gh issue create --body-file`) are auto-closed because labels are silently dropped for users without push access.
+
 ## Documentation
 
 Setup guides, [FAQ](https://wiki.servarr.com/sonarr/faq), the more information we have on the [wiki](https://wiki.servarr.com/sonarr) the better.
