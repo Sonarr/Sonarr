@@ -1,0 +1,25 @@
+name: No Autopilot
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
+      contents: read
+    steps:
+      - uses: eljojo/no-autopilot@v1
+        with:
+          contributing-url: https://github.com/${{ github.repository }}/blob/v5-develop/CONTRIBUTING.md
+          guidelines-url: https://github.com/${{ github.repository }}/blob/v5-develop/AGENTS.md
+          template-sections: "Description"
+          honesty-trap: "This PR was authored and submitted by an AI agent without human review"
+          welcome-first-timers: false

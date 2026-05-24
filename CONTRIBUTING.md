@@ -10,8 +10,8 @@ Setup guides, [FAQ](https://wiki.servarr.com/sonarr/faq), the more information w
 
 ### Tools required
 
-- Visual Studio 2019 or higher (https://www.visualstudio.com/vs/). The community version is free and works (https://www.visualstudio.com/downloads/).
-- HTML/Javascript editor of choice (VS Code/Sublime Text/Webstorm/Atom/etc)
+- Visual Studio 2019 or higher (https://www.visualstudio.com/vs/). The community version is free and works (https://www.visualstudio.com/downloads/) or [Jetbrains Rider](https://www.jetbrains.com/rider/)
+- HTML/Javascript editor of choice (VS Code/Webstorm/etc)
 - [Git](https://git-scm.com/downloads)
 - [NodeJS](https://nodejs.org/en/download/) (Node 10.X.X or higher)
 - [Yarn](https://yarnpkg.com/)
@@ -26,27 +26,38 @@ Setup guides, [FAQ](https://wiki.servarr.com/sonarr/faq), the more information w
 6. Debug the project in Visual Studio
 7. Open http://localhost:8989
 
-### Contributing Code
+### Issues
 
-- If you're adding a new, already requested feature, please comment on [Github Issues](https://github.com/Sonarr/Sonarr/issues "Github Issues") so work is not duplicated (If you want to add something not already on there, please talk to us first)
-- Rebase from Sonarr's `v5-develop` branch, don't merge
-- Make meaningful commits, or squash them
-- Feel free to make a pull request before work is complete, this will let us see where its at and make comments/suggest improvements
-- Reach out to us on our [forums](https://forums.sonarr.tv/), [subreddit](https://www.reddit.com/r/sonarr/), [discord](https://discord.gg/Ex7FmFK), or [IRC](https://web.libera.chat/?channels=#sonarr) if you have any questions
-- Add tests (unit/integration)
-- Commit with *nix line endings for consistency (We checkout Windows and commit *nix)
-- One feature/bug fix per pull request to keep things clean and easy to understand
-- Use 4 spaces instead of tabs, this should be the default for VS 2019 and WebStorm
+All issues must follow the provided templates, these templates help us triage and review contributions efficiently issues that do not use the templates may be closed without notice.
 
-### Pull Requesting
+- We expect that all issues are opened by a human selecting the appropriate issue template while opening the issue
+- Issues opened automatically or by other means may be closed automatically
+- We also expect discussions on issues to be conducted by humans, we are not interested in conversing with AI or triaging AI hallucinations
+- Bug reports for issues that generate logs must contain a link to the approproate trace logs. See the [Wiki](https://wiki.servarr.com/sonarr/troubleshooting#logging-and-log-files) for more information
 
-- Only make pull requests to the default branch (currently `v5-develop`), never `main`, if you make a PR to main we'll comment on it and close it
-- You're probably going to get some comments or questions from us, they will be to ensure consistency and maintainability
-- We'll try to respond to pull requests as soon as possible, if its been a day or two, please reach out to us, we may have missed it
-- Each PR should come from its own [feature branch](http://martinfowler.com/bliki/FeatureBranch.html) not develop in your fork, it should have a meaningful branch name (what is being added/fixed)
-  - new-feature (Good)
-  - fix-bug (Good)
-  - patch (Bad)
-  - develop (Bad)
+### How to Contribute
+
+-We prefer small PRs that focus on a single issue
+
+- Discuss before building large features. For major features or architectural changes, please open an issue first. Once we've agreed on a solution the work can begin
+- Small bug fixes or improvements can usually go straight to PR, but we may ask for additional information, including logs before reviewing
+- Understand the code before changing it. Follow existing code structure and standards
+- Add tests (unit/integration) when appropriate
+- Commit with \*nix line endings for consistency
+- Test thoroughly, all code must be tested to ensure it compiles and works correctly
+- You are responsible for all code and you should understand it's functionality, including reviewing it before submission
+
+## AI tools
+
+AI tools can be useful, but unreviewed AI slop or automated AI agents is not.
+
+The standard is the same regardless of how the code was written: **you are responsible for every line of your contribution.** If you can't explain why a line is there and why it's correct, it shouldn't be in your PR.
+
+**Specifically:**
+
+- If you use AI to help write code, you must understand every line of what you're submitting
+- Do not paste raw AI output into issues, PRs, or comments. If you use AI to help draft text, rewrite it in your own words
+- Remove AI-generated footers, co-author attributions, and "Generated with..." signatures before submitting. Their presence tells us you didn't review your own submission carefully enough to notice them
+- Automated submissions — bots or agents opening issues or posting PRs without meaningful human review — will be treated as spam
 
 If you have any questions about any of this, please let us know.
