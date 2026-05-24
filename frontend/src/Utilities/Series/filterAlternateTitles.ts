@@ -63,6 +63,15 @@ function filterAlternateTitles(
           ? seasonNumber
           : sceneSeasonNumber;
 
+      // Add season titles with no mappedSeasonNumber
+      if (
+        mappedSeasonNumber === undefined &&
+        alternateTitle.seasonNumber === seasonNumber
+      ) {
+        seasonTitles.push(alternateTitle);
+        return;
+      }
+
       if (
         mappedSeasonNumber !== undefined &&
         mappedSeasonNumber === mappedAltSeasonNumber
