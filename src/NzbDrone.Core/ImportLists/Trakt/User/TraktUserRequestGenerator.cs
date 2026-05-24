@@ -53,7 +53,6 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
 
             var filterParams = TraktQueryHelper.BuildFilterParameters(_settings.Rating, _settings.Genres, _settings.Years, _settings.Limit, _settings.TraktAdditionalParameters);
 
-            // Add extended parameter for watched list
             if (_settings.TraktListType == (int)TraktUserListType.UserWatchedList)
             {
                 filterParams["extended"] = "full";
