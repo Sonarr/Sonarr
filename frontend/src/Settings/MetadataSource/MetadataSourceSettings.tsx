@@ -1,19 +1,16 @@
 import React from 'react';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import SettingsPage from 'Settings/SettingsPage';
 import translate from 'Utilities/String/translate';
 import TheTvdb from './TheTvdb';
 
 function MetadataSourceSettings() {
   return (
-    <PageContent title={translate('MetadataSourceSettings')}>
-      <SettingsToolbar showSave={false} />
-
+    <SettingsPage title={translate('MetadataSourceSettings')} showSave={false}>
       <PageContentBody>
         <TheTvdb />
       </PageContentBody>
-    </PageContent>
+    </SettingsPage>
   );
 }
 

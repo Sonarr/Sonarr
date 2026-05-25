@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import CommandNames from 'Commands/CommandNames';
 import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
@@ -6,9 +6,12 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
+import PageToolbar, {
+  type MoreMenuItem,
+} from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
+import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
@@ -88,10 +91,52 @@ function LogsTable() {
     });
   }, [executeCommand, goToPage, refetch]);
 
+  const [isTableOptionsModalOpen, setIsTableOptionsModalOpen] = useState(false);
+
+  const onTableOptionsPress = useCallback(() => {
+    setIsTableOptionsModalOpen(true);
+  }, []);
+
+  const onTableOptionsModalClose = useCallback(() => {
+    setIsTableOptionsModalOpen(false);
+  }, []);
+
+  const moreMenuItems = useMemo<MoreMenuItem[]>(
+    () => [
+      {
+        id: 'refresh',
+        label: translate('Refresh'),
+        iconName: icons.REFRESH,
+        isSpinning: isFetching,
+        onPress: handleRefreshPress,
+      },
+      {
+        id: 'clear',
+        label: translate('Clear'),
+        iconName: icons.CLEAR,
+        isSpinning: isClearLogExecuting,
+        onPress: handleClearLogsPress,
+      },
+      {
+        id: 'options',
+        label: translate('Options'),
+        iconName: icons.TABLE,
+        onPress: onTableOptionsPress,
+      },
+    ],
+    [
+      isFetching,
+      handleRefreshPress,
+      isClearLogExecuting,
+      handleClearLogsPress,
+      onTableOptionsPress,
+    ]
+  );
+
   return (
     <PageContent title={translate('Logs')}>
-      <PageToolbar>
-        <PageToolbarSection>
+      <PageToolbar moreMenuItems={moreMenuItems}>
+        <ToolbarItem id="refresh" priority={1} groupId="left-a">
           <PageToolbarButton
             label={translate('Refresh')}
             iconName={icons.REFRESH}
@@ -99,20 +144,27 @@ function LogsTable() {
             isSpinning={isFetching}
             onPress={handleRefreshPress}
           />
+        </ToolbarItem>
 
+        <ToolbarItem id="clear" priority={1} groupId="left-a">
           <PageToolbarButton
             label={translate('Clear')}
             iconName={icons.CLEAR}
             isSpinning={isClearLogExecuting}
             onPress={handleClearLogsPress}
           />
-        </PageToolbarSection>
+        </ToolbarItem>
 
-        <PageToolbarSection alignContent={align.RIGHT}>
+        <PageToolbarSpacer />
+
+        <ToolbarItem id="options" priority={2} groupId="right-a">
           <TableOptionsModalWrapper
             canModifyColumns={false}
             columns={columns}
             pageSize={pageSize}
+            isOpen={isTableOptionsModalOpen}
+            onPress={onTableOptionsPress}
+            onModalClose={onTableOptionsModalClose}
             onTableOptionChange={handleTableOptionChange}
           >
             <PageToolbarButton
@@ -120,7 +172,9 @@ function LogsTable() {
               iconName={icons.TABLE}
             />
           </TableOptionsModalWrapper>
+        </ToolbarItem>
 
+        <ToolbarItem id="filter" pinned={true}>
           <FilterMenu
             alignMenu={align.RIGHT}
             selectedFilterKey={selectedFilterKey}
@@ -128,7 +182,7 @@ function LogsTable() {
             customFilters={[]}
             onFilterSelect={handleFilterSelect}
           />
-        </PageToolbarSection>
+        </ToolbarItem>
       </PageToolbar>
 
       <PageContentBody>

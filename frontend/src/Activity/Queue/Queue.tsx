@@ -14,10 +14,14 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
+import PageToolbar, {
+  type MoreMenuItem,
+} from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
@@ -212,6 +216,69 @@ function QueueContent() {
     [goToPage]
   );
 
+  const [isTableOptionsModalOpen, setIsTableOptionsModalOpen] = useState(false);
+
+  const onTableOptionsPress = useCallback(() => {
+    setIsTableOptionsModalOpen(true);
+  }, []);
+
+  const onTableOptionsModalClose = useCallback(() => {
+    setIsTableOptionsModalOpen(false);
+  }, []);
+
+  const moreMenuItems = useMemo<MoreMenuItem[]>(
+    () => [
+      {
+        id: 'refresh',
+        label: translate('Refresh'),
+        iconName: icons.REFRESH,
+        isSpinning: isRefreshing,
+        onPress: handleRefreshPress,
+      },
+      {
+        id: 'grab-selected',
+        label: translate('GrabSelected'),
+        iconName: icons.DOWNLOAD,
+        isDisabled: disableSelectedActions || !isPendingSelected,
+        isSpinning: isGrabbing,
+        onPress: handleGrabSelectedPress,
+      },
+      {
+        id: 'remove-selected',
+        label: translate('RemoveSelected'),
+        iconName: icons.REMOVE,
+        isDisabled: disableSelectedActions,
+        isSpinning: isRemoving,
+        onPress: handleRemoveSelectedPress,
+      },
+      {
+        id: 'import-selected',
+        label: translate('ImportSelected'),
+        iconName: icons.INTERACTIVE,
+        isDisabled: disableSelectedActions,
+        onPress: handleImportSelectedPress,
+      },
+      {
+        id: 'options',
+        label: translate('Options'),
+        iconName: icons.TABLE,
+        onPress: onTableOptionsPress,
+      },
+    ],
+    [
+      isRefreshing,
+      handleRefreshPress,
+      disableSelectedActions,
+      isPendingSelected,
+      isGrabbing,
+      handleGrabSelectedPress,
+      isRemoving,
+      handleRemoveSelectedPress,
+      handleImportSelectedPress,
+      onTableOptionsPress,
+    ]
+  );
+
   useEffect(() => {
     const repopulate = () => {
       refetch();
@@ -286,17 +353,21 @@ function QueueContent() {
 
   return (
     <PageContent title={translate('Queue')}>
-      <PageToolbar>
-        <PageToolbarSection>
+      <PageToolbar moreMenuItems={moreMenuItems}>
+        <ToolbarItem id="refresh" priority={1} groupId="left-a">
           <PageToolbarButton
-            label="Refresh"
+            label={translate('Refresh')}
             iconName={icons.REFRESH}
             isSpinning={isRefreshing}
             onPress={handleRefreshPress}
           />
+        </ToolbarItem>
 
+        <OverflowDivider groupId="left-a">
           <PageToolbarSeparator />
+        </OverflowDivider>
 
+        <ToolbarItem id="grab-selected" priority={1} groupId="left-b">
           <PageToolbarButton
             label={translate('GrabSelected')}
             iconName={icons.DOWNLOAD}
@@ -304,7 +375,9 @@ function QueueContent() {
             isSpinning={isGrabbing}
             onPress={handleGrabSelectedPress}
           />
+        </ToolbarItem>
 
+        <ToolbarItem id="remove-selected" priority={1} groupId="left-b">
           <PageToolbarButton
             label={translate('RemoveSelected')}
             iconName={icons.REMOVE}
@@ -312,22 +385,31 @@ function QueueContent() {
             isSpinning={isRemoving}
             onPress={handleRemoveSelectedPress}
           />
+        </ToolbarItem>
 
+        <OverflowDivider groupId="left-b">
           <PageToolbarSeparator />
+        </OverflowDivider>
 
+        <ToolbarItem id="import-selected" priority={1} groupId="left-c">
           <PageToolbarButton
             label={translate('ImportSelected')}
             iconName={icons.INTERACTIVE}
             isDisabled={disableSelectedActions}
             onPress={handleImportSelectedPress}
           />
-        </PageToolbarSection>
+        </ToolbarItem>
 
-        <PageToolbarSection alignContent={align.RIGHT}>
+        <PageToolbarSpacer />
+
+        <ToolbarItem id="options" priority={2} groupId="right-a">
           <TableOptionsModalWrapper
             columns={columns}
             pageSize={pageSize}
             maxPageSize={200}
+            isOpen={isTableOptionsModalOpen}
+            onPress={onTableOptionsPress}
+            onModalClose={onTableOptionsModalClose}
             onTableOptionChange={handleTableOptionChange}
           >
             <PageToolbarButton
@@ -335,7 +417,9 @@ function QueueContent() {
               iconName={icons.TABLE}
             />
           </TableOptionsModalWrapper>
+        </ToolbarItem>
 
+        <ToolbarItem id="filter" pinned={true}>
           <FilterMenu
             alignMenu={align.RIGHT}
             selectedFilterKey={selectedFilterKey}
@@ -344,7 +428,7 @@ function QueueContent() {
             filterModalConnectorComponent={QueueFilterModal}
             onFilterSelect={handleFilterSelect}
           />
-        </PageToolbarSection>
+        </ToolbarItem>
       </PageToolbar>
 
       {currentQueue.current}

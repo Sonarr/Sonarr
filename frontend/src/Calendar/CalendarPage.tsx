@@ -11,10 +11,14 @@ import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
+import PageToolbar, {
+  type MoreMenuItem,
+} from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import Episode from 'Episode/Episode';
 import EpisodeFileProvider from 'EpisodeFile/EpisodeFileProvider';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
@@ -106,39 +110,79 @@ function CalendarPage() {
     setCalendarDayCount(dayCount);
   }, [width]);
 
+  const moreMenuItems = useMemo<MoreMenuItem[]>(
+    () => [
+      {
+        id: 'ical-link',
+        label: translate('ICalLink'),
+        iconName: icons.CALENDAR,
+        onPress: handleGetCalendarLinkPress,
+      },
+      {
+        id: 'rss-sync',
+        label: translate('RssSync'),
+        iconName: icons.RSS,
+        isSpinning: isRssSyncExecuting,
+        onPress: handleRssSyncPress,
+      },
+      {
+        id: 'options',
+        label: translate('Options'),
+        iconName: icons.POSTER,
+        onPress: handleOptionsPress,
+      },
+    ],
+    [
+      handleGetCalendarLinkPress,
+      isRssSyncExecuting,
+      handleRssSyncPress,
+      handleOptionsPress,
+    ]
+  );
+
   return (
     <CalendarPageProvider
       episodeIds={episodeIds}
       episodeFileIds={episodeFileIds}
     >
       <PageContent title={translate('Calendar')}>
-        <PageToolbar>
-          <PageToolbarSection>
+        <PageToolbar moreMenuItems={moreMenuItems}>
+          <ToolbarItem id="ical-link" priority={1} groupId="left-a">
             <PageToolbarButton
               label={translate('ICalLink')}
               iconName={icons.CALENDAR}
               onPress={handleGetCalendarLinkPress}
             />
+          </ToolbarItem>
 
+          <OverflowDivider groupId="left-a">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
+          <ToolbarItem id="rss-sync" priority={1} groupId="left-b">
             <PageToolbarButton
               label={translate('RssSync')}
               iconName={icons.RSS}
               isSpinning={isRssSyncExecuting}
               onPress={handleRssSyncPress}
             />
+          </ToolbarItem>
 
+          <ToolbarItem id="search-missing" priority={1} groupId="left-b">
             <CalendarMissingEpisodeSearchButton />
-          </PageToolbarSection>
+          </ToolbarItem>
 
-          <PageToolbarSection alignContent={align.RIGHT}>
+          <PageToolbarSpacer />
+
+          <ToolbarItem id="options" priority={2} groupId="right-a">
             <PageToolbarButton
               label={translate('Options')}
               iconName={icons.POSTER}
               onPress={handleOptionsPress}
             />
+          </ToolbarItem>
 
+          <ToolbarItem id="filter" pinned={true}>
             <FilterMenu
               alignMenu={align.RIGHT}
               isDisabled={!hasSeries}
@@ -148,7 +192,7 @@ function CalendarPage() {
               filterModalConnectorComponent={CalendarFilterModal}
               onFilterSelect={handleFilterSelect}
             />
-          </PageToolbarSection>
+          </ToolbarItem>
         </PageToolbar>
 
         <PageContentBody

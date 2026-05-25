@@ -1,37 +1,88 @@
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
+import { type MoreMenuItem } from 'Components/Page/Toolbar/PageToolbar';
+import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
-import ParseToolbarButton from 'Parse/ParseToolbarButton';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
+import { icons } from 'Helpers/Props';
+import useParseModal from 'Parse/useParseModal';
+import SettingsPage from 'Settings/SettingsPage';
 import translate from 'Utilities/String/translate';
 import CustomFormats from './CustomFormats/CustomFormats';
 import ManageCustomFormatsToolbarButton from './CustomFormats/Manage/ManageCustomFormatsToolbarButton';
 
 function CustomFormatSettingsPage() {
+  const { open: onParseModalPress, modal: parseModal } = useParseModal();
+
+  const [isManageCustomFormatsOpen, setIsManageCustomFormatsOpen] =
+    useState(false);
+
+  const handleManageCustomFormatsPress = useCallback(() => {
+    setIsManageCustomFormatsOpen(true);
+  }, []);
+
+  const handleManageCustomFormatsClose = useCallback(() => {
+    setIsManageCustomFormatsOpen(false);
+  }, []);
+
+  const moreMenuItems = useMemo<MoreMenuItem[]>(
+    () => [
+      {
+        id: 'test-parsing',
+        label: translate('TestParsing'),
+        iconName: icons.PARSE,
+        onPress: onParseModalPress,
+      },
+      {
+        id: 'manage-custom-formats',
+        label: translate('ManageFormats'),
+        iconName: icons.MANAGE,
+        onPress: handleManageCustomFormatsPress,
+      },
+    ],
+    [onParseModalPress, handleManageCustomFormatsPress]
+  );
+
   return (
-    <PageContent title={translate('CustomFormatsSettings')}>
-      <SettingsToolbar
-        showSave={false}
-        additionalButtons={
-          <>
+    <SettingsPage
+      title={translate('CustomFormatsSettings')}
+      showSave={false}
+      moreMenuItems={moreMenuItems}
+      toolbarChildren={
+        <>
+          <OverflowDivider groupId="extras">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
-            <ParseToolbarButton />
+          <ToolbarItem id="test-parsing" priority={1} groupId="extras">
+            <PageToolbarButton
+              label={translate('TestParsing')}
+              iconName={icons.PARSE}
+              onPress={onParseModalPress}
+            />
+          </ToolbarItem>
 
-            <ManageCustomFormatsToolbarButton />
-          </>
-        }
-      />
-
+          <ToolbarItem id="manage-custom-formats" priority={1} groupId="extras">
+            <ManageCustomFormatsToolbarButton
+              isOpen={isManageCustomFormatsOpen}
+              onPress={handleManageCustomFormatsPress}
+              onModalClose={handleManageCustomFormatsClose}
+            />
+          </ToolbarItem>
+        </>
+      }
+    >
       <PageContentBody>
         <DndProvider backend={HTML5Backend}>
           <CustomFormats />
         </DndProvider>
       </PageContentBody>
-    </PageContent>
+
+      {parseModal}
+    </SettingsPage>
   );
 }
 

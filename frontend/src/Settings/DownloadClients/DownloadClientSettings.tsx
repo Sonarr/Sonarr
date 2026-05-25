@@ -1,12 +1,14 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppState from 'App/State/AppState';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
+import { type MoreMenuItem } from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { icons } from 'Helpers/Props';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import SettingsPage from 'Settings/SettingsPage';
 import { testAllDownloadClients } from 'Store/Actions/settingsActions';
 import {
   SaveCallback,
@@ -61,32 +63,57 @@ function DownloadClientSettings() {
     dispatch(testAllDownloadClients());
   }, [dispatch]);
 
-  return (
-    <PageContent title={translate('DownloadClientSettings')}>
-      <SettingsToolbar
-        isSaving={isSaving}
-        hasPendingChanges={hasPendingChanges}
-        additionalButtons={
-          <>
-            <PageToolbarSeparator />
+  const moreMenuItems = useMemo<MoreMenuItem[]>(
+    () => [
+      {
+        id: 'test-all',
+        label: translate('TestAllClients'),
+        iconName: icons.TEST,
+        isSpinning: isTestingAll,
+        onPress: handleTestAllIndexersPress,
+      },
+      {
+        id: 'manage',
+        label: translate('ManageClients'),
+        iconName: icons.MANAGE,
+        onPress: handleManageDownloadClientsPress,
+      },
+    ],
+    [isTestingAll, handleTestAllIndexersPress, handleManageDownloadClientsPress]
+  );
 
+  return (
+    <SettingsPage
+      title={translate('DownloadClientSettings')}
+      isSaving={isSaving}
+      hasPendingChanges={hasPendingChanges}
+      moreMenuItems={moreMenuItems}
+      toolbarChildren={
+        <>
+          <OverflowDivider groupId="extras">
+            <PageToolbarSeparator />
+          </OverflowDivider>
+
+          <ToolbarItem id="test-all" priority={1} groupId="extras">
             <PageToolbarButton
               label={translate('TestAllClients')}
               iconName={icons.TEST}
               isSpinning={isTestingAll}
               onPress={handleTestAllIndexersPress}
             />
+          </ToolbarItem>
 
+          <ToolbarItem id="manage" priority={1} groupId="extras">
             <PageToolbarButton
               label={translate('ManageClients')}
               iconName={icons.MANAGE}
               onPress={handleManageDownloadClientsPress}
             />
-          </>
-        }
-        onSavePress={handleSavePress}
-      />
-
+          </ToolbarItem>
+        </>
+      }
+      onSavePress={handleSavePress}
+    >
       <PageContentBody>
         <DownloadClients />
 
@@ -102,7 +129,7 @@ function DownloadClientSettings() {
           onModalClose={handleManageDownloadClientsModalClose}
         />
       </PageContentBody>
-    </PageContent>
+    </SettingsPage>
   );
 }
 

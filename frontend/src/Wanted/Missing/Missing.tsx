@@ -9,10 +9,14 @@ import FilterMenu from 'Components/Menu/FilterMenu';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
+import PageToolbar, {
+  type MoreMenuItem,
+} from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
@@ -189,6 +193,64 @@ function MissingContent() {
     [goToPage]
   );
 
+  const [isTableOptionsModalOpen, setIsTableOptionsModalOpen] = useState(false);
+
+  const onTableOptionsPress = useCallback(() => {
+    setIsTableOptionsModalOpen(true);
+  }, []);
+
+  const onTableOptionsModalClose = useCallback(() => {
+    setIsTableOptionsModalOpen(false);
+  }, []);
+
+  const moreMenuItems = useMemo<MoreMenuItem[]>(
+    () => [
+      {
+        id: 'search',
+        label: anySelected
+          ? translate('SearchSelected')
+          : translate('SearchAll'),
+        iconName: icons.SEARCH,
+        isDisabled: isSearchingForEpisodes,
+        isSpinning: isSearchingForEpisodes,
+        onPress: anySelected ? handleSearchSelectedPress : handleSearchAllPress,
+      },
+      {
+        id: 'toggle-monitored',
+        label: isShowingMonitored
+          ? translate('UnmonitorSelected')
+          : translate('MonitorSelected'),
+        iconName: icons.MONITORED,
+        isDisabled: !anySelected,
+        isSpinning: isToggling,
+        onPress: handleToggleSelectedPress,
+      },
+      {
+        id: 'manual-import',
+        label: translate('ManualImport'),
+        iconName: icons.INTERACTIVE,
+        onPress: handleInteractiveImportPress,
+      },
+      {
+        id: 'options',
+        label: translate('Options'),
+        iconName: icons.TABLE,
+        onPress: onTableOptionsPress,
+      },
+    ],
+    [
+      anySelected,
+      isSearchingForEpisodes,
+      handleSearchSelectedPress,
+      handleSearchAllPress,
+      isShowingMonitored,
+      isToggling,
+      handleToggleSelectedPress,
+      handleInteractiveImportPress,
+      onTableOptionsPress,
+    ]
+  );
+
   useEffect(() => {
     const repopulate = () => {
       refetch();
@@ -208,8 +270,8 @@ function MissingContent() {
   return (
     <QueueDetailsProvider episodeIds={episodeIds}>
       <PageContent title={translate('Missing')}>
-        <PageToolbar>
-          <PageToolbarSection>
+        <PageToolbar moreMenuItems={moreMenuItems}>
+          <ToolbarItem id="search" priority={1} groupId="left-a">
             <PageToolbarButton
               label={
                 anySelected
@@ -223,9 +285,13 @@ function MissingContent() {
                 anySelected ? handleSearchSelectedPress : handleSearchAllPress
               }
             />
+          </ToolbarItem>
 
+          <OverflowDivider groupId="left-a">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
+          <ToolbarItem id="toggle-monitored" priority={1} groupId="left-b">
             <PageToolbarButton
               label={
                 isShowingMonitored
@@ -237,20 +303,29 @@ function MissingContent() {
               isSpinning={isToggling}
               onPress={handleToggleSelectedPress}
             />
+          </ToolbarItem>
 
+          <OverflowDivider groupId="left-b">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
+          <ToolbarItem id="manual-import" priority={1} groupId="left-c">
             <PageToolbarButton
               label={translate('ManualImport')}
               iconName={icons.INTERACTIVE}
               onPress={handleInteractiveImportPress}
             />
-          </PageToolbarSection>
+          </ToolbarItem>
 
-          <PageToolbarSection alignContent={align.RIGHT}>
+          <PageToolbarSpacer />
+
+          <ToolbarItem id="options" priority={2} groupId="right-a">
             <TableOptionsModalWrapper
               columns={columns}
               pageSize={pageSize}
+              isOpen={isTableOptionsModalOpen}
+              onPress={onTableOptionsPress}
+              onModalClose={onTableOptionsModalClose}
               onTableOptionChange={handleTableOptionChange}
             >
               <PageToolbarButton
@@ -258,7 +333,9 @@ function MissingContent() {
                 iconName={icons.TABLE}
               />
             </TableOptionsModalWrapper>
+          </ToolbarItem>
 
+          <ToolbarItem id="filter" pinned={true}>
             <FilterMenu
               alignMenu={align.RIGHT}
               selectedFilterKey={selectedFilterKey}
@@ -267,7 +344,7 @@ function MissingContent() {
               filterModalConnectorComponent={MissingFilterModal}
               onFilterSelect={handleFilterSelect}
             />
-          </PageToolbarSection>
+          </ToolbarItem>
         </PageToolbar>
 
         <PageContentBody>

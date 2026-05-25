@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
+import PageToolbar, {
+  type MoreMenuItem,
+} from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
@@ -66,14 +69,38 @@ function LogFiles({
     type === 'update' ? 'UpdateLogs' : 'logs',
   ]);
 
+  const moreMenuItems = useMemo<MoreMenuItem[]>(
+    () => [
+      {
+        id: 'refresh',
+        label: translate('Refresh'),
+        iconName: icons.REFRESH,
+        isSpinning: isFetching,
+        onPress: onRefreshPress,
+      },
+      {
+        id: 'clear',
+        label: translate('Clear'),
+        iconName: icons.CLEAR,
+        isSpinning: isDeleteFilesExecuting,
+        onPress: onDeleteFilesPress,
+      },
+    ],
+    [isFetching, onRefreshPress, isDeleteFilesExecuting, onDeleteFilesPress]
+  );
+
   return (
     <PageContent title={translate('LogFiles')}>
-      <PageToolbar>
-        <PageToolbarSection>
+      <PageToolbar moreMenuItems={moreMenuItems}>
+        <ToolbarItem id="logs-nav" pinned={true}>
           <LogsNavMenu current={currentLogView} />
+        </ToolbarItem>
 
+        <OverflowDivider groupId="left-a">
           <PageToolbarSeparator />
+        </OverflowDivider>
 
+        <ToolbarItem id="refresh" priority={1} groupId="left-a">
           <PageToolbarButton
             label={translate('Refresh')}
             iconName={icons.REFRESH}
@@ -81,14 +108,16 @@ function LogFiles({
             isSpinning={isFetching}
             onPress={onRefreshPress}
           />
+        </ToolbarItem>
 
+        <ToolbarItem id="clear" priority={1} groupId="left-a">
           <PageToolbarButton
             label={translate('Clear')}
             iconName={icons.CLEAR}
             isSpinning={isDeleteFilesExecuting}
             onPress={onDeleteFilesPress}
           />
-        </PageToolbarSection>
+        </ToolbarItem>
       </PageToolbar>
       <PageContentBody>
         <Alert>

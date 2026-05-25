@@ -12,17 +12,20 @@ import MetadataAttribution from 'Components/MetadataAttribution';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
+import PageToolbar, {
+  type MoreMenuItem,
+} from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
 import useEpisodes from 'Episode/useEpisodes';
 import useEpisodeFiles from 'EpisodeFile/useEpisodeFiles';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import {
-  align,
   icons,
   kinds,
   sizes,
@@ -381,6 +384,102 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     }
   }, [isRefreshing, wasRefreshing, isRenaming, wasRenaming, populate]);
 
+  let expandIcon = icons.EXPAND_INDETERMINATE;
+
+  if (expandedState.allExpanded) {
+    expandIcon = icons.COLLAPSE;
+  } else if (expandedState.allCollapsed) {
+    expandIcon = icons.EXPAND;
+  }
+
+  // useMemo must be before the early return to satisfy hooks rules
+  const monitored = series?.monitored ?? false;
+
+  const moreMenuItems = useMemo<MoreMenuItem[]>(
+    () => [
+      {
+        id: 'refresh',
+        label: translate('RefreshAndScan'),
+        iconName: icons.REFRESH,
+        isSpinning: isRefreshing,
+        onPress: handleRefreshPress,
+      },
+      {
+        id: 'search-monitored',
+        label: translate('SearchMonitored'),
+        iconName: icons.SEARCH,
+        isDisabled: !monitored || !hasMonitoredEpisodes || !hasEpisodes,
+        isSpinning: isSearching,
+        onPress: handleSearchPress,
+      },
+      {
+        id: 'preview-rename',
+        label: translate('PreviewRename'),
+        iconName: icons.ORGANIZE,
+        isDisabled: !hasEpisodeFiles,
+        onPress: handleOrganizePress,
+      },
+      {
+        id: 'manage-episodes',
+        label: translate('ManageEpisodes'),
+        iconName: icons.EPISODE_FILE,
+        onPress: handleManageEpisodesPress,
+      },
+      {
+        id: 'history',
+        label: translate('History'),
+        iconName: icons.HISTORY,
+        isDisabled: !hasEpisodes,
+        onPress: handleSeriesHistoryPress,
+      },
+      {
+        id: 'episode-monitoring',
+        label: translate('EpisodeMonitoring'),
+        iconName: icons.MONITORED,
+        onPress: handleMonitorOptionsPress,
+      },
+      {
+        id: 'edit',
+        label: translate('Edit'),
+        iconName: icons.EDIT,
+        onPress: handleEditSeriesPress,
+      },
+      {
+        id: 'delete',
+        label: translate('Delete'),
+        iconName: icons.DELETE,
+        onPress: handleDeleteSeriesPress,
+      },
+      {
+        id: 'expand-all',
+        label: expandedState.allExpanded
+          ? translate('CollapseAll')
+          : translate('ExpandAll'),
+        iconName: expandIcon,
+        onPress: handleExpandAllPress,
+      },
+    ],
+    [
+      isRefreshing,
+      handleRefreshPress,
+      monitored,
+      hasMonitoredEpisodes,
+      hasEpisodes,
+      isSearching,
+      handleSearchPress,
+      hasEpisodeFiles,
+      handleOrganizePress,
+      handleManageEpisodesPress,
+      handleSeriesHistoryPress,
+      handleMonitorOptionsPress,
+      handleEditSeriesPress,
+      handleDeleteSeriesPress,
+      expandedState.allExpanded,
+      expandIcon,
+      handleExpandAllPress,
+    ]
+  );
+
   if (!series) {
     return null;
   }
@@ -396,7 +495,6 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     path,
     statistics = {} as Statistics,
     qualityProfileId,
-    monitored,
     status,
     network,
     originalLanguage,
@@ -424,14 +522,6 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     });
   }
 
-  let expandIcon = icons.EXPAND_INDETERMINATE;
-
-  if (expandedState.allExpanded) {
-    expandIcon = icons.COLLAPSE;
-  } else if (expandedState.allCollapsed) {
-    expandIcon = icons.EXPAND;
-  }
-
   const fanartUrl = getFanartUrl(images);
   const isFetching = isEpisodesFetching || isEpisodeFilesFetching;
   const isPopulated = isEpisodesFetched && isEpisodeFilesFetched;
@@ -439,8 +529,8 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   return (
     <SeriesDetailsProvider seriesId={seriesId}>
       <PageContent title={title}>
-        <PageToolbar>
-          <PageToolbarSection>
+        <PageToolbar moreMenuItems={moreMenuItems}>
+          <ToolbarItem id="refresh" priority={1} groupId="left-a">
             <PageToolbarButton
               label={translate('RefreshAndScan')}
               iconName={icons.REFRESH}
@@ -449,7 +539,9 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
               isSpinning={isRefreshing}
               onPress={handleRefreshPress}
             />
+          </ToolbarItem>
 
+          <ToolbarItem id="search-monitored" priority={1} groupId="left-a">
             <PageToolbarButton
               label={translate('SearchMonitored')}
               iconName={icons.SEARCH}
@@ -462,51 +554,69 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
               }
               onPress={handleSearchPress}
             />
+          </ToolbarItem>
 
+          <OverflowDivider groupId="left-a">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
+          <ToolbarItem id="preview-rename" priority={1} groupId="left-b">
             <PageToolbarButton
               label={translate('PreviewRename')}
               iconName={icons.ORGANIZE}
               isDisabled={!hasEpisodeFiles}
               onPress={handleOrganizePress}
             />
+          </ToolbarItem>
 
+          <ToolbarItem id="manage-episodes" priority={1} groupId="left-b">
             <PageToolbarButton
               label={translate('ManageEpisodes')}
               iconName={icons.EPISODE_FILE}
               onPress={handleManageEpisodesPress}
             />
+          </ToolbarItem>
 
+          <ToolbarItem id="history" priority={1} groupId="left-b">
             <PageToolbarButton
               label={translate('History')}
               iconName={icons.HISTORY}
               isDisabled={!hasEpisodes}
               onPress={handleSeriesHistoryPress}
             />
+          </ToolbarItem>
 
+          <OverflowDivider groupId="left-b">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
+          <ToolbarItem id="episode-monitoring" priority={1} groupId="left-c">
             <PageToolbarButton
               label={translate('EpisodeMonitoring')}
               iconName={icons.MONITORED}
               onPress={handleMonitorOptionsPress}
             />
+          </ToolbarItem>
 
+          <ToolbarItem id="edit" priority={1} groupId="left-c">
             <PageToolbarButton
               label={translate('Edit')}
               iconName={icons.EDIT}
               onPress={handleEditSeriesPress}
             />
+          </ToolbarItem>
 
+          <ToolbarItem id="delete" priority={1} groupId="left-c">
             <PageToolbarButton
               label={translate('Delete')}
               iconName={icons.DELETE}
               onPress={handleDeleteSeriesPress}
             />
-          </PageToolbarSection>
+          </ToolbarItem>
 
-          <PageToolbarSection alignContent={align.RIGHT}>
+          <PageToolbarSpacer />
+
+          <ToolbarItem id="expand-all" priority={2} groupId="right-a">
             <PageToolbarButton
               label={
                 expandedState.allExpanded
@@ -516,7 +626,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
               iconName={expandIcon}
               onPress={handleExpandAllPress}
             />
-          </PageToolbarSection>
+          </ToolbarItem>
         </PageToolbar>
 
         <PageContentBody innerClassName={styles.innerContentBody}>

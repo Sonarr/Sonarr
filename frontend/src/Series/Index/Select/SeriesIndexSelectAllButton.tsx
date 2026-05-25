@@ -6,13 +6,10 @@ import PageToolbarButton, {
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 
-interface SeriesIndexSelectAllButtonProps
-  extends Omit<PageToolbarButtonProps, 'iconName'> {
-  isSelectMode: boolean;
-}
+type SeriesIndexSelectAllButtonProps = Omit<PageToolbarButtonProps, 'iconName'>;
 
 function SeriesIndexSelectAllButton(props: SeriesIndexSelectAllButtonProps) {
-  const { isSelectMode, overflowComponent } = props;
+  const { overflowComponent } = props;
   const { allSelected, allUnselected, selectAll, unselectAll } = useSelect();
 
   let icon = icons.SQUARE_MINUS;
@@ -31,14 +28,14 @@ function SeriesIndexSelectAllButton(props: SeriesIndexSelectAllButtonProps) {
     }
   }, [allSelected, selectAll, unselectAll]);
 
-  return isSelectMode ? (
+  return (
     <PageToolbarButton
       label={allSelected ? translate('UnselectAll') : translate('SelectAll')}
       iconName={icon}
       overflowComponent={overflowComponent}
       onPress={onPress}
     />
-  ) : null;
+  );
 }
 
 export default SeriesIndexSelectAllButton;

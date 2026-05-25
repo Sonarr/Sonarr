@@ -1,13 +1,15 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import CommandNames from 'Commands/CommandNames';
 import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
+import { type MoreMenuItem } from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { icons } from 'Helpers/Props';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import SettingsPage from 'Settings/SettingsPage';
 import {
   SaveCallback,
   SettingsStateChange,
@@ -65,15 +67,33 @@ function Quality() {
     saveDefinitions.current?.();
   }, []);
 
-  return (
-    <PageContent title={translate('QualitySettings')}>
-      <SettingsToolbar
-        isSaving={isSaving}
-        hasPendingChanges={hasPendingChanges}
-        additionalButtons={
-          <>
-            <PageToolbarSeparator />
+  const moreMenuItems = useMemo<MoreMenuItem[]>(
+    () => [
+      {
+        id: 'reset-definitions',
+        label: translate('ResetDefinitions'),
+        iconName: icons.REFRESH,
+        isSpinning: isResettingQualityDefinitions,
+        isDisabled: isResettingQualityDefinitions,
+        onPress: handleResetQualityDefinitionsPress,
+      },
+    ],
+    [isResettingQualityDefinitions, handleResetQualityDefinitionsPress]
+  );
 
+  return (
+    <SettingsPage
+      title={translate('QualitySettings')}
+      isSaving={isSaving}
+      hasPendingChanges={hasPendingChanges}
+      moreMenuItems={moreMenuItems}
+      toolbarChildren={
+        <>
+          <OverflowDivider groupId="extras">
+            <PageToolbarSeparator />
+          </OverflowDivider>
+
+          <ToolbarItem id="reset-definitions" priority={1} groupId="extras">
             <PageToolbarButton
               label={translate('ResetDefinitions')}
               iconName={icons.REFRESH}
@@ -81,10 +101,11 @@ function Quality() {
               isDisabled={isResettingQualityDefinitions}
               onPress={handleResetQualityDefinitionsPress}
             />
-          </>
-        }
-        onSavePress={handleSavePress}
-      />
+          </ToolbarItem>
+        </>
+      }
+      onSavePress={handleSavePress}
+    >
       <PageContentBody>
         <QualityDefinitions
           isResettingQualityDefinitions={isResettingQualityDefinitions}
@@ -102,7 +123,7 @@ function Quality() {
         onConfirm={handleResetQualityDefinitionsConfirmed}
         onCancel={handleCloseResetQualityDefinitionsModal}
       />
-    </PageContent>
+    </SettingsPage>
   );
 }
 
