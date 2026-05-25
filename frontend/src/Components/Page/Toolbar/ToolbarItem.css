@@ -1,0 +1,9 @@
+.slot {
+  display: inline-flex;
+  align-items: center;
+  padding-right: 4px;
+
+  &:last-child {
+    padding-right: 0;
+  }
+}
