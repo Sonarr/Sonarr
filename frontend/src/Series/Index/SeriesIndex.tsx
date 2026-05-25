@@ -146,8 +146,8 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
   }, [executeCommand]);
 
   const onSelectModePress = useCallback(() => {
-    setIsSelectMode(!isSelectMode);
-  }, [isSelectMode]);
+    setIsSelectMode((val) => !val);
+  }, []);
 
   const onTableOptionChange = useCallback(
     (
