@@ -164,6 +164,11 @@ function RemoveQueueItemModal(props: RemoveQueueItemModalProps) {
                 value={removalMethod}
                 values={removalMethodOptions}
                 isDisabled={!canChangeCategory && !canIgnore}
+                helpText={
+                  !canChangeCategory && !canIgnore
+                    ? translate('RemoveQueueItemRemovalMethodDisabledHelpText')
+                    : undefined
+                }
                 helpTextWarning={translate(
                   'RemoveQueueItemRemovalMethodHelpTextWarning'
                 )}
