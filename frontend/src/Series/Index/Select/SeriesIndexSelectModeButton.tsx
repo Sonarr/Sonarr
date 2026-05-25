@@ -11,15 +11,15 @@ interface SeriesIndexSelectModeButtonProps extends PageToolbarButtonProps {
 
 function SeriesIndexSelectModeButton(props: SeriesIndexSelectModeButtonProps) {
   const { label, iconName, isSelectMode, overflowComponent, onPress } = props;
-  const { reset } = useSelect();
+  const { unselectAll } = useSelect();
 
   const onPressWrapper = useCallback(() => {
     if (isSelectMode) {
-      reset();
+      unselectAll();
     }
 
     onPress();
-  }, [isSelectMode, onPress, reset]);
+  }, [isSelectMode, onPress, unselectAll]);
 
   return (
     <PageToolbarButton
