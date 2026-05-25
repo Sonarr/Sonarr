@@ -1820,7 +1820,7 @@
   "RemoveQueueItem": "Remove - {sourceTitle}",
   "RemoveQueueItemConfirmation": "Are you sure you want to remove '{sourceTitle}' from the queue?",
   "RemoveQueueItemRemovalMethod": "Removal Method",
-  "RemoveQueueItemRemovalMethodDisabledHelpText": "No other removal options can be selected as the download is not associated with a show in {appName}. Either select 'Remove from Download Client' or change its category manually.",
+  "RemoveQueueItemRemovalMethodDisabledHelpText": "No other removal options can be selected as the download is not associated with a series in {appName}. Either select 'Remove from Download Client' or change its category manually in {downloadClient}.",
   "RemoveQueueItemRemovalMethodHelpTextWarning": "'Remove from Download Client' will remove the download and the file(s) from the download client.",
   "RemoveQueueItemsRemovalMethodHelpTextWarning": "'Remove from Download Client' will remove the downloads and the files from the download client.",
   "RemoveRootFolder": "Remove Root Folder",
