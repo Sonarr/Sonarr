@@ -129,7 +129,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
     refreshLabel = translate('UpdateFiltered');
   }
 
-  const onRefreshSeriesPress = useCallback(() => {
+  const handleRefreshSeriesPress = useCallback(() => {
     const seriesToRefresh =
       isSelectMode && anySelected ? getSelectedIds() : data.map((m) => m.id);
 
@@ -204,22 +204,22 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
 
   const [tableOptionsModalOpen, setTableOptionsModalOpen] = useState(false);
 
-  const onTableOptionsPress = useCallback(() => {
+  const handleTableOptionsPress = useCallback(() => {
     setTableOptionsModalOpen(true);
   }, []);
 
-  const onTableOptionsModalClose = useCallback(() => {
+  const handleTableOptionsModalClose = useCallback(() => {
     setTableOptionsModalOpen(false);
   }, []);
 
   // Routes Options press to the right modal based on current view
-  const onOptionsTrigger = useCallback(() => {
+  const handleOptionsTrigger = useCallback(() => {
     if (view === 'table') {
-      onTableOptionsPress();
+      handleTableOptionsPress();
     } else {
       onOptionsPress();
     }
-  }, [view, onTableOptionsPress, onOptionsPress]);
+  }, [view, handleTableOptionsPress, onOptionsPress]);
 
   const isLoaded = !!(!error && isFetched && data.length);
   const hasNoSeries = !totalItems;
@@ -232,7 +232,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
         iconName: icons.REFRESH,
         isSpinning: isRefreshingSeries,
         isDisabled: hasNoSeries,
-        onPress: onRefreshSeriesPress,
+        onPress: handleRefreshSeriesPress,
       },
       {
         id: 'rss',
@@ -274,7 +274,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
         label: translate('Options'),
         iconName: getOptionsIcon(view),
         isDisabled: hasNoSeries,
-        onPress: onOptionsTrigger,
+        onPress: handleOptionsTrigger,
       }
     );
     return items;
@@ -282,14 +282,14 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
     refreshLabel,
     isRefreshingSeries,
     hasNoSeries,
-    onRefreshSeriesPress,
+    handleRefreshSeriesPress,
     isRssSyncExecuting,
     onRssSyncPress,
     isSelectMode,
     onSelectModePress,
     onParseModalPress,
     view,
-    onOptionsTrigger,
+    handleOptionsTrigger,
   ]);
 
   const jumpBarItems: PageJumpBarItems = useMemo(() => {
@@ -340,7 +340,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
             iconName={icons.REFRESH}
             isSpinning={isRefreshingSeries}
             isDisabled={hasNoSeries}
-            onPress={onRefreshSeriesPress}
+            onPress={handleRefreshSeriesPress}
           />
         </ToolbarItem>
 
@@ -396,7 +396,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
             label={translate('Options')}
             iconName={getOptionsIcon(view)}
             isDisabled={hasNoSeries}
-            onPress={onOptionsTrigger}
+            onPress={handleOptionsTrigger}
           />
         </ToolbarItem>
 
@@ -494,7 +494,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
         columns={columns}
         optionsComponent={SeriesIndexTableOptions}
         onTableOptionChange={onTableOptionChange}
-        onModalClose={onTableOptionsModalClose}
+        onModalClose={handleTableOptionsModalClose}
       />
 
       {parseModal}

@@ -93,11 +93,11 @@ function LogsTable() {
 
   const [isTableOptionsModalOpen, setIsTableOptionsModalOpen] = useState(false);
 
-  const onTableOptionsPress = useCallback(() => {
+  const handleTableOptionsPress = useCallback(() => {
     setIsTableOptionsModalOpen(true);
   }, []);
 
-  const onTableOptionsModalClose = useCallback(() => {
+  const handleTableOptionsModalClose = useCallback(() => {
     setIsTableOptionsModalOpen(false);
   }, []);
 
@@ -121,7 +121,7 @@ function LogsTable() {
         id: 'options',
         label: translate('Options'),
         iconName: icons.TABLE,
-        onPress: onTableOptionsPress,
+        onPress: handleTableOptionsPress,
       },
     ],
     [
@@ -129,7 +129,7 @@ function LogsTable() {
       handleRefreshPress,
       isClearLogExecuting,
       handleClearLogsPress,
-      onTableOptionsPress,
+      handleTableOptionsPress,
     ]
   );
 
@@ -163,8 +163,8 @@ function LogsTable() {
             columns={columns}
             pageSize={pageSize}
             isOpen={isTableOptionsModalOpen}
-            onPress={onTableOptionsPress}
-            onModalClose={onTableOptionsModalClose}
+            onPress={handleTableOptionsPress}
+            onModalClose={handleTableOptionsModalClose}
             onTableOptionChange={handleTableOptionChange}
           >
             <PageToolbarButton

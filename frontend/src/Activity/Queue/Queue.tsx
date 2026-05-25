@@ -218,11 +218,11 @@ function QueueContent() {
 
   const [isTableOptionsModalOpen, setIsTableOptionsModalOpen] = useState(false);
 
-  const onTableOptionsPress = useCallback(() => {
+  const handleTableOptionsPress = useCallback(() => {
     setIsTableOptionsModalOpen(true);
   }, []);
 
-  const onTableOptionsModalClose = useCallback(() => {
+  const handleTableOptionsModalClose = useCallback(() => {
     setIsTableOptionsModalOpen(false);
   }, []);
 
@@ -262,7 +262,7 @@ function QueueContent() {
         id: 'options',
         label: translate('Options'),
         iconName: icons.TABLE,
-        onPress: onTableOptionsPress,
+        onPress: handleTableOptionsPress,
       },
     ],
     [
@@ -275,7 +275,7 @@ function QueueContent() {
       isRemoving,
       handleRemoveSelectedPress,
       handleImportSelectedPress,
-      onTableOptionsPress,
+      handleTableOptionsPress,
     ]
   );
 
@@ -408,8 +408,8 @@ function QueueContent() {
             pageSize={pageSize}
             maxPageSize={200}
             isOpen={isTableOptionsModalOpen}
-            onPress={onTableOptionsPress}
-            onModalClose={onTableOptionsModalClose}
+            onPress={handleTableOptionsPress}
+            onModalClose={handleTableOptionsModalClose}
             onTableOptionChange={handleTableOptionChange}
           >
             <PageToolbarButton

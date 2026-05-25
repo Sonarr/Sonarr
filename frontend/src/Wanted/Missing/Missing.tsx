@@ -195,11 +195,11 @@ function MissingContent() {
 
   const [isTableOptionsModalOpen, setIsTableOptionsModalOpen] = useState(false);
 
-  const onTableOptionsPress = useCallback(() => {
+  const handleTableOptionsPress = useCallback(() => {
     setIsTableOptionsModalOpen(true);
   }, []);
 
-  const onTableOptionsModalClose = useCallback(() => {
+  const handleTableOptionsModalClose = useCallback(() => {
     setIsTableOptionsModalOpen(false);
   }, []);
 
@@ -235,7 +235,7 @@ function MissingContent() {
         id: 'options',
         label: translate('Options'),
         iconName: icons.TABLE,
-        onPress: onTableOptionsPress,
+        onPress: handleTableOptionsPress,
       },
     ],
     [
@@ -247,7 +247,7 @@ function MissingContent() {
       isToggling,
       handleToggleSelectedPress,
       handleInteractiveImportPress,
-      onTableOptionsPress,
+      handleTableOptionsPress,
     ]
   );
 
@@ -324,8 +324,8 @@ function MissingContent() {
               columns={columns}
               pageSize={pageSize}
               isOpen={isTableOptionsModalOpen}
-              onPress={onTableOptionsPress}
-              onModalClose={onTableOptionsModalClose}
+              onPress={handleTableOptionsPress}
+              onModalClose={handleTableOptionsModalClose}
               onTableOptionChange={handleTableOptionChange}
             >
               <PageToolbarButton
