@@ -4,15 +4,15 @@
   display: inline-flex;
   align-items: center;
   padding: 0 14px;
-  height: 34px;
+  height: var(--chromeChipSize);
   border-radius: 999px;
   color: var(--toolbarColor);
   white-space: nowrap;
   transition:
-    color 160ms cubic-bezier(0.25, 1, 0.5, 1),
-    background-color 160ms cubic-bezier(0.25, 1, 0.5, 1),
-    box-shadow 160ms cubic-bezier(0.25, 1, 0.5, 1),
-    transform 160ms cubic-bezier(0.25, 1, 0.5, 1);
+    color var(--transitionSmooth),
+    background-color var(--transitionSmooth),
+    box-shadow var(--transitionSmooth),
+    transform var(--transitionSmooth);
   gap: 7px;
 
   /* Suppress the base MenuButton caret — not appropriate on a pill button */
@@ -22,7 +22,7 @@
 
   &:hover {
     background-color: var(--paperCard);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--shadowChromeChip);
     color: var(--ink);
     text-decoration: none;
     transform: translateY(-1px);
@@ -53,4 +53,27 @@
   font-weight: 500;
   font-size: 13px;
   line-height: 1;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .menuButton {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 6px 10px;
+    min-height: 48px;
+    height: auto;
+    border-radius: 12px;
+    gap: 4px;
+  }
+
+  .inner {
+    align-items: center;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .label {
+    font-size: 12px;
+  }
 }
