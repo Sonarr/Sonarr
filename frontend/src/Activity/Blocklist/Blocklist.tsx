@@ -210,7 +210,7 @@ function BlocklistContent() {
   return (
     <PageContent title={translate('Blocklist')}>
       <PageToolbar moreMenuItems={moreMenuItems}>
-        <ToolbarItem id="remove-selected" priority={1} groupId="left-a">
+        <ToolbarItem id="remove-selected" priority={1} groupId="left">
           <PageToolbarButton
             label={translate('RemoveSelected')}
             iconName={icons.REMOVE}
@@ -220,7 +220,7 @@ function BlocklistContent() {
           />
         </ToolbarItem>
 
-        <ToolbarItem id="clear" priority={1} groupId="left-a">
+        <ToolbarItem id="clear" priority={1} groupId="left">
           <PageToolbarButton
             label={translate('Clear')}
             iconName={icons.CLEAR}
@@ -232,7 +232,7 @@ function BlocklistContent() {
 
         <PageToolbarSpacer />
 
-        <ToolbarItem id="options" priority={2} groupId="right-a">
+        <ToolbarItem id="options" priority={2} groupId="right">
           <TableOptionsModalWrapper
             columns={columns}
             pageSize={pageSize}

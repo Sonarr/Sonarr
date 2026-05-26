@@ -136,7 +136,7 @@ function LogsTable() {
   return (
     <PageContent title={translate('Logs')}>
       <PageToolbar moreMenuItems={moreMenuItems}>
-        <ToolbarItem id="refresh" priority={1} groupId="left-a">
+        <ToolbarItem id="refresh" priority={1} groupId="left">
           <PageToolbarButton
             label={translate('Refresh')}
             iconName={icons.REFRESH}
@@ -146,7 +146,7 @@ function LogsTable() {
           />
         </ToolbarItem>
 
-        <ToolbarItem id="clear" priority={1} groupId="left-a">
+        <ToolbarItem id="clear" priority={1} groupId="left">
           <PageToolbarButton
             label={translate('Clear')}
             iconName={icons.CLEAR}
@@ -157,7 +157,7 @@ function LogsTable() {
 
         <PageToolbarSpacer />
 
-        <ToolbarItem id="options" priority={2} groupId="right-a">
+        <ToolbarItem id="options" priority={2} groupId="right">
           <TableOptionsModalWrapper
             canModifyColumns={false}
             columns={columns}

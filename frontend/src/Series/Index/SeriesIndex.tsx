@@ -395,7 +395,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
 
         <PageToolbarSpacer />
 
-        <ToolbarItem id="options" priority={2} groupId="right-a">
+        <ToolbarItem id="options" priority={2} groupId="right">
           <PageToolbarButton
             label={translate('Options')}
             iconName={getOptionsIcon(view)}
@@ -404,7 +404,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
           />
         </ToolbarItem>
 
-        <OverflowDivider groupId="right-a">
+        <OverflowDivider groupId="right">
           <PageToolbarSeparator />
         </OverflowDivider>
 

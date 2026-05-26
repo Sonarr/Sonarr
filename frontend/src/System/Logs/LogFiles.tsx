@@ -96,11 +96,11 @@ function LogFiles({
           <LogsNavMenu current={currentLogView} />
         </ToolbarItem>
 
-        <OverflowDivider groupId="left-a">
+        <OverflowDivider groupId="left">
           <PageToolbarSeparator />
         </OverflowDivider>
 
-        <ToolbarItem id="refresh" priority={1} groupId="left-a">
+        <ToolbarItem id="refresh" priority={1} groupId="left">
           <PageToolbarButton
             label={translate('Refresh')}
             iconName={icons.REFRESH}
@@ -110,7 +110,7 @@ function LogFiles({
           />
         </ToolbarItem>
 
-        <ToolbarItem id="clear" priority={1} groupId="left-a">
+        <ToolbarItem id="clear" priority={1} groupId="left">
           <PageToolbarButton
             label={translate('Clear')}
             iconName={icons.CLEAR}

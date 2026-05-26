@@ -102,7 +102,7 @@ function Backups() {
   return (
     <PageContent title={translate('Backups')}>
       <PageToolbar moreMenuItems={moreMenuItems}>
-        <ToolbarItem id="backup-now" priority={1} groupId="left-a">
+        <ToolbarItem id="backup-now" priority={1} groupId="left">
           <PageToolbarButton
             label={translate('BackupNow')}
             iconName={icons.BACKUP}
@@ -111,7 +111,7 @@ function Backups() {
           />
         </ToolbarItem>
 
-        <ToolbarItem id="restore-backup" priority={1} groupId="left-a">
+        <ToolbarItem id="restore-backup" priority={1} groupId="left">
           <PageToolbarButton
             label={translate('RestoreBackup')}
             iconName={icons.RESTORE}

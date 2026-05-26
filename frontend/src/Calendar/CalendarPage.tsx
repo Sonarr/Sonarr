@@ -174,7 +174,7 @@ function CalendarPage() {
 
           <PageToolbarSpacer />
 
-          <ToolbarItem id="options" priority={2} groupId="right-a">
+          <ToolbarItem id="options" priority={2} groupId="right">
             <PageToolbarButton
               label={translate('Options')}
               iconName={icons.POSTER}

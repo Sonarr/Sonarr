@@ -615,7 +615,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
 
           <PageToolbarSpacer />
 
-          <ToolbarItem id="expand-all" priority={2} groupId="right-a">
+          <ToolbarItem id="expand-all" priority={2} groupId="right">
             <PageToolbarButton
               label={
                 expandedState.allExpanded

@@ -297,7 +297,7 @@ function CutoffUnmetContent() {
 
           <PageToolbarSpacer />
 
-          <ToolbarItem id="options" priority={2} groupId="right-a">
+          <ToolbarItem id="options" priority={2} groupId="right">
             <TableOptionsModalWrapper
               columns={columns}
               pageSize={pageSize}

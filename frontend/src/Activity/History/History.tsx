@@ -148,7 +148,7 @@ function History() {
   return (
     <PageContent title={translate('History')}>
       <PageToolbar moreMenuItems={moreMenuItems}>
-        <ToolbarItem id="refresh" priority={1} groupId="left-a">
+        <ToolbarItem id="refresh" priority={1} groupId="left">
           <PageToolbarButton
             label={translate('Refresh')}
             iconName={icons.REFRESH}
@@ -159,7 +159,7 @@ function History() {
 
         <PageToolbarSpacer />
 
-        <ToolbarItem id="options" priority={2} groupId="right-a">
+        <ToolbarItem id="options" priority={2} groupId="right">
           <TableOptionsModalWrapper
             columns={columns}
             pageSize={pageSize}
