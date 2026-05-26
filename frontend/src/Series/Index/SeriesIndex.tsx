@@ -90,9 +90,6 @@ interface SeriesIndexBodyProps {
   seriesIndex: ReturnType<typeof useSeriesIndex>;
 }
 
-// Inner body — runs inside the SelectProvider so it can read selection state
-// directly. Renders toolbar buttons as plain PageToolbarButton elements so
-// the responsive-overflow algorithm can collapse them as needed.
 function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
   const {
     isLoading: isFetching,
@@ -212,7 +209,6 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
     setTableOptionsModalOpen(false);
   }, []);
 
-  // Routes Options press to the right modal based on current view
   const handleOptionsTrigger = useCallback(() => {
     if (view === 'table') {
       handleTableOptionsPress();

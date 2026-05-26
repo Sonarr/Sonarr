@@ -4,17 +4,7 @@ import styles from './PageHeading.css';
 interface PageHeadingProps {
   scope: string;
   title: string;
-  /**
-   * Stat readout — calm mono micro-caption. Used by utility pages
-   * (Queue, History, Blocklist, Wanted) for "N records · M warnings".
-   * Pass an array of strings to get bullet-separated tokens.
-   */
   meta?: React.ReactNode | string[];
-  /**
-   * Editorial subtitle — Fraunces italic. Reserved for pages with
-   * editorial voice (Series Detail, Home empty state). Mutually exclusive
-   * with `meta` in practice.
-   */
   subtitle?: React.ReactNode;
   actions?: React.ReactNode;
 }

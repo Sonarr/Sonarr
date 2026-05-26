@@ -11,8 +11,6 @@ export interface PageToolbarButtonProps extends LinkProps {
   spinningName?: IconName;
   isSpinning?: boolean;
   isDisabled?: boolean;
-  // Receives the source button's full props via spread, plus any callsite-
-  // specific extras (e.g. `isSelectMode`). Typing as `any` is intentional.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   overflowComponent?: React.ComponentType<any>;
 }

@@ -172,7 +172,6 @@
   --progressBarBackgroundColor: oklch(90% 0.006 80);
   --logEventsBackgroundColor: oklch(100% 0 0);
 
-  /* Chrome surfaces — shadow alphas overridden in [data-theme=dark]. */
   --shadowChromeChip: 0 1px 4px oklch(0% 0 0 / 0.06);
   --shadowChromeDropdown:
     0 12px 32px -12px oklch(0% 0 0 / 0.32),
@@ -356,7 +355,6 @@
   --progressBarBackgroundColor: oklch(30% 0.010 80);
   --logEventsBackgroundColor: oklch(19% 0.008 80);
 
-  /* Chrome surfaces */
   --shadowChromeChip: 0 1px 4px oklch(0% 0 0 / 0.45);
   --shadowChromeDropdown:
     0 12px 32px -12px oklch(0% 0 0 / 0.65),

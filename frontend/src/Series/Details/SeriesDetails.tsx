@@ -392,7 +392,6 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     expandIcon = icons.EXPAND;
   }
 
-  // useMemo must be before the early return to satisfy hooks rules
   const monitored = series?.monitored ?? false;
 
   const moreMenuItems = useMemo<MoreMenuItem[]>(
