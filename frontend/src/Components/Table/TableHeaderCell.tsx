@@ -3,6 +3,7 @@ import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons, sortDirections } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
+import { IsModifiable } from './Column';
 import styles from './TableHeaderCell.css';
 
 interface TableHeaderCellProps {
@@ -12,7 +13,7 @@ interface TableHeaderCellProps {
   columnLabel?: string | (() => string);
   isSortable?: boolean;
   isVisible?: boolean;
-  isModifiable?: boolean;
+  isModifiable?: IsModifiable;
   sortKey?: string;
   fixedSortDirection?: SortDirection;
   sortDirection?: string;

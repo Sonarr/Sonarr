@@ -174,7 +174,7 @@ function TableOptionsModal({
                             label,
                             columnLabel,
                             isVisible,
-                            isModifiable = true,
+                            isModifiable = 'enabled',
                           } = column;
 
                           return (

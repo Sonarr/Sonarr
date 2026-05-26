@@ -6,7 +6,7 @@ import Icon from 'Components/Icon';
 import DragType from 'Helpers/DragType';
 import { icons } from 'Helpers/Props';
 import { CheckInputChanged } from 'typings/inputs';
-import Column from '../Column';
+import Column, { IsModifiable } from '../Column';
 import styles from './TableOptionsColumn.css';
 
 interface DragItem {
@@ -20,7 +20,7 @@ interface TableOptionsColumnProps {
   isDraggingDown: boolean;
   isDraggingUp: boolean;
   isVisible: boolean;
-  isModifiable: boolean;
+  isModifiable: IsModifiable;
   index: number;
   onVisibleChange: (change: CheckInputChanged) => void;
   onColumnDragEnd: (didDrop: boolean) => void;
@@ -53,7 +53,7 @@ function TableOptionsColumn({
         return;
       }
 
-      if (!isModifiable) {
+      if (isModifiable === 'disabled') {
         return;
       }
 
@@ -138,17 +138,17 @@ function TableOptionsColumn({
             containerClassName={styles.checkContainer}
             name={name}
             value={isVisible}
-            isDisabled={isModifiable === false}
+            isDisabled={isModifiable !== 'enabled'}
             onChange={onVisibleChange}
           />
           {typeof label === 'function' ? label() : label}
         </label>
 
-        {isModifiable ? (
+        {isModifiable === 'disabled' ? null : (
           <div ref={dragRef} className={styles.dragHandle}>
             <Icon className={styles.dragIcon} name={icons.REORDER} />
           </div>
-        ) : null}
+        )}
       </div>
 
       {isAfter ? (
