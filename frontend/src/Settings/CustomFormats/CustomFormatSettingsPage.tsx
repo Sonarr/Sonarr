@@ -8,17 +8,24 @@ import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { icons } from 'Helpers/Props';
-import useParseModal from 'Parse/useParseModal';
+import ParseModal from 'Parse/ParseModal';
 import SettingsPage from 'Settings/SettingsPage';
 import translate from 'Utilities/String/translate';
 import CustomFormats from './CustomFormats/CustomFormats';
-import ManageCustomFormatsToolbarButton from './CustomFormats/Manage/ManageCustomFormatsToolbarButton';
+import ManageCustomFormatsModal from './CustomFormats/Manage/ManageCustomFormatsModal';
 
 function CustomFormatSettingsPage() {
-  const { open: onParseModalPress, modal: parseModal } = useParseModal();
-
+  const [isParseModalOpen, setIsParseModalOpen] = useState(false);
   const [isManageCustomFormatsOpen, setIsManageCustomFormatsOpen] =
     useState(false);
+
+  const handleParseModalPress = useCallback(() => {
+    setIsParseModalOpen(true);
+  }, []);
+
+  const handleParseModalClose = useCallback(() => {
+    setIsParseModalOpen(false);
+  }, []);
 
   const handleManageCustomFormatsPress = useCallback(() => {
     setIsManageCustomFormatsOpen(true);
@@ -34,7 +41,7 @@ function CustomFormatSettingsPage() {
         id: 'test-parsing',
         label: translate('TestParsing'),
         iconName: icons.PARSE,
-        onPress: onParseModalPress,
+        onPress: handleParseModalPress,
       },
       {
         id: 'manage-custom-formats',
@@ -43,7 +50,7 @@ function CustomFormatSettingsPage() {
         onPress: handleManageCustomFormatsPress,
       },
     ],
-    [onParseModalPress, handleManageCustomFormatsPress]
+    [handleParseModalPress, handleManageCustomFormatsPress]
   );
 
   return (
@@ -61,15 +68,15 @@ function CustomFormatSettingsPage() {
             <PageToolbarButton
               label={translate('TestParsing')}
               iconName={icons.PARSE}
-              onPress={onParseModalPress}
+              onPress={handleParseModalPress}
             />
           </ToolbarItem>
 
           <ToolbarItem id="manage-custom-formats" priority={1} groupId="extras">
-            <ManageCustomFormatsToolbarButton
-              isOpen={isManageCustomFormatsOpen}
+            <PageToolbarButton
+              label={translate('ManageFormats')}
+              iconName={icons.MANAGE}
               onPress={handleManageCustomFormatsPress}
-              onModalClose={handleManageCustomFormatsClose}
             />
           </ToolbarItem>
         </>
@@ -81,7 +88,15 @@ function CustomFormatSettingsPage() {
         </DndProvider>
       </PageContentBody>
 
-      {parseModal}
+      <ParseModal
+        isOpen={isParseModalOpen}
+        onModalClose={handleParseModalClose}
+      />
+
+      <ManageCustomFormatsModal
+        isOpen={isManageCustomFormatsOpen}
+        onModalClose={handleManageCustomFormatsClose}
+      />
     </SettingsPage>
   );
 }

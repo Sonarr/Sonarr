@@ -21,7 +21,7 @@ import TableOptionsModal from 'Components/Table/TableOptions/TableOptionsModal';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { icons, kinds } from 'Helpers/Props';
 import { DESCENDING } from 'Helpers/Props/sortDirections';
-import useParseModal from 'Parse/useParseModal';
+import ParseModal from 'Parse/ParseModal';
 import NoSeries from 'Series/NoSeries';
 import Series from 'Series/Series';
 import {
@@ -111,7 +111,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
   const isSmallScreen = useAppDimension('isSmallScreen');
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
-  const { open: onParseModalPress, modal: parseModal } = useParseModal();
+  const [isParseModalOpen, setIsParseModalOpen] = useState(false);
   const [jumpToCharacter, setJumpToCharacter] = useState<string | undefined>(
     undefined
   );
@@ -209,6 +209,14 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
     setTableOptionsModalOpen(false);
   }, []);
 
+  const handleParseModalPress = useCallback(() => {
+    setIsParseModalOpen(true);
+  }, []);
+
+  const handleParseModalClose = useCallback(() => {
+    setIsParseModalOpen(false);
+  }, []);
+
   const handleOptionsTrigger = useCallback(() => {
     if (view === 'table') {
       handleTableOptionsPress();
@@ -263,7 +271,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
         id: 'parse',
         label: translate('TestParsing'),
         iconName: icons.PARSE,
-        onPress: onParseModalPress,
+        onPress: handleParseModalPress,
       },
       {
         id: 'options',
@@ -283,7 +291,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
     onRssSyncPress,
     isSelectMode,
     onSelectModePress,
-    onParseModalPress,
+    handleParseModalPress,
     view,
     handleOptionsTrigger,
   ]);
@@ -381,7 +389,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
           <PageToolbarButton
             label={translate('TestParsing')}
             iconName={icons.PARSE}
-            onPress={onParseModalPress}
+            onPress={handleParseModalPress}
           />
         </ToolbarItem>
 
@@ -493,7 +501,10 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
         onModalClose={handleTableOptionsModalClose}
       />
 
-      {parseModal}
+      <ParseModal
+        isOpen={isParseModalOpen}
+        onModalClose={handleParseModalClose}
+      />
     </PageContent>
   );
 }
