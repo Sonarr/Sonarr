@@ -22,9 +22,7 @@ import styles from './PageToolbar.css';
 
 export type MoreMenuItem = PageToolbarButtonProps & {
   id: string;
-  // Extras passed to `overflowComponent` when the item collapses into ⋮ — for callsite props the standard button doesn't carry.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  overflowProps?: Record<string, any>;
+  renderOverflow?: (base: PageToolbarButtonProps) => ReactNode;
 };
 
 interface PageToolbarProps {
@@ -102,10 +100,13 @@ function OverflowMenuItemEntry({ item }: { item: MoreMenuItem }) {
     return null;
   }
 
-  const { id: _id, overflowComponent, overflowProps, ...rest } = item;
-  const OverflowComponent = overflowComponent ?? PageToolbarOverflowMenuItem;
+  const { id: _id, renderOverflow, ...rest } = item;
 
-  return <OverflowComponent {...rest} {...overflowProps} />;
+  return renderOverflow ? (
+    <>{renderOverflow(rest)}</>
+  ) : (
+    <PageToolbarOverflowMenuItem {...rest} />
+  );
 }
 
 export default PageToolbar;

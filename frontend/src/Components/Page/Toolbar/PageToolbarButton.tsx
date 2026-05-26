@@ -11,8 +11,6 @@ export interface PageToolbarButtonProps extends LinkProps {
   spinningName?: IconName;
   isSpinning?: boolean;
   isDisabled?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  overflowComponent?: React.ComponentType<any>;
 }
 
 function PageToolbarButton({
@@ -21,7 +19,6 @@ function PageToolbarButton({
   spinningName = icons.SPINNER,
   isDisabled = false,
   isSpinning = false,
-  overflowComponent,
   ...otherProps
 }: PageToolbarButtonProps) {
   return (

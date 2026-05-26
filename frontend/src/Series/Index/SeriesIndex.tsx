@@ -253,8 +253,14 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
           : translate('SelectSeries'),
         iconName: isSelectMode ? icons.SERIES_ENDED : icons.CHECK,
         onPress: onSelectModePress,
-        overflowComponent: SeriesIndexSelectModeMenuItem,
-        overflowProps: { isSelectMode },
+        renderOverflow: ({ label, iconName }) => (
+          <SeriesIndexSelectModeMenuItem
+            label={label}
+            iconName={iconName}
+            isSelectMode={isSelectMode}
+            onPress={onSelectModePress}
+          />
+        ),
       },
     ];
     if (isSelectMode) {
@@ -262,8 +268,12 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
         id: 'selectall',
         label: translate('SelectAll'),
         iconName: icons.CHECK_SQUARE,
-        overflowComponent: SeriesIndexSelectAllMenuItem,
-        overflowProps: { isSelectMode },
+        renderOverflow: ({ label }) => (
+          <SeriesIndexSelectAllMenuItem
+            label={label}
+            isSelectMode={isSelectMode}
+          />
+        ),
       });
     }
     items.push(
@@ -377,7 +387,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
 
         {isSelectMode && (
           <ToolbarItem id="selectall" priority={1} groupId="left-b">
-            <SeriesIndexSelectAllButton label="SelectAll" />
+            <SeriesIndexSelectAllButton />
           </ToolbarItem>
         )}
 
