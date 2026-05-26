@@ -88,6 +88,7 @@ export function InternalOverflowItem({
   children,
 }: InternalOverflowItemProps) {
   const { manager } = useOverflowCtx();
+
   const setNode = useCallback(
     (node: HTMLElement | null) => {
       if (node) {
@@ -104,6 +105,7 @@ export function InternalOverflowItem({
     },
     [manager, id, priority, pinned, groupId]
   );
+
   return cloneElement(children, { ref: setNode } as never);
 }
 
@@ -115,6 +117,7 @@ interface OverflowDividerProps {
 // Slot div wraps the separator so its gap is inside Fluent's border-box budget (margins aren't measured).
 export function OverflowDivider({ groupId, children }: OverflowDividerProps) {
   const { manager } = useOverflowCtx();
+
   const setNode = useCallback(
     (node: HTMLElement | null) => {
       if (node) {
@@ -125,6 +128,7 @@ export function OverflowDivider({ groupId, children }: OverflowDividerProps) {
     },
     [manager, groupId]
   );
+
   return (
     <div ref={setNode} className={slotStyles.slot}>
       {children}

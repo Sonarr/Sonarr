@@ -50,12 +50,12 @@ function PageToolbar({
 
   const rendered = childrenArray.flatMap((child, i) => {
     if (i === moreInsertBefore) {
-      return [<MoreButton key="__more" items={moreMenuItems} />, child];
+      return [<MoreButton key="more" items={moreMenuItems} />, child];
     }
     return [child];
   });
   if (spacerIndex < 0) {
-    rendered.push(<MoreButton key="__more-end" items={moreMenuItems} />);
+    rendered.push(<MoreButton key="more-end" items={moreMenuItems} />);
   }
 
   return (
@@ -97,11 +97,14 @@ function MoreButton({ items }: MoreButtonProps) {
 
 function OverflowMenuItemEntry({ item }: { item: MoreMenuItem }) {
   const isVisible = useIsOverflowItemVisible(item.id);
+
   if (isVisible) {
     return null;
   }
+
   const { id: _id, overflowComponent, overflowProps, ...rest } = item;
   const OverflowComponent = overflowComponent ?? PageToolbarOverflowMenuItem;
+
   return <OverflowComponent {...rest} {...overflowProps} />;
 }
 
