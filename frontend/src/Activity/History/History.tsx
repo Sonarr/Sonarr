@@ -4,15 +4,12 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbar, {
-  type MoreMenuItem,
-} from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
-import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
+import TableOptionsModal from 'Components/Table/TableOptions/TableOptionsModal';
 import TablePager from 'Components/Table/TablePager';
 import useEpisodes from 'Episode/useEpisodes';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
@@ -114,25 +111,6 @@ function History() {
     setIsTableOptionsModalOpen(false);
   }, []);
 
-  const moreMenuItems = useMemo<MoreMenuItem[]>(
-    () => [
-      {
-        id: 'refresh',
-        label: translate('Refresh'),
-        iconName: icons.REFRESH,
-        isSpinning: isFetching,
-        onPress: handleRefreshPress,
-      },
-      {
-        id: 'options',
-        label: translate('Options'),
-        iconName: icons.TABLE,
-        onPress: handleTableOptionsPress,
-      },
-    ],
-    [isFetching, handleRefreshPress, handleTableOptionsPress]
-  );
-
   useEffect(() => {
     const repopulate = () => {
       refetch();
@@ -147,33 +125,27 @@ function History() {
 
   return (
     <PageContent title={translate('History')}>
-      <PageToolbar moreMenuItems={moreMenuItems}>
-        <ToolbarItem id="refresh" priority={1} groupId="left">
-          <PageToolbarButton
-            label={translate('Refresh')}
-            iconName={icons.REFRESH}
-            isSpinning={isFetching}
-            onPress={handleRefreshPress}
-          />
-        </ToolbarItem>
+      <PageToolbar>
+        <ToolbarItem
+          id="refresh"
+          priority={1}
+          groupId="left"
+          label={translate('Refresh')}
+          iconName={icons.REFRESH}
+          isSpinning={isFetching}
+          onPress={handleRefreshPress}
+        />
 
         <PageToolbarSpacer />
 
-        <ToolbarItem id="options" priority={2} groupId="right">
-          <TableOptionsModalWrapper
-            columns={columns}
-            pageSize={pageSize}
-            isOpen={isTableOptionsModalOpen}
-            onPress={handleTableOptionsPress}
-            onModalClose={handleTableOptionsModalClose}
-            onTableOptionChange={handleTableOptionChange}
-          >
-            <PageToolbarButton
-              label={translate('Options')}
-              iconName={icons.TABLE}
-            />
-          </TableOptionsModalWrapper>
-        </ToolbarItem>
+        <ToolbarItem
+          id="options"
+          priority={2}
+          groupId="right"
+          label={translate('Options')}
+          iconName={icons.TABLE}
+          onPress={handleTableOptionsPress}
+        />
 
         <ToolbarItem id="filter" pinned={true}>
           <FilterMenu
@@ -232,6 +204,14 @@ function History() {
           </div>
         ) : null}
       </PageContentBody>
+
+      <TableOptionsModal
+        isOpen={isTableOptionsModalOpen}
+        columns={columns}
+        pageSize={pageSize}
+        onTableOptionChange={handleTableOptionChange}
+        onModalClose={handleTableOptionsModalClose}
+      />
     </PageContent>
   );
 }

@@ -1,9 +1,13 @@
-import classNames from 'classnames';
 import React, {
   Children,
+  createContext,
   isValidElement,
   type ReactElement,
   type ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
 } from 'react';
 import Menu from 'Components/Menu/Menu';
 import MenuContent from 'Components/Menu/MenuContent';
@@ -20,25 +24,94 @@ import PageToolbarOverflowMenuItem from './PageToolbarOverflowMenuItem';
 import PageToolbarSpacer from './PageToolbarSpacer';
 import styles from './PageToolbar.css';
 
-export type MoreMenuItem = PageToolbarButtonProps & {
+type MoreMenuItem = PageToolbarButtonProps & {
   id: string;
+  priority?: number;
+  groupId?: string;
   renderOverflow?: (base: PageToolbarButtonProps) => ReactNode;
 };
+
+interface ToolbarRegistryContextValue {
+  register: (item: MoreMenuItem) => void;
+  unregister: (id: string) => void;
+}
+
+function shallowEqualMenuItem(a: MoreMenuItem, b: MoreMenuItem): boolean {
+  const keys = Object.keys(a) as (keyof MoreMenuItem)[];
+  if (keys.length !== Object.keys(b).length) {
+    return false;
+  }
+  return keys.every((key) => a[key] === b[key]);
+}
+
+const ToolbarRegistryContext =
+  createContext<ToolbarRegistryContextValue | null>(null);
+
+export function useToolbarRegistry() {
+  return useContext(ToolbarRegistryContext);
+}
 
 interface PageToolbarProps {
   className?: string;
   children?: ReactNode;
-  moreMenuItems?: MoreMenuItem[];
 }
 
 function PageToolbar({
   className = styles.toolbar,
   children,
-  moreMenuItems = [],
 }: PageToolbarProps) {
+  const [items, setItems] = useState<Record<string, MoreMenuItem>>({});
+
+  const register = useCallback((item: MoreMenuItem) => {
+    setItems((prev) => {
+      const existing = prev[item.id];
+      if (existing && shallowEqualMenuItem(existing, item)) {
+        return prev;
+      }
+      return { ...prev, [item.id]: item };
+    });
+  }, []);
+
+  const unregister = useCallback((id: string) => {
+    setItems((prev) => {
+      if (!(id in prev)) {
+        return prev;
+      }
+      const { [id]: _removed, ...rest } = prev;
+      return rest;
+    });
+  }, []);
+
+  const registry = useMemo(
+    () => ({ register, unregister }),
+    [register, unregister]
+  );
+
+  const moreMenuItems = useMemo(() => {
+    return Object.values(items).sort((a, b) => {
+      const ga = a.groupId ?? '';
+      const gb = b.groupId ?? '';
+      if (ga !== gb) {
+        return ga < gb ? -1 : 1;
+      }
+      const pa = a.priority ?? 0;
+      const pb = b.priority ?? 0;
+      if (pa !== pb) {
+        return pa - pb;
+      }
+      if (a.id < b.id) {
+        return -1;
+      }
+      if (a.id > b.id) {
+        return 1;
+      }
+      return 0;
+    });
+  }, [items]);
+
   const childrenArray = Children.toArray(children).filter(
-    isValidElement
-  ) as ReactElement[];
+    (c): c is ReactElement => isValidElement(c)
+  );
   const spacerIndex = childrenArray.findIndex(
     (c) => c.type === PageToolbarSpacer
   );
@@ -57,9 +130,11 @@ function PageToolbar({
   }
 
   return (
-    <Overflow padding={40}>
-      <div className={classNames(className)}>{rendered}</div>
-    </Overflow>
+    <ToolbarRegistryContext.Provider value={registry}>
+      <Overflow padding={40}>
+        <div className={className}>{rendered}</div>
+      </Overflow>
+    </ToolbarRegistryContext.Provider>
   );
 }
 
@@ -93,17 +168,23 @@ function MoreButton({ items }: MoreButtonProps) {
   );
 }
 
-function OverflowMenuItemEntry({ item }: { item: MoreMenuItem }) {
+function OverflowMenuItemEntry({ item }: { item: MoreMenuItem }): ReactNode {
   const isVisible = useIsOverflowItemVisible(item.id);
 
   if (isVisible) {
     return null;
   }
 
-  const { id: _id, renderOverflow, ...rest } = item;
+  const {
+    id: _id,
+    priority: _priority,
+    groupId: _groupId,
+    renderOverflow,
+    ...rest
+  } = item;
 
   return renderOverflow ? (
-    <>{renderOverflow(rest)}</>
+    renderOverflow(rest)
   ) : (
     <PageToolbarOverflowMenuItem {...rest} />
   );

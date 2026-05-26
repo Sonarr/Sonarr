@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import CommandNames from 'Commands/CommandNames';
 import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
@@ -8,15 +8,12 @@ import FilterMenu from 'Components/Menu/FilterMenu';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbar, {
-  type MoreMenuItem,
-} from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
-import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
+import TableOptionsModal from 'Components/Table/TableOptions/TableOptionsModal';
 import TablePager from 'Components/Table/TablePager';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, icons, kinds } from 'Helpers/Props';
@@ -159,42 +156,6 @@ function BlocklistContent() {
     setIsTableOptionsModalOpen(false);
   }, []);
 
-  const moreMenuItems = useMemo<MoreMenuItem[]>(
-    () => [
-      {
-        id: 'remove-selected',
-        label: translate('RemoveSelected'),
-        iconName: icons.REMOVE,
-        isDisabled: !anySelected,
-        isSpinning: isRemoving,
-        onPress: handleRemoveSelectedPress,
-      },
-      {
-        id: 'clear',
-        label: translate('Clear'),
-        iconName: icons.CLEAR,
-        isDisabled: !records.length,
-        isSpinning: isClearingBlocklistExecuting,
-        onPress: handleClearBlocklistPress,
-      },
-      {
-        id: 'options',
-        label: translate('Options'),
-        iconName: icons.TABLE,
-        onPress: handleTableOptionsPress,
-      },
-    ],
-    [
-      anySelected,
-      isRemoving,
-      handleRemoveSelectedPress,
-      records.length,
-      isClearingBlocklistExecuting,
-      handleClearBlocklistPress,
-      handleTableOptionsPress,
-    ]
-  );
-
   useEffect(() => {
     const repopulate = () => {
       refetch();
@@ -209,44 +170,39 @@ function BlocklistContent() {
 
   return (
     <PageContent title={translate('Blocklist')}>
-      <PageToolbar moreMenuItems={moreMenuItems}>
-        <ToolbarItem id="remove-selected" priority={1} groupId="left">
-          <PageToolbarButton
-            label={translate('RemoveSelected')}
-            iconName={icons.REMOVE}
-            isDisabled={!anySelected}
-            isSpinning={isRemoving}
-            onPress={handleRemoveSelectedPress}
-          />
-        </ToolbarItem>
+      <PageToolbar>
+        <ToolbarItem
+          id="remove-selected"
+          priority={1}
+          groupId="left"
+          label={translate('RemoveSelected')}
+          iconName={icons.REMOVE}
+          isDisabled={!anySelected}
+          isSpinning={isRemoving}
+          onPress={handleRemoveSelectedPress}
+        />
 
-        <ToolbarItem id="clear" priority={1} groupId="left">
-          <PageToolbarButton
-            label={translate('Clear')}
-            iconName={icons.CLEAR}
-            isDisabled={!records.length}
-            isSpinning={isClearingBlocklistExecuting}
-            onPress={handleClearBlocklistPress}
-          />
-        </ToolbarItem>
+        <ToolbarItem
+          id="clear"
+          priority={1}
+          groupId="left"
+          label={translate('Clear')}
+          iconName={icons.CLEAR}
+          isDisabled={!records.length}
+          isSpinning={isClearingBlocklistExecuting}
+          onPress={handleClearBlocklistPress}
+        />
 
         <PageToolbarSpacer />
 
-        <ToolbarItem id="options" priority={2} groupId="right">
-          <TableOptionsModalWrapper
-            columns={columns}
-            pageSize={pageSize}
-            isOpen={isTableOptionsModalOpen}
-            onPress={handleTableOptionsPress}
-            onModalClose={handleTableOptionsModalClose}
-            onTableOptionChange={handleTableOptionChange}
-          >
-            <PageToolbarButton
-              label={translate('Options')}
-              iconName={icons.TABLE}
-            />
-          </TableOptionsModalWrapper>
-        </ToolbarItem>
+        <ToolbarItem
+          id="options"
+          priority={2}
+          groupId="right"
+          label={translate('Options')}
+          iconName={icons.TABLE}
+          onPress={handleTableOptionsPress}
+        />
 
         <ToolbarItem id="filter" pinned={true}>
           <FilterMenu
@@ -326,6 +282,14 @@ function BlocklistContent() {
         confirmLabel={translate('Clear')}
         onConfirm={handleClearBlocklistConfirmed}
         onCancel={handleConfirmClearModalClose}
+      />
+
+      <TableOptionsModal
+        isOpen={isTableOptionsModalOpen}
+        columns={columns}
+        pageSize={pageSize}
+        onTableOptionChange={handleTableOptionChange}
+        onModalClose={handleTableOptionsModalClose}
       />
     </PageContent>
   );

@@ -1,8 +1,6 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
-import { type MoreMenuItem } from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { icons } from 'Helpers/Props';
@@ -57,57 +55,35 @@ function ImportListSettings() {
     testAllImportLists();
   }, [testAllImportLists]);
 
-  const moreMenuItems = useMemo<MoreMenuItem[]>(
-    () => [
-      {
-        id: 'test-all',
-        label: translate('TestAllLists'),
-        iconName: icons.TEST,
-        isSpinning: isTestingAllImportLists,
-        onPress: handleTestAllImportListsPress,
-      },
-      {
-        id: 'manage',
-        label: translate('ManageLists'),
-        iconName: icons.MANAGE,
-        onPress: handleManageImportListsPress,
-      },
-    ],
-    [
-      isTestingAllImportLists,
-      handleTestAllImportListsPress,
-      handleManageImportListsPress,
-    ]
-  );
-
   return (
     <SettingsPage
       title={translate('ImportListSettings')}
       isSaving={isSaving}
       hasPendingChanges={hasPendingChanges}
-      moreMenuItems={moreMenuItems}
       toolbarChildren={
         <>
           <OverflowDivider groupId="extras">
             <PageToolbarSeparator />
           </OverflowDivider>
 
-          <ToolbarItem id="test-all" priority={1} groupId="extras">
-            <PageToolbarButton
-              label={translate('TestAllLists')}
-              iconName={icons.TEST}
-              isSpinning={isTestingAllImportLists}
-              onPress={handleTestAllImportListsPress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="test-all"
+            priority={1}
+            groupId="extras"
+            label={translate('TestAllLists')}
+            iconName={icons.TEST}
+            isSpinning={isTestingAllImportLists}
+            onPress={handleTestAllImportListsPress}
+          />
 
-          <ToolbarItem id="manage" priority={1} groupId="extras">
-            <PageToolbarButton
-              label={translate('ManageLists')}
-              iconName={icons.MANAGE}
-              onPress={handleManageImportListsPress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="manage"
+            priority={1}
+            groupId="extras"
+            label={translate('ManageLists')}
+            iconName={icons.MANAGE}
+            onPress={handleManageImportListsPress}
+          />
         </>
       }
       onSavePress={handleSavePress}

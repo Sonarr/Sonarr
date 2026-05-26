@@ -10,10 +10,8 @@ import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageJumpBar, { PageJumpBarItems } from 'Components/Page/PageJumpBar';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
-import PageToolbar, {
-  type MoreMenuItem,
-} from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
+import { PageToolbarButtonProps } from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
@@ -51,25 +49,15 @@ import SeriesIndexTableOptions from './Table/SeriesIndexTableOptions';
 import styles from './SeriesIndex.css';
 
 function getViewComponent(view: string) {
-  if (view === 'posters') {
-    return SeriesIndexPosters;
-  }
-
-  if (view === 'overview') {
-    return SeriesIndexOverviews;
-  }
+  if (view === 'posters') return SeriesIndexPosters;
+  if (view === 'overview') return SeriesIndexOverviews;
 
   return SeriesIndexTable;
 }
 
 function getOptionsIcon(view: string) {
-  if (view === 'posters') {
-    return icons.POSTER;
-  }
-
-  if (view === 'overview') {
-    return icons.OVERVIEW;
-  }
+  if (view === 'posters') return icons.POSTER;
+  if (view === 'overview') return icons.OVERVIEW;
 
   return icons.TABLE;
 }
@@ -180,13 +168,15 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
     setSeriesOption('selectedFilterKey', value);
   }, []);
 
-  const onOptionsPress = useCallback(() => {
-    setIsOptionsModalOpen(true);
-  }, [setIsOptionsModalOpen]);
+  const onOptionsPress = useCallback(
+    () => setIsOptionsModalOpen(true),
+    [setIsOptionsModalOpen]
+  );
 
-  const onOptionsModalClose = useCallback(() => {
-    setIsOptionsModalOpen(false);
-  }, [setIsOptionsModalOpen]);
+  const onOptionsModalClose = useCallback(
+    () => setIsOptionsModalOpen(false),
+    [setIsOptionsModalOpen]
+  );
 
   const onJumpBarItemPress = useCallback(
     (character: string) => {
@@ -201,21 +191,25 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
 
   const [tableOptionsModalOpen, setTableOptionsModalOpen] = useState(false);
 
-  const handleTableOptionsPress = useCallback(() => {
-    setTableOptionsModalOpen(true);
-  }, []);
+  const handleTableOptionsPress = useCallback(
+    () => setTableOptionsModalOpen(true),
+    []
+  );
 
-  const handleTableOptionsModalClose = useCallback(() => {
-    setTableOptionsModalOpen(false);
-  }, []);
+  const handleTableOptionsModalClose = useCallback(
+    () => setTableOptionsModalOpen(false),
+    []
+  );
 
-  const handleParseModalPress = useCallback(() => {
-    setIsParseModalOpen(true);
-  }, []);
+  const handleParseModalPress = useCallback(
+    () => setIsParseModalOpen(true),
+    []
+  );
 
-  const handleParseModalClose = useCallback(() => {
-    setIsParseModalOpen(false);
-  }, []);
+  const handleParseModalClose = useCallback(
+    () => setIsParseModalOpen(false),
+    []
+  );
 
   const handleOptionsTrigger = useCallback(() => {
     if (view === 'table') {
@@ -228,83 +222,41 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
   const isLoaded = !!(!error && isFetched && data.length);
   const hasNoSeries = !totalItems;
 
-  const moreMenuItems = useMemo<MoreMenuItem[]>(() => {
-    const items: MoreMenuItem[] = [
-      {
-        id: 'refresh',
-        label: refreshLabel,
-        iconName: icons.REFRESH,
-        isSpinning: isRefreshingSeries,
-        isDisabled: hasNoSeries,
-        onPress: handleRefreshSeriesPress,
-      },
-      {
-        id: 'rss',
-        label: translate('RssSync'),
-        iconName: icons.RSS,
-        isSpinning: isRssSyncExecuting,
-        isDisabled: hasNoSeries,
-        onPress: onRssSyncPress,
-      },
-      {
-        id: 'select',
-        label: isSelectMode
-          ? translate('StopSelecting')
-          : translate('SelectSeries'),
-        iconName: isSelectMode ? icons.SERIES_ENDED : icons.CHECK,
-        onPress: onSelectModePress,
-        renderOverflow: ({ label, iconName }) => (
-          <SeriesIndexSelectModeMenuItem
-            label={label}
-            iconName={iconName}
-            isSelectMode={isSelectMode}
-            onPress={onSelectModePress}
-          />
-        ),
-      },
-    ];
-    if (isSelectMode) {
-      items.push({
-        id: 'selectall',
-        label: translate('SelectAll'),
-        iconName: icons.CHECK_SQUARE,
-        renderOverflow: ({ label }) => (
-          <SeriesIndexSelectAllMenuItem
-            label={label}
-            isSelectMode={isSelectMode}
-          />
-        ),
-      });
-    }
-    items.push(
-      {
-        id: 'parse',
-        label: translate('TestParsing'),
-        iconName: icons.PARSE,
-        onPress: handleParseModalPress,
-      },
-      {
-        id: 'options',
-        label: translate('Options'),
-        iconName: getOptionsIcon(view),
-        isDisabled: hasNoSeries,
-        onPress: handleOptionsTrigger,
-      }
-    );
-    return items;
-  }, [
-    refreshLabel,
-    isRefreshingSeries,
-    hasNoSeries,
-    handleRefreshSeriesPress,
-    isRssSyncExecuting,
-    onRssSyncPress,
-    isSelectMode,
-    onSelectModePress,
-    handleParseModalPress,
-    view,
-    handleOptionsTrigger,
-  ]);
+  const renderSelectButton = useCallback(
+    ({ label, iconName }: PageToolbarButtonProps) => (
+      <SeriesIndexSelectModeButton
+        label={label}
+        iconName={iconName}
+        isSelectMode={isSelectMode}
+        onPress={onSelectModePress}
+      />
+    ),
+    [isSelectMode, onSelectModePress]
+  );
+
+  const renderSelectOverflow = useCallback(
+    ({ label, iconName }: PageToolbarButtonProps) => (
+      <SeriesIndexSelectModeMenuItem
+        label={label}
+        iconName={iconName}
+        isSelectMode={isSelectMode}
+        onPress={onSelectModePress}
+      />
+    ),
+    [isSelectMode, onSelectModePress]
+  );
+
+  const renderSelectAllButton = useCallback(
+    () => <SeriesIndexSelectAllButton />,
+    []
+  );
+
+  const renderSelectAllOverflow = useCallback(
+    ({ label }: PageToolbarButtonProps) => (
+      <SeriesIndexSelectAllMenuItem label={label} isSelectMode={isSelectMode} />
+    ),
+    [isSelectMode]
+  );
 
   const jumpBarItems: PageJumpBarItems = useMemo(() => {
     // Reset if not sorting by sortTitle
@@ -347,72 +299,84 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
 
   return (
     <PageContent>
-      <PageToolbar moreMenuItems={moreMenuItems}>
-        <ToolbarItem id="refresh" priority={1} groupId="left-a">
-          <PageToolbarButton
-            label={refreshLabel}
-            iconName={icons.REFRESH}
-            isSpinning={isRefreshingSeries}
-            isDisabled={hasNoSeries}
-            onPress={handleRefreshSeriesPress}
-          />
-        </ToolbarItem>
+      <PageToolbar>
+        <ToolbarItem
+          id="refresh"
+          priority={1}
+          groupId="left-a"
+          label={refreshLabel}
+          iconName={icons.REFRESH}
+          isSpinning={isRefreshingSeries}
+          isDisabled={hasNoSeries}
+          onPress={handleRefreshSeriesPress}
+        />
 
-        <ToolbarItem id="rss" priority={1} groupId="left-a">
-          <PageToolbarButton
-            label={translate('RssSync')}
-            iconName={icons.RSS}
-            isSpinning={isRssSyncExecuting}
-            isDisabled={hasNoSeries}
-            onPress={onRssSyncPress}
-          />
-        </ToolbarItem>
+        <ToolbarItem
+          id="rss"
+          priority={1}
+          groupId="left-a"
+          label={translate('RssSync')}
+          iconName={icons.RSS}
+          isSpinning={isRssSyncExecuting}
+          isDisabled={hasNoSeries}
+          onPress={onRssSyncPress}
+        />
 
         <OverflowDivider groupId="left-a">
           <PageToolbarSeparator />
         </OverflowDivider>
 
-        <ToolbarItem id="select" priority={1} groupId="left-b">
-          <SeriesIndexSelectModeButton
-            label={
-              isSelectMode
-                ? translate('StopSelecting')
-                : translate('SelectSeries')
-            }
-            iconName={isSelectMode ? icons.SERIES_ENDED : icons.CHECK}
-            isSelectMode={isSelectMode}
-            onPress={onSelectModePress}
-          />
-        </ToolbarItem>
+        <ToolbarItem
+          id="select"
+          priority={1}
+          groupId="left-b"
+          label={
+            isSelectMode
+              ? translate('StopSelecting')
+              : translate('SelectSeries')
+          }
+          iconName={isSelectMode ? icons.SERIES_ENDED : icons.CHECK}
+          renderButton={renderSelectButton}
+          renderOverflow={renderSelectOverflow}
+          onPress={onSelectModePress}
+        />
 
         {isSelectMode && (
-          <ToolbarItem id="selectall" priority={1} groupId="left-b">
-            <SeriesIndexSelectAllButton />
-          </ToolbarItem>
+          <ToolbarItem
+            id="selectall"
+            priority={1}
+            groupId="left-b"
+            label={translate('SelectAll')}
+            iconName={icons.CHECK_SQUARE}
+            renderButton={renderSelectAllButton}
+            renderOverflow={renderSelectAllOverflow}
+          />
         )}
 
         <OverflowDivider groupId="left-b">
           <PageToolbarSeparator />
         </OverflowDivider>
 
-        <ToolbarItem id="parse" priority={1} groupId="left-c">
-          <PageToolbarButton
-            label={translate('TestParsing')}
-            iconName={icons.PARSE}
-            onPress={handleParseModalPress}
-          />
-        </ToolbarItem>
+        <ToolbarItem
+          id="parse"
+          priority={1}
+          groupId="left-c"
+          label={translate('TestParsing')}
+          iconName={icons.PARSE}
+          onPress={handleParseModalPress}
+        />
 
         <PageToolbarSpacer />
 
-        <ToolbarItem id="options" priority={2} groupId="right">
-          <PageToolbarButton
-            label={translate('Options')}
-            iconName={getOptionsIcon(view)}
-            isDisabled={hasNoSeries}
-            onPress={handleOptionsTrigger}
-          />
-        </ToolbarItem>
+        <ToolbarItem
+          id="options"
+          priority={2}
+          groupId="right"
+          label={translate('Options')}
+          iconName={getOptionsIcon(view)}
+          isDisabled={hasNoSeries}
+          onPress={handleOptionsTrigger}
+        />
 
         <OverflowDivider groupId="right">
           <PageToolbarSeparator />

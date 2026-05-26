@@ -1,14 +1,11 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
-import PageToolbar, {
-  type MoreMenuItem,
-} from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import Column from 'Components/Table/Column';
@@ -69,29 +66,9 @@ function LogFiles({
     type === 'update' ? 'UpdateLogs' : 'logs',
   ]);
 
-  const moreMenuItems = useMemo<MoreMenuItem[]>(
-    () => [
-      {
-        id: 'refresh',
-        label: translate('Refresh'),
-        iconName: icons.REFRESH,
-        isSpinning: isFetching,
-        onPress: onRefreshPress,
-      },
-      {
-        id: 'clear',
-        label: translate('Clear'),
-        iconName: icons.CLEAR,
-        isSpinning: isDeleteFilesExecuting,
-        onPress: onDeleteFilesPress,
-      },
-    ],
-    [isFetching, onRefreshPress, isDeleteFilesExecuting, onDeleteFilesPress]
-  );
-
   return (
     <PageContent title={translate('LogFiles')}>
-      <PageToolbar moreMenuItems={moreMenuItems}>
+      <PageToolbar>
         <ToolbarItem id="logs-nav" pinned={true}>
           <LogsNavMenu current={currentLogView} />
         </ToolbarItem>
@@ -100,24 +77,26 @@ function LogFiles({
           <PageToolbarSeparator />
         </OverflowDivider>
 
-        <ToolbarItem id="refresh" priority={1} groupId="left">
-          <PageToolbarButton
-            label={translate('Refresh')}
-            iconName={icons.REFRESH}
-            spinningName={icons.REFRESH}
-            isSpinning={isFetching}
-            onPress={onRefreshPress}
-          />
-        </ToolbarItem>
+        <ToolbarItem
+          id="refresh"
+          priority={1}
+          groupId="left"
+          label={translate('Refresh')}
+          iconName={icons.REFRESH}
+          spinningName={icons.REFRESH}
+          isSpinning={isFetching}
+          onPress={onRefreshPress}
+        />
 
-        <ToolbarItem id="clear" priority={1} groupId="left">
-          <PageToolbarButton
-            label={translate('Clear')}
-            iconName={icons.CLEAR}
-            isSpinning={isDeleteFilesExecuting}
-            onPress={onDeleteFilesPress}
-          />
-        </ToolbarItem>
+        <ToolbarItem
+          id="clear"
+          priority={1}
+          groupId="left"
+          label={translate('Clear')}
+          iconName={icons.CLEAR}
+          isSpinning={isDeleteFilesExecuting}
+          onPress={onDeleteFilesPress}
+        />
       </PageToolbar>
       <PageContentBody>
         <Alert>

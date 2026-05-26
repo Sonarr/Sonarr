@@ -1,14 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import CommandNames from 'Commands/CommandNames';
 import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbar, {
-  type MoreMenuItem,
-} from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
@@ -80,44 +77,27 @@ function Backups() {
     }
   }, [isBackupExecuting, wasBackupExecuting, refetch]);
 
-  const moreMenuItems = useMemo<MoreMenuItem[]>(
-    () => [
-      {
-        id: 'backup-now',
-        label: translate('BackupNow'),
-        iconName: icons.BACKUP,
-        isSpinning: isBackupExecuting,
-        onPress: handleBackupPress,
-      },
-      {
-        id: 'restore-backup',
-        label: translate('RestoreBackup'),
-        iconName: icons.RESTORE,
-        onPress: handleRestorePress,
-      },
-    ],
-    [isBackupExecuting, handleBackupPress, handleRestorePress]
-  );
-
   return (
     <PageContent title={translate('Backups')}>
-      <PageToolbar moreMenuItems={moreMenuItems}>
-        <ToolbarItem id="backup-now" priority={1} groupId="left">
-          <PageToolbarButton
-            label={translate('BackupNow')}
-            iconName={icons.BACKUP}
-            isSpinning={isBackupExecuting}
-            onPress={handleBackupPress}
-          />
-        </ToolbarItem>
+      <PageToolbar>
+        <ToolbarItem
+          id="backup-now"
+          priority={1}
+          groupId="left"
+          label={translate('BackupNow')}
+          iconName={icons.BACKUP}
+          isSpinning={isBackupExecuting}
+          onPress={handleBackupPress}
+        />
 
-        <ToolbarItem id="restore-backup" priority={1} groupId="left">
-          <PageToolbarButton
-            label={translate('RestoreBackup')}
-            iconName={icons.RESTORE}
-            onPress={handleRestorePress}
-          />
-        </ToolbarItem>
+        <ToolbarItem
+          id="restore-backup"
+          priority={1}
+          groupId="left"
+          label={translate('RestoreBackup')}
+          iconName={icons.RESTORE}
+          onPress={handleRestorePress}
+        />
       </PageToolbar>
 
       <PageContentBody>

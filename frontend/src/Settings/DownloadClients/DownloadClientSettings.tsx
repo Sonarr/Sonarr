@@ -1,10 +1,8 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppState from 'App/State/AppState';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
-import { type MoreMenuItem } from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { icons } from 'Helpers/Props';
@@ -59,57 +57,39 @@ function DownloadClientSettings() {
     saveOptions.current?.();
   }, []);
 
-  const handleTestAllIndexersPress = useCallback(() => {
+  const handleTestAllDownloadClientsPress = useCallback(() => {
     dispatch(testAllDownloadClients());
   }, [dispatch]);
-
-  const moreMenuItems = useMemo<MoreMenuItem[]>(
-    () => [
-      {
-        id: 'test-all',
-        label: translate('TestAllClients'),
-        iconName: icons.TEST,
-        isSpinning: isTestingAll,
-        onPress: handleTestAllIndexersPress,
-      },
-      {
-        id: 'manage',
-        label: translate('ManageClients'),
-        iconName: icons.MANAGE,
-        onPress: handleManageDownloadClientsPress,
-      },
-    ],
-    [isTestingAll, handleTestAllIndexersPress, handleManageDownloadClientsPress]
-  );
 
   return (
     <SettingsPage
       title={translate('DownloadClientSettings')}
       isSaving={isSaving}
       hasPendingChanges={hasPendingChanges}
-      moreMenuItems={moreMenuItems}
       toolbarChildren={
         <>
           <OverflowDivider groupId="extras">
             <PageToolbarSeparator />
           </OverflowDivider>
 
-          <ToolbarItem id="test-all" priority={1} groupId="extras">
-            <PageToolbarButton
-              label={translate('TestAllClients')}
-              iconName={icons.TEST}
-              isSpinning={isTestingAll}
-              onPress={handleTestAllIndexersPress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="test-all"
+            priority={1}
+            groupId="extras"
+            label={translate('TestAllClients')}
+            iconName={icons.TEST}
+            isSpinning={isTestingAll}
+            onPress={handleTestAllDownloadClientsPress}
+          />
 
-          <ToolbarItem id="manage" priority={1} groupId="extras">
-            <PageToolbarButton
-              label={translate('ManageClients')}
-              iconName={icons.MANAGE}
-              onPress={handleManageDownloadClientsPress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="manage"
+            priority={1}
+            groupId="extras"
+            label={translate('ManageClients')}
+            iconName={icons.MANAGE}
+            onPress={handleManageDownloadClientsPress}
+          />
         </>
       }
       onSavePress={handleSavePress}

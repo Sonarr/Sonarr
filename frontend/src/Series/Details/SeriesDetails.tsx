@@ -13,10 +13,7 @@ import MonitorToggleButton from 'Components/MonitorToggleButton';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
-import PageToolbar, {
-  type MoreMenuItem,
-} from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
@@ -394,91 +391,6 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
 
   const monitored = series?.monitored ?? false;
 
-  const moreMenuItems = useMemo<MoreMenuItem[]>(
-    () => [
-      {
-        id: 'refresh',
-        label: translate('RefreshAndScan'),
-        iconName: icons.REFRESH,
-        isSpinning: isRefreshing,
-        onPress: handleRefreshPress,
-      },
-      {
-        id: 'search-monitored',
-        label: translate('SearchMonitored'),
-        iconName: icons.SEARCH,
-        isDisabled: !monitored || !hasMonitoredEpisodes || !hasEpisodes,
-        isSpinning: isSearching,
-        onPress: handleSearchPress,
-      },
-      {
-        id: 'preview-rename',
-        label: translate('PreviewRename'),
-        iconName: icons.ORGANIZE,
-        isDisabled: !hasEpisodeFiles,
-        onPress: handleOrganizePress,
-      },
-      {
-        id: 'manage-episodes',
-        label: translate('ManageEpisodes'),
-        iconName: icons.EPISODE_FILE,
-        onPress: handleManageEpisodesPress,
-      },
-      {
-        id: 'history',
-        label: translate('History'),
-        iconName: icons.HISTORY,
-        isDisabled: !hasEpisodes,
-        onPress: handleSeriesHistoryPress,
-      },
-      {
-        id: 'episode-monitoring',
-        label: translate('EpisodeMonitoring'),
-        iconName: icons.MONITORED,
-        onPress: handleMonitorOptionsPress,
-      },
-      {
-        id: 'edit',
-        label: translate('Edit'),
-        iconName: icons.EDIT,
-        onPress: handleEditSeriesPress,
-      },
-      {
-        id: 'delete',
-        label: translate('Delete'),
-        iconName: icons.DELETE,
-        onPress: handleDeleteSeriesPress,
-      },
-      {
-        id: 'expand-all',
-        label: expandedState.allExpanded
-          ? translate('CollapseAll')
-          : translate('ExpandAll'),
-        iconName: expandIcon,
-        onPress: handleExpandAllPress,
-      },
-    ],
-    [
-      isRefreshing,
-      handleRefreshPress,
-      monitored,
-      hasMonitoredEpisodes,
-      hasEpisodes,
-      isSearching,
-      handleSearchPress,
-      hasEpisodeFiles,
-      handleOrganizePress,
-      handleManageEpisodesPress,
-      handleSeriesHistoryPress,
-      handleMonitorOptionsPress,
-      handleEditSeriesPress,
-      handleDeleteSeriesPress,
-      expandedState.allExpanded,
-      expandIcon,
-      handleExpandAllPress,
-    ]
-  );
-
   if (!series) {
     return null;
   }
@@ -528,104 +440,113 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   return (
     <SeriesDetailsProvider seriesId={seriesId}>
       <PageContent title={title}>
-        <PageToolbar moreMenuItems={moreMenuItems}>
-          <ToolbarItem id="refresh" priority={1} groupId="left-a">
-            <PageToolbarButton
-              label={translate('RefreshAndScan')}
-              iconName={icons.REFRESH}
-              spinningName={icons.REFRESH}
-              title={translate('RefreshAndScanTooltip')}
-              isSpinning={isRefreshing}
-              onPress={handleRefreshPress}
-            />
-          </ToolbarItem>
+        <PageToolbar>
+          <ToolbarItem
+            id="refresh"
+            priority={1}
+            groupId="left-a"
+            label={translate('RefreshAndScan')}
+            iconName={icons.REFRESH}
+            spinningName={icons.REFRESH}
+            title={translate('RefreshAndScanTooltip')}
+            isSpinning={isRefreshing}
+            onPress={handleRefreshPress}
+          />
 
-          <ToolbarItem id="search-monitored" priority={1} groupId="left-a">
-            <PageToolbarButton
-              label={translate('SearchMonitored')}
-              iconName={icons.SEARCH}
-              isDisabled={!monitored || !hasMonitoredEpisodes || !hasEpisodes}
-              isSpinning={isSearching}
-              title={
-                hasMonitoredEpisodes
-                  ? undefined
-                  : translate('NoMonitoredEpisodes')
-              }
-              onPress={handleSearchPress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="search-monitored"
+            priority={1}
+            groupId="left-a"
+            label={translate('SearchMonitored')}
+            iconName={icons.SEARCH}
+            isDisabled={!monitored || !hasMonitoredEpisodes || !hasEpisodes}
+            isSpinning={isSearching}
+            title={
+              hasMonitoredEpisodes
+                ? undefined
+                : translate('NoMonitoredEpisodes')
+            }
+            onPress={handleSearchPress}
+          />
 
           <OverflowDivider groupId="left-a">
             <PageToolbarSeparator />
           </OverflowDivider>
 
-          <ToolbarItem id="preview-rename" priority={1} groupId="left-b">
-            <PageToolbarButton
-              label={translate('PreviewRename')}
-              iconName={icons.ORGANIZE}
-              isDisabled={!hasEpisodeFiles}
-              onPress={handleOrganizePress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="preview-rename"
+            priority={1}
+            groupId="left-b"
+            label={translate('PreviewRename')}
+            iconName={icons.ORGANIZE}
+            isDisabled={!hasEpisodeFiles}
+            onPress={handleOrganizePress}
+          />
 
-          <ToolbarItem id="manage-episodes" priority={1} groupId="left-b">
-            <PageToolbarButton
-              label={translate('ManageEpisodes')}
-              iconName={icons.EPISODE_FILE}
-              onPress={handleManageEpisodesPress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="manage-episodes"
+            priority={1}
+            groupId="left-b"
+            label={translate('ManageEpisodes')}
+            iconName={icons.EPISODE_FILE}
+            onPress={handleManageEpisodesPress}
+          />
 
-          <ToolbarItem id="history" priority={1} groupId="left-b">
-            <PageToolbarButton
-              label={translate('History')}
-              iconName={icons.HISTORY}
-              isDisabled={!hasEpisodes}
-              onPress={handleSeriesHistoryPress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="history"
+            priority={1}
+            groupId="left-b"
+            label={translate('History')}
+            iconName={icons.HISTORY}
+            isDisabled={!hasEpisodes}
+            onPress={handleSeriesHistoryPress}
+          />
 
           <OverflowDivider groupId="left-b">
             <PageToolbarSeparator />
           </OverflowDivider>
 
-          <ToolbarItem id="episode-monitoring" priority={1} groupId="left-c">
-            <PageToolbarButton
-              label={translate('EpisodeMonitoring')}
-              iconName={icons.MONITORED}
-              onPress={handleMonitorOptionsPress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="episode-monitoring"
+            priority={1}
+            groupId="left-c"
+            label={translate('EpisodeMonitoring')}
+            iconName={icons.MONITORED}
+            onPress={handleMonitorOptionsPress}
+          />
 
-          <ToolbarItem id="edit" priority={1} groupId="left-c">
-            <PageToolbarButton
-              label={translate('Edit')}
-              iconName={icons.EDIT}
-              onPress={handleEditSeriesPress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="edit"
+            priority={1}
+            groupId="left-c"
+            label={translate('Edit')}
+            iconName={icons.EDIT}
+            onPress={handleEditSeriesPress}
+          />
 
-          <ToolbarItem id="delete" priority={1} groupId="left-c">
-            <PageToolbarButton
-              label={translate('Delete')}
-              iconName={icons.DELETE}
-              onPress={handleDeleteSeriesPress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="delete"
+            priority={1}
+            groupId="left-c"
+            label={translate('Delete')}
+            iconName={icons.DELETE}
+            onPress={handleDeleteSeriesPress}
+          />
 
           <PageToolbarSpacer />
 
-          <ToolbarItem id="expand-all" priority={2} groupId="right">
-            <PageToolbarButton
-              label={
-                expandedState.allExpanded
-                  ? translate('CollapseAll')
-                  : translate('ExpandAll')
-              }
-              iconName={expandIcon}
-              onPress={handleExpandAllPress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="expand-all"
+            priority={2}
+            groupId="right"
+            label={
+              expandedState.allExpanded
+                ? translate('CollapseAll')
+                : translate('ExpandAll')
+            }
+            iconName={expandIcon}
+            onPress={handleExpandAllPress}
+          />
         </PageToolbar>
 
         <PageContentBody innerClassName={styles.innerContentBody}>

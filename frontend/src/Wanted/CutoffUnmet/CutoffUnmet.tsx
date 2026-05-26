@@ -16,16 +16,13 @@ import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
-import PageToolbar, {
-  type MoreMenuItem,
-} from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
-import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
+import TableOptionsModal from 'Components/Table/TableOptions/TableOptionsModal';
 import TablePager from 'Components/Table/TablePager';
 import Episode from 'Episode/Episode';
 import { useToggleEpisodesMonitored } from 'Episode/useEpisode';
@@ -197,47 +194,6 @@ function CutoffUnmetContent() {
     setIsTableOptionsModalOpen(false);
   }, []);
 
-  const moreMenuItems = useMemo<MoreMenuItem[]>(
-    () => [
-      {
-        id: 'search',
-        label: anySelected
-          ? translate('SearchSelected')
-          : translate('SearchAll'),
-        iconName: icons.SEARCH,
-        isDisabled: isSearchingForEpisodes,
-        isSpinning: isSearchingForEpisodes,
-        onPress: anySelected ? handleSearchSelectedPress : handleSearchAllPress,
-      },
-      {
-        id: 'toggle-monitored',
-        label: isShowingMonitored
-          ? translate('UnmonitorSelected')
-          : translate('MonitorSelected'),
-        iconName: icons.MONITORED,
-        isDisabled: !anySelected,
-        isSpinning: isToggling,
-        onPress: handleToggleSelectedPress,
-      },
-      {
-        id: 'options',
-        label: translate('Options'),
-        iconName: icons.TABLE,
-        onPress: handleTableOptionsPress,
-      },
-    ],
-    [
-      anySelected,
-      isSearchingForEpisodes,
-      handleSearchSelectedPress,
-      handleSearchAllPress,
-      isShowingMonitored,
-      isToggling,
-      handleToggleSelectedPress,
-      handleTableOptionsPress,
-    ]
-  );
-
   useEffect(() => {
     const repopulate = () => {
       refetch();
@@ -260,58 +216,51 @@ function CutoffUnmetContent() {
       episodeFileIds={episodeFileIds}
     >
       <PageContent title={translate('CutoffUnmet')}>
-        <PageToolbar moreMenuItems={moreMenuItems}>
-          <ToolbarItem id="search" priority={1} groupId="left-a">
-            <PageToolbarButton
-              label={
-                anySelected
-                  ? translate('SearchSelected')
-                  : translate('SearchAll')
-              }
-              iconName={icons.SEARCH}
-              isDisabled={isSearchingForEpisodes}
-              isSpinning={isSearchingForEpisodes}
-              onPress={
-                anySelected ? handleSearchSelectedPress : handleSearchAllPress
-              }
-            />
-          </ToolbarItem>
+        <PageToolbar>
+          <ToolbarItem
+            id="search"
+            priority={1}
+            groupId="left-a"
+            label={
+              anySelected ? translate('SearchSelected') : translate('SearchAll')
+            }
+            iconName={icons.SEARCH}
+            isDisabled={isSearchingForEpisodes}
+            isSpinning={isSearchingForEpisodes}
+            onPress={
+              anySelected ? handleSearchSelectedPress : handleSearchAllPress
+            }
+          />
 
           <OverflowDivider groupId="left-a">
             <PageToolbarSeparator />
           </OverflowDivider>
 
-          <ToolbarItem id="toggle-monitored" priority={1} groupId="left-b">
-            <PageToolbarButton
-              label={
-                isShowingMonitored
-                  ? translate('UnmonitorSelected')
-                  : translate('MonitorSelected')
-              }
-              iconName={icons.MONITORED}
-              isDisabled={!anySelected}
-              isSpinning={isToggling}
-              onPress={handleToggleSelectedPress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="toggle-monitored"
+            priority={1}
+            groupId="left-b"
+            label={
+              isShowingMonitored
+                ? translate('UnmonitorSelected')
+                : translate('MonitorSelected')
+            }
+            iconName={icons.MONITORED}
+            isDisabled={!anySelected}
+            isSpinning={isToggling}
+            onPress={handleToggleSelectedPress}
+          />
 
           <PageToolbarSpacer />
 
-          <ToolbarItem id="options" priority={2} groupId="right">
-            <TableOptionsModalWrapper
-              columns={columns}
-              pageSize={pageSize}
-              isOpen={isTableOptionsModalOpen}
-              onPress={handleTableOptionsPress}
-              onModalClose={handleTableOptionsModalClose}
-              onTableOptionChange={handleTableOptionChange}
-            >
-              <PageToolbarButton
-                label={translate('Options')}
-                iconName={icons.TABLE}
-              />
-            </TableOptionsModalWrapper>
-          </ToolbarItem>
+          <ToolbarItem
+            id="options"
+            priority={2}
+            groupId="right"
+            label={translate('Options')}
+            iconName={icons.TABLE}
+            onPress={handleTableOptionsPress}
+          />
 
           <ToolbarItem id="filter" pinned={true}>
             <FilterMenu
@@ -394,6 +343,14 @@ function CutoffUnmetContent() {
             </div>
           ) : null}
         </PageContentBody>
+
+        <TableOptionsModal
+          isOpen={isTableOptionsModalOpen}
+          columns={columns}
+          pageSize={pageSize}
+          onTableOptionChange={handleTableOptionChange}
+          onModalClose={handleTableOptionsModalClose}
+        />
       </PageContent>
     </CutoffUnmetProvider>
   );

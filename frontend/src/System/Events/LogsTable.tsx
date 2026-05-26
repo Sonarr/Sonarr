@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import CommandNames from 'Commands/CommandNames';
 import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
@@ -6,15 +6,12 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbar, {
-  type MoreMenuItem,
-} from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
-import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
+import TableOptionsModal from 'Components/Table/TableOptions/TableOptionsModal';
 import TablePager from 'Components/Table/TablePager';
 import { align, icons, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
@@ -101,78 +98,40 @@ function LogsTable() {
     setIsTableOptionsModalOpen(false);
   }, []);
 
-  const moreMenuItems = useMemo<MoreMenuItem[]>(
-    () => [
-      {
-        id: 'refresh',
-        label: translate('Refresh'),
-        iconName: icons.REFRESH,
-        isSpinning: isFetching,
-        onPress: handleRefreshPress,
-      },
-      {
-        id: 'clear',
-        label: translate('Clear'),
-        iconName: icons.CLEAR,
-        isSpinning: isClearLogExecuting,
-        onPress: handleClearLogsPress,
-      },
-      {
-        id: 'options',
-        label: translate('Options'),
-        iconName: icons.TABLE,
-        onPress: handleTableOptionsPress,
-      },
-    ],
-    [
-      isFetching,
-      handleRefreshPress,
-      isClearLogExecuting,
-      handleClearLogsPress,
-      handleTableOptionsPress,
-    ]
-  );
-
   return (
     <PageContent title={translate('Logs')}>
-      <PageToolbar moreMenuItems={moreMenuItems}>
-        <ToolbarItem id="refresh" priority={1} groupId="left">
-          <PageToolbarButton
-            label={translate('Refresh')}
-            iconName={icons.REFRESH}
-            spinningName={icons.REFRESH}
-            isSpinning={isFetching}
-            onPress={handleRefreshPress}
-          />
-        </ToolbarItem>
+      <PageToolbar>
+        <ToolbarItem
+          id="refresh"
+          priority={1}
+          groupId="left"
+          label={translate('Refresh')}
+          iconName={icons.REFRESH}
+          spinningName={icons.REFRESH}
+          isSpinning={isFetching}
+          onPress={handleRefreshPress}
+        />
 
-        <ToolbarItem id="clear" priority={1} groupId="left">
-          <PageToolbarButton
-            label={translate('Clear')}
-            iconName={icons.CLEAR}
-            isSpinning={isClearLogExecuting}
-            onPress={handleClearLogsPress}
-          />
-        </ToolbarItem>
+        <ToolbarItem
+          id="clear"
+          priority={1}
+          groupId="left"
+          label={translate('Clear')}
+          iconName={icons.CLEAR}
+          isSpinning={isClearLogExecuting}
+          onPress={handleClearLogsPress}
+        />
 
         <PageToolbarSpacer />
 
-        <ToolbarItem id="options" priority={2} groupId="right">
-          <TableOptionsModalWrapper
-            canModifyColumns={false}
-            columns={columns}
-            pageSize={pageSize}
-            isOpen={isTableOptionsModalOpen}
-            onPress={handleTableOptionsPress}
-            onModalClose={handleTableOptionsModalClose}
-            onTableOptionChange={handleTableOptionChange}
-          >
-            <PageToolbarButton
-              label={translate('Options')}
-              iconName={icons.TABLE}
-            />
-          </TableOptionsModalWrapper>
-        </ToolbarItem>
+        <ToolbarItem
+          id="options"
+          priority={2}
+          groupId="right"
+          label={translate('Options')}
+          iconName={icons.TABLE}
+          onPress={handleTableOptionsPress}
+        />
 
         <ToolbarItem id="filter" pinned={true}>
           <FilterMenu
@@ -221,6 +180,15 @@ function LogsTable() {
           </div>
         ) : null}
       </PageContentBody>
+
+      <TableOptionsModal
+        isOpen={isTableOptionsModalOpen}
+        canModifyColumns={false}
+        columns={columns}
+        pageSize={pageSize}
+        onTableOptionChange={handleTableOptionChange}
+        onModalClose={handleTableOptionsModalClose}
+      />
     </PageContent>
   );
 }

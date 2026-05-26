@@ -1,5 +1,4 @@
 import React from 'react';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
@@ -25,19 +24,20 @@ function SettingsSaveItems({
       </ToolbarItem>
 
       {showSave ? (
-        <ToolbarItem id="save" priority={1} groupId="save">
-          <PageToolbarButton
-            label={
-              hasPendingChanges
-                ? translate('SaveChanges')
-                : translate('NoChanges')
-            }
-            iconName={icons.SAVE}
-            isSpinning={isSaving}
-            isDisabled={!hasPendingChanges}
-            onPress={onSavePress}
-          />
-        </ToolbarItem>
+        <ToolbarItem
+          id="save"
+          priority={1}
+          groupId="save"
+          label={
+            hasPendingChanges
+              ? translate('SaveChanges')
+              : translate('NoChanges')
+          }
+          iconName={icons.SAVE}
+          isSpinning={isSaving}
+          isDisabled={!hasPendingChanges}
+          onPress={onSavePress}
+        />
       ) : null}
     </>
   );

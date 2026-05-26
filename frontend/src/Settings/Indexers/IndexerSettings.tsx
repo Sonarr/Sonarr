@@ -1,8 +1,6 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
-import { type MoreMenuItem } from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { icons } from 'Helpers/Props';
@@ -55,57 +53,35 @@ function IndexerSettings() {
     testAllIndexers();
   }, [testAllIndexers]);
 
-  const moreMenuItems = useMemo<MoreMenuItem[]>(
-    () => [
-      {
-        id: 'test-all',
-        label: translate('TestAllIndexers'),
-        iconName: icons.TEST,
-        isSpinning: isTestingAllIndexers,
-        onPress: handleTestAllIndexersPress,
-      },
-      {
-        id: 'manage',
-        label: translate('ManageIndexers'),
-        iconName: icons.MANAGE,
-        onPress: handleManageIndexersPress,
-      },
-    ],
-    [
-      isTestingAllIndexers,
-      handleTestAllIndexersPress,
-      handleManageIndexersPress,
-    ]
-  );
-
   return (
     <SettingsPage
       title={translate('IndexerSettings')}
       isSaving={isSaving}
       hasPendingChanges={hasPendingChanges}
-      moreMenuItems={moreMenuItems}
       toolbarChildren={
         <>
           <OverflowDivider groupId="extras">
             <PageToolbarSeparator />
           </OverflowDivider>
 
-          <ToolbarItem id="test-all" priority={1} groupId="extras">
-            <PageToolbarButton
-              label={translate('TestAllIndexers')}
-              iconName={icons.TEST}
-              isSpinning={isTestingAllIndexers}
-              onPress={handleTestAllIndexersPress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="test-all"
+            priority={1}
+            groupId="extras"
+            label={translate('TestAllIndexers')}
+            iconName={icons.TEST}
+            isSpinning={isTestingAllIndexers}
+            onPress={handleTestAllIndexersPress}
+          />
 
-          <ToolbarItem id="manage" priority={1} groupId="extras">
-            <PageToolbarButton
-              label={translate('ManageIndexers')}
-              iconName={icons.MANAGE}
-              onPress={handleManageIndexersPress}
-            />
-          </ToolbarItem>
+          <ToolbarItem
+            id="manage"
+            priority={1}
+            groupId="extras"
+            label={translate('ManageIndexers')}
+            iconName={icons.MANAGE}
+            onPress={handleManageIndexersPress}
+          />
         </>
       }
       onSavePress={handleSavePress}
