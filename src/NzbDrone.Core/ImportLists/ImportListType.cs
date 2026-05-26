@@ -7,6 +7,7 @@ namespace NzbDrone.Core.ImportLists
         Trakt,
         Simkl,
         Other,
-        Advanced
+        Advanced,
+        TMDb
     }
 }
