@@ -185,6 +185,10 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("S3E3 - Part 3 Seventeen Seconds [1080p]", "", 3, 3)]
         [TestCase("S03E03 - Part 3 Seventeen Seconds [1080p]", "", 3, 3)]
         [TestCase("[VARYG] Series at Age 29 S01E03 Rirui and Anyango 1080p CR WEB-DL AAC2.0 H.264 (29-sai Dokushin Chuuken Boukensha no Nichijou, Multi-Subs)", "Series at Age 29", 1, 3)]
+        [TestCase("Series S093E081 1080p ALL4 WEB-DL AAC2 0 H 264-JJUNAHJAMESON", "Series", 93, 81)]
+        [TestCase("Series S87E136 1080p WEB-DL x264-NGP", "Series", 87, 136)]
+        [TestCase("Series S092E001 1080p ALL4 WEB-DL AAC2 0 H 264-JJunahJameson", "Series", 92, 1)]
+        [TestCase("Series s90 e43 1080p HDTV AAC H264", "Series", 90, 43)]
 
         // [TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
