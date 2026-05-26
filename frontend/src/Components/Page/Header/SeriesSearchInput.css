@@ -98,7 +98,7 @@
     border: 1px solid var(--borderColor);
     border-radius: 12px;
     background-color: var(--cardBackgroundColor);
-    box-shadow: var(--shadowChromeDropdown);
+    box-shadow: var(--shadowDropdown);
     color: var(--ink);
   }
 }

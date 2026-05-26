@@ -68,8 +68,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--chromeChipSize);
-  height: var(--chromeChipSize);
+  width: var(--chipSize);
+  height: var(--chipSize);
   border-radius: 6px;
   color: var(--inkMuted);
   text-align: center;

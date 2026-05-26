@@ -3,8 +3,8 @@
   align-items: center;
   justify-content: center;
   margin-left: 4px;
-  width: var(--chromeChipSize);
-  height: var(--chromeChipSize);
+  width: var(--chipSize);
+  height: var(--chipSize);
   border-radius: 6px;
   color: var(--inkSoft);
   transition:
