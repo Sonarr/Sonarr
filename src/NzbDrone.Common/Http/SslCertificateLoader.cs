@@ -4,6 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Http;
+
 public static class SslCertificateLoader
 {
     public static SslStreamCertificateContext LoadCertificateContext(string certPath, string keyPath, string certPassword)
