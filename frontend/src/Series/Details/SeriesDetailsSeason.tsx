@@ -178,6 +178,7 @@ function SeriesDetailsSeason({
 
       if (shiftKey && lastToggled) {
         const { lower, upper } = getToggledRange(items, episodeId, lastToggled);
+
         for (let i = lower; i < upper; i++) {
           episodeIds.add(items[i].id);
         }

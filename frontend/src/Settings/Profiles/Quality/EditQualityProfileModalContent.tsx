@@ -290,6 +290,7 @@ function EditQualityProfileModalContent({
           } else {
             acc.push(item as QualityProfileQualityItem);
           }
+
           return acc;
         },
         []

@@ -71,6 +71,7 @@ function ProviderFieldFormGroup<T>({
         if (selectOptionsProviderAction) {
           return 'dynamicSelect';
         }
+
         return 'select';
       case 'seriesTag':
         return 'seriesTag';

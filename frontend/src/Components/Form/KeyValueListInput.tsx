@@ -65,6 +65,7 @@ function KeyValueListInput({
       if (v.key || v.value) {
         acc.push(v);
       }
+
       return acc;
     }, []);
 

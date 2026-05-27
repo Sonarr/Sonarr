@@ -37,6 +37,7 @@ export interface EditSeriesModalContentProps {
   onModalClose: () => void;
   onDeleteSeriesPress: () => void;
 }
+
 function EditSeriesModalContent({
   seriesId,
   onModalClose,

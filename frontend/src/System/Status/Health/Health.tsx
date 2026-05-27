@@ -88,6 +88,7 @@ function Health() {
                 const source = item.source;
 
                 let kind: IconKind = kinds.WARNING;
+
                 switch (item.type.toLowerCase()) {
                   case 'error':
                     kind = kinds.DANGER;
