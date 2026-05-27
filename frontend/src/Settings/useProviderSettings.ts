@@ -333,6 +333,7 @@ export const useManageProviderSettings = <T extends ModelBase>(
             value: pendingFields.get(field.name),
           };
         }
+
         return field;
       });
 

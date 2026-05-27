@@ -28,6 +28,7 @@ function getSuggestions(series: SuggestedSeries[], value: string) {
   if (value.length === 1) {
     for (let i = 0; i < series.length; i++) {
       const s = series[i];
+
       if (s.firstCharacter === value.toLowerCase()) {
         suggestions.push({
           item: series[i],
@@ -40,6 +41,7 @@ function getSuggestions(series: SuggestedSeries[], value: string) {
           ],
           refIndex: 0,
         });
+
         if (suggestions.length > limit) {
           break;
         }

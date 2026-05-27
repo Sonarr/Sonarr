@@ -118,6 +118,7 @@ function DelayProfile({
       if (!ref.current) {
         return;
       }
+
       const dragIndex = item.order;
       const hoverIndex = order;
 

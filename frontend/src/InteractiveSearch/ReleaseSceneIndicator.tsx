@@ -20,6 +20,7 @@ function formatReleaseNumber(
         episodeNumbers[episodeNumbers.length - 1]
       }`;
     }
+
     return `${seasonNumber}x${episodeNumbers[0]}`;
   }
 
@@ -29,6 +30,7 @@ function formatReleaseNumber(
         absoluteEpisodeNumbers[absoluteEpisodeNumbers.length - 1]
       }`;
     }
+
     return absoluteEpisodeNumbers[0];
   }
 
@@ -125,6 +127,7 @@ function ReleaseSceneIndicator(props: ReleaseSceneIndicatorProps) {
         {translate('ReleaseSceneIndicatorUnknownMessage')}
       </div>
     );
+
     if (sceneOrigin === 'unknown') {
       messages.push(
         <div key="origin">
@@ -146,6 +149,7 @@ function ReleaseSceneIndicator(props: ReleaseSceneIndicatorProps) {
     if (!isMixed && !isUnknown) {
       level = styles.levelNotRequested;
     }
+
     if (mappedNumber) {
       messages.push(
         <div key="not-requested">

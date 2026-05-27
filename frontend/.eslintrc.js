@@ -283,6 +283,11 @@ module.exports = {
     'space-unary-ops': 'off',
     'spaced-comment': 'error',
     'wrap-regex': 'error',
+    'padding-line-between-statements': [
+      'error',
+      { blankLine: 'always', prev: '*', next: 'multiline-block-like' },
+      { blankLine: 'always', prev: 'multiline-block-like', next: '*' }
+    ],
 
     // ImportSort
 

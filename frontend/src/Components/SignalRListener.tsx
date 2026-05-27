@@ -384,6 +384,7 @@ function SignalRListener() {
           if (retryContext.elapsedMilliseconds > 180000) {
             setAppValue({ isDisconnected: true });
           }
+
           return Math.min(retryContext.previousRetryCount, 10) * 1000;
         },
       })

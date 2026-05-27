@@ -175,6 +175,7 @@ export default function useSelectStore<T extends SelectStoreModel<Id>>(
         if (value.isSelected) {
           acc.push(id);
         }
+
         return acc;
       },
       []
@@ -208,6 +209,7 @@ export default function useSelectStore<T extends SelectStoreModel<Id>>(
             if (value.isSelected) {
               acc.push(id);
             }
+
             return acc;
           }, []);
       })
