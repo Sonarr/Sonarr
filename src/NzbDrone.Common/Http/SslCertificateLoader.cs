@@ -1,12 +1,12 @@
-using System;
 using System.Linq;
 using System.Net.Security;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Http
 {
-    public class SslCertificateLoadException : Exception
+    public class SslCertificateLoadException : CryptographicException
     {
         public SslCertificateLoadException(string message)
             : base(message)
