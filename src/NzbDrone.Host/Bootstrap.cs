@@ -288,11 +288,9 @@ namespace NzbDrone.Host
 
         private static SslStreamCertificateContext ValidateSslCertificate(string cert, string key, string password)
         {
-            SslStreamCertificateContext certificateContext;
-
             try
             {
-                certificateContext = SslCertificateLoader.LoadCertificateContext(cert, key, password);
+                return SslCertificateLoader.LoadCertificateContext(cert, key, password);
             }
             catch (CryptographicException ex)
             {
@@ -308,8 +306,6 @@ namespace NzbDrone.Host
             {
                 throw new SonarrStartupException(ex);
             }
-
-            return certificateContext;
         }
 
         private static bool RunWithRestartCheck(IHost host)
