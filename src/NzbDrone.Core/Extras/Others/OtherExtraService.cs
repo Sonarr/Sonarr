@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
@@ -138,11 +139,12 @@ namespace NzbDrone.Core.Extras.Others
                 }
             }
 
+            var copy = 1;
             foreach (var file in matchingFiles)
             {
                 try
                 {
-                    var extraFile = ImportFile(localEpisode.Series, episodeFile, file, isReadOnly, Path.GetExtension(file), null);
+                    var extraFile = ImportFile(localEpisode.Series, episodeFile, file, isReadOnly, Path.GetExtension(file), GetSuffix(copy++, matchingFiles.Count > 1));
                     _mediaFileAttributeService.SetFilePermissions(file);
                     _otherExtraFileService.Upsert(extraFile);
                     importedFiles.Add(extraFile);
@@ -154,6 +156,30 @@ namespace NzbDrone.Core.Extras.Others
             }
 
             return importedFiles;
+        }
+
+        private string GetSuffix(int copy, bool multipleCopies = false, string title = null)
+        {
+            var suffixBuilder = new StringBuilder();
+
+            if (title is not null)
+            {
+                suffixBuilder.Append('.');
+                suffixBuilder.Append(title);
+
+                if (multipleCopies)
+                {
+                    suffixBuilder.Append(" - ");
+                    suffixBuilder.Append(copy);
+                }
+            }
+            else if (multipleCopies)
+            {
+                suffixBuilder.Append('.');
+                suffixBuilder.Append(copy);
+            }
+
+            return suffixBuilder.ToString();
         }
     }
 }

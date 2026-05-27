@@ -151,7 +151,7 @@ export const useReprocessInteractiveImportItems = () => {
                 (updatedItem) => updatedItem.id === oldItem.id
               );
 
-              return reprocessedItem ? reprocessedItem : oldItem;
+              return reprocessedItem ? { ...oldItem, ...reprocessedItem } : oldItem;
             });
           }
         );
