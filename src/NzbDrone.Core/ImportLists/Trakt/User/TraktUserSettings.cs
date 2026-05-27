@@ -1,4 +1,5 @@
 using FluentValidation;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
 
@@ -11,6 +12,11 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
             RuleFor(c => c.TraktListType).NotNull();
             RuleFor(c => c.TraktWatchedListType).NotNull();
             RuleFor(c => c.AuthUser).NotEmpty();
+
+            RuleFor(c => c.Years)
+                .Must(BeValidYearRange)
+                .When(c => c.Years.IsNotNullOrWhiteSpace())
+                .WithMessage("Not a valid year or range of years");
         }
     }
 
@@ -36,6 +42,9 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
 
         [FieldDefinition(4, Label = "Username", HelpText = "ImportListsTraktSettingsUserListUsernameHelpText")]
         public string Username { get; set; }
+
+        [FieldDefinition(5, Label = "ImportListsTraktSettingsYears", HelpText = "ImportListsTraktSettingsYearsSeriesHelpText")]
+        public string Years { get; set; }
 
         public override NzbDroneValidationResult Validate()
         {

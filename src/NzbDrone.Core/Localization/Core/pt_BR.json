@@ -1717,6 +1717,7 @@
     "QualityDefinitionsSizeNotice": "As restrições de tamanho foram transferidas para Perfis de Qualidade",
     "QualityProfile": "Perfil de qualidade",
     "QualityProfileInUseSeriesListCollection": "Não é possível excluir um perfil de qualidade anexado a uma série, lista ou coleção",
+    "QualityProfileItemFailureCount": "{count} itens de qualidade têm limites de tamanho inválidos",
     "QualityProfileUsage": "Uso do Perfil de Qualidade",
     "QualityProfileUsedInCountImportLists": "Usado em {count} listas de importação",
     "QualityProfileUsedInCountSeries": "Usado em {count} séries",

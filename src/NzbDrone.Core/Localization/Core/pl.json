@@ -1717,6 +1717,7 @@
     "QualityDefinitionsSizeNotice": "Ograniczenia rozmiaru zostały przeniesione do profili jakości",
     "QualityProfile": "Profil jakości",
     "QualityProfileInUseSeriesListCollection": "Nie można usunąć profilu jakości przypisanego do serialu, listy lub kolekcji",
+    "QualityProfileItemFailureCount": "{count} opcji jakości ma nieprawidłowe limity rozmiaru",
     "QualityProfileUsage": "Użycie profilu jakości",
     "QualityProfileUsedInCountImportLists": "Użyto w {count} listach importu",
     "QualityProfileUsedInCountSeries": "Użyto w {count} serialach",

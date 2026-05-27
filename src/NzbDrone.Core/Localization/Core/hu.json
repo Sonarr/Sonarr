@@ -1717,6 +1717,7 @@
     "QualityDefinitionsSizeNotice": "A méretkorlátozások átkerültek a minőségi profilokhoz",
     "QualityProfile": "Minőségi profil",
     "QualityProfileInUseSeriesListCollection": "Nem törölhető egy sorozathoz, listához vagy gyűjteményhez csatolt minőségi profil",
+    "QualityProfileItemFailureCount": "{count} minőségi tétel érvénytelen méretkorlátozású",
     "QualityProfileUsage": "Minőségi profil használata",
     "QualityProfileUsedInCountImportLists": "{count} importlista használja",
     "QualityProfileUsedInCountSeries": "{count} sorozat használja",
