@@ -197,6 +197,22 @@ export const goToToday = () => {
   setCalendarTime(moment());
 };
 
+export const goToDate = (date: moment.MomentInput) => {
+  const view = getCalendarOption('view');
+  const selected = moment(date).startOf('day');
+
+  if (view === 'forecast') {
+    const { time } = calendarStore.getState();
+    const currentStartWeekday = moment(time).subtract(1, 'day').day();
+    const diff = (selected.day() - currentStartWeekday + 7) % 7;
+
+    setCalendarTime(selected.subtract(diff, 'days').add(1, 'day'));
+    return;
+  }
+
+  setCalendarTime(selected);
+};
+
 export const goToPreviousRange = () => {
   const { dayCount, time } = calendarStore.getState();
   const view = getCalendarOption('view');
