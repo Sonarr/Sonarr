@@ -4,7 +4,7 @@ using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.ImportLists.TMDb.Discover;
 
-public sealed class TMDbDiscoverRequestGenerator : TMDbRequestGeneratorBase<TMDbDiscoverSettings>
+public class TMDbDiscoverRequestGenerator : TMDbRequestGeneratorBase<TMDbDiscoverSettings>
 {
     public TMDbDiscoverRequestGenerator(TMDbDiscoverSettings settings)
         : base(settings)

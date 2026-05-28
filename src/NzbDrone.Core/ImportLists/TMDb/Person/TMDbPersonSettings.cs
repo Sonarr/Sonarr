@@ -5,7 +5,7 @@ using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.ImportLists.TMDb.Person;
 
-public sealed class TMDbPersonSettingsValidator : TMDbSettingsBaseValidator<TMDbPersonSettings>
+public class TMDbPersonSettingsValidator : TMDbSettingsBaseValidator<TMDbPersonSettings>
 {
     public TMDbPersonSettingsValidator()
     {
@@ -22,7 +22,7 @@ public sealed class TMDbPersonSettingsValidator : TMDbSettingsBaseValidator<TMDb
     }
 }
 
-public sealed class TMDbPersonSettings : TMDbSettingsBase<TMDbPersonSettings>
+public class TMDbPersonSettings : TMDbSettingsBase<TMDbPersonSettings>
 {
     private static readonly TMDbPersonSettingsValidator Validator = new();
 
