@@ -158,22 +158,11 @@ namespace NzbDrone.Core.Extras.Others
             return importedFiles;
         }
 
-        private string GetSuffix(int copy, bool multipleCopies = false, string title = null)
+        private static string GetSuffix(int copy, bool multipleCopies = false)
         {
             var suffixBuilder = new StringBuilder();
 
-            if (title is not null)
-            {
-                suffixBuilder.Append('.');
-                suffixBuilder.Append(title);
-
-                if (multipleCopies)
-                {
-                    suffixBuilder.Append(" - ");
-                    suffixBuilder.Append(copy);
-                }
-            }
-            else if (multipleCopies)
+            if (multipleCopies)
             {
                 suffixBuilder.Append('.');
                 suffixBuilder.Append(copy);
