@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text.Json;
 using NLog;
 using NzbDrone.Common.Cloud;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
@@ -53,19 +52,14 @@ public abstract class TmdbImportBase<TSettings> : HttpImportListBase<TSettings>
             var response = _httpClient.Execute(request);
             var resource = JsonSerializer.Deserialize<RequestTokenResource>(response.Content);
 
-            if (!TmdbToken.TryParse(resource.RequestToken, out var requestToken) || requestToken.RedirectTo.IsNullOrWhiteSpace())
-            {
-                _logger.Warn("Request token does not contain an embedded 'redirect_to' payload object.");
-            }
-
             request = new HttpRequestBuilder(TmdbAuthUserApproval)
-                .AddQueryParam("request_token", requestToken.Raw)
+                .AddQueryParam("request_token", resource.RequestToken)
                 .Build();
 
             return new
             {
                 OauthUrl = request.Url.ToString(),
-                RequestToken = requestToken.Raw
+                RequestToken = resource.RequestToken
             };
         }
         else if (action == "getOAuthToken")
@@ -79,11 +73,6 @@ public abstract class TmdbImportBase<TSettings> : HttpImportListBase<TSettings>
 
             var response = _httpClient.Execute(request);
             var resource = JsonSerializer.Deserialize<AccessTokenResource>(response.Content);
-
-            if (!TmdbToken.TryParse(resource.AccessToken, out var accessToken) || !accessToken.CanRead)
-            {
-                _logger.Warn("Access token does not provide the application with the required read permissions.");
-            }
 
             return resource;
         }
