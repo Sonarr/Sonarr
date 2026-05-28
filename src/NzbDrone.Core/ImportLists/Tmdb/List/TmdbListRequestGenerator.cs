@@ -1,11 +1,11 @@
 ﻿using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 
-namespace NzbDrone.Core.ImportLists.TMDb.List;
+namespace NzbDrone.Core.ImportLists.Tmdb.List;
 
-public class TMDbListRequestGenerator : TMDbRequestGeneratorBase<TMDbListSettings>
+public class TmdbListRequestGenerator : TmdbRequestGeneratorBase<TmdbListSettings>
 {
-    public TMDbListRequestGenerator(TMDbListSettings settings)
+    public TmdbListRequestGenerator(TmdbListSettings settings)
         : base(settings)
     {
     }

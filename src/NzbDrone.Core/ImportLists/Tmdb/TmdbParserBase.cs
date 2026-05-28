@@ -6,9 +6,9 @@ using NzbDrone.Common.Serializer;
 using NzbDrone.Core.ImportLists.Exceptions;
 using NzbDrone.Core.Parser.Model;
 
-namespace NzbDrone.Core.ImportLists.TMDb;
+namespace NzbDrone.Core.ImportLists.Tmdb;
 
-public abstract class TMDbParserBase<TResponse> : IParseImportListResponse
+public abstract class TmdbParserBase<TResponse> : IParseImportListResponse
     where TResponse : new()
 {
     public IList<ImportListItemInfo> ParseResponse(ImportListResponse importListResponse)
@@ -26,7 +26,7 @@ public abstract class TMDbParserBase<TResponse> : IParseImportListResponse
         return results;
     }
 
-    protected static ImportListItemInfo AsImportable(TMDbMediaResource resource)
+    protected static ImportListItemInfo AsImportable(TmdbMediaResource resource)
     {
         // When MediaType is null/empty, it is implied to be a media type of "tv".
         if (resource.MediaType.IsNullOrWhiteSpace() || resource.MediaType == "tv")
@@ -48,7 +48,7 @@ public abstract class TMDbParserBase<TResponse> : IParseImportListResponse
         if (importListResponse.HttpResponse.StatusCode != HttpStatusCode.OK)
         {
             throw new ImportListException(importListResponse,
-                $"TMDb API(${importListResponse.Request.Url.Path}) API call resulted in an unexpected StatusCode [{importListResponse.HttpResponse.StatusCode}]");
+                $"TMDb API(${importListResponse.Request.Url.Path}) call resulted in an unexpected StatusCode [{importListResponse.HttpResponse.StatusCode}]");
         }
 
         if (importListResponse.HttpResponse.Headers.ContentType != null && !importListResponse.HttpResponse.Headers.ContentType.Contains("text/json", StringComparison.OrdinalIgnoreCase) &&

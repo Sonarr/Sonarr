@@ -7,14 +7,14 @@ using System.Text.Json.Serialization;
 using Microsoft.IdentityModel.Tokens;
 using NzbDrone.Common.Extensions;
 
-namespace NzbDrone.Core.ImportLists.TMDb;
+namespace NzbDrone.Core.ImportLists.Tmdb;
 
-public class TMDbToken
+public class TmdbToken
 {
     private static readonly JwtSecurityTokenHandler Handler = new();
 
     [SetsRequiredMembers]
-    private TMDbToken(JwtSecurityToken jwt)
+    private TmdbToken(JwtSecurityToken jwt)
     {
         Raw = jwt.RawData;
 
@@ -38,7 +38,7 @@ public class TMDbToken
     public required bool CanRead { get; init; }
     public required bool CanWrite { get; init; }
 
-    public static bool TryParse(string raw, out TMDbToken token)
+    public static bool TryParse(string raw, out TmdbToken token)
     {
         token = null;
         JwtSecurityToken deserializedToken;
@@ -57,7 +57,7 @@ public class TMDbToken
             return false;
         }
 
-        token = new TMDbToken(deserializedToken);
+        token = new TmdbToken(deserializedToken);
         return true;
     }
 
@@ -125,7 +125,7 @@ public class AccessTokenResponse
 }
 
 [DebuggerDisplay("Page: {Page}/{TotalPages}, Page Results: {Results.Count,n0}")]
-public class TMDbPagedResource<TPagedResult>
+public class TmdbPagedResource<TPagedResult>
     where TPagedResult : new()
 {
     [JsonPropertyName("page")]
@@ -141,7 +141,7 @@ public class TMDbPagedResource<TPagedResult>
     public int TotalResults { get; init; }
 }
 
-public class TMDbAccountListResource
+public class TmdbAccountListResource
 {
     [JsonPropertyName("account_object_id")]
     public string AccountObjectId { get; init; }
@@ -193,7 +193,7 @@ public class TMDbAccountListResource
 }
 
 [DebuggerDisplay("Name: {Name}, Id: {Id}, Language: {OriginalLanguage}")]
-public class TMDbMediaResource
+public class TmdbMediaResource
 {
     [JsonPropertyName("adult")]
     public bool Adult { get; init; }
@@ -245,19 +245,19 @@ public class TMDbMediaResource
 }
 
 [DebuggerDisplay("Id: {Id}, Cast: {Cast.Count,n0}, Crew: {Crew.Count,n0}")]
-public class TMDbCreditsResource
+public class TmdbCreditsResource
 {
     [JsonPropertyName("id")]
     public int Id { get; init; }
 
     [JsonPropertyName("cast")]
-    public IReadOnlyList<TMDbCastResource> Cast { get; init; }
+    public IReadOnlyList<TmdbCastResource> Cast { get; init; }
 
     [JsonPropertyName("crew")]
-    public IReadOnlyList<TMDbCrewResource> Crew { get; init; }
+    public IReadOnlyList<TmdbCrewResource> Crew { get; init; }
 }
 
-public class TMDbCastResource : TMDbMediaResource
+public class TmdbCastResource : TmdbMediaResource
 {
     [JsonPropertyName("character")]
     public string Character { get; init; }
@@ -272,7 +272,7 @@ public class TMDbCastResource : TMDbMediaResource
     public string FirstCreditAirDate { get; init; }
 }
 
-public class TMDbCrewResource : TMDbMediaResource
+public class TmdbCrewResource : TmdbMediaResource
 {
     [JsonPropertyName("job")]
     public string Job { get; init; }

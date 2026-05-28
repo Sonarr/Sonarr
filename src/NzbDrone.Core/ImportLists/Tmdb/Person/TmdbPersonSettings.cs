@@ -3,11 +3,11 @@ using System.Linq;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 
-namespace NzbDrone.Core.ImportLists.TMDb.Person;
+namespace NzbDrone.Core.ImportLists.Tmdb.Person;
 
-public class TMDbPersonSettingsValidator : TMDbSettingsBaseValidator<TMDbPersonSettings>
+public class TmdbPersonSettingsValidator : TmdbSettingsBaseValidator<TmdbPersonSettings>
 {
-    public TMDbPersonSettingsValidator()
+    public TmdbPersonSettingsValidator()
     {
         RuleFor(c => c.PersonId).Must(id => int.TryParse(id, out var idInt) && idInt > 0)
             .WithMessage($"Must be a valid 32-bit integer greater than zero, and less than or equal to {int.MaxValue}.");
@@ -22,23 +22,23 @@ public class TMDbPersonSettingsValidator : TMDbSettingsBaseValidator<TMDbPersonS
     }
 }
 
-public class TMDbPersonSettings : TMDbSettingsBase<TMDbPersonSettings>
+public class TmdbPersonSettings : TmdbSettingsBase<TmdbPersonSettings>
 {
-    private static readonly TMDbPersonSettingsValidator Validator = new();
+    private static readonly TmdbPersonSettingsValidator Validator = new();
 
-    public TMDbPersonSettings()
+    public TmdbPersonSettings()
         : base(Validator)
     {
         IsIncludingCastCredit = true;
         IncludedCrewDepartmentCredits = [];
     }
 
-    [FieldDefinition(1, Label = "ImportListsTMDbSettingsPersonId", HelpText = "ImportListsTMDbSettingsPersonIdHelpText", Type = FieldType.Textbox)]
+    [FieldDefinition(1, Label = "ImportListsTmdbSettingsPersonId", HelpText = "ImportListsTmdbSettingsPersonIdHelpText", Type = FieldType.Textbox)]
     public string PersonId { get; set; }
 
-    [FieldDefinition(2, Label = "ImportListsTMDbSettingsIsIncludingCastCredit", HelpText = "ImportListsTMDbSettingsIsIncludingCastCreditHelpText", Type = FieldType.Checkbox)]
+    [FieldDefinition(2, Label = "ImportListsTmdbSettingsIsIncludingCastCredit", HelpText = "ImportListsTmdbSettingsIsIncludingCastCreditHelpText", Type = FieldType.Checkbox)]
     public bool IsIncludingCastCredit { get; set; }
 
-    [FieldDefinition(3, Label = "ImportListsTMDbSettingsIncludedCrewDepartmentCredits", HelpText = "ImportListsTMDbSettingsIncludedCrewDepartmentCreditsHelpText", Type = FieldType.Select, SelectOptions = typeof(TMDbCrewDepartment))]
+    [FieldDefinition(3, Label = "ImportListsTmdbSettingsIncludedCrewDepartmentCredits", HelpText = "ImportListsTmdbSettingsIncludedCrewDepartmentCreditsHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbCrewDepartment))]
     public IEnumerable<int> IncludedCrewDepartmentCredits { get; set; }
 }

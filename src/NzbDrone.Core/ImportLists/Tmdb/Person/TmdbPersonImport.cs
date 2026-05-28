@@ -5,11 +5,11 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 
-namespace NzbDrone.Core.ImportLists.TMDb.Person;
+namespace NzbDrone.Core.ImportLists.Tmdb.Person;
 
-public class TMDbPersonImport : TMDbImportBase<TMDbPersonSettings>
+public class TmdbPersonImport : TmdbImportBase<TmdbPersonSettings>
 {
-    public TMDbPersonImport(ISonarrCloudRequestBuilder requestBuilder,
+    public TmdbPersonImport(ISonarrCloudRequestBuilder requestBuilder,
                             IHttpClient httpClient,
                             IImportListStatusService importListStatusService,
                             IConfigService configService,
@@ -24,11 +24,11 @@ public class TMDbPersonImport : TMDbImportBase<TMDbPersonSettings>
 
     public override IParseImportListResponse GetParser()
     {
-        return new TMDbPersonParser(Settings);
+        return new TmdbPersonParser(Settings);
     }
 
     public override IImportListRequestGenerator GetRequestGenerator()
     {
-        return new TMDbPersonRequestGenerator(Settings);
+        return new TmdbPersonRequestGenerator(Settings);
     }
 }

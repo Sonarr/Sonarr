@@ -4,12 +4,12 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
 
-namespace NzbDrone.Core.ImportLists.TMDb;
+namespace NzbDrone.Core.ImportLists.Tmdb;
 
-public abstract class TMDbSettingsBaseValidator<TSettings> : AbstractValidator<TSettings>
-    where TSettings : TMDbSettingsBase<TSettings>
+public abstract class TmdbSettingsBaseValidator<TSettings> : AbstractValidator<TSettings>
+    where TSettings : TmdbSettingsBase<TSettings>
 {
-    protected TMDbSettingsBaseValidator()
+    protected TmdbSettingsBaseValidator()
     {
         RuleFor(c => c.BaseUrl).ValidRootUrl();
 
@@ -27,7 +27,7 @@ public abstract class TMDbSettingsBaseValidator<TSettings> : AbstractValidator<T
             return;
         }
 
-        if (!TMDbToken.TryParse(rawApiToken, out var apiToken))
+        if (!TmdbToken.TryParse(rawApiToken, out var apiToken))
         {
             context.AddFailure("Token is malformed or corrupted.");
         }
@@ -38,12 +38,12 @@ public abstract class TMDbSettingsBaseValidator<TSettings> : AbstractValidator<T
     }
 }
 
-public abstract class TMDbSettingsBase<TSettings> : ImportListSettingsBase<TSettings>
-    where TSettings : TMDbSettingsBase<TSettings>
+public abstract class TmdbSettingsBase<TSettings> : ImportListSettingsBase<TSettings>
+    where TSettings : TmdbSettingsBase<TSettings>
 {
-    private readonly TMDbSettingsBaseValidator<TSettings> _validator;
+    private readonly TmdbSettingsBaseValidator<TSettings> _validator;
 
-    protected TMDbSettingsBase(TMDbSettingsBaseValidator<TSettings> validator)
+    protected TmdbSettingsBase(TmdbSettingsBaseValidator<TSettings> validator)
     {
         _validator = validator;
 
@@ -63,7 +63,7 @@ public abstract class TMDbSettingsBase<TSettings> : ImportListSettingsBase<TSett
     [FieldDefinition(98, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden, Privacy = PrivacyLevel.ApiKey, Advanced = true)]
     public string AuthToken { get; set; }
 
-    [FieldDefinition(99, Label = "ImportListsTMDbSettingsAuthenticateWithTMDb", Type = FieldType.OAuth)]
+    [FieldDefinition(99, Label = "ImportListsTmdbSettingsAuthenticateWithTmdb", Type = FieldType.OAuth)]
     public string SignIn { get; set; }
 
     public override NzbDroneValidationResult Validate()
