@@ -3,7 +3,7 @@ using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.ImportLists.TMDb.List;
 
-public sealed class TMDbListRequestGenerator : TMDbRequestGeneratorBase<TMDbListSettings>
+public class TMDbListRequestGenerator : TMDbRequestGeneratorBase<TMDbListSettings>
 {
     public TMDbListRequestGenerator(TMDbListSettings settings)
         : base(settings)

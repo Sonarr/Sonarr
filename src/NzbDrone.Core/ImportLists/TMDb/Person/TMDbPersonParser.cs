@@ -4,7 +4,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.ImportLists.TMDb.Person;
 
-public sealed class TMDbPersonParser : TMDbParserBase<TMDbCreditsResource>
+public class TMDbPersonParser : TMDbParserBase<TMDbCreditsResource>
 {
     private readonly bool _isIncludingCastCredit;
     private readonly HashSet<string> _departments;

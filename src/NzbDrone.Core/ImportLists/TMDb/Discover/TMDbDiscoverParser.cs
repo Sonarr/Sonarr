@@ -4,7 +4,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.ImportLists.TMDb.Discover;
 
-public sealed class TMDbDiscoverParser : TMDbParserBase<TMDbPagedResource<TMDbMediaResource>>
+public class TMDbDiscoverParser : TMDbParserBase<TMDbPagedResource<TMDbMediaResource>>
 {
     protected override IEnumerable<ImportListItemInfo> ParseResponse(TMDbPagedResource<TMDbMediaResource> resource)
     {

@@ -8,7 +8,7 @@ using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.ImportLists.TMDb.Discover;
 
-public sealed class TMDbDiscoverImport : TMDbImportBase<TMDbDiscoverSettings>
+public class TMDbDiscoverImport : TMDbImportBase<TMDbDiscoverSettings>
 {
     public TMDbDiscoverImport(ISonarrCloudRequestBuilder requestBuilder,
                               IHttpClient httpClient,

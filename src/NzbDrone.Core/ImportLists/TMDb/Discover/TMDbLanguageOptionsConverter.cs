@@ -6,7 +6,7 @@ using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.ImportLists.TMDb.Discover;
 
-public sealed class TMDbLanguageOptionsConverter : ISelectOptionsConverter
+public class TMDbLanguageOptionsConverter : ISelectOptionsConverter
 {
     public static string UnpackLanguage(int packedLanguage)
     {

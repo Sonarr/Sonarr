@@ -2,7 +2,7 @@ using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.ImportLists.TMDb.Person;
 
-public sealed class TMDbPersonRequestGenerator : TMDbRequestGeneratorBase<TMDbPersonSettings>
+public class TMDbPersonRequestGenerator : TMDbRequestGeneratorBase<TMDbPersonSettings>
 {
     public TMDbPersonRequestGenerator(TMDbPersonSettings settings)
         : base(settings)

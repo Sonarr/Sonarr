@@ -7,7 +7,7 @@ using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.ImportLists.TMDb.Account;
 
-public sealed class TMDbAccountImport : TMDbImportBase<TMDbAccountSettings>
+public class TMDbAccountImport : TMDbImportBase<TMDbAccountSettings>
 {
     public TMDbAccountImport(ISonarrCloudRequestBuilder requestBuilder,
                           IHttpClient httpClient,
