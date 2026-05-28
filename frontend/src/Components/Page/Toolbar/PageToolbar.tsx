@@ -42,7 +42,7 @@ function shallowEqualMenuItem(a: MoreMenuItem, b: MoreMenuItem): boolean {
   if (keys.length !== Object.keys(b).length) {
     return false;
   }
-  return keys.every((key) => a[key] === b[key]);
+  return keys.every((key) => key in b && a[key] === b[key]);
 }
 
 const ToolbarRegistryContext =
