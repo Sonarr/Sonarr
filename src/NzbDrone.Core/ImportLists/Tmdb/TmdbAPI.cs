@@ -64,46 +64,22 @@ public class TmdbToken
     public override string ToString() => Raw;
 }
 
-public class RequestTokenResponse
+public class RequestTokenResource
 {
     [JsonPropertyName("success")]
     public bool IsSuccess { get; init; }
 
-    [JsonPropertyName("status_code")]
+    [JsonPropertyName("statusCode")]
     public int StatusCode { get; init; }
 
-    [JsonPropertyName("status_message")]
+    [JsonPropertyName("statusMessage")]
     public string StatusMessage { get; init; }
 
-    [JsonPropertyName("request_token")]
-    public string RequestToken { get; init; }
-
-    [JsonPropertyName("statusCode")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWriting)]
-    public int SonarrStatusCode
-    {
-        get => StatusCode;
-        init => StatusCode = value;
-    }
-
-    [JsonPropertyName("statusMessage")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWriting)]
-    public string SonarrStatusMessage
-    {
-        get => StatusMessage;
-        init => StatusMessage = value;
-    }
-
     [JsonPropertyName("requestToken")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWriting)]
-    public string SonarrRequestToken
-    {
-        get => RequestToken;
-        init => RequestToken = value;
-    }
+    public string RequestToken { get; init; }
 }
 
-public class AccessTokenResponse
+public class AccessTokenResource
 {
     [JsonPropertyName("success")]
     public bool IsSuccess { get; init; }
