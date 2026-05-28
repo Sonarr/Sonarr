@@ -1,68 +1,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Text.Json.Serialization;
-using Microsoft.IdentityModel.Tokens;
-using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.ImportLists.Tmdb;
-
-public class TmdbToken
-{
-    private static readonly JwtSecurityTokenHandler Handler = new();
-
-    [SetsRequiredMembers]
-    private TmdbToken(JwtSecurityToken jwt)
-    {
-        Raw = jwt.RawData;
-
-        if (jwt.Payload.TryGetValue("redirect_to", out var redirectToObj))
-        {
-            RedirectTo = (string)redirectToObj;
-        }
-
-        foreach (var claim in jwt.Claims.Where(c => c.Type == "scopes"))
-        {
-            CanRead |= claim.Value == "api_read";
-            CanWrite |= claim.Value == "api_write";
-            IsPendingApproval |= claim.Value == "pending_request_token";
-        }
-    }
-
-    public string RedirectTo { get; init; }
-    public bool IsPendingApproval { get; init; }
-
-    public required string Raw { get; init; }
-    public required bool CanRead { get; init; }
-    public required bool CanWrite { get; init; }
-
-    public static bool TryParse(string raw, out TmdbToken token)
-    {
-        token = null;
-        JwtSecurityToken deserializedToken;
-
-        if (raw.IsNullOrWhiteSpace())
-        {
-            return false;
-        }
-
-        try
-        {
-            deserializedToken = Handler.ReadJwtToken(raw);
-        }
-        catch (SecurityTokenMalformedException)
-        {
-            return false;
-        }
-
-        token = new TmdbToken(deserializedToken);
-        return true;
-    }
-
-    public override string ToString() => Raw;
-}
 
 public class RequestTokenResource
 {
