@@ -144,7 +144,8 @@ namespace NzbDrone.Core.Extras.Others
             {
                 try
                 {
-                    var extraFile = ImportFile(localEpisode.Series, episodeFile, file, isReadOnly, Path.GetExtension(file), GetSuffix(copy++, matchingFiles.Count > 1));
+                    var suffix = GetSuffix(copy, matchingFiles.Count > 1);
+                    var extraFile = ImportFile(localEpisode.Series, episodeFile, file, isReadOnly, Path.GetExtension(file), suffix);
                     _mediaFileAttributeService.SetFilePermissions(file);
                     _otherExtraFileService.Upsert(extraFile);
                     importedFiles.Add(extraFile);
