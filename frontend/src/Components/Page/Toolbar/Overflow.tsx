@@ -7,9 +7,12 @@ import React, {
   createContext,
   type ReactElement,
   type ReactNode,
+  type RefAttributes,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import slotStyles from './ToolbarItem.css';
@@ -35,11 +38,21 @@ interface OverflowProps {
   padding?: number;
 }
 
-// `padding` must match container horizontal padding and stay stable per mount — changes re-observe and lose registered items.
 export function Overflow({ children, padding = 10 }: OverflowProps) {
   const manager = useMemo(() => createOverflowManager(), []);
   const [visibility, setVisibility] = useState<Record<string, boolean>>({});
   const [overflowCount, setOverflowCount] = useState(0);
+
+  // `padding` must match the container's horizontal padding and stay stable per mount; a change re-observes and drops registered items.
+  const initialPadding = useRef(padding);
+  useEffect(() => {
+    if (!window.Sonarr.isProduction && padding !== initialPadding.current) {
+      // eslint-disable-next-line no-console
+      console.error(
+        `Overflow: \`padding\` changed from ${initialPadding.current} to ${padding} after mount; registered items will be dropped. Keep it stable.`
+      );
+    }
+  }, [padding]);
 
   const setContainer = useCallback(
     (node: HTMLElement | null) => {
@@ -66,8 +79,9 @@ export function Overflow({ children, padding = 10 }: OverflowProps) {
 
   return (
     <OverflowContext.Provider value={{ manager, visibility, overflowCount }}>
-      {/* `as never`: cloneElement ref injection — child must not already declare a ref. */}
-      {cloneElement(children, { ref: setContainer } as never)}
+      {cloneElement(children, {
+        ref: setContainer,
+      } as RefAttributes<HTMLElement>)}
     </OverflowContext.Provider>
   );
 }
@@ -106,7 +120,7 @@ export function InternalOverflowItem({
     [manager, id, priority, pinned, groupId]
   );
 
-  return cloneElement(children, { ref: setNode } as never);
+  return cloneElement(children, { ref: setNode } as RefAttributes<HTMLElement>);
 }
 
 interface OverflowDividerProps {
