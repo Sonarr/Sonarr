@@ -7,7 +7,7 @@ using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.ImportLists.TMDb.Person;
 
-public sealed class TMDbPersonImport : TMDbImportBase<TMDbPersonSettings>
+public class TMDbPersonImport : TMDbImportBase<TMDbPersonSettings>
 {
     public TMDbPersonImport(ISonarrCloudRequestBuilder requestBuilder,
                             IHttpClient httpClient,
