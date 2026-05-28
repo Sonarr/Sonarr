@@ -33,10 +33,10 @@ public abstract class TmdbSettingsBase<TSettings> : ImportListSettingsBase<TSett
 
     public override string BaseUrl { get; set; } = "https://api.themoviedb.org";
 
-    [FieldDefinition(97, Label = "Account Id", Type = FieldType.Textbox, Hidden = HiddenType.Hidden, Advanced = true)]
+    [FieldDefinition(0, Label = "Account Id", Type = FieldType.Textbox, Hidden = HiddenType.Hidden, Advanced = true)]
     public string AccountId { get; set; }
 
-    [FieldDefinition(98, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden, Privacy = PrivacyLevel.ApiKey, Advanced = true)]
+    [FieldDefinition(0, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden, Privacy = PrivacyLevel.ApiKey, Advanced = true)]
     public string AuthToken { get; set; }
 
     [FieldDefinition(99, Label = "ImportListsTmdbSettingsAuthenticateWithTmdb", Type = FieldType.OAuth)]
