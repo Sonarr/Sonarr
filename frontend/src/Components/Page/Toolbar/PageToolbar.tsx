@@ -2,6 +2,7 @@ import React, {
   Children,
   createContext,
   isValidElement,
+  type PropsWithChildren,
   type ReactElement,
   type ReactNode,
   useCallback,
@@ -48,12 +49,15 @@ const ToolbarRegistryContext =
   createContext<ToolbarRegistryContextValue | null>(null);
 
 export function useToolbarRegistry() {
-  return useContext(ToolbarRegistryContext);
+  const ctx = useContext(ToolbarRegistryContext);
+  if (!ctx) {
+    throw new Error('ToolbarItem must be used inside <PageToolbar>');
+  }
+  return ctx;
 }
 
-interface PageToolbarProps {
+interface PageToolbarProps extends PropsWithChildren {
   className?: string;
-  children?: ReactNode;
 }
 
 function PageToolbar({

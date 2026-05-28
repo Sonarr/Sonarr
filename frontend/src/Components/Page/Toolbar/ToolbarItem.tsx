@@ -65,10 +65,6 @@ function ToolbarItemButtonMode(props: ToolbarItemButtonModeProps) {
   const registry = useToolbarRegistry();
 
   useEffect(() => {
-    if (!registry) {
-      return;
-    }
-
     registry.register({
       id,
       label,
