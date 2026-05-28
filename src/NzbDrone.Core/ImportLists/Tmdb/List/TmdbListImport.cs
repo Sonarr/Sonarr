@@ -11,11 +11,11 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 
-namespace NzbDrone.Core.ImportLists.TMDb.List;
+namespace NzbDrone.Core.ImportLists.Tmdb.List;
 
-public class TMDbListImport : TMDbImportBase<TMDbListSettings>
+public class TmdbListImport : TmdbImportBase<TmdbListSettings>
 {
-    public TMDbListImport(ISonarrCloudRequestBuilder requestBuilder,
+    public TmdbListImport(ISonarrCloudRequestBuilder requestBuilder,
                           IHttpClient httpClient,
                           IImportListStatusService importListStatusService,
                           IConfigService configService,
@@ -41,12 +41,12 @@ public class TMDbListImport : TMDbImportBase<TMDbListSettings>
 
     public override IParseImportListResponse GetParser()
     {
-        return new TMDbListParser();
+        return new TmdbListParser();
     }
 
     public override IImportListRequestGenerator GetRequestGenerator()
     {
-        return new TMDbListRequestGenerator(Settings);
+        return new TmdbListRequestGenerator(Settings);
     }
 
     private List<FieldSelectStringOption> GetAccountListOptions()
@@ -74,7 +74,7 @@ public class TMDbListImport : TMDbImportBase<TMDbListSettings>
             var request = new ImportListRequest(builder.Build());
 
             var response = FetchImportListResponse(request);
-            var resource = JsonSerializer.Deserialize<TMDbPagedResource<TMDbAccountListResource>>(response.Content);
+            var resource = JsonSerializer.Deserialize<TmdbPagedResource<TmdbAccountListResource>>(response.Content);
 
             options.AddRange(resource.Results
                 .Select(r => new FieldSelectStringOption
