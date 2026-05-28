@@ -7,40 +7,22 @@ interface TableOptionsModalWrapperProps
   extends Omit<TableOptionsModalProps, 'isOpen' | 'onModalClose'> {
   columns: Column[];
   children: ReactElement<LinkProps>;
-  // Optional controlled mode — parent owns state so the overflow popup entry can trigger the same modal.
-  isOpen?: boolean;
-  onPress?: () => void;
-  onModalClose?: () => void;
 }
 
 function TableOptionsModalWrapper({
   columns,
   children,
-  isOpen,
-  onPress,
-  onModalClose,
   ...otherProps
 }: TableOptionsModalWrapperProps) {
-  const [internalOpen, setInternalOpen] = useState(false);
-
-  const isControlled = isOpen !== undefined;
-  const effectiveOpen = isControlled ? isOpen : internalOpen;
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleTableOptionsPress = useCallback(() => {
-    if (isControlled) {
-      onPress?.();
-    } else {
-      setInternalOpen(true);
-    }
-  }, [isControlled, onPress]);
+    setIsOpen(true);
+  }, []);
 
   const handleTableOptionsModalClose = useCallback(() => {
-    if (isControlled) {
-      onModalClose?.();
-    } else {
-      setInternalOpen(false);
-    }
-  }, [isControlled, onModalClose]);
+    setIsOpen(false);
+  }, []);
 
   return (
     <>
@@ -50,7 +32,7 @@ function TableOptionsModalWrapper({
 
       <TableOptionsModal
         {...otherProps}
-        isOpen={effectiveOpen}
+        isOpen={isOpen}
         columns={columns}
         onModalClose={handleTableOptionsModalClose}
       />
