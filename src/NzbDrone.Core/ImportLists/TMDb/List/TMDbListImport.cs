@@ -13,7 +13,7 @@ using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.ImportLists.TMDb.List;
 
-public sealed class TMDbListImport : TMDbImportBase<TMDbListSettings>
+public class TMDbListImport : TMDbImportBase<TMDbListSettings>
 {
     public TMDbListImport(ISonarrCloudRequestBuilder requestBuilder,
                           IHttpClient httpClient,

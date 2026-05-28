@@ -2,11 +2,11 @@
 
 namespace NzbDrone.Core.ImportLists.TMDb.Account;
 
-public sealed class TMDbAccountSettingsValidator : TMDbSettingsBaseValidator<TMDbAccountSettings>
+public class TMDbAccountSettingsValidator : TMDbSettingsBaseValidator<TMDbAccountSettings>
 {
 }
 
-public sealed class TMDbAccountSettings : TMDbSettingsBase<TMDbAccountSettings>
+public class TMDbAccountSettings : TMDbSettingsBase<TMDbAccountSettings>
 {
     private static readonly TMDbAccountSettingsValidator Validator = new();
 

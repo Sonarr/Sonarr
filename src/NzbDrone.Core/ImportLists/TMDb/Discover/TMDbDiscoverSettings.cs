@@ -6,7 +6,7 @@ using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.ImportLists.TMDb.Discover;
 
-public sealed partial class TMDbDiscoverSettingsValidator : TMDbSettingsBaseValidator<TMDbDiscoverSettings>
+public partial class TMDbDiscoverSettingsValidator : TMDbSettingsBaseValidator<TMDbDiscoverSettings>
 {
     public TMDbDiscoverSettingsValidator()
     {
@@ -44,7 +44,7 @@ public sealed partial class TMDbDiscoverSettingsValidator : TMDbSettingsBaseVali
     }
 }
 
-public sealed class TMDbDiscoverSettings : TMDbSettingsBase<TMDbDiscoverSettings>
+public class TMDbDiscoverSettings : TMDbSettingsBase<TMDbDiscoverSettings>
 {
     private static readonly TMDbDiscoverSettingsValidator Validator = new();
 

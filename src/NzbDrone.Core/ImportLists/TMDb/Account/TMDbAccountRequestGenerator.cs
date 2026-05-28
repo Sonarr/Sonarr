@@ -2,7 +2,7 @@
 
 namespace NzbDrone.Core.ImportLists.TMDb.Account;
 
-public sealed class TMDbAccountRequestGenerator : TMDbRequestGeneratorBase<TMDbAccountSettings>
+public class TMDbAccountRequestGenerator : TMDbRequestGeneratorBase<TMDbAccountSettings>
 {
     public TMDbAccountRequestGenerator(TMDbAccountSettings settings)
         : base(settings)
