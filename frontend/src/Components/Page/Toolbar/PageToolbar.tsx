@@ -91,31 +91,23 @@ function PageToolbar({
     [register, unregister]
   );
 
-  const moreMenuItems = useMemo(() => {
-    return Object.values(items).sort((a, b) => {
-      const ga = a.groupId ?? '';
-      const gb = b.groupId ?? '';
-      if (ga !== gb) {
-        return ga < gb ? -1 : 1;
-      }
-      const pa = a.priority ?? 0;
-      const pb = b.priority ?? 0;
-      if (pa !== pb) {
-        return pa - pb;
-      }
-      if (a.id < b.id) {
-        return -1;
-      }
-      if (a.id > b.id) {
-        return 1;
-      }
-      return 0;
-    });
-  }, [items]);
-
   const childrenArray = Children.toArray(children).filter(
     (c): c is ReactElement => isValidElement(c)
   );
+
+  const orderById = new Map<string, number>();
+  childrenArray.forEach((child, index) => {
+    const id = (child.props as { id?: string }).id;
+    if (id !== undefined) {
+      orderById.set(id, index);
+    }
+  });
+
+  const moreMenuItems = Object.values(items).sort(
+    (a, b) =>
+      (orderById.get(a.id) ?? Infinity) - (orderById.get(b.id) ?? Infinity)
+  );
+
   const spacerIndex = childrenArray.findIndex(
     (c) => c.type === PageToolbarSpacer
   );
