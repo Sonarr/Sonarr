@@ -1,6 +1,4 @@
 using FluentValidation;
-using FluentValidation.Validators;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
 
@@ -16,25 +14,6 @@ public abstract class TmdbSettingsBaseValidator<TSettings> : AbstractValidator<T
         RuleFor(c => c.AuthToken).NotEmpty()
             .OverridePropertyName("SignIn")
             .WithMessage("Must authenticate with TMDb");
-
-        RuleFor(c => c.ApiKey).Custom(EnsureValidApiToken);
-    }
-
-    private static void EnsureValidApiToken(string rawApiToken, CustomContext context)
-    {
-        if (rawApiToken.IsNullOrWhiteSpace())
-        {
-            return;
-        }
-
-        if (!TmdbToken.TryParse(rawApiToken, out var apiToken))
-        {
-            context.AddFailure("Token is malformed or corrupted.");
-        }
-        else if (!apiToken.CanRead)
-        {
-            context.AddFailure("Token does not provide the necessary read permissions.");
-        }
     }
 }
 
@@ -54,11 +33,8 @@ public abstract class TmdbSettingsBase<TSettings> : ImportListSettingsBase<TSett
 
     public override string BaseUrl { get; set; } = "https://api.themoviedb.org";
 
-    [FieldDefinition(96, Label = "Account Id", Type = FieldType.Textbox, Hidden = HiddenType.Hidden, Advanced = true)]
+    [FieldDefinition(97, Label = "Account Id", Type = FieldType.Textbox, Hidden = HiddenType.Hidden, Advanced = true)]
     public string AccountId { get; set; }
-
-    [FieldDefinition(97, Label = "TMDb API Read Access Token", Type = FieldType.Textbox, Privacy = PrivacyLevel.ApiKey, Advanced = true)]
-    public string ApiKey { get; set; }
 
     [FieldDefinition(98, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden, Privacy = PrivacyLevel.ApiKey, Advanced = true)]
     public string AuthToken { get; set; }

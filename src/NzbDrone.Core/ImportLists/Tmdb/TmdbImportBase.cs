@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Text.Json;
 using NLog;
 using NzbDrone.Common.Cloud;
@@ -20,8 +19,6 @@ public abstract class TmdbImportBase<TSettings> : HttpImportListBase<TSettings>
 {
     private const string SonarrAuthAccess = "auth/tmdb/access";
     private const string SonarrAuthRequest = "auth/tmdb/request";
-    private const string TmdbAuthAccess = "4/auth/access_token";
-    private const string TmdbAuthRequest = "4/auth/request_token";
     private const string TmdbAuthUserApproval = "https://www.themoviedb.org/auth/access";
 
     private readonly IHttpRequestBuilderFactory _requestBuilder;
@@ -46,29 +43,17 @@ public abstract class TmdbImportBase<TSettings> : HttpImportListBase<TSettings>
     {
         if (action == "startOAuth")
         {
-            if (TmdbToken.TryParse(Settings.ApiKey, out var apiAccessToken) && !apiAccessToken.CanRead)
-            {
-                _logger.Warn("Access token does not contain valid read permissions and will be ignored.");
-            }
-
-            HttpRequest request;
-            if (apiAccessToken.Raw.IsNotNullOrWhiteSpace())
-            {
-                request = CreateOAuthRequestBuilder(TmdbAuthRequest, apiAccessToken.Raw).Build();
-                request.SetContent(JsonSerializer.Serialize(new { redirect_to = query["callbackUrl"] }));
-            }
-            else
-            {
-                request = CreateOAuthRequestBuilder(SonarrAuthRequest)
-                    .AddQueryParam("redirectUrl", query["callbackUrl"])
-                    .Build();
-            }
+            var request = _requestBuilder.Create()
+                .Accept(HttpAccept.Json)
+                .Resource(SonarrAuthRequest)
+                .SetHeader("Content-Type", "application/json")
+                .AddQueryParam("redirectUrl", query["callbackUrl"])
+                .Build();
 
             var response = _httpClient.Execute(request);
-            var resource = JsonSerializer.Deserialize<RequestTokenResponse>(response.Content);
+            var resource = JsonSerializer.Deserialize<RequestTokenResource>(response.Content);
 
-            _ = TmdbToken.TryParse(resource.RequestToken, out var requestToken);
-            if (requestToken.RedirectTo.IsNullOrWhiteSpace())
+            if (!TmdbToken.TryParse(resource.RequestToken, out var requestToken) || requestToken.RedirectTo.IsNullOrWhiteSpace())
             {
                 _logger.Warn("Request token does not contain an embedded 'redirect_to' payload object.");
             }
@@ -80,28 +65,27 @@ public abstract class TmdbImportBase<TSettings> : HttpImportListBase<TSettings>
             return new
             {
                 OauthUrl = request.Url.ToString(),
-                request_token = requestToken.Raw,
-                api_access_token = apiAccessToken.Raw ?? string.Empty
+                RequestToken = requestToken.Raw
             };
         }
         else if (action == "getOAuthToken")
         {
-            HttpRequest request;
-            var apiAccessToken = query["api_access_token"];
-            if (apiAccessToken.IsNotNullOrWhiteSpace())
-            {
-                request = CreateOAuthRequestBuilder(TmdbAuthAccess, apiAccessToken).Build();
-                request.SetContent(JsonSerializer.Serialize(new { request_token = query["request_token"] }));
-            }
-            else
-            {
-                request = CreateOAuthRequestBuilder(SonarrAuthAccess)
-                    .AddQueryParam("requestToken", query["request_token"])
-                    .Build();
-            }
+            var request = _requestBuilder.Create()
+                .Accept(HttpAccept.Json)
+                .Resource(SonarrAuthAccess)
+                .SetHeader("Content-Type", "application/json")
+                .AddQueryParam("requestToken", query["requestToken"])
+                .Build();
 
             var response = _httpClient.Execute(request);
-            return JsonSerializer.Deserialize<AccessTokenResponse>(response.Content);
+            var resource = JsonSerializer.Deserialize<AccessTokenResource>(response.Content);
+
+            if (!TmdbToken.TryParse(resource.AccessToken, out var accessToken) || !accessToken.CanRead)
+            {
+                _logger.Warn("Access token does not provide the application with the required read permissions.");
+            }
+
+            return resource;
         }
 
         return new { };
@@ -122,25 +106,5 @@ public abstract class TmdbImportBase<TSettings> : HttpImportListBase<TSettings>
             Settings = definition.Value,
             Implementation = GetType().Name
         });
-    }
-
-    private HttpRequestBuilder CreateOAuthRequestBuilder(string resourceUrl, string apiAccessToken = null)
-    {
-        HttpRequestBuilder builder;
-        if (apiAccessToken.IsNotNullOrWhiteSpace())
-        {
-            builder = new HttpRequestBuilder(Settings.BaseUrl) { Method = HttpMethod.Post }
-                .SetHeader("Authorization", $"Bearer {apiAccessToken}");
-        }
-        else
-        {
-            builder = _requestBuilder.Create();
-        }
-
-        builder.Accept(HttpAccept.Json)
-            .Resource(resourceUrl)
-            .SetHeader("Content-Type", "application/json");
-
-        return builder;
     }
 }
