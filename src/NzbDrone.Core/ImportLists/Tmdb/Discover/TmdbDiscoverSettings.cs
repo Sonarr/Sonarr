@@ -4,11 +4,11 @@ using FluentValidation.Validators;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 
-namespace NzbDrone.Core.ImportLists.TMDb.Discover;
+namespace NzbDrone.Core.ImportLists.Tmdb.Discover;
 
-public partial class TMDbDiscoverSettingsValidator : TMDbSettingsBaseValidator<TMDbDiscoverSettings>
+public partial class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDiscoverSettings>
 {
-    public TMDbDiscoverSettingsValidator()
+    public TmdbDiscoverSettingsValidator()
     {
         RuleFor(c => c.MinimumVoteAverage).Custom(ValidateVoteAverage);
 
@@ -44,15 +44,15 @@ public partial class TMDbDiscoverSettingsValidator : TMDbSettingsBaseValidator<T
     }
 }
 
-public class TMDbDiscoverSettings : TMDbSettingsBase<TMDbDiscoverSettings>
+public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
 {
-    private static readonly TMDbDiscoverSettingsValidator Validator = new();
+    private static readonly TmdbDiscoverSettingsValidator Validator = new();
 
-    public TMDbDiscoverSettings()
+    public TmdbDiscoverSettings()
         : base(Validator)
     {
-        Sort = (int)TMDbDiscoverSort.Popularity;
-        SortOrder = (int)TMDbDiscoverSortOrder.Descending;
+        Sort = (int)TmdbDiscoverSort.Popularity;
+        SortOrder = (int)TmdbDiscoverSortOrder.Descending;
     }
 
     [FieldDefinition(1, Label = "Include Adult", Type = FieldType.Checkbox, Advanced = true)]
@@ -61,13 +61,13 @@ public class TMDbDiscoverSettings : TMDbSettingsBase<TMDbDiscoverSettings>
     [FieldDefinition(2, Label = "Include Without First Air Dates", Type = FieldType.Checkbox, Advanced = true)]
     public bool IncludeNullFirstAirDates { get; set; }
 
-    [FieldDefinition(3, Label = "Original Language", Type = FieldType.Select, SelectOptions = typeof(TMDbLanguageOptionsConverter))]
+    [FieldDefinition(3, Label = "Original Language", Type = FieldType.Select, SelectOptions = typeof(TmdbLanguageOptionsConverter))]
     public int WithOriginalLanguageCode { get; set; }
 
-    [FieldDefinition(4, Label = "Sort", Type = FieldType.Select, SelectOptions = typeof(TMDbDiscoverSort))]
+    [FieldDefinition(4, Label = "Sort", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSort))]
     public int Sort { get; set; }
 
-    [FieldDefinition(5, Label = "Sort Order", Type = FieldType.Select, SelectOptions = typeof(TMDbDiscoverSortOrder))]
+    [FieldDefinition(5, Label = "Sort Order", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSortOrder))]
     public int SortOrder { get; set; }
 
     [FieldDefinition(6, Label = "Minimum Vote Average", Type = FieldType.Textbox, HelpText = "Filter series by minimum vote average.")]
