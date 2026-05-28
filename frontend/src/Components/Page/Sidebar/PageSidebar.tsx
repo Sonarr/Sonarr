@@ -455,17 +455,13 @@ function PageSidebar() {
 
             return (
               <Fragment key={`group-${groupIndex}`}>
-                {showSeparatorBefore && (
-                  <div
-                    className={styles.divider}
-                    role="separator"
-                    aria-hidden="true"
-                  />
-                )}
+                {showSeparatorBefore ? (
+                  <div className={styles.divider} aria-hidden="true" />
+                ) : null}
 
-                {group.label && (
+                {group.label ? (
                   <span className={styles.groupLabel}>{group.label()}</span>
-                )}
+                ) : null}
 
                 {group.items.map((link) => {
                   const childWithStatusComponent = link.children?.find(
@@ -497,22 +493,22 @@ function PageSidebar() {
                       isParentItem={!!link.children}
                       onPress={handleItemPress}
                     >
-                      {link.children &&
-                        link.to === activeParent &&
-                        link.children.map((child) => {
-                          return (
-                            <PageSidebarItem
-                              key={child.to}
-                              title={child.title}
-                              to={child.to}
-                              isActive={pathname === child.to}
-                              isParentItem={false}
-                              isChildItem={true}
-                              statusComponent={child.statusComponent}
-                              onPress={handleItemPress}
-                            />
-                          );
-                        })}
+                      {link.children && link.to === activeParent
+                        ? link.children.map((child) => {
+                            return (
+                              <PageSidebarItem
+                                key={child.to}
+                                title={child.title}
+                                to={child.to}
+                                isActive={pathname === child.to}
+                                isParentItem={false}
+                                isChildItem={true}
+                                statusComponent={child.statusComponent}
+                                onPress={handleItemPress}
+                              />
+                            );
+                          })
+                        : null}
                     </PageSidebarItem>
                   );
                 })}

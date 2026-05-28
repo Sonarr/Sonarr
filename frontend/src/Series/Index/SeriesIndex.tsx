@@ -341,7 +341,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
           onPress={onSelectModePress}
         />
 
-        {isSelectMode && (
+        {isSelectMode ? (
           <ToolbarItem
             id="selectall"
             priority={1}
@@ -351,7 +351,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
             renderButton={renderSelectAllButton}
             renderOverflow={renderSelectAllOverflow}
           />
-        )}
+        ) : null}
 
         <OverflowDivider groupId="left-b">
           <PageToolbarSeparator />
