@@ -149,6 +149,8 @@ namespace NzbDrone.Core.Extras.Others
                     _mediaFileAttributeService.SetFilePermissions(file);
                     _otherExtraFileService.Upsert(extraFile);
                     importedFiles.Add(extraFile);
+
+                    copy++;
                 }
                 catch (Exception ex)
                 {
