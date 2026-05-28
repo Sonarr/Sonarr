@@ -24,16 +24,16 @@ public class AccessTokenResource
     [JsonPropertyName("success")]
     public bool IsSuccess { get; init; }
 
-    [JsonPropertyName("status_code")]
+    [JsonPropertyName("statusCode")]
     public int StatusCode { get; init; }
 
-    [JsonPropertyName("status_message")]
+    [JsonPropertyName("statusMessage")]
     public string StatusMessage { get; init; }
 
-    [JsonPropertyName("account_id")]
+    [JsonPropertyName("accountId")]
     public string AccountId { get; init; }
 
-    [JsonPropertyName("access_token")]
+    [JsonPropertyName("accessToken")]
     public string AccessToken { get; init; }
 
     [JsonIgnore]
