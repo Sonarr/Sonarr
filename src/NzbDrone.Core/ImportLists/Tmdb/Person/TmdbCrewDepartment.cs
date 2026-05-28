@@ -1,8 +1,8 @@
 ﻿using NzbDrone.Core.Annotations;
 
-namespace NzbDrone.Core.ImportLists.TMDb.Person;
+namespace NzbDrone.Core.ImportLists.Tmdb.Person;
 
-public enum TMDbCrewDepartment
+public enum TmdbCrewDepartment
 {
     Art,
     Camera,

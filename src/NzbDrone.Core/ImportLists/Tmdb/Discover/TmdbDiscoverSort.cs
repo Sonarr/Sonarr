@@ -1,6 +1,6 @@
-﻿namespace NzbDrone.Core.ImportLists.TMDb.Discover;
+﻿namespace NzbDrone.Core.ImportLists.Tmdb.Discover;
 
-public enum TMDbDiscoverSort
+public enum TmdbDiscoverSort
 {
     First_Air_Date = 0,
     Name = 1,

@@ -2,11 +2,11 @@
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 
-namespace NzbDrone.Core.ImportLists.TMDb.List;
+namespace NzbDrone.Core.ImportLists.Tmdb.List;
 
-public class TMDbListSettingsValidator : TMDbSettingsBaseValidator<TMDbListSettings>
+public class TmdbListSettingsValidator : TmdbSettingsBaseValidator<TmdbListSettings>
 {
-    public TMDbListSettingsValidator()
+    public TmdbListSettingsValidator()
     {
         RuleFor(c => c.ListId).Must(id => int.TryParse(id, out var idInt) && idInt > 0)
             .WithMessage($"Must be a valid 32-bit integer greater than zero, and less than or equal to {int.MaxValue}.")
@@ -28,11 +28,11 @@ public class TMDbListSettingsValidator : TMDbSettingsBaseValidator<TMDbListSetti
     }
 }
 
-public class TMDbListSettings : TMDbSettingsBase<TMDbListSettings>
+public class TmdbListSettings : TmdbSettingsBase<TmdbListSettings>
 {
-    private static readonly TMDbListSettingsValidator Validator = new();
+    private static readonly TmdbListSettingsValidator Validator = new();
 
-    public TMDbListSettings()
+    public TmdbListSettings()
         : base(Validator)
     {
     }

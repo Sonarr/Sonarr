@@ -2,20 +2,20 @@ using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Parser.Model;
 
-namespace NzbDrone.Core.ImportLists.TMDb.Person;
+namespace NzbDrone.Core.ImportLists.Tmdb.Person;
 
-public class TMDbPersonParser : TMDbParserBase<TMDbCreditsResource>
+public class TmdbPersonParser : TmdbParserBase<TmdbCreditsResource>
 {
     private readonly bool _isIncludingCastCredit;
     private readonly HashSet<string> _departments;
 
-    public TMDbPersonParser(TMDbPersonSettings settings)
+    public TmdbPersonParser(TmdbPersonSettings settings)
     {
         _isIncludingCastCredit = settings.IsIncludingCastCredit;
         _departments = GetWantedCrewDepartments(settings.IncludedCrewDepartmentCredits);
     }
 
-    protected override IEnumerable<ImportListItemInfo> ParseResponse(TMDbCreditsResource resource)
+    protected override IEnumerable<ImportListItemInfo> ParseResponse(TmdbCreditsResource resource)
     {
         var items = Enumerable.Empty<ImportListItemInfo>();
         if (_isIncludingCastCredit && resource.Cast.Count > 0)
@@ -36,11 +36,11 @@ public class TMDbPersonParser : TMDbParserBase<TMDbCreditsResource>
     private static HashSet<string> GetWantedCrewDepartments(IEnumerable<int> includedCrewDepartmentCredits)
     {
         return includedCrewDepartmentCredits
-            .Cast<TMDbCrewDepartment>()
+            .Cast<TmdbCrewDepartment>()
             .Select(crewDepartment => crewDepartment switch
             {
-                TMDbCrewDepartment.CostumeMakeup => "Costume & Makeup",
-                TMDbCrewDepartment.VisualEffects => "Visual Effects",
+                TmdbCrewDepartment.CostumeMakeup => "Costume & Makeup",
+                TmdbCrewDepartment.VisualEffects => "Visual Effects",
                 _ => crewDepartment.ToString()
             }).ToHashSet();
     }

@@ -8,6 +8,6 @@ namespace NzbDrone.Core.ImportLists
         Simkl,
         Other,
         Advanced,
-        TMDb
+        Tmdb
     }
 }

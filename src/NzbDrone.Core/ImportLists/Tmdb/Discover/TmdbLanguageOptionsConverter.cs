@@ -4,9 +4,9 @@ using System.Globalization;
 using System.Linq;
 using NzbDrone.Core.Annotations;
 
-namespace NzbDrone.Core.ImportLists.TMDb.Discover;
+namespace NzbDrone.Core.ImportLists.Tmdb.Discover;
 
-public class TMDbLanguageOptionsConverter : ISelectOptionsConverter
+public class TmdbLanguageOptionsConverter : ISelectOptionsConverter
 {
     public static string UnpackLanguage(int packedLanguage)
     {

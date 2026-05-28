@@ -5,11 +5,11 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 
-namespace NzbDrone.Core.ImportLists.TMDb.Account;
+namespace NzbDrone.Core.ImportLists.Tmdb.Account;
 
-public class TMDbAccountImport : TMDbImportBase<TMDbAccountSettings>
+public class TmdbAccountImport : TmdbImportBase<TmdbAccountSettings>
 {
-    public TMDbAccountImport(ISonarrCloudRequestBuilder requestBuilder,
+    public TmdbAccountImport(ISonarrCloudRequestBuilder requestBuilder,
                           IHttpClient httpClient,
                           IImportListStatusService importListStatusService,
                           IConfigService configService,
@@ -25,11 +25,11 @@ public class TMDbAccountImport : TMDbImportBase<TMDbAccountSettings>
 
     public override IParseImportListResponse GetParser()
     {
-        return new TMDbAccountParser();
+        return new TmdbAccountParser();
     }
 
     public override IImportListRequestGenerator GetRequestGenerator()
     {
-        return new TMDbAccountRequestGenerator(Settings);
+        return new TmdbAccountRequestGenerator(Settings);
     }
 }

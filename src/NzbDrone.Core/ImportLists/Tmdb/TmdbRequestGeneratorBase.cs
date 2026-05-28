@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using NzbDrone.Common.Http;
 
-namespace NzbDrone.Core.ImportLists.TMDb;
+namespace NzbDrone.Core.ImportLists.Tmdb;
 
-public abstract class TMDbRequestGeneratorBase<TSettings> : IImportListRequestGenerator
-    where TSettings : TMDbSettingsBase<TSettings>
+public abstract class TmdbRequestGeneratorBase<TSettings> : IImportListRequestGenerator
+    where TSettings : TmdbSettingsBase<TSettings>
 {
-    protected TMDbRequestGeneratorBase(TSettings settings)
+    protected TmdbRequestGeneratorBase(TSettings settings)
     {
         Settings = settings;
     }

@@ -6,11 +6,11 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 
-namespace NzbDrone.Core.ImportLists.TMDb.Discover;
+namespace NzbDrone.Core.ImportLists.Tmdb.Discover;
 
-public class TMDbDiscoverImport : TMDbImportBase<TMDbDiscoverSettings>
+public class TmdbDiscoverImport : TmdbImportBase<TmdbDiscoverSettings>
 {
-    public TMDbDiscoverImport(ISonarrCloudRequestBuilder requestBuilder,
+    public TmdbDiscoverImport(ISonarrCloudRequestBuilder requestBuilder,
                               IHttpClient httpClient,
                               IImportListStatusService importListStatusService,
                               IConfigService configService,
@@ -26,22 +26,22 @@ public class TMDbDiscoverImport : TMDbImportBase<TMDbDiscoverSettings>
 
     public override IParseImportListResponse GetParser()
     {
-        return new TMDbDiscoverParser();
+        return new TmdbDiscoverParser();
     }
 
     public override IImportListRequestGenerator GetRequestGenerator()
     {
-        return new TMDbDiscoverRequestGenerator(Settings);
+        return new TmdbDiscoverRequestGenerator(Settings);
     }
 
-    protected override IEnumerable<KeyValuePair<string, TMDbDiscoverSettings>> GetPresetDefinitionPairs()
+    protected override IEnumerable<KeyValuePair<string, TmdbDiscoverSettings>> GetPresetDefinitionPairs()
     {
-        yield return new KeyValuePair<string, TMDbDiscoverSettings>("Top Rated",
-            new TMDbDiscoverSettings
+        yield return new KeyValuePair<string, TmdbDiscoverSettings>("Top Rated",
+            new TmdbDiscoverSettings
             {
                 MinimumVoteCount = "200",
-                Sort = (int)TMDbDiscoverSort.Vote_Average,
-                SortOrder = (int)TMDbDiscoverSortOrder.Descending
+                Sort = (int)TmdbDiscoverSort.Vote_Average,
+                SortOrder = (int)TmdbDiscoverSortOrder.Descending
             });
     }
 }

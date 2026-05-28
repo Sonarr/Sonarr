@@ -2,19 +2,19 @@ using System.Globalization;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 
-namespace NzbDrone.Core.ImportLists.TMDb.Discover;
+namespace NzbDrone.Core.ImportLists.Tmdb.Discover;
 
-public class TMDbDiscoverRequestGenerator : TMDbRequestGeneratorBase<TMDbDiscoverSettings>
+public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscoverSettings>
 {
-    public TMDbDiscoverRequestGenerator(TMDbDiscoverSettings settings)
+    public TmdbDiscoverRequestGenerator(TmdbDiscoverSettings settings)
         : base(settings)
     {
     }
 
     protected override void SetupSeriesRequestsBuilder(HttpRequestBuilder builder)
     {
-        var sortString = ((TMDbDiscoverSort)Settings.Sort).ToString().ToLower(CultureInfo.InvariantCulture);
-        var sortOrderString = Settings.SortOrder == (int)TMDbDiscoverSortOrder.Ascending ? "asc" : "desc";
+        var sortString = ((TmdbDiscoverSort)Settings.Sort).ToString().ToLower(CultureInfo.InvariantCulture);
+        var sortOrderString = Settings.SortOrder == (int)TmdbDiscoverSortOrder.Ascending ? "asc" : "desc";
 
         builder.Resource("3/discover/tv")
             .AddQueryParam("include_adult", Settings.IncludeAdult)
@@ -24,7 +24,7 @@ public class TMDbDiscoverRequestGenerator : TMDbRequestGeneratorBase<TMDbDiscove
         if (Settings.WithOriginalLanguageCode != 0)
         {
             builder.AddQueryParam("with_original_language",
-                TMDbLanguageOptionsConverter.UnpackLanguage(Settings.WithOriginalLanguageCode));
+                TmdbLanguageOptionsConverter.UnpackLanguage(Settings.WithOriginalLanguageCode));
         }
 
         AddOrSkipQueryParam(builder, "vote_average.gte", Settings.MinimumVoteAverage);
