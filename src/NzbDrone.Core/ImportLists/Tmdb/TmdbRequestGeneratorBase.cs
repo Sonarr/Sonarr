@@ -26,8 +26,7 @@ public abstract class TmdbRequestGeneratorBase<TSettings> : IImportListRequestGe
     {
         var builder = new HttpRequestBuilder(Settings.BaseUrl)
             .Accept(HttpAccept.Json)
-            .SetHeader("Authorization", $"Bearer {Settings.AuthToken}")
-            .AddQueryParam("language", "en-US");
+            .SetHeader("Authorization", $"Bearer {Settings.AuthToken}");
 
         SetupSeriesRequestsBuilder(builder);
         if (Settings.MaxPages > 0)
