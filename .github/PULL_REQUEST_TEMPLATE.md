@@ -16,7 +16,7 @@ YES - ###
 
 <!-- You must put an X in appropriate checkboxes before submitting -->
 
-- [ ] I have read [CONTRIBUTING.md](../CONTRIBUTING.md) and this PR follows the guidelines
+- [ ] I have read [CONTRIBUTING.md](/Sonarr/Sonarr/blob/v5-develop/CONTRIBUTING.md) and this PR follows the guidelines
 - [ ] I have fully reviewed all code in this PR and confirm it works as intended
 - [ ] This PR was authored and submitted by an AI agent without human review
 
