@@ -21,10 +21,10 @@ namespace NzbDrone.Core.Parser.Model
         public DownloadClientItem DownloadItem { get; set; }
         public ParsedEpisodeInfo FolderEpisodeInfo { get; set; }
         public Series Series { get; set; }
-        public List<Episode> Episodes { get; set; } = new();
+        public List<Episode> Episodes { get; set; } = [];
         public List<DeletedEpisodeFile> OldFiles { get; set; }
         public QualityModel Quality { get; set; }
-        public List<Language> Languages { get; set; } = new();
+        public List<Language> Languages { get; set; } = [];
         public IndexerFlags IndexerFlags { get; set; }
         public ReleaseType ReleaseType { get; set; }
         public MediaInfoModel MediaInfo { get; set; }
@@ -34,9 +34,9 @@ namespace NzbDrone.Core.Parser.Model
         public string ReleaseHash { get; set; }
         public string SceneName { get; set; }
         public bool OtherVideoFiles { get; set; }
-        public List<CustomFormat> CustomFormats { get; set; } = new();
+        public List<CustomFormat> CustomFormats { get; set; } = [];
         public int CustomFormatScore { get; set; }
-        public List<CustomFormat> OriginalFileNameCustomFormats { get; set; } = new();
+        public List<CustomFormat> OriginalFileNameCustomFormats { get; set; } = [];
         public int OriginalFileNameCustomFormatScore { get; set; }
         public GrabbedReleaseInfo Release { get; set; }
         public bool ScriptImported { get; set; }
