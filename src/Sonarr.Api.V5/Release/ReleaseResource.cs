@@ -17,6 +17,7 @@ public class ReleaseResource : RestResource
     public int QualityWeight { get; set; }
     public List<Language> Languages { get; set; } = [];
     public int? MappedSeasonNumber { get; set; }
+    public int[] MappedSeasonNumbers { get; set; } = [];
     public int[] MappedEpisodeNumbers { get; set; } = [];
     public int[] MappedAbsoluteEpisodeNumbers { get; set; } = [];
     public int? MappedSeriesId { get; set; }
@@ -46,6 +47,7 @@ public static class ReleaseResourceMapper
             Languages = remoteEpisode.Languages,
             MappedSeriesId = remoteEpisode.Series?.Id,
             MappedSeasonNumber = remoteEpisode.Episodes.FirstOrDefault()?.SeasonNumber,
+            MappedSeasonNumbers = remoteEpisode.MappedSeasonNumbers,
             MappedEpisodeNumbers = remoteEpisode.Episodes.Select(v => v.EpisodeNumber).ToArray(),
             MappedAbsoluteEpisodeNumbers = remoteEpisode.Episodes.Where(v => v.AbsoluteEpisodeNumber.HasValue).Select(v => v.AbsoluteEpisodeNumber!.Value).ToArray(),
             MappedEpisodeInfo = remoteEpisode.Episodes.Select(v => new ReleaseEpisodeResource(v)),

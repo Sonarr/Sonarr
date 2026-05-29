@@ -39,6 +39,7 @@ namespace Sonarr.Api.V3.Indexers
         public int[] EpisodeNumbers { get; set; }
         public int[] AbsoluteEpisodeNumbers { get; set; }
         public int? MappedSeasonNumber { get; set; }
+        public int[] MappedSeasonNumbers { get; set; }
         public int[] MappedEpisodeNumbers { get; set; }
         public int[] MappedAbsoluteEpisodeNumbers { get; set; }
         public int? MappedSeriesId { get; set; }
@@ -72,6 +73,7 @@ namespace Sonarr.Api.V3.Indexers
         public bool IsAbsoluteNumbering { get; set; }
         public bool IsPossibleSpecialEpisode { get; set; }
         public bool Special { get; set; }
+        public bool IsMultiSeason { get; set; }
 
         // Sent when queuing an unknown release
 
@@ -128,6 +130,7 @@ namespace Sonarr.Api.V3.Indexers
                 AbsoluteEpisodeNumbers = parsedEpisodeInfo.AbsoluteEpisodeNumbers,
                 MappedSeriesId = remoteEpisode.Series?.Id,
                 MappedSeasonNumber = remoteEpisode.Episodes.FirstOrDefault()?.SeasonNumber,
+                MappedSeasonNumbers = remoteEpisode.MappedSeasonNumbers,
                 MappedEpisodeNumbers = remoteEpisode.Episodes.Select(v => v.EpisodeNumber).ToArray(),
                 MappedAbsoluteEpisodeNumbers = remoteEpisode.Episodes.Where(v => v.AbsoluteEpisodeNumber.HasValue).Select(v => v.AbsoluteEpisodeNumber.Value).ToArray(),
                 MappedEpisodeInfo = remoteEpisode.Episodes.Select(v => new ReleaseEpisodeResource(v)),
@@ -161,6 +164,7 @@ namespace Sonarr.Api.V3.Indexers
                 IsAbsoluteNumbering = parsedEpisodeInfo.IsAbsoluteNumbering,
                 IsPossibleSpecialEpisode = parsedEpisodeInfo.IsPossibleSpecialEpisode,
                 Special = parsedEpisodeInfo.Special,
+                IsMultiSeason = parsedEpisodeInfo.IsMultiSeason,
             };
         }
 
