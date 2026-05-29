@@ -165,12 +165,21 @@ namespace NzbDrone.Core.Parser
 
         public RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int seriesId, IEnumerable<int> episodeIds)
         {
-            return new RemoteEpisode
+            var remoteEpisode = new RemoteEpisode
                    {
                        ParsedEpisodeInfo = parsedEpisodeInfo,
                        Series = _seriesService.GetSeries(seriesId),
                        Episodes = _episodeService.GetEpisodes(episodeIds)
                    };
+
+            remoteEpisode.MappedSeasonNumbers = remoteEpisode.Episodes
+                .Select(e => e.SeasonNumber)
+                .Where(n => n > 0)
+                .Distinct()
+                .OrderBy(n => n)
+                .ToArray();
+
+            return remoteEpisode;
         }
 
         private RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvdbId, int tvRageId, string imdbId, Series series, SearchCriteriaBase searchCriteria)
@@ -225,6 +234,12 @@ namespace NzbDrone.Core.Parser
                 if (ValidateParsedEpisodeInfo.ValidateForSeriesType(parsedEpisodeInfo, series))
                 {
                     remoteEpisode.Episodes = GetEpisodes(parsedEpisodeInfo, series, remoteEpisode.MappedSeasonNumber, sceneSource, searchCriteria);
+                    remoteEpisode.MappedSeasonNumbers = remoteEpisode.Episodes
+                        .Select(e => e.SeasonNumber)
+                        .Where(n => n > 0)
+                        .Distinct()
+                        .OrderBy(n => n)
+                        .ToArray();
                 }
             }
 
@@ -260,6 +275,14 @@ namespace NzbDrone.Core.Parser
         {
             if (parsedEpisodeInfo.FullSeason)
             {
+                // Multi-season packs: fetch episodes for all seasons and union them
+                if (parsedEpisodeInfo.IsMultiSeason &&
+                    parsedEpisodeInfo.SeasonNumbers != null &&
+                    parsedEpisodeInfo.SeasonNumbers.Length > 1)
+                {
+                    return GetMultiSeasonEpisodes(parsedEpisodeInfo, series, sceneSource);
+                }
+
                 if (series.UseSceneNumbering && sceneSource)
                 {
                     var episodes = _episodeService.GetEpisodesBySceneSeason(series.Id, mappedSeasonNumber);
@@ -707,6 +730,39 @@ namespace NzbDrone.Core.Parser
             }
 
             return result;
+        }
+
+        private List<Episode> GetMultiSeasonEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, Series series, bool sceneSource)
+        {
+            var result = new List<Episode>();
+
+            foreach (var seasonNumber in parsedEpisodeInfo.SeasonNumbers.Where(s => s > 0))
+            {
+                if (series.UseSceneNumbering && sceneSource)
+                {
+                    var sceneEpisodes = _episodeService.GetEpisodesBySceneSeason(series.Id, seasonNumber);
+
+                    if (sceneEpisodes?.Any() == true)
+                    {
+                        result.AddRange(sceneEpisodes);
+                        continue;
+                    }
+
+                    // Scene lookup empty — find TVDB-equivalent via scene mapping offset
+                    var sceneMapping = _sceneMappingService.FindSceneMapping(parsedEpisodeInfo.SeriesTitle, parsedEpisodeInfo.ReleaseTitle, seasonNumber);
+
+                    if (sceneMapping?.SeasonNumber != null && sceneMapping?.SceneSeasonNumber != null)
+                    {
+                        var mappedSeason = seasonNumber + (sceneMapping.SeasonNumber.Value - sceneMapping.SceneSeasonNumber.Value);
+                        result.AddRange(_episodeService.GetEpisodesBySeason(series.Id, mappedSeason) ?? []);
+                        continue;
+                    }
+                }
+
+                result.AddRange(_episodeService.GetEpisodesBySeason(series.Id, seasonNumber) ?? []);
+            }
+
+            return result.DistinctBy(e => e.Id).ToList();
         }
     }
 }

@@ -201,8 +201,16 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)(?:[-_\W](?<![()\[!]))+S(?<season>(?<!\d+)(?:\d{2})(?!\d+))(?:\.)(?<episode>\d{2,3}(?!\d+))(?:[-_. ]|$)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Multi-season pack - concatenated S-blocks without separator (S01S02S03)
+                new Regex(@"^(?<title>.+?)[-_. ]+S(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:S(?<season>(?<!\d+)\d{1,2}(?!\d+)))+(?:[-_. ]|$)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                // Multi-season pack - "Seasons N-M" or "Seasons N.M.P" (plural keyword with range or list)
+                new Regex(@"^(?<title>.+?)[-_. ]+(?:Seasons)[-_. ]+(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[-_. ]{1,3})(?<season>(?<!\d+)\d{1,2}(?!\d+)))+(?:[-_. ]|$)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 // Multi-season pack
-                new Regex(@"^(?<title>.+?)(Complete Series)?[-_. ]+(?:S|(?:Season|Saison|Series|Stagione)[_. ])(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:[-_. ]{1}|[-_. ]{3})(?:S|(?:Season|Saison|Series|Stagione)[_. ])?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))",
+                new Regex(@"^(?<title>.+?)(Complete Series)?[-_. ]+(?:S|(?:Season|Saison|Series|Stagione)[_. ])(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:(?:[-_. ]{1}|[-_. ]{3})(?:S|(?:Season|Saison|Series|Stagione)[_. ])?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+)))+",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Partial season pack
@@ -1058,16 +1066,31 @@ namespace NzbDrone.Core.Parser
                     }
                 }
 
-                // If more than 1 season was parsed set IsMultiSeason to true so it can be rejected later
+                // Expand range notation: if exactly 2 seasons captured and the gap > 1, fill in intermediate seasons
+                // e.g. "Seasons 1-3" captures [1, 3] but should expand to [1, 2, 3]
+                if (seasons.Distinct().Count() == 2)
+                {
+                    var min = seasons.Min();
+                    var max = seasons.Max();
+                    if (max - min > 1)
+                    {
+                        seasons = Enumerable.Range(min, max - min + 1).ToList();
+                    }
+                }
+
+                // If more than 1 season was parsed set IsMultiSeason to true
                 if (seasons.Distinct().Count() > 1)
                 {
                     result.IsMultiSeason = true;
                 }
 
+                // Always record all distinct seasons; downstream uses this to resolve multi-season episodes
+                result.SeasonNumbers = seasons.Distinct().OrderBy(s => s).ToArray();
+
                 if (seasons.Any())
                 {
                     // If at least one season was parsed use the first season as the season
-                    result.SeasonNumber = seasons.First();
+                    result.SeasonNumber = seasons.OrderBy(s => s).First();
                 }
                 else if (!result.AbsoluteEpisodeNumbers.Any() && result.EpisodeNumbers.Any())
                 {

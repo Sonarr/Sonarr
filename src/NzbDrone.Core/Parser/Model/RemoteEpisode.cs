@@ -15,6 +15,14 @@ namespace NzbDrone.Core.Parser.Model
         public ParsedEpisodeInfo ParsedEpisodeInfo { get; set; }
         public SceneMapping SceneMapping { get; set; }
         public int MappedSeasonNumber { get; set; }
+
+        private int[] _mappedSeasonNumbers = Array.Empty<int>();
+        public int[] MappedSeasonNumbers
+        {
+            get => _mappedSeasonNumbers ?? Array.Empty<int>();
+            set => _mappedSeasonNumbers = value;
+        }
+
         public Series Series { get; set; }
         public List<Episode> Episodes { get; set; }
         public bool EpisodeRequested { get; set; }
@@ -31,6 +39,7 @@ namespace NzbDrone.Core.Parser.Model
             Episodes = new List<Episode>();
             CustomFormats = new List<CustomFormat>();
             Languages = new List<Language>();
+            MappedSeasonNumbers = Array.Empty<int>();
         }
 
         public bool IsRecentEpisode()
