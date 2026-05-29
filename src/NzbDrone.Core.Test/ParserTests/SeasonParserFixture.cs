@@ -1,3 +1,4 @@
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
@@ -106,6 +107,10 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title Complete Series S01 S04 (1080p BluRay x265 HEVC 10bit AAC 5.1 Vyndros)", "Series Title", 1)]
         [TestCase("Series Title S01 S04 (1080p BluRay x265 HEVC 10bit AAC 5.1 Vyndros)", "Series Title", 1)]
         [TestCase("Series Title S01 04 (1080p BluRay x265 HEVC 10bit AAC 5.1 Vyndros)", "Series Title", 1)]
+        [TestCase("Show.S01S02S03.BluRay.1080p", "Show", 1)]
+        [TestCase("Series.Seasons.1-3.Complete.1080p", "Series", 1)]
+        [TestCase("Show.Seasons.1.2.3.Complete", "Show", 1)]
+        [TestCase("Series Title S01 S02 S03 (1080p BluRay x265)", "Series Title", 1)]
         public void should_parse_multi_season_release(string postTitle, string title, int firstSeason)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
@@ -116,6 +121,8 @@ namespace NzbDrone.Core.Test.ParserTests
             result.FullSeason.Should().BeTrue();
             result.IsPartialSeason.Should().BeFalse();
             result.IsMultiSeason.Should().BeTrue();
+            result.SeasonNumbers.Should().NotBeNullOrEmpty();
+            result.SeasonNumbers.Min().Should().Be(firstSeason);
         }
 
         [Test]
