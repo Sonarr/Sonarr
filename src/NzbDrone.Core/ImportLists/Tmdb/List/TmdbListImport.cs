@@ -52,7 +52,7 @@ public class TmdbListImport : TmdbImportBase<TmdbListSettings>
     private List<FieldSelectStringOption> GetAccountListOptions()
     {
         const int maxPages = 3;
-        var options = new List<FieldSelectStringOption>((PageSize * maxPages) + 1)
+        var options = new List<FieldSelectStringOption>()
         {
             new() { Name = "None" }
         };
