@@ -37,8 +37,7 @@ All issues must follow the provided templates, these templates help us triage an
 
 ### How to Contribute
 
--We prefer small PRs that focus on a single issue
-
+- We prefer small PRs that focus on a single issue
 - Discuss before building large features. For major features or architectural changes, please open an issue first. Once we've agreed on a solution the work can begin
 - Small bug fixes or improvements can usually go straight to PR, but we may ask for additional information, including logs before reviewing
 - Understand the code before changing it. Follow existing code structure and standards
