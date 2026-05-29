@@ -43,6 +43,8 @@ interface Queue extends ModelBase {
   downloadClient: string;
   outputPath: string;
   episodesWithFilesCount: number;
+  episodeCountBySeason: Record<number, number>;
+  episodesWithFilesCountBySeason: Record<number, number>;
   seriesId?: number;
   episodeIds: number[];
   seasonNumbers: number[];

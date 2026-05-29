@@ -39,6 +39,8 @@ namespace Sonarr.Api.V5.Queue
         public string? Indexer { get; set; }
         public string? OutputPath { get; set; }
         public int EpisodesWithFilesCount { get; set; }
+        public Dictionary<int, int> EpisodeCountBySeason { get; set; } = new();
+        public Dictionary<int, int> EpisodesWithFilesCountBySeason { get; set; } = new();
         public bool IsFullSeason { get; set; }
         public bool IsMultiSeason { get; set; }
     }
@@ -83,6 +85,13 @@ namespace Sonarr.Api.V5.Queue
                 Indexer = model.Indexer,
                 OutputPath = model.OutputPath,
                 EpisodesWithFilesCount = model.Episodes?.Count(e => e.HasFile) ?? 0,
+                EpisodeCountBySeason = model.Episodes?
+                    .GroupBy(e => e.SeasonNumber)
+                    .ToDictionary(g => g.Key, g => g.Count()) ?? new(),
+                EpisodesWithFilesCountBySeason = model.Episodes?
+                    .Where(e => e.HasFile)
+                    .GroupBy(e => e.SeasonNumber)
+                    .ToDictionary(g => g.Key, g => g.Count()) ?? new(),
                 IsFullSeason = model.RemoteEpisode?.ParsedEpisodeInfo?.FullSeason ?? false,
                 IsMultiSeason = model.RemoteEpisode?.ParsedEpisodeInfo?.IsMultiSeason ?? false
             };
