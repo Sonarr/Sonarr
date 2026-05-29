@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
@@ -27,16 +28,19 @@ namespace NzbDrone.Core.Parser
         private readonly IEpisodeService _episodeService;
         private readonly ISeriesService _seriesService;
         private readonly ISceneMappingService _sceneMappingService;
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
         public ParsingService(IEpisodeService episodeService,
                               ISeriesService seriesService,
                               ISceneMappingService sceneMappingService,
+                              IConfigService configService,
                               Logger logger)
         {
             _episodeService = episodeService;
             _seriesService = seriesService;
             _sceneMappingService = sceneMappingService;
+            _configService = configService;
             _logger = logger;
         }
 
@@ -172,12 +176,15 @@ namespace NzbDrone.Core.Parser
                        Episodes = _episodeService.GetEpisodes(episodeIds)
                    };
 
-            remoteEpisode.MappedSeasonNumbers = remoteEpisode.Episodes
-                .Select(e => e.SeasonNumber)
-                .Where(n => n > 0)
-                .Distinct()
-                .OrderBy(n => n)
-                .ToArray();
+            if (_configService.EnableExperimentalMultiSeasonSupport)
+            {
+                remoteEpisode.MappedSeasonNumbers = remoteEpisode.Episodes
+                    .Select(e => e.SeasonNumber)
+                    .Where(n => n > 0)
+                    .Distinct()
+                    .OrderBy(n => n)
+                    .ToArray();
+            }
 
             return remoteEpisode;
         }
@@ -234,12 +241,16 @@ namespace NzbDrone.Core.Parser
                 if (ValidateParsedEpisodeInfo.ValidateForSeriesType(parsedEpisodeInfo, series))
                 {
                     remoteEpisode.Episodes = GetEpisodes(parsedEpisodeInfo, series, remoteEpisode.MappedSeasonNumber, sceneSource, searchCriteria);
-                    remoteEpisode.MappedSeasonNumbers = remoteEpisode.Episodes
-                        .Select(e => e.SeasonNumber)
-                        .Where(n => n > 0)
-                        .Distinct()
-                        .OrderBy(n => n)
-                        .ToArray();
+
+                    if (_configService.EnableExperimentalMultiSeasonSupport)
+                    {
+                        remoteEpisode.MappedSeasonNumbers = remoteEpisode.Episodes
+                            .Select(e => e.SeasonNumber)
+                            .Where(n => n > 0)
+                            .Distinct()
+                            .OrderBy(n => n)
+                            .ToArray();
+                    }
                 }
             }
 
@@ -278,7 +289,8 @@ namespace NzbDrone.Core.Parser
                 // Multi-season packs: fetch episodes for all seasons and union them
                 if (parsedEpisodeInfo.IsMultiSeason &&
                     parsedEpisodeInfo.SeasonNumbers != null &&
-                    parsedEpisodeInfo.SeasonNumbers.Length > 1)
+                    parsedEpisodeInfo.SeasonNumbers.Length > 1 &&
+                    _configService.EnableExperimentalMultiSeasonSupport)
                 {
                     return GetMultiSeasonEpisodes(parsedEpisodeInfo, series, sceneSource);
                 }

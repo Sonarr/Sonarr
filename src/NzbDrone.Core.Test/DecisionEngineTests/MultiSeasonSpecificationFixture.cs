@@ -4,6 +4,7 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Parser.Model;
@@ -54,6 +55,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Title = "Series.Title.S01-02.720p.BluRay.X264-RlsGrp"
                 }
             };
+
+            Mocker.GetMock<IConfigService>()
+                .SetupGet(c => c.EnableExperimentalMultiSeasonSupport)
+                .Returns(true);
         }
 
         [Test]
@@ -118,6 +123,48 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_true_if_all_conditions_met()
         {
             var result = Subject.IsSatisfiedBy(_remoteEpisode, new());
+            result.Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_reject_with_multi_season_reason_when_experimental_support_disabled()
+        {
+            Mocker.GetMock<IConfigService>()
+                .SetupGet(c => c.EnableExperimentalMultiSeasonSupport)
+                .Returns(false);
+
+            var result = Subject.IsSatisfiedBy(_remoteEpisode, null);
+
+            result.Accepted.Should().BeFalse();
+            result.Reason.Should().Be(DownloadRejectionReason.MultiSeason);
+        }
+
+        [Test]
+        public void should_not_check_monitoring_when_experimental_support_disabled()
+        {
+            Mocker.GetMock<IConfigService>()
+                .SetupGet(c => c.EnableExperimentalMultiSeasonSupport)
+                .Returns(false);
+
+            _remoteEpisode.Series.Monitored = false;
+
+            var result = Subject.IsSatisfiedBy(_remoteEpisode, null);
+
+            result.Accepted.Should().BeFalse();
+            result.Reason.Should().Be(DownloadRejectionReason.MultiSeason);
+        }
+
+        [Test]
+        public void should_accept_non_multi_season_release_regardless_of_flag()
+        {
+            Mocker.GetMock<IConfigService>()
+                .SetupGet(c => c.EnableExperimentalMultiSeasonSupport)
+                .Returns(false);
+
+            _remoteEpisode.ParsedEpisodeInfo.IsMultiSeason = false;
+
+            var result = Subject.IsSatisfiedBy(_remoteEpisode, null);
+
             result.Accepted.Should().BeTrue();
         }
     }

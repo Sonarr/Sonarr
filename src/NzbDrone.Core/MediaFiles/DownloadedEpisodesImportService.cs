@@ -203,9 +203,10 @@ namespace NzbDrone.Core.MediaFiles
                 }
             }
 
-            if (downloadClientItemInfo is { IsMultiSeason: true })
+            if (downloadClientItemInfo is { IsMultiSeason: true } &&
+                _configService.EnableExperimentalMultiSeasonSupport)
             {
-                _logger.Debug("Download client item is marked as multi-season, attempting multi-season import for: {0}", directoryInfo.FullName);
+                _logger.Debug("Multi-season support enabled. Routing to multi-season import for: {0}", directoryInfo.FullName);
                 return ProcessMultiSeasonFolder(directoryInfo, importMode, series, downloadClientItem, downloadClientItemInfo);
             }
 

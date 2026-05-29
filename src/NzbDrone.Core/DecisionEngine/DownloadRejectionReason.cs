@@ -1,5 +1,3 @@
-using System;
-
 namespace NzbDrone.Core.DecisionEngine;
 
 public enum DownloadRejectionReason
@@ -46,7 +44,6 @@ public enum DownloadRejectionReason
     MaximumSizeExceeded,
     MinimumAge,
     MaximumAge,
-    [Obsolete("Use MultiSeasonNotAllMonitored, EpisodeNotMonitored, or FullSeasonNotAired instead. Multi-season downloads are now conditionally accepted.")]
     MultiSeason,
     MultiSeasonNotAllMonitored,
     Sample,

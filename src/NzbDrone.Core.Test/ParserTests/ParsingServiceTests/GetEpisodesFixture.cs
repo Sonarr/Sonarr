@@ -5,6 +5,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Languages;
@@ -57,6 +58,10 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Mocker.GetMock<ISeriesService>()
                   .Setup(s => s.FindByTitle(It.IsAny<string>()))
                   .Returns(_series);
+
+            Mocker.GetMock<IConfigService>()
+                .SetupGet(c => c.EnableExperimentalMultiSeasonSupport)
+                .Returns(true);
         }
 
         private void GivenDailySeries()
@@ -679,6 +684,62 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
             Mocker.GetMock<IEpisodeService>()
                   .Verify(v => v.FindEpisode(_series.TvdbId, _parsedEpisodeInfo.SeasonNumber, _parsedEpisodeInfo.EpisodeNumbers.First()), Times.Once());
+        }
+
+        [Test]
+        public void should_return_all_season_episodes_when_multi_season_flag_enabled()
+        {
+            _parsedEpisodeInfo.FullSeason = true;
+            _parsedEpisodeInfo.IsMultiSeason = true;
+            _parsedEpisodeInfo.SeasonNumber = 1;
+            _parsedEpisodeInfo.SeasonNumbers = new[] { 1, 2 };
+            _parsedEpisodeInfo.EpisodeNumbers = Array.Empty<int>();
+
+            var season1Episodes = Builder<Episode>.CreateListOfSize(3)
+                .All().With(e => e.SeasonNumber = 1).Build().ToList();
+            var season2Episodes = Builder<Episode>.CreateListOfSize(2)
+                .All().With(e => e.SeasonNumber = 2).Build().ToList();
+
+            for (var i = 0; i < season2Episodes.Count; i++)
+            {
+                season2Episodes[i].Id = 100 + i;
+            }
+
+            Mocker.GetMock<IEpisodeService>()
+                .Setup(s => s.GetEpisodesBySeason(_series.Id, 1))
+                .Returns(season1Episodes);
+            Mocker.GetMock<IEpisodeService>()
+                .Setup(s => s.GetEpisodesBySeason(_series.Id, 2))
+                .Returns(season2Episodes);
+
+            var result = Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
+
+            result.Should().HaveCount(5);
+        }
+
+        [Test]
+        public void should_fall_through_to_single_season_when_multi_season_flag_disabled()
+        {
+            Mocker.GetMock<IConfigService>()
+                .SetupGet(c => c.EnableExperimentalMultiSeasonSupport)
+                .Returns(false);
+
+            _parsedEpisodeInfo.FullSeason = true;
+            _parsedEpisodeInfo.IsMultiSeason = true;
+            _parsedEpisodeInfo.SeasonNumber = 1;
+            _parsedEpisodeInfo.SeasonNumbers = new[] { 1, 2 };
+            _parsedEpisodeInfo.EpisodeNumbers = Array.Empty<int>();
+
+            Mocker.GetMock<IEpisodeService>()
+                .Setup(s => s.GetEpisodesBySeason(_series.Id, 1))
+                .Returns(_episodes);
+
+            Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySeason(_series.Id, 1), Times.Once());
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySeason(_series.Id, 2), Times.Never());
         }
     }
 }

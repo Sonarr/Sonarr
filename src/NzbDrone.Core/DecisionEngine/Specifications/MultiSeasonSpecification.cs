@@ -2,16 +2,19 @@ using System;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class MultiSeasonSpecification : IDownloadDecisionEngineSpecification
     {
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public MultiSeasonSpecification(Logger logger)
+        public MultiSeasonSpecification(IConfigService configService, Logger logger)
         {
+            _configService = configService;
             _logger = logger;
         }
 
@@ -23,6 +26,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (!subject.ParsedEpisodeInfo.IsMultiSeason)
             {
                 return DownloadSpecDecision.Accept();
+            }
+
+            if (!_configService.EnableExperimentalMultiSeasonSupport)
+            {
+                _logger.Debug("Multi-season support is disabled. Rejecting: {0}", subject.Release.Title);
+                return DownloadSpecDecision.Reject(
+                    DownloadRejectionReason.MultiSeason,
+                    "Multi-season releases are not supported. Enable experimental multi-season support in Media Management settings to allow them.");
             }
 
             _logger.Debug("Checking multi-season release: {0}", subject.Release.Title);

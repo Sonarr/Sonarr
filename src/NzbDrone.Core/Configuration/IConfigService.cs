@@ -46,6 +46,7 @@ namespace NzbDrone.Core.Configuration
         // Season Pack Upgrade (Media Management)
         SeasonPackUpgradeType SeasonPackUpgrade { get; set; }
         double SeasonPackUpgradeThreshold { get; set; }
+        bool EnableExperimentalMultiSeasonSupport { get; set; }
 
         // Permissions (Media Management)
         bool SetPermissionsLinux { get; set; }

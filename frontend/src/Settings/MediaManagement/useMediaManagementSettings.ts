@@ -30,6 +30,7 @@ export interface MediaManagementSettingsModel {
   allowFingerprinting: string;
   seasonPackUpgrade: string;
   seasonPackUpgradeThreshold: number;
+  enableExperimentalMultiSeasonSupport: boolean;
 }
 
 const PATH = '/settings/mediamanagement';
