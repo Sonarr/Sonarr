@@ -261,7 +261,7 @@ namespace NzbDrone.Core.MediaFiles
                 _logger.Debug("No season subfolders or root video files found in multi-season folder: {0}", directoryInfo.FullName);
                 return new List<ImportResult>
                 {
-                    RejectionResult(ImportRejectionReason.MultiSeason, "Multi-season download, unable to import automatically")
+                    RejectionResult(ImportRejectionReason.MultiSeason, "Multi-season download could not be imported automatically. No season subfolders or video files were found in the expected locations. Manual import may be required.")
                 };
             }
 

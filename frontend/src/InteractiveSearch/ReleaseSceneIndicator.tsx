@@ -9,11 +9,31 @@ import { icons, tooltipPositions } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import styles from './ReleaseSceneIndicator.css';
 
+function formatSeasonRange(seasonNumbers: number[]): string {
+  const sorted = [...seasonNumbers].sort((a, b) => a - b);
+
+  const isConsecutive = sorted.every(
+    (n, i) => i === 0 || n === sorted[i - 1] + 1
+  );
+
+  if (isConsecutive) {
+    return `S${sorted[0]}–S${sorted[sorted.length - 1]}`;
+  }
+
+  return sorted.map((n) => `S${n}`).join(', ');
+}
+
 function formatReleaseNumber(
   seasonNumber: number | undefined,
+  seasonNumbers: number[] | undefined,
   episodeNumbers: number[] | undefined,
-  absoluteEpisodeNumbers: number[] | undefined
+  absoluteEpisodeNumbers: number[] | undefined,
+  isMultiSeason: boolean
 ) {
+  if (isMultiSeason && seasonNumbers && seasonNumbers.length > 1) {
+    return formatSeasonRange(seasonNumbers);
+  }
+
   if (episodeNumbers && episodeNumbers.length) {
     if (episodeNumbers.length > 1) {
       return `${seasonNumber}x${episodeNumbers[0]}-${
@@ -42,9 +62,11 @@ function formatReleaseNumber(
 interface ReleaseSceneIndicatorProps {
   className: string;
   seasonNumber?: number;
+  seasonNumbers?: number[];
   episodeNumbers?: number[];
   absoluteEpisodeNumbers?: number[];
   sceneSeasonNumber?: number;
+  sceneSeasonNumbers?: number[];
   sceneEpisodeNumbers?: number[];
   sceneAbsoluteEpisodeNumbers?: number[];
   sceneMapping?: {
@@ -53,6 +75,7 @@ interface ReleaseSceneIndicatorProps {
     comment?: string;
   };
   episodeRequested: boolean;
+  isMultiSeason: boolean;
   isDaily: boolean;
 }
 
@@ -60,13 +83,16 @@ function ReleaseSceneIndicator(props: ReleaseSceneIndicatorProps) {
   const {
     className,
     seasonNumber,
+    seasonNumbers,
     episodeNumbers,
     absoluteEpisodeNumbers,
     sceneSeasonNumber,
+    sceneSeasonNumbers,
     sceneEpisodeNumbers,
     sceneAbsoluteEpisodeNumbers,
     sceneMapping = {},
     episodeRequested,
+    isMultiSeason,
     isDaily,
   } = props;
 
@@ -94,13 +120,17 @@ function ReleaseSceneIndicator(props: ReleaseSceneIndicatorProps) {
 
   const releaseNumber = formatReleaseNumber(
     sceneSeasonNumber,
+    sceneSeasonNumbers,
     sceneEpisodeNumbers,
-    sceneAbsoluteEpisodeNumbers
+    sceneAbsoluteEpisodeNumbers,
+    isMultiSeason
   );
   const mappedNumber = formatReleaseNumber(
     seasonNumber,
+    seasonNumbers,
     episodeNumbers,
-    absoluteEpisodeNumbers
+    absoluteEpisodeNumbers,
+    isMultiSeason
   );
   const messages = [];
 

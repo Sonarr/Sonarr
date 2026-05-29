@@ -33,7 +33,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 _logger.Debug("Multi-season support is disabled. Rejecting: {0}", subject.Release.Title);
                 return DownloadSpecDecision.Reject(
                     DownloadRejectionReason.MultiSeason,
-                    "Multi-season releases are not supported. Enable experimental multi-season support in Media Management settings to allow them.");
+                    "Multi-season releases are not supported. To allow them, enable 'Experimental Multi-Season Support' in Settings → Media Management → Experimental Features.");
             }
 
             _logger.Debug("Checking multi-season release: {0}", subject.Release.Title);
