@@ -94,7 +94,11 @@ namespace NzbDrone.Core.Test.Extras.Others
         [TestCase(@"audio_folder_1\Series Title S01E01.mka", @"audio_folder_2\Series Title S01E01.mka", "Series Title - S01E01.1.mka", "Series Title - S01E01.2.mka")]
         public void should_import_all_files_with_same_name(string firstExtraFilePath, string secondExtraFilePath, string firstOutputPath, string secondOutputPath)
         {
-            var files = new List<string> { Path.Combine(_episodeFolder, firstExtraFilePath).AsOsAgnostic(), Path.Combine(_episodeFolder, secondExtraFilePath).AsOsAgnostic() };
+            var files = new List<string>
+            {
+                Path.Combine(_episodeFolder, firstExtraFilePath).AsOsAgnostic(),
+                Path.Combine(_episodeFolder, secondExtraFilePath).AsOsAgnostic()
+            };
 
             var results = Subject.ImportFiles(_localEpisode, _episodeFile, files, true).ToList();
 
