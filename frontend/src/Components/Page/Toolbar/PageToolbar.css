@@ -1,16 +1,42 @@
 .toolbar {
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   flex: 0 0 auto;
+  flex-wrap: nowrap;
+  overflow: hidden;
   padding: 0 20px;
+  min-width: 0;
   height: $toolbarHeight;
+  border-bottom: 1px solid var(--borderColor);
   background-color: var(--toolbarBackgroundColor);
   color: var(--toolbarColor);
-  line-height: 60px;
+}
+
+/* Hide items and dividers the Fluent algorithm collapses. */
+.toolbar [data-overflowing] {
+  display: none;
+}
+
+.overflowMenuButton {
+  composes: menuButton from '~Components/Menu/ToolbarMenuButton.css';
+}
+
+.moreContainer {
+  display: inline-flex;
+  align-items: center;
 }
 
 @media only screen and (max-width: $breakpointSmall) {
   .toolbar {
-    padding: 0 10px;
+    padding: 8px 12px;
+    height: auto;
+  }
+
+  .overflowMenuButton {
+    &::after {
+      margin-left: 0;
+      content: '\25BE';
+    }
   }
 }

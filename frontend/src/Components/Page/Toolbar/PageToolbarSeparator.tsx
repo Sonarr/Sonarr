@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styles from './PageToolbarSeparator.css';
 
-function PageToolbarSeparator() {
-  return <div className={styles.separator} />;
-}
+const PageToolbarSeparator = forwardRef<HTMLDivElement>((_props, ref) => {
+  return <div ref={ref} className={styles.separator} />;
+});
 
 export default PageToolbarSeparator;
