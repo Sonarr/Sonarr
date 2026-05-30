@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'Sonarr/Sonarr'
     steps:
-      - uses: dessant/support-requests@v4
+      - uses: dessant/support-requests@v5
         with:
           github-token: ${{ github.token }}
           support-label: 'support'
