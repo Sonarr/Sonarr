@@ -27,9 +27,11 @@ const OverflowContext = createContext<OverflowCtx | null>(null);
 
 function useOverflowCtx() {
   const ctx = useContext(OverflowContext);
+
   if (!ctx) {
     throw new Error('Overflow primitives must be inside <Overflow>');
   }
+
   return ctx;
 }
 

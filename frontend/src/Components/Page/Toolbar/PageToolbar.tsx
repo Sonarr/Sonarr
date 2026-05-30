@@ -39,9 +39,11 @@ interface ToolbarRegistryContextValue {
 
 function shallowEqualMenuItem(a: MoreMenuItem, b: MoreMenuItem): boolean {
   const keys = Object.keys(a) as (keyof MoreMenuItem)[];
+
   if (keys.length !== Object.keys(b).length) {
     return false;
   }
+
   return keys.every((key) => key in b && a[key] === b[key]);
 }
 
@@ -50,9 +52,11 @@ const ToolbarRegistryContext =
 
 export function useToolbarRegistry() {
   const ctx = useContext(ToolbarRegistryContext);
+
   if (!ctx) {
     throw new Error('ToolbarItem must be used inside <PageToolbar>');
   }
+
   return ctx;
 }
 
@@ -69,9 +73,11 @@ function PageToolbar({
   const register = useCallback((item: MoreMenuItem) => {
     setItems((prev) => {
       const existing = prev[item.id];
+
       if (existing && shallowEqualMenuItem(existing, item)) {
         return prev;
       }
+
       return { ...prev, [item.id]: item };
     });
   }, []);
@@ -81,6 +87,7 @@ function PageToolbar({
       if (!(id in prev)) {
         return prev;
       }
+
       const { [id]: _removed, ...rest } = prev;
       return rest;
     });
@@ -98,6 +105,7 @@ function PageToolbar({
   const orderById = new Map<string, number>();
   childrenArray.forEach((child, index) => {
     const id = (child.props as { id?: string }).id;
+
     if (id !== undefined) {
       orderById.set(id, index);
     }
@@ -119,8 +127,10 @@ function PageToolbar({
     if (i === moreInsertBefore) {
       return [<MoreButton key="more" items={moreMenuItems} />, child];
     }
+
     return [child];
   });
+
   if (spacerIndex < 0) {
     rendered.push(<MoreButton key="more-end" items={moreMenuItems} />);
   }
