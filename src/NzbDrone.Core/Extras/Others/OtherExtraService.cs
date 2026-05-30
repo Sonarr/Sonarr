@@ -140,6 +140,7 @@ namespace NzbDrone.Core.Extras.Others
             }
 
             var copy = 1;
+
             foreach (var file in matchingFiles)
             {
                 try
