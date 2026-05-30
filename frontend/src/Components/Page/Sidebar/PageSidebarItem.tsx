@@ -36,9 +36,7 @@ function PageSidebarItem({
   }, [isChildItem, isParentItem, onPress]);
 
   return (
-    <div
-      className={classNames(styles.item, isActiveParent && styles.isActiveItem)}
-    >
+    <div className={styles.item}>
       <Link
         className={classNames(
           isChildItem ? styles.childLink : styles.link,

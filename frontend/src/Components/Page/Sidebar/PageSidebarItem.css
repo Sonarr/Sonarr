@@ -1,47 +1,87 @@
 .item {
-  border-left: 3px solid transparent;
+  position: relative;
   color: var(--sidebarColor);
-  transition: border-left 0.3s ease-in-out;
-}
-
-.isActiveItem {
-  border-left: 3px solid var(--themeAlternateBlue);
+  transition: color var(--transitionSmooth);
 }
 
 .link {
-  display: block;
-  padding: 12px 24px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 1px 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
   color: var(--sidebarColor);
+  font-weight: 500;
+  font-size: 14px;
+  transition:
+    background-color var(--transitionSmooth),
+    color var(--transitionSmooth);
 
-  &:hover,
-  &:focus {
-    color: var(--themeBlue);
+  &:hover {
+    background-color: var(--menuItemHoverBackgroundColor);
+    color: var(--ink);
     text-decoration: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 1px var(--accent), 0 0 0 4px var(--inputFocusBoxShadowColor);
   }
 }
 
 .childLink {
   composes: link;
 
-  padding: 10px 24px;
-  padding-left: 35px;
+  margin-top: 4px;
+  margin-left: 28px;
+  padding: 6px 12px;
+  color: var(--toolbarLabelColor);
+  font-weight: 400;
+  font-size: 13px;
+
+  &:hover {
+    color: var(--ink);
+  }
 }
 
 .isActiveLink {
-  color: var(--themeAlternateBlue);
+  background-color: var(--sidebarActiveBackgroundColor);
+  color: var(--ink);
+  font-weight: 550;
+
+  &::before {
+    position: absolute;
+    top: 50%;
+    left: -4px;
+    margin-top: -7px;
+    width: 2px;
+    height: 14px;
+    border-radius: 999px;
+    background-color: var(--accent);
+    content: "";
+  }
 }
 
 .isActiveParentLink {
   background-color: var(--sidebarActiveBackgroundColor);
+  color: var(--ink);
+  font-weight: 550;
 }
 
 .iconContainer {
-  display: inline-block;
-  margin-right: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 10px;
   width: 18px;
-  text-align: center;
+  height: 18px;
+  opacity: 0.85;
 }
 
 .status {
-  float: right;
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
 }
