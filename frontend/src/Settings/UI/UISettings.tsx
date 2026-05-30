@@ -7,11 +7,10 @@ import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { inputTypes, kinds } from 'Helpers/Props';
 import { useFilteredLanguages } from 'Language/useLanguages';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import SettingsPage from 'Settings/SettingsPage';
 import { InputChanged } from 'typings/inputs';
 import timeZoneOptions from 'Utilities/Date/timeZoneOptions';
 import titleCase from 'Utilities/String/titleCase';
@@ -117,13 +116,12 @@ function UISettings() {
   }, [saveSettings]);
 
   return (
-    <PageContent title={translate('UiSettings')}>
-      <SettingsToolbar
-        hasPendingChanges={hasPendingChanges}
-        isSaving={isSaving}
-        onSavePress={handleSavePress}
-      />
-
+    <SettingsPage
+      title={translate('UiSettings')}
+      hasPendingChanges={hasPendingChanges}
+      isSaving={isSaving}
+      onSavePress={handleSavePress}
+    >
       <PageContentBody>
         {isFetching && isPopulated ? <LoadingIndicator /> : null}
 
@@ -278,7 +276,7 @@ function UISettings() {
           </Form>
         ) : null}
       </PageContentBody>
-    </PageContent>
+    </SettingsPage>
   );
 }
 

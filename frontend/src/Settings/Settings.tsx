@@ -1,16 +1,13 @@
 import React from 'react';
 import Link from 'Components/Link/Link';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import translate from 'Utilities/String/translate';
-import SettingsToolbar from './SettingsToolbar';
+import SettingsPage from './SettingsPage';
 import styles from './Settings.css';
 
 function Settings() {
   return (
-    <PageContent title={translate('Settings')}>
-      <SettingsToolbar hasPendingChanges={false} />
-
+    <SettingsPage title={translate('Settings')}>
       <PageContentBody>
         <Link className={styles.link} to="/settings/mediamanagement">
           {translate('MediaManagement')}
@@ -112,7 +109,7 @@ function Settings() {
 
         <div className={styles.summary}>{translate('UiSettingsSummary')}</div>
       </PageContentBody>
-    </PageContent>
+    </SettingsPage>
   );
 }
 

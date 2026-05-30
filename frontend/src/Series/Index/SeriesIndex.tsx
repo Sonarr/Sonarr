@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import QueueDetailsProvider from 'Activity/Queue/Details/QueueDetailsProvider';
 import { useAppDimension } from 'App/appStore';
-import { SelectProvider } from 'App/Select/SelectContext';
+import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import CommandNames from 'Commands/CommandNames';
 import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
@@ -9,16 +9,19 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageJumpBar, { PageJumpBarItems } from 'Components/Page/PageJumpBar';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
+import { PageToolbarButtonProps } from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
-import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
+import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
+import TableOptionsModal from 'Components/Table/TableOptions/TableOptionsModal';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
-import { align, icons, kinds } from 'Helpers/Props';
+import { icons, kinds } from 'Helpers/Props';
 import { DESCENDING } from 'Helpers/Props/sortDirections';
-import ParseToolbarButton from 'Parse/ParseToolbarButton';
+import ParseModal from 'Parse/ParseModal';
 import NoSeries from 'Series/NoSeries';
+import Series from 'Series/Series';
 import {
   setSeriesOption,
   setSeriesSort,
@@ -41,31 +44,48 @@ import SeriesIndexSelectFooter from './Select/SeriesIndexSelectFooter';
 import SeriesIndexSelectModeButton from './Select/SeriesIndexSelectModeButton';
 import SeriesIndexSelectModeMenuItem from './Select/SeriesIndexSelectModeMenuItem';
 import SeriesIndexFooter from './SeriesIndexFooter';
-import SeriesIndexRefreshSeriesButton from './SeriesIndexRefreshSeriesButton';
 import SeriesIndexTable from './Table/SeriesIndexTable';
 import SeriesIndexTableOptions from './Table/SeriesIndexTableOptions';
 import styles from './SeriesIndex.css';
 
 function getViewComponent(view: string) {
-  if (view === 'posters') {
-    return SeriesIndexPosters;
-  }
-
-  if (view === 'overview') {
-    return SeriesIndexOverviews;
-  }
+  if (view === 'posters') return SeriesIndexPosters;
+  if (view === 'overview') return SeriesIndexOverviews;
 
   return SeriesIndexTable;
 }
 
+function getOptionsIcon(view: string) {
+  if (view === 'posters') return icons.POSTER;
+  if (view === 'overview') return icons.OVERVIEW;
+
+  return icons.TABLE;
+}
+
 function SeriesIndex() {
+  const seriesIndex = useSeriesIndex();
+
+  return (
+    <QueueDetailsProvider all={true}>
+      <SelectProvider items={seriesIndex.data}>
+        <SeriesIndexBody seriesIndex={seriesIndex} />
+      </SelectProvider>
+    </QueueDetailsProvider>
+  );
+}
+
+interface SeriesIndexBodyProps {
+  seriesIndex: ReturnType<typeof useSeriesIndex>;
+}
+
+function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
   const {
     isLoading: isFetching,
     isFetched,
     isError: error,
     data,
     totalItems,
-  } = useSeriesIndex();
+  } = seriesIndex;
 
   const { selectedFilterKey, sortKey, sortDirection, view, columns } =
     useSeriesOptions();
@@ -75,13 +95,34 @@ function SeriesIndex() {
 
   const executeCommand = useExecuteCommand();
   const isRssSyncExecuting = useCommandExecuting(CommandNames.RssSync);
+  const isRefreshingSeries = useCommandExecuting(CommandNames.RefreshSeries);
   const isSmallScreen = useAppDimension('isSmallScreen');
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
+  const [isParseModalOpen, setIsParseModalOpen] = useState(false);
   const [jumpToCharacter, setJumpToCharacter] = useState<string | undefined>(
     undefined
   );
   const [isSelectMode, setIsSelectMode] = useState(false);
+  const { anySelected, getSelectedIds } = useSelect<Series>();
+
+  let refreshLabel = translate('UpdateAll');
+
+  if (anySelected) {
+    refreshLabel = translate('UpdateSelected');
+  } else if (selectedFilterKey !== 'all') {
+    refreshLabel = translate('UpdateFiltered');
+  }
+
+  const handleRefreshSeriesPress = useCallback(() => {
+    const seriesToRefresh =
+      isSelectMode && anySelected ? getSelectedIds() : data.map((m) => m.id);
+
+    executeCommand({
+      name: CommandNames.RefreshSeries,
+      seriesIds: seriesToRefresh,
+    });
+  }, [executeCommand, anySelected, isSelectMode, data, getSelectedIds]);
 
   const onRssSyncPress = useCallback(() => {
     executeCommand({
@@ -90,8 +131,8 @@ function SeriesIndex() {
   }, [executeCommand]);
 
   const onSelectModePress = useCallback(() => {
-    setIsSelectMode(!isSelectMode);
-  }, [isSelectMode, setIsSelectMode]);
+    setIsSelectMode((val) => !val);
+  }, []);
 
   const onTableOptionChange = useCallback(
     (
@@ -127,13 +168,15 @@ function SeriesIndex() {
     setSeriesOption('selectedFilterKey', value);
   }, []);
 
-  const onOptionsPress = useCallback(() => {
-    setIsOptionsModalOpen(true);
-  }, [setIsOptionsModalOpen]);
+  const onOptionsPress = useCallback(
+    () => setIsOptionsModalOpen(true),
+    [setIsOptionsModalOpen]
+  );
 
-  const onOptionsModalClose = useCallback(() => {
-    setIsOptionsModalOpen(false);
-  }, [setIsOptionsModalOpen]);
+  const onOptionsModalClose = useCallback(
+    () => setIsOptionsModalOpen(false),
+    [setIsOptionsModalOpen]
+  );
 
   const onJumpBarItemPress = useCallback(
     (character: string) => {
@@ -145,6 +188,75 @@ function SeriesIndex() {
   const onScroll = useCallback(() => {
     setJumpToCharacter(undefined);
   }, [setJumpToCharacter]);
+
+  const [tableOptionsModalOpen, setTableOptionsModalOpen] = useState(false);
+
+  const handleTableOptionsPress = useCallback(
+    () => setTableOptionsModalOpen(true),
+    []
+  );
+
+  const handleTableOptionsModalClose = useCallback(
+    () => setTableOptionsModalOpen(false),
+    []
+  );
+
+  const handleParseModalPress = useCallback(
+    () => setIsParseModalOpen(true),
+    []
+  );
+
+  const handleParseModalClose = useCallback(
+    () => setIsParseModalOpen(false),
+    []
+  );
+
+  const handleOptionsTrigger = useCallback(() => {
+    if (view === 'table') {
+      handleTableOptionsPress();
+    } else {
+      onOptionsPress();
+    }
+  }, [view, handleTableOptionsPress, onOptionsPress]);
+
+  const isLoaded = !!(!error && isFetched && data.length);
+  const hasNoSeries = !totalItems;
+
+  const renderSelectButton = useCallback(
+    ({ label, iconName }: PageToolbarButtonProps) => (
+      <SeriesIndexSelectModeButton
+        label={label}
+        iconName={iconName}
+        isSelectMode={isSelectMode}
+        onPress={onSelectModePress}
+      />
+    ),
+    [isSelectMode, onSelectModePress]
+  );
+
+  const renderSelectOverflow = useCallback(
+    ({ label, iconName }: PageToolbarButtonProps) => (
+      <SeriesIndexSelectModeMenuItem
+        label={label}
+        iconName={iconName}
+        isSelectMode={isSelectMode}
+        onPress={onSelectModePress}
+      />
+    ),
+    [isSelectMode, onSelectModePress]
+  );
+
+  const renderSelectAllButton = useCallback(
+    () => <SeriesIndexSelectAllButton />,
+    []
+  );
+
+  const renderSelectAllOverflow = useCallback(
+    ({ label }: PageToolbarButtonProps) => (
+      <SeriesIndexSelectAllMenuItem label={label} isSelectMode={isSelectMode} />
+    ),
+    [isSelectMode]
+  );
 
   const jumpBarItems: PageJumpBarItems = useMemo(() => {
     // Reset if not sorting by sortTitle
@@ -185,163 +297,189 @@ function SeriesIndex() {
   }, [data, sortKey, sortDirection]);
   const ViewComponent = useMemo(() => getViewComponent(view), [view]);
 
-  const isLoaded = !!(!error && isFetched && data.length);
-  const hasNoSeries = !totalItems;
-
   return (
-    <QueueDetailsProvider all={true}>
-      <SelectProvider items={data}>
-        <PageContent>
-          <PageToolbar>
-            <PageToolbarSection>
-              <SeriesIndexRefreshSeriesButton
-                isSelectMode={isSelectMode}
-                selectedFilterKey={selectedFilterKey}
-              />
+    <PageContent>
+      <PageToolbar>
+        <ToolbarItem
+          id="refresh"
+          priority={1}
+          groupId="left-a"
+          label={refreshLabel}
+          iconName={icons.REFRESH}
+          isSpinning={isRefreshingSeries}
+          isDisabled={hasNoSeries}
+          onPress={handleRefreshSeriesPress}
+        />
 
-              <PageToolbarButton
-                label={translate('RssSync')}
-                iconName={icons.RSS}
-                isSpinning={isRssSyncExecuting}
-                isDisabled={hasNoSeries}
-                onPress={onRssSyncPress}
-              />
+        <ToolbarItem
+          id="rss"
+          priority={1}
+          groupId="left-a"
+          label={translate('RssSync')}
+          iconName={icons.RSS}
+          isSpinning={isRssSyncExecuting}
+          isDisabled={hasNoSeries}
+          onPress={onRssSyncPress}
+        />
 
-              <PageToolbarSeparator />
+        <OverflowDivider groupId="left-a">
+          <PageToolbarSeparator />
+        </OverflowDivider>
 
-              <SeriesIndexSelectModeButton
-                label={
-                  isSelectMode
-                    ? translate('StopSelecting')
-                    : translate('SelectSeries')
-                }
-                iconName={isSelectMode ? icons.SERIES_ENDED : icons.CHECK}
-                isSelectMode={isSelectMode}
-                overflowComponent={SeriesIndexSelectModeMenuItem}
-                onPress={onSelectModePress}
-              />
+        <ToolbarItem
+          id="select"
+          priority={1}
+          groupId="left-b"
+          label={
+            isSelectMode
+              ? translate('StopSelecting')
+              : translate('SelectSeries')
+          }
+          iconName={isSelectMode ? icons.SERIES_ENDED : icons.CHECK}
+          renderButton={renderSelectButton}
+          renderOverflow={renderSelectOverflow}
+          onPress={onSelectModePress}
+        />
 
-              <SeriesIndexSelectAllButton
-                label="SelectAll"
-                isSelectMode={isSelectMode}
-                overflowComponent={SeriesIndexSelectAllMenuItem}
-              />
+        {isSelectMode ? (
+          <ToolbarItem
+            id="selectall"
+            priority={1}
+            groupId="left-b"
+            label={translate('SelectAll')}
+            iconName={icons.CHECK_SQUARE}
+            renderButton={renderSelectAllButton}
+            renderOverflow={renderSelectAllOverflow}
+          />
+        ) : null}
 
-              <PageToolbarSeparator />
-              <ParseToolbarButton />
-            </PageToolbarSection>
+        <OverflowDivider groupId="left-b">
+          <PageToolbarSeparator />
+        </OverflowDivider>
 
-            <PageToolbarSection
-              alignContent={align.RIGHT}
-              collapseButtons={false}
-            >
-              {view === 'table' ? (
-                <TableOptionsModalWrapper
-                  columns={columns}
-                  optionsComponent={SeriesIndexTableOptions}
-                  onTableOptionChange={onTableOptionChange}
-                >
-                  <PageToolbarButton
-                    label={translate('Options')}
-                    iconName={icons.TABLE}
-                  />
-                </TableOptionsModalWrapper>
-              ) : (
-                <PageToolbarButton
-                  label={translate('Options')}
-                  iconName={view === 'posters' ? icons.POSTER : icons.OVERVIEW}
-                  isDisabled={hasNoSeries}
-                  onPress={onOptionsPress}
-                />
-              )}
+        <ToolbarItem
+          id="parse"
+          priority={1}
+          groupId="left-c"
+          label={translate('TestParsing')}
+          iconName={icons.PARSE}
+          onPress={handleParseModalPress}
+        />
 
-              <PageToolbarSeparator />
+        <PageToolbarSpacer />
 
-              <SeriesIndexViewMenu
-                view={view}
-                isDisabled={hasNoSeries}
-                onViewSelect={onViewSelect}
-              />
+        <ToolbarItem
+          id="options"
+          priority={2}
+          groupId="right"
+          label={translate('Options')}
+          iconName={getOptionsIcon(view)}
+          isDisabled={hasNoSeries}
+          onPress={handleOptionsTrigger}
+        />
 
-              <SeriesIndexSortMenu
+        <OverflowDivider groupId="right">
+          <PageToolbarSeparator />
+        </OverflowDivider>
+
+        <ToolbarItem id="view" pinned={true}>
+          <SeriesIndexViewMenu
+            view={view}
+            isDisabled={hasNoSeries}
+            onViewSelect={onViewSelect}
+          />
+        </ToolbarItem>
+
+        <ToolbarItem id="sort" pinned={true}>
+          <SeriesIndexSortMenu
+            sortKey={sortKey}
+            sortDirection={sortDirection}
+            isDisabled={hasNoSeries}
+            onSortSelect={onSortSelect}
+          />
+        </ToolbarItem>
+
+        <ToolbarItem id="filter" pinned={true}>
+          <SeriesIndexFilterMenu
+            selectedFilterKey={selectedFilterKey}
+            filters={filters}
+            customFilters={customFilters}
+            isDisabled={hasNoSeries}
+            onFilterSelect={onFilterSelect}
+          />
+        </ToolbarItem>
+      </PageToolbar>
+      <div className={styles.pageContentBodyWrapper}>
+        <PageContentBody
+          ref={scrollerRef}
+          className={styles.contentBody}
+          innerClassName={
+            (styles as unknown as Record<string, string>)[
+              `${view}InnerContentBody`
+            ]
+          }
+          scrollPositionKey="seriesIndex"
+          onScroll={onScroll}
+        >
+          {isFetching && !isFetched ? <LoadingIndicator /> : null}
+
+          {!isFetching && !!error ? (
+            <Alert kind={kinds.DANGER}>{translate('SeriesLoadError')}</Alert>
+          ) : null}
+
+          {isLoaded ? (
+            <div className={styles.contentBodyContainer}>
+              <ViewComponent
+                scrollerRef={scrollerRef}
+                items={data}
                 sortKey={sortKey}
                 sortDirection={sortDirection}
-                isDisabled={hasNoSeries}
-                onSortSelect={onSortSelect}
+                jumpToCharacter={jumpToCharacter}
+                isSelectMode={isSelectMode}
+                isSmallScreen={isSmallScreen}
               />
 
-              <SeriesIndexFilterMenu
-                selectedFilterKey={selectedFilterKey}
-                filters={filters}
-                customFilters={customFilters}
-                isDisabled={hasNoSeries}
-                onFilterSelect={onFilterSelect}
-              />
-            </PageToolbarSection>
-          </PageToolbar>
-          <div className={styles.pageContentBodyWrapper}>
-            <PageContentBody
-              ref={scrollerRef}
-              className={styles.contentBody}
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              innerClassName={styles[`${view}InnerContentBody`]}
-              scrollPositionKey="seriesIndex"
-              onScroll={onScroll}
-            >
-              {isFetching && !isFetched ? <LoadingIndicator /> : null}
-
-              {!isFetching && !!error ? (
-                <Alert kind={kinds.DANGER}>
-                  {translate('SeriesLoadError')}
-                </Alert>
-              ) : null}
-
-              {isLoaded ? (
-                <div className={styles.contentBodyContainer}>
-                  <ViewComponent
-                    scrollerRef={scrollerRef}
-                    items={data}
-                    sortKey={sortKey}
-                    sortDirection={sortDirection}
-                    jumpToCharacter={jumpToCharacter}
-                    isSelectMode={isSelectMode}
-                    isSmallScreen={isSmallScreen}
-                  />
-
-                  <SeriesIndexFooter />
-                </div>
-              ) : null}
-
-              {!error && isFetched && !data.length ? (
-                <NoSeries totalItems={totalItems} />
-              ) : null}
-            </PageContentBody>
-            {isLoaded && !!jumpBarItems.order.length ? (
-              <PageJumpBar
-                items={jumpBarItems}
-                onItemPress={onJumpBarItemPress}
-              />
-            ) : null}
-          </div>
-
-          {isSelectMode ? <SeriesIndexSelectFooter /> : null}
-
-          {view === 'posters' ? (
-            <SeriesIndexPosterOptionsModal
-              isOpen={isOptionsModalOpen}
-              onModalClose={onOptionsModalClose}
-            />
+              <SeriesIndexFooter />
+            </div>
           ) : null}
-          {view === 'overview' ? (
-            <SeriesIndexOverviewOptionsModal
-              isOpen={isOptionsModalOpen}
-              onModalClose={onOptionsModalClose}
-            />
+
+          {!error && isFetched && !data.length ? (
+            <NoSeries totalItems={totalItems} />
           ) : null}
-        </PageContent>
-      </SelectProvider>
-    </QueueDetailsProvider>
+        </PageContentBody>
+        {isLoaded && !!jumpBarItems.order.length ? (
+          <PageJumpBar items={jumpBarItems} onItemPress={onJumpBarItemPress} />
+        ) : null}
+      </div>
+
+      {isSelectMode ? <SeriesIndexSelectFooter /> : null}
+
+      {view === 'posters' ? (
+        <SeriesIndexPosterOptionsModal
+          isOpen={isOptionsModalOpen}
+          onModalClose={onOptionsModalClose}
+        />
+      ) : null}
+      {view === 'overview' ? (
+        <SeriesIndexOverviewOptionsModal
+          isOpen={isOptionsModalOpen}
+          onModalClose={onOptionsModalClose}
+        />
+      ) : null}
+
+      <TableOptionsModal
+        isOpen={tableOptionsModalOpen}
+        columns={columns}
+        optionsComponent={SeriesIndexTableOptions}
+        onTableOptionChange={onTableOptionChange}
+        onModalClose={handleTableOptionsModalClose}
+      />
+
+      <ParseModal
+        isOpen={isParseModalOpen}
+        onModalClose={handleParseModalClose}
+      />
+    </PageContent>
   );
 }
 
