@@ -1,9 +1,8 @@
 import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 import React from 'react';
 import { DndProvider } from 'react-dnd-multi-backend';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import SettingsPage from 'Settings/SettingsPage';
 import translate from 'Utilities/String/translate';
 import DelayProfiles from './Delay/DelayProfiles';
 import QualityProfiles from './Quality/QualityProfiles';
@@ -14,9 +13,7 @@ import ReleaseProfiles from './Release/ReleaseProfiles';
 
 function Profiles() {
   return (
-    <PageContent title={translate('Profiles')}>
-      <SettingsToolbar showSave={false} />
-
+    <SettingsPage title={translate('Profiles')} showSave={false}>
       <PageContentBody>
         <DndProvider options={HTML5toTouch}>
           <QualityProfiles />
@@ -24,7 +21,7 @@ function Profiles() {
           <ReleaseProfiles />
         </DndProvider>
       </PageContentBody>
-    </PageContent>
+    </SettingsPage>
   );
 }
 

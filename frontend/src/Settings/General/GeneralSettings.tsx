@@ -5,11 +5,10 @@ import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { kinds } from 'Helpers/Props';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import SettingsPage from 'Settings/SettingsPage';
 import { useIsWindowsService } from 'System/Status/useSystemStatus';
 import { useRestart } from 'System/useSystem';
 import { InputChanged } from 'typings/inputs';
@@ -101,13 +100,12 @@ function GeneralSettings() {
   }, [isResettingApiKey, wasResettingApiKey]);
 
   return (
-    <PageContent title={translate('GeneralSettings')}>
-      <SettingsToolbar
-        hasPendingChanges={hasPendingChanges}
-        isSaving={isSaving}
-        onSavePress={handleSavePress}
-      />
-
+    <SettingsPage
+      title={translate('GeneralSettings')}
+      hasPendingChanges={hasPendingChanges}
+      isSaving={isSaving}
+      onSavePress={handleSavePress}
+    >
       <PageContentBody>
         {isFetching && !isFetched ? <LoadingIndicator /> : null}
 
@@ -203,7 +201,7 @@ function GeneralSettings() {
         onConfirm={handleConfirmRestart}
         onCancel={handleCloseRestartRequiredModalOpen}
       />
-    </PageContent>
+    </SettingsPage>
   );
 }
 

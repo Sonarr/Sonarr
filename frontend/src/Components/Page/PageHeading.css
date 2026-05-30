@@ -1,0 +1,90 @@
+.heading {
+  margin-bottom: 24px;
+}
+
+.scopeLine {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.scope {
+  flex: 0 0 auto;
+  padding-right: 8px;
+  color: var(--accentDeep);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  font-size: 10px;
+  font-family: $monoSpaceFontFamily;
+}
+
+.scopeLine::after {
+  flex: 1;
+  height: 1px;
+  background-color: var(--inputBorderColor);
+  content: "";
+  opacity: 0.5;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+
+  flex-wrap: wrap;
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  margin: 0;
+  color: var(--ink);
+  letter-spacing: -0.018em;
+  font-weight: 600;
+  font-size: 28px;
+  font-family: $defaultFontFamily;
+  line-height: 1.15;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--inkMuted);
+  font-style: italic;
+  font-size: 15px;
+  font-family: $editorialFontFamily;
+  line-height: 1.5;
+}
+
+.meta {
+  display: inline-flex;
+  align-items: center;
+  color: var(--inkMuted);
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  font-size: 11px;
+  font-family: $monoSpaceFontFamily;
+  gap: 6px;
+}
+
+.metaSep {
+  color: var(--inkMuted);
+  opacity: 0.6;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
