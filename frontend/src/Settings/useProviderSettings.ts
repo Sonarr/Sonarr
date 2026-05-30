@@ -8,12 +8,12 @@ import useApiMutation, {
 import useApiQuery, { QueryOptions } from 'Helpers/Hooks/useApiQuery';
 import { usePendingChangesStore } from 'Helpers/Hooks/usePendingChangesStore';
 import { usePendingFieldsStore } from 'Helpers/Hooks/usePendingFieldsStore';
-import selectSettings from 'Store/Selectors/selectSettings';
 import { PendingSection } from 'typings/pending';
 import Provider from 'typings/Provider';
 import fetchJson, { ApiError } from 'Utilities/Fetch/fetchJson';
 import getQueryPath from 'Utilities/Fetch/getQueryPath';
 import getQueryString, { QueryParams } from 'Utilities/Fetch/getQueryString';
+import selectSettings from 'Utilities/selectSettings';
 
 export type SkipValidation = 'none' | 'warnings' | 'all';
 export interface SaveOptions {

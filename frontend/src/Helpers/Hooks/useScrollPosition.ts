@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { useLocation, useNavigationType } from 'react-router';
 import { OnScroll } from 'Components/Scroller/Scroller';
-import scrollPositions from 'Store/scrollPositions';
+import scrollPositions from 'Helpers/scrollPositions';
 
 function useScrollPosition(key?: string) {
   const { pathname } = useLocation();
