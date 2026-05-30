@@ -2,9 +2,11 @@
   display: flex;
   align-items: center;
   flex: 0 0 auto;
+  padding: 0 20px 0 0;
   height: $headerHeight;
+  border-bottom: 1px solid var(--borderColor);
   background-color: var(--pageHeaderBackgroundColor);
-  color: var(--white);
+  color: var(--ink);
 }
 
 .logoContainer {
@@ -15,43 +17,80 @@
 }
 
 .logoLink {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: 15px;
+  font-family: $defaultFontFamily;
   line-height: 0;
+  gap: 10px;
+
+  &:hover {
+    color: var(--ink);
+    text-decoration: none;
+  }
 }
 
 .logo {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
+}
+
+.brandName {
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1;
 }
 
 .sidebarToggleContainer {
   display: none;
   justify-content: center;
   flex: 0 0 45px;
-  margin-right: 14px;
+  margin-right: 8px;
 }
 
 .right {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 4px;
+
   flex-grow: 1;
 }
 
 .donate {
   composes: link from '~Components/Link/Link.css';
 
-  width: 30px;
-  color: var(--themeRed);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--chipSize);
+  height: var(--chipSize);
+  border-radius: 6px;
+  color: var(--inkMuted);
   text-align: center;
-  line-height: 60px;
+  transition:
+    color var(--transitionSmooth),
+    background-color var(--transitionSmooth);
 
   &:hover {
-    color: #9c1f30;
+    background-color: var(--menuItemHoverBackgroundColor);
+    color: var(--statusMissing);
   }
 }
 
 @media only screen and (max-width: $breakpointSmall) {
   .logoContainer {
-    flex: 0 0 60px;
+    flex: 0 0 auto;
+    padding-left: 16px;
+  }
+
+  .brandName {
+    display: none;
   }
 
   .sidebarToggleContainer {

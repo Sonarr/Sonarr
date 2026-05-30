@@ -47,12 +47,10 @@ function AdvancedSettingsButton({ showLabel }: AdvancedSettingsButtonProps) {
       </span>
 
       {showLabel ? (
-        <div className={styles.labelContainer}>
-          <div className={styles.label}>
-            {showAdvancedSettings
-              ? translate('HideAdvanced')
-              : translate('ShowAdvanced')}
-          </div>
+        <div className={styles.label}>
+          {showAdvancedSettings
+            ? translate('HideAdvanced')
+            : translate('ShowAdvanced')}
         </div>
       ) : null}
     </Link>
