@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Authentication
 
     public class UserService : IUserService, IHandle<ApplicationStartedEvent>
     {
-        private const int ITERATIONS = 10000;
+        private const int ITERATIONS = 220000;
         private const int SALT_SIZE = 128 / 8;
         private const int NUMBER_OF_BYTES = 256 / 8;
 
@@ -109,6 +109,11 @@ namespace NzbDrone.Core.Authentication
 
             if (VerifyHashedPassword(user, password))
             {
+                if (user.Iterations < ITERATIONS)
+                {
+                    return Update(SetUserHashedPassword(user, password));
+                }
+
                 return user;
             }
 
