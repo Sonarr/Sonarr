@@ -222,6 +222,8 @@ jobs:
       ]
     secrets: inherit
     uses: ./.github/workflows/deploy.yml
+    permissions:
+      contents: write
     with:
       framework: ${{ needs.prepare.outputs.framework }}
       branch: ${{ github.ref_name }}
