@@ -373,10 +373,46 @@
     var copyDiv = document.getElementById('copy');
     copyDiv.classList.remove('hidden');
 
-    if (window.location.search.indexOf('loginFailed=true') > -1) {
-      var loginFailedDiv = document.getElementById('login-failed');
+    var searchParams = new URLSearchParams(window.location.search);
 
-      loginFailedDiv.classList.remove('hidden');
+    if (searchParams.get('loginFailed') === 'true') {
+      var loginFailedDiv = document.getElementById('login-failed');
+      var lockoutUntil = parseInt(searchParams.get('lockoutUntil'), 10);
+      var lockoutTimer = null;
+
+      if (isNaN(lockoutUntil)) {
+        loginFailedDiv.classList.remove('hidden');
+      } else if (lockoutUntil > Date.now()) {
+        var submitButton = document.querySelector('button[type="submit"]');
+
+        submitButton.disabled = true;
+        loginFailedDiv.classList.remove('hidden');
+
+        var updateLockout = function () {
+          var remainingSeconds = Math.ceil((lockoutUntil - Date.now()) / 1000);
+
+          if (remainingSeconds <= 0) {
+            clearInterval(lockoutTimer);
+            submitButton.disabled = false;
+            loginFailedDiv.classList.add('hidden');
+
+            return;
+          }
+
+          var minutes = Math.floor(remainingSeconds / 60);
+          var seconds = remainingSeconds % 60;
+          var remaining = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+
+          loginFailedDiv.innerHTML =
+            'Too many failed sign in attempts. Please try again in ' + remaining + '.';
+        };
+
+        updateLockout();
+
+        lockoutTimer = setInterval(updateLockout, 1000);
+      } else {
+        loginFailedDiv.classList.remove('hidden');
+      }
     }
 
     if (window.location.search.indexOf('ssoFailed=true') > -1) {
