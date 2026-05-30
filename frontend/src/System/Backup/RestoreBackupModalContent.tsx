@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useAppValue } from 'App/appStore';
 import { Error } from 'App/State/AppSectionState';
 import TextInput from 'Components/Form/TextInput';
@@ -80,7 +79,6 @@ function RestoreBackupModalContent({
   onModalClose,
 }: RestoreBackupModalContentProps) {
   const isRestarting = useAppValue('isRestarting');
-  const dispatch = useDispatch();
 
   const { restoreBackupById, isRestoringBackup, restoreBackupError } =
     useRestoreBackup(id || 0);
@@ -134,7 +132,7 @@ function RestoreBackupModalContent({
       setIsReloading(true);
       window.location.reload();
     }
-  }, [isRestarting, wasRestarting, dispatch]);
+  }, [isRestarting, wasRestarting]);
 
   return (
     <ModalContent onModalClose={onModalClose}>

@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react';
 import useApiMutation from 'Helpers/Hooks/useApiMutation';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import { usePendingChangesStore } from 'Helpers/Hooks/usePendingChangesStore';
-import selectSettings from 'Store/Selectors/selectSettings';
+import selectSettings from 'Utilities/selectSettings';
 
 export const useSettings = <T extends object>(path: string) => {
   const result = useApiQuery<T>({
