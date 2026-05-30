@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Notifications.Ntfy
         {
             Topics = Array.Empty<string>();
             Priority = 3;
+            Headers = new List<KeyValuePair<string, string>>();
         }
 
         [FieldDefinition(0, Label = "NotificationsNtfySettingsServerUrl", Type = FieldType.Url, HelpLink = "https://ntfy.sh/docs/install/", HelpText = "NotificationsNtfySettingsServerUrlHelpText")]
@@ -57,6 +58,9 @@ namespace NzbDrone.Core.Notifications.Ntfy
 
         [FieldDefinition(7, Label = "NotificationsNtfySettingsClickUrl", Type = FieldType.Url, HelpText = "NotificationsNtfySettingsClickUrlHelpText")]
         public string ClickUrl { get; set; }
+
+        [FieldDefinition(8, Label = "NotificationsNtfySettingsHeaders", Type = FieldType.KeyValueList, Advanced = true)]
+        public IEnumerable<KeyValuePair<string, string>> Headers { get; set; }
 
         public override NzbDroneValidationResult Validate()
         {
