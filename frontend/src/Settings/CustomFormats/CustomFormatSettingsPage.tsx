@@ -1,37 +1,84 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
-import ParseToolbarButton from 'Parse/ParseToolbarButton';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
+import { icons } from 'Helpers/Props';
+import ParseModal from 'Parse/ParseModal';
+import SettingsPage from 'Settings/SettingsPage';
 import translate from 'Utilities/String/translate';
 import CustomFormats from './CustomFormats/CustomFormats';
-import ManageCustomFormatsToolbarButton from './CustomFormats/Manage/ManageCustomFormatsToolbarButton';
+import ManageCustomFormatsModal from './CustomFormats/Manage/ManageCustomFormatsModal';
 
 function CustomFormatSettingsPage() {
+  const [isParseModalOpen, setIsParseModalOpen] = useState(false);
+  const [isManageCustomFormatsOpen, setIsManageCustomFormatsOpen] =
+    useState(false);
+
+  const handleParseModalPress = useCallback(() => {
+    setIsParseModalOpen(true);
+  }, []);
+
+  const handleParseModalClose = useCallback(() => {
+    setIsParseModalOpen(false);
+  }, []);
+
+  const handleManageCustomFormatsPress = useCallback(() => {
+    setIsManageCustomFormatsOpen(true);
+  }, []);
+
+  const handleManageCustomFormatsClose = useCallback(() => {
+    setIsManageCustomFormatsOpen(false);
+  }, []);
+
   return (
-    <PageContent title={translate('CustomFormatsSettings')}>
-      <SettingsToolbar
-        showSave={false}
-        additionalButtons={
-          <>
+    <SettingsPage
+      title={translate('CustomFormatsSettings')}
+      showSave={false}
+      toolbarChildren={
+        <>
+          <OverflowDivider groupId="extras">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
-            <ParseToolbarButton />
+          <ToolbarItem
+            id="test-parsing"
+            priority={1}
+            groupId="extras"
+            label={translate('TestParsing')}
+            iconName={icons.PARSE}
+            onPress={handleParseModalPress}
+          />
 
-            <ManageCustomFormatsToolbarButton />
-          </>
-        }
-      />
-
+          <ToolbarItem
+            id="manage-custom-formats"
+            priority={1}
+            groupId="extras"
+            label={translate('ManageFormats')}
+            iconName={icons.MANAGE}
+            onPress={handleManageCustomFormatsPress}
+          />
+        </>
+      }
+    >
       <PageContentBody>
         <DndProvider backend={HTML5Backend}>
           <CustomFormats />
         </DndProvider>
       </PageContentBody>
-    </PageContent>
+
+      <ParseModal
+        isOpen={isParseModalOpen}
+        onModalClose={handleParseModalClose}
+      />
+
+      <ManageCustomFormatsModal
+        isOpen={isManageCustomFormatsOpen}
+        onModalClose={handleManageCustomFormatsClose}
+      />
+    </SettingsPage>
   );
 }
 

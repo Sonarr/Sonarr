@@ -3,7 +3,6 @@
 interface CssExports {
   'childLink': string;
   'iconContainer': string;
-  'isActiveItem': string;
   'isActiveLink': string;
   'isActiveParentLink': string;
   'item': string;
