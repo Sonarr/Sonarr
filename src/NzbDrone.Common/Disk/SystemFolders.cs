@@ -25,7 +25,10 @@ namespace NzbDrone.Common.Disk
                        "/lib",
                        "/sbin",
                        "/proc",
-                       "/usr/bin"
+                       "/usr/bin",
+                       "/usr/sbin",
+                       "/usr/local/bin",
+                       "/usr/local/sbin"
                    };
         }
     }
