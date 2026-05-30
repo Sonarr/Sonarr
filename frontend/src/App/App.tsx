@@ -1,7 +1,6 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import { Provider } from 'react-redux';
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -9,15 +8,10 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom';
-import { Store } from 'redux';
 import Page from 'Components/Page/Page';
 import ApplyTheme from './ApplyTheme';
 import { appRouteElements } from './AppRoutes';
 import { queryClient } from './queryClient';
-
-interface AppProps {
-  store: Store;
-}
 
 function PageLayout() {
   return (
@@ -37,13 +31,11 @@ const router = createBrowserRouter(
   { basename: window.Sonarr.urlBase || undefined }
 );
 
-function App({ store }: AppProps) {
+function App() {
   return (
     <DocumentTitle title={window.Sonarr.instanceName}>
       <QueryClientProvider client={queryClient}>
-        <Provider store={store}>
-          <RouterProvider router={router} />
-        </Provider>
+        <RouterProvider router={router} />
       </QueryClientProvider>
     </DocumentTitle>
   );
