@@ -4,15 +4,14 @@ on:
   issues:
     types: [labeled, unlabeled, reopened]
 
-permissions:
-  issues: write
-
 jobs:
   action:
     runs-on: ubuntu-latest
     if: github.repository == 'Sonarr/Sonarr'
+    permissions:
+      issues: write
     steps:
-      - uses: dessant/support-requests@v4
+      - uses: dessant/support-requests@v5
         with:
           github-token: ${{ github.token }}
           support-label: 'support'
