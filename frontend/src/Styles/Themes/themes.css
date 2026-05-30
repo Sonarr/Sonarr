@@ -65,7 +65,7 @@
   --linkColor: oklch(50% 0.130 215);
   --linkHoverColor: oklch(78% 0.130 215);
 
-  /* Page chrome */
+  /* Page header & sidebar */
   --pageHeaderBackgroundColor: oklch(98% 0.006 80);
   --sidebarColor: oklch(32% 0.010 80);
   --sidebarBackgroundColor: oklch(96% 0.008 80);
@@ -171,9 +171,16 @@
   --progressBarBackTextColor: oklch(32% 0.010 80);
   --progressBarBackgroundColor: oklch(90% 0.006 80);
   --logEventsBackgroundColor: oklch(100% 0 0);
+
+  --shadowChip: 0 1px 4px oklch(0% 0 0 / 0.06);
+  --shadowDropdown:
+    0 12px 32px -12px oklch(0% 0 0 / 0.32),
+    0 2px 8px -2px oklch(0% 0 0 / 0.12);
+  --shadowSidebar: 0 24px 60px -16px oklch(0% 0 0 / 0.32);
+  --chipSize: 34px;
+  --transitionSmooth: 160ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* stylelint-disable-next-line selector-max-attribute */
 [data-theme=dark] {
   /* Surfaces */
   --paper: oklch(15% 0.008 80);
@@ -241,7 +248,7 @@
   --linkColor: oklch(82% 0.115 215);
   --linkHoverColor: oklch(85% 0.100 215);
 
-  /* Page chrome */
+  /* Page header & sidebar */
   --pageHeaderBackgroundColor: oklch(15% 0.008 80);
   --sidebarColor: oklch(95% 0.006 80);
   --sidebarBackgroundColor: oklch(19% 0.008 80);
@@ -347,9 +354,14 @@
   --progressBarBackTextColor: oklch(95% 0.006 80);
   --progressBarBackgroundColor: oklch(30% 0.010 80);
   --logEventsBackgroundColor: oklch(19% 0.008 80);
+
+  --shadowChip: 0 1px 4px oklch(0% 0 0 / 0.45);
+  --shadowDropdown:
+    0 12px 32px -12px oklch(0% 0 0 / 0.65),
+    0 2px 8px -2px oklch(0% 0 0 / 0.35);
+  --shadowSidebar: 0 24px 60px -16px oklch(0% 0 0 / 0.65);
 }
 
-/* stylelint-disable-next-line selector-max-attribute */
 [data-color-impaired] {
   --statusMissing:   oklch(56% 0.180 40);    /* Vermillion  #D55E00 */
   --statusAiring:    oklch(60% 0.135 165);   /* Bluish green #009E73 */
@@ -376,7 +388,6 @@
   --alertWarningBackgroundColor: color-mix(in oklch, var(--warningColor) 8%, transparent);
 }
 
-/* stylelint-disable-next-line selector-max-attribute */
 [data-theme=dark][data-color-impaired] {
   --statusMissing:   oklch(66% 0.180 40);
   --statusAiring:    oklch(70% 0.135 165);

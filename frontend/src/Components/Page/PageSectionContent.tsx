@@ -4,6 +4,7 @@ import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import { kinds } from 'Helpers/Props';
 import { ApiError } from 'Utilities/Fetch/fetchJson';
+import styles from './PageSectionContent.css';
 
 interface PageSectionContentProps {
   isFetching: boolean;
@@ -29,7 +30,7 @@ function PageSectionContent({
   }
 
   if (isPopulated && !error) {
-    return <div>{children}</div>;
+    return <div className={styles.content}>{children}</div>;
   }
 
   return null;

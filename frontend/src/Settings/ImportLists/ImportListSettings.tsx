@@ -1,10 +1,10 @@
 import React, { useCallback, useRef, useState } from 'react';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { icons } from 'Helpers/Props';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import SettingsPage from 'Settings/SettingsPage';
 import {
   SaveCallback,
   SettingsStateChange,
@@ -56,31 +56,38 @@ function ImportListSettings() {
   }, [testAllImportLists]);
 
   return (
-    <PageContent title={translate('ImportListSettings')}>
-      <SettingsToolbar
-        isSaving={isSaving}
-        hasPendingChanges={hasPendingChanges}
-        additionalButtons={
-          <>
+    <SettingsPage
+      title={translate('ImportListSettings')}
+      isSaving={isSaving}
+      hasPendingChanges={hasPendingChanges}
+      toolbarChildren={
+        <>
+          <OverflowDivider groupId="extras">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
-            <PageToolbarButton
-              label={translate('TestAllLists')}
-              iconName={icons.TEST}
-              isSpinning={isTestingAllImportLists}
-              onPress={handleTestAllImportListsPress}
-            />
+          <ToolbarItem
+            id="test-all"
+            priority={1}
+            groupId="extras"
+            label={translate('TestAllLists')}
+            iconName={icons.TEST}
+            isSpinning={isTestingAllImportLists}
+            onPress={handleTestAllImportListsPress}
+          />
 
-            <PageToolbarButton
-              label={translate('ManageLists')}
-              iconName={icons.MANAGE}
-              onPress={handleManageImportListsPress}
-            />
-          </>
-        }
-        onSavePress={handleSavePress}
-      />
-
+          <ToolbarItem
+            id="manage"
+            priority={1}
+            groupId="extras"
+            label={translate('ManageLists')}
+            iconName={icons.MANAGE}
+            onPress={handleManageImportListsPress}
+          />
+        </>
+      }
+      onSavePress={handleSavePress}
+    >
       <PageContentBody>
         <ImportLists />
 
@@ -96,7 +103,7 @@ function ImportListSettings() {
           onModalClose={handleManageImportListsModalClose}
         />
       </PageContentBody>
-    </PageContent>
+    </SettingsPage>
   );
 }
 

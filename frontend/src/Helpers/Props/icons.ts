@@ -37,7 +37,7 @@ import {
   CornerLeftUp,
   Download,
   Drama,
-  Ellipsis,
+  EllipsisVertical,
   ExternalLink,
   Eye,
   File,
@@ -169,7 +169,7 @@ export const NETWORK = Radio;
 export const NAVBAR_COLLAPSE = Menu;
 export const NOT_AIRED = Clock;
 export const ORGANIZE = Network;
-export const OVERFLOW = Ellipsis;
+export const OVERFLOW = EllipsisVertical;
 export const OVERVIEW = LayoutList;
 export const PAGE_FIRST = ChevronsLeft;
 export const PAGE_PREVIOUS = ChevronLeft;

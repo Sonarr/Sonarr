@@ -4,10 +4,6 @@
   position: relative;
 }
 
-.labelContainer {
-  composes: labelContainer from '~Components/Page/Toolbar/PageToolbarButton.css';
-}
-
 .label {
   composes: label from '~Components/Page/Toolbar/PageToolbarButton.css';
 }
