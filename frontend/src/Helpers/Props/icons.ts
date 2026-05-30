@@ -13,6 +13,7 @@ import {
   Calculator,
   Calendar,
   CalendarDays,
+  ChartColumn,
   Check,
   ChevronDown,
   ChevronLeft,
@@ -37,7 +38,7 @@ import {
   CornerLeftUp,
   Download,
   Drama,
-  Ellipsis,
+  EllipsisVertical,
   ExternalLink,
   Eye,
   File,
@@ -169,7 +170,7 @@ export const NETWORK = Radio;
 export const NAVBAR_COLLAPSE = Menu;
 export const NOT_AIRED = Clock;
 export const ORGANIZE = Network;
-export const OVERFLOW = Ellipsis;
+export const OVERFLOW = EllipsisVertical;
 export const OVERVIEW = LayoutList;
 export const PAGE_FIRST = ChevronsLeft;
 export const PAGE_PREVIOUS = ChevronLeft;
@@ -207,6 +208,7 @@ export const SORT_DESCENDING = ArrowDown;
 export const SPINNER = Loader;
 export const SQUARE = Square;
 export const SQUARE_MINUS = SquareMinus;
+export const STATISTICS = ChartColumn;
 export const SUBTRACT = Minus;
 export const SYSTEM = Laptop;
 export const TABLE = Table;

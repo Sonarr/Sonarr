@@ -7,12 +7,11 @@ import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import RootFolders from 'RootFolder/RootFolders';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import SettingsPage from 'Settings/SettingsPage';
 import { useIsWindows } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import { SettingsStateChange } from 'typings/Settings/SettingsState';
@@ -178,13 +177,12 @@ function MediaManagement() {
   );
 
   return (
-    <PageContent title={translate('MediaManagementSettings')}>
-      <SettingsToolbar
-        isSaving={isSaving || naming.isSaving}
-        hasPendingChanges={naming.hasPendingChanges || hasPendingChanges}
-        onSavePress={handleSavePress}
-      />
-
+    <SettingsPage
+      title={translate('MediaManagementSettings')}
+      isSaving={isSaving || naming.isSaving}
+      hasPendingChanges={naming.hasPendingChanges || hasPendingChanges}
+      onSavePress={handleSavePress}
+    >
       <PageContentBody>
         <Naming
           setChildSave={handleSetNamingSave}
@@ -671,7 +669,7 @@ function MediaManagement() {
           <AddRootFolder />
         </FieldSet>
       </PageContentBody>
-    </PageContent>
+    </SettingsPage>
   );
 }
 
