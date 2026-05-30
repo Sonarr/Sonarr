@@ -7,7 +7,6 @@ interface CssExports {
   'indicatorBackground': string;
   'indicatorContainer': string;
   'label': string;
-  'labelContainer': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

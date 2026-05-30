@@ -1,10 +1,10 @@
 import React, { useCallback, useRef, useState } from 'react';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { icons } from 'Helpers/Props';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import SettingsPage from 'Settings/SettingsPage';
 import {
   SaveCallback,
   SettingsStateChange,
@@ -53,36 +53,43 @@ function DownloadClientSettings() {
     saveOptions.current?.();
   }, []);
 
-  const handleTestAllClientsPress = useCallback(() => {
+  const handleTestAllDownloadClientsPress = useCallback(() => {
     testAllDownloadClients();
   }, [testAllDownloadClients]);
 
   return (
-    <PageContent title={translate('DownloadClientSettings')}>
-      <SettingsToolbar
-        isSaving={isSaving}
-        hasPendingChanges={hasPendingChanges}
-        additionalButtons={
-          <>
+    <SettingsPage
+      title={translate('DownloadClientSettings')}
+      isSaving={isSaving}
+      hasPendingChanges={hasPendingChanges}
+      toolbarChildren={
+        <>
+          <OverflowDivider groupId="extras">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
-            <PageToolbarButton
-              label={translate('TestAllClients')}
-              iconName={icons.TEST}
-              isSpinning={isTestingAllDownloadClients}
-              onPress={handleTestAllClientsPress}
-            />
+          <ToolbarItem
+            id="test-all"
+            priority={1}
+            groupId="extras"
+            label={translate('TestAllClients')}
+            iconName={icons.TEST}
+            isSpinning={isTestingAllDownloadClients}
+            onPress={handleTestAllDownloadClientsPress}
+          />
 
-            <PageToolbarButton
-              label={translate('ManageClients')}
-              iconName={icons.MANAGE}
-              onPress={handleManageDownloadClientsPress}
-            />
-          </>
-        }
-        onSavePress={handleSavePress}
-      />
-
+          <ToolbarItem
+            id="manage"
+            priority={1}
+            groupId="extras"
+            label={translate('ManageClients')}
+            iconName={icons.MANAGE}
+            onPress={handleManageDownloadClientsPress}
+          />
+        </>
+      }
+      onSavePress={handleSavePress}
+    >
       <PageContentBody>
         <DownloadClients />
 
@@ -98,7 +105,7 @@ function DownloadClientSettings() {
           onModalClose={handleManageDownloadClientsModalClose}
         />
       </PageContentBody>
-    </PageContent>
+    </SettingsPage>
   );
 }
 

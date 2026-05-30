@@ -308,7 +308,6 @@
     ],
     "selector-attribute-quotes": "never",
     "selector-class-pattern": "^[A-Za-z0-9]+$",
-    "selector-max-attribute": 0,
     "selector-max-class": 3,
     "selector-max-compound-selectors": 3,
     "selector-max-id": 0,

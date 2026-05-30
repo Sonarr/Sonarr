@@ -5,7 +5,8 @@ import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
+import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, kinds } from 'Helpers/Props';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -243,9 +244,9 @@ function Statistics() {
   return (
     <PageContent title={translate('Statistics')}>
       <PageToolbar>
-        <PageToolbarSection />
+        <PageToolbarSpacer />
 
-        <PageToolbarSection alignContent={align.RIGHT}>
+        <ToolbarItem id="filter" pinned={true}>
           <FilterMenu
             alignMenu={align.RIGHT}
             selectedFilterKey={selectedFilterKey}
@@ -254,7 +255,7 @@ function Statistics() {
             filterModalConnectorComponent={StatisticsFilterModal}
             onFilterSelect={handleFilterSelect}
           />
-        </PageToolbarSection>
+        </ToolbarItem>
       </PageToolbar>
 
       <PageContentBody>

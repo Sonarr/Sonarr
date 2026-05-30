@@ -2,10 +2,10 @@
   flex: 1 1 $jumpBarItemHeight;
   border-bottom: 1px solid var(--borderColor);
   text-align: center;
-  font-weight: bold;
+  font-weight: 600;
 
   &:hover {
-    color: #777;
+    color: var(--inkMuted);
   }
 
   &:last-child {

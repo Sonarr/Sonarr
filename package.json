@@ -22,6 +22,7 @@
   ],
   "dependencies": {
     "@floating-ui/react": "0.27.19",
+    "@fluentui/priority-overflow": "9.3.0",
     "@fontsource/fraunces": "5.2.9",
     "@fontsource/inter": "5.2.8",
     "@fontsource/jetbrains-mono": "5.2.8",

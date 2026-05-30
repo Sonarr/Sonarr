@@ -42,12 +42,13 @@ function PageHeader() {
   return (
     <div className={styles.header}>
       <div className={styles.logoContainer}>
-        <Link className={styles.logoLink} to="/">
+        <Link className={styles.logoLink} to="/" aria-label={translate('Home')}>
           <img
             className={styles.logo}
             src={`${window.Sonarr.urlBase}/Content/Images/logo.svg`}
-            alt="Sonarr Logo"
+            alt=""
           />
+          <span className={styles.brandName}>Sonarr</span>
         </Link>
       </div>
 

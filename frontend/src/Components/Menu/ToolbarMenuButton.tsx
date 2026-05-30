@@ -31,7 +31,7 @@ function ToolbarMenuButton({
           ) : null}
         </div>
 
-        <span className={styles.label}>{text}</span>
+        {text ? <span className={styles.label}>{text}</span> : null}
       </div>
     </MenuButton>
   );
