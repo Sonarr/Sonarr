@@ -113,7 +113,7 @@ namespace Sonarr.Api.V3.Config
                 .NotEmpty()
                 .IsValidPath()
                 .SetValidator(new FileExistsValidator(diskProvider))
-                .IsValidCertificate()
+                .IsValidCertificate(p => p == PrivateValue ? _configFileProvider.SslCertPassword : p)
                 .When(c => c.EnableSsl);
 
             SharedValidator.RuleFor(c => c.SslKeyPath)
@@ -134,19 +134,12 @@ namespace Sonarr.Api.V3.Config
 
         private bool IsMatchingPassword(HostConfigResource resource)
         {
-            var user = _userService.FindUser();
-
-            if (user != null && user.Password == resource.Password)
+            if (resource.Password == PrivateValue)
             {
                 return true;
             }
 
-            if (resource.Password == resource.PasswordConfirmation)
-            {
-                return true;
-            }
-
-            return false;
+            return resource.Password == resource.PasswordConfirmation;
         }
 
         protected override HostConfigResource GetResourceById(int id)
@@ -163,11 +156,13 @@ namespace Sonarr.Api.V3.Config
 
             resource.Id = 1;
             resource.Username = user?.Username ?? string.Empty;
-            resource.Password = user?.Password ?? string.Empty;
+            resource.Password = user?.Password.IsNotNullOrWhiteSpace() == true ? PrivateValue : string.Empty;
             resource.PasswordConfirmation = string.Empty;
 
-            // Prevent the OIDC client secret from being exposed
+            // Prevent secrets from being exposed
             resource.OidcClientSecret = oidcClientSecret.IsNullOrWhiteSpace() ? string.Empty : PrivateValue;
+            resource.SslCertPassword = resource.SslCertPassword.IsNullOrWhiteSpace() ? string.Empty : PrivateValue;
+            resource.ProxyPassword = resource.ProxyPassword.IsNullOrWhiteSpace() ? string.Empty : PrivateValue;
 
             return resource;
         }
@@ -189,12 +184,23 @@ namespace Sonarr.Api.V3.Config
                 dictionary["OidcClientSecret"] = oidcClientSecret;
             }
 
+            if (resource.SslCertPassword == PrivateValue)
+            {
+                dictionary["SslCertPassword"] = _configFileProvider.SslCertPassword;
+            }
+
+            if (resource.ProxyPassword == PrivateValue)
+            {
+                dictionary["ProxyPassword"] = _configService.ProxyPassword;
+            }
+
             _configFileProvider.SaveConfigDictionary(dictionary);
             _configService.SaveConfigDictionary(dictionary);
 
-            if (resource.Username.IsNotNullOrWhiteSpace() && resource.Password.IsNotNullOrWhiteSpace())
+            if (resource.Username.IsNotNullOrWhiteSpace() &&
+                resource.Password.IsNotNullOrWhiteSpace())
             {
-                _userService.Upsert(resource.Username, resource.Password);
+                _userService.Upsert(resource.Username, resource.Password == PrivateValue ? null : resource.Password);
             }
 
             return Accepted(resource.Id);
