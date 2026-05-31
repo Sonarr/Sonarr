@@ -90,6 +90,7 @@ function SeriesHistoryRow({
 
   const handleConfirmMarkAsFailed = useCallback(() => {
     markAsFailed();
+    setIsMarkAsFailedModalOpen(false);
   }, [markAsFailed]);
 
   const handleMarkAsFailedModalClose = useCallback(() => {
