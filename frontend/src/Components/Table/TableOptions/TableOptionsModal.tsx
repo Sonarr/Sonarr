@@ -3,9 +3,9 @@ import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 import React, { useCallback, useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd-multi-backend';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import NumberInput from 'Components/Form/NumberInput';
 import Button from 'Components/Link/Button';
 import Modal from 'Components/Modal/Modal';
@@ -137,7 +137,7 @@ function TableOptionsModal({
             <ModalBody>
               <Form>
                 {hasPageSize ? (
-                  <FormGroup>
+                  <FormRow>
                     <FormLabel>{translate('TablePageSize')}</FormLabel>
 
                     <NumberInput
@@ -151,7 +151,7 @@ function TableOptionsModal({
                     {pageSizeError ? (
                       <FormInputHelpText text={pageSizeError} isError={true} />
                     ) : null}
-                  </FormGroup>
+                  </FormRow>
                 ) : null}
 
                 {OptionsComponent ? (
@@ -159,43 +159,40 @@ function TableOptionsModal({
                 ) : null}
 
                 {canModifyColumns ? (
-                  <FormGroup>
+                  <div className={styles.columnsSection}>
                     <FormLabel>{translate('TableColumns')}</FormLabel>
+                    <FormInputHelpText
+                      text={translate('TableColumnsHelpText')}
+                    />
 
-                    <div>
-                      <FormInputHelpText
-                        text={translate('TableColumnsHelpText')}
-                      />
+                    <div className={styles.columns}>
+                      {columns.map((column, index) => {
+                        const {
+                          name,
+                          label,
+                          columnLabel,
+                          isVisible,
+                          isModifiable = 'enabled',
+                        } = column;
 
-                      <div className={styles.columns}>
-                        {columns.map((column, index) => {
-                          const {
-                            name,
-                            label,
-                            columnLabel,
-                            isVisible,
-                            isModifiable = 'enabled',
-                          } = column;
-
-                          return (
-                            <TableOptionsColumn
-                              key={name}
-                              name={name}
-                              label={columnLabel ?? label}
-                              isVisible={isVisible}
-                              isModifiable={isModifiable}
-                              index={index}
-                              isDraggingUp={isDraggingUp}
-                              isDraggingDown={isDraggingDown}
-                              onVisibleChange={handleVisibleChange}
-                              onColumnDragMove={handleColumnDragMove}
-                              onColumnDragEnd={handleColumnDragEnd}
-                            />
-                          );
-                        })}
-                      </div>
+                        return (
+                          <TableOptionsColumn
+                            key={name}
+                            name={name}
+                            label={columnLabel ?? label}
+                            isVisible={isVisible}
+                            isModifiable={isModifiable}
+                            index={index}
+                            isDraggingUp={isDraggingUp}
+                            isDraggingDown={isDraggingDown}
+                            onVisibleChange={handleVisibleChange}
+                            onColumnDragMove={handleColumnDragMove}
+                            onColumnDragEnd={handleColumnDragEnd}
+                          />
+                        );
+                      })}
                     </div>
-                  </FormGroup>
+                  </div>
                 ) : null}
               </Form>
             </ModalBody>
