@@ -10,6 +10,9 @@ interface CssExports {
   'cell': string;
   'certification': string;
   'checkInput': string;
+  'episodeBar': string;
+  'episodeBarFill': string;
+  'episodeBarFillComplete': string;
   'episodeCount': string;
   'episodeFileQualities': string;
   'episodeProgress': string;
@@ -19,11 +22,14 @@ interface CssExports {
   'monitorNewItems': string;
   'network': string;
   'nextAiring': string;
+  'nextAiringEmpty': string;
+  'nextAiringMono': string;
   'originalCountry': string;
   'originalLanguage': string;
   'overlayTitle': string;
   'path': string;
   'previousAiring': string;
+  'qualityChip': string;
   'qualityProfileId': string;
   'ratings': string;
   'releaseGroups': string;
@@ -35,6 +41,7 @@ interface CssExports {
   'sortTitle': string;
   'status': string;
   'tags': string;
+  'titleLink': string;
   'useSceneNumbering': string;
   'year': string;
 }
