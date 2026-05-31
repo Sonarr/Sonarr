@@ -16,6 +16,7 @@ export interface SeriesOptions {
     showQualityProfile: boolean;
     showTags: boolean;
     showSearchAction: boolean;
+    showStatus: 'none' | 'deleted' | 'active' | 'all';
   };
   overviewOptions: {
     detailedProgressBar: boolean;
@@ -57,6 +58,7 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
         showQualityProfile: true,
         showTags: false,
         showSearchAction: false,
+        showStatus: 'deleted',
       },
       overviewOptions: {
         detailedProgressBar: false,

@@ -163,6 +163,11 @@
   --tableRowHoverBackgroundColor: oklch(96% 0.008 80);
   --addSeriesBackgroundColor: oklch(96% 0.008 80);
   --seriesBackgroundColor: oklch(96% 0.008 80);
+
+  /* Sit on artwork, so theme-independent: no dark-block override */
+  --seriesOverlayScrim: oklch(15% 0.008 80 / 0.82);
+  --seriesOverlayInk: oklch(95% 0.006 80 / 0.9);
+
   --searchIconContainerBackgroundColor: oklch(98% 0.006 80);
   --collapseButtonBackgroundColor: oklch(98% 0.006 80);
   --seasonBackgroundColor: oklch(100% 0 0);
