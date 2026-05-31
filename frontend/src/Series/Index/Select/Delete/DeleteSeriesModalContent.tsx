@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -70,41 +71,42 @@ function DeleteSeriesModalContent({
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('DeleteSelectedSeries')}</ModalHeader>
-
       <ModalBody>
         <div>
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('AddListExclusion')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('AddListExclusionSeriesHelpText')}
+            />
+            <FormInput
               type={inputTypes.CHECK}
               name="addImportListExclusion"
               value={addImportListExclusion}
-              helpText={translate('AddListExclusionSeriesHelpText')}
               onChange={onDeleteOptionChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>
               {series.length > 1
                 ? translate('DeleteSeriesFolders')
                 : translate('DeleteSeriesFolder')}
             </FormLabel>
-
-            <FormInputGroup
-              type={inputTypes.CHECK}
-              name="deleteFiles"
-              value={deleteFiles}
-              helpText={
+            <FormInputHelpText
+              text={
                 series.length > 1
                   ? translate('DeleteSeriesFoldersHelpText')
                   : translate('DeleteSeriesFolderHelpText')
               }
+            />
+            <FormInput
+              type={inputTypes.CHECK}
+              name="deleteFiles"
+              value={deleteFiles}
               kind="danger"
               onChange={onDeleteFilesChange}
             />
-          </FormGroup>
+          </FormRow>
         </div>
 
         <div className={styles.message}>
@@ -125,7 +127,6 @@ function DeleteSeriesModalContent({
           styles={styles}
         />
       </ModalBody>
-
       <ModalFooter>
         <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
