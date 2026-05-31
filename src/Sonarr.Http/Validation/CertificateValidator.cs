@@ -1,3 +1,4 @@
+using System;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using FluentValidation.Validators;
@@ -10,6 +11,13 @@ namespace Sonarr.Http.Validation;
 public class CertificateValidator : PropertyValidator
 {
     private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(CertificateValidator));
+
+    private readonly Func<string, string> _resolvePassword;
+
+    public CertificateValidator(Func<string, string> resolvePassword = null)
+    {
+        _resolvePassword = resolvePassword ?? (password => password);
+    }
 
     protected override string GetDefaultMessageTemplate() => "Invalid SSL certificate file or {passwordOrKey}. {message}";
 
@@ -27,7 +35,7 @@ public class CertificateValidator : PropertyValidator
 
         try
         {
-            SslCertificateLoader.LoadCertificateContext(resource.SslCertPath, resource.SslKeyPath, resource.SslCertPassword);
+            SslCertificateLoader.LoadCertificateContext(resource.SslCertPath, resource.SslKeyPath, _resolvePassword(resource.SslCertPassword));
 
             return true;
         }

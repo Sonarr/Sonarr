@@ -62,10 +62,15 @@ namespace NzbDrone.Core.Authentication
 
             if (user == null)
             {
+                if (password == null)
+                {
+                    return null;
+                }
+
                 return Add(username, password);
             }
 
-            if (user.Password != password)
+            if (password != null)
             {
                 SetUserHashedPassword(user, password);
             }
