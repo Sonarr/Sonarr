@@ -285,8 +285,8 @@ public class ReleaseController : RestController<ReleaseResource>
     private ReleaseHistoryResource? AddHistory(ReleaseInfo release, List<EpisodeHistory> history)
     {
         var grabbed = history.FirstOrDefault(h => h.EventType == EpisodeHistoryEventType.Grabbed &&
-                                                  h.Data.TryGetValue("guid", out var guid) &&
-                                                  guid == release.Guid);
+                                                  ((h.Data.TryGetValue("guid", out var guid) && guid == release.Guid) ||
+                                                   (h.Data.TryGetValue("nzbInfoUrl", out var infoUrl) && infoUrl.IsNotNullOrWhiteSpace() && infoUrl.Equals(release.InfoUrl, StringComparison.Ordinal))));
 
         if (grabbed == null && release.DownloadProtocol == DownloadProtocol.Torrent)
         {
