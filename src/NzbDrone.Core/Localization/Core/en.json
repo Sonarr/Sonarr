@@ -1477,6 +1477,7 @@
   "NotificationsNtfySettingsAccessTokenHelpText": "Optional token-based authorization. Takes priority over username/password",
   "NotificationsNtfySettingsClickUrl": "Click Url",
   "NotificationsNtfySettingsClickUrlHelpText": "Optional link when user clicks notification",
+  "NotificationsNtfySettingsHeaders": "Headers",
   "NotificationsNtfySettingsPasswordHelpText": "Optional password",
   "NotificationsNtfySettingsServerUrl": "Server URL",
   "NotificationsNtfySettingsServerUrlHelpText": "Leave blank to use public server ({url})",
