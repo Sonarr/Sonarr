@@ -64,6 +64,7 @@ namespace NzbDrone.Core.Download
             if (grabbedHistory.Any())
             {
                 PublishDownloadFailedEvent(grabbedHistory.First(), GetEpisodeIds(grabbedHistory), message, source);
+                return;
             }
 
             throw new InvalidOperationException("Unable to mark download as failed, no grabbed history available");
@@ -76,6 +77,7 @@ namespace NzbDrone.Core.Download
             if (history.Any())
             {
                 PublishDownloadFailedEvent(history.First(), GetEpisodeIds(history), message ?? "Manually marked as failed", source, trackedDownload, skipRedownload: skipRedownload);
+                return;
             }
 
             throw new InvalidOperationException("Unable to mark download as failed, no grabbed history available");
