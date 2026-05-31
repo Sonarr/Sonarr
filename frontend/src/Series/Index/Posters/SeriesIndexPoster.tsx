@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 import CommandNames from 'Commands/CommandNames';
 import { useExecuteCommand } from 'Commands/useCommands';
-import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
@@ -44,6 +43,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
     showQualityProfile,
     showTags,
     showSearchAction,
+    showStatus,
   } = useSeriesPosterOptions();
 
   const { showRelativeDates, shortDateFormat, longDateFormat, timeFormat } =
@@ -130,6 +130,38 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
     height: `${posterHeight}px`,
   };
 
+  const getStatusBadge = () => {
+    const mode = showStatus ?? 'deleted';
+
+    if (mode === 'none') {
+      return null;
+    }
+
+    if (status === 'deleted') {
+      return { label: translate('Deleted'), statusClass: styles.deleted };
+    }
+
+    if (status === 'continuing' && (mode === 'active' || mode === 'all')) {
+      return { label: translate('Continuing'), statusClass: styles.continuing };
+    }
+
+    if (status === 'upcoming' && (mode === 'active' || mode === 'all')) {
+      return { label: translate('Upcoming'), statusClass: styles.upcoming };
+    }
+
+    if (status === 'ended' && mode === 'all') {
+      return { label: translate('Ended'), statusClass: styles.ended };
+    }
+
+    return null;
+  };
+
+  const statusBadge = getStatusBadge();
+
+  const monitoredLabel = monitored
+    ? translate('Monitored')
+    : translate('Unmonitored');
+
   return (
     <div className={styles.content}>
       <div className={styles.posterContainer} title={title}>
@@ -137,7 +169,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
           <SeriesIndexPosterSelect seriesId={seriesId} titleSlug={titleSlug} />
         ) : null}
 
-        <Label className={styles.controls}>
+        <div className={styles.controls}>
           <SpinnerIconButton
             className={styles.action}
             name={icons.REFRESH}
@@ -166,20 +198,15 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
             tabIndex={-1}
             onPress={onEditSeriesPress}
           />
-        </Label>
+        </div>
 
-        {status === 'ended' ? (
+        {statusBadge ? (
           <div
-            className={classNames(styles.status, styles.ended)}
-            title={translate('Ended')}
-          />
-        ) : null}
-
-        {status === 'deleted' ? (
-          <div
-            className={classNames(styles.status, styles.deleted)}
-            title={translate('Deleted')}
-          />
+            className={classNames(styles.status, statusBadge.statusClass)}
+            title={statusBadge.label}
+          >
+            <span className={styles.statusLabel}>{statusBadge.label}</span>
+          </div>
         ) : null}
 
         <Link className={styles.link} style={elementStyle} to={link}>
@@ -218,15 +245,16 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
         </div>
       ) : null}
 
-      {showMonitored ? (
-        <div className={styles.title}>
-          {monitored ? translate('Monitored') : translate('Unmonitored')}
-        </div>
-      ) : null}
+      {showMonitored || (showQualityProfile && !!qualityProfile?.name) ? (
+        <div className={styles.meta}>
+          {showMonitored ? monitoredLabel : null}
 
-      {showQualityProfile && !!qualityProfile?.name ? (
-        <div className={styles.title} title={translate('QualityProfile')}>
-          {qualityProfile.name}
+          {showMonitored && showQualityProfile && !!qualityProfile?.name ? (
+            <span className={styles.metaSep}> · </span>
+          ) : null}
+          {showQualityProfile && !!qualityProfile?.name
+            ? qualityProfile.name
+            : null}
         </div>
       ) : null}
 
