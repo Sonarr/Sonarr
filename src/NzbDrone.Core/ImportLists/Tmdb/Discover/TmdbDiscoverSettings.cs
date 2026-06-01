@@ -6,21 +6,20 @@ using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.ImportLists.Tmdb.Discover;
 
-public partial class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDiscoverSettings>
+public class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDiscoverSettings>
 {
+    private static readonly Regex AndOrDelimitedIdsRegex = new(@"^\d+(?:[,|]\d+)*$", RegexOptions.Compiled);
+
     public TmdbDiscoverSettingsValidator()
     {
         RuleFor(c => c.MinimumVoteAverage).Custom(ValidateVoteAverage);
 
-        RuleFor(c => c.WithKeywords).Matches(WithQueryRegex)
+        RuleFor(c => c.WithKeywords).Matches(AndOrDelimitedIdsRegex)
             .When(c => c.WithKeywords.IsNotNullOrWhiteSpace());
 
-        RuleFor(c => c.WithCompanies).Matches(WithQueryRegex)
+        RuleFor(c => c.WithCompanies).Matches(AndOrDelimitedIdsRegex)
             .When(c => c.WithCompanies.IsNotNullOrWhiteSpace());
     }
-
-    [GeneratedRegex(@"^\d+(?:[,|]\d+)*$")]
-    private static partial Regex WithQueryRegex { get; }
 
     private static void ValidateVoteAverage(string voteAverage, CustomContext context)
     {
