@@ -40,8 +40,8 @@ public class TmdbDiscoverImport : TmdbImportBase<TmdbDiscoverSettings>
             new TmdbDiscoverSettings
             {
                 MinimumVoteCount = "200",
-                Sort = (int)TmdbDiscoverSort.Vote_Average,
-                SortOrder = (int)TmdbDiscoverSortOrder.Descending
+                SortType = (int)TmdbDiscoverSortType.VoteAverage,
+                SortOrderType = (int)TmdbDiscoverSortOrderType.Descending
             });
     }
 }

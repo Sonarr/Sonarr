@@ -11,11 +11,11 @@ public class TmdbAccountRequestGenerator : TmdbRequestGeneratorBase<TmdbAccountS
 
     protected override void SetupSeriesRequestsBuilder(HttpRequestBuilder builder)
     {
-        builder.ResourceUrl = (TmdbAccountList)Settings.AccountList switch
+        builder.ResourceUrl = (TmdbAccountListType)Settings.AccountListType switch
         {
-            TmdbAccountList.Rated => $"4/account/{Settings.AccountId}/tv/rated",
-            TmdbAccountList.Recommended => $"4/account/{Settings.AccountId}/tv/recommendations",
-            TmdbAccountList.Watchlist => $"4/account/{Settings.AccountId}/tv/watchlist",
+            TmdbAccountListType.Rated => $"4/account/{Settings.AccountId}/tv/rated",
+            TmdbAccountListType.Recommended => $"4/account/{Settings.AccountId}/tv/recommendations",
+            TmdbAccountListType.Watchlist => $"4/account/{Settings.AccountId}/tv/watchlist",
             _ => $"4/account/{Settings.AccountId}/tv/favorites"
         };
     }

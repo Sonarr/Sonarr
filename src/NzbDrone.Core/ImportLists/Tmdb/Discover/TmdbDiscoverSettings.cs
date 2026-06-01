@@ -51,32 +51,32 @@ public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
     public TmdbDiscoverSettings()
         : base(Validator)
     {
-        Sort = (int)TmdbDiscoverSort.Popularity;
         OriginalLanguage = (int)TmdbLanguage.Any;
-        SortOrder = (int)TmdbDiscoverSortOrder.Descending;
+        SortType = (int)TmdbDiscoverSortType.Popularity;
+        SortOrderType = (int)TmdbDiscoverSortOrderType.Descending;
     }
 
-    [FieldDefinition(1, Label = "Original Language", Type = FieldType.Select, SelectOptions = typeof(TmdbLanguage))]
+    [FieldDefinition(1, Label = "ImportListsTmdbSettingsOriginalLanguage", HelpText  = "ImportListsTmdbSettingsOriginalLanguageHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbLanguage))]
     public int OriginalLanguage { get; set; }
 
-    [FieldDefinition(2, Label = "Sort", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSort))]
-    public int Sort { get; set; }
+    [FieldDefinition(2, Label = "ImportListsTmdbSettingsSortType", HelpText = "ImportListsTmdbSettingsSortTypeHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSortType))]
+    public int SortType { get; set; }
 
-    [FieldDefinition(3, Label = "Sort Order", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSortOrder))]
-    public int SortOrder { get; set; }
+    [FieldDefinition(3, Label = "ImportListsTmdbSettingsSortOrderType", HelpText = "ImportListsTmdbSettingsSortOrderTypeHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSortOrderType))]
+    public int SortOrderType { get; set; }
 
-    [FieldDefinition(4, Label = "Minimum Vote Average", Type = FieldType.Textbox, HelpText = "Filter series by minimum vote average.")]
+    [FieldDefinition(4, Label = "ImportListsTmdbSettingsMinimumVoteAverage", HelpText = "ImportListsTmdbSettingsMinimumVoteAverageHelpText", Type = FieldType.Textbox)]
     public string MinimumVoteAverage { get; set; }
 
-    [FieldDefinition(5, Label = "Minimum Vote Count", Type = FieldType.Textbox, HelpText = "Filter series by minimum vote count.")]
+    [FieldDefinition(5, Label = "ImportListsTmdbSettingsMinimumVoteCount", HelpText = "ImportListsTmdbSettingsMinimumVoteCountHelpText", Type = FieldType.Textbox)]
     public string MinimumVoteCount { get; set; }
 
-    [FieldDefinition(6, Label = "Company Ids", Type = FieldType.Textbox)]
-    public string WithCompanies { get; set; }
-
-    [FieldDefinition(7, Label = "Keyword Ids", Type = FieldType.Textbox)]
+    [FieldDefinition(6, Label = "ImportListsTmdbSettingsWithKeywords", HelpText = "ImportListsTmdbSettingsWithAdvancedQueryHelpText", Type = FieldType.Textbox)]
     public string WithKeywords { get; set; }
 
-    [FieldDefinition(8, Label = "Include Without First Air Dates", Type = FieldType.Checkbox, Advanced = true)]
+    [FieldDefinition(7, Label = "ImportListsTmdbSettingsWithCompanies", HelpText = "ImportListsTmdbSettingsWithAdvancedQueryHelpText", Type = FieldType.Textbox)]
+    public string WithCompanies { get; set; }
+
+    [FieldDefinition(8, Label = "ImportListsTmdbSettingsIncludeNullFirstAirDates", HelpText = "ImportListsTmdbSettingsIncludeNullFirstAirDatesHelpText", Type = FieldType.Checkbox, Advanced = true)]
     public bool IncludeNullFirstAirDates { get; set; }
 }

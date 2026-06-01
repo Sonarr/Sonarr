@@ -13,9 +13,9 @@ public class TmdbAccountSettings : TmdbSettingsBase<TmdbAccountSettings>
     public TmdbAccountSettings()
         : base(Validator)
     {
-        AccountList = (int)TmdbAccountList.Watchlist;
+        AccountListType = (int)TmdbAccountListType.Watchlist;
     }
 
-    [FieldDefinition(1, Label = "Account List Type", HelpText = "Select the list type of the account to import.", Type = FieldType.Select, SelectOptions = typeof(TmdbAccountList))]
-    public int AccountList { get; set; }
+    [FieldDefinition(1, Label = "ImportListsTmdbSettingsAccountListType", HelpText = "ImportListsTmdbSettingsAccountListTypeHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbAccountListType))]
+    public int AccountListType { get; set; }
 }
