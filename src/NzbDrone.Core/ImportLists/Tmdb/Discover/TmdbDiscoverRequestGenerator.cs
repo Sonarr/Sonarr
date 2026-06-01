@@ -10,7 +10,7 @@ public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscove
     {
     }
 
-    protected override void SetupSeriesRequestsBuilder(HttpRequestBuilder builder)
+    protected override HttpRequestBuilder CreateSeriesRequestsBuilder()
     {
         var originalLanguage = (TmdbLanguage)Settings.OriginalLanguage;
         var sortOrderString = Settings.SortOrderType == (int)TmdbDiscoverSortOrderType.Ascending ? "asc" : "desc";
@@ -25,7 +25,10 @@ public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscove
             _ => sortType.ToString().ToLowerInvariant()
         };
 
-        builder.Resource("3/discover/tv")
+        var builder = new HttpRequestBuilder(Settings.BaseUrl)
+            .Accept(HttpAccept.Json)
+            .SetHeader("Authorization", $"Bearer {Settings.AuthToken}")
+            .Resource("3/discover/tv")
             .AddQueryParam("include_null_first_air_dates", Settings.IncludeNullFirstAirDates)
             .AddQueryParam("sort_by", $"{sortString}.{sortOrderString}");
 
@@ -38,6 +41,8 @@ public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscove
         AddOrSkipQueryParam(builder, "vote_count.gte", Settings.MinimumVoteCount);
         AddOrSkipQueryParam(builder, "with_companies", Settings.WithCompanies);
         AddOrSkipQueryParam(builder, "with_keywords", Settings.WithKeywords);
+
+        return builder;
     }
 
     private static void AddOrSkipQueryParam(HttpRequestBuilder builder, string name, string value)

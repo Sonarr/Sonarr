@@ -23,15 +23,11 @@ public abstract class TmdbRequestGeneratorBase<TSettings> : IImportListRequestGe
         return pageableRequests;
     }
 
-    protected abstract void SetupSeriesRequestsBuilder(HttpRequestBuilder builder);
+    protected abstract HttpRequestBuilder CreateSeriesRequestsBuilder();
 
     private IEnumerable<ImportListRequest> GetSeriesRequests()
     {
-        var builder = new HttpRequestBuilder(Settings.BaseUrl)
-            .Accept(HttpAccept.Json)
-            .SetHeader("Authorization", $"Bearer {Settings.AuthToken}");
-
-        SetupSeriesRequestsBuilder(builder);
+        var builder = CreateSeriesRequestsBuilder();
         if (MaxPages > 0)
         {
             for (var i = 1; i <= MaxPages; i++)
