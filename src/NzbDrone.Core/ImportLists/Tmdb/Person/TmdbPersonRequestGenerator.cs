@@ -9,8 +9,11 @@ public class TmdbPersonRequestGenerator : TmdbRequestGeneratorBase<TmdbPersonSet
     {
     }
 
-    protected override void SetupSeriesRequestsBuilder(HttpRequestBuilder builder)
+    protected override HttpRequestBuilder CreateSeriesRequestsBuilder()
     {
-        builder.Resource($"3/person/{Settings.PersonId}/tv_credits");
+        return new HttpRequestBuilder(Settings.BaseUrl)
+            .Accept(HttpAccept.Json)
+            .SetHeader("Authorization", $"Bearer {Settings.AuthToken}")
+            .Resource($"3/person/{Settings.PersonId}/tv_credits");
     }
 }

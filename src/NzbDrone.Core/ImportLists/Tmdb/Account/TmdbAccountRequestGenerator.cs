@@ -9,8 +9,12 @@ public class TmdbAccountRequestGenerator : TmdbRequestGeneratorBase<TmdbAccountS
     {
     }
 
-    protected override void SetupSeriesRequestsBuilder(HttpRequestBuilder builder)
+    protected override HttpRequestBuilder CreateSeriesRequestsBuilder()
     {
+        var builder = new HttpRequestBuilder(Settings.BaseUrl)
+            .Accept(HttpAccept.Json)
+            .SetHeader("Authorization", $"Bearer {Settings.AuthToken}");
+
         builder.ResourceUrl = (TmdbAccountListType)Settings.AccountListType switch
         {
             TmdbAccountListType.Rated => $"4/account/{Settings.AccountId}/tv/rated",
@@ -18,5 +22,7 @@ public class TmdbAccountRequestGenerator : TmdbRequestGeneratorBase<TmdbAccountS
             TmdbAccountListType.Watchlist => $"4/account/{Settings.AccountId}/tv/watchlist",
             _ => $"4/account/{Settings.AccountId}/tv/favorites"
         };
+
+        return builder;
     }
 }
