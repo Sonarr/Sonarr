@@ -13,8 +13,17 @@ public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscove
     protected override void SetupSeriesRequestsBuilder(HttpRequestBuilder builder)
     {
         var originalLanguage = (TmdbLanguage)Settings.OriginalLanguage;
-        var sortString = ((TmdbDiscoverSort)Settings.Sort).ToString().ToLowerInvariant();
-        var sortOrderString = Settings.SortOrder == (int)TmdbDiscoverSortOrder.Ascending ? "asc" : "desc";
+        var sortOrderString = Settings.SortOrderType == (int)TmdbDiscoverSortOrderType.Ascending ? "asc" : "desc";
+
+        var sortType = (TmdbDiscoverSortType)Settings.SortType;
+        var sortString = sortType switch
+        {
+            TmdbDiscoverSortType.FirstAirDate => "first_air_date",
+            TmdbDiscoverSortType.OriginalName => "original_name",
+            TmdbDiscoverSortType.VoteAverage => "vote_average",
+            TmdbDiscoverSortType.VoteCount => "vote_count",
+            _ => sortType.ToString().ToLowerInvariant()
+        };
 
         builder.Resource("3/discover/tv")
             .AddQueryParam("include_null_first_air_dates", Settings.IncludeNullFirstAirDates)

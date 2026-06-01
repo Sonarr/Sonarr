@@ -11,8 +11,8 @@ public class TmdbPersonParser : TmdbParserBase<TmdbCreditsResource>
 
     public TmdbPersonParser(TmdbPersonSettings settings)
     {
-        _isIncludingCastCredit = settings.IsIncludingCastCredit;
-        _departments = GetWantedCrewDepartments(settings.IncludedCrewDepartmentCredits);
+        _isIncludingCastCredit = settings.IncludingCastCredit;
+        _departments = GetWantedCrewDepartments(settings.IncludedCrewDepartmentCreditTypes);
     }
 
     protected override IEnumerable<ImportListItemInfo> ParseResponse(TmdbCreditsResource resource)
@@ -36,11 +36,11 @@ public class TmdbPersonParser : TmdbParserBase<TmdbCreditsResource>
     private static HashSet<string> GetWantedCrewDepartments(IEnumerable<int> includedCrewDepartmentCredits)
     {
         return includedCrewDepartmentCredits
-            .Cast<TmdbCrewDepartment>()
+            .Cast<TmdbCrewDepartmentType>()
             .Select(crewDepartment => crewDepartment switch
             {
-                TmdbCrewDepartment.CostumeMakeup => "Costume & Makeup",
-                TmdbCrewDepartment.VisualEffects => "Visual Effects",
+                TmdbCrewDepartmentType.CostumeMakeup => "Costume & Makeup",
+                TmdbCrewDepartmentType.VisualEffects => "Visual Effects",
                 _ => crewDepartment.ToString()
             }).ToHashSet();
     }
