@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using NLog;
 using NzbDrone.Common.Cloud;
 using NzbDrone.Common.Http;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
@@ -50,7 +50,7 @@ public abstract class TmdbImportBase<TSettings> : HttpImportListBase<TSettings>
                 .Build();
 
             var response = _httpClient.Execute(request);
-            var resource = JsonSerializer.Deserialize<RequestTokenResource>(response.Content);
+            var resource = STJson.Deserialize<RequestTokenResource>(response.Content);
 
             request = new HttpRequestBuilder(TmdbAuthUserApproval)
                 .AddQueryParam("request_token", resource.RequestToken)
@@ -72,9 +72,7 @@ public abstract class TmdbImportBase<TSettings> : HttpImportListBase<TSettings>
                 .Build();
 
             var response = _httpClient.Execute(request);
-            var resource = JsonSerializer.Deserialize<AccessTokenResource>(response.Content);
-
-            return resource;
+            return STJson.Deserialize<AccessTokenResource>(response.Content);
         }
 
         return new { };
