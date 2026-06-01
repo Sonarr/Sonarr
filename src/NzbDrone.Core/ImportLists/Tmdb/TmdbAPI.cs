@@ -4,42 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace NzbDrone.Core.ImportLists.Tmdb;
 
-public class RequestTokenResource
-{
-    [JsonPropertyName("success")]
-    public bool IsSuccess { get; init; }
-
-    [JsonPropertyName("statusCode")]
-    public int StatusCode { get; init; }
-
-    [JsonPropertyName("statusMessage")]
-    public string StatusMessage { get; init; }
-
-    [JsonPropertyName("requestToken")]
-    public string RequestToken { get; init; }
-}
-
-public class AccessTokenResource
-{
-    [JsonPropertyName("success")]
-    public bool IsSuccess { get; init; }
-
-    [JsonPropertyName("statusCode")]
-    public int StatusCode { get; init; }
-
-    [JsonPropertyName("statusMessage")]
-    public string StatusMessage { get; init; }
-
-    [JsonPropertyName("accountId")]
-    public string AccountId { get; init; }
-
-    [JsonPropertyName("accessToken")]
-    public string AccessToken { get; init; }
-
-    [JsonIgnore]
-    public string AuthToken => AccessToken;
-}
-
 [DebuggerDisplay("Page: {Page}/{TotalPages}, Page Results: {Results.Count,n0}")]
 public class TmdbPagedResource<TPagedResult>
     where TPagedResult : new()
