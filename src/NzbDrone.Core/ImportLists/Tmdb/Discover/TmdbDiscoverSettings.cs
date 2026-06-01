@@ -55,9 +55,6 @@ public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
         SortOrder = (int)TmdbDiscoverSortOrder.Descending;
     }
 
-    [FieldDefinition(1, Label = "Include Adult", Type = FieldType.Checkbox, Advanced = true)]
-    public bool IncludeAdult { get; set; }
-
     [FieldDefinition(2, Label = "Include Without First Air Dates", Type = FieldType.Checkbox, Advanced = true)]
     public bool IncludeNullFirstAirDates { get; set; }
 

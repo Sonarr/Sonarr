@@ -17,7 +17,6 @@ public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscove
         var sortOrderString = Settings.SortOrder == (int)TmdbDiscoverSortOrder.Ascending ? "asc" : "desc";
 
         builder.Resource("3/discover/tv")
-            .AddQueryParam("include_adult", Settings.IncludeAdult)
             .AddQueryParam("include_null_first_air_dates", Settings.IncludeNullFirstAirDates)
             .AddQueryParam("sort_by", $"{sortString}.{sortOrderString}");
 
