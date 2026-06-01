@@ -37,9 +37,9 @@ public class TmdbListSettings : TmdbSettingsBase<TmdbListSettings>
     {
     }
 
-    [FieldDefinition(1, Label = "Account List", HelpText = "Optionally, select one of the following lists belonging to your account.", Type = FieldType.Select, SelectOptionsProviderAction = "getAccountLists", Advanced = true)]
+    [FieldDefinition(1, Label = "ImportListsTmdbSettingsAccountListId", HelpText = "ImportListsTmdbSettingsAccountListIdHelpText", Type = FieldType.Select, SelectOptionsProviderAction = "getAccountLists", Advanced = true)]
     public string AccountListId { get; set; }
 
-    [FieldDefinition(2, Label = "List Id", HelpText = "The id of the list to import.")]
+    [FieldDefinition(2, Label = "ImportListsTmdbSettingsListId", HelpText = "ImportListsTmdbSettingsListIdHelpText")]
     public string ListId { get; set; }
 }
