@@ -10,9 +10,11 @@ public class TmdbListRequestGenerator : TmdbRequestGeneratorBase<TmdbListSetting
     {
     }
 
-    protected override void SetupSeriesRequestsBuilder(HttpRequestBuilder builder)
+    protected override HttpRequestBuilder CreateSeriesRequestsBuilder()
     {
-        builder.ResourceUrl = $"4/list/{(Settings.ListId.IsNotNullOrWhiteSpace()
-            ? Settings.ListId : Settings.AccountListId)}";
+        return new HttpRequestBuilder(Settings.BaseUrl)
+            .Accept(HttpAccept.Json)
+            .SetHeader("Authorization", $"Bearer {Settings.AuthToken}")
+            .Resource($"4/list/{(Settings.ListId.IsNotNullOrWhiteSpace() ? Settings.ListId : Settings.AccountListId)}");
     }
 }
