@@ -6,19 +6,19 @@ namespace NzbDrone.Core.ImportLists.Tmdb.Person;
 
 public class TmdbPersonParser : TmdbParserBase<TmdbCreditsResource>
 {
-    private readonly bool _isIncludingCastCredit;
+    private readonly bool _isIncludingCastCredits;
     private readonly HashSet<string> _departments;
 
     public TmdbPersonParser(TmdbPersonSettings settings)
     {
-        _isIncludingCastCredit = settings.IncludingCastCredit;
-        _departments = GetWantedCrewDepartments(settings.IncludedCrewDepartmentCreditTypes);
+        _isIncludingCastCredits = settings.IncludingCastCredits;
+        _departments = GetDepartmentNames(settings.IncludeDepartmentTypes);
     }
 
     protected override IEnumerable<ImportListItemInfo> ParseResponse(TmdbCreditsResource resource)
     {
         var items = Enumerable.Empty<ImportListItemInfo>();
-        if (_isIncludingCastCredit && resource.Cast.Count > 0)
+        if (_isIncludingCastCredits && resource.Cast.Count > 0)
         {
             items = resource.Cast.Select(AsImportable);
         }
@@ -33,15 +33,15 @@ public class TmdbPersonParser : TmdbParserBase<TmdbCreditsResource>
         return items;
     }
 
-    private static HashSet<string> GetWantedCrewDepartments(IEnumerable<int> includedCrewDepartmentCredits)
+    private static HashSet<string> GetDepartmentNames(IEnumerable<int> departmentTypes)
     {
-        return includedCrewDepartmentCredits
-            .Cast<TmdbCrewDepartmentType>()
-            .Select(crewDepartment => crewDepartment switch
+        return departmentTypes
+            .Cast<TmdbDepartmentType>()
+            .Select(department => department switch
             {
-                TmdbCrewDepartmentType.CostumeMakeup => "Costume & Makeup",
-                TmdbCrewDepartmentType.VisualEffects => "Visual Effects",
-                _ => crewDepartment.ToString()
+                TmdbDepartmentType.CostumeMakeup => "Costume & Makeup",
+                TmdbDepartmentType.VisualEffects => "Visual Effects",
+                _ => department.ToString()
             }).ToHashSet();
     }
 }
