@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text.Json;
 using NLog;
 using NzbDrone.Common.Cloud;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
@@ -74,7 +74,7 @@ public class TmdbListImport : TmdbImportBase<TmdbListSettings>
             var request = new ImportListRequest(builder.Build());
 
             var response = FetchImportListResponse(request);
-            var resource = JsonSerializer.Deserialize<TmdbPagedResource<TmdbAccountListResource>>(response.Content);
+            var resource = STJson.Deserialize<TmdbPagedResource<TmdbAccountListResource>>(response.Content);
 
             options.AddRange(resource.Results
                 .Select(r => new FieldSelectStringOption
