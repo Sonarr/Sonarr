@@ -30,6 +30,6 @@ public class TmdbAccountImport : TmdbImportBase<TmdbAccountSettings>
 
     public override IImportListRequestGenerator GetRequestGenerator()
     {
-        return new TmdbAccountRequestGenerator(Settings);
+        return new TmdbAccountRequestGenerator(Settings, 10);
     }
 }

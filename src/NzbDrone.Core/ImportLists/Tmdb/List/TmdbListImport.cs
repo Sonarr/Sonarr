@@ -46,7 +46,7 @@ public class TmdbListImport : TmdbImportBase<TmdbListSettings>
 
     public override IImportListRequestGenerator GetRequestGenerator()
     {
-        return new TmdbListRequestGenerator(Settings);
+        return new TmdbListRequestGenerator(Settings, 10);
     }
 
     private List<FieldSelectStringOption> GetAccountListOptions()

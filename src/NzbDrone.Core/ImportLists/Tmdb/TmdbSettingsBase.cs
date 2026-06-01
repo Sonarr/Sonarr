@@ -29,8 +29,6 @@ public abstract class TmdbSettingsBase<TSettings> : ImportListSettingsBase<TSett
         SignIn = "startOAuth";
     }
 
-    public virtual int MaxPages { get; set; } = 10;
-
     public override string BaseUrl { get; set; } = "https://api.themoviedb.org";
 
     [FieldDefinition(0, Label = "ImportListsTmdbSettingsAccountId", Type = FieldType.Textbox, Hidden = HiddenType.Hidden, Advanced = true)]
