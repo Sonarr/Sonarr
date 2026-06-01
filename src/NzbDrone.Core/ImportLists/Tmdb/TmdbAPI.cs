@@ -8,10 +8,8 @@ namespace NzbDrone.Core.ImportLists.Tmdb;
 public class TmdbPagedResource<TPagedResult>
     where TPagedResult : new()
 {
-    [JsonPropertyName("page")]
     public int Page { get; init; }
 
-    [JsonPropertyName("results")]
     public IReadOnlyList<TPagedResult> Results { get; init; }
 
     [JsonPropertyName("total_pages")]
@@ -35,13 +33,11 @@ public class TmdbAccountListResource
     [JsonPropertyName("created_at")]
     public string CreatedAt { get; init; }
 
-    [JsonPropertyName("description")]
     public string Description { get; init; }
 
     [JsonPropertyName("featured")]
     public int FeaturedCount { get; init; }
 
-    [JsonPropertyName("id")]
     public int Id { get; init; }
 
     [JsonPropertyName("iso_3166_1")]
@@ -50,19 +46,15 @@ public class TmdbAccountListResource
     [JsonPropertyName("iso_639_1")]
     public string LanguageCode { get; init; }
 
-    [JsonPropertyName("name")]
     public string Name { get; init; }
 
     [JsonPropertyName("number_of_items")]
     public int TotalItemsCount { get; init; }
 
-    [JsonPropertyName("public")]
     public int Public { get; init; }
 
-    [JsonPropertyName("revenue")]
     public long Revenue { get; init; }
 
-    [JsonPropertyName("runtime")]
     public string Runtime { get; init; }
 
     [JsonPropertyName("sort_by")]
@@ -75,7 +67,6 @@ public class TmdbAccountListResource
 [DebuggerDisplay("Name: {Name}, Id: {Id}, Language: {OriginalLanguage}")]
 public class TmdbMediaResource
 {
-    [JsonPropertyName("adult")]
     public bool Adult { get; init; }
 
     [JsonPropertyName("backdrop_path")]
@@ -84,10 +75,8 @@ public class TmdbMediaResource
     [JsonPropertyName("genre_ids")]
     public IReadOnlyList<int> GenreIds { get; init; }
 
-    [JsonPropertyName("id")]
     public int Id { get; init; }
 
-    [JsonPropertyName("name")]
     public string Name { get; init; }
 
     [JsonPropertyName("origin_country")]
@@ -99,10 +88,8 @@ public class TmdbMediaResource
     [JsonPropertyName("original_name")]
     public string OriginalName { get; init; }
 
-    [JsonPropertyName("overview")]
     public string Overview { get; init; }
 
-    [JsonPropertyName("popularity")]
     public float Popularity { get; init; }
 
     [JsonPropertyName("poster_path")]
@@ -114,7 +101,6 @@ public class TmdbMediaResource
     [JsonPropertyName("first_air_date")]
     public string FirstAirDate { get; init; }
 
-    [JsonPropertyName("softcore")]
     public bool Softcore { get; init; }
 
     [JsonPropertyName("vote_average")]
@@ -127,19 +113,15 @@ public class TmdbMediaResource
 [DebuggerDisplay("Id: {Id}, Cast: {Cast.Count,n0}, Crew: {Crew.Count,n0}")]
 public class TmdbCreditsResource
 {
-    [JsonPropertyName("id")]
     public int Id { get; init; }
 
-    [JsonPropertyName("cast")]
     public IReadOnlyList<TmdbCastResource> Cast { get; init; }
 
-    [JsonPropertyName("crew")]
     public IReadOnlyList<TmdbCrewResource> Crew { get; init; }
 }
 
 public class TmdbCastResource : TmdbMediaResource
 {
-    [JsonPropertyName("character")]
     public string Character { get; init; }
 
     [JsonPropertyName("credit_id")]
@@ -154,10 +136,8 @@ public class TmdbCastResource : TmdbMediaResource
 
 public class TmdbCrewResource : TmdbMediaResource
 {
-    [JsonPropertyName("job")]
     public string Job { get; init; }
 
-    [JsonPropertyName("department")]
     public string Department { get; init; }
 
     [JsonPropertyName("credit_id")]
