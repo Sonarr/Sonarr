@@ -8,6 +8,7 @@ namespace NzbDrone.Core.ImportLists.Tmdb.Discover;
 
 public class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDiscoverSettings>
 {
+    private static readonly Regex AndDelimitedIdsRegex = new(@"^\d+(?:,\d+)*$", RegexOptions.Compiled);
     private static readonly Regex AndOrDelimitedIdsRegex = new(@"^\d+(?:[,|]\d+)*$", RegexOptions.Compiled);
 
     public TmdbDiscoverSettingsValidator()
@@ -19,6 +20,9 @@ public class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDisco
 
         RuleFor(c => c.WithCompanies).Matches(AndOrDelimitedIdsRegex)
             .When(c => c.WithCompanies.IsNotNullOrWhiteSpace());
+
+        RuleFor(c => c.WithNetworks).Matches(AndDelimitedIdsRegex)
+            .When(c => c.WithNetworks.IsNotNullOrWhiteSpace());
     }
 
     private static void ValidateVoteAverage(string voteAverage, CustomContext context)
@@ -70,12 +74,15 @@ public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
     [FieldDefinition(5, Label = "ImportListsTmdbSettingsMinimumVoteCount", HelpText = "ImportListsTmdbSettingsMinimumVoteCountHelpText", Type = FieldType.Textbox)]
     public string MinimumVoteCount { get; set; }
 
-    [FieldDefinition(6, Label = "ImportListsTmdbSettingsWithKeywords", HelpText = "ImportListsTmdbSettingsWithAdvancedQueryHelpText", Type = FieldType.Textbox)]
+    [FieldDefinition(6, Label = "ImportListsTmdbSettingsWithKeywords", HelpText = "ImportListsTmdbSettingsAndOrDelimitedIdsHelpText", Type = FieldType.Textbox)]
     public string WithKeywords { get; set; }
 
-    [FieldDefinition(7, Label = "ImportListsTmdbSettingsWithCompanies", HelpText = "ImportListsTmdbSettingsWithAdvancedQueryHelpText", Type = FieldType.Textbox)]
+    [FieldDefinition(7, Label = "ImportListsTmdbSettingsWithCompanies", HelpText = "ImportListsTmdbSettingsAndOrDelimitedIdsHelpText", Type = FieldType.Textbox)]
     public string WithCompanies { get; set; }
 
-    [FieldDefinition(8, Label = "ImportListsTmdbSettingsIncludeNullFirstAirDates", HelpText = "ImportListsTmdbSettingsIncludeNullFirstAirDatesHelpText", Type = FieldType.Checkbox, Advanced = true)]
+    [FieldDefinition(8, Label = "ImportListsTmdbSettingsWithNetworks", HelpText = "ImportListsTmdbSettingsAndDelimitedIdsHelpText", Type = FieldType.Textbox)]
+    public string WithNetworks { get; set; }
+
+    [FieldDefinition(9, Label = "ImportListsTmdbSettingsIncludeNullFirstAirDates", HelpText = "ImportListsTmdbSettingsIncludeNullFirstAirDatesHelpText", Type = FieldType.Checkbox, Advanced = true)]
     public bool IncludeNullFirstAirDates { get; set; }
 }

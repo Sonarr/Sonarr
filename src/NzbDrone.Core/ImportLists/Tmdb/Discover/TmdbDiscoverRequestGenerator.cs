@@ -41,6 +41,7 @@ public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscove
         AddOrSkipQueryParam(builder, "vote_count.gte", Settings.MinimumVoteCount);
         AddOrSkipQueryParam(builder, "with_companies", Settings.WithCompanies);
         AddOrSkipQueryParam(builder, "with_keywords", Settings.WithKeywords);
+        AddOrSkipQueryParam(builder, "with_networks", Settings.WithNetworks);
 
         return builder;
     }
