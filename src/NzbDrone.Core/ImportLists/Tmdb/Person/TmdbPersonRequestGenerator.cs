@@ -5,7 +5,7 @@ namespace NzbDrone.Core.ImportLists.Tmdb.Person;
 public class TmdbPersonRequestGenerator : TmdbRequestGeneratorBase<TmdbPersonSettings>
 {
     public TmdbPersonRequestGenerator(TmdbPersonSettings settings)
-        : base(settings)
+        : base(settings, 0)
     {
     }
 
