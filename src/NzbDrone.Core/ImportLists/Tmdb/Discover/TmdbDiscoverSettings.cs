@@ -52,30 +52,31 @@ public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
         : base(Validator)
     {
         Sort = (int)TmdbDiscoverSort.Popularity;
+        OriginalLanguage = (int)TmdbLanguage.Any;
         SortOrder = (int)TmdbDiscoverSortOrder.Descending;
     }
 
-    [FieldDefinition(2, Label = "Include Without First Air Dates", Type = FieldType.Checkbox, Advanced = true)]
-    public bool IncludeNullFirstAirDates { get; set; }
+    [FieldDefinition(1, Label = "Original Language", Type = FieldType.Select, SelectOptions = typeof(TmdbLanguage))]
+    public int OriginalLanguage { get; set; }
 
-    [FieldDefinition(3, Label = "Original Language", Type = FieldType.Select, SelectOptions = typeof(TmdbLanguageOptionsConverter))]
-    public int WithOriginalLanguageCode { get; set; }
-
-    [FieldDefinition(4, Label = "Sort", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSort))]
+    [FieldDefinition(2, Label = "Sort", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSort))]
     public int Sort { get; set; }
 
-    [FieldDefinition(5, Label = "Sort Order", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSortOrder))]
+    [FieldDefinition(3, Label = "Sort Order", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSortOrder))]
     public int SortOrder { get; set; }
 
-    [FieldDefinition(6, Label = "Minimum Vote Average", Type = FieldType.Textbox, HelpText = "Filter series by minimum vote average.")]
+    [FieldDefinition(4, Label = "Minimum Vote Average", Type = FieldType.Textbox, HelpText = "Filter series by minimum vote average.")]
     public string MinimumVoteAverage { get; set; }
 
-    [FieldDefinition(7, Label = "Minimum Vote Count", Type = FieldType.Textbox, HelpText = "Filter series by minimum vote count.")]
+    [FieldDefinition(5, Label = "Minimum Vote Count", Type = FieldType.Textbox, HelpText = "Filter series by minimum vote count.")]
     public string MinimumVoteCount { get; set; }
 
-    [FieldDefinition(8, Label = "Company Ids", Type = FieldType.Textbox)]
+    [FieldDefinition(6, Label = "Company Ids", Type = FieldType.Textbox)]
     public string WithCompanies { get; set; }
 
-    [FieldDefinition(9, Label = "Keyword Ids", Type = FieldType.Textbox)]
+    [FieldDefinition(7, Label = "Keyword Ids", Type = FieldType.Textbox)]
     public string WithKeywords { get; set; }
+
+    [FieldDefinition(8, Label = "Include Without First Air Dates", Type = FieldType.Checkbox, Advanced = true)]
+    public bool IncludeNullFirstAirDates { get; set; }
 }

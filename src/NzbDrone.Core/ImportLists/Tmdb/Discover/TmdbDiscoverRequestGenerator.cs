@@ -1,4 +1,3 @@
-using System.Globalization;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 
@@ -13,17 +12,17 @@ public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscove
 
     protected override void SetupSeriesRequestsBuilder(HttpRequestBuilder builder)
     {
-        var sortString = ((TmdbDiscoverSort)Settings.Sort).ToString().ToLower(CultureInfo.InvariantCulture);
+        var originalLanguage = (TmdbLanguage)Settings.OriginalLanguage;
+        var sortString = ((TmdbDiscoverSort)Settings.Sort).ToString().ToLowerInvariant();
         var sortOrderString = Settings.SortOrder == (int)TmdbDiscoverSortOrder.Ascending ? "asc" : "desc";
 
         builder.Resource("3/discover/tv")
             .AddQueryParam("include_null_first_air_dates", Settings.IncludeNullFirstAirDates)
             .AddQueryParam("sort_by", $"{sortString}.{sortOrderString}");
 
-        if (Settings.WithOriginalLanguageCode != 0)
+        if (originalLanguage != TmdbLanguage.Any)
         {
-            builder.AddQueryParam("with_original_language",
-                TmdbLanguageOptionsConverter.UnpackLanguage(Settings.WithOriginalLanguageCode));
+            builder.AddQueryParam("with_original_language", originalLanguage.ToString().ToLowerInvariant());
         }
 
         AddOrSkipQueryParam(builder, "vote_average.gte", Settings.MinimumVoteAverage);
