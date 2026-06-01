@@ -5,8 +5,8 @@ namespace NzbDrone.Core.ImportLists.Tmdb.Discover;
 
 public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscoverSettings>
 {
-    public TmdbDiscoverRequestGenerator(TmdbDiscoverSettings settings)
-        : base(settings)
+    public TmdbDiscoverRequestGenerator(TmdbDiscoverSettings settings, int maxPages)
+        : base(settings, maxPages)
     {
     }
 

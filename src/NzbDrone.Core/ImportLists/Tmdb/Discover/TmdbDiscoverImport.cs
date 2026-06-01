@@ -31,7 +31,7 @@ public class TmdbDiscoverImport : TmdbImportBase<TmdbDiscoverSettings>
 
     public override IImportListRequestGenerator GetRequestGenerator()
     {
-        return new TmdbDiscoverRequestGenerator(Settings);
+        return new TmdbDiscoverRequestGenerator(Settings, 10);
     }
 
     protected override IEnumerable<KeyValuePair<string, TmdbDiscoverSettings>> GetPresetDefinitionPairs()

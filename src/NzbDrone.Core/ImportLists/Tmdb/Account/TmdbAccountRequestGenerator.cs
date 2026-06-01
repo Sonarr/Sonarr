@@ -4,8 +4,8 @@ namespace NzbDrone.Core.ImportLists.Tmdb.Account;
 
 public class TmdbAccountRequestGenerator : TmdbRequestGeneratorBase<TmdbAccountSettings>
 {
-    public TmdbAccountRequestGenerator(TmdbAccountSettings settings)
-        : base(settings)
+    public TmdbAccountRequestGenerator(TmdbAccountSettings settings, int maxPages)
+        : base(settings, maxPages)
     {
     }
 

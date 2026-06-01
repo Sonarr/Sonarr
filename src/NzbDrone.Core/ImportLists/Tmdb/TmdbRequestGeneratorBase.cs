@@ -6,10 +6,13 @@ namespace NzbDrone.Core.ImportLists.Tmdb;
 public abstract class TmdbRequestGeneratorBase<TSettings> : IImportListRequestGenerator
     where TSettings : TmdbSettingsBase<TSettings>
 {
-    protected TmdbRequestGeneratorBase(TSettings settings)
+    protected TmdbRequestGeneratorBase(TSettings settings, int maxPages)
     {
         Settings = settings;
+        MaxPages = maxPages;
     }
+
+    protected int MaxPages { get; }
 
     protected TSettings Settings { get; }
 
@@ -29,9 +32,9 @@ public abstract class TmdbRequestGeneratorBase<TSettings> : IImportListRequestGe
             .SetHeader("Authorization", $"Bearer {Settings.AuthToken}");
 
         SetupSeriesRequestsBuilder(builder);
-        if (Settings.MaxPages > 0)
+        if (MaxPages > 0)
         {
-            for (var i = 1; i <= Settings.MaxPages; i++)
+            for (var i = 1; i <= MaxPages; i++)
             {
                 builder.AddQueryParam("page", i, true);
                 yield return new ImportListRequest(builder.Build());

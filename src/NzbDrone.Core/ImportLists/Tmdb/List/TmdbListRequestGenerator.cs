@@ -5,8 +5,8 @@ namespace NzbDrone.Core.ImportLists.Tmdb.List;
 
 public class TmdbListRequestGenerator : TmdbRequestGeneratorBase<TmdbListSettings>
 {
-    public TmdbListRequestGenerator(TmdbListSettings settings)
-        : base(settings)
+    public TmdbListRequestGenerator(TmdbListSettings settings, int maxPages)
+        : base(settings, maxPages)
     {
     }
 
