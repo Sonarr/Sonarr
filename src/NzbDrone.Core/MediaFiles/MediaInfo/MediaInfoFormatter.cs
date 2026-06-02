@@ -191,6 +191,16 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return GetSceneNameMatch(sceneName, "HEVC", "x265", "h265");
             }
 
+            if (videoCodecId == "x266")
+            {
+                return "x266";
+            }
+
+            if (videoFormat == "vvc")
+            {
+                return GetSceneNameMatch(sceneName, "VVC", "x266", "h266");
+            }
+
             if (videoFormat == "mpeg2video")
             {
                 return "MPEG2";
