@@ -99,12 +99,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                         }
 
                         // Prefer the release type from the grabbed history
-                        if (Enum.TryParse(grabHistory?.Data.GetValueOrDefault("releaseType"), true, out ReleaseType releaseType))
+                        if (Enum.TryParse(grabHistory?.Data.GetValueOrDefault("releaseType"), true, out ReleaseType releaseType) &&
+                            releaseType != ReleaseType.Unknown)
                         {
-                            if (releaseType != ReleaseType.Unknown)
-                            {
-                                episodeFile.ReleaseType = releaseType;
-                            }
+                            episodeFile.ReleaseType = releaseType;
                         }
                     }
 
