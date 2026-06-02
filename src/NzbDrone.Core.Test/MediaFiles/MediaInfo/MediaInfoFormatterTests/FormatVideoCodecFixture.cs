@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         }
 
         [Test]
-        public void should_return_VideoFormat_by_default()
+        public void should_return_video_format_by_default()
         {
             var mediaInfoModel = new MediaInfoModel
             {
@@ -77,6 +77,12 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
             };
 
             MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, null).Should().Be(mediaInfoModel.VideoFormat);
+        }
+
+        [Test]
+        public void should_return_null_if_video_stream_is_null()
+        {
+            MediaInfoFormatter.FormatVideoCodec(null, null).Should().Be(string.Empty);
         }
     }
 }
