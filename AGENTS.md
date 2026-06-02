@@ -12,3 +12,6 @@
 - Land ongoing fork work on `develop` unless the user explicitly asks for a different target.
 - Treat `master` as the production or release branch.
 - If work changes release or deploy behavior, update any nearby workflow or release docs in the same change.
+## Git worktrees
+
+Worktree directory preference: create git worktrees under `~/worktrees/<repo>/<branch>`, never inside this clone or `~/Documents/Repos.nosync/`. Merged/clean worktrees are auto-pruned weekly by `infra/scripts/prune-worktrees.sh` (launchd `dev.staros.worktree-janitor`).
