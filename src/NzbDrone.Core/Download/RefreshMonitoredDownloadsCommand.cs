@@ -4,5 +4,6 @@ namespace NzbDrone.Core.Download
 {
     public class RefreshMonitoredDownloadsCommand : Command
     {
+        public override bool BypassQueueLimit => true;
     }
 }

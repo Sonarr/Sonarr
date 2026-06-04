@@ -8,6 +8,8 @@ namespace NzbDrone.Core.Messaging.Commands
 {
     public class CommandQueue : IEnumerable
     {
+        private const int QueueLimit = 3;
+
         private readonly object _mutex = new object();
         private readonly List<CommandModel> _items;
 
@@ -160,6 +162,26 @@ namespace NzbDrone.Core.Messaging.Commands
                     var startedCommands = _items.Where(c => c.Status == CommandStatus.Started)
                                                 .ToList();
 
+                    var improvedQueue = bool.TryParse(Environment.GetEnvironmentVariable("IMPROVE_QUEUE_RESPONSIVENESS"), out var bypassEnabled) && bypassEnabled;
+
+                    if (improvedQueue)
+                    {
+                        var bypassCommand = _items.Where(c => c.Status == CommandStatus.Queued && c.Body.BypassQueueLimit)
+                                                  .OrderByDescending(c => c.Priority)
+                                                  .ThenBy(c => c.QueuedAt)
+                                                  .FirstOrDefault();
+
+                        if (bypassCommand != null &&
+                            !startedCommands.Any(c => c.Body.IsExclusive) &&
+                            !(bypassCommand.Body.RequiresDiskAccess && startedCommands.Any(c => c.Body.RequiresDiskAccess)))
+                        {
+                            bypassCommand.StartedAt = DateTime.UtcNow;
+                            bypassCommand.Status = CommandStatus.Started;
+                            item = bypassCommand;
+                            return true;
+                        }
+                    }
+
                     var localItem = _items.Where(c =>
                                           {
                                               // If an executing command requires disk access don't return a command that
@@ -203,6 +225,12 @@ namespace NzbDrone.Core.Messaging.Commands
                     // If the next command to execute is exclusive wait for executing commands to complete.
                     // This will prevent other tasks from starting so the exclusive task executes in the order it should.
                     else if (localItem.Body.IsExclusive && startedCommands.Any())
+                    {
+                        rval = false;
+                    }
+
+                    // Non-bypass commands can only execute if there are fewer than QueueLimit non-bypass commands already running
+                    else if (improvedQueue && !localItem.Body.BypassQueueLimit && startedCommands.Count(c => !c.Body.BypassQueueLimit) >= QueueLimit)
                     {
                         rval = false;
                     }

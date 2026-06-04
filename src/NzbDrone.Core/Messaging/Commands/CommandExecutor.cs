@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Messaging.Commands
     public class CommandExecutor : IHandle<ApplicationStartedEvent>,
                                    IHandle<ApplicationShutdownRequested>
     {
-        private const int THREAD_LIMIT = 3;
+        private static readonly int THREAD_LIMIT = bool.TryParse(Environment.GetEnvironmentVariable("IMPROVE_QUEUE_RESPONSIVENESS"), out var enabled) && enabled ? 6 : 3;
 
         private readonly Logger _logger;
         private readonly IServiceFactory _serviceFactory;
