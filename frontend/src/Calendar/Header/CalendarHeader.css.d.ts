@@ -3,8 +3,16 @@
 interface CssExports {
   'header': string;
   'loading': string;
+  'monthButton': string;
+  'monthButtonActive': string;
+  'monthGrid': string;
+  'monthPicker': string;
+  'monthPickerPortal': string;
+  'monthPickerYear': string;
   'navigationButtons': string;
+  'titleChevron': string;
   'titleDesktop': string;
+  'titleLink': string;
   'titleMobile': string;
   'todayButton': string;
   'viewButtonsContainer': string;

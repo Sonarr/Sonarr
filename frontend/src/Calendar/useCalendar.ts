@@ -197,6 +197,10 @@ export const goToToday = () => {
   setCalendarTime(moment());
 };
 
+export const goToDate = (date: moment.Moment) => {
+  setCalendarTime(date);
+};
+
 export const goToPreviousRange = () => {
   const { dayCount, time } = calendarStore.getState();
   const view = getCalendarOption('view');

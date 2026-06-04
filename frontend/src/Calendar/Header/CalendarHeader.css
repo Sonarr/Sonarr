@@ -42,6 +42,68 @@
   margin-right: 10px;
 }
 
+.titleLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+    text-decoration: none;
+  }
+}
+
+.titleChevron {
+  opacity: 0.6;
+}
+
+.monthPickerPortal {
+  z-index: $popperZIndex;
+}
+
+.monthPicker {
+  background-color: var(--toolbarMenuItemBackgroundColor);
+  padding: 10px;
+  min-width: 180px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.monthPickerYear {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: bold;
+  padding: 4px 2px;
+}
+
+.monthGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+.monthButton,
+.monthButtonActive {
+  display: block;
+  padding: 6px 4px;
+  text-align: center;
+  color: var(--menuItemColor);
+
+  &:hover {
+    background-color: var(--toolbarMenuItemHoverBackgroundColor);
+    color: var(--menuItemHoverColor);
+    text-decoration: none;
+  }
+}
+
+.monthButtonActive {
+  background-color: var(--toolbarMenuItemHoverBackgroundColor);
+  color: var(--menuItemHoverColor);
+  font-weight: bold;
+}
+
 @media only screen and (max-width: $breakpointSmall) {
   .navigationButtons {
     flex: 1 0 50%;

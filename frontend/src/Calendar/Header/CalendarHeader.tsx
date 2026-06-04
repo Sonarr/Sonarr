@@ -1,5 +1,14 @@
+import {
+  autoUpdate,
+  flip,
+  FloatingPortal,
+  shift,
+  useDismiss,
+  useFloating,
+  useInteractions,
+} from '@floating-ui/react';
 import moment from 'moment';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useAppDimensions } from 'App/appStore';
 import {
   setCalendarOption,
@@ -7,6 +16,7 @@ import {
 } from 'Calendar/calendarOptionsStore';
 import { CalendarView } from 'Calendar/calendarViews';
 import useCalendar, {
+  goToDate,
   goToNextRange,
   goToPreviousRange,
   goToToday,
@@ -15,6 +25,7 @@ import useCalendar, {
 } from 'Calendar/useCalendar';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
+import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Menu from 'Components/Menu/Menu';
 import MenuButton from 'Components/Menu/MenuButton';
@@ -26,6 +37,43 @@ import translate from 'Utilities/String/translate';
 import CalendarHeaderViewButton from './CalendarHeaderViewButton';
 import styles from './CalendarHeader.css';
 
+const MONTH_NAMES = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+interface MonthButtonProps {
+  name: string;
+  index: number;
+  isActive: boolean;
+  onPress: (month: number) => void;
+}
+
+function MonthButton({ name, index, isActive, onPress }: MonthButtonProps) {
+  const handlePress = useCallback(() => {
+    onPress(index);
+  }, [index, onPress]);
+
+  return (
+    <Link
+      className={isActive ? styles.monthButtonActive : styles.monthButton}
+      onPress={handlePress}
+    >
+      {name}
+    </Link>
+  );
+}
+
 function CalendarHeader() {
   const { isFetching } = useCalendar();
   const view = useCalendarOption('view');
@@ -35,6 +83,23 @@ function CalendarHeader() {
   const { isSmallScreen, isLargeScreen } = useAppDimensions();
 
   const { longDateFormat } = useUiSettingsValues();
+
+  const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
+  const [pickerYear, setPickerYear] = useState(() => moment(time).year());
+
+  const currentMonth = moment(time).month();
+  const currentYear = moment(time).year();
+
+  const { refs, context, floatingStyles } = useFloating({
+    middleware: [flip({ crossAxis: false, mainAxis: true }), shift()],
+    open: isMonthPickerOpen,
+    placement: 'bottom',
+    whileElementsMounted: autoUpdate,
+    onOpenChange: setIsMonthPickerOpen,
+  });
+
+  const dismiss = useDismiss(context, { outsidePressEvent: 'click' });
+  const { getReferenceProps, getFloatingProps } = useInteractions([dismiss]);
 
   const handleViewChange = useCallback((newView: string) => {
     setCalendarOption('view', newView as CalendarView);
@@ -51,6 +116,31 @@ function CalendarHeader() {
   const handleNextPress = useCallback(() => {
     goToNextRange();
   }, []);
+
+  const handleTitlePress = useCallback(() => {
+    if (view === 'agenda') {
+      return;
+    }
+
+    setPickerYear(moment(time).year());
+    setIsMonthPickerOpen((open) => !open);
+  }, [view, time]);
+
+  const handlePickerPrevYear = useCallback(() => {
+    setPickerYear((y) => y - 1);
+  }, []);
+
+  const handlePickerNextYear = useCallback(() => {
+    setPickerYear((y) => y + 1);
+  }, []);
+
+  const handleMonthSelect = useCallback(
+    (month: number) => {
+      goToDate(moment({ year: pickerYear, month, day: 1 }));
+      setIsMonthPickerOpen(false);
+    },
+    [pickerYear]
+  );
 
   const title = useMemo(() => {
     const timeMoment = moment(time);
@@ -76,14 +166,69 @@ function CalendarHeader() {
       endFormat = 'MMM D YYYY';
     }
 
-    return `${startMoment.format(startFormat)} \u2014 ${endMoment.format(
+    return `${startMoment.format(startFormat)} — ${endMoment.format(
       endFormat
     )}`;
   }, [time, start, end, view, longDateFormat]);
 
+  const titleContent = (
+    <>
+      {title}
+      {view !== 'agenda' ? (
+        <Icon
+          className={styles.titleChevron}
+          name={icons.CARET_DOWN}
+          size={14}
+        />
+      ) : null}
+    </>
+  );
+
+  const monthPicker = (
+    <div className={styles.monthPicker}>
+      <div className={styles.monthPickerYear}>
+        <Link onPress={handlePickerPrevYear}>
+          <Icon name={icons.PAGE_PREVIOUS} size={14} />
+        </Link>
+
+        <span>{pickerYear}</span>
+
+        <Link onPress={handlePickerNextYear}>
+          <Icon name={icons.PAGE_NEXT} size={14} />
+        </Link>
+      </div>
+
+      <div className={styles.monthGrid}>
+        {MONTH_NAMES.map((name, index) => (
+          <MonthButton
+            key={name}
+            name={name}
+            index={index}
+            isActive={index === currentMonth && pickerYear === currentYear}
+            onPress={handleMonthSelect}
+          />
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <div>
-      {isSmallScreen ? <div className={styles.titleMobile}>{title}</div> : null}
+      {isSmallScreen ? (
+        <div
+          ref={refs.setReference}
+          className={styles.titleMobile}
+          {...getReferenceProps()}
+        >
+          <Link
+            className={styles.titleLink}
+            isDisabled={view === 'agenda'}
+            onPress={handleTitlePress}
+          >
+            {titleContent}
+          </Link>
+        </div>
+      ) : null}
 
       <div className={styles.header}>
         <div className={styles.navigationButtons}>
@@ -113,7 +258,19 @@ function CalendarHeader() {
         </div>
 
         {isSmallScreen ? null : (
-          <div className={styles.titleDesktop}>{title}</div>
+          <div
+            ref={refs.setReference}
+            className={styles.titleDesktop}
+            {...getReferenceProps()}
+          >
+            <Link
+              className={styles.titleLink}
+              isDisabled={view === 'agenda'}
+              onPress={handleTitlePress}
+            >
+              {titleContent}
+            </Link>
+          </div>
         )}
 
         <div className={styles.viewButtonsContainer}>
@@ -211,6 +368,19 @@ function CalendarHeader() {
           )}
         </div>
       </div>
+
+      {isMonthPickerOpen ? (
+        <FloatingPortal id="portal-root">
+          <div
+            ref={refs.setFloating}
+            style={floatingStyles}
+            className={styles.monthPickerPortal}
+            {...getFloatingProps()}
+          >
+            {monthPicker}
+          </div>
+        </FloatingPortal>
+      ) : null}
     </div>
   );
 }
