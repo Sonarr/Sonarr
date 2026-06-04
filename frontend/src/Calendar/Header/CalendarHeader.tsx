@@ -166,7 +166,7 @@ function CalendarHeader() {
       endFormat = 'MMM D YYYY';
     }
 
-    return `${startMoment.format(startFormat)} — ${endMoment.format(
+    return `${startMoment.format(startFormat)} \u2014 ${endMoment.format(
       endFormat
     )}`;
   }, [time, start, end, view, longDateFormat]);
@@ -174,13 +174,13 @@ function CalendarHeader() {
   const titleContent = (
     <>
       {title}
-      {view !== 'agenda' ? (
+      {view === 'agenda' ? null : (
         <Icon
           className={styles.titleChevron}
           name={icons.CARET_DOWN}
           size={14}
         />
-      ) : null}
+      )}
     </>
   );
 
