@@ -359,6 +359,10 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             {
                 requestBuilder.Headers["Authorization"] = $"Bearer {settings.ApiKey}";
             }
+            else if (settings.Username.IsNotNullOrWhiteSpace() || settings.Password.IsNotNullOrWhiteSpace())
+            {
+                requestBuilder.NetworkCredential = new BasicNetworkCredential(settings.Username, settings.Password);
+            }
 
             return requestBuilder;
         }
