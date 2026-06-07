@@ -36,13 +36,23 @@
 
   position: relative;
   display: block;
-  height: 70px;
+  overflow: hidden;
+  margin: 8px 12px 8px 0;
+  height: 56px;
+  border-radius: 8px;
   background-color: var(--seriesBackgroundColor);
+  transition: box-shadow 200ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    box-shadow: 0 4px 12px -6px oklch(0% 0 0 / 0.4);
+    text-decoration: none;
+  }
 }
 
 .bannerImage {
-  width: 379px;
-  height: 70px;
+  width: 100%;
+  height: 56px;
+  object-fit: cover;
 }
 
 .overlayTitle {
@@ -55,15 +65,19 @@
   padding: 5px;
   width: 100%;
   height: 100%;
-  color: var(--offWhite);
+  color: var(--inkFaint);
   text-align: center;
-  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 600;
+  font-size: 11px;
 }
 
 .network {
   composes: cell;
 
   flex: 2 0 90px;
+  color: var(--inkMuted);
 }
 
 .originalCountry,
@@ -117,7 +131,31 @@
 .episodeCount {
   composes: cell;
 
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   flex: 0 0 130px;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.episodeBar {
+  overflow: hidden;
+  width: 72px;
+  height: 3px;
+  border-radius: 4px;
+  background-color: var(--progressBarBackgroundColor);
+}
+
+.episodeBarFill {
+  height: 100%;
+  border-radius: 4px;
+  background-color: var(--accent);
+  transition: width 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.episodeBarFillComplete {
+  background-color: var(--successColor);
 }
 
 .year {
@@ -179,4 +217,36 @@
   composes: input from '~Components/Form/CheckInput.css';
 
   margin-top: 0;
+}
+
+.qualityChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background-color: var(--paperWarm);
+  color: var(--inkSoft);
+  text-transform: uppercase;
+  white-space: nowrap;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.nextAiringMono {
+  color: var(--inkMuted);
+  letter-spacing: 0.02em;
+  font-size: 11px;
+  font-family: $monoSpaceFontFamily;
+}
+
+.nextAiringEmpty {
+  color: var(--inkFaint);
+}
+
+.titleLink {
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 14px;
 }

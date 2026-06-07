@@ -223,6 +223,7 @@ function FormInput<T, C extends InputType>(props: FormInputProps<T, C>) {
         <div
           className={classNames(
             className,
+            checkInput && styles.checkInput,
             hasButton && styles.hasButtons,
             hasButton && hasError && styles.hasError,
             hasButton && hasWarning && styles.hasWarning
