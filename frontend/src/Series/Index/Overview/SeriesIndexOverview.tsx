@@ -1,37 +1,31 @@
 import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';
-import TextTruncate from 'react-text-truncate';
 import CommandNames from 'Commands/CommandNames';
 import { useExecuteCommand } from 'Commands/useCommands';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
-import SeriesTagList from 'Components/SeriesTagList';
+import useMeasure from 'Helpers/Hooks/useMeasure';
 import { icons } from 'Helpers/Props';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
 import SeriesIndexProgressBar from 'Series/Index/ProgressBar/SeriesIndexProgressBar';
 import SeriesIndexPosterSelect from 'Series/Index/Select/SeriesIndexPosterSelect';
-import { Statistics } from 'Series/Series';
+import { SeriesStatus, Statistics } from 'Series/Series';
 import { useSeriesOverviewOptions } from 'Series/seriesOptionsStore';
 import SeriesPoster from 'Series/SeriesPoster';
-import dimensions from 'Styles/Variables/dimensions';
-import fonts from 'Styles/Variables/fonts';
 import translate from 'Utilities/String/translate';
 import useSeriesIndexItem from '../useSeriesIndexItem';
+import { ROW_BORDER, ROW_VERTICAL_PADDING } from './overviewLayout';
 import SeriesIndexOverviewInfo from './SeriesIndexOverviewInfo';
 import styles from './SeriesIndexOverview.css';
 
-const columnPadding = parseInt(dimensions.seriesIndexColumnPadding);
-const columnPaddingSmallScreen = parseInt(
-  dimensions.seriesIndexColumnPaddingSmallScreen
-);
-const defaultFontSize = parseInt(fonts.defaultFontSize);
-const lineHeight = parseFloat(fonts.lineHeight);
+// Mirrors .synopsis font-size/line-height in SeriesIndexOverview.css.
+const SYNOPSIS_FONT_SIZE = 13.5;
+const SYNOPSIS_LINE_HEIGHT = 1.6;
 
-// Hardcoded height based on line-height of 32 + bottom margin of 10.
-// Less side-effecty than using react-measure.
-const TITLE_HEIGHT = 42;
+const TITLE_HEIGHT = 38;
+const CHIP_STRIP_HEIGHT = 28;
 
 interface SeriesIndexOverviewProps {
   seriesId: number;
@@ -40,7 +34,21 @@ interface SeriesIndexOverviewProps {
   posterHeight: number;
   rowHeight: number;
   isSelectMode: boolean;
-  isSmallScreen: boolean;
+}
+
+function getStatusBadge(status: SeriesStatus) {
+  switch (status) {
+    case 'deleted':
+      return { label: translate('Deleted'), statusClass: styles.deleted };
+    case 'continuing':
+      return { label: translate('Continuing'), statusClass: styles.continuing };
+    case 'upcoming':
+      return { label: translate('Upcoming'), statusClass: styles.upcoming };
+    case 'ended':
+      return { label: translate('Ended'), statusClass: styles.ended };
+    default:
+      return null;
+  }
 }
 
 function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
@@ -51,7 +59,6 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
     posterHeight,
     rowHeight,
     isSelectMode,
-    isSmallScreen,
   } = props;
 
   const { series, qualityProfile, isRefreshingSeries, isSearchingSeries } =
@@ -95,12 +102,19 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
   }, [setIsDeleteSeriesModalOpen]);
 
   const contentHeight = useMemo(() => {
-    const padding = isSmallScreen ? columnPaddingSmallScreen : columnPadding;
+    return rowHeight - (ROW_VERTICAL_PADDING * 2 + ROW_BORDER);
+  }, [rowHeight]);
 
-    return rowHeight - padding;
-  }, [rowHeight, isSmallScreen]);
+  const [chipStripRef, chipStripBounds] = useMeasure();
+  const chipStripHeight = chipStripBounds.height || CHIP_STRIP_HEIGHT;
 
-  const overviewHeight = contentHeight - TITLE_HEIGHT;
+  const synopsisLines = Math.max(
+    1,
+    Math.floor(
+      (contentHeight - TITLE_HEIGHT - chipStripHeight) /
+        (SYNOPSIS_FONT_SIZE * SYNOPSIS_LINE_HEIGHT)
+    )
+  );
 
   if (!series) {
     return null;
@@ -137,6 +151,8 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
     height: `${posterHeight}px`,
   };
 
+  const statusBadge = getStatusBadge(status);
+
   return (
     <div>
       <div className={styles.content}>
@@ -149,23 +165,20 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
               />
             ) : null}
 
-            {status === 'ended' ? (
+            {statusBadge ? (
               <div
-                className={classNames(styles.status, styles.ended)}
-                title={translate('Ended')}
-              />
-            ) : null}
-
-            {status === 'deleted' ? (
-              <div
-                className={classNames(styles.status, styles.deleted)}
-                title={translate('Deleted')}
-              />
+                className={classNames(
+                  styles.statusPill,
+                  statusBadge.statusClass
+                )}
+              >
+                <span className={styles.statusLabel}>{statusBadge.label}</span>
+              </div>
             ) : null}
 
             <Link className={styles.link} style={elementStyle} to={link}>
               <SeriesPoster
-                className={styles.poster}
+                className={styles.posterImage}
                 style={elementStyle}
                 images={images}
                 size={250}
@@ -197,6 +210,7 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
 
             <div className={styles.actions}>
               <SpinnerIconButton
+                className={styles.action}
                 name={icons.REFRESH}
                 title={translate('RefreshSeries')}
                 isSpinning={isRefreshingSeries}
@@ -205,6 +219,7 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
 
               {overviewOptions.showSearchAction ? (
                 <SpinnerIconButton
+                  className={styles.action}
                   name={icons.SEARCH}
                   title={translate('SearchForMonitoredEpisodes')}
                   isSpinning={isSearchingSeries}
@@ -213,6 +228,7 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
               ) : null}
 
               <IconButton
+                className={styles.action}
                 name={icons.EDIT}
                 title={translate('EditSeries')}
                 aria-label={translate('EditSeries')}
@@ -221,38 +237,37 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
             </div>
           </div>
 
-          <div className={styles.details}>
-            <div className={styles.overviewContainer}>
-              <Link className={styles.overview} to={link}>
-                <TextTruncate
-                  line={Math.floor(
-                    overviewHeight / (defaultFontSize * lineHeight)
-                  )}
-                  text={overview}
-                />
-              </Link>
+          <Link
+            className={styles.synopsis}
+            to={link}
+            style={{ WebkitLineClamp: synopsisLines }}
+          >
+            {overview}
+          </Link>
 
-              {overviewOptions.showTags ? (
-                <div className={styles.tags}>
-                  <SeriesTagList tags={tags} />
-                </div>
-              ) : null}
-            </div>
-            <SeriesIndexOverviewInfo
-              height={overviewHeight}
-              monitored={monitored}
-              network={network}
-              nextAiring={nextAiring}
-              previousAiring={previousAiring}
-              added={added}
-              seasonCount={seasonCount}
-              qualityProfile={qualityProfile}
-              sizeOnDisk={sizeOnDisk}
-              path={path}
-              sortKey={sortKey}
-              {...overviewOptions}
-            />
-          </div>
+          <SeriesIndexOverviewInfo
+            ref={chipStripRef}
+            monitored={monitored}
+            network={network}
+            nextAiring={nextAiring}
+            previousAiring={previousAiring}
+            added={added}
+            seasonCount={seasonCount}
+            qualityProfile={qualityProfile}
+            sizeOnDisk={sizeOnDisk}
+            path={path}
+            sortKey={sortKey}
+            showNetwork={overviewOptions.showNetwork}
+            showMonitored={overviewOptions.showMonitored}
+            showQualityProfile={overviewOptions.showQualityProfile}
+            showPreviousAiring={overviewOptions.showPreviousAiring}
+            showAdded={overviewOptions.showAdded}
+            showSeasonCount={overviewOptions.showSeasonCount}
+            showPath={overviewOptions.showPath}
+            showSizeOnDisk={overviewOptions.showSizeOnDisk}
+            showTags={overviewOptions.showTags}
+            tags={tags}
+          />
         </div>
       </div>
 

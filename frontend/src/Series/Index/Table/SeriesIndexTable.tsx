@@ -73,7 +73,7 @@ function SeriesIndexTable({
   const listRef = useRef<FixedSizeList<RowItemData>>(null);
 
   const rowHeight = useMemo(() => {
-    return showBanners ? 70 : 38;
+    return showBanners ? 72 : 48;
   }, [showBanners]);
 
   useEffect(() => {

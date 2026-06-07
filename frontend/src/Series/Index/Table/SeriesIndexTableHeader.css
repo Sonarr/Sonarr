@@ -134,3 +134,7 @@
 
   flex: 0 1 90px;
 }
+
+.sorted {
+  color: var(--accent) !important;
+}

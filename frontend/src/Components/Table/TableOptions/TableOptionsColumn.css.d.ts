@@ -5,7 +5,7 @@ interface CssExports {
   'column': string;
   'columnContainer': string;
   'dragHandle': string;
-  'dragIcon': string;
+  'hidden': string;
   'isDragging': string;
   'label': string;
   'placeholder': string;

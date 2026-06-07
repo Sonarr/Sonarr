@@ -19,15 +19,15 @@
 }
 
 .primary {
-  background-color: var(--accent);
+  background-color: color-mix(in oklab, var(--accent) 80%, oklch(0% 0 0));
 }
 
 .danger {
-  background-color: var(--dangerColor);
+  background-color: color-mix(in oklab, var(--dangerColor) 80%, oklch(0% 0 0));
 }
 
 .success {
-  background-color: var(--successColor);
+  background-color: color-mix(in oklab, var(--successColor) 80%, oklch(0% 0 0));
 }
 
 .purple {
@@ -35,7 +35,7 @@
 }
 
 .warning {
-  background-color: var(--warningColor);
+  background-color: color-mix(in oklab, var(--warningColor) 80%, oklch(0% 0 0));
 }
 
 .info {

@@ -19,8 +19,9 @@
   flex-direction: column;
   flex-grow: 1;
 
-  /* 5px less padding than normal to handle poster's 5px margin */
-  padding: calc($pageContentBodyPadding - 5px);
+  
+  padding: calc(var(--pageContentBodyPadding) - 5px);
+  padding-top: unset;
 }
 
 .tableInnerContentBody {
@@ -31,13 +32,24 @@
   flex-grow: 1;
 }
 
+.overviewInnerContentBody {
+  composes: innerContentBody from '~Components/Page/PageContentBody.css';
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  padding: calc(var(--pageContentBodyPadding) - 5px);
+  padding-top: unset;
+}
+
 .contentBodyContainer {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media only screen and (max-width: 768px) {
   .pageContentBodyWrapper {
     flex-basis: auto;
   }
@@ -47,6 +59,6 @@
   }
 
   .postersInnerContentBody {
-    padding: calc($pageContentBodyPaddingSmallScreen - 5px);
+    padding: calc(var(--pageContentBodyPaddingSmallScreen) - 5px);
   }
 }

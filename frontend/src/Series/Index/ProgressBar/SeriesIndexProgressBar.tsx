@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useQueueDetailsForSeries } from 'Activity/Queue/Details/QueueDetailsProvider';
 import ProgressBar from 'Components/ProgressBar';
 import { sizes } from 'Helpers/Props';
@@ -36,6 +36,18 @@ function SeriesIndexProgressBar(props: SeriesIndexProgressBarProps) {
 
   const queueDetails = useQueueDetailsForSeries(seriesId, seasonNumber);
 
+  const containerClassName = useMemo(() => {
+    if (isStandalone) {
+      return undefined;
+    }
+
+    if (detailedProgressBar) {
+      return styles.progressDetailed;
+    }
+
+    return styles.progress;
+  }, [isStandalone, detailedProgressBar]);
+
   const newDownloads = queueDetails.count - queueDetails.episodesWithFiles;
   const progress = episodeCount ? (episodeFileCount / episodeCount) * 100 : 100;
   const text = newDownloads
@@ -44,8 +56,10 @@ function SeriesIndexProgressBar(props: SeriesIndexProgressBarProps) {
 
   return (
     <ProgressBar
-      className={styles.progressBar}
-      containerClassName={isStandalone ? undefined : styles.progress}
+      className={
+        detailedProgressBar ? styles.progressBarDetailed : styles.progressBar
+      }
+      containerClassName={containerClassName}
       progress={progress}
       kind={getProgressBarKind(
         status,

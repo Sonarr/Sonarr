@@ -3,6 +3,8 @@
 interface CssExports {
   'progress': string;
   'progressBar': string;
+  'progressBarDetailed': string;
+  'progressDetailed': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

@@ -50,7 +50,7 @@ module.exports = {
   modalBodyPadding: '30px',
 
   // Series
-  seriesIndexColumnPadding: '16px',
-  seriesIndexColumnPaddingSmallScreen: '8px',
+  seriesIndexColumnPadding: '12px',
+  seriesIndexColumnPaddingSmallScreen: '6px',
   seriesIndexOverviewInfoRowHeight: '21px'
 };

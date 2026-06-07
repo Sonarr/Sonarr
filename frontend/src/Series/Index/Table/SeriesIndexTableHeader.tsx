@@ -116,7 +116,8 @@ function SeriesIndexTableHeader(props: SeriesIndexTableHeaderProps) {
               name === 'sortTitle' &&
                 showBanners &&
                 !hasGrowableColumns(columns) &&
-                styles.bannerGrow
+                styles.bannerGrow,
+              isSortable && name === sortKey && styles.sorted
             )}
             name={name}
             sortKey={sortKey}
