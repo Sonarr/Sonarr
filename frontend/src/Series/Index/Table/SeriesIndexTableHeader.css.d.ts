@@ -28,6 +28,7 @@ interface CssExports {
   'seriesType': string;
   'sizeOnDisk': string;
   'sortTitle': string;
+  'sorted': string;
   'status': string;
   'tags': string;
   'useSceneNumbering': string;

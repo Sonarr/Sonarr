@@ -131,7 +131,11 @@ function TableOptionsColumn({
       ) : null}
 
       <div
-        className={classNames(styles.column, isDragging && styles.isDragging)}
+        className={classNames(
+          styles.column,
+          isDragging && styles.isDragging,
+          !isVisible && styles.hidden
+        )}
       >
         <label className={styles.label}>
           <CheckInput
@@ -146,7 +150,7 @@ function TableOptionsColumn({
 
         {isModifiable === 'disabled' ? null : (
           <div ref={dragRef} className={styles.dragHandle}>
-            <Icon className={styles.dragIcon} name={icons.REORDER} />
+            <Icon name={icons.GRIP} size={16} />
           </div>
         )}
       </div>
