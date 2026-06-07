@@ -9,7 +9,7 @@
 .path {
   margin-left: 5px;
   color: var(--dangerColor);
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .statistics {

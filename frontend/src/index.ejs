@@ -62,7 +62,7 @@
       var finalTheme =
         theme === 'dark' || (theme === 'auto' && defaultDark) ? 'dark' : 'light';
 
-      document.documentElement.style.setProperty('--pageBackground', finalTheme === 'dark' ? '#202020' : '#f5f7fa');
+      document.documentElement.style.setProperty('--pageBackground', finalTheme === 'dark' ? 'oklch(15% 0.008 80)' : 'oklch(98% 0.006 80)');
     </script>
 
     __MINI_PROFILER__

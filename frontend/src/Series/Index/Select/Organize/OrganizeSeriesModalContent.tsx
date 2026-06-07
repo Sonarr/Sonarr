@@ -3,7 +3,6 @@ import React, { useCallback, useMemo } from 'react';
 import { useSelect } from 'App/Select/SelectContext';
 import CommandNames from 'Commands/CommandNames';
 import { useExecuteCommand } from 'Commands/useCommands';
-import Alert from 'Components/Alert';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -60,10 +59,10 @@ function OrganizeSeriesModalContent({
       </ModalHeader>
 
       <ModalBody>
-        <Alert>
+        <p className={styles.intro}>
           {translate('OrganizeSelectedSeriesModalAlert')}
           <Icon className={styles.renameIcon} name={icons.ORGANIZE} />
-        </Alert>
+        </p>
 
         <div className={styles.message}>
           {translate('OrganizeSelectedSeriesModalConfirmation', {

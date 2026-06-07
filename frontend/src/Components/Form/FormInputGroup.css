@@ -46,6 +46,14 @@
   min-width: 0;
 }
 
+.checkInput {
+  justify-content: flex-end;
+}
+
+.checkInput .inputContainer {
+  flex: 0 1 auto;
+}
+
 .inputUnit {
   position: absolute;
   top: 0;
