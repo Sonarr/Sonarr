@@ -1,11 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
 import { useSelect } from 'App/Select/SelectContext';
-import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -13,7 +12,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
-import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
+import { icons, inputTypes, tooltipPositions } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import styles from './ChangeMonitoringModalContent.css';
 
@@ -47,13 +46,11 @@ function ChangeMonitoringModalContent({
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('MonitorEpisodes')}</ModalHeader>
-
       <ModalBody>
-        <Alert kind={kinds.INFO}>
-          <div>{translate('MonitorEpisodesModalInfo')}</div>
-        </Alert>
+        <p className={styles.intro}>{translate('MonitorEpisodesModalInfo')}</p>
+
         <Form {...otherProps}>
-          <FormGroup>
+          <FormRow>
             <FormLabel>
               {translate('Monitoring')}
 
@@ -65,17 +62,16 @@ function ChangeMonitoringModalContent({
               />
             </FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.MONITOR_EPISODES_SELECT}
               name="monitor"
               value={monitor}
               includeNoChange={true}
               onChange={onInputChange}
             />
-          </FormGroup>
+          </FormRow>
         </Form>
       </ModalBody>
-
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>
           {translate('CountSeriesSelected', { count: selectedCount })}

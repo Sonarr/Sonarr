@@ -1,52 +1,111 @@
-$hoverScale: 1.05;
-
 .content {
+  position: relative;
   display: flex;
-  flex-grow: 1;
+  align-items: center;
+  gap: 18px;
+
+  padding: 16px 18px;
+  border-radius: 10px;
+  transition: background-color 160ms ease;
+
+  /* Straight divider — not border-bottom, which would curve with border-radius */
+  &::after {
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 1px;
+    background-color: var(--borderColor);
+    content: "";
+  }
+
+  &:hover {
+    background: var(--paperWarm);
+  }
 }
 
 .poster {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 6px;
 }
 
 .posterContainer {
   position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: var(--seriesBackgroundColor);
+}
+
+.posterImage {
+  display: block;
 }
 
 .link {
   composes: link from '~Components/Link/Link.css';
 
   display: block;
-  color: var(--defaultColor);
+  background-color: var(--seriesBackgroundColor);
 
   &:hover {
     color: var(--defaultColor);
     text-decoration: none;
   }
+}
 
-  .posterContainer & {
-    background-color: var(--seriesBackgroundColor);
+.statusPill {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  max-width: calc(100% - 14px);
+  border-radius: 999px;
+  background: var(--seriesOverlayBackdrop);
+  color: var(--seriesOverlayInk);
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+  font-weight: 600;
+  font-size: 9.5px;
+  font-family: $defaultFontFamily;
+  line-height: 1;
+  pointer-events: none;
+  gap: 5px;
+
+  &::before {
+    flex-shrink: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    content: '';
   }
 }
 
-.status {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 1;
-  width: 0;
-  height: 0;
-  border-width: 0 25px 25px 0;
-  border-style: solid;
-  color: var(--white);
+.statusLabel {
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-  &.ended {
-    border-color: transparent var(--dangerColor) transparent transparent;
-  }
+.ended::before {
+  background: var(--statusFinished);
+}
 
-  &.deleted {
-    border-color: transparent var(--gray) transparent transparent;
-  }
+.deleted::before {
+  background: var(--statusHiatus);
+}
+
+.continuing::before {
+  background: var(--statusAiring);
+}
+
+.upcoming::before {
+  background: var(--statusUpcoming);
 }
 
 .info {
@@ -54,58 +113,92 @@ $hoverScale: 1.05;
   flex: 1 0 1px;
   flex-direction: column;
   overflow: hidden;
-  padding-left: 10px;
+  padding-top: 2px;
+  min-width: 0;
+  gap: 6px;
 }
 
 .titleRow {
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
-  flex: 0 0 auto;
-  margin-bottom: 10px;
-  line-height: 32px;
+  gap: 10px;
+
+  flex-shrink: 0;
+  margin-bottom: 4px;
 }
 
 .title {
   @add-mixin truncate;
-  composes: link;
+  composes: link from '~Components/Link/Link.css';
 
   flex: 1 0 1px;
-  font-weight: 300;
-  font-size: 30px;
+  background-color: transparent;
+  color: var(--ink);
+  letter-spacing: -0.018em;
+  font-weight: 600;
+  font-size: 20px;
+  font-family: $defaultFontFamily;
+  line-height: 1.2;
+
+  &:hover {
+    color: var(--ink);
+    text-decoration: none;
+  }
 }
 
 .actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
   white-space: nowrap;
+  gap: 4px;
 }
 
-.details {
-  display: flex;
-  justify-content: space-between;
-  flex: 1 0 auto;
+.action {
+  composes: link from '~Components/Link/Link.css';
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--inkMuted);
+  transition:
+    background 120ms ease,
+    color 120ms ease;
+
+  &:hover {
+    background: var(--paperCard);
+    color: var(--ink);
+  }
 }
 
-.overviewContainer {
-  display: flex;
-  justify-content: space-between;
-  flex: 0 1 1000px;
-  flex-direction: column;
-}
+.synopsis {
+  composes: link from '~Components/Link/Link.css';
 
-.overview {
-  composes: link;
+  /* stylelint-disable-next-line value-no-vendor-prefix -- required for -webkit-line-clamp */
+  display: -webkit-box;
 
   overflow: hidden;
-  min-height: 0;
-}
+  max-width: 110ch;
+  color: var(--inkSoft);
+  font-style: italic;
+  font-size: 13.5px;
+  font-family: $defaultFontFamily;
+  line-height: 1.6;
+  -webkit-box-orient: vertical;
 
-.tags {
-  display: flex;
-  justify-content: space-around;
-  overflow: hidden;
+  &:hover {
+    color: var(--inkSoft);
+    text-decoration: none;
+  }
 }
 
 @media only screen and (max-width: $breakpointSmall) {
-  .overview {
+  .synopsis {
     display: none;
   }
 }

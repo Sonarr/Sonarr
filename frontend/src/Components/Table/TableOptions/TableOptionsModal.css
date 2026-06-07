@@ -1,5 +1,14 @@
+.columnsSection {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--borderColor);
+}
+
 .columns {
-  margin-top: 10px;
+  overflow: hidden;
+  margin-top: 12px;
   width: 100%;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
   user-select: none;
 }
