@@ -53,6 +53,7 @@ import {
   FolderOpen,
   FolderTree,
   Globe,
+  GripVertical,
   Group,
   HardDrive,
   Heart,
@@ -150,6 +151,7 @@ export const FOLDER = Folder;
 export const FOLDER_OPEN = FolderOpen;
 export const GENRE = Drama;
 export const GLOBE = Globe;
+export const GRIP = GripVertical;
 export const GROUP = Group;
 export const HEALTH = HeartPulse;
 export const HEART = Heart;

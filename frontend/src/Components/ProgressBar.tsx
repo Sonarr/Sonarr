@@ -42,7 +42,7 @@ function ProgressBar({
     >
       {showText && width ? (
         <div
-          className={classNames(styles.backTextContainer, styles[kind])}
+          className={styles.backTextContainer}
           style={{ width: actualWidth }}
         >
           <div className={styles.backText}>
