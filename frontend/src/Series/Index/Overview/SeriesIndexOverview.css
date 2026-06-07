@@ -63,11 +63,11 @@
   display: inline-flex;
   align-items: center;
   padding: 3px 8px;
+  max-width: calc(100% - 14px);
   border-radius: 999px;
-  background: var(--seriesOverlayScrim);
+  background: var(--seriesOverlayBackdrop);
   color: var(--seriesOverlayInk);
   text-transform: uppercase;
-  white-space: nowrap;
   letter-spacing: 0.055em;
   font-weight: 600;
   font-size: 9.5px;
@@ -83,6 +83,13 @@
     border-radius: 999px;
     content: '';
   }
+}
+
+.statusLabel {
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ended::before {
@@ -180,7 +187,7 @@
   color: var(--inkSoft);
   font-style: italic;
   font-size: 13.5px;
-  font-family: $editorialFontFamily;
+  font-family: $defaultFontFamily;
   line-height: 1.6;
   -webkit-box-orient: vertical;
 

@@ -12,6 +12,7 @@ interface CssExports {
   'poster': string;
   'posterContainer': string;
   'posterImage': string;
+  'statusLabel': string;
   'statusPill': string;
   'synopsis': string;
   'title': string;

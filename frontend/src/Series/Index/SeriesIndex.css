@@ -1,14 +1,3 @@
-.error {
-  margin-bottom: 20px;
-  color: var(--dangerColor);
-  font-size: 13px;
-}
-
-.pageHeadingWrapper {
-  flex: 0 0 auto;
-  padding: 24px 32px 0;
-}
-
 .pageContentBodyWrapper {
   display: flex;
   flex: 1 0 1px;

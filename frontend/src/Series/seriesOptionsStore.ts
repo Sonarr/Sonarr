@@ -2,6 +2,8 @@ import Column from 'Components/Table/Column';
 import { createOptionsStore } from 'Helpers/Hooks/useOptionsStore';
 import translate from 'Utilities/String/translate';
 
+export type ShowStatusMode = 'none' | 'deleted' | 'active' | 'all';
+
 export interface SeriesOptions {
   selectedFilterKey: string | number;
   sortKey: string;
@@ -16,7 +18,7 @@ export interface SeriesOptions {
     showQualityProfile: boolean;
     showTags: boolean;
     showSearchAction: boolean;
-    showStatus: 'none' | 'deleted' | 'active' | 'all';
+    showStatus: ShowStatusMode;
   };
   overviewOptions: {
     detailedProgressBar: boolean;

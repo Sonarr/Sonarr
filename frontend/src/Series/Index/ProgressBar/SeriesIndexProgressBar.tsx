@@ -41,7 +41,10 @@ function SeriesIndexProgressBar(props: SeriesIndexProgressBarProps) {
       return undefined;
     }
 
-    if (detailedProgressBar) return styles.progressDetailed;
+    if (detailedProgressBar) {
+      return styles.progressDetailed;
+    }
+
     return styles.progress;
   }, [isStandalone, detailedProgressBar]);
 

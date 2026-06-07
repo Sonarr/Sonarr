@@ -3,7 +3,7 @@
 
   overflow: hidden;
 
-  height: 2px !important;
+  height: 3px;
   border-radius: 4px;
   background-color: var(--borderColor);
   box-shadow: none;
@@ -13,7 +13,6 @@
 .progressBar {
   composes: progressBar from '~Components/ProgressBar.css';
 
-  height: 2px !important;
   border-radius: 4px;
   box-shadow: none;
   transition: width 240ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -24,7 +23,7 @@
 
   overflow: hidden;
 
-  height: 14px !important;
+  height: 14px;
   border-radius: 6px;
   background-color: var(--borderColor);
   box-shadow: none;
@@ -37,7 +36,6 @@
 .progressBarDetailed {
   composes: progressBar from '~Components/ProgressBar.css';
 
-  height: 14px !important;
   border-radius: 6px;
   box-shadow: none;
   transition: width 240ms cubic-bezier(0.16, 1, 0.3, 1);

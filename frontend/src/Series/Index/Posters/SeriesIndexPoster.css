@@ -4,11 +4,9 @@
   gap: 6px;
 
   padding-bottom: 4px;
-  transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover {
     z-index: 2;
-    transform: translateY(-3px);
 
     .controls {
       opacity: 1;
@@ -19,6 +17,7 @@
       box-shadow:
         0 16px 36px -12px oklch(0% 0 0 / 0.32),
         0 4px 12px -2px oklch(0% 0 0 / 0.16);
+      filter: brightness(1.06) saturate(1.04);
     }
   }
 }
@@ -28,7 +27,9 @@
   overflow: hidden;
   border-radius: 12px;
   background-color: var(--seriesBackgroundColor);
-  transition: box-shadow 200ms cubic-bezier(0.25, 1, 0.5, 1);
+  transition:
+    box-shadow 200ms cubic-bezier(0.25, 1, 0.5, 1),
+    filter 200ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .link {
@@ -70,7 +71,7 @@
   padding: 4px 8px;
   max-width: calc(100% - 20px);
   border-radius: 999px;
-  background-color: var(--seriesOverlayScrim);
+  background-color: var(--seriesOverlayBackdrop);
   color: var(--seriesOverlayInk);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -122,7 +123,7 @@
   overflow: hidden;
   padding: 3px;
   border-radius: 8px;
-  background-color: var(--seriesOverlayScrim);
+  background-color: var(--seriesOverlayBackdrop);
   box-shadow: 0 8px 22px -10px oklch(0% 0 0 / 0.65);
   opacity: 0;
   transition:

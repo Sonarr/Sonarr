@@ -11,8 +11,11 @@ import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
 import SeriesIndexProgressBar from 'Series/Index/ProgressBar/SeriesIndexProgressBar';
 import SeriesIndexPosterSelect from 'Series/Index/Select/SeriesIndexPosterSelect';
-import { Statistics } from 'Series/Series';
-import { useSeriesPosterOptions } from 'Series/seriesOptionsStore';
+import { SeriesStatus, Statistics } from 'Series/Series';
+import {
+  ShowStatusMode,
+  useSeriesPosterOptions,
+} from 'Series/seriesOptionsStore';
 import SeriesPoster from 'Series/SeriesPoster';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import formatDateTime from 'Utilities/Date/formatDateTime';
@@ -28,6 +31,36 @@ interface SeriesIndexPosterProps {
   isSelectMode: boolean;
   posterWidth: number;
   posterHeight: number;
+}
+
+function getStatusBadge(status: SeriesStatus, showStatus: ShowStatusMode) {
+  if (showStatus === 'none') {
+    return null;
+  }
+
+  if (status === 'deleted') {
+    return { label: translate('Deleted'), statusClass: styles.deleted };
+  }
+
+  if (
+    status === 'continuing' &&
+    (showStatus === 'active' || showStatus === 'all')
+  ) {
+    return { label: translate('Continuing'), statusClass: styles.continuing };
+  }
+
+  if (
+    status === 'upcoming' &&
+    (showStatus === 'active' || showStatus === 'all')
+  ) {
+    return { label: translate('Upcoming'), statusClass: styles.upcoming };
+  }
+
+  if (status === 'ended' && showStatus === 'all') {
+    return { label: translate('Ended'), statusClass: styles.ended };
+  }
+
+  return null;
 }
 
 function SeriesIndexPoster(props: SeriesIndexPosterProps) {
@@ -130,33 +163,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
     height: `${posterHeight}px`,
   };
 
-  const getStatusBadge = () => {
-    const mode = showStatus ?? 'deleted';
-
-    if (mode === 'none') {
-      return null;
-    }
-
-    if (status === 'deleted') {
-      return { label: translate('Deleted'), statusClass: styles.deleted };
-    }
-
-    if (status === 'continuing' && (mode === 'active' || mode === 'all')) {
-      return { label: translate('Continuing'), statusClass: styles.continuing };
-    }
-
-    if (status === 'upcoming' && (mode === 'active' || mode === 'all')) {
-      return { label: translate('Upcoming'), statusClass: styles.upcoming };
-    }
-
-    if (status === 'ended' && mode === 'all') {
-      return { label: translate('Ended'), statusClass: styles.ended };
-    }
-
-    return null;
-  };
-
-  const statusBadge = getStatusBadge();
+  const statusBadge = getStatusBadge(status, showStatus);
 
   const monitoredLabel = monitored
     ? translate('Monitored')

@@ -96,8 +96,7 @@ function SeriesIndexOverviews(props: SeriesIndexOverviewsProps) {
       ? detailedProgressBarHeight
       : progressBarHeight;
 
-    // posterHeight + gap + progress is the poster column; the row then adds
-    // .content's top+bottom padding and the 1px divider on top of that.
+    // Used as the virtual list's itemSize, so it has to match the real row height.
     return (
       posterHeight +
       POSTER_PROGRESS_GAP +

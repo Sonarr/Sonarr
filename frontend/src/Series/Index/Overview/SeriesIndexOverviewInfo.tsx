@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { forwardRef, ReactNode } from 'react';
 import { QualityProfileModel } from 'Settings/Profiles/Quality/useQualityProfiles';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import { useTagList } from 'Tags/useTags';
@@ -33,7 +33,10 @@ interface SeriesIndexOverviewInfoProps {
   sortKey: string;
 }
 
-function SeriesIndexOverviewInfo(props: SeriesIndexOverviewInfoProps) {
+const SeriesIndexOverviewInfo = forwardRef<
+  HTMLDivElement,
+  SeriesIndexOverviewInfoProps
+>((props, ref) => {
   const {
     showNetwork,
     showMonitored,
@@ -62,7 +65,7 @@ function SeriesIndexOverviewInfo(props: SeriesIndexOverviewInfoProps) {
     uiSettings;
   const tagList = useTagList();
 
-  const chips: React.ReactNode[] = [];
+  const chips: ReactNode[] = [];
 
   if (nextAiring) {
     chips.push(
@@ -200,7 +203,11 @@ function SeriesIndexOverviewInfo(props: SeriesIndexOverviewInfoProps) {
     return null;
   }
 
-  return <div className={styles.chipStrip}>{chips}</div>;
-}
+  return (
+    <div ref={ref} className={styles.chipStrip}>
+      {chips}
+    </div>
+  );
+});
 
 export default SeriesIndexOverviewInfo;

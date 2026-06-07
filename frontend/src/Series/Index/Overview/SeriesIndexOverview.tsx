@@ -5,6 +5,7 @@ import { useExecuteCommand } from 'Commands/useCommands';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
+import useMeasure from 'Helpers/Hooks/useMeasure';
 import { icons } from 'Helpers/Props';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
@@ -33,6 +34,21 @@ interface SeriesIndexOverviewProps {
   posterHeight: number;
   rowHeight: number;
   isSelectMode: boolean;
+}
+
+function getStatusBadge(status: SeriesStatus) {
+  switch (status) {
+    case 'deleted':
+      return { label: translate('Deleted'), statusClass: styles.deleted };
+    case 'continuing':
+      return { label: translate('Continuing'), statusClass: styles.continuing };
+    case 'upcoming':
+      return { label: translate('Upcoming'), statusClass: styles.upcoming };
+    case 'ended':
+      return { label: translate('Ended'), statusClass: styles.ended };
+    default:
+      return null;
+  }
 }
 
 function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
@@ -89,10 +105,13 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
     return rowHeight - (ROW_VERTICAL_PADDING * 2 + ROW_BORDER);
   }, [rowHeight]);
 
+  const [chipStripRef, chipStripBounds] = useMeasure();
+  const chipStripHeight = chipStripBounds.height || CHIP_STRIP_HEIGHT;
+
   const synopsisLines = Math.max(
     1,
     Math.floor(
-      (contentHeight - TITLE_HEIGHT - CHIP_STRIP_HEIGHT) /
+      (contentHeight - TITLE_HEIGHT - chipStripHeight) /
         (SYNOPSIS_FONT_SIZE * SYNOPSIS_LINE_HEIGHT)
     )
   );
@@ -132,22 +151,7 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
     height: `${posterHeight}px`,
   };
 
-  const statusLabels: Partial<Record<SeriesStatus, string>> = {
-    ended: translate('Ended'),
-    deleted: translate('Deleted'),
-    continuing: translate('Continuing'),
-    upcoming: translate('Upcoming'),
-  };
-
-  const statusPillClasses: Partial<Record<SeriesStatus, string>> = {
-    ended: styles.ended,
-    deleted: styles.deleted,
-    continuing: styles.continuing,
-    upcoming: styles.upcoming,
-  };
-
-  const statusLabel = statusLabels[status] ?? null;
-  const statusPillClass = statusPillClasses[status];
+  const statusBadge = getStatusBadge(status);
 
   return (
     <div>
@@ -161,9 +165,14 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
               />
             ) : null}
 
-            {statusLabel ? (
-              <div className={classNames(styles.statusPill, statusPillClass)}>
-                {statusLabel}
+            {statusBadge ? (
+              <div
+                className={classNames(
+                  styles.statusPill,
+                  statusBadge.statusClass
+                )}
+              >
+                <span className={styles.statusLabel}>{statusBadge.label}</span>
               </div>
             ) : null}
 
@@ -237,6 +246,7 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
           </Link>
 
           <SeriesIndexOverviewInfo
+            ref={chipStripRef}
             monitored={monitored}
             network={network}
             nextAiring={nextAiring}
