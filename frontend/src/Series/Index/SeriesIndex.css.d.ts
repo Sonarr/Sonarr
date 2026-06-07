@@ -3,6 +3,7 @@
 interface CssExports {
   'contentBody': string;
   'contentBodyContainer': string;
+  'overviewInnerContentBody': string;
   'pageContentBodyWrapper': string;
   'postersInnerContentBody': string;
   'tableInnerContentBody': string;

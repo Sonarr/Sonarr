@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { inputTypes } from 'Helpers/Props';
 import {
   setSeriesTableOptions,
@@ -24,29 +25,26 @@ function SeriesIndexTableOptions() {
 
   return (
     <>
-      <FormGroup>
+      <FormRow>
         <FormLabel>{translate('ShowBanners')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('ShowBannersHelpText')} />
+        <FormInput
           type={inputTypes.CHECK}
           name="showBanners"
           value={showBanners}
-          helpText={translate('ShowBannersHelpText')}
           onChange={handleTableOptionChange}
         />
-      </FormGroup>
-
-      <FormGroup>
+      </FormRow>
+      <FormRow>
         <FormLabel>{translate('ShowSearch')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('ShowSearchHelpText')} />
+        <FormInput
           type={inputTypes.CHECK}
           name="showSearchAction"
           value={showSearchAction}
-          helpText={translate('ShowSearchHelpText')}
           onChange={handleTableOptionChange}
         />
-      </FormGroup>
+      </FormRow>
     </>
   );
 }
