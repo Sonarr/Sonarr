@@ -95,7 +95,7 @@ public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
     [FieldDefinition(4, Label = "ImportListsTmdbSettingsVoteAverageMinimum", HelpText = "ImportListsTmdbSettingsVoteAverageMinimumHelpText", Type = FieldType.Textbox)]
     public string VoteAverageMinimum { get; set; }
 
-    [FieldDefinition(5, Label = "ImportListsTmdbSettingsVoteCountMinimum", HelpText = "ImportListsTmdbSettingsVoteCountMinimumHelpText", Type = FieldType.Textbox)]
+    [FieldDefinition(5, Label = "ImportListsTmdbSettingsVoteCountMinimum", HelpText = "ImportListsTmdbSettingsVoteCountMinimumHelpText", Type = FieldType.Textbox, Advanced = true)]
     public string VoteCountMinimum { get; set; }
 
     [FieldDefinition(6, Label = "ImportListsTmdbSettingsAirDateMinimum", HelpText = "ImportListsTmdbSettingsAirDateMinimumHelpText", Type = FieldType.Textbox, Advanced = true)]
