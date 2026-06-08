@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.Cloud;
@@ -36,6 +37,28 @@ public class TmdbDiscoverImport : TmdbImportBase<TmdbDiscoverSettings>
 
     protected override IEnumerable<KeyValuePair<string, TmdbDiscoverSettings>> GetPresetDefinitionPairs()
     {
+        var now = DateTime.UtcNow;
+        var todaysDate = now.ToString("yyyy-MM-dd");
+        var sevenDaysFromNowDate = now.AddDays(7).ToString("yyyy-MM-dd");
+
+        yield return new KeyValuePair<string, TmdbDiscoverSettings>($"Airing Today ({todaysDate})",
+            new TmdbDiscoverSettings
+            {
+                AirDateMinimum =  todaysDate,
+                AirDateMaximum =  todaysDate,
+                SortType = (int)TmdbDiscoverSortType.Popularity,
+                SortOrderType = (int)TmdbDiscoverSortOrderType.Descending
+            });
+
+        yield return new KeyValuePair<string, TmdbDiscoverSettings>($"On The Air ({todaysDate} - {sevenDaysFromNowDate})",
+            new TmdbDiscoverSettings
+            {
+                AirDateMinimum =  todaysDate,
+                AirDateMaximum =  sevenDaysFromNowDate,
+                SortType = (int)TmdbDiscoverSortType.Popularity,
+                SortOrderType = (int)TmdbDiscoverSortOrderType.Descending
+            });
+
         yield return new KeyValuePair<string, TmdbDiscoverSettings>("Top Rated",
             new TmdbDiscoverSettings
             {

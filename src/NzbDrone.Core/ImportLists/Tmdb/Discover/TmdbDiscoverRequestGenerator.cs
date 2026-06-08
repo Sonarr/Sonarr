@@ -37,6 +37,8 @@ public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscove
             builder.AddQueryParam("with_original_language", originalLanguage.ToString().ToLowerInvariant());
         }
 
+        AddOrSkipQueryParam(builder, "air_date.gte", Settings.AirDateMinimum);
+        AddOrSkipQueryParam(builder, "air_date.lte", Settings.AirDateMaximum);
         AddOrSkipQueryParam(builder, "vote_average.gte", Settings.MinimumVoteAverage);
         AddOrSkipQueryParam(builder, "vote_count.gte", Settings.MinimumVoteCount);
         AddOrSkipQueryParam(builder, "with_companies", Settings.WithCompanies);
