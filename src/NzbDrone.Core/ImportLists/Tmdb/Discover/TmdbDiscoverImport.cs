@@ -46,8 +46,7 @@ public class TmdbDiscoverImport : TmdbImportBase<TmdbDiscoverSettings>
             {
                 AirDateMinimum =  todaysDate,
                 AirDateMaximum =  todaysDate,
-                SortType = (int)TmdbDiscoverSortType.Popularity,
-                SortOrderType = (int)TmdbDiscoverSortOrderType.Descending
+                SortByType = (int)TmdbDiscoverSortByType.PopularityDesc
             });
 
         yield return new KeyValuePair<string, TmdbDiscoverSettings>($"On The Air ({todaysDate} - {sevenDaysFromNowDate})",
@@ -55,16 +54,14 @@ public class TmdbDiscoverImport : TmdbImportBase<TmdbDiscoverSettings>
             {
                 AirDateMinimum =  todaysDate,
                 AirDateMaximum =  sevenDaysFromNowDate,
-                SortType = (int)TmdbDiscoverSortType.Popularity,
-                SortOrderType = (int)TmdbDiscoverSortOrderType.Descending
+                SortByType = (int)TmdbDiscoverSortByType.PopularityDesc
             });
 
         yield return new KeyValuePair<string, TmdbDiscoverSettings>("Top Rated",
             new TmdbDiscoverSettings
             {
                 VoteCountMinimum = "200",
-                SortType = (int)TmdbDiscoverSortType.VoteAverage,
-                SortOrderType = (int)TmdbDiscoverSortOrderType.Descending
+                SortByType =  (int)TmdbDiscoverSortByType.VoteAverageDesc
             });
     }
 }
