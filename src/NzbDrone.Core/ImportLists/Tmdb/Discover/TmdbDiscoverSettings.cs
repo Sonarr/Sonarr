@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Validators;
@@ -54,6 +55,7 @@ public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
     public TmdbDiscoverSettings()
         : base(Validator)
     {
+        WithGenreTypes = [];
         OriginalLanguage = (int)TmdbLanguage.Any;
         SortType = (int)TmdbDiscoverSortType.Popularity;
         SortOrderType = (int)TmdbDiscoverSortOrderType.Descending;
@@ -74,21 +76,24 @@ public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
     [FieldDefinition(5, Label = "ImportListsTmdbSettingsVoteCountMinimum", HelpText = "ImportListsTmdbSettingsVoteCountMinimumHelpText", Type = FieldType.Textbox)]
     public string VoteCountMinimum { get; set; }
 
-    [FieldDefinition(6, Label = "ImportListsTmdbSettingsAirDateMinimum", HelpText = "ImportListsTmdbSettingsAirDateMinimumHelpText", Type = FieldType.Textbox)]
+    [FieldDefinition(6, Label = "ImportListsTmdbSettingsAirDateMinimum", HelpText = "ImportListsTmdbSettingsAirDateMinimumHelpText", Type = FieldType.Textbox, Advanced = true)]
     public string AirDateMinimum { get; set; }
 
-    [FieldDefinition(7, Label = "ImportListsTmdbSettingsAirDateMaximum", HelpText = "ImportListsTmdbSettingsAirDateMaximumHelpText", Type = FieldType.Textbox)]
+    [FieldDefinition(7, Label = "ImportListsTmdbSettingsAirDateMaximum", HelpText = "ImportListsTmdbSettingsAirDateMaximumHelpText", Type = FieldType.Textbox, Advanced = true)]
     public string AirDateMaximum { get; set; }
 
-    [FieldDefinition(8, Label = "ImportListsTmdbSettingsWithKeywords", HelpText = "ImportListsTmdbSettingsAndOrDelimitedIdsHelpText", Type = FieldType.Textbox)]
+    [FieldDefinition(8, Label = "ImportListsTmdbSettingsWithGenreTypes", HelpText = "ImportListsTmdbSettingsWithGenreTypesHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverGenreType))]
+    public IEnumerable<int> WithGenreTypes { get; set; }
+
+    [FieldDefinition(9, Label = "ImportListsTmdbSettingsWithKeywords", HelpText = "ImportListsTmdbSettingsAndOrDelimitedIdsHelpText", Type = FieldType.Textbox)]
     public string WithKeywords { get; set; }
 
-    [FieldDefinition(9, Label = "ImportListsTmdbSettingsWithCompanies", HelpText = "ImportListsTmdbSettingsAndOrDelimitedIdsHelpText", Type = FieldType.Textbox)]
+    [FieldDefinition(10, Label = "ImportListsTmdbSettingsWithCompanies", HelpText = "ImportListsTmdbSettingsAndOrDelimitedIdsHelpText", Type = FieldType.Textbox)]
     public string WithCompanies { get; set; }
 
-    [FieldDefinition(10, Label = "ImportListsTmdbSettingsWithNetworks", HelpText = "ImportListsTmdbSettingsAndDelimitedIdsHelpText", Type = FieldType.Textbox)]
+    [FieldDefinition(11, Label = "ImportListsTmdbSettingsWithNetworks", HelpText = "ImportListsTmdbSettingsAndDelimitedIdsHelpText", Type = FieldType.Textbox)]
     public string WithNetworks { get; set; }
 
-    [FieldDefinition(11, Label = "ImportListsTmdbSettingsIncludeNullFirstAirDates", HelpText = "ImportListsTmdbSettingsIncludeNullFirstAirDatesHelpText", Type = FieldType.Checkbox, Advanced = true)]
+    [FieldDefinition(12, Label = "ImportListsTmdbSettingsIncludeNullFirstAirDates", HelpText = "ImportListsTmdbSettingsIncludeNullFirstAirDatesHelpText", Type = FieldType.Checkbox, Advanced = true)]
     public bool IncludeNullFirstAirDates { get; set; }
 }
