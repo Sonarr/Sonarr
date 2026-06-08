@@ -25,7 +25,7 @@ public class SslCertificateLoaderFixture
     }
 
     [Test]
-    public void Exception_is_CryptographicException()
+    public void exception_is_CryptographicException()
     {
         var ex = new SslCertificateLoadException("test");
 
@@ -33,7 +33,7 @@ public class SslCertificateLoaderFixture
     }
 
     [Test]
-    public void Exception_preserves_message()
+    public void exception_preserves_message()
     {
         var ex = new SslCertificateLoadException("expected message");
 
@@ -41,7 +41,7 @@ public class SslCertificateLoaderFixture
     }
 
     [Test]
-    public void LoadCertificateContext_loads_pem_with_separate_key()
+    public void loadCertificateContext_loads_pem_with_separate_key()
     {
         var context = SslCertificateLoader.LoadCertificateContext(_certs.LeafOnlyPemPath, _certs.LeafKeyPath, null);
 
@@ -51,7 +51,7 @@ public class SslCertificateLoaderFixture
     }
 
     [Test]
-    public void LoadCertificateContext_loads_pem_chain_with_intermediate()
+    public void loadCertificateContext_loads_pem_chain_with_intermediate()
     {
         var context = SslCertificateLoader.LoadCertificateContext(_certs.ChainPemPath, _certs.LeafKeyPath, null);
 
@@ -60,7 +60,7 @@ public class SslCertificateLoaderFixture
     }
 
     [Test]
-    public void LoadCertificateContext_includes_intermediate_in_chain()
+    public void loadCertificateContext_includes_intermediate_in_chain()
     {
         var context = SslCertificateLoader.LoadCertificateContext(_certs.ChainPemPath, _certs.LeafKeyPath, null);
 
@@ -68,7 +68,7 @@ public class SslCertificateLoaderFixture
     }
 
     [Test]
-    public void LoadCertificateContext_removes_duplicate_leaf_from_chain()
+    public void loadCertificateContext_removes_duplicate_leaf_from_chain()
     {
         var context = SslCertificateLoader.LoadCertificateContext(_certs.LeafOnlyPemPath, _certs.LeafKeyPath, null);
 
@@ -76,7 +76,7 @@ public class SslCertificateLoaderFixture
     }
 
     [Test]
-    public void LoadCertificateContext_loads_pkcs12()
+    public void loadCertificateContext_loads_pkcs12()
     {
         var context = SslCertificateLoader.LoadCertificateContext(_certs.PfxPath, null, SslTestCertificates.PfxPassword);
 
@@ -86,7 +86,7 @@ public class SslCertificateLoaderFixture
     }
 
     [Test]
-    public void LoadCertificateContext_throws_when_pkcs12_has_no_private_key()
+    public void loadCertificateContext_throws_when_pkcs12_has_no_private_key()
     {
         Action act = () => SslCertificateLoader.LoadCertificateContext(_certs.PfxNoKeyPath, null, "");
 
@@ -95,7 +95,7 @@ public class SslCertificateLoaderFixture
     }
 
     [Test]
-    public void LoadCertificateContext_throws_for_wrong_pem_key()
+    public void loadCertificateContext_throws_for_wrong_pem_key()
     {
         Action act = () => SslCertificateLoader.LoadCertificateContext(_certs.LeafOnlyPemPath, _certs.WrongKeyPath, null);
 
