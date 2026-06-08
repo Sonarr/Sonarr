@@ -15,5 +15,5 @@ public enum TmdbDiscoverSortType
     [FieldOption(Label = "ImportListsTmdbSettingsDiscoverSortTypeVoteAverage")]
     VoteAverage = 4,
     [FieldOption(Label = "ImportListsTmdbSettingsDiscoverSortTypeVoteCount")]
-    VoteCount = 5,
+    VoteCount = 5
 }
