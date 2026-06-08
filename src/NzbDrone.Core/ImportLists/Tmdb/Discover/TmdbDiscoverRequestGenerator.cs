@@ -14,16 +14,29 @@ public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscove
     protected override HttpRequestBuilder CreateSeriesRequestsBuilder()
     {
         var originalLanguage = (TmdbLanguage)Settings.OriginalLanguage;
-        var sortOrderString = Settings.SortOrderType == (int)TmdbDiscoverSortOrderType.Ascending ? "asc" : "desc";
 
-        var sortType = (TmdbDiscoverSortType)Settings.SortType;
-        var sortString = sortType switch
+        var sortByType = (TmdbDiscoverSortByType)Settings.SortByType;
+        var sortByString = sortByType switch
         {
-            TmdbDiscoverSortType.FirstAirDate => "first_air_date",
-            TmdbDiscoverSortType.OriginalName => "original_name",
-            TmdbDiscoverSortType.VoteAverage => "vote_average",
-            TmdbDiscoverSortType.VoteCount => "vote_count",
-            _ => sortType.ToString().ToLowerInvariant()
+            TmdbDiscoverSortByType.FirstAirDateAsc => "first_air_date.asc",
+            TmdbDiscoverSortByType.FirstAirDateDesc => "first_air_date.desc",
+
+            TmdbDiscoverSortByType.NameAsc => "name.asc",
+            TmdbDiscoverSortByType.NameDesc => "name.desc",
+
+            TmdbDiscoverSortByType.OriginalNameAsc => "original_name.asc",
+            TmdbDiscoverSortByType.OriginalNameDesc => "original_name.desc",
+
+            TmdbDiscoverSortByType.PopularityAsc => "popularity.asc",
+            TmdbDiscoverSortByType.PopularityDesc => "popularity.desc",
+
+            TmdbDiscoverSortByType.VoteAverageAsc => "vote_average.asc",
+            TmdbDiscoverSortByType.VoteAverageDesc => "vote_average.desc",
+
+            TmdbDiscoverSortByType.VoteCountAsc => "vote_count.asc",
+            TmdbDiscoverSortByType.VoteCountDesc => "vote_count.desc",
+
+            _ => "popularity.desc"
         };
 
         var builder = new HttpRequestBuilder(Settings.BaseUrl)
@@ -31,7 +44,7 @@ public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscove
             .SetHeader("Authorization", $"Bearer {Settings.AuthToken}")
             .Resource("3/discover/tv")
             .AddQueryParam("include_null_first_air_dates", Settings.IncludeNullFirstAirDates)
-            .AddQueryParam("sort_by", $"{sortString}.{sortOrderString}");
+            .AddQueryParam("sort_by", sortByString);
 
         if (originalLanguage != TmdbLanguage.Any)
         {
