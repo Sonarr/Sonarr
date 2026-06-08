@@ -79,43 +79,39 @@ public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
     {
         WithGenreTypes = [];
         OriginalLanguage = (int)TmdbLanguage.Any;
-        SortType = (int)TmdbDiscoverSortType.Popularity;
-        SortOrderType = (int)TmdbDiscoverSortOrderType.Descending;
+        SortByType = (int)TmdbDiscoverSortByType.PopularityDesc;
     }
 
     [FieldDefinition(1, Label = "ImportListsTmdbSettingsOriginalLanguage", HelpText  = "ImportListsTmdbSettingsOriginalLanguageHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbLanguage))]
     public int OriginalLanguage { get; set; }
 
-    [FieldDefinition(2, Label = "ImportListsTmdbSettingsSortType", HelpText = "ImportListsTmdbSettingsSortTypeHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSortType))]
-    public int SortType { get; set; }
+    [FieldDefinition(2, Label = "ImportListsTmdbSettingsSortByType", HelpText = "ImportListsTmdbSettingsSortByTypeHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSortByType))]
+    public int SortByType { get; set; }
 
-    [FieldDefinition(3, Label = "ImportListsTmdbSettingsSortOrderType", HelpText = "ImportListsTmdbSettingsSortOrderTypeHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSortOrderType))]
-    public int SortOrderType { get; set; }
-
-    [FieldDefinition(4, Label = "ImportListsTmdbSettingsVoteAverageMinimum", HelpText = "ImportListsTmdbSettingsVoteAverageMinimumHelpText", Type = FieldType.Textbox)]
+    [FieldDefinition(3, Label = "ImportListsTmdbSettingsVoteAverageMinimum", HelpText = "ImportListsTmdbSettingsVoteAverageMinimumHelpText", Type = FieldType.Textbox)]
     public string VoteAverageMinimum { get; set; }
 
-    [FieldDefinition(5, Label = "ImportListsTmdbSettingsVoteCountMinimum", HelpText = "ImportListsTmdbSettingsVoteCountMinimumHelpText", Type = FieldType.Textbox, Advanced = true)]
+    [FieldDefinition(4, Label = "ImportListsTmdbSettingsVoteCountMinimum", HelpText = "ImportListsTmdbSettingsVoteCountMinimumHelpText", Type = FieldType.Textbox, Advanced = true)]
     public string VoteCountMinimum { get; set; }
 
-    [FieldDefinition(6, Label = "ImportListsTmdbSettingsAirDateMinimum", HelpText = "ImportListsTmdbSettingsAirDateMinimumHelpText", Type = FieldType.Textbox, Advanced = true)]
+    [FieldDefinition(5, Label = "ImportListsTmdbSettingsAirDateMinimum", HelpText = "ImportListsTmdbSettingsAirDateMinimumHelpText", Type = FieldType.Textbox, Advanced = true)]
     public string AirDateMinimum { get; set; }
 
-    [FieldDefinition(7, Label = "ImportListsTmdbSettingsAirDateMaximum", HelpText = "ImportListsTmdbSettingsAirDateMaximumHelpText", Type = FieldType.Textbox, Advanced = true)]
+    [FieldDefinition(6, Label = "ImportListsTmdbSettingsAirDateMaximum", HelpText = "ImportListsTmdbSettingsAirDateMaximumHelpText", Type = FieldType.Textbox, Advanced = true)]
     public string AirDateMaximum { get; set; }
 
-    [FieldDefinition(8, Label = "ImportListsTmdbSettingsWithGenreTypes", HelpText = "ImportListsTmdbSettingsWithGenreTypesHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverGenreType))]
+    [FieldDefinition(7, Label = "ImportListsTmdbSettingsWithGenreTypes", HelpText = "ImportListsTmdbSettingsWithGenreTypesHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverGenreType))]
     public IEnumerable<int> WithGenreTypes { get; set; }
 
-    [FieldDefinition(9, Label = "ImportListsTmdbSettingsWithKeywords", HelpText = "ImportListsTmdbSettingsAndOrDelimitedIdsHelpText", Type = FieldType.Textbox)]
+    [FieldDefinition(8, Label = "ImportListsTmdbSettingsWithKeywords", HelpText = "ImportListsTmdbSettingsAndOrDelimitedIdsHelpText", Type = FieldType.Textbox)]
     public string WithKeywords { get; set; }
 
-    [FieldDefinition(10, Label = "ImportListsTmdbSettingsWithCompanies", HelpText = "ImportListsTmdbSettingsAndOrDelimitedIdsHelpText", Type = FieldType.Textbox)]
+    [FieldDefinition(9, Label = "ImportListsTmdbSettingsWithCompanies", HelpText = "ImportListsTmdbSettingsAndOrDelimitedIdsHelpText", Type = FieldType.Textbox)]
     public string WithCompanies { get; set; }
 
-    [FieldDefinition(11, Label = "ImportListsTmdbSettingsWithNetworks", HelpText = "ImportListsTmdbSettingsAndDelimitedIdsHelpText", Type = FieldType.Textbox)]
+    [FieldDefinition(10, Label = "ImportListsTmdbSettingsWithNetworks", HelpText = "ImportListsTmdbSettingsAndDelimitedIdsHelpText", Type = FieldType.Textbox)]
     public string WithNetworks { get; set; }
 
-    [FieldDefinition(12, Label = "ImportListsTmdbSettingsIncludeNullFirstAirDates", HelpText = "ImportListsTmdbSettingsIncludeNullFirstAirDatesHelpText", Type = FieldType.Checkbox, Advanced = true)]
+    [FieldDefinition(11, Label = "ImportListsTmdbSettingsIncludeNullFirstAirDates", HelpText = "ImportListsTmdbSettingsIncludeNullFirstAirDatesHelpText", Type = FieldType.Checkbox, Advanced = true)]
     public bool IncludeNullFirstAirDates { get; set; }
 }
