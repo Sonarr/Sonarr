@@ -13,7 +13,7 @@ public class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDisco
 
     public TmdbDiscoverSettingsValidator()
     {
-        RuleFor(c => c.MinimumVoteAverage).Custom(ValidateVoteAverage);
+        RuleFor(c => c.VoteAverageMinimum).Custom(ValidateVoteAverage);
 
         RuleFor(c => c.WithKeywords).Matches(AndOrDelimitedIdsRegex)
             .When(c => c.WithKeywords.IsNotNullOrWhiteSpace());
@@ -68,11 +68,11 @@ public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
     [FieldDefinition(3, Label = "ImportListsTmdbSettingsSortOrderType", HelpText = "ImportListsTmdbSettingsSortOrderTypeHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSortOrderType))]
     public int SortOrderType { get; set; }
 
-    [FieldDefinition(4, Label = "ImportListsTmdbSettingsMinimumVoteAverage", HelpText = "ImportListsTmdbSettingsMinimumVoteAverageHelpText", Type = FieldType.Textbox)]
-    public string MinimumVoteAverage { get; set; }
+    [FieldDefinition(4, Label = "ImportListsTmdbSettingsVoteAverageMinimum", HelpText = "ImportListsTmdbSettingsVoteAverageMinimumHelpText", Type = FieldType.Textbox)]
+    public string VoteAverageMinimum { get; set; }
 
-    [FieldDefinition(5, Label = "ImportListsTmdbSettingsMinimumVoteCount", HelpText = "ImportListsTmdbSettingsMinimumVoteCountHelpText", Type = FieldType.Textbox)]
-    public string MinimumVoteCount { get; set; }
+    [FieldDefinition(5, Label = "ImportListsTmdbSettingsVoteCountMinimum", HelpText = "ImportListsTmdbSettingsVoteCountMinimumHelpText", Type = FieldType.Textbox)]
+    public string VoteCountMinimum { get; set; }
 
     [FieldDefinition(6, Label = "ImportListsTmdbSettingsAirDateMinimum", HelpText = "ImportListsTmdbSettingsAirDateMinimumHelpText", Type = FieldType.Textbox)]
     public string AirDateMinimum { get; set; }

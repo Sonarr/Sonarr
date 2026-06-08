@@ -62,7 +62,7 @@ public class TmdbDiscoverImport : TmdbImportBase<TmdbDiscoverSettings>
         yield return new KeyValuePair<string, TmdbDiscoverSettings>("Top Rated",
             new TmdbDiscoverSettings
             {
-                MinimumVoteCount = "200",
+                VoteCountMinimum = "200",
                 SortType = (int)TmdbDiscoverSortType.VoteAverage,
                 SortOrderType = (int)TmdbDiscoverSortOrderType.Descending
             });
