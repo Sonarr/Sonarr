@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Validators;
@@ -16,6 +18,12 @@ public class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDisco
     {
         RuleFor(c => c.VoteAverageMinimum).Custom(ValidateVoteAverage);
 
+        RuleFor(c => c.AirDateMinimum).Must(ValidateAirDate)
+            .WithMessage("Must be in the format: yyyy-MM-dd");
+
+        RuleFor(c => c.AirDateMaximum).Must(ValidateAirDate)
+            .WithMessage("Must be in the format: yyyy-MM-dd");
+
         RuleFor(c => c.WithKeywords).Matches(AndOrDelimitedIdsRegex)
             .When(c => c.WithKeywords.IsNotNullOrWhiteSpace());
 
@@ -24,6 +32,20 @@ public class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDisco
 
         RuleFor(c => c.WithNetworks).Matches(AndDelimitedIdsRegex)
             .When(c => c.WithNetworks.IsNotNullOrWhiteSpace());
+    }
+
+    private static bool ValidateAirDate(string airDate)
+    {
+        if (airDate.IsNullOrWhiteSpace())
+        {
+            return true;
+        }
+
+        return DateTime.TryParseExact(airDate,
+            "yyyy-MM-dd",
+            CultureInfo.InvariantCulture,
+            DateTimeStyles.None,
+            out _);
     }
 
     private static void ValidateVoteAverage(string voteAverage, CustomContext context)
