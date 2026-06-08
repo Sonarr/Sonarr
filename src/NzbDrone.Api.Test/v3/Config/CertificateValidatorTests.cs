@@ -35,7 +35,7 @@ public class CertificateValidatorTests
     }
 
     [Test]
-    public void Validate_fails_when_cert_path_is_null()
+    public void validate_fails_when_cert_path_is_null()
     {
         var resource = new HostConfigResource { SslCertPath = null };
 
@@ -45,7 +45,7 @@ public class CertificateValidatorTests
     }
 
     [Test]
-    public void Validate_passes_for_valid_pem_certificate()
+    public void validate_passes_for_valid_pem_certificate()
     {
         var resource = new HostConfigResource
         {
@@ -59,7 +59,7 @@ public class CertificateValidatorTests
     }
 
     [Test]
-    public void Validate_passes_for_valid_pkcs12_certificate()
+    public void validate_passes_for_valid_pkcs12_certificate()
     {
         var resource = new HostConfigResource
         {
@@ -73,7 +73,7 @@ public class CertificateValidatorTests
     }
 
     [Test]
-    public void Validate_fails_for_pem_with_wrong_key()
+    public void validate_fails_for_pem_with_wrong_key()
     {
         var resource = new HostConfigResource
         {
@@ -88,7 +88,7 @@ public class CertificateValidatorTests
     }
 
     [Test]
-    public void Validate_fails_for_pkcs12_with_wrong_password()
+    public void validate_fails_for_pkcs12_with_wrong_password()
     {
         var resource = new HostConfigResource
         {
