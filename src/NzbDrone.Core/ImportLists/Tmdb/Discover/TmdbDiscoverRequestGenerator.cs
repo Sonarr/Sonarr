@@ -1,3 +1,4 @@
+using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 
@@ -35,6 +36,11 @@ public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscove
         if (originalLanguage != TmdbLanguage.Any)
         {
             builder.AddQueryParam("with_original_language", originalLanguage.ToString().ToLowerInvariant());
+        }
+
+        if (Settings.WithGenreTypes.Any())
+        {
+            builder.AddQueryParam("with_genres", string.Join(',', Settings.WithGenreTypes));
         }
 
         AddOrSkipQueryParam(builder, "air_date.gte", Settings.AirDateMinimum);
