@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
@@ -19,6 +20,9 @@ namespace NzbDrone.Core.Extras.Subtitles
 {
     public class SubtitleService : ExtraFileManager<SubtitleFile>
     {
+        private static readonly Regex SubtitleSuffixRegex = new(@"(?<suffix>([-_. ](?<tags>forced|foreign|default|cc|psdh|sdh))*[-_. ](?<iso_code>[a-z]{2,3})([-_. ](?<tags>forced|foreign|default|cc|psdh|sdh))*)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly HashSet<string> AdditionalNorwegianSubtitleCodes = new(StringComparer.OrdinalIgnoreCase) { "nn" };
+
         private readonly IDiskProvider _diskProvider;
         private readonly IDetectSample _detectSample;
         private readonly ISubtitleFileService _subtitleFileService;
@@ -77,7 +81,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             foreach (var episodeFile in episodeFiles)
             {
                 var groupedExtraFilesForEpisodeFile = subtitleFiles.Where(m => m.EpisodeFileId == episodeFile.Id)
-                                                            .GroupBy(s => s.AggregateString).ToList();
+                                                            .GroupBy(s => GetRenameSuffix(s, false) + s.Extension, StringComparer.OrdinalIgnoreCase).ToList();
 
                 foreach (var group in groupedExtraFilesForEpisodeFile)
                 {
@@ -92,7 +96,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                             subtitleFile.Copy = ++copy;
                         }
 
-                        var suffix = GetSuffix(subtitleFile.Language, subtitleFile.Copy, subtitleFile.LanguageTags, multipleCopies, subtitleFile.Title);
+                        var suffix = GetRenameSuffix(subtitleFile, multipleCopies);
 
                         movedFiles.AddIfNotNull(MoveFile(series, episodeFile, subtitleFile, suffix));
                     }
@@ -236,6 +240,60 @@ namespace NzbDrone.Core.Extras.Subtitles
             }
 
             return importedFiles;
+        }
+
+        private string GetRenameSuffix(SubtitleFile subtitleFile, bool multipleCopies)
+        {
+            var languageSuffix = GetExistingLanguageSuffix(subtitleFile);
+
+            if (languageSuffix is null)
+            {
+                return GetSuffix(subtitleFile.Language, subtitleFile.Copy, subtitleFile.LanguageTags, multipleCopies, subtitleFile.Title);
+            }
+
+            var suffixBuilder = new StringBuilder();
+
+            if (subtitleFile.Title is not null)
+            {
+                suffixBuilder.Append('.');
+                suffixBuilder.Append(subtitleFile.Title);
+
+                if (multipleCopies)
+                {
+                    suffixBuilder.Append(" - ");
+                    suffixBuilder.Append(subtitleFile.Copy);
+                }
+            }
+            else if (multipleCopies)
+            {
+                suffixBuilder.Append('.');
+                suffixBuilder.Append(subtitleFile.Copy);
+            }
+
+            suffixBuilder.Append(languageSuffix);
+
+            return suffixBuilder.ToString();
+        }
+
+        private string GetExistingLanguageSuffix(SubtitleFile subtitleFile)
+        {
+            var fileName = Path.GetFileNameWithoutExtension(subtitleFile.RelativePath);
+            var match = SubtitleSuffixRegex.Match(fileName);
+
+            if (!match.Success)
+            {
+                return null;
+            }
+
+            var isoCode = match.Groups["iso_code"].Value.ToLowerInvariant();
+            var isoLanguage = IsoLanguages.Find(isoCode);
+
+            if (isoLanguage is null && !AdditionalNorwegianSubtitleCodes.Contains(isoCode))
+            {
+                return null;
+            }
+
+            return match.Groups["suffix"].Value;
         }
 
         private string GetSuffix(Language language, int copy, List<string> languageTags, bool multipleCopies = false, string title = null)

@@ -8,6 +8,7 @@ using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Extras.Subtitles;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser.Model;
@@ -153,6 +154,63 @@ namespace NzbDrone.Core.Test.Extras.Subtitles
             {
                 results[i].RelativePath.AsOsAgnostic().PathEquals(Path.Combine("Season 1", expectedOutputs[i]).AsOsAgnostic()).Should().Be(true);
             }
+        }
+
+        [Test]
+        [TestCase("nb", 15)]
+        [TestCase("nn", 0)]
+        [TestCase("no", 15)]
+        [TestCase("nb.forced.sdh", 15)]
+        public void should_preserve_existing_subtitle_suffix_when_renaming(string existingSuffix, int languageId)
+        {
+            _episodeFile.RelativePath = Path.Combine("Season 1", "Series Title - S01E01 - Pilot.mkv").AsOsAgnostic();
+            _episodeFile.Path = Path.Combine(_series.Path, _episodeFile.RelativePath).AsOsAgnostic();
+
+            var subtitleFile = new SubtitleFile
+            {
+                SeriesId = _series.Id,
+                EpisodeFileId = _episodeFile.Id,
+                RelativePath = Path.Combine("Season 1", $"Series Title - S01E01.{existingSuffix}.srt").AsOsAgnostic(),
+                Extension = ".srt",
+                Language = Language.FindById(languageId),
+                LanguageTags = existingSuffix.Split('.').Skip(1).ToList()
+            };
+
+            Mocker.GetMock<ISubtitleFileService>()
+                  .Setup(s => s.GetFilesBySeries(_series.Id))
+                  .Returns(new List<SubtitleFile> { subtitleFile });
+
+            var results = Subject.MoveFilesAfterRename(_series, new List<EpisodeFile> { _episodeFile }).ToList();
+
+            results.Count.Should().Be(1);
+            results[0].RelativePath.AsOsAgnostic().PathEquals(Path.Combine("Season 1", $"Series Title - S01E01 - Pilot.{existingSuffix}.srt").AsOsAgnostic()).Should().Be(true);
+        }
+
+        [Test]
+        public void should_preserve_existing_subtitle_title_and_suffix_when_renaming()
+        {
+            _episodeFile.RelativePath = Path.Combine("Season 1", "Series Title - S01E01 - Pilot.mkv").AsOsAgnostic();
+            _episodeFile.Path = Path.Combine(_series.Path, _episodeFile.RelativePath).AsOsAgnostic();
+
+            var subtitleFile = new SubtitleFile
+            {
+                SeriesId = _series.Id,
+                EpisodeFileId = _episodeFile.Id,
+                RelativePath = Path.Combine("Season 1", "Series Title - S01E01.Commentary.nb.forced.srt").AsOsAgnostic(),
+                Extension = ".srt",
+                Language = Language.Norwegian,
+                LanguageTags = new List<string> { "forced" },
+                Title = "Commentary"
+            };
+
+            Mocker.GetMock<ISubtitleFileService>()
+                  .Setup(s => s.GetFilesBySeries(_series.Id))
+                  .Returns(new List<SubtitleFile> { subtitleFile });
+
+            var results = Subject.MoveFilesAfterRename(_series, new List<EpisodeFile> { _episodeFile }).ToList();
+
+            results.Count.Should().Be(1);
+            results[0].RelativePath.AsOsAgnostic().PathEquals(Path.Combine("Season 1", "Series Title - S01E01 - Pilot.Commentary.nb.forced.srt").AsOsAgnostic()).Should().Be(true);
         }
 
         [Test]
