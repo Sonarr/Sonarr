@@ -133,7 +133,8 @@ namespace NzbDrone.Core.CustomFormats
                 Languages = localEpisode.Languages,
                 IndexerFlags = localEpisode.IndexerFlags,
                 ReleaseType = localEpisode.ReleaseType,
-                Filename = fileName
+                Filename = fileName,
+                ReleaseTitleExclusions = GetReleaseTitleExclusions(localEpisode.Series, localEpisode.Episodes)
             };
 
             return ParseCustomFormat(input);
@@ -205,9 +206,29 @@ namespace NzbDrone.Core.CustomFormats
                 IndexerFlags = episodeFile.IndexerFlags,
                 ReleaseType = episodeFile.ReleaseType,
                 Filename = Path.GetFileName(episodeFile.RelativePath),
+                ReleaseTitleExclusions = GetReleaseTitleExclusions(series, episodeFile.Episodes?.Value)
             };
 
             return ParseCustomFormat(input, allCustomFormats);
+        }
+
+        private static List<string> GetReleaseTitleExclusions(Series series, IEnumerable<Episode> episodes)
+        {
+            var titles = new List<string>();
+
+            if (series?.Title.IsNotNullOrWhiteSpace() == true)
+            {
+                titles.Add(series.Title);
+            }
+
+            if (episodes != null)
+            {
+                titles.AddRange(episodes
+                    .Select(e => e.Title)
+                    .Where(t => t.IsNotNullOrWhiteSpace()));
+            }
+
+            return titles.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
         }
     }
 }
