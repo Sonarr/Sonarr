@@ -17,11 +17,18 @@ function TagDetailsDelayProfile({
   usenetDelay,
   torrentDelay,
 }: TagDetailsDelayProfileProps) {
+  const protocol = titleCase(
+    translate('DelayProfileProtocol', {
+      preferredProtocol:
+        preferredProtocol === 'unknown'
+          ? translate('NoPreference')
+          : preferredProtocol,
+    })
+  );
+
   return (
     <div>
-      <div>
-        {titleCase(translate('DelayProfileProtocol', { preferredProtocol }))}
-      </div>
+      <div>{protocol}</div>
 
       <div>
         {enableUsenet

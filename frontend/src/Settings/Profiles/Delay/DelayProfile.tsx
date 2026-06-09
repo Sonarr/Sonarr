@@ -83,6 +83,10 @@ function DelayProfile({
       return translate('OnlyUsenet');
     }
 
+    if (preferredProtocol === 'unknown') {
+      return translate('NoPreference');
+    }
+
     return titleCase(translate('PreferProtocol', { preferredProtocol }));
   }, [preferredProtocol, enableUsenet, enableTorrent]);
 

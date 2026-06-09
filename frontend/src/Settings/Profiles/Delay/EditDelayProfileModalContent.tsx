@@ -32,6 +32,12 @@ const protocolOptions: EnhancedSelectInputValue<string>[] = [
     },
   },
   {
+    key: 'noPreference',
+    get value() {
+      return translate('NoPreference');
+    },
+  },
+  {
     key: 'onlyUsenet',
     get value() {
       return translate('OnlyUsenet');
@@ -86,6 +92,10 @@ function EditDelayProfileModalContent({
       return 'onlyUsenet';
     }
 
+    if (preferredProtocol.value === 'unknown') {
+      return 'noPreference';
+    }
+
     return preferredProtocol.value === 'usenet'
       ? 'preferUsenet'
       : 'preferTorrent';
@@ -115,6 +125,11 @@ function EditDelayProfileModalContent({
           updateValue('enableUsenet', true);
           updateValue('enableTorrent', true);
           updateValue('preferredProtocol', 'torrent');
+          break;
+        case 'noPreference':
+          updateValue('enableUsenet', true);
+          updateValue('enableTorrent', true);
+          updateValue('preferredProtocol', 'unknown');
           break;
         case 'onlyUsenet':
           updateValue('enableUsenet', true);

@@ -2,6 +2,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Pending;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Delay;
 using NzbDrone.Core.Qualities;
@@ -40,7 +41,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             var qualityProfile = subject.Series.QualityProfile.Value;
             var delayProfile = _delayProfileService.BestForTags(subject.Series.Tags);
             var delay = delayProfile.GetProtocolDelay(subject.Release.DownloadProtocol);
+            var hasPreferredProtocol = delayProfile.PreferredProtocol != DownloadProtocol.Unknown;
             var isPreferredProtocol = subject.Release.DownloadProtocol == delayProfile.PreferredProtocol;
+            var shouldBypassProtocolDelay = !hasPreferredProtocol || isPreferredProtocol;
             var preferPropersAndRepacks = _configService.DownloadPropersAndRepacks == ProperDownloadTypes.PreferAndUpgrade;
 
             if (delay == 0)
@@ -53,7 +56,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             var qualityComparer = new QualityModelComparer(qualityProfile);
 
-            if (isPreferredProtocol && preferPropersAndRepacks)
+            if (shouldBypassProtocolDelay && preferPropersAndRepacks)
             {
                 foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
                 {
@@ -75,22 +78,22 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 var bestQualityInProfile = qualityProfile.LastAllowedQuality();
                 var isBestInProfile = qualityComparer.Compare(subject.ParsedEpisodeInfo.Quality.Quality, bestQualityInProfile) >= 0;
 
-                if (isBestInProfile && isPreferredProtocol)
+                if (isBestInProfile && shouldBypassProtocolDelay)
                 {
-                    _logger.Debug("Quality is highest in profile for preferred protocol, will not delay");
+                    _logger.Debug("Quality is highest in profile, will not delay");
                     return DownloadSpecDecision.Accept();
                 }
             }
 
-            // If quality meets or exceeds the best allowed quality in the profile accept it immediately
+            // If the custom format score meets or exceeds the configured minimum accept it immediately
             if (delayProfile.BypassIfAboveCustomFormatScore)
             {
                 var score = subject.CustomFormatScore;
                 var minimum = delayProfile.MinimumCustomFormatScore;
 
-                if (score >= minimum && isPreferredProtocol)
+                if (score >= minimum && shouldBypassProtocolDelay)
                 {
-                    _logger.Debug("Custom format score ({0}) meets minimum ({1}) for preferred protocol, will not delay", score, minimum);
+                    _logger.Debug("Custom format score ({0}) meets minimum ({1}), will not delay", score, minimum);
                     return DownloadSpecDecision.Accept();
                 }
             }

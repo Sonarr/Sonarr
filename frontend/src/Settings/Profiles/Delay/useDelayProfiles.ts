@@ -10,10 +10,12 @@ import fetchJson, { ApiError } from 'Utilities/Fetch/fetchJson';
 import getQueryPath from 'Utilities/Fetch/getQueryPath';
 import getQueryString from 'Utilities/Fetch/getQueryString';
 
+export type DelayProfileProtocol = 'unknown' | 'usenet' | 'torrent';
+
 export interface DelayProfile extends ModelBase {
   enableUsenet: boolean;
   enableTorrent: boolean;
-  preferredProtocol: 'usenet' | 'torrent';
+  preferredProtocol: DelayProfileProtocol;
   usenetDelay: number;
   torrentDelay: number;
   bypassIfHighestQuality: boolean;
