@@ -1097,6 +1097,11 @@ namespace NzbDrone.Core.Organizer
                     return "v" + quality.Revision.Version;
                 }
 
+                if (quality.Revision.IsRepack)
+                {
+                    return "Repack";
+                }
+
                 return "Proper";
             }
 

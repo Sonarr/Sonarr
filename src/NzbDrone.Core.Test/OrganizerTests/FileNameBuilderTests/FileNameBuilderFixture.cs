@@ -63,6 +63,12 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             _episodeFile.Quality.Revision.Version = 2;
         }
 
+        private void GivenRepack()
+        {
+            _episodeFile.Quality.Revision.Version = 2;
+            _episodeFile.Quality.Revision.IsRepack = true;
+        }
+
         private void GivenReal()
         {
             _episodeFile.Quality.Revision.Real = 1;
@@ -767,6 +773,17 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("South Park - S15E06 [HDTV-720p Proper]");
+        }
+
+        [Test]
+        public void should_replace_quality_full_with_quality_title_and_repack_only_when_a_repack()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} [{Quality Full}]";
+
+            GivenRepack();
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South Park - S15E06 [HDTV-720p Repack]");
         }
 
         [Test]
