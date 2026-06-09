@@ -1,0 +1,41 @@
+{
+  "shows": [
+    {
+      "id": 111188,
+      "rank": 1,
+      "adult": 0,
+      "title": "Scam 1992: The Harshad Mehta Story",
+      "imdb_id": "tt12392504",
+      "tvdb_id": 389680,
+      "ids": {
+        "mdblist": "m111188",
+        "imdb": "tt12392504",
+        "tmdb": 90823,
+        "tvdb": 389680
+      },
+      "mediatype": "show",
+      "release_year": 2020
+    },
+    {
+      "id": 101352,
+      "rank": 2,
+      "adult": 0,
+      "title": "Panchayat",
+      "imdb_id": "tt12004706",
+      "tvdb_id": 379446,
+      "mediatype": "show",
+      "release_year": 2020
+    },
+    {
+      "id": 917496,
+      "rank": 3,
+      "adult": 0,
+      "title": "Beetlejuice Beetlejuice",
+      "imdb_id": "tt2049403",
+      "tvdb_id": null,
+      "mediatype": "movie",
+      "release_year": 2024
+    }
+  ],
+  "movies": []
+}

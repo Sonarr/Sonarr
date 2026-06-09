@@ -72,7 +72,7 @@ function AddImportListModalContent({
                 <FieldSet
                   key={key}
                   legend={translate('TypeOfList', {
-                    typeOfList: titleCase(key),
+                    typeOfList: getImportListTypeName(key),
                   })}
                 >
                   <div className={styles.lists}>
@@ -98,6 +98,14 @@ function AddImportListModalContent({
       </ModalFooter>
     </ModalContent>
   );
+}
+
+function getImportListTypeName(listType: string) {
+  if (listType === 'mdbList') {
+    return 'MDBList';
+  }
+
+  return titleCase(listType);
 }
 
 export default AddImportListModalContent;

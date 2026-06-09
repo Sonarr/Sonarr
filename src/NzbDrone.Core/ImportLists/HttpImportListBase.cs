@@ -20,14 +20,13 @@ namespace NzbDrone.Core.ImportLists
     public abstract class HttpImportListBase<TSettings> : ImportListBase<TSettings>
         where TSettings : IImportListSettings, new()
     {
-        protected const int MaxNumResultsPerQuery = 1000;
-
         protected readonly IHttpClient _httpClient;
 
         public bool SupportsPaging => PageSize > 0;
 
         public virtual int PageSize => 0;
         public virtual TimeSpan RateLimit => TimeSpan.FromSeconds(2);
+        protected virtual int MaxNumResultsPerQuery => 1000;
 
         public abstract IImportListRequestGenerator GetRequestGenerator();
         public abstract IParseImportListResponse GetParser();
