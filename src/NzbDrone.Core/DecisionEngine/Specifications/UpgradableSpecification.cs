@@ -104,7 +104,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (newFormatScore < currentFormatScore + qualityProfile.MinUpgradeFormatScore)
             {
-                _logger.Debug("New item's custom formats [{0}] ({1}) do not meet minimum custom format score increment of {3} required for upgrade, skipping. Existing: [{4}] ({5}).",
+                _logger.Debug("New item's custom formats [{0}] ({1}) do not meet minimum custom format score increment of {2} required for upgrade, skipping. Existing: [{3}] ({4}).",
                               newCustomFormats.ConcatToString(),
                               newFormatScore,
                               qualityProfile.MinUpgradeFormatScore,
