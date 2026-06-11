@@ -62,7 +62,7 @@ function ImportSeriesCard({
 
   const {
     relativePath,
-    language = { id: 0, name: 'Unknown' },
+    language,
     monitor,
     qualityProfileId,
     seasonFolder,
@@ -192,7 +192,6 @@ function ImportSeriesCard({
               <div className={styles.titleRow}>
                 <ImportSeriesSelectSeries
                   id={id}
-                  language={language}
                   onInputChange={handleInputChange}
                   onEditingChange={setIsSearching}
                 />
@@ -229,7 +228,6 @@ function ImportSeriesCard({
               <div className={styles.matchAction}>
                 <ImportSeriesSelectSeries
                   id={id}
-                  language={language}
                   onInputChange={handleInputChange}
                   onEditingChange={setIsSearching}
                 />
@@ -297,13 +295,16 @@ function ImportSeriesCard({
             </div>
 
             <div className={styles.setting}>
-              <div className={styles.settingLabel}>{translate('Language')}</div>
+              <div className={styles.settingLabel}>
+                {translate('MetadataLanguage')}
+              </div>
 
               <LanguageSelectInput
                 name="language"
                 value={language}
-                modalTitle={translate('Language')}
+                modalTitle={translate('MetadataLanguage')}
                 isDisabled={!selectedSeries}
+                includeAny={false}
                 onChange={handleInputChange}
               />
             </div>

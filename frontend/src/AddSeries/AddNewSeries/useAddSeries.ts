@@ -13,7 +13,9 @@ interface AddSeriesPayload
     Omit<
       AddSeriesOptions,
       'monitor' | 'searchForMissingEpisodes' | 'searchForCutoffUnmetEpisodes'
-    > {}
+    > {
+  language: Language;
+}
 
 const DEFAULT_SERIES: AddSeries[] = [];
 

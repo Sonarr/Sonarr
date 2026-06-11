@@ -1,7 +1,10 @@
 import { useEffect } from 'react';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
-import { useAddSeriesOptions } from 'AddSeries/addSeriesOptionsStore';
+import {
+  useAddSeriesLanguage,
+  useAddSeriesOptions,
+} from 'AddSeries/addSeriesOptionsStore';
 import { createOptionsStore } from 'Helpers/Hooks/useOptionsStore';
 import Language from 'Language/Language';
 import { UnmappedFolder } from 'RootFolder/useRootFolders';
@@ -59,8 +62,9 @@ const importSeriesStore = create<ImportSeriesState>()(() => defaultState);
 export const useEnsureImportSeriesItems = (
   unmappedFolders: UnamppedFolderItem[]
 ) => {
-  const { language, monitor, qualityProfileId, seriesType, seasonFolder } =
+  const { monitor, qualityProfileId, seriesType, seasonFolder } =
     useAddSeriesOptions();
+  const language = useAddSeriesLanguage();
 
   useEffect(() => {
     unmappedFolders.forEach((unmappedFolder) => {
@@ -183,6 +187,12 @@ export const useIsCurrentLookupQueueItem = (id: string) => {
 
 export const useIsCurrentItemQueued = (id: string) => {
   return importSeriesStore((state) => state.lookupQueue.includes(id));
+};
+
+export const useHasSearchedItems = () => {
+  return importSeriesStore((state) =>
+    Object.values(state.items).some((item) => item.hasSearched)
+  );
 };
 
 export const useLookupQueueHasItems = () => {

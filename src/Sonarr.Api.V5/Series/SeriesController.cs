@@ -12,6 +12,7 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Tv;
@@ -105,6 +106,13 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
         SharedValidator.RuleFor(s => s.QualityProfileId).Cascade(CascadeMode.Stop)
             .ValidId()
             .SetValidator(qualityProfileExistsValidator);
+
+        SharedValidator.RuleFor(s => s.Language).Cascade(CascadeMode.Stop)
+            .NotNull()
+            .Must(l => IsoLanguages.Get(l!) != null)
+            .WithMessage("Invalid Language value");
+
+        SharedValidator.RuleFor(s => s.SeasonType).NotEmpty();
 
         PostValidator.RuleFor(s => s.Title).NotEmpty();
         PostValidator.RuleFor(s => s.TvdbId).GreaterThan(0).SetValidator(seriesExistsValidator);

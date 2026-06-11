@@ -1,5 +1,6 @@
 using FluentValidation;
 using NzbDrone.Core.ImportLists;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 using NzbDrone.SignalR;
@@ -27,5 +28,10 @@ public class ImportListController : ProviderControllerBase<ImportListResource, I
         SharedValidator.RuleFor(c => c.QualityProfileId).Cascade(CascadeMode.Stop)
             .ValidId()
             .SetValidator(qualityProfileExistsValidator);
+
+        SharedValidator.RuleFor(c => c.Language).Cascade(CascadeMode.Stop)
+            .NotNull()
+            .Must(l => IsoLanguages.Get(l!) != null)
+            .WithMessage("Invalid Language value");
     }
 }

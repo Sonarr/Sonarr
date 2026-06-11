@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import {
   AddSeriesOptions,
   setAddSeriesOption,
+  useAddSeriesLanguage,
   useAddSeriesOptions,
 } from 'AddSeries/addSeriesOptionsStore';
 import EnhancedSelectInput, {
@@ -29,8 +30,9 @@ function ImportSeriesDefaults({
   isApplyDisabled,
   onApplyDefaults,
 }: ImportSeriesDefaultsProps) {
-  const { language, monitor, qualityProfileId, seasonFolder, seriesType } =
+  const { monitor, qualityProfileId, seasonFolder, seriesType } =
     useAddSeriesOptions();
+  const language = useAddSeriesLanguage();
 
   const seasonFolderOptions: EnhancedSelectInputValue<boolean>[] = useMemo(
     () => [
@@ -91,11 +93,14 @@ function ImportSeriesDefaults({
         </div>
 
         <div className={styles.setting}>
-          <div className={styles.settingLabel}>{translate('Language')}</div>
+          <div className={styles.settingLabel}>
+            {translate('MetadataLanguage')}
+          </div>
           <LanguageSelectInput
             name="language"
             value={language}
-            modalTitle={translate('Language')}
+            modalTitle={translate('MetadataLanguage')}
+            includeAny={false}
             onChange={handleInputChange}
           />
         </div>

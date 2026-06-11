@@ -1,17 +1,18 @@
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 import AddSeries from 'AddSeries/AddSeries';
-import { useAddSeriesOption } from 'AddSeries/addSeriesOptionsStore';
 import { useAppDimension } from 'App/appStore';
 import HeartRating from 'Components/HeartRating';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import MetadataAttribution from 'Components/MetadataAttribution';
 import { icons } from 'Helpers/Props';
+import { useLanguageById } from 'Language/useLanguages';
 import { Statistics } from 'Series/Series';
 import SeriesGenres from 'Series/SeriesGenres';
 import SeriesPoster from 'Series/SeriesPoster';
 import useExistingSeries from 'Series/useExistingSeries';
+import { useMetadataSourceSettingsValues } from 'Settings/MetadataSource/useMetadataSourceSettings';
 import translate from 'Utilities/String/translate';
 import AddNewSeriesModal from './AddNewSeriesModal';
 import styles from './AddNewSeriesSearchResult.module.css';
@@ -55,13 +56,14 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
     isExcluded,
   } = series;
 
-  const language = useAddSeriesOption('language');
+  const { preferredMetadataLanguage } = useMetadataSourceSettingsValues();
+  const language = useLanguageById(preferredMetadataLanguage);
   const isExistingSeries = useExistingSeries(tvdbId);
   const isSmallScreen = useAppDimension('isSmallScreen');
   const [isNewAddSeriesModalOpen, setIsNewAddSeriesModalOpen] = useState(false);
 
   const seasonCount = statistics.seasonCount;
-  const translation = translations.find((t) => t.language.id === language.id);
+  const translation = translations.find((t) => t.language.id === language?.id);
   const title = translation?.title ?? originalTitle ?? lookupTitle;
   const overview = translation?.overview ?? lookupOverview;
 

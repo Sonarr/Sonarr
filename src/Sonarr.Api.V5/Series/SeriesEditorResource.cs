@@ -1,3 +1,4 @@
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Tv;
 
 namespace Sonarr.Api.V5.Series;
@@ -8,6 +9,7 @@ public class SeriesEditorResource
     public bool? Monitored { get; set; }
     public NewItemMonitorTypes? MonitorNewItems { get; set; }
     public int? QualityProfileId { get; set; }
+    public Language? Language { get; set; }
     public SeriesTypes? SeriesType { get; set; }
     public bool? SeasonFolder { get; set; }
     public string? RootFolderPath { get; set; }

@@ -25,7 +25,7 @@ import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import useDebounce from 'Helpers/Hooks/useDebounce';
 import { icons, kinds } from 'Helpers/Props';
-import Language from 'Language/Language';
+import { usePreferredMetadataLanguage } from 'Language/useLanguages';
 import useExistingSeries from 'Series/useExistingSeries';
 import { InputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
@@ -50,19 +50,18 @@ function handleResultsMouseDown(event: MouseEvent<HTMLDivElement>) {
 
 interface ImportSeriesSelectSeriesProps {
   id: string;
-  language: Language;
   onInputChange: (input: InputChanged) => void;
   onEditingChange: (isEditing: boolean) => void;
 }
 
 function ImportSeriesSelectSeries({
   id,
-  language,
   onInputChange,
   onEditingChange,
 }: ImportSeriesSelectSeriesProps) {
   const importSeriesItem = useImportSeriesItem(id);
   const { selectedSeries, name } = importSeriesItem ?? {};
+  const language = usePreferredMetadataLanguage();
   const isExistingSeries = useExistingSeries(selectedSeries?.tvdbId);
 
   const [term, setTerm] = useState(name);
@@ -222,10 +221,6 @@ function ImportSeriesSelectSeries({
   useEffect(() => {
     setHighlightedIndex(0);
   }, [data]);
-
-  useEffect(() => {
-    addToLookupQueue(id, true);
-  }, [id, language]);
 
   useEffect(() => {
     if (isEditing) {
