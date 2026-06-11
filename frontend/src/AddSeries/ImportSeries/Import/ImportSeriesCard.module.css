@@ -104,7 +104,7 @@
 
 .settingsRow {
   display: grid;
-  grid-template-columns: repeat(5, minmax(112px, 180px));
+  grid-template-columns: repeat(6, minmax(112px, 180px));
 
   justify-content: end;
 

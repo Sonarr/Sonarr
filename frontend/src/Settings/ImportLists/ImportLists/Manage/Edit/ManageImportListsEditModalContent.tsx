@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
 import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
@@ -10,6 +11,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalSection from 'Components/ModalSection';
 import { inputTypes } from 'Helpers/Props';
+import Language from 'Language/Language';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './ManageImportListsEditModalContent.module.css';
@@ -18,6 +20,7 @@ interface SavePayload {
   enableAutomaticAdd?: boolean;
   qualityProfileId?: number;
   rootFolderPath?: string;
+  language?: Language;
   tagExisting?: boolean;
 }
 
@@ -61,6 +64,7 @@ function ManageImportListsEditModalContent(
     NO_CHANGE
   );
   const [rootFolderPath, setRootFolderPath] = useState(NO_CHANGE);
+  const [language, setLanguage] = useState<string | Language>(NO_CHANGE);
   const [tagExisting, setTagExisting] = useState(NO_CHANGE);
 
   const save = useCallback(() => {
@@ -82,6 +86,11 @@ function ManageImportListsEditModalContent(
       payload.rootFolderPath = rootFolderPath;
     }
 
+    if (language !== NO_CHANGE) {
+      hasChanges = true;
+      payload.language = language as Language;
+    }
+
     if (tagExisting !== NO_CHANGE) {
       hasChanges = true;
       payload.tagExisting = tagExisting === 'enabled';
@@ -96,6 +105,7 @@ function ManageImportListsEditModalContent(
     enableAutomaticAdd,
     qualityProfileId,
     rootFolderPath,
+    language,
     tagExisting,
     onSavePress,
     onModalClose,
@@ -111,6 +121,9 @@ function ManageImportListsEditModalContent(
         break;
       case 'rootFolderPath':
         setRootFolderPath(value as string);
+        break;
+      case 'language':
+        setLanguage(value as Language);
         break;
       case 'tagExisting':
         setTagExisting(value as string);
@@ -169,8 +182,22 @@ function ManageImportListsEditModalContent(
           </FormRow>
 
           <FormRow>
-            <FormLabel>{translate('TagExisting')}</FormLabel>
+            <FormLabel>{translate('Language')}</FormLabel>
 
+            <FormInputHelpText text={translate('ListLanguageHelpText')} />
+            <FormInput
+              type={inputTypes.LANGUAGE_SELECT}
+              name="language"
+              value={language}
+              includeAny={false}
+              includeNoChange={true}
+              includeNoChangeDisabled={false}
+              onChange={onInputChange}
+            />
+          </FormRow>
+
+          <FormRow>
+            <FormLabel>{translate('TagExisting')}</FormLabel>
             <FormInput
               type={inputTypes.SELECT}
               name="tagExisting"
