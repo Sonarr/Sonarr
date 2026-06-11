@@ -67,8 +67,24 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 
         private DownloadSpecDecision IsSatisfiedBy(RemoteEpisode remoteEpisode, AnimeEpisodeSearchCriteria animeEpisodeSpec)
         {
-            if (remoteEpisode.ParsedEpisodeInfo.FullSeason && !animeEpisodeSpec.IsSeasonSearch)
+            if (remoteEpisode.ParsedEpisodeInfo.FullSeason)
             {
+                if (animeEpisodeSpec.IsSeasonSearch)
+                {
+                    return DownloadSpecDecision.Accept();
+                }
+
+                // A standard-format full-season pack (e.g. a dubbed "<Title> S01" release) carries no
+                // absolute episode numbers, so it would otherwise be skipped during an episode search.
+                // Accept it only when it maps to the searched season and actually covers the requested
+                // episode. Absolute-numbered packs have episode numbers and never reach this branch.
+                if (remoteEpisode.ParsedEpisodeInfo.SeasonNumber == animeEpisodeSpec.SeasonNumber &&
+                    remoteEpisode.Episodes.Any(e => e.SeasonNumber == animeEpisodeSpec.SeasonNumber &&
+                                                    e.EpisodeNumber == animeEpisodeSpec.EpisodeNumber))
+                {
+                    return DownloadSpecDecision.Accept();
+                }
+
                 _logger.Debug("Full season result during single episode search, skipping.");
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.FullSeason, "Full season pack");
             }
