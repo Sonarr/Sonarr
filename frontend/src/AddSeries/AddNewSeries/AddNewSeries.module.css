@@ -9,7 +9,6 @@
 
 .searchWrap {
   position: relative;
-  flex: 1 1 auto;
 }
 
 .searchIcon {
@@ -144,29 +143,5 @@
     height: 1px;
     background: var(--hairline);
     content: '';
-  }
-}
-
-.searchRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.languageInput {
-  composes: enhancedSelect from 'Components/Form/Select/EnhancedSelectInput.module.css';
-
-  flex: 0 0 auto;
-  width: 180px;
-  height: 46px;
-  border: 1px solid var(--hairlineStrong);
-  border-radius: 8px;
-  background: var(--paperCard);
-  font-size: 15px;
-}
-
-@media (--breakpointMedium) {
-  .languageInput {
-    width: 130px;
   }
 }

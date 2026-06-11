@@ -69,6 +69,11 @@ public class SeriesEditorController : Controller
                 });
             }
 
+            if (resource.Language != null)
+            {
+                series.Language = resource.Language;
+            }
+
             if (resource.Tags != null)
             {
                 var newTags = resource.Tags;

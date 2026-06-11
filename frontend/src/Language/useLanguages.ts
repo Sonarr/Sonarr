@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
-import Language from 'Language/Language';
+import Language, { DEFAULT_LANGUAGE } from 'Language/Language';
+import { useMetadataSourceSettingsValues } from 'Settings/MetadataSource/useMetadataSourceSettings';
 
 interface LanguageFilter {
   [key: string]: boolean | undefined;
@@ -52,6 +53,13 @@ export const useLanguageById = (id: number | undefined) => {
 
     return data.find((language) => language.id === id);
   }, [data, id]);
+};
+
+export const usePreferredMetadataLanguage = () => {
+  const { preferredMetadataLanguage } = useMetadataSourceSettingsValues();
+  const language = useLanguageById(preferredMetadataLanguage);
+
+  return language ?? DEFAULT_LANGUAGE;
 };
 
 export const useLanguageByName = (name: string | undefined) => {
