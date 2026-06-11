@@ -34,6 +34,45 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
             StoredModel.QualityProfile.Should().NotBeNull();
         }
 
+        private Series BuildSeries(int tvdbId, string seriesEdition, string titleSlug)
+        {
+            return Builder<Series>.CreateNew()
+                .With(s => s.Id = 0)
+                .With(s => s.TvdbId = tvdbId)
+                .With(s => s.SeriesEdition = seriesEdition)
+                .With(s => s.TitleSlug = titleSlug)
+                .With(s => s.Path = $@"C:\Test\{titleSlug}")
+                .BuildNew();
+        }
+
+        [Test]
+        public void should_allow_same_tvdbid_with_different_series_edition()
+        {
+            Subject.Insert(BuildSeries(305089, SeriesEditions.Standard, "rezero"));
+            Subject.Insert(BuildSeries(305089, SeriesEditions.DirectorsCut, "rezero-directors-cut"));
+
+            Subject.FindAllByTvdbId(305089).Should().HaveCount(2);
+        }
+
+        [Test]
+        public void should_find_standard_series_by_legacy_tvdbid_lookup()
+        {
+            Subject.Insert(BuildSeries(305089, SeriesEditions.Standard, "rezero"));
+            Subject.Insert(BuildSeries(305089, SeriesEditions.DirectorsCut, "rezero-directors-cut"));
+
+            Subject.FindByTvdbId(305089).SeriesEdition.Should().Be(SeriesEditions.Standard);
+        }
+
+        [Test]
+        public void should_not_allow_duplicate_tvdbid_and_series_edition()
+        {
+            Subject.Insert(BuildSeries(305089, SeriesEditions.DirectorsCut, "rezero-directors-cut"));
+
+            System.Action duplicate = () => Subject.Insert(BuildSeries(305089, SeriesEditions.DirectorsCut, "rezero-directors-cut-2"));
+
+            duplicate.Should().Throw<System.Exception>();
+        }
+
         private void GivenSeries()
         {
             var series = Builder<Series>.CreateListOfSize(2)

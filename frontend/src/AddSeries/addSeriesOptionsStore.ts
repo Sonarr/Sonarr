@@ -1,10 +1,11 @@
 import { createOptionsStore } from 'Helpers/Hooks/useOptionsStore';
-import { SeriesMonitor, SeriesType } from 'Series/Series';
+import { SeriesEdition, SeriesMonitor, SeriesType } from 'Series/Series';
 
 export interface AddSeriesOptions {
   rootFolderPath: string;
   monitor: SeriesMonitor;
   qualityProfileId: number;
+  seriesEdition: SeriesEdition;
   seriesType: SeriesType;
   seasonFolder: boolean;
   searchForMissingEpisodes: boolean;
@@ -18,6 +19,7 @@ const { useOptions, useOption, setOption } =
       rootFolderPath: '',
       monitor: 'all',
       qualityProfileId: 0,
+      seriesEdition: 'standard',
       seriesType: 'standard',
       seasonFolder: true,
       searchForMissingEpisodes: false,

@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Tv
         {
             var added = DateTime.UtcNow;
             var seriesToAdd = new List<Series>();
-            var existingSeriesTvdbIds = _seriesService.AllSeriesTvdbIds();
+            var existingSeriesTvdbIdEditions = _seriesService.AllSeriesTvdbIdEditions();
 
             foreach (var s in newSeries)
             {
@@ -76,15 +76,15 @@ namespace NzbDrone.Core.Tv
                     var series = AddSkyhookData(s);
                     series = SetPropertiesAndValidate(series);
                     series.Added = added;
-                    if (existingSeriesTvdbIds.Any(f => f == series.TvdbId))
+                    if (existingSeriesTvdbIdEditions.Any(f => f.TvdbId == series.TvdbId && f.SeriesEdition == series.SeriesEdition))
                     {
-                        _logger.Debug("TVDB ID {0} was not added due to validation failure: Series {1} already exists in database", s.TvdbId, s);
+                        _logger.Debug("TVDB ID {0} edition {1} was not added due to validation failure: Series {2} already exists in database", s.TvdbId, s.SeriesEdition, s);
                         continue;
                     }
 
-                    if (seriesToAdd.Any(f => f.TvdbId == series.TvdbId))
+                    if (seriesToAdd.Any(f => f.TvdbId == series.TvdbId && f.SeriesEdition == series.SeriesEdition))
                     {
-                        _logger.Trace("TVDB ID {0} was already added from another import list, not adding series {1} again", s.TvdbId, s);
+                        _logger.Trace("TVDB ID {0} edition {1} was already added from another import list, not adding series {2} again", s.TvdbId, s.SeriesEdition, s);
                         continue;
                     }
 
@@ -135,8 +135,17 @@ namespace NzbDrone.Core.Tv
             newSeries.Seasons = newSeries.Seasons != null && newSeries.Seasons.Any() ? newSeries.Seasons : series.Seasons;
 
             series.ApplyChanges(newSeries);
+            ApplyEditionOverrides(series);
 
             return series;
+        }
+
+        private void ApplyEditionOverrides(Series series)
+        {
+            series.SeriesEdition = SeriesEditions.Normalize(series.SeriesEdition);
+
+            series.TitleSlug = SeriesEditions.GetTitleSlug(series);
+            series.Title = SeriesEditions.GetDisplayTitle(series);
         }
 
         private Series SetPropertiesAndValidate(Series newSeries)
@@ -149,6 +158,7 @@ namespace NzbDrone.Core.Tv
 
             newSeries.CleanTitle = newSeries.Title.CleanSeriesTitle();
             newSeries.SortTitle = SeriesTitleNormalizer.Normalize(newSeries.Title, newSeries.TvdbId);
+            newSeries.SeriesEdition = SeriesEditions.Normalize(newSeries.SeriesEdition);
             newSeries.Added = DateTime.UtcNow;
 
             if (newSeries.AddOptions != null && newSeries.AddOptions.Monitor == MonitorTypes.None)

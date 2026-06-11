@@ -45,6 +45,8 @@ namespace NzbDrone.Core.Tv
                 dupeFreeRemoteEpisodes = MapAbsoluteEpisodeNumbers(dupeFreeRemoteEpisodes);
             }
 
+            dupeFreeRemoteEpisodes = SeriesEditions.ApplyEpisodeOverrides(series, dupeFreeRemoteEpisodes);
+
             var orderedEpisodes = OrderEpisodes(series, dupeFreeRemoteEpisodes).ToList();
             var episodesPerSeason = orderedEpisodes.GroupBy(s => s.SeasonNumber).ToDictionary(g => g.Key, g => g.Count());
             var latestSeason = seasons.MaxBy(s => s.SeasonNumber);

@@ -51,6 +51,7 @@ function EditSeriesModalContent({
     monitorNewItems,
     seasonFolder,
     qualityProfileId,
+    seriesEdition,
     seriesType,
     path,
     tags,
@@ -78,6 +79,7 @@ function EditSeriesModalContent({
         monitorNewItems,
         seasonFolder,
         qualityProfileId,
+        seriesEdition,
         seriesType,
         path,
         tags,
@@ -90,6 +92,7 @@ function EditSeriesModalContent({
     monitorNewItems,
     seasonFolder,
     qualityProfileId,
+    seriesEdition,
     seriesType,
     path,
     tags,
@@ -232,6 +235,18 @@ function EditSeriesModalContent({
               name="seriesType"
               {...settings.seriesType}
               helpText={translate('SeriesTypesHelpText')}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
+
+          <FormGroup size={sizes.MEDIUM}>
+            <FormLabel>{translate('SeriesEdition')}</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.SERIES_EDITION_SELECT}
+              name="seriesEdition"
+              {...settings.seriesEdition}
+              helpText={translate('SeriesEditionHelpText')}
               onChange={handleInputChange}
             />
           </FormGroup>

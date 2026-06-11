@@ -19,9 +19,11 @@ namespace NzbDrone.Core.Tv
             OriginalLanguage = Language.English;
             MalIds = new HashSet<int>();
             AniListIds = new HashSet<int>();
+            SeriesEdition = SeriesEditions.Standard;
         }
 
         public int TvdbId { get; set; }
+        public string SeriesEdition { get; set; }
         public int TvRageId { get; set; }
         public int TvMazeId { get; set; }
         public string ImdbId { get; set; }
@@ -64,12 +66,13 @@ namespace NzbDrone.Core.Tv
 
         public override string ToString()
         {
-            return string.Format("[{0}][{1}]", TvdbId, Title.NullSafe());
+            return string.Format("[{0}][{1}][{2}]", TvdbId, SeriesEdition.NullSafe(), Title.NullSafe());
         }
 
         public void ApplyChanges(Series otherSeries)
         {
             TvdbId = otherSeries.TvdbId;
+            SeriesEdition = SeriesEditions.Normalize(otherSeries.SeriesEdition);
 
             Seasons = otherSeries.Seasons;
             Path = otherSeries.Path;

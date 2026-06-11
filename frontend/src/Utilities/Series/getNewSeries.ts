@@ -1,5 +1,6 @@
 import Series, {
   MonitorNewItems,
+  SeriesEdition,
   SeriesMonitor,
   SeriesType,
 } from 'Series/Series';
@@ -9,6 +10,7 @@ interface NewSeriesPayload {
   monitor: SeriesMonitor;
   monitorNewItems: MonitorNewItems;
   qualityProfileId: number;
+  seriesEdition: SeriesEdition;
   seriesType: SeriesType;
   seasonFolder: boolean;
   tags: number[];
@@ -22,6 +24,7 @@ function getNewSeries(series: Series, payload: NewSeriesPayload) {
     monitor,
     monitorNewItems,
     qualityProfileId,
+    seriesEdition,
     seriesType,
     seasonFolder,
     tags,
@@ -39,6 +42,7 @@ function getNewSeries(series: Series, payload: NewSeriesPayload) {
   series.monitored = true;
   series.monitorNewItems = monitorNewItems;
   series.qualityProfileId = qualityProfileId;
+  series.seriesEdition = seriesEdition;
   series.rootFolderPath = rootFolderPath;
   series.seriesType = seriesType;
   series.seasonFolder = seasonFolder;

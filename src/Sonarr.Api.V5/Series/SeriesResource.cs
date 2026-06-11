@@ -34,6 +34,7 @@ public class SeriesResource : RestResource
     public bool UseSceneNumbering { get; set; }
     public int Runtime { get; set; }
     public int TvdbId { get; set; }
+    public string? SeriesEdition { get; set; }
     public int TvRageId { get; set; }
     public int TvMazeId { get; set; }
     public int TmdbId { get; set; }
@@ -87,6 +88,7 @@ public static class SeriesResourceMapper
             UseSceneNumbering = model.UseSceneNumbering,
             Runtime = model.Runtime,
             TvdbId = model.TvdbId,
+            SeriesEdition = SeriesEditions.Normalize(model.SeriesEdition),
             TvRageId = model.TvRageId,
             TvMazeId = model.TvMazeId,
             TmdbId = model.TmdbId,
@@ -130,6 +132,7 @@ public static class SeriesResourceMapper
             UseSceneNumbering = resource.UseSceneNumbering,
             Runtime = resource.Runtime,
             TvdbId = resource.TvdbId,
+            SeriesEdition = SeriesEditions.Normalize(resource.SeriesEdition),
             TvRageId = resource.TvRageId,
             TvMazeId = resource.TvMazeId,
             TmdbId = resource.TmdbId,

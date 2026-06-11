@@ -19,6 +19,7 @@ export const ROOT_FOLDER_SELECT = 'rootFolderSelect';
 export const SELECT = 'select';
 export const SERIES_TAG = 'seriesTag';
 export const DYNAMIC_SELECT = 'dynamicSelect';
+export const SERIES_EDITION_SELECT = 'seriesEditionSelect';
 export const SERIES_TYPE_SELECT = 'seriesTypeSelect';
 export const TAG = 'tag';
 export const TEXT = 'text';
@@ -48,6 +49,7 @@ export const all = [
   SELECT,
   SERIES_TAG,
   DYNAMIC_SELECT,
+  SERIES_EDITION_SELECT,
   SERIES_TYPE_SELECT,
   TAG,
   TEXT,
@@ -81,6 +83,7 @@ export type InputType =
   | 'select'
   | 'seriesTag'
   | 'dynamicSelect'
+  | 'seriesEditionSelect'
   | 'seriesTypeSelect'
   | 'tag'
   | 'text'

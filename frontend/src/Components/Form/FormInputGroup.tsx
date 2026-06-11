@@ -46,6 +46,9 @@ import QualityProfileSelectInput, {
 import RootFolderSelectInput, {
   RootFolderSelectInputProps,
 } from './Select/RootFolderSelectInput';
+import SeriesEditionSelectInput, {
+  SeriesEditionSelectInputProps,
+} from './Select/SeriesEditionSelectInput';
 import SeriesTypeSelectInput, {
   SeriesTypeSelectInputProps,
 } from './Select/SeriesTypeSelectInput';
@@ -82,6 +85,7 @@ const componentMap: Record<InputType, ElementType> = {
   rootFolderSelect: RootFolderSelectInput,
   select: EnhancedSelectInput,
   seriesTag: SeriesTagInput,
+  seriesEditionSelect: SeriesEditionSelectInput,
   seriesTypeSelect: SeriesTypeSelectInput,
   tag: SeriesTagInput,
   tagSelect: TagSelectInput,
@@ -142,6 +146,8 @@ type PickProps<V, C extends InputType> = C extends 'text'
     EnhancedSelectInputProps<any, V>
   : C extends 'seriesTag'
   ? SeriesTagInputProps<V>
+  : C extends 'seriesEditionSelect'
+  ? SeriesEditionSelectInputProps
   : C extends 'seriesTypeSelect'
   ? SeriesTypeSelectInputProps
   : C extends 'tag'

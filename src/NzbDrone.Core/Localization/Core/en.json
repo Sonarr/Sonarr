@@ -2002,6 +2002,8 @@
   "SeriesTitle": "Series Title",
   "SeriesTitleToExcludeHelpText": "The name of the series to exclude",
   "SeriesType": "Series Type",
+  "SeriesEdition": "Series Edition",
+  "SeriesEditionHelpText": "Experimental edition variant used to keep alternate cuts or episode orders separate",
   "SeriesTypes": "Series Types",
   "SeriesTypesHelpText": "Series type is used for renaming, parsing and searching",
   "SetIndexerFlags": "Set Indexer Flags",

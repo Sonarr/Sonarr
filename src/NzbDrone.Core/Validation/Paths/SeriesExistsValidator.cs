@@ -24,8 +24,22 @@ namespace NzbDrone.Core.Validation.Paths
             }
 
             var tvdbId = Convert.ToInt32(context.PropertyValue.ToString());
+            dynamic instance = context.ParentContext.InstanceToValidate;
+            string seriesEdition = SeriesEditions.Standard;
 
-            return !_seriesService.AllSeriesTvdbIds().Any(s => s == tvdbId);
+            try
+            {
+                seriesEdition = instance.SeriesEdition;
+            }
+            catch
+            {
+                seriesEdition = SeriesEditions.Standard;
+            }
+
+            seriesEdition = SeriesEditions.Normalize(seriesEdition);
+
+            return !_seriesService.AllSeriesTvdbIdEditions()
+                                  .Any(s => s.TvdbId == tvdbId && s.SeriesEdition == seriesEdition);
         }
     }
 }

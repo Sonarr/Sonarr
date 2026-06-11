@@ -4,6 +4,7 @@ import Language from 'Language/Language';
 import Quality from 'Quality/Quality';
 
 export type SeriesType = 'anime' | 'daily' | 'standard';
+export type SeriesEdition = 'standard' | 'directors_cut' | 'custom';
 export type SeriesMonitor =
   | 'all'
   | 'future'
@@ -94,6 +95,7 @@ interface Series extends ModelBase {
   runtime: number;
   seasonFolder: boolean;
   seasons: Season[];
+  seriesEdition: SeriesEdition;
   seriesType: SeriesType;
   sortTitle: string;
   statistics?: Statistics;

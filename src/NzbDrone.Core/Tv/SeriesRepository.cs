@@ -13,10 +13,13 @@ namespace NzbDrone.Core.Tv
         Series FindByTitle(string cleanTitle, int year);
         List<Series> FindByTitleInexact(string cleanTitle);
         Series FindByTvdbId(int tvdbId);
+        Series FindByTvdbId(int tvdbId, string seriesEdition);
+        List<Series> FindAllByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
         Series FindByImdbId(string imdbId);
         Series FindByPath(string path);
         List<int> AllSeriesTvdbIds();
+        List<Series> AllSeriesTvdbIdEditions();
         Dictionary<int, string> AllSeriesPaths();
         Dictionary<int, List<int>> AllSeriesTags();
         Dictionary<int, int> AllSeriesQualityProfiles();
@@ -67,7 +70,19 @@ namespace NzbDrone.Core.Tv
 
         public Series FindByTvdbId(int tvdbId)
         {
-            return Query(s => s.TvdbId == tvdbId).SingleOrDefault();
+            return FindByTvdbId(tvdbId, SeriesEditions.Standard);
+        }
+
+        public Series FindByTvdbId(int tvdbId, string seriesEdition)
+        {
+            var edition = SeriesEditions.Normalize(seriesEdition);
+
+            return Query(s => s.TvdbId == tvdbId && s.SeriesEdition == edition).SingleOrDefault();
+        }
+
+        public List<Series> FindAllByTvdbId(int tvdbId)
+        {
+            return Query(s => s.TvdbId == tvdbId).ToList();
         }
 
         public Series FindByTvRageId(int tvRageId)
@@ -90,7 +105,15 @@ namespace NzbDrone.Core.Tv
         {
             using (var conn = _database.OpenConnection())
             {
-                return conn.Query<int>("SELECT \"TvdbId\" FROM \"Series\"").ToList();
+                return conn.Query<int>("SELECT \"TvdbId\" FROM \"Series\" WHERE \"SeriesEdition\" = @seriesEdition", new { seriesEdition = SeriesEditions.Standard }).ToList();
+            }
+        }
+
+        public List<Series> AllSeriesTvdbIdEditions()
+        {
+            using (var conn = _database.OpenConnection())
+            {
+                return conn.Query<Series>("SELECT \"TvdbId\", \"SeriesEdition\" FROM \"Series\"").ToList();
             }
         }
 

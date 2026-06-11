@@ -28,6 +28,7 @@ public enum DownloadRejectionReason
     WrongEpisode,
     WrongSeason,
     WrongSeries,
+    WrongSeriesEdition,
     FullSeason,
     UnknownRuntime,
     BelowMinimumSize,

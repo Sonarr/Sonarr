@@ -103,6 +103,10 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
             .ValidId()
             .SetValidator(qualityProfileExistsValidator);
 
+        SharedValidator.RuleFor(s => s.SeriesEdition)
+            .Must(SeriesEditions.IsValid)
+            .WithMessage("Series edition must be one of: standard, directors_cut, custom");
+
         PostValidator.RuleFor(s => s.Title).NotEmpty();
         PostValidator.RuleFor(s => s.TvdbId).GreaterThan(0).SetValidator(seriesExistsValidator);
     }
@@ -117,7 +121,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
 
         if (tvdbId.HasValue)
         {
-            seriesResources.AddIfNotNull(_seriesService.FindByTvdbId(tvdbId.Value)?.ToResource(includeSeasonImages));
+            seriesResources.AddRange(_seriesService.FindAllByTvdbId(tvdbId.Value).Select(s => s.ToResource(includeSeasonImages)));
         }
         else
         {

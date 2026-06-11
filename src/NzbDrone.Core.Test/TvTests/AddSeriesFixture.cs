@@ -83,6 +83,41 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
+        public void should_treat_missing_series_edition_as_standard()
+        {
+            var newSeries = new Series
+            {
+                TvdbId = 1,
+                RootFolderPath = @"C:\Test\TV"
+            };
+
+            GivenValidSeries(newSeries.TvdbId);
+            GivenValidPath();
+
+            var series = Subject.AddSeries(newSeries);
+
+            series.SeriesEdition.Should().Be(SeriesEditions.Standard);
+        }
+
+        [Test]
+        public void should_preserve_series_edition()
+        {
+            var newSeries = new Series
+            {
+                TvdbId = 1,
+                SeriesEdition = SeriesEditions.DirectorsCut,
+                RootFolderPath = @"C:\Test\TV"
+            };
+
+            GivenValidSeries(newSeries.TvdbId);
+            GivenValidPath();
+
+            var series = Subject.AddSeries(newSeries);
+
+            series.SeriesEdition.Should().Be(SeriesEditions.DirectorsCut);
+        }
+
+        [Test]
         public void should_throw_if_series_validation_fails()
         {
             var newSeries = new Series

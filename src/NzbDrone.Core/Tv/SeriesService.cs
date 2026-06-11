@@ -16,6 +16,8 @@ namespace NzbDrone.Core.Tv
         Series AddSeries(Series newSeries);
         List<Series> AddSeries(List<Series> newSeries);
         Series FindByTvdbId(int tvdbId);
+        Series FindByTvdbId(int tvdbId, string seriesEdition);
+        List<Series> FindAllByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
         Series FindByImdbId(string imdbId);
         Series FindByTitle(string title);
@@ -25,6 +27,7 @@ namespace NzbDrone.Core.Tv
         void DeleteSeries(List<int> seriesIds, bool deleteFiles, bool addImportListExclusion);
         List<Series> GetAllSeries();
         List<int> AllSeriesTvdbIds();
+        List<Series> AllSeriesTvdbIdEditions();
         Dictionary<int, string> GetAllSeriesPaths();
         Dictionary<int, List<int>> GetAllSeriesTags();
         List<Series> AllForTag(int tagId);
@@ -72,6 +75,7 @@ namespace NzbDrone.Core.Tv
 
         public Series AddSeries(Series newSeries)
         {
+            newSeries.SeriesEdition = SeriesEditions.Normalize(newSeries.SeriesEdition);
             _seriesRepository.Insert(newSeries);
             _eventAggregator.PublishEvent(new SeriesAddedEvent(GetSeries(newSeries.Id)));
 
@@ -80,6 +84,7 @@ namespace NzbDrone.Core.Tv
 
         public List<Series> AddSeries(List<Series> newSeries)
         {
+            newSeries.ForEach(s => s.SeriesEdition = SeriesEditions.Normalize(s.SeriesEdition));
             _seriesRepository.InsertMany(newSeries);
             _eventAggregator.PublishEvent(new SeriesImportedEvent(newSeries.Select(s => s.Id).ToList()));
 
@@ -89,6 +94,16 @@ namespace NzbDrone.Core.Tv
         public Series FindByTvdbId(int tvRageId)
         {
             return _seriesRepository.FindByTvdbId(tvRageId);
+        }
+
+        public Series FindByTvdbId(int tvdbId, string seriesEdition)
+        {
+            return _seriesRepository.FindByTvdbId(tvdbId, seriesEdition);
+        }
+
+        public List<Series> FindAllByTvdbId(int tvdbId)
+        {
+            return _seriesRepository.FindAllByTvdbId(tvdbId);
         }
 
         public Series FindByTvRageId(int tvRageId)
@@ -175,6 +190,11 @@ namespace NzbDrone.Core.Tv
         public List<int> AllSeriesTvdbIds()
         {
             return _seriesRepository.AllSeriesTvdbIds().ToList();
+        }
+
+        public List<Series> AllSeriesTvdbIdEditions()
+        {
+            return _seriesRepository.AllSeriesTvdbIdEditions().ToList();
         }
 
         public Dictionary<int, string> GetAllSeriesPaths()

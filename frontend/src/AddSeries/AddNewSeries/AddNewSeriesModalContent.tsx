@@ -22,7 +22,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
 import { getValidationFailures } from 'Helpers/Hooks/useApiMutation';
 import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
-import { SeriesType } from 'Series/Series';
+import { SeriesEdition, SeriesType } from 'Series/Series';
 import SeriesPoster from 'Series/SeriesPoster';
 import selectSettings from 'Store/Selectors/selectSettings';
 import { useIsWindows } from 'System/Status/useSystemStatus';
@@ -61,6 +61,9 @@ function AddNewSeriesModalContent({
       ? settings.seriesType.value
       : initialSeriesType
   );
+  const [seriesEdition, setSeriesEdition] = useState<SeriesEdition>(
+    settings.seriesEdition.value
+  );
 
   const {
     monitor,
@@ -69,6 +72,7 @@ function AddNewSeriesModalContent({
     searchForCutoffUnmetEpisodes,
     searchForMissingEpisodes,
     seasonFolder,
+    seriesEdition: seriesEditionSetting,
     seriesType: seriesTypeSetting,
     tags,
   } = settings;
@@ -97,12 +101,14 @@ function AddNewSeriesModalContent({
         searchForCutoffUnmetEpisodes: searchForCutoffUnmetEpisodes.value,
       },
       qualityProfileId: qualityProfileId.value,
+      seriesEdition,
       seriesType,
       seasonFolder: seasonFolder.value,
       tags: tags.value,
     });
   }, [
     series,
+    seriesEdition,
     seriesType,
     rootFolderPath,
     monitor,
@@ -117,6 +123,10 @@ function AddNewSeriesModalContent({
   useEffect(() => {
     setSeriesType(seriesTypeSetting.value);
   }, [seriesTypeSetting]);
+
+  useEffect(() => {
+    setSeriesEdition(seriesEditionSetting.value);
+  }, [seriesEditionSetting]);
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -226,6 +236,19 @@ function AddNewSeriesModalContent({
                   {...seriesTypeSetting}
                   value={seriesType}
                   helpText={translate('SeriesTypesHelpText')}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>{translate('SeriesEdition')}</FormLabel>
+
+                <FormInputGroup
+                  type={inputTypes.SERIES_EDITION_SELECT}
+                  name="seriesEdition"
+                  onChange={handleInputChange}
+                  {...seriesEditionSetting}
+                  value={seriesEdition}
+                  helpText={translate('SeriesEditionHelpText')}
                 />
               </FormGroup>
 

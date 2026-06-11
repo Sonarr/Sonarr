@@ -431,6 +431,12 @@ namespace NzbDrone.Core.Parser
                     return new FindSeriesResult(searchCriteria.Series, SeriesMatchType.Title);
                 }
 
+                if (searchCriteria.SceneTitles != null &&
+                    searchCriteria.SceneTitles.Any(t => t.CleanSeriesTitle() == parsedEpisodeInfo.SeriesTitle.CleanSeriesTitle()))
+                {
+                    return new FindSeriesResult(searchCriteria.Series, SeriesMatchType.Alias);
+                }
+
                 if (tvdbId > 0 && tvdbId == searchCriteria.Series.TvdbId)
                 {
                     _logger.ForDebugEvent()
