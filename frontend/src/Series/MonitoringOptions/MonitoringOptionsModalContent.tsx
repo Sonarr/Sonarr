@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
@@ -73,13 +73,13 @@ function MonitoringOptionsModalContent({
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('MonitorEpisodes')}</ModalHeader>
-
       <ModalBody>
-        <Alert kind={kinds.INFO}>
-          <div>{translate('MonitorEpisodesModalInfo')}</div>
+        <Alert className={styles.info} kind={kinds.INFO}>
+          {translate('MonitorEpisodesModalInfo')}
         </Alert>
+
         <Form>
-          <FormGroup>
+          <FormRow>
             <FormLabel>
               {translate('Monitoring')}
 
@@ -91,17 +91,16 @@ function MonitoringOptionsModalContent({
               />
             </FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type="monitorEpisodesSelect"
               name="monitor"
               value={monitor}
               includeNoChange={true}
               onChange={handleMonitorChange}
             />
-          </FormGroup>
+          </FormRow>
         </Form>
       </ModalBody>
-
       <ModalFooter>
         <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 

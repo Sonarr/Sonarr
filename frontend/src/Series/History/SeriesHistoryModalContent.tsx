@@ -1,6 +1,5 @@
 import React from 'react';
 import useSeriesHistory from 'Activity/History/useSeriesHistory';
-import Alert from 'Components/Alert';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -11,10 +10,11 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
-import { icons, kinds } from 'Helpers/Props';
+import { icons } from 'Helpers/Props';
 import formatSeason from 'Season/formatSeason';
 import translate from 'Utilities/String/translate';
 import SeriesHistoryRow from './SeriesHistoryRow';
+import styles from './SeriesHistoryModalContent.css';
 
 const columns: Column[] = [
   {
@@ -102,7 +102,7 @@ function SeriesHistoryModalContent({
         {isFetching && !isFetched ? <LoadingIndicator /> : null}
 
         {!isFetching && !!error ? (
-          <Alert kind={kinds.DANGER}>{translate('HistoryLoadError')}</Alert>
+          <p className={styles.error}>{translate('HistoryLoadError')}</p>
         ) : null}
 
         {isFetched && !hasItems && !error ? (
