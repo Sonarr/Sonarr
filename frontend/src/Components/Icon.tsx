@@ -31,6 +31,7 @@ export default function Icon({
 }: IconProps) {
   const iconProps: LucideProps = {
     className: classNames(
+      styles.icon,
       className,
       styles[kind],
       isSpinning && styles.spinning

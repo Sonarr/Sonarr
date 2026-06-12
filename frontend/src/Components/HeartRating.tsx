@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import Icon, { IconProps } from 'Components/Icon';
 import Tooltip from 'Components/Tooltip/Tooltip';
@@ -6,22 +7,34 @@ import translate from 'Utilities/String/translate';
 import styles from './HeartRating.css';
 
 interface HeartRatingProps {
+  className?: string;
   rating: number;
   votes?: number;
   iconSize?: IconProps['size'];
 }
 
-function HeartRating({ rating, votes = 0, iconSize = 14 }: HeartRatingProps) {
+function HeartRating({
+  className,
+  rating,
+  votes = 0,
+  iconSize = 14,
+}: HeartRatingProps) {
   return (
     <Tooltip
+      className={classNames(styles.rating, className)}
       anchor={
-        <span className={styles.rating}>
-          <Icon className={styles.heart} name={icons.HEART} size={iconSize} />
+        <>
+          <Icon
+            className={styles.heart}
+            name={icons.HEART}
+            size={iconSize}
+            filled={true}
+          />
           {rating * 10}%
-        </span>
+        </>
       }
       tooltip={translate('CountVotes', { votes })}
-      kind={kinds.INVERSE}
+      kind={kinds.DEFAULT}
       position={tooltipPositions.TOP}
     />
   );
