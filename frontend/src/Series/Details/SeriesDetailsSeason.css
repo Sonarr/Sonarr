@@ -1,8 +1,16 @@
 .season {
-  margin-bottom: 20px;
+  overflow: hidden;
+  margin-bottom: 16px;
   border: 1px solid var(--borderColor);
-  border-radius: 4px;
+  border-radius: 12px;
   background-color: var(--cardBackgroundColor);
+  transition: box-shadow 200ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    box-shadow:
+      0 6px 20px -8px rgba(0, 0, 0, 0.18),
+      0 2px 4px -2px rgba(0, 0, 0, 0.08);
+  }
 
   &:last-of-type {
     margin-bottom: 0;
@@ -14,61 +22,91 @@
   display: flex;
   align-items: center;
   width: 100%;
-  font-size: 24px;
+  color: var(--ink);
+  letter-spacing: -0.018em;
+  font-weight: 600;
+  font-size: 18px;
+  font-family: $defaultFontFamily;
 }
 
 .seasonInfo {
-  margin-right: 10px;
-  margin-left: 5px;
+  display: inline-flex;
+  align-items: center;
+  margin-right: 8px;
+  margin-left: 4px;
+  color: var(--inkSoft);
 }
 
 .seasonNumber {
-  line-height: 24px;
+  color: var(--ink);
+  line-height: 1.2;
 }
 
 .seasonStats {
   display: flex;
-  align-items: flex-end;
-  flex-direction: column;
-  margin-left: auto;
-  gap: 2px;
+  align-items: center;
+  flex-flow: row wrap;
+  margin-left: 16px;
+  gap: 8px;
 }
 
 .seasonStatsLabel {
   composes: label from '~Components/Label.css';
 
+  display: inline-flex;
+  align-items: center;
   margin: 0;
-  width: 100%;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--paperWarm);
+  color: var(--inkSoft);
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  font-size: 11px;
+  gap: 6px;
 }
 
 .episodeCountTooltip {
-  display: flex;
-  align-items: stretch;
-  width: 100%;
+  display: inline-flex;
+  align-items: center;
 }
 
 .sizeOnDisk {
-  color: #777;
-  font-size: $defaultFontSize;
+  color: var(--inkMuted);
+  font-weight: 400;
+  font-size: 12px;
+  font-family: $monoSpaceFontFamily;
 }
 
 .expandButton {
   composes: link from '~Components/Link/Link.css';
 
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
   flex-grow: 1;
-  margin: 0 20px;
-  text-align: center;
+  margin: 0 16px;
+  color: var(--inkMuted);
+  transition: color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    color: var(--ink);
+    text-decoration: none;
+  }
 }
 
 .left {
   display: flex;
   align-items: center;
   flex: 0 1 350px;
+  gap: 6px;
 }
 
 .left,
 .actions {
-  padding: 15px 10px;
+  padding: 14px 16px;
 }
 
 .actionsMenu {
@@ -86,16 +124,25 @@
 
 .actionMenuIcon {
   margin-right: 8px;
+  color: var(--inkMuted);
 }
 
 .actionButton {
   composes: button from '~Components/Link/IconButton.css';
 
   width: 30px;
+  color: var(--inkSoft);
+  transition: color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    /* Don't go to Accent — icons.COLLAPSE / icons.EXPAND are filled chevron-circle glyphs
+       and turning the whole disc Accent reads as a chunky orange puck. Soft ink shift only. */
+    color: var(--ink);
+  }
 }
 
 .episodes {
-  padding-top: 15px;
+  padding-top: 12px;
   border-top: 1px solid var(--borderColor);
 }
 
@@ -103,12 +150,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 15px;
+  padding: 10px 16px;
   width: 100%;
   border-top: 1px solid var(--borderColor);
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
-  background-color: var(--collapseButtonBackgroundColor);
+  background-color: var(--paperWarm);
+  color: var(--inkMuted);
+  transition: background-color 160ms cubic-bezier(0.25, 1, 0.5, 1), color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    background-color: var(--menuItemHoverBackgroundColor);
+    color: var(--ink);
+  }
 }
 
 .collapseButtonIcon {
@@ -121,13 +173,29 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-top: -12px;
-  margin-left: -12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  width: auto;
+  border-radius: 8px;
+  transition: background-color 160ms cubic-bezier(0.25, 1, 0.5, 1), color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+  transform: translate(-50%, -50%);
+
+  .expandButton:hover & {
+    background-color: var(--menuItemHoverBackgroundColor);
+    color: var(--ink);
+  }
 }
 
 .noEpisodes {
-  margin-bottom: 15px;
+  margin: 0 0 12px;
+  padding: 24px;
+  color: var(--inkMuted);
   text-align: center;
+  font-style: italic;
+  font-size: 14px;
+  font-family: $editorialFontFamily;
 }
 
 @media only screen and (max-width: $breakpointSmall) {
@@ -140,6 +208,7 @@
   .expandButtonIcon {
     position: static;
     margin: 0;
+    transform: none;
   }
 
   .sizeOnDisk {
