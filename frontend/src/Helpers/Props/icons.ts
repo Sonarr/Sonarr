@@ -50,6 +50,7 @@ import {
   FlaskConical,
   Folder,
   FolderOpen,
+  FolderPen,
   FolderTree,
   Globe,
   GripVertical,
@@ -65,6 +66,7 @@ import {
   Laptop,
   LayoutGrid,
   LayoutList,
+  List,
   ListChecks,
   ListFilter,
   Loader,
@@ -104,7 +106,7 @@ import {
 export const ACTIONS = Zap;
 export const ACTIVITY = Clock;
 export const ADD = Plus;
-export const ALTERNATE_TITLES = Copy;
+export const ALTERNATE_TITLES = List;
 export const ADVANCED_SETTINGS = Settings;
 export const ARROW_LEFT = ArrowLeft;
 export const ARROW_RIGHT = ArrowRight;
@@ -170,7 +172,7 @@ export const MONITORED = Bookmark;
 export const NETWORK = Radio;
 export const NAVBAR_COLLAPSE = Menu;
 export const NOT_AIRED = Clock;
-export const ORGANIZE = Network;
+export const ORGANIZE = FolderPen;
 export const OVERFLOW = EllipsisVertical;
 export const OVERVIEW = LayoutList;
 export const PAGE_FIRST = ChevronsLeft;
