@@ -1,11 +1,10 @@
 import {
   ArrowDown,
-  ArrowLeft,
-  ArrowRight,
   ArrowUp,
   ArrowUpDown,
   Asterisk,
   Ban,
+  BookA,
   Bookmark,
   BookmarkX,
   BookOpen,
@@ -66,7 +65,6 @@ import {
   Laptop,
   LayoutGrid,
   LayoutList,
-  List,
   ListChecks,
   ListFilter,
   Loader,
@@ -74,6 +72,8 @@ import {
   Menu,
   Minus,
   Monitor,
+  MoveLeft,
+  MoveRight,
   Network,
   Pause,
   Play,
@@ -106,10 +106,10 @@ import {
 export const ACTIONS = Zap;
 export const ACTIVITY = Clock;
 export const ADD = Plus;
-export const ALTERNATE_TITLES = List;
+export const ALTERNATE_TITLES = BookA;
 export const ADVANCED_SETTINGS = Settings;
-export const ARROW_LEFT = ArrowLeft;
-export const ARROW_RIGHT = ArrowRight;
+export const ARROW_LEFT = MoveLeft;
+export const ARROW_RIGHT = MoveRight;
 export const BACKUP = FileArchive;
 export const BLOCKLIST = Ban;
 export const BUG = Bug;

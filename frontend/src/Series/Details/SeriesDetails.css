@@ -25,9 +25,9 @@
   background:
     linear-gradient(
       to bottom,
-      rgba(0, 0, 0, 0.32) 0%,
-      rgba(0, 0, 0, 0.46) 50%,
-      rgba(0, 0, 0, 0.70) 100%
+      rgba(0, 0, 0, 0.42) 0%,
+      rgba(0, 0, 0, 0.56) 50%,
+      rgba(0, 0, 0, 0.78) 100%
     );
 }
 

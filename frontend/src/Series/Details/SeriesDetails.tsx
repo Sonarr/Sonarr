@@ -607,7 +607,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                       <IconButton
                         className={styles.seriesNavigationButton}
                         name={icons.ARROW_LEFT}
-                        size={30}
+                        size={24}
                         title={translate('SeriesDetailsGoTo', {
                           title: previousSeries.title,
                         })}
@@ -622,7 +622,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                       <IconButton
                         className={styles.seriesNavigationButton}
                         name={icons.ARROW_RIGHT}
-                        size={30}
+                        size={24}
                         title={translate('SeriesDetailsGoTo', {
                           title: nextSeries.title,
                         })}
