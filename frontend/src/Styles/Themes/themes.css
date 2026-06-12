@@ -93,6 +93,7 @@
   --defaultHoverBorderColor: oklch(78% 0.130 215);
   --primaryBackgroundColor: oklch(18% 0.012 80);
   --primaryBorderColor: oklch(18% 0.012 80);
+  --primaryButtonColor: oklch(100% 0 0);
   --primaryHoverBackgroundColor: oklch(50% 0.130 215);
   --primaryHoverBorderColor: oklch(50% 0.130 215);
   --successBackgroundColor: oklch(62% 0.115 148);
@@ -281,6 +282,7 @@
   --defaultHoverBorderColor: oklch(82% 0.115 215);
   --primaryBackgroundColor: oklch(95% 0.006 80);
   --primaryBorderColor: oklch(95% 0.006 80);
+  --primaryButtonColor: oklch(20% 0.012 80);
   --primaryHoverBackgroundColor: oklch(82% 0.115 215);
   --primaryHoverBorderColor: oklch(82% 0.115 215);
   --successBackgroundColor: oklch(66% 0.115 148);
