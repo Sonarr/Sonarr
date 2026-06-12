@@ -5,130 +5,231 @@
 .header {
   position: relative;
   z-index: 0;
+  min-height: 380px;
   width: 100%;
 }
 
 .backdrop {
   position: absolute;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
+  inset: 0;
+  z-index: -2;
+  background-position: center 25%;
   background-size: cover;
+  filter: saturate(1.1);
 }
 
 .backdropOverlay {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  background: var(--black);
-  opacity: 0.7;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.32) 0%,
+      rgba(0, 0, 0, 0.46) 50%,
+      rgba(0, 0, 0, 0.70) 100%
+    );
 }
 
 .headerContent {
   display: flex;
-  padding: 30px;
+  align-items: flex-end;
+  gap: 32px;
+
+  padding: 64px 32px 28px;
   width: 100%;
   height: 100%;
-  color: var(--white);
-  gap: 35px;
+  color: var(--seriesOverlayInk);
 }
 
 .poster {
   flex-shrink: 0;
-  width: 250px;
-  height: 368px;
+  overflow: hidden;
+  width: 240px;
+  height: 354px;
+  border-radius: 12px;
+  box-shadow:
+    0 24px 60px -16px rgba(0, 0, 0, 0.55),
+    0 6px 14px -2px rgba(0, 0, 0, 0.30);
 }
 
 .info {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+  padding-bottom: 4px;
   width: 100%;
+  gap: 12px;
 }
 
 .titleRow {
-  position: relative;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: flex-start;
   flex: 0 0 auto;
+  gap: 16px;
 }
 
 .titleContainer {
   display: flex;
-  margin-bottom: 5px;
+  align-items: center;
+  gap: 16px;
+
+  margin-bottom: 0;
 }
 
 .title {
-  overflow: auto;
-  max-height: calc(3 * 60px);
+  overflow: hidden;
+  max-height: calc(2 * 1.2em);
+  color: var(--white);
   text-wrap: balance;
-  font-weight: 300;
-  font-size: 50px;
-  line-height: 60px;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  font-family: $defaultFontFamily;
+  line-height: 1.2;
 }
 
 .toggleMonitoredContainer {
-  align-self: center;
-  margin-right: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .monitorToggleButton {
   composes: toggleButton from '~Components/MonitorToggleButton.css';
 
-  width: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  /* Override IconButton's fixed 22px width so the larger glyph isn't squeezed/distorted. */
+  width: auto;
+  color: var(--seriesOverlayInk);
 
   &:hover {
-    color: var(--iconButtonHoverLightColor);
+    color: var(--accent);
   }
 }
 
 .alternateTitlesIconContainer {
-  align-self: flex-end;
-  margin-bottom: 10px;
-  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  /* Sub-action of the title — pull it in tighter than the 16px row gap. */
+  margin-left: -6px;
+  color: color-mix(in oklch, var(--seriesOverlayInk) 85%, transparent);
+  /* Small icon reads high against the large title — nudge to its optical centre. */
+  transform: translateY(3px);
 }
 
 .seriesNavigationButtons {
   position: absolute;
-  right: 0;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+  display: flex;
+  gap: 4px;
+
   white-space: nowrap;
 }
 
 .seriesNavigationButton {
   composes: button from '~Components/Link/IconButton.css';
 
-  margin-left: 5px;
-  width: 30px;
-  color: #e1e2e3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background-color: transparent;
+  color: color-mix(in oklch, var(--seriesOverlayInk) 78%, transparent);
   white-space: nowrap;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+  transition: background-color 200ms cubic-bezier(0.25, 1, 0.5, 1),
+              color 200ms cubic-bezier(0.25, 1, 0.5, 1),
+              filter 200ms cubic-bezier(0.25, 1, 0.5, 1);
 
   &:hover {
-    color: var(--iconButtonHoverLightColor);
+    color: var(--white);
   }
 }
 
 .details {
-  margin-bottom: 8px;
-  font-weight: 300;
-  font-size: 20px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 6px 0 4px;
+  color: var(--seriesOverlayInk);
+  letter-spacing: 0.01em;
+  font-weight: 400;
+  font-size: 14px;
+  font-family: $defaultFontFamily;
+  row-gap: 6px;
+}
+
+.details > span:not(:last-child)::after {
+  margin: 0 7px;
+  color: color-mix(in oklch, var(--seriesOverlayInk) 45%, transparent);
+  content: "·";
 }
 
 .runtime,
 .genres {
-  margin-right: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
+/* Override the shared HeartRating spacing — the row's column-gap handles it here. */
+.heartRating {
+  margin-right: 0 !important;
+}
+
+.detailsChips {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 4px;
+  column-gap: 8px;
+  row-gap: 8px;
+}
+
+/* Icon + span sit directly inside Label now (inner div removed), so gap applies here. */
 .detailsLabel {
   composes: label from '~Components/Label.css';
 
-  margin: 5px 10px 5px 0;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 5px 12px 5px 10px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--seriesOverlayBackdrop);
+  color: color-mix(in oklch, var(--seriesOverlayInk) 95%, transparent);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  font-size: 12px;
+  gap: 8px;
+  backdrop-filter: blur(8px);
+}
+
+.detailsLabel svg {
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+/* These chips carry their own icon — the Label's status dot is meaningless noise here. */
+.detailsLabel::before {
+  display: none;
 }
 
 .fileCountMessage {
-  padding: 5px;
+  padding: 4px 0;
+  color: color-mix(in oklch, var(--seriesOverlayInk) 85%, transparent);
   white-space: nowrap;
-  font-weight: 300;
-  font-size: 15px;
+  font-weight: 500;
+  font-size: 13px;
 }
 
 .path,
@@ -140,50 +241,115 @@
 .network,
 .links,
 .tags {
-  margin-left: 8px;
-  font-weight: 300;
-  font-size: 17px;
+  margin-left: 0;
+  color: color-mix(in oklch, var(--seriesOverlayInk) 92%, transparent);
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.overviewSection {
+  position: relative;
+  margin: 0 0 32px;
+}
+
+.overviewFrame {
+  position: relative;
+  margin-bottom: 14px;
+  padding-top: 14px;
+}
+
+.overviewFrame::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 1px;
+  background-color: var(--accent);
+  content: "";
+}
+
+.overviewFrame::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 36px;
+  height: 1px;
+  background-color: var(--borderColor);
+  content: "";
+}
+
+.overviewLabel {
+  position: absolute;
+  top: -7px;
+  left: 0;
+  z-index: 1;
+  padding-right: 8px;
+  background-color: var(--pageBackground);
+  color: var(--accentDeep);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  font-size: 10px;
+  font-family: $monoSpaceFontFamily;
 }
 
 .overview {
-  flex: 1 0 0;
-  margin-top: 8px;
-  min-height: 0;
-  text-wrap: balance;
-  font-size: $intermediateFontSize;
+  margin: 0;
+  color: var(--inkSoft);
+  text-wrap: pretty;
+  font-style: italic;
+  font-size: 16px;
+  font-family: $defaultFontFamily;
+  line-height: 1.6;
 }
 
 .contentContainer {
-  padding: 20px;
+  padding: 28px 32px 64px;
+  background-color: var(--pageBackground);
 }
 
 .seriesProgressLabel {
   composes: label from '~Components/Label.css';
 
   margin: 0;
-  font-size: 17px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--seriesOverlayBackdrop);
+  color: color-mix(in oklch, var(--seriesOverlayInk) 95%, transparent);
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  font-size: 12px;
+  backdrop-filter: blur(8px);
 }
 
 @media only screen and (max-width: $breakpointSmall) {
+  .header {
+    min-height: 320px;
+  }
+
   .contentContainer {
-    padding: 20px 0;
+    padding: 20px 16px 48px;
   }
 
   .headerContent {
-    padding: 15px;
+    padding: 48px 16px 20px;
+    gap: 16px;
   }
 
   .title {
     overflow: hidden;
-    max-height: calc(3 * 30px);
-    font-weight: 300;
-    font-size: 30px;
-    line-height: 30px;
+    max-height: calc(2 * 1.2em);
+    font-size: 28px;
   }
 }
 
 @media only screen and (max-width: $breakpointLarge) {
   .poster {
     display: none;
+  }
+
+  .headerContent {
+    padding-top: 48px;
   }
 }

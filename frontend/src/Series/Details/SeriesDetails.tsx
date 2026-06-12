@@ -577,7 +577,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                         className={styles.monitorToggleButton}
                         monitored={monitored}
                         isSaving={isTogglingSeriesMonitored}
-                        size={40}
+                        size={48}
                         onPress={handleMonitorTogglePress}
                       />
                     </div>
@@ -588,7 +588,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                       <div className={styles.alternateTitlesIconContainer}>
                         <Popover
                           anchor={
-                            <Icon name={icons.ALTERNATE_TITLES} size={20} />
+                            <Icon name={icons.ALTERNATE_TITLES} size={24} />
                           }
                           title={translate('AlternateTitles')}
                           body={
@@ -636,49 +636,45 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                 </div>
 
                 <div className={styles.details}>
-                  <div>
-                    {runtime ? (
-                      <span className={styles.runtime}>
-                        {translate('SeriesDetailsRuntime', { runtime })}
-                      </span>
-                    ) : null}
+                  {runtime ? (
+                    <span className={styles.runtime}>
+                      {translate('SeriesDetailsRuntime', { runtime })}
+                    </span>
+                  ) : null}
 
-                    {ratings.value ? (
-                      <HeartRating
-                        rating={ratings.value}
-                        votes={ratings.votes}
-                        iconSize={20}
-                      />
-                    ) : null}
+                  {ratings.value ? (
+                    <HeartRating
+                      className={styles.heartRating}
+                      rating={ratings.value}
+                      votes={ratings.votes}
+                      iconSize={14}
+                    />
+                  ) : null}
 
+                  {genres.length ? (
                     <SeriesGenres className={styles.genres} genres={genres} />
+                  ) : null}
 
-                    <span>{runningYears}</span>
-                  </div>
+                  {runningYears ? <span>{runningYears}</span> : null}
                 </div>
 
-                <div>
+                <div className={styles.detailsChips}>
                   <Label className={styles.detailsLabel} size={sizes.LARGE}>
-                    <div>
-                      <Icon name={icons.FOLDER} size={17} />
-                      <span className={styles.path}>{path}</span>
-                    </div>
+                    <Icon name={icons.FOLDER} size={14} />
+                    <span className={styles.path}>{path}</span>
                   </Label>
 
                   <Tooltip
                     anchor={
                       <Label className={styles.detailsLabel} size={sizes.LARGE}>
-                        <div>
-                          <Icon name={icons.DRIVE} size={17} />
-
-                          <span className={styles.sizeOnDisk}>
-                            {formatBytes(sizeOnDisk)}
-                          </span>
-                        </div>
+                        <Icon name={icons.DRIVE} size={14} />
+                        <span className={styles.sizeOnDisk}>
+                          {formatBytes(sizeOnDisk)}
+                        </span>
                       </Label>
                     }
                     tooltip={<span>{episodeFilesCountMessage}</span>}
-                    kind={kinds.INVERSE}
+                    kind={kinds.DEFAULT}
                     position={tooltipPositions.BOTTOM}
                   />
 
@@ -687,28 +683,19 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                     title={translate('QualityProfile')}
                     size={sizes.LARGE}
                   >
-                    <div>
-                      <Icon name={icons.PROFILE} size={17} />
-                      <span className={styles.qualityProfileName}>
-                        <QualityProfileName
-                          qualityProfileId={qualityProfileId}
-                        />
-                      </span>
-                    </div>
+                    <Icon name={icons.PROFILE} size={14} />
+                    <span className={styles.qualityProfileName}>
+                      <QualityProfileName qualityProfileId={qualityProfileId} />
+                    </span>
                   </Label>
 
                   <Label className={styles.detailsLabel} size={sizes.LARGE}>
-                    <div>
-                      <Icon
-                        name={monitored ? icons.MONITORED : icons.UNMONITORED}
-                        size={17}
-                      />
-                      <span className={styles.qualityProfileName}>
-                        {monitored
-                          ? translate('Monitored')
-                          : translate('Unmonitored')}
-                      </span>
-                    </div>
+                    <Icon name={icons.MONITORED} filled={monitored} size={14} />
+                    <span className={styles.qualityProfileName}>
+                      {monitored
+                        ? translate('Monitored')
+                        : translate('Unmonitored')}
+                    </span>
                   </Label>
 
                   <Label
@@ -717,12 +704,10 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                     size={sizes.LARGE}
                     kind={status === 'deleted' ? kinds.INVERSE : undefined}
                   >
-                    <div>
-                      <Icon name={statusDetails.icon} size={17} />
-                      <span className={styles.statusName}>
-                        {statusDetails.title}
-                      </span>
-                    </div>
+                    <Icon name={statusDetails.icon} size={14} />
+                    <span className={styles.statusName}>
+                      {statusDetails.title}
+                    </span>
                   </Label>
 
                   {originalLanguage?.name ? (
@@ -731,12 +716,10 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                       title={translate('OriginalLanguage')}
                       size={sizes.LARGE}
                     >
-                      <div>
-                        <Icon name={icons.LANGUAGE} size={17} />
-                        <span className={styles.originalLanguageName}>
-                          {originalLanguage.name}
-                        </span>
-                      </div>
+                      <Icon name={icons.LANGUAGE} size={14} />
+                      <span className={styles.originalLanguageName}>
+                        {originalLanguage.name}
+                      </span>
                     </Label>
                   ) : null}
 
@@ -746,12 +729,10 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                       title={translate('OriginalCountry')}
                       size={sizes.LARGE}
                     >
-                      <div>
-                        <Icon name={icons.GLOBE} size={17} />
-                        <span className={styles.originalCountry}>
-                          {originalCountryName}
-                        </span>
-                      </div>
+                      <Icon name={icons.GLOBE} size={14} />
+                      <span className={styles.originalCountry}>
+                        {originalCountryName}
+                      </span>
                     </Label>
                   ) : null}
 
@@ -761,22 +742,18 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                       title={translate('Network')}
                       size={sizes.LARGE}
                     >
-                      <div>
-                        <Icon name={icons.NETWORK} size={17} />
-                        <span className={styles.network}>{network}</span>
-                      </div>
+                      <Icon name={icons.NETWORK} size={14} />
+                      <span className={styles.network}>{network}</span>
                     </Label>
                   ) : null}
 
                   <Tooltip
                     anchor={
                       <Label className={styles.detailsLabel} size={sizes.LARGE}>
-                        <div>
-                          <Icon name={icons.EXTERNAL_LINK} size={17} />
-                          <span className={styles.links}>
-                            {translate('Links')}
-                          </span>
-                        </div>
+                        <Icon name={icons.EXTERNAL_LINK} size={14} />
+                        <span className={styles.links}>
+                          {translate('Links')}
+                        </span>
                       </Label>
                     }
                     tooltip={
@@ -787,7 +764,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                         tmdbId={tmdbId}
                       />
                     }
-                    kind={kinds.INVERSE}
+                    kind={kinds.DEFAULT}
                     position={tooltipPositions.BOTTOM}
                   />
 
@@ -798,7 +775,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                           className={styles.detailsLabel}
                           size={sizes.LARGE}
                         >
-                          <Icon name={icons.TAGS} size={17} />
+                          <Icon name={icons.TAGS} size={14} />
 
                           <span className={styles.tags}>
                             {translate('Tags')}
@@ -806,7 +783,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                         </Label>
                       }
                       tooltip={<SeriesTags seriesId={seriesId} />}
-                      kind={kinds.INVERSE}
+                      kind={kinds.DEFAULT}
                       position={tooltipPositions.BOTTOM}
                     />
                   ) : null}
@@ -820,14 +797,23 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                   />
                 </div>
 
-                <div className={styles.overview}>{overview}</div>
-
                 <MetadataAttribution />
               </div>
             </div>
           </div>
 
           <div className={styles.contentContainer}>
+            {overview ? (
+              <section className={styles.overviewSection}>
+                <div className={styles.overviewFrame} aria-hidden="true">
+                  <span className={styles.overviewLabel}>
+                    {translate('Overview')}
+                  </span>
+                </div>
+                <p className={styles.overview}>{overview}</p>
+              </section>
+            ) : null}
+
             {!isPopulated && !episodesError && !episodeFilesError ? (
               <LoadingIndicator />
             ) : null}

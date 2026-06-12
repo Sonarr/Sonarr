@@ -6,11 +6,13 @@ interface CssExports {
   'backdropOverlay': string;
   'contentContainer': string;
   'details': string;
+  'detailsChips': string;
   'detailsLabel': string;
   'fileCountMessage': string;
   'genres': string;
   'header': string;
   'headerContent': string;
+  'heartRating': string;
   'info': string;
   'innerContentBody': string;
   'links': string;
@@ -19,6 +21,9 @@ interface CssExports {
   'originalCountry': string;
   'originalLanguageName': string;
   'overview': string;
+  'overviewFrame': string;
+  'overviewLabel': string;
+  'overviewSection': string;
   'path': string;
   'poster': string;
   'qualityProfileName': string;

@@ -1,32 +1,59 @@
 .links {
   display: flex;
-  flex-wrap: wrap;
-  margin: 0;
-}
-
-.link {
-  white-space: nowrap;
-}
-
-.linkLabel {
-  composes: label from '~Components/Label.css';
-
-  margin: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-
-  &:hover {
-    cursor: pointer;
-  }
+  flex-direction: column;
+  min-width: 220px;
+  gap: 2px;
 }
 
 .linkBlock {
   display: flex;
-  margin: 3px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background-color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    background-color: var(--menuItemHoverBackgroundColor);
+
+    .link {
+      color: var(--accent);
+    }
+  }
 }
 
-@media only screen and (max-width: $breakpointExtraSmall) {
-  .links {
-    flex-flow: column wrap;
+.copyButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  color: var(--inkMuted);
+  font-size: 12px;
+  font-family: $monoSpaceFontFamily;
+  cursor: pointer;
+  transition: color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    color: var(--accent);
+  }
+}
+
+.link {
+  composes: link from '~Components/Link/Link.css';
+
+  color: var(--ink);
+
+  white-space: nowrap;
+  font-weight: 500;
+  font-size: 13px;
+  transition: color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    text-decoration: none;
   }
 }
