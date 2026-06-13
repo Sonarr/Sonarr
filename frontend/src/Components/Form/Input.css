@@ -23,7 +23,7 @@
     outline: 0;
     border-color: var(--accent);
     background-color: var(--paperCard);
-    box-shadow: 0 0 0 4px var(--inputFocusBoxShadowColor);
+    box-shadow: none;
   }
 }
 
@@ -33,7 +33,7 @@
   &:focus,
   &:focus-visible {
     border-color: var(--inputErrorBorderColor);
-    box-shadow: 0 0 0 4px var(--inputErrorBoxShadowColor);
+    box-shadow: none;
   }
 }
 
@@ -43,7 +43,7 @@
   &:focus,
   &:focus-visible {
     border-color: var(--inputWarningBorderColor);
-    box-shadow: 0 0 0 4px var(--inputWarningBoxShadowColor);
+    box-shadow: none;
   }
 }
 
