@@ -4,6 +4,7 @@ using FluentValidation.TestHelper;
 using NUnit.Framework;
 using NzbDrone.Test.Common;
 using Sonarr.Api.V3.Config;
+using Sonarr.Http.Validation;
 
 namespace NzbDrone.Api.Test.v3.Config;
 
