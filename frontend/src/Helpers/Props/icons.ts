@@ -4,7 +4,6 @@ import {
   ArrowUpDown,
   Asterisk,
   Ban,
-  BookA,
   Bookmark,
   BookmarkX,
   BookOpen,
@@ -23,6 +22,8 @@ import {
   CircleAlert,
   CircleArrowDown,
   CircleCheck,
+  CircleChevronLeft,
+  CircleChevronRight,
   CircleDot,
   CircleHelp,
   CirclePause,
@@ -72,13 +73,12 @@ import {
   Menu,
   Minus,
   Monitor,
-  MoveLeft,
-  MoveRight,
   Network,
   Pause,
   Play,
   Plus,
   Power,
+  Quote,
   Radio,
   RefreshCcw,
   RefreshCw,
@@ -100,16 +100,15 @@ import {
   UserPlus,
   Wrench,
   X,
-  Zap,
 } from 'lucide-react';
 
-export const ACTIONS = Zap;
+export const ACTIONS = EllipsisVertical;
 export const ACTIVITY = Clock;
 export const ADD = Plus;
-export const ALTERNATE_TITLES = BookA;
+export const ALTERNATE_TITLES = Quote;
 export const ADVANCED_SETTINGS = Settings;
-export const ARROW_LEFT = MoveLeft;
-export const ARROW_RIGHT = MoveRight;
+export const ARROW_LEFT = CircleChevronLeft;
+export const ARROW_RIGHT = CircleChevronRight;
 export const BACKUP = FileArchive;
 export const BLOCKLIST = Ban;
 export const BUG = Bug;
