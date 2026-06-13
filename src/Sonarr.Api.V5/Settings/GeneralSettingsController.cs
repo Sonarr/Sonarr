@@ -8,6 +8,7 @@ using NzbDrone.Core.Update;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 using Sonarr.Http;
+using Sonarr.Http.Validation;
 
 namespace Sonarr.Api.V5.Settings;
 
