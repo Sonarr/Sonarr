@@ -8,11 +8,13 @@ interface CssExports {
   'details': string;
   'detailsChips': string;
   'detailsLabel': string;
+  'detailsLabelInteractive': string;
   'fileCountMessage': string;
   'genres': string;
   'header': string;
   'headerContent': string;
   'heartRating': string;
+  'heroFooter': string;
   'info': string;
   'innerContentBody': string;
   'links': string;
@@ -21,10 +23,12 @@ interface CssExports {
   'originalCountry': string;
   'originalLanguageName': string;
   'overview': string;
+  'overviewClamped': string;
   'overviewFrame': string;
   'overviewLabel': string;
   'overviewSection': string;
-  'path': string;
+  'overviewToggle': string;
+  'pathLine': string;
   'poster': string;
   'qualityProfileName': string;
   'runtime': string;
@@ -38,6 +42,7 @@ interface CssExports {
   'titleContainer': string;
   'titleRow': string;
   'toggleMonitoredContainer': string;
+  'tvdbBadge': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

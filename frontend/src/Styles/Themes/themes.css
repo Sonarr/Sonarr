@@ -167,7 +167,7 @@
 
   /* Sit on artwork, so theme-independent: no dark-block override */
   --seriesOverlayBackdrop: oklch(15% 0.008 80 / 0.82);
-  --seriesOverlayInk: oklch(95% 0.006 80 / 0.9);
+  --seriesOverlayInk: oklch(90% 0.006 80);
 
   --searchIconContainerBackgroundColor: oklch(98% 0.006 80);
   --collapseButtonBackgroundColor: oklch(98% 0.006 80);

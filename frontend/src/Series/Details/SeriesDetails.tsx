@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import CommandNames from 'Commands/CommandNames';
@@ -7,8 +8,8 @@ import HeartRating from 'Components/HeartRating';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
+import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import MetadataAttribution from 'Components/MetadataAttribution';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
@@ -213,6 +214,11 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   const [isManageEpisodesOpen, setIsManageEpisodesOpen] = useState(false);
   const [isEditSeriesModalOpen, setIsEditSeriesModalOpen] = useState(false);
   const [isDeleteSeriesModalOpen, setIsDeleteSeriesModalOpen] = useState(false);
+  const [isOverviewExpanded, setIsOverviewExpanded] = useState(false);
+
+  const handleToggleOverview = useCallback(() => {
+    setIsOverviewExpanded((value) => !value);
+  }, []);
   const [isSeriesHistoryModalOpen, setIsSeriesHistoryModalOpen] =
     useState(false);
   const [isMonitorOptionsModalOpen, setIsMonitorOptionsModalOpen] =
@@ -588,7 +594,11 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                       <div className={styles.alternateTitlesIconContainer}>
                         <Popover
                           anchor={
-                            <Icon name={icons.ALTERNATE_TITLES} size={24} />
+                            <Icon
+                              name={icons.ALTERNATE_TITLES}
+                              size={18}
+                              filled={true}
+                            />
                           }
                           title={translate('AlternateTitles')}
                           body={
@@ -659,15 +669,21 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                 </div>
 
                 <div className={styles.detailsChips}>
-                  <Label className={styles.detailsLabel} size={sizes.LARGE}>
-                    <Icon name={icons.FOLDER} size={14} />
-                    <span className={styles.path}>{path}</span>
-                  </Label>
+                  <SeriesProgressLabel
+                    className={styles.seriesProgressLabel}
+                    seriesId={seriesId}
+                    monitored={monitored}
+                    episodeCount={episodeCount}
+                    episodeFileCount={episodeFileCount}
+                  />
 
                   <Tooltip
                     anchor={
-                      <Label className={styles.detailsLabel} size={sizes.LARGE}>
-                        <Icon name={icons.DRIVE} size={14} />
+                      <Label
+                        className={styles.detailsLabel}
+                        size={sizes.LARGE}
+                        icon={icons.DRIVE}
+                      >
                         <span className={styles.sizeOnDisk}>
                           {formatBytes(sizeOnDisk)}
                         </span>
@@ -682,19 +698,10 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                     className={styles.detailsLabel}
                     title={translate('QualityProfile')}
                     size={sizes.LARGE}
+                    icon={icons.PROFILE}
                   >
-                    <Icon name={icons.PROFILE} size={14} />
                     <span className={styles.qualityProfileName}>
                       <QualityProfileName qualityProfileId={qualityProfileId} />
-                    </span>
-                  </Label>
-
-                  <Label className={styles.detailsLabel} size={sizes.LARGE}>
-                    <Icon name={icons.MONITORED} filled={monitored} size={14} />
-                    <span className={styles.qualityProfileName}>
-                      {monitored
-                        ? translate('Monitored')
-                        : translate('Unmonitored')}
                     </span>
                   </Label>
 
@@ -703,8 +710,8 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                     title={statusDetails.message}
                     size={sizes.LARGE}
                     kind={status === 'deleted' ? kinds.INVERSE : undefined}
+                    icon={statusDetails.icon}
                   >
-                    <Icon name={statusDetails.icon} size={14} />
                     <span className={styles.statusName}>
                       {statusDetails.title}
                     </span>
@@ -715,8 +722,8 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                       className={styles.detailsLabel}
                       title={translate('OriginalLanguage')}
                       size={sizes.LARGE}
+                      icon={icons.LANGUAGE}
                     >
-                      <Icon name={icons.LANGUAGE} size={14} />
                       <span className={styles.originalLanguageName}>
                         {originalLanguage.name}
                       </span>
@@ -728,8 +735,8 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                       className={styles.detailsLabel}
                       title={translate('OriginalCountry')}
                       size={sizes.LARGE}
+                      icon={icons.GLOBE}
                     >
-                      <Icon name={icons.GLOBE} size={14} />
                       <span className={styles.originalCountry}>
                         {originalCountryName}
                       </span>
@@ -741,16 +748,22 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                       className={styles.detailsLabel}
                       title={translate('Network')}
                       size={sizes.LARGE}
+                      icon={icons.NETWORK}
                     >
-                      <Icon name={icons.NETWORK} size={14} />
                       <span className={styles.network}>{network}</span>
                     </Label>
                   ) : null}
 
                   <Tooltip
                     anchor={
-                      <Label className={styles.detailsLabel} size={sizes.LARGE}>
-                        <Icon name={icons.EXTERNAL_LINK} size={14} />
+                      <Label
+                        className={classNames(
+                          styles.detailsLabel,
+                          styles.detailsLabelInteractive
+                        )}
+                        size={sizes.LARGE}
+                        icon={icons.EXTERNAL_LINK}
+                      >
                         <span className={styles.links}>
                           {translate('Links')}
                         </span>
@@ -772,11 +785,13 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                     <Tooltip
                       anchor={
                         <Label
-                          className={styles.detailsLabel}
+                          className={classNames(
+                            styles.detailsLabel,
+                            styles.detailsLabelInteractive
+                          )}
                           size={sizes.LARGE}
+                          icon={icons.TAGS}
                         >
-                          <Icon name={icons.TAGS} size={14} />
-
                           <span className={styles.tags}>
                             {translate('Tags')}
                           </span>
@@ -787,17 +802,27 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                       position={tooltipPositions.BOTTOM}
                     />
                   ) : null}
-
-                  <SeriesProgressLabel
-                    className={styles.seriesProgressLabel}
-                    seriesId={seriesId}
-                    monitored={monitored}
-                    episodeCount={episodeCount}
-                    episodeFileCount={episodeFileCount}
-                  />
                 </div>
 
-                <MetadataAttribution />
+                <div className={styles.heroFooter}>
+                  <div className={styles.pathLine}>
+                    <Icon name={icons.FOLDER} size={14} />
+                    <span>{path}</span>
+                  </div>
+
+                  <Link
+                    className={styles.tvdbBadge}
+                    to="/settings/metadatasource"
+                    title={translate('MetadataProvidedBy', {
+                      provider: 'TheTVDB',
+                    })}
+                  >
+                    <img
+                      src={`${window.Sonarr.urlBase}/Content/Images/thetvdb-dark.png`}
+                      alt="TheTVDB"
+                    />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -810,7 +835,20 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                     {translate('Overview')}
                   </span>
                 </div>
-                <p className={styles.overview}>{overview}</p>
+                <p
+                  className={classNames(
+                    styles.overview,
+                    !isOverviewExpanded && styles.overviewClamped
+                  )}
+                >
+                  {overview}
+                </p>
+                <Link
+                  className={styles.overviewToggle}
+                  onPress={handleToggleOverview}
+                >
+                  {isOverviewExpanded ? translate('Less') : translate('More')}
+                </Link>
               </section>
             ) : null}
 

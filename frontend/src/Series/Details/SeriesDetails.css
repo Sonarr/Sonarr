@@ -7,6 +7,7 @@
   z-index: 0;
   min-height: 380px;
   width: 100%;
+  container-type: inline-size;
 }
 
 .backdrop {
@@ -31,9 +32,31 @@
     );
 }
 
+.tvdbBadge {
+  position: absolute;
+  right: 24px;
+  bottom: 16px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.7;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+  transition: opacity 200ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.tvdbBadge img {
+  display: block;
+  width: auto;
+  height: 16px;
+}
+
 .headerContent {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 32px;
 
   padding: 64px 32px 28px;
@@ -45,8 +68,8 @@
 .poster {
   flex-shrink: 0;
   overflow: hidden;
-  width: 240px;
-  height: 354px;
+  width: clamp(160px, 20cqi, 210px);
+  height: clamp(236px, 29.5cqi, 310px);
   border-radius: 12px;
   box-shadow:
     0 24px 60px -16px rgba(0, 0, 0, 0.55),
@@ -85,7 +108,7 @@
   text-wrap: balance;
   letter-spacing: -0.025em;
   font-weight: 600;
-  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  font-size: clamp(2.25rem, 5cqi, 3.25rem);
   font-family: $defaultFontFamily;
   line-height: 1.2;
 }
@@ -96,29 +119,33 @@
 }
 
 .monitorToggleButton {
-  composes: toggleButton from '~Components/MonitorToggleButton.css';
+  composes: link from '~Components/Link/Link.css';
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  /* Override IconButton's fixed 22px width so the larger glyph isn't squeezed/distorted. */
-  width: auto;
   color: var(--seriesOverlayInk);
+  opacity: 0.85;
+  transition: opacity 200ms cubic-bezier(0.25, 1, 0.5, 1);
 
   &:hover {
-    color: var(--accent);
+    opacity: 1;
   }
 }
 
 .alternateTitlesIconContainer {
   display: flex;
   align-items: center;
-  /* Sub-action of the title — pull it in tighter than the 16px row gap. */
   margin-left: -6px;
-  color: color-mix(in oklch, var(--seriesOverlayInk) 85%, transparent);
-  /* Small icon reads high against the large title — nudge to its optical centre. */
+  color: var(--seriesOverlayInk);
+  opacity: 0.85;
+  transition: opacity 200ms cubic-bezier(0.25, 1, 0.5, 1);
   transform: translateY(3px);
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .seriesNavigationButtons {
@@ -133,7 +160,7 @@
 }
 
 .seriesNavigationButton {
-  composes: button from '~Components/Link/IconButton.css';
+  composes: link from '~Components/Link/Link.css';
 
   display: inline-flex;
   align-items: center;
@@ -142,15 +169,16 @@
   height: 32px;
   border-radius: 999px;
   background-color: transparent;
-  color: color-mix(in oklch, var(--seriesOverlayInk) 78%, transparent);
+  color: var(--seriesOverlayInk);
   white-space: nowrap;
+  opacity: 0.78;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
   transition: background-color 200ms cubic-bezier(0.25, 1, 0.5, 1),
-              color 200ms cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 200ms cubic-bezier(0.25, 1, 0.5, 1),
               filter 200ms cubic-bezier(0.25, 1, 0.5, 1);
 
   &:hover {
-    color: var(--white);
+    opacity: 1;
   }
 }
 
@@ -180,7 +208,6 @@
   gap: 6px;
 }
 
-/* Override the shared HeartRating spacing — the row's column-gap handles it here. */
 .heartRating {
   margin-right: 0 !important;
 }
@@ -194,7 +221,6 @@
   row-gap: 8px;
 }
 
-/* Icon + span sit directly inside Label now (inner div removed), so gap applies here. */
 .detailsLabel {
   composes: label from '~Components/Label.css';
 
@@ -219,9 +245,13 @@
   opacity: 0.85;
 }
 
-/* These chips carry their own icon — the Label's status dot is meaningless noise here. */
-.detailsLabel::before {
-  display: none;
+.detailsLabelInteractive {
+  cursor: pointer;
+  transition: background-color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    background-color: color-mix(in oklch, var(--seriesOverlayInk) 14%, var(--seriesOverlayBackdrop));
+  }
 }
 
 .fileCountMessage {
@@ -232,7 +262,6 @@
   font-size: 13px;
 }
 
-.path,
 .sizeOnDisk,
 .qualityProfileName,
 .originalCountry,
@@ -245,6 +274,35 @@
   color: color-mix(in oklch, var(--seriesOverlayInk) 92%, transparent);
   font-weight: 400;
   font-size: 13px;
+}
+
+.heroFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  gap: 12px;
+}
+
+.pathLine {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  max-width: 560px;
+  color: color-mix(in oklch, var(--seriesOverlayInk) 50%, transparent);
+  font-size: 12px;
+  gap: 7px;
+}
+
+.pathLine svg {
+  flex-shrink: 0;
+}
+
+.pathLine span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .overviewSection {
@@ -280,16 +338,16 @@
 
 .overviewLabel {
   position: absolute;
-  top: -7px;
+  top: -9px;
   left: 0;
   z-index: 1;
   padding-right: 8px;
   background-color: var(--pageBackground);
   color: var(--accentDeep);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-weight: 500;
-  font-size: 10px;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  font-size: 12px;
   font-family: $monoSpaceFontFamily;
 }
 
@@ -301,6 +359,20 @@
   font-size: 16px;
   font-family: $defaultFontFamily;
   line-height: 1.6;
+}
+
+.overviewToggle {
+  composes: link from '~Components/Link/Link.css';
+
+  display: none;
+  margin-top: 8px;
+  color: var(--accent);
+  font-weight: 500;
+  font-size: 13px;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .contentContainer {
@@ -325,7 +397,11 @@
 
 @media only screen and (max-width: $breakpointSmall) {
   .header {
-    min-height: 320px;
+    min-height: 240px;
+  }
+
+  .poster {
+    display: none;
   }
 
   .contentContainer {
@@ -333,7 +409,7 @@
   }
 
   .headerContent {
-    padding: 48px 16px 20px;
+    padding: 40px 16px 16px;
     gap: 16px;
   }
 
@@ -342,14 +418,41 @@
     max-height: calc(2 * 1.2em);
     font-size: 28px;
   }
-}
 
-@media only screen and (max-width: $breakpointLarge) {
-  .poster {
-    display: none;
+  .titleContainer {
+    gap: 10px;
   }
 
-  .headerContent {
-    padding-top: 48px;
+  .monitorToggleButton svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .alternateTitlesIconContainer {
+    transform: none;
+  }
+
+  .alternateTitlesIconContainer svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .overviewClamped {
+    /* stylelint-disable-next-line value-no-vendor-prefix -- required for -webkit-line-clamp */
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  .overviewToggle {
+    display: inline-block;
+  }
+
+  .tvdbBadge {
+    position: static;
+    right: auto;
+    bottom: auto;
+    flex-shrink: 0;
   }
 }
