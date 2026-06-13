@@ -45,10 +45,16 @@
 @media only screen and (max-width: 992px) {
   .right {
     grid-template-columns: 1fr;
+    row-gap: 8px;
   }
 
   .right > :last-child {
     grid-column: 1;
     grid-row: auto;
+    order: 1;
+  }
+
+  .right > :not(:first-child):not(:last-child) {
+    order: 2;
   }
 }
