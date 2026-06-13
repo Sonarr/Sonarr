@@ -33,6 +33,10 @@
   display: none;
 }
 
+.hasIcon::before {
+  display: none;
+}
+
 /** Kinds — dot color via custom property, bg stays paper-warm. **/
 
 .danger::before {
