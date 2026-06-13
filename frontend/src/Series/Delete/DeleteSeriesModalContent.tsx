@@ -71,6 +71,7 @@ function DeleteSeriesModalContent({
       <ModalHeader>
         {translate('DeleteSeriesModalHeader', { title })}
       </ModalHeader>
+
       <ModalBody>
         <div className={styles.pathContainer}>
           <Icon className={styles.pathIcon} name={icons.FOLDER} />
@@ -80,6 +81,7 @@ function DeleteSeriesModalContent({
 
         <FormRow>
           <FormLabel>{translate('AddListExclusion')}</FormLabel>
+
           <FormInputHelpText
             text={translate('AddListExclusionSeriesHelpText')}
           />
@@ -97,6 +99,7 @@ function DeleteSeriesModalContent({
               ? translate('DeleteSeriesFolder')
               : translate('DeleteEpisodesFiles', { episodeFileCount })}
           </FormLabel>
+
           <FormInputHelpText
             text={
               episodeFileCount === 0
@@ -133,6 +136,7 @@ function DeleteSeriesModalContent({
           </div>
         ) : null}
       </ModalBody>
+
       <ModalFooter>
         <Button onPress={onModalClose}>{translate('Close')}</Button>
 

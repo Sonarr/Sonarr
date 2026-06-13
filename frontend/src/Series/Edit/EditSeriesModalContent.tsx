@@ -167,10 +167,12 @@ function EditSeriesModalContent({
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('EditSeriesModalHeader', { title })}</ModalHeader>
+
       <ModalBody>
         <Form {...otherSettings}>
           <FormRow size={sizes.MEDIUM}>
             <FormLabel>{translate('Monitored')}</FormLabel>
+
             <FormInputHelpText text={translate('MonitoredEpisodesHelpText')} />
             <FormInput
               type={inputTypes.CHECK}
@@ -190,6 +192,7 @@ function EditSeriesModalContent({
                 position={tooltipPositions.RIGHT}
               />
             </FormLabel>
+
             <FormInputHelpText text={translate('MonitorNewSeasonsHelpText')} />
             <FormInput
               type={inputTypes.MONITOR_NEW_ITEMS_SELECT}
@@ -201,6 +204,7 @@ function EditSeriesModalContent({
 
           <FormRow size={sizes.MEDIUM}>
             <FormLabel>{translate('UseSeasonFolder')}</FormLabel>
+
             <FormInputHelpText text={translate('UseSeasonFolderHelpText')} />
             <FormInput
               type={inputTypes.CHECK}
@@ -223,6 +227,7 @@ function EditSeriesModalContent({
 
           <FormRow size={sizes.MEDIUM}>
             <FormLabel>{translate('SeriesType')}</FormLabel>
+
             <FormInputHelpText text={translate('SeriesTypesHelpText')} />
             <FormInput
               type={inputTypes.SERIES_TYPE_SELECT}
@@ -266,6 +271,7 @@ function EditSeriesModalContent({
           </FormRow>
         </Form>
       </ModalBody>
+
       <ModalFooter>
         <Button
           className={styles.deleteButton}
@@ -285,6 +291,7 @@ function EditSeriesModalContent({
           {translate('Save')}
         </SpinnerErrorButton>
       </ModalFooter>
+
       <RootFolderModal
         isOpen={isRootFolderModalOpen}
         seriesId={seriesId}
@@ -292,6 +299,7 @@ function EditSeriesModalContent({
         onSavePress={handleRootFolderChange}
         onModalClose={handleRootFolderModalClose}
       />
+
       <MoveSeriesModal
         originalPath={path}
         destinationPath={pendingChanges.path}

@@ -73,6 +73,7 @@ function MonitoringOptionsModalContent({
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('MonitorEpisodes')}</ModalHeader>
+
       <ModalBody>
         <Alert className={styles.info} kind={kinds.INFO}>
           {translate('MonitorEpisodesModalInfo')}
@@ -101,6 +102,7 @@ function MonitoringOptionsModalContent({
           </FormRow>
         </Form>
       </ModalBody>
+
       <ModalFooter>
         <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 

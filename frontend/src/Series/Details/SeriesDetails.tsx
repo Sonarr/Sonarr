@@ -835,6 +835,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                     {translate('Overview')}
                   </span>
                 </div>
+
                 <p
                   className={classNames(
                     styles.overview,
@@ -843,6 +844,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                 >
                   {overview}
                 </p>
+
                 <Link
                   className={styles.overviewToggle}
                   onPress={handleToggleOverview}
