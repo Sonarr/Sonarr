@@ -348,7 +348,7 @@ function SeriesDetailsSeason({
             alignMenu={align.RIGHT}
             enforceMaxHeight={false}
           >
-            <MenuButton>
+            <MenuButton className={styles.actionsMenuButton}>
               <Icon name={icons.ACTIONS} size={22} />
             </MenuButton>
 
