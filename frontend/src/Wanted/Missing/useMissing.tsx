@@ -51,7 +51,7 @@ export const FILTER_BUILDER: FilterBuilderProp<Episode>[] = [
   {
     name: 'monitored',
     label: () => translate('Monitored'),
-    type: 'exact',
+    type: 'equal',
     valueType: filterBuilderValueTypes.BOOL,
   },
   {
@@ -59,6 +59,30 @@ export const FILTER_BUILDER: FilterBuilderProp<Episode>[] = [
     label: () => translate('IncludeSpecials'),
     type: 'equal',
     valueType: filterBuilderValueTypes.BOOL,
+  },
+  {
+    name: 'seriesIds',
+    label: () => translate('Series'),
+    type: 'equal',
+    valueType: filterBuilderValueTypes.SERIES,
+  },
+  {
+    name: 'qualityProfileIds',
+    label: () => translate('QualityProfile'),
+    type: 'equal',
+    valueType: filterBuilderValueTypes.QUALITY_PROFILE,
+  },
+  {
+    name: 'seriesType',
+    label: () => translate('SeriesType'),
+    type: 'equal',
+    valueType: filterBuilderValueTypes.SERIES_TYPES,
+  },
+  {
+    name: 'seriesTags',
+    label: () => translate('Tags'),
+    type: 'array',
+    valueType: filterBuilderValueTypes.TAG,
   },
 ];
 
@@ -95,6 +119,7 @@ const useMissing = () => {
     goToPage,
     isPlaceholderData,
     page,
+    filters,
   };
 };
 

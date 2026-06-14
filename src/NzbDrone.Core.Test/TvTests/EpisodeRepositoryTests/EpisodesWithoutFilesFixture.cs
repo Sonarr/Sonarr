@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -24,6 +25,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                         .With(s => s.TvRageId = RandomNumber)
                                         .With(s => s.Runtime = 30)
                                         .With(s => s.Monitored = true)
+                                        .With(s => s.Tags = new HashSet<int> { 10, 20 })
                                         .With(s => s.TitleSlug = "Title3")
                                         .Build();
 
@@ -32,6 +34,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                         .With(s => s.TvdbId = RandomNumber)
                                         .With(s => s.Runtime = 30)
                                         .With(s => s.Monitored = false)
+                                        .With(s => s.Tags = new HashSet<int> { 30 })
                                         .With(s => s.TitleSlug = "Title2")
                                         .Build();
 
@@ -160,6 +163,48 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
 
             episodes.TotalRecords.Should().Be(4);
             episodes.Records.Where(e => e.Id == onAirEpisode.Id).Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_filter_by_series_tags_when_provided()
+        {
+            GivenMonitoredFilterExpression();
+
+            var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false, new HashSet<int> { 10 });
+
+            episodes.Records.Should().NotBeEmpty();
+            episodes.Records.Should().OnlyContain(e => e.SeriesId == _monitoredSeries.Id);
+        }
+
+        [Test]
+        public void should_filter_by_series_tags_with_unmonitored_series()
+        {
+            GivenUnmonitoredFilterExpression();
+
+            var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false, new HashSet<int> { 30 });
+
+            episodes.Records.Should().OnlyContain(e => e.SeriesId == _unmonitoredSeries.Id);
+        }
+
+        [Test]
+        public void should_match_no_series_when_tag_id_unknown()
+        {
+            GivenMonitoredFilterExpression();
+
+            var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false, new HashSet<int> { 9999 });
+
+            episodes.Records.Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_ignore_empty_tag_list()
+        {
+            GivenMonitoredFilterExpression();
+
+            var withFilter = Subject.EpisodesWithoutFiles(_pagingSpec, false, new HashSet<int>());
+            var withNull = Subject.EpisodesWithoutFiles(_pagingSpec, false, null);
+
+            withFilter.TotalRecords.Should().Be(withNull.TotalRecords);
         }
     }
 }

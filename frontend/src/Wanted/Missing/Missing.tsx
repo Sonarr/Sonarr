@@ -33,6 +33,7 @@ import {
   unregisterPagePopulator,
 } from 'Utilities/pagePopulator';
 import translate from 'Utilities/String/translate';
+import toWantedSearchCommandBody from 'Wanted/toWantedSearchCommandBody';
 import MissingFilterModal from './MissingFilterModal';
 import {
   setMissingOption,
@@ -63,6 +64,7 @@ function MissingContent() {
     page,
     goToPage,
     refetch,
+    filters: activeFilters,
   } = useMissing();
 
   const { columns, pageSize, sortKey, sortDirection, selectedFilterKey } =
@@ -138,16 +140,17 @@ function MissingContent() {
 
   const handleSearchAllMissingConfirmed = useCallback(() => {
     executeCommand(
-      {
-        name: CommandNames.MissingEpisodeSearch,
-      },
+      toWantedSearchCommandBody(
+        CommandNames.MissingEpisodeSearch,
+        activeFilters
+      ),
       () => {
         refetch();
       }
     );
 
     setIsConfirmSearchAllModalOpen(false);
-  }, [executeCommand, refetch]);
+  }, [activeFilters, executeCommand, refetch]);
 
   const handleToggleSelectedPress = useCallback(() => {
     toggleEpisodesMonitored({

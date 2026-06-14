@@ -26,7 +26,15 @@ public class MissingController : EpisodeControllerWithSignalR
 
     [HttpGet]
     [Produces("application/json")]
-    public Ok<PagingResource<EpisodeResource>> GetMissingEpisodes([FromQuery] PagingRequestResource paging, bool monitored = true, bool includeSpecials = true, [FromQuery] MissingSubresource[]? includeSubresources = null)
+    public Ok<PagingResource<EpisodeResource>> GetMissingEpisodes(
+        [FromQuery] PagingRequestResource paging,
+        [FromQuery] bool monitored = true,
+        [FromQuery] bool includeSpecials = true,
+        [FromQuery] List<int>? seriesIds = null,
+        [FromQuery] List<int>? qualityProfileIds = null,
+        [FromQuery] List<SeriesTypes>? seriesType = null,
+        [FromQuery] HashSet<int>? seriesTags = null,
+        [FromQuery] MissingSubresource[]? includeSubresources = null)
     {
         var pagingResource = new PagingResource<EpisodeResource>(paging);
         var pagingSpec = pagingResource.MapToPagingSpec<EpisodeResource, Episode>(
@@ -48,10 +56,25 @@ public class MissingController : EpisodeControllerWithSignalR
             pagingSpec.FilterExpressions.Add(v => v.Monitored == false || v.Series.Monitored == false);
         }
 
+        if (seriesIds?.Any() == true)
+        {
+            pagingSpec.FilterExpressions.Add(e => seriesIds.Contains(e.SeriesId));
+        }
+
+        if (qualityProfileIds?.Any() == true)
+        {
+            pagingSpec.FilterExpressions.Add(e => qualityProfileIds.Contains(e.Series.QualityProfileId));
+        }
+
+        if (seriesType?.Any() == true)
+        {
+            pagingSpec.FilterExpressions.Add(e => seriesType.Contains(e.Series.SeriesType));
+        }
+
         var includeSeries = includeSubresources.Contains(MissingSubresource.Series);
         var includeImages = includeSubresources.Contains(MissingSubresource.Images);
 
-        var resource = pagingSpec.ApplyToPage(spec => _episodeService.EpisodesWithoutFiles(spec, includeSpecials), v => MapToResource(v, includeSeries, false, includeImages));
+        var resource = pagingSpec.ApplyToPage(spec => _episodeService.EpisodesWithoutFiles(spec, includeSpecials, seriesTags), v => MapToResource(v, includeSeries, false, includeImages));
 
         return TypedResults.Ok(resource);
     }
