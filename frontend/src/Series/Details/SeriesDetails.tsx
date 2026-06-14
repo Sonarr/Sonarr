@@ -10,7 +10,7 @@ import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import MonitorToggleButton from 'Components/MonitorToggleButton';
+import MetadataAttribution from 'Components/MetadataAttribution';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
@@ -103,6 +103,8 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   const { toggleSeriesMonitored, isTogglingSeriesMonitored } =
     useToggleSeriesMonitored(seriesId);
   const { data: allSeries } = useSeries();
+
+  const monitored = series?.monitored ?? false;
 
   const {
     isFetching: isEpisodesFetching,
@@ -339,14 +341,11 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     []
   );
 
-  const handleMonitorTogglePress = useCallback(
-    (value: boolean) => {
-      toggleSeriesMonitored({
-        monitored: value,
-      });
-    },
-    [toggleSeriesMonitored]
-  );
+  const handleMonitorToggle = useCallback(() => {
+    toggleSeriesMonitored({
+      monitored: !monitored,
+    });
+  }, [toggleSeriesMonitored, monitored]);
 
   const handleRefreshPress = useCallback(() => {
     executeCommand({
@@ -394,8 +393,6 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   } else if (expandedState.allCollapsed) {
     expandIcon = icons.EXPAND;
   }
-
-  const monitored = series?.monitored ?? false;
 
   if (!series) {
     return null;
@@ -578,27 +575,13 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
               <div className={styles.info}>
                 <div className={styles.titleRow}>
                   <div className={styles.titleContainer}>
-                    <div className={styles.toggleMonitoredContainer}>
-                      <MonitorToggleButton
-                        className={styles.monitorToggleButton}
-                        monitored={monitored}
-                        isSaving={isTogglingSeriesMonitored}
-                        size={48}
-                        onPress={handleMonitorTogglePress}
-                      />
-                    </div>
-
                     <div className={styles.title}>{title}</div>
 
                     {alternateTitles.length ? (
                       <div className={styles.alternateTitlesIconContainer}>
                         <Popover
                           anchor={
-                            <Icon
-                              name={icons.ALTERNATE_TITLES}
-                              size={18}
-                              filled={true}
-                            />
+                            <Icon name={icons.ALTERNATE_TITLES} size={18} />
                           }
                           title={translate('AlternateTitles')}
                           body={
@@ -669,139 +652,162 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                 </div>
 
                 <div className={styles.detailsChips}>
-                  <SeriesProgressLabel
-                    className={styles.seriesProgressLabel}
-                    seriesId={seriesId}
-                    monitored={monitored}
-                    episodeCount={episodeCount}
-                    episodeFileCount={episodeFileCount}
-                  />
-
-                  <Tooltip
-                    anchor={
+                  <div className={styles.chipsRow}>
+                    <Link
+                      className={styles.monitoredToggle}
+                      isDisabled={isTogglingSeriesMonitored}
+                      aria-pressed={monitored}
+                      onPress={handleMonitorToggle}
+                    >
                       <Label
                         className={styles.detailsLabel}
                         size={sizes.LARGE}
-                        icon={icons.DRIVE}
+                        icon={icons.MONITORED}
+                        iconFilled={monitored}
+                        interactive={true}
                       >
-                        <span className={styles.sizeOnDisk}>
-                          {formatBytes(sizeOnDisk)}
+                        <span className={styles.monitoredText}>
+                          {monitored
+                            ? translate('Monitored')
+                            : translate('Unmonitored')}
                         </span>
                       </Label>
-                    }
-                    tooltip={<span>{episodeFilesCountMessage}</span>}
-                    kind={kinds.DEFAULT}
-                    position={tooltipPositions.BOTTOM}
-                  />
+                    </Link>
 
-                  <Label
-                    className={styles.detailsLabel}
-                    title={translate('QualityProfile')}
-                    size={sizes.LARGE}
-                    icon={icons.PROFILE}
-                  >
-                    <span className={styles.qualityProfileName}>
-                      <QualityProfileName qualityProfileId={qualityProfileId} />
-                    </span>
-                  </Label>
-
-                  <Label
-                    className={styles.detailsLabel}
-                    title={statusDetails.message}
-                    size={sizes.LARGE}
-                    kind={status === 'deleted' ? kinds.INVERSE : undefined}
-                    icon={statusDetails.icon}
-                  >
-                    <span className={styles.statusName}>
-                      {statusDetails.title}
-                    </span>
-                  </Label>
-
-                  {originalLanguage?.name ? (
-                    <Label
-                      className={styles.detailsLabel}
-                      title={translate('OriginalLanguage')}
-                      size={sizes.LARGE}
-                      icon={icons.LANGUAGE}
-                    >
-                      <span className={styles.originalLanguageName}>
-                        {originalLanguage.name}
-                      </span>
-                    </Label>
-                  ) : null}
-
-                  {originalCountryName ? (
-                    <Label
-                      className={styles.detailsLabel}
-                      title={translate('OriginalCountry')}
-                      size={sizes.LARGE}
-                      icon={icons.GLOBE}
-                    >
-                      <span className={styles.originalCountry}>
-                        {originalCountryName}
-                      </span>
-                    </Label>
-                  ) : null}
-
-                  {network ? (
-                    <Label
-                      className={styles.detailsLabel}
-                      title={translate('Network')}
-                      size={sizes.LARGE}
-                      icon={icons.NETWORK}
-                    >
-                      <span className={styles.network}>{network}</span>
-                    </Label>
-                  ) : null}
-
-                  <Tooltip
-                    anchor={
-                      <Label
-                        className={classNames(
-                          styles.detailsLabel,
-                          styles.detailsLabelInteractive
-                        )}
-                        size={sizes.LARGE}
-                        icon={icons.EXTERNAL_LINK}
-                      >
-                        <span className={styles.links}>
-                          {translate('Links')}
-                        </span>
-                      </Label>
-                    }
-                    tooltip={
-                      <SeriesDetailsLinks
-                        tvdbId={tvdbId}
-                        tvMazeId={tvMazeId}
-                        imdbId={imdbId}
-                        tmdbId={tmdbId}
-                      />
-                    }
-                    kind={kinds.DEFAULT}
-                    position={tooltipPositions.BOTTOM}
-                  />
-
-                  {tags.length ? (
                     <Tooltip
                       anchor={
                         <Label
-                          className={classNames(
-                            styles.detailsLabel,
-                            styles.detailsLabelInteractive
-                          )}
+                          className={styles.detailsLabel}
                           size={sizes.LARGE}
-                          icon={icons.TAGS}
+                          icon={icons.EXTERNAL_LINK}
+                          interactive={true}
                         >
-                          <span className={styles.tags}>
-                            {translate('Tags')}
+                          <span className={styles.links}>
+                            {translate('Links')}
                           </span>
                         </Label>
                       }
-                      tooltip={<SeriesTags seriesId={seriesId} />}
+                      tooltip={
+                        <SeriesDetailsLinks
+                          tvdbId={tvdbId}
+                          tvMazeId={tvMazeId}
+                          imdbId={imdbId}
+                          tmdbId={tmdbId}
+                        />
+                      }
                       kind={kinds.DEFAULT}
                       position={tooltipPositions.BOTTOM}
                     />
-                  ) : null}
+
+                    {tags.length ? (
+                      <Tooltip
+                        anchor={
+                          <Label
+                            className={styles.detailsLabel}
+                            size={sizes.LARGE}
+                            icon={icons.TAGS}
+                            interactive={true}
+                          >
+                            <span className={styles.tags}>
+                              {translate('Tags')}
+                            </span>
+                          </Label>
+                        }
+                        tooltip={<SeriesTags seriesId={seriesId} />}
+                        kind={kinds.DEFAULT}
+                        position={tooltipPositions.BOTTOM}
+                      />
+                    ) : null}
+                  </div>
+
+                  <div className={styles.chipsRow}>
+                    <SeriesProgressLabel
+                      className={styles.seriesProgressLabel}
+                      seriesId={seriesId}
+                      monitored={monitored}
+                      episodeCount={episodeCount}
+                      episodeFileCount={episodeFileCount}
+                    />
+
+                    <Tooltip
+                      anchor={
+                        <Label
+                          className={styles.detailsLabel}
+                          size={sizes.LARGE}
+                          icon={icons.DRIVE}
+                        >
+                          <span className={styles.sizeOnDisk}>
+                            {formatBytes(sizeOnDisk)}
+                          </span>
+                        </Label>
+                      }
+                      tooltip={<span>{episodeFilesCountMessage}</span>}
+                      kind={kinds.DEFAULT}
+                      position={tooltipPositions.BOTTOM}
+                    />
+
+                    <Label
+                      className={styles.detailsLabel}
+                      title={translate('QualityProfile')}
+                      size={sizes.LARGE}
+                      icon={icons.PROFILE}
+                    >
+                      <span className={styles.qualityProfileName}>
+                        <QualityProfileName
+                          qualityProfileId={qualityProfileId}
+                        />
+                      </span>
+                    </Label>
+
+                    <Label
+                      className={styles.detailsLabel}
+                      title={statusDetails.message}
+                      size={sizes.LARGE}
+                      kind={status === 'deleted' ? kinds.INVERSE : undefined}
+                      icon={statusDetails.icon}
+                    >
+                      <span className={styles.statusName}>
+                        {statusDetails.title}
+                      </span>
+                    </Label>
+
+                    {originalLanguage?.name ? (
+                      <Label
+                        className={styles.detailsLabel}
+                        title={translate('OriginalLanguage')}
+                        size={sizes.LARGE}
+                        icon={icons.LANGUAGE}
+                      >
+                        <span className={styles.originalLanguageName}>
+                          {originalLanguage.name}
+                        </span>
+                      </Label>
+                    ) : null}
+
+                    {originalCountryName ? (
+                      <Label
+                        className={styles.detailsLabel}
+                        title={translate('OriginalCountry')}
+                        size={sizes.LARGE}
+                        icon={icons.GLOBE}
+                      >
+                        <span className={styles.originalCountry}>
+                          {originalCountryName}
+                        </span>
+                      </Label>
+                    ) : null}
+
+                    {network ? (
+                      <Label
+                        className={styles.detailsLabel}
+                        title={translate('Network')}
+                        size={sizes.LARGE}
+                        icon={icons.NETWORK}
+                      >
+                        <span className={styles.network}>{network}</span>
+                      </Label>
+                    ) : null}
+                  </div>
                 </div>
 
                 <div className={styles.heroFooter}>
@@ -810,18 +816,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                     <span>{path}</span>
                   </div>
 
-                  <Link
-                    className={styles.tvdbBadge}
-                    to="/settings/metadatasource"
-                    title={translate('MetadataProvidedBy', {
-                      provider: 'TheTVDB',
-                    })}
-                  >
-                    <img
-                      src={`${window.Sonarr.urlBase}/Content/Images/thetvdb-dark.png`}
-                      alt="TheTVDB"
-                    />
-                  </Link>
+                  <MetadataAttribution />
                 </div>
               </div>
             </div>

@@ -12,6 +12,7 @@ export interface LabelProps extends ComponentProps<'span'> {
   outline?: boolean;
   icon?: IconName;
   iconFilled?: boolean;
+  interactive?: boolean;
   children: ReactNode;
 }
 
@@ -22,6 +23,7 @@ export default function Label({
   outline = false,
   icon,
   iconFilled = false,
+  interactive = false,
   children,
   ...otherProps
 }: LabelProps) {
@@ -32,7 +34,8 @@ export default function Label({
         styles[kind],
         styles[size],
         outline && styles.outline,
-        icon && styles.hasIcon
+        icon && styles.hasIcon,
+        interactive && styles.interactive
       )}
       {...otherProps}
     >

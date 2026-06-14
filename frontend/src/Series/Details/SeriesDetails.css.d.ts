@@ -4,11 +4,11 @@ interface CssExports {
   'alternateTitlesIconContainer': string;
   'backdrop': string;
   'backdropOverlay': string;
+  'chipsRow': string;
   'contentContainer': string;
   'details': string;
   'detailsChips': string;
   'detailsLabel': string;
-  'detailsLabelInteractive': string;
   'fileCountMessage': string;
   'genres': string;
   'header': string;
@@ -18,7 +18,8 @@ interface CssExports {
   'info': string;
   'innerContentBody': string;
   'links': string;
-  'monitorToggleButton': string;
+  'monitoredText': string;
+  'monitoredToggle': string;
   'network': string;
   'originalCountry': string;
   'originalLanguageName': string;
@@ -41,8 +42,6 @@ interface CssExports {
   'title': string;
   'titleContainer': string;
   'titleRow': string;
-  'toggleMonitoredContainer': string;
-  'tvdbBadge': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

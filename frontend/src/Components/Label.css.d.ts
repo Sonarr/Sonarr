@@ -6,6 +6,7 @@ interface CssExports {
   'disabled': string;
   'hasIcon': string;
   'info': string;
+  'interactive': string;
   'inverse': string;
   'label': string;
   'large': string;

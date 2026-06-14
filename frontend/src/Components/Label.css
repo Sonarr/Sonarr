@@ -37,6 +37,18 @@
   display: none;
 }
 
+.interactive {
+  cursor: pointer;
+}
+
+.interactive svg {
+  opacity: 0.85;
+}
+
+.interactive:hover svg {
+  opacity: 1;
+}
+
 /** Kinds — dot color via custom property, bg stays paper-warm. **/
 
 .danger::before {

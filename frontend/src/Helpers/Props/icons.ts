@@ -11,6 +11,7 @@ import {
   Calculator,
   Calendar,
   CalendarDays,
+  Captions,
   Check,
   ChevronDown,
   ChevronLeft,
@@ -78,7 +79,6 @@ import {
   Play,
   Plus,
   Power,
-  Quote,
   Radio,
   RefreshCcw,
   RefreshCw,
@@ -105,7 +105,7 @@ import {
 export const ACTIONS = EllipsisVertical;
 export const ACTIVITY = Clock;
 export const ADD = Plus;
-export const ALTERNATE_TITLES = Quote;
+export const ALTERNATE_TITLES = Captions;
 export const ADVANCED_SETTINGS = Settings;
 export const ARROW_LEFT = CircleChevronLeft;
 export const ARROW_RIGHT = CircleChevronRight;
