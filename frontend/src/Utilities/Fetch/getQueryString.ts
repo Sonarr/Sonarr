@@ -27,7 +27,11 @@ const getQueryString = (queryParams?: QueryParams) => {
       if (Array.isArray(value)) {
         if (typeof value[0] === 'object') {
           (value as PropertyFilter[]).forEach((filter) => {
-            acc.append(filter.key, String(filter.value));
+            if (Array.isArray(filter.value)) {
+              filter.value.forEach((v) => acc.append(filter.key, String(v)));
+            } else {
+              acc.append(filter.key, String(filter.value));
+            }
           });
         } else {
           value.forEach((item) => {
