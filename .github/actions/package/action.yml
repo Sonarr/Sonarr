@@ -44,9 +44,10 @@ runs:
         echo "SONARR_MAJOR_VERSION=${{ inputs.major_version }}" >> "$GITHUB_ENV"
         echo "SONARR_VERSION=${{ inputs.version }}" >> "$GITHUB_ENV"
 
-    - name: Create Packages
+     - name: Create Packages
       shell: bash
-      run: $GITHUB_ACTION_PATH/package.sh
+      run: |
+        bash "$GITHUB_ACTION_PATH/package.sh"
 
     - name: Create Windows Installer (x64)
       if: ${{ inputs.runtime == 'win-x64' }}
