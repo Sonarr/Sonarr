@@ -26,4 +26,17 @@ runs:
   steps:
     - name: Archive Artifact
       uses: thedoctor0/zip-release@0.7.5
-      
+      with:
+        # wejściowy folder/artefakt do spakowania
+        # Zmień jeśli Twój "artifact" nie jest katalogiem w repo.
+        root_folder: ${{ inputs.artifact }}
+
+        # gdzie ma trafić wynik (relative do repo; często najlepiej użyć ./)
+        target: .
+
+        # nazwa archiwum (zależy od tego, co zip-release przyjmuje)
+        # jeśli w Waszym workflow oczekujesz konkretnych nazw, dopasuj ten format
+        filename: sonarr-${{ inputs.os }}-${{ inputs.archive_type }}-${{ inputs.version }}.zip
+
+        # opcjonalnie: tworzenie nazwy tagu/branch jeśli jest używane przez action
+        # W razie błędu usuń/zmień linie, które nie są zgodne z action inputs.
