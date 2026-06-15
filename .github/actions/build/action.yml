@@ -16,30 +16,48 @@ inputs:
     required: true
   package_tests:
     description: "True if tests should be packaged for later testing steps"
+    required: true
+    default: 'false'
 
 runs:
   using: "composite"
   steps:
-    - name: Setup .NET
+    - name: Setup .NET (from global.json)
+      shell: bash
+      run: |
+        set -euo pipefail
+        DOTNET_VERSION="$(jq -r '.sdk.version' global.json)"
+        echo "DOTNET_VERSION=$DOTNET_VERSION" >> "$GITHUB_ENV"
+      # Composite actions nie pozwalają wprost podstawić wyniku bash do with: w tym samym kroku,
+      # więc instalację SDK robimy w osobnym kroku.
+
+    - name: Install .NET SDK
       uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
 
     - name: Setup NuGet registry source
       shell: bash
       if: ${{ startsWith(inputs.runtime, 'freebsd') }}
-      run:
-        dotnet nuget add source --configfile src/NuGet.Config --name gh-openur https://nuget.pkg.github.com/openur/index.json --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text
+      run: |
+        dotnet nuget add source \
+          --configfile src/NuGet.Config \
+          --name gh-openur \
+          https://nuget.pkg.github.com/openur/index.json \
+          --username "${{ github.repository_owner }}" \
+          --password "${{ github.token }}" \
+          --store-password-in-clear-text
 
     - name: Setup Environment Variables
       id: variables
       shell: bash
       run: |
-        DOTNET_VERSION=$(jq -r '.sdk.version' global.json)
-
+        set -euo pipefail
         echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
         echo "SONARR_VERSION=${{ inputs.version }}" >> "$GITHUB_ENV"
         echo "BRANCH=${{ inputs.branch }}" >> "$GITHUB_ENV"
 
-        if [ "$RUNNER_OS" == "Windows" ]; then
+        if [ "${RUNNER_OS:-}" = "Windows" ]; then
           echo "NUGET_PACKAGES=D:\nuget\packages" >> "$GITHUB_ENV"
         fi
 
@@ -47,32 +65,76 @@ runs:
       if: ${{ inputs.runtime == 'freebsd-x64' }}
       shell: bash
       run: |
-        BUNDLEDVERSIONS="${SDK_PATH}/Microsoft.NETCoreSdk.BundledVersions.props"
+        set -euo pipefail
 
-        if grep -q freebsd-x64 "$BUNDLEDVERSIONS"; then
+        BUNDLEDVERSIONS="${SDK_PATH}/Microsoft.NETCoreSdk.BundledVersions.props"
+        if [ ! -f "$BUNDLEDVERSIONS" ]; then
+          echo "BundledVersions props not found at: $BUNDLEDVERSIONS"
+          exit 1
+        fi
+
+        # Ujednolicenie edycji plików: obsługa sed na GNU i BSD/macOS.
+        # flaga -i z argumentem zachowuje backup w BSD; w GNU też zadziała.
+        # Wybrane podejście: używamy "sed -i" z podaniem pustego extension, jeśli potrzeba.
+        # Żeby nie komplikować, zrobimy edycję przez jednorazowy backup i podmianę.
+        tmp="$(mktemp)"
+        cp "$BUNDLEDVERSIONS" "$tmp"
+
+        if grep -q "freebsd-x64" "$tmp"; then
           echo "Extra platforms already enabled"
         else
           echo "Enabling extra platform support"
-          sed -i.ORI 's/osx-x64/osx-x64;freebsd-x64/' "$BUNDLEDVERSIONS"
+          sed 's/osx-x64/osx-x64;freebsd-x64/' "$tmp" > "${tmp}.new"
+          mv "${tmp}.new" "$tmp"
         fi
 
-        if grep -qv freebsd-x64 src/Directory.Build.props; then
-          sed -i'' -e "s^<RuntimeIdentifiers>\(.*\)</RuntimeIdentifiers>^<RuntimeIdentifiers>\1;freebsd-x64</RuntimeIdentifiers>^g" src/Directory.Build.props
+        if grep -qv "freebsd-x64" src/Directory.Build.props; then
+          # Dodajemy freebsd-x64 do RuntimeIdentifiers w Directory.Build.props
+          # Zakładamy format jak w Twoim kodzie: <RuntimeIdentifiers> ... </RuntimeIdentifiers>
+          # Używamy edycji przez plik tymczasowy.
+          tmp2="$(mktemp)"
+          cp "src/Directory.Build.props" "$tmp2"
+          sed -e "s^<RuntimeIdentifiers>\\(.*\\)</RuntimeIdentifiers>^<RuntimeIdentifiers>\\1;freebsd-x64</RuntimeIdentifiers>^g" "$tmp2" > "${tmp2}.new"
+          mv "${tmp2}.new" "$tmp2"
+          mv "$tmp2" "src/Directory.Build.props"
         fi
+
+        mv "$tmp" "$BUNDLEDVERSIONS"
 
     - name: Update Version Number
       shell: bash
       run: |
-        if [ "$SONARR_VERSION" != "" ]; then
+        set -euo pipefail
+
+        if [ "${SONARR_VERSION:-}" != "" ]; then
           echo "Updating version info to: $SONARR_VERSION"
-          sed -i'' -e "s/<AssemblyVersion>[0-9.*]\+<\/AssemblyVersion>/<AssemblyVersion>$SONARR_VERSION<\/AssemblyVersion>/g" src/Directory.Build.props
-          sed -i'' -e "s/<AssemblyConfiguration>[\$()A-Za-z-]\+<\/AssemblyConfiguration>/<AssemblyConfiguration>${BRANCH}<\/AssemblyConfiguration>/g" src/Directory.Build.props
-          sed -i'' -e "s/<string>10.0.0.0<\/string>/<string>$SONARR_VERSION<\/string>/g" distribution/macOS/Sonarr.app/Contents/Info.plist
+
+          # assembly version
+          tmp="$(mktemp)"
+          sed -e "s/<AssemblyVersion>[0-9.]*<\\/AssemblyVersion>/<AssemblyVersion>${SONARR_VERSION}<\\/AssemblyVersion>/g" \
+            src/Directory.Build.props > "$tmp"
+          mv "$tmp" src/Directory.Build.props
+
+          # assembly configuration (uwaga: w Twoim oryginale używałeś regexu na $()A-Za-z)
+          tmp="$(mktemp)"
+          sed -e "s/<AssemblyConfiguration>.*<\\/AssemblyConfiguration>/<AssemblyConfiguration>${BRANCH}<\\/AssemblyConfiguration>/g" \
+            src/Directory.Build.props > "$tmp"
+          mv "$tmp" src/Directory.Build.props
+
+          # macOS Info.plist - dopasuj dokładniej jeśli format się różni
+          if [ -f "distribution/macOS/Sonarr.app/Contents/Info.plist" ]; then
+            tmp="$(mktemp)"
+            sed -e "s/<string>[0-9.]*<\\/string>/<string>${SONARR_VERSION}<\\/string>/g" \
+              distribution/macOS/Sonarr.app/Contents/Info.plist > "$tmp"
+            mv "$tmp" distribution/macOS/Sonarr.app/Contents/Info.plist
+          fi
         fi
 
     - name: Build Backend
       shell: bash
       run: |
+        set -euo pipefail
+
         runtime="${{ inputs.runtime }}"
         platform=Windows
         slnFile=src/Sonarr.sln
@@ -80,7 +142,7 @@ runs:
 
         IFS='-' read -ra SPLIT <<< "$runtime"
 
-        if [ "${SPLIT[0]}" == "win" ]; then
+        if [ "${SPLIT[0]}" = "win" ]; then
           platform=Windows
           targetingWindows=true
         else
@@ -92,11 +154,19 @@ runs:
 
         echo "Building Sonarr for $runtime, Platform: $platform"
 
-        dotnet msbuild -restore $slnFile -p:SelfContained=true -p:Configuration=Release -p:Platform=$platform -p:RuntimeIdentifiers=$runtime -p:EnableWindowsTargeting=true -t:PublishAllRids
+        dotnet msbuild -restore "$slnFile" \
+          -p:SelfContained=true \
+          -p:Configuration=Release \
+          -p:Platform="$platform" \
+          -p:RuntimeIdentifiers="$runtime" \
+          -p:EnableWindowsTargeting=true \
+          -t:PublishAllRids
 
     - name: Package
       shell: bash
       run: |
+        set -euo pipefail
+
         framework="${{ inputs.framework }}"
         runtime="${{ inputs.runtime }}"
 
@@ -104,84 +174,88 @@ runs:
 
         case "${SPLIT[0]}" in
           linux|freebsd*)
-            folder=_artifacts/$runtime/$framework/Sonarr
-
+            folder=_artifacts/"$runtime"/"$framework"/Sonarr
             echo "Packaging files"
-            rm -rf $folder
-            mkdir -p $folder
-            cp -r _output/$framework/$runtime/publish/* $folder
-            cp -r _output/Sonarr.Update/$framework/$runtime/publish $folder/Sonarr.Update
-            cp LICENSE.md $folder
+            rm -rf "$folder"
+            mkdir -p "$folder"
+            cp -r "_output/$framework/$runtime/publish/"* "$folder"
+            cp -r "_output/Sonarr.Update/$framework/$runtime/publish" "$folder/Sonarr.Update"
+            cp LICENSE.md "$folder"
 
             echo "Removing Service helpers"
-            rm -f $folder/ServiceUninstall.*
-            rm -f $folder/ServiceInstall.*
+            rm -f "$folder/ServiceUninstall."*
+            rm -f "$folder/ServiceInstall."*
 
             echo "Removing Sonarr.Windows"
-            rm $folder/Sonarr.Windows.*
+            rm -f "$folder/Sonarr.Windows."*
 
             echo "Adding Sonarr.Mono to UpdatePackage"
-            cp $folder/Sonarr.Mono.* $folder/Sonarr.Update
-            cp $folder/Mono.Posix.NETStandard.* $folder/Sonarr.Update
-            cp $folder/libMonoPosixHelper.* $folder/Sonarr.Update
+            cp "$folder"/Sonarr.Mono.* "$folder/Sonarr.Update"
+            cp "$folder"/Mono.Posix.NETStandard.* "$folder/Sonarr.Update"
+            cp "$folder"/libMonoPosixHelper.* "$folder/Sonarr.Update"
             ;;
-          win)
-            folder=_artifacts/$runtime/$framework/Sonarr
 
+          win)
+            folder=_artifacts/"$runtime"/"$framework"/Sonarr
             echo "Packaging files"
-            rm -rf $folder
-            mkdir -p $folder
-            cp -r _output/$framework/$runtime/publish/* $folder
-            cp -r _output/Sonarr.Update/$framework/$runtime/publish $folder/Sonarr.Update
-            cp LICENSE.md $folder
-            cp -r _output/$framework-windows/$runtime/publish/* $folder
+            rm -rf "$folder"
+            mkdir -p "$folder"
+            cp -r "_output/$framework/$runtime/publish/"* "$folder"
+            cp -r "_output/Sonarr.Update/$framework/$runtime/publish" "$folder/Sonarr.Update"
+            cp LICENSE.md "$folder"
+            cp -r "_output/$framework-windows/$runtime/publish/"* "$folder"
 
             echo "Removing Sonarr.Mono"
-            rm -f $folder/Sonarr.Mono.*
-            rm -f $folder/Mono.Posix.NETStandard.*
-            rm -f $folder/libMonoPosixHelper.*
+            rm -f "$folder"/Sonarr.Mono.*
+            rm -f "$folder"/Mono.Posix.NETStandard.*
+            rm -f "$folder"/libMonoPosixHelper.*
 
             echo "Adding Sonarr.Windows to UpdatePackage"
-            cp $folder/Sonarr.Windows.* $folder/Sonarr.Update
-
+            cp "$folder"/Sonarr.Windows.* "$folder/Sonarr.Update"
             ;;
-          osx)
-            folder=_artifacts/$runtime/$framework/Sonarr
 
+          osx)
+            folder=_artifacts/"$runtime"/"$framework"/Sonarr
             echo "Packaging files"
-            rm -rf $folder
-            mkdir -p $folder
-            cp -r _output/$framework/$runtime/publish/* $folder
-            cp -r _output/Sonarr.Update/$framework/$runtime/publish $folder/Sonarr.Update
-            cp LICENSE.md $folder
+            rm -rf "$folder"
+            mkdir -p "$folder"
+            cp -r "_output/$framework/$runtime/publish/"* "$folder"
+            cp -r "_output/Sonarr.Update/$framework/$runtime/publish" "$folder/Sonarr.Update"
+            cp LICENSE.md "$folder"
 
             echo "Removing Service helpers"
-            rm -f $folder/ServiceUninstall.*
-            rm -f $folder/ServiceInstall.*
+            rm -f "$folder/ServiceUninstall."*
+            rm -f "$folder/ServiceInstall."*
 
             echo "Removing Sonarr.Windows"
-            rm $folder/Sonarr.Windows.*
+            rm -f "$folder/Sonarr.Windows."*
 
             echo "Adding Sonarr.Mono to UpdatePackage"
-            cp $folder/Sonarr.Mono.* $folder/Sonarr.Update
-            cp $folder/Mono.Posix.NETStandard.* $folder/Sonarr.Update
-            cp $folder/libMonoPosixHelper.* $folder/Sonarr.Update
+            cp "$folder"/Sonarr.Mono.* "$folder/Sonarr.Update"
+            cp "$folder"/Mono.Posix.NETStandard.* "$folder/Sonarr.Update"
+            cp "$folder"/libMonoPosixHelper.* "$folder/Sonarr.Update"
+            ;;
+
+          *)
+            echo "Unsupported runtime: $runtime"
+            exit 1
             ;;
         esac
 
     - name: Package Tests
-      if: ${{ inputs.package_tests }}
+      if: ${{ inputs.package_tests == 'true' }}
       shell: bash
       run: |
+        set -euo pipefail
+
         framework="${{ inputs.framework }}"
         runtime="${{ inputs.runtime }}"
 
         cp scripts/test.sh "_tests/$framework/$runtime/publish"
-
-        rm -f _tests/$framework/$runtime/*.log.config
+        rm -f "_tests/$framework/$runtime/"*.log.config
 
     - name: Upload Test Artifacts
-      if: ${{ inputs.package_tests }}
+      if: ${{ inputs.package_tests == 'true' }}
       uses: ./.github/actions/publish-test-artifact
       with:
         framework: ${{ inputs.framework }}
