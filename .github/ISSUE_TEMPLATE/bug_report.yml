@@ -7,8 +7,8 @@ body:
     label: Is there an existing issue for this?
     description: Please search to see if an open or closed issue already exists for the bug you encountered. If a bug exists and it is closed as complete it may not yet be in a stable release.
     options:
-    - label: I have searched the existing open and closed issues
-      required: true
+      - label: I have searched the existing open and closed issues
+        required: true
 - type: textarea
   attributes:
     label: Current Behavior
@@ -44,12 +44,12 @@ body:
         - **Browser**: Firefox 90 (If UI related)
         - **Database**: Sqlite 3.41.2
     value: |
-        - OS: 
-        - Sonarr: 
-        - Docker Install: 
-        - Using Reverse Proxy: 
-        - Browser: 
-        - Database: 
+      - OS: 
+      - Sonarr: 
+      - Docker Install: 
+      - Using Reverse Proxy: 
+      - Browser: 
+      - Database: 
     render: markdown
   validations:
     required: true
@@ -67,8 +67,8 @@ body:
     label: Trace Logs?
     description: |
       Trace Logs (https://wiki.servarr.com/sonarr/troubleshooting#logging-and-log-files) 
-      ***Generally speaking, all bug reports must have trace logs provided.***
-      *** Info Logs are not trace logs. If the logs do not say trace and are not from a file like `*.trace.*.txt` they are not trace logs.***
+      **Generally speaking, all bug reports must have trace logs provided.**
+      **Info Logs are not trace logs. If the logs do not say trace and are not from a file like `*.trace.*.txt` they are not trace logs.**
   validations:
     required: true
 - type: textarea
