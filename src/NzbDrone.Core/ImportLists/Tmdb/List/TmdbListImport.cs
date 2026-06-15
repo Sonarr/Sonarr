@@ -81,7 +81,7 @@ public class TmdbListImport : TmdbImportBase<TmdbListSettings>
                 {
                     Name = r.Name,
                     Value = r.Id.ToString(CultureInfo.InvariantCulture),
-                    Hint = $"(Id: {r.Id}, Items: {r.TotalItemsCount})"
+                    Hint = $"(Id: {r.Id}, Items: {r.NumberOfItems})"
                 }));
 
             if (resource.Results.Count < PageSize || resource.Results.Count >= MaxNumResultsPerQuery)

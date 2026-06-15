@@ -16,7 +16,7 @@ public class TmdbAccountListResource
     public string Name { get; init; }
 
     [JsonPropertyName("number_of_items")]
-    public int TotalItemsCount { get; init; }
+    public int NumberOfItems { get; init; }
 }
 
 public class TmdbMediaResource
