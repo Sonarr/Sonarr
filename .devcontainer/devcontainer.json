@@ -2,18 +2,20 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/dotnet
 {
   "name": "Sonarr",
-  "image": "mcr.microsoft.com/devcontainers/dotnet:1-10.0",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:8.0",
   "features": {
     "ghcr.io/devcontainers/features/node:2": {
-      "nodeGypDependencies": true,
-      "version": "20",
-      "nvmVersion": "latest"
-    }
+      "version": "20"
+    },
+    "ghcr.io/devcontainers/features/git:1": {}
   },
   "forwardPorts": [8989],
   "customizations": {
     "vscode": {
-      "extensions": ["esbenp.prettier-vscode"]
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "ms-dotnettools.csharp"
+      ]
     }
   }
 }
