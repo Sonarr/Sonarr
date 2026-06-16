@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -446,7 +447,7 @@ function EditQualityProfileModalContent({
     setMode(newMode);
   }, []);
 
-  const handleFormatItemScoreChange = useCallback(
+  const handleFormatItemScoreChange = useDebouncedCallback(
     (formatId: number, score: number) => {
       const newFormatItems = formatItems.value.map((formatItem) => {
         if (formatItem.format === formatId) {
@@ -461,7 +462,7 @@ function EditQualityProfileModalContent({
 
       updateValue('formatItems', newFormatItems);
     },
-    [formatItems, updateValue]
+    1000
   );
 
   useEffect(() => {
