@@ -13,6 +13,7 @@
     "AddConditionError": "Niet in staat een nieuwe voorwaarde toe te voegen, probeer het opnieuw.",
     "AddConditionImplementation": "Voeg voorwaarde toe - {implementationName}",
     "AddConnection": "Voeg connectie toe",
+    "AddConnectionError": "Het is niet gelukt om een nieuwe verbinding toe te voegen. Probeer het nog eens.",
     "AddConnectionImplementation": "Voeg connectie toe - {implementationName}",
     "AddCustomFilter": "Aangepaste Filter Toevoegen",
     "AddCustomFormat": "Voeg aangepast formaat toe",
