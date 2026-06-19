@@ -561,7 +561,7 @@
     "DownloadClientValidationApiKeyIncorrect": "Clé API incorrecte",
     "DownloadClientValidationApiKeyRequired": "Clé API requise",
     "DownloadClientValidationAuthenticationFailure": "Échec de l'authentification",
-    "DownloadClientValidationAuthenticationFailureDetail": "Veuillez vérifier vos identifiants. Vérifiez également que l'hôte qui exécute {appName} n'est pas empêché d'accéder à {clientName} par des limitations de la liste blanche dans la configuration de {clientName}.",
+    "DownloadClientValidationAuthenticationFailureDetail": "Veuillez vérifier votre nom d'utilisateur et votre mot de passe. Vérifiez également que l'hôte qui exécute {appName} n'est pas empêché d'accéder à {clientName} par des limitations de la liste blanche dans la configuration de {clientName}.",
     "DownloadClientValidationCategoryMissing": "La catégorie n'existe pas",
     "DownloadClientValidationCategoryMissingDetail": "La catégorie que vous avez saisie n'existe pas dans {clientName}. Créez-la d'abord dans {clientName}.",
     "DownloadClientValidationErrorVersion": "La version de {clientName} doit être au moins {requiredVersion}. La version rapportée est {reportedVersion}",
