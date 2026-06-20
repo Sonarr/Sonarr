@@ -2023,6 +2023,8 @@
   "ShowAdvanced": "Show Advanced",
   "ShowBanners": "Show Banners",
   "ShowBannersHelpText": "Show banners instead of titles",
+  "ShowCoverArt": "Show Cover Art",
+  "ShowCoverArtHelpText": "Show series cover art in the agenda view",
   "ShowDateAdded": "Show Date Added",
   "ShowDateAddedHelpText": "Show when the series was added",
   "ShowEpisodeInformation": "Show Episode Information",
