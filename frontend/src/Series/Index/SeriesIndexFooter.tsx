@@ -1,6 +1,4 @@
-import classNames from 'classnames';
 import React from 'react';
-import { ColorImpairedConsumer } from 'App/ColorImpairedContext';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
 import useSeries from 'Series/useSeries';
@@ -46,108 +44,71 @@ export default function SeriesIndexFooter() {
   });
 
   return (
-    <ColorImpairedConsumer>
-      {(enableColorImpairedMode) => {
-        return (
-          <div className={styles.footer}>
-            <div>
-              <div className={styles.legendItem}>
-                <div
-                  className={classNames(
-                    styles.continuing,
-                    enableColorImpairedMode && 'colorImpaired'
-                  )}
-                />
-                <div>{translate('SeriesIndexFooterContinuing')}</div>
-              </div>
+    <div className={styles.footer}>
+      <div>
+        <div className={styles.legendItem}>
+          <div className={styles.continuing} />
+          <div>{translate('SeriesIndexFooterContinuing')}</div>
+        </div>
 
-              <div className={styles.legendItem}>
-                <div
-                  className={classNames(
-                    styles.ended,
-                    enableColorImpairedMode && 'colorImpaired'
-                  )}
-                />
-                <div>{translate('SeriesIndexFooterEnded')}</div>
-              </div>
+        <div className={styles.legendItem}>
+          <div className={styles.ended} />
+          <div>{translate('SeriesIndexFooterEnded')}</div>
+        </div>
 
-              <div className={styles.legendItem}>
-                <div
-                  className={classNames(
-                    styles.missingMonitored,
-                    enableColorImpairedMode && 'colorImpaired'
-                  )}
-                />
-                <div>{translate('SeriesIndexFooterMissingMonitored')}</div>
-              </div>
+        <div className={styles.legendItem}>
+          <div className={styles.missingMonitored} />
+          <div>{translate('SeriesIndexFooterMissingMonitored')}</div>
+        </div>
 
-              <div className={styles.legendItem}>
-                <div
-                  className={classNames(
-                    styles.missingUnmonitored,
-                    enableColorImpairedMode && 'colorImpaired'
-                  )}
-                />
-                <div>{translate('SeriesIndexFooterMissingUnmonitored')}</div>
-              </div>
+        <div className={styles.legendItem}>
+          <div className={styles.missingUnmonitored} />
+          <div>{translate('SeriesIndexFooterMissingUnmonitored')}</div>
+        </div>
 
-              <div className={styles.legendItem}>
-                <div
-                  className={classNames(
-                    styles.downloading,
-                    enableColorImpairedMode && 'colorImpaired'
-                  )}
-                />
-                <div>{translate('SeriesIndexFooterDownloading')}</div>
-              </div>
-            </div>
+        <div className={styles.legendItem}>
+          <div className={styles.downloading} />
+          <div>{translate('SeriesIndexFooterDownloading')}</div>
+        </div>
+      </div>
 
-            <div className={styles.statistics}>
-              <DescriptionList>
-                <DescriptionListItem title={translate('Series')} data={count} />
+      <div className={styles.statistics}>
+        <DescriptionList>
+          <DescriptionListItem title={translate('Series')} data={count} />
 
-                <DescriptionListItem title={translate('Ended')} data={ended} />
+          <DescriptionListItem title={translate('Ended')} data={ended} />
 
-                <DescriptionListItem
-                  title={translate('Continuing')}
-                  data={continuing}
-                />
-              </DescriptionList>
+          <DescriptionListItem
+            title={translate('Continuing')}
+            data={continuing}
+          />
+        </DescriptionList>
 
-              <DescriptionList>
-                <DescriptionListItem
-                  title={translate('Monitored')}
-                  data={monitored}
-                />
+        <DescriptionList>
+          <DescriptionListItem
+            title={translate('Monitored')}
+            data={monitored}
+          />
 
-                <DescriptionListItem
-                  title={translate('Unmonitored')}
-                  data={count - monitored}
-                />
-              </DescriptionList>
+          <DescriptionListItem
+            title={translate('Unmonitored')}
+            data={count - monitored}
+          />
+        </DescriptionList>
 
-              <DescriptionList>
-                <DescriptionListItem
-                  title={translate('Episodes')}
-                  data={episodes}
-                />
+        <DescriptionList>
+          <DescriptionListItem title={translate('Episodes')} data={episodes} />
 
-                <DescriptionListItem
-                  title={translate('Files')}
-                  data={episodeFiles}
-                />
-              </DescriptionList>
+          <DescriptionListItem title={translate('Files')} data={episodeFiles} />
+        </DescriptionList>
 
-              <DescriptionList>
-                <DescriptionListItem
-                  title={translate('TotalFileSize')}
-                  data={formatBytes(totalFileSize)}
-                />
-              </DescriptionList>
-            </div>
-          </div>
-        );
-      }}
-    </ColorImpairedConsumer>
+        <DescriptionList>
+          <DescriptionListItem
+            title={translate('TotalFileSize')}
+            data={formatBytes(totalFileSize)}
+          />
+        </DescriptionList>
+      </div>
+    </div>
   );
 }
