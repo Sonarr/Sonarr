@@ -21,7 +21,7 @@
 }
 
 .bar {
-  width: 4px;
+  width: 8px;
   height: 15px;
   border-radius: 2px;
   background-color: var(--inkMuted);

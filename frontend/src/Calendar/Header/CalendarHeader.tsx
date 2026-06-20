@@ -14,7 +14,7 @@ import useCalendar, {
   useCalendarTime,
 } from 'Calendar/useCalendar';
 import Icon from 'Components/Icon';
-import Button from 'Components/Link/Button';
+import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Menu from 'Components/Menu/Menu';
 import MenuButton from 'Components/Menu/MenuButton';
@@ -87,29 +87,29 @@ function CalendarHeader() {
 
       <div className={styles.header}>
         <div className={styles.navigationButtons}>
-          <Button
+          <Link
             className={styles.navButton}
             isDisabled={view === 'agenda'}
             onPress={handlePreviousPress}
           >
             <Icon name={icons.PAGE_PREVIOUS} />
-          </Button>
+          </Link>
 
-          <Button
+          <Link
             className={styles.navButton}
             isDisabled={view === 'agenda'}
             onPress={handleNextPress}
           >
             <Icon name={icons.PAGE_NEXT} />
-          </Button>
+          </Link>
 
-          <Button
+          <Link
             className={styles.todayButton}
             isDisabled={view === 'agenda'}
             onPress={handleTodayPress}
           >
             {translate('Today')}
-          </Button>
+          </Link>
         </div>
 
         {isSmallScreen ? null : (

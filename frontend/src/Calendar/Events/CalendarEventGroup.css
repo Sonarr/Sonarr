@@ -89,6 +89,11 @@
   flex-shrink: 0;
   gap: 4px;
 
+  & > span {
+    display: inline-flex;
+    align-items: center;
+  }
+
   &:global(.fullColor) {
     filter: var(--calendarFullColorFilter);
   }
