@@ -80,7 +80,7 @@
 
   &.onAir::before {
     background-color: var(--statusAiring);
-    animation: agendaNowPulse 2s ease-out infinite;
+    animation: agendaNowPulse 1.5s ease-in-out infinite;
   }
 
   &.missing::before {
@@ -145,11 +145,11 @@
 
 
 @keyframes agendaNowPulse {
-  0% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--statusAiring) 55%, transparent); }
+  0% { opacity: 1; }
 
-  70% { box-shadow: 0 0 0 6px color-mix(in oklch, var(--statusAiring) 0%, transparent); }
+  50% { opacity: 0.4; }
 
-  100% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--statusAiring) 0%, transparent); }
+  100% { opacity: 1; }
 }
 
 @media only screen and (max-width: 768px) {
