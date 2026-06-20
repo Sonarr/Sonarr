@@ -23,28 +23,30 @@
   overflow-x: hidden;
 }
 
-.info,
-.episodeInfo {
+.info {
   display: flex;
   align-items: center;
   gap: 8px;
-}
 
-.info::before {
-  display: inline-block;
-  flex-shrink: 0;
-  width: 4px;
-  height: 15px;
-  border-radius: 2px;
-  background-color: var(--inkMuted);
-  content: "";
+  &::before {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 4px;
+    height: 15px;
+    border-radius: 2px;
+    background-color: var(--inkMuted);
+    content: "";
+  }
 }
 
 .episodeInfo {
+  display: flex;
+  align-items: center;
   margin-top: 3px;
   padding-left: 12px;
   color: var(--inkMuted);
   font-size: 12px;
+  gap: 8px;
 }
 
 .seriesTitle,
@@ -97,47 +99,53 @@
   font-family: var(--monoSpaceFontFamily);
 }
 
-.downloaded .info::before {
-  background-color: var(--successColor);
+.downloaded {
+  & .info::before {
+    background-color: var(--successColor);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--successColor) 10%, transparent);
+  }
 }
 
-.downloaded:global(.fullColor) {
-  background-color: color-mix(in oklch, var(--successColor) 10%, transparent);
-}
+.downloading {
+  & .info::before {
+    background-color: var(--statusGrabbing);
+  }
 
-.downloading .info::before {
-  background-color: var(--statusGrabbing);
-}
-
-.downloading:global(.fullColor) {
-  background-color: color-mix(in oklch, var(--statusGrabbing) 10%, transparent);
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--statusGrabbing) 10%, transparent);
+  }
 }
 
 .unmonitored {
   color: var(--inkMuted);
+
+  & .info::before {
+    background-color: var(--inkMuted);
+    opacity: 0.5;
+  }
+
+  & .seriesTitle {
+    color: var(--inkSoft);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--inkMuted) 14%, transparent);
+  }
 }
 
-.unmonitored .info::before {
-  background-color: var(--inkMuted);
-  opacity: 0.5;
-}
+.onAir {
+  & .info::before {
+    background-color: var(--statusAiring);
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--statusAiring) 60%, transparent);
+    animation: nowPulse 2s ease-out infinite;
+  }
 
-.unmonitored .seriesTitle {
-  color: var(--inkSoft);
-}
-
-.unmonitored:global(.fullColor) {
-  background-color: color-mix(in oklch, var(--inkMuted) 14%, transparent);
-}
-
-.onAir .info::before {
-  background-color: var(--statusAiring);
-  box-shadow: 0 0 0 0 color-mix(in oklch, var(--statusAiring) 60%, transparent);
-  animation: nowPulse 2s ease-out infinite;
-}
-
-.onAir:global(.fullColor) {
-  background-color: color-mix(in oklch, var(--statusAiring) 14%, transparent);
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--statusAiring) 14%, transparent);
+  }
 }
 
 @keyframes nowPulse {
@@ -148,18 +156,22 @@
   100% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--statusAiring) 0%, transparent); }
 }
 
-.missing .info::before {
-  background-color: var(--dangerColor);
+.missing {
+  & .info::before {
+    background-color: var(--dangerColor);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--dangerColor) 14%, transparent);
+  }
 }
 
-.missing:global(.fullColor) {
-  background-color: color-mix(in oklch, var(--dangerColor) 14%, transparent);
-}
+.unaired {
+  & .info::before {
+    background-color: var(--inkFaint);
+  }
 
-.unaired .info::before {
-  background-color: var(--inkFaint);
-}
-
-.unaired:global(.fullColor) {
-  background-color: color-mix(in oklch, var(--inkFaint) 10%, transparent);
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--inkFaint) 10%, transparent);
+  }
 }

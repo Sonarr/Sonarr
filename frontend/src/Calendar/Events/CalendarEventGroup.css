@@ -14,21 +14,26 @@
   }
 }
 
-.info,
+.info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &::before {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 4px;
+    height: 15px;
+    border-radius: 2px;
+    background-color: var(--inkMuted);
+    content: "";
+  }
+}
+
 .airingInfo {
   display: flex;
   align-items: center;
   gap: 6px;
-}
-
-.info::before {
-  display: inline-block;
-  flex-shrink: 0;
-  width: 4px;
-  height: 15px;
-  border-radius: 2px;
-  background-color: var(--inkMuted);
-  content: "";
 }
 
 .seriesTitle {
@@ -94,12 +99,16 @@
 }
 
 
-.downloaded .info::before {
-  background-color: var(--successColor);
+.downloaded {
+  & .info::before {
+    background-color: var(--successColor);
+  }
 }
 
-.downloading .info::before {
-  background-color: var(--statusGrabbing);
+.downloading {
+  & .info::before {
+    background-color: var(--statusGrabbing);
+  }
 }
 
 .unmonitored {
@@ -111,18 +120,26 @@
   }
 }
 
-.onAir .info::before {
-  background-color: var(--statusAiring);
+.onAir {
+  & .info::before {
+    background-color: var(--statusAiring);
+  }
 }
 
-.missing .info::before {
-  background-color: var(--dangerColor);
+.missing {
+  & .info::before {
+    background-color: var(--dangerColor);
+  }
 }
 
-.premiere .info::before {
-  background-color: var(--statusUpcoming);
+.premiere {
+  & .info::before {
+    background-color: var(--statusUpcoming);
+  }
 }
 
-.unaired .info::before {
-  background-color: var(--inkFaint);
+.unaired {
+  & .info::before {
+    background-color: var(--inkFaint);
+  }
 }

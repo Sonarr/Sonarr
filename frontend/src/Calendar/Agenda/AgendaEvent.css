@@ -50,16 +50,50 @@
   flex: 1 0 1px;
   overflow-x: hidden;
   gap: 10px;
-}
 
-.eventWrapper::before {
-  display: inline-block;
-  flex-shrink: 0;
-  width: 4px;
-  height: 15px;
-  border-radius: 2px;
-  background-color: var(--inkMuted);
-  content: "";
+  &::before {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 4px;
+    height: 15px;
+    border-radius: 2px;
+    background-color: var(--inkMuted);
+    content: "";
+  }
+
+  &.downloaded::before {
+    background-color: var(--successColor);
+  }
+
+  &.downloading::before {
+    background-color: var(--statusGrabbing);
+  }
+
+  &.unmonitored::before {
+    background-color: var(--inkMuted);
+    opacity: 0.5;
+  }
+
+  &.unmonitored .seriesTitle {
+    color: var(--inkSoft);
+  }
+
+  &.onAir::before {
+    background-color: var(--statusAiring);
+    animation: agendaNowPulse 2s ease-out infinite;
+  }
+
+  &.missing::before {
+    background-color: var(--dangerColor);
+  }
+
+  &.premiere::before {
+    background-color: var(--statusUpcoming);
+  }
+
+  &.unaired::before {
+    background-color: var(--inkFaint);
+  }
 }
 
 .time {
@@ -114,42 +148,6 @@
   pointer-events: all;
 }
 
-
-.eventWrapper {
-  &.downloaded::before {
-    background-color: var(--successColor);
-  }
-
-  &.downloading::before {
-    background-color: var(--statusGrabbing);
-  }
-
-  &.unmonitored::before {
-    background-color: var(--inkMuted);
-    opacity: 0.5;
-  }
-
-  &.unmonitored .seriesTitle {
-    color: var(--inkSoft);
-  }
-
-  &.onAir::before {
-    background-color: var(--statusAiring);
-    animation: agendaNowPulse 2s ease-out infinite;
-  }
-
-  &.missing::before {
-    background-color: var(--dangerColor);
-  }
-
-  &.premiere::before {
-    background-color: var(--statusUpcoming);
-  }
-
-  &.unaired::before {
-    background-color: var(--inkFaint);
-  }
-}
 
 @keyframes agendaNowPulse {
   0% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--statusAiring) 55%, transparent); }

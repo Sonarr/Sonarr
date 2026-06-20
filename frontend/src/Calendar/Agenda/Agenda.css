@@ -10,8 +10,8 @@
   letter-spacing: -0.01em;
   font-weight: 600;
   font-size: 14px;
-}
 
-.dayHeader:first-child {
-  margin-top: 0;
+  &:first-child {
+    margin-top: 0;
+  }
 }
