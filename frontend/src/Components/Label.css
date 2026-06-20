@@ -8,7 +8,6 @@
   background-color: var(--paperWarm);
   color: var(--inkSoft);
   text-align: center;
-  text-transform: uppercase;
   white-space: nowrap;
   letter-spacing: 0.06em;
   font-weight: 500;
@@ -34,7 +33,24 @@
   display: none;
 }
 
-/** Kinds — dot color via custom property, bg stays paper-warm. **/
+.hasIcon::before {
+  display: none;
+}
+
+.label.interactive {
+    cursor: pointer;
+
+    svg {
+        opacity: 0.85;
+    }
+
+    &:hover {
+        svg {
+            opacity: 1;
+        }
+    }
+}
+
 
 .danger::before {
   background-color: var(--dangerColor);
