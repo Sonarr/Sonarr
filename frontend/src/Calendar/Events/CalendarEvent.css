@@ -110,6 +110,10 @@
 
   &:global(.fullColor) {
     background-color: color-mix(in oklch, var(--successColor) 10%, transparent);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--successColor) 26%, transparent);
+    }
   }
 }
 
@@ -120,6 +124,10 @@
 
   &:global(.fullColor) {
     background-color: color-mix(in oklch, var(--statusGrabbing) 10%, transparent);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--statusGrabbing) 26%, transparent);
+    }
   }
 }
 
@@ -137,6 +145,10 @@
 
   &:global(.fullColor) {
     background-color: color-mix(in oklch, var(--inkMuted) 14%, transparent);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--inkMuted) 30%, transparent);
+    }
   }
 }
 
@@ -148,6 +160,10 @@
 
   &:global(.fullColor) {
     background-color: color-mix(in oklch, var(--statusAiring) 14%, transparent);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--statusAiring) 30%, transparent);
+    }
   }
 }
 
@@ -166,6 +182,10 @@
 
   &:global(.fullColor) {
     background-color: color-mix(in oklch, var(--dangerColor) 14%, transparent);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--dangerColor) 30%, transparent);
+    }
   }
 }
 
@@ -176,5 +196,9 @@
 
   &:global(.fullColor) {
     background-color: color-mix(in oklch, var(--statusUnaired) 10%, transparent);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--statusUnaired) 26%, transparent);
+    }
   }
 }

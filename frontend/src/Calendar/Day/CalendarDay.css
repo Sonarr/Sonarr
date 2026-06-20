@@ -7,11 +7,6 @@
   border-bottom: 1px solid var(--calendarBorderColor);
   border-left: 1px solid var(--calendarBorderColor);
   background-color: var(--pageBackground);
-  transition: background-color var(--transitionSmooth);
-
-  &:hover {
-    background-color: var(--paperWarm);
-  }
 }
 
 .isSingleDay {
