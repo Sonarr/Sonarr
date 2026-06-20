@@ -1,33 +1,58 @@
 .eventGroup {
+  position: relative;
   overflow-x: hidden;
-  margin: 4px 2px;
-  padding: 5px;
-  border-bottom: 1px solid var(--borderColor);
-  border-left: 4px solid var(--borderColor);
+  margin: 2px 0;
+  padding: 6px 8px 6px 10px;
+  border-radius: 8px;
+  color: var(--ink);
   font-size: 12px;
+  font-family: var(--defaultFontFamily);
+  transition: background-color var(--transitionSmooth);
+
+  &:hover {
+    background-color: var(--paperWarm);
+  }
 }
 
 .info,
 .airingInfo {
   display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.info::before {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 4px;
+  height: 15px;
+  border-radius: 2px;
+  background-color: var(--inkMuted);
+  content: "";
 }
 
 .seriesTitle {
   @add-mixin truncate;
   flex: 1 0 1px;
-  margin-right: 10px;
-  color: var(--calendarTextDimAlternate);
-  font-size: $defaultFontSize;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  font-weight: 550;
+  font-size: 13px;
+  line-height: 1.3;
 }
 
 .airTime {
   flex: 1 0 1px;
-  color: var(--calendarTextDim);
+  padding-left: 12px;
+  color: var(--inkMuted);
+  letter-spacing: 0.02em;
+  font-size: 11px;
+  font-family: var(--monoSpaceFontFamily);
 }
 
 .episodeInfo {
-  margin-left: 10px;
-  color: var(--calendarTextDim);
+  color: var(--inkMuted);
+  font-size: 11px;
 }
 
 .absoluteEpisodeNumber {
@@ -38,6 +63,7 @@
   display: flex;
   justify-content: flex-end;
   flex: 1 0 20px;
+  color: var(--inkMuted);
 }
 
 .expandContainer,
@@ -45,53 +71,58 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--inkMuted);
 }
 
 .collapseContainer {
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 
 .statusContainer {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
+  gap: 4px;
 
-   &:global(.fullColor) {
-    filter: var(--calendarFullColorFilter)
+  &:global(.fullColor) {
+    filter: var(--calendarFullColorFilter);
   }
 }
 
 .statusIcon {
-  margin-left: 3px;
+  color: var(--inkMuted);
 }
 
-/*
- * Status
- */
 
-.downloaded {
-  composes: downloaded from '~Calendar/Events/CalendarEvent.css';
+.downloaded .info::before {
+  background-color: var(--successColor);
 }
 
-.downloading {
-  composes: downloading from '~Calendar/Events/CalendarEvent.css';
+.downloading .info::before {
+  background-color: var(--statusGrabbing);
 }
 
 .unmonitored {
-  composes: unmonitored from '~Calendar/Events/CalendarEvent.css';
+  color: var(--inkMuted);
+
+  & .info::before {
+    background-color: var(--inkMuted);
+    opacity: 0.5;
+  }
 }
 
-.onAir {
-  composes: onAir from '~Calendar/Events/CalendarEvent.css';
+.onAir .info::before {
+  background-color: var(--statusAiring);
 }
 
-.missing {
-  composes: missing from '~Calendar/Events/CalendarEvent.css';
+.missing .info::before {
+  background-color: var(--dangerColor);
 }
 
-.premiere {
-  composes: premiere from '~Calendar/Events/CalendarEvent.css';
+.premiere .info::before {
+  background-color: var(--statusUpcoming);
 }
 
-.unaired {
-  composes: unaired from '~Calendar/Events/CalendarEvent.css';
+.unaired .info::before {
+  background-color: var(--inkFaint);
 }

@@ -10,6 +10,7 @@ interface CssExports {
   'event': string;
   'info': string;
   'missing': string;
+  'nowPulse': string;
   'onAir': string;
   'overlay': string;
   'seriesTitle': string;

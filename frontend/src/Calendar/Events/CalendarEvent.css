@@ -1,11 +1,15 @@
-$fullColorGradient: rgba(244, 245, 246, 0.2);
-
 .event {
   position: relative;
-  margin: 4px 2px;
-  padding: 5px;
-  border-bottom: 1px solid var(--calendarBorderColor);
-  border-left: 4px solid var(--calendarBorderColor);
+  margin: 3px 0;
+  padding: 6px 8px;
+  border-radius: 8px;
+  color: var(--ink);
+  font-family: var(--defaultFontFamily);
+  transition: background-color var(--transitionSmooth);
+
+  &:hover {
+    background-color: var(--paperCard);
+  }
 }
 
 .underlay {
@@ -17,32 +21,50 @@ $fullColorGradient: rgba(244, 245, 246, 0.2);
 
   position: relative;
   overflow-x: hidden;
-  font-size: 12px;
-
-  &:global(.colorImpaired) {
-    border-left-width: 5px;
-  }
 }
 
 .info,
 .episodeInfo {
   display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info::before {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 4px;
+  height: 15px;
+  border-radius: 2px;
+  background-color: var(--inkMuted);
+  content: "";
 }
 
 .episodeInfo {
-  color: var(--calendarTextDim);
+  margin-top: 3px;
+  padding-left: 12px;
+  color: var(--inkMuted);
+  font-size: 12px;
 }
 
 .seriesTitle,
 .episodeTitle {
   @add-mixin truncate;
   flex: 1 0 1px;
-  margin-right: 10px;
 }
 
 .seriesTitle {
-  color: var(--calendarTextDimAlternate);
-  font-size: $defaultFontSize;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  font-weight: 550;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.episodeTitle {
+  color: var(--inkSoft);
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 .absoluteEpisodeNumber {
@@ -50,109 +72,94 @@ $fullColorGradient: rgba(244, 245, 246, 0.2);
 }
 
 .statusContainer {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
+  gap: 4px;
 
   &:global(.fullColor) {
-    filter: var(--calendarFullColorFilter)
+    filter: var(--calendarFullColorFilter);
   }
 }
 
 .statusIcon {
-  margin-left: 3px;
+  color: var(--inkMuted);
   cursor: default;
   pointer-events: all;
 }
 
 .airTime {
-  color: var(--calendarTextDim);
+  margin-top: 3px;
+  padding-left: 12px;
+  color: var(--inkMuted);
+  letter-spacing: 0.02em;
+  font-size: 11px;
+  font-family: var(--monoSpaceFontFamily);
 }
 
-/*
- * Status
- */
-
-.downloaded {
-  border-left-color: var(--successColor) !important;
-
-  &:global(.fullColor) {
-    background-color: rgba(39, 194, 76, 0.4) !important;
-  }
-
-  &:global(.colorImpaired) {
-    border-left-color: color(#27c24c saturation(+15%)) !important;
-  }
+.downloaded .info::before {
+  background-color: var(--successColor);
 }
 
-.downloading {
-  border-left-color: var(--purple) !important;
+.downloaded:global(.fullColor) {
+  background-color: color-mix(in oklch, var(--successColor) 10%, transparent);
+}
 
-  &:global(.fullColor) {
-    background-color: rgba(122, 67, 182, 0.4) !important;
-  }
+.downloading .info::before {
+  background-color: var(--statusGrabbing);
+}
+
+.downloading:global(.fullColor) {
+  background-color: color-mix(in oklch, var(--statusGrabbing) 10%, transparent);
 }
 
 .unmonitored {
-  border-left-color: var(--gray) !important;
-
-  &:global(.fullColor) {
-    background-color: rgba(173, 173, 173, 0.5) !important;
-  }
-
-  &:global(.colorImpaired) {
-    background: repeating-linear-gradient(45deg, var(--colorImpairedGradientDark), var(--colorImpairedGradientDark) 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
-  }
-
-  &:global(.fullColor.colorImpaired) {
-    background: repeating-linear-gradient(45deg, $fullColorGradient, $fullColorGradient 5px, transparent 5px, transparent 10px);
-  }
+  color: var(--inkMuted);
 }
 
-.onAir {
-  border-left-color: var(--warningColor) !important;
-
-  &:global(.fullColor) {
-    background-color: rgba(255, 165, 0, 0.6) !important;
-  }
-
-  &:global(.colorImpaired) {
-    background: repeating-linear-gradient(90deg, var(--colorImpairedGradientDark), var(--colorImpairedGradientDark) 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
-  }
-
-  &:global(.fullColor.colorImpaired) {
-    background: repeating-linear-gradient(90deg, $fullColorGradient, $fullColorGradient 5px, transparent 5px, transparent 10px);
-  }
+.unmonitored .info::before {
+  background-color: var(--inkMuted);
+  opacity: 0.5;
 }
 
-.missing {
-  border-left-color: var(--dangerColor) !important;
-
-  &:global(.fullColor) {
-    background-color: rgba(240, 80, 80, 0.6) !important;
-  }
-
-  &:global(.colorImpaired) {
-    border-left-color: color(#f05050 saturation(+15%)) !important;
-    background: repeating-linear-gradient(90deg, var(--colorImpairedGradientDark), var(--colorImpairedGradientDark) 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
-  }
-
-  &:global(.fullColor.colorImpaired) {
-    background: repeating-linear-gradient(90deg, $fullColorGradient, $fullColorGradient 5px, transparent 5px, transparent 10px);
-  }
+.unmonitored .seriesTitle {
+  color: var(--inkSoft);
 }
 
-.unaired {
-  border-left-color: var(--primaryColor) !important;
+.unmonitored:global(.fullColor) {
+  background-color: color-mix(in oklch, var(--inkMuted) 14%, transparent);
+}
 
-  &:global(.fullColor) {
-    background-color: rgba(93, 156, 236, 0.4) !important;
-  }
+.onAir .info::before {
+  background-color: var(--statusAiring);
+  box-shadow: 0 0 0 0 color-mix(in oklch, var(--statusAiring) 60%, transparent);
+  animation: nowPulse 2s ease-out infinite;
+}
 
-  &:global(.colorImpaired) {
-    background: repeating-linear-gradient(90deg, var(--colorImpairedGradientDark), var(--colorImpairedGradientDark) 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
-  }
+.onAir:global(.fullColor) {
+  background-color: color-mix(in oklch, var(--statusAiring) 14%, transparent);
+}
 
-  &:global(.fullColor.colorImpaired) {
-    background: repeating-linear-gradient(90deg, $fullColorGradient, $fullColorGradient 5px, transparent 5px, transparent 10px);
-  }
+@keyframes nowPulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--statusAiring) 55%, transparent); }
+
+  70% { box-shadow: 0 0 0 5px color-mix(in oklch, var(--statusAiring) 0%, transparent); }
+
+  100% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--statusAiring) 0%, transparent); }
+}
+
+.missing .info::before {
+  background-color: var(--dangerColor);
+}
+
+.missing:global(.fullColor) {
+  background-color: color-mix(in oklch, var(--dangerColor) 14%, transparent);
+}
+
+.unaired .info::before {
+  background-color: var(--inkFaint);
+}
+
+.unaired:global(.fullColor) {
+  background-color: color-mix(in oklch, var(--inkFaint) 10%, transparent);
 }

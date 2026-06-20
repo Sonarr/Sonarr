@@ -59,8 +59,7 @@ function CalendarEvent(props: CalendarEventProps) {
   const episodeFile = useEpisodeFile(episodeFileId);
   const queueItem = useQueueItemForEpisode(id);
 
-  const { timeFormat, enableColorImpairedMode, timeZone } =
-    useUiSettingsValues();
+  const { timeFormat, timeZone } = useUiSettingsValues();
 
   const {
     showEpisodeInformation,
@@ -108,7 +107,6 @@ function CalendarEvent(props: CalendarEventProps) {
       className={classNames(
         styles.event,
         styles[statusStyle],
-        enableColorImpairedMode && 'colorImpaired',
         fullColorEvents && 'fullColor'
       )}
     >
