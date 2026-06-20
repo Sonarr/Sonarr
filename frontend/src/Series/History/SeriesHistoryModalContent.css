@@ -1,0 +1,8 @@
+.error {
+  margin: 0 0 8px;
+  max-width: 70ch;
+  color: var(--dangerColor);
+  font-size: 13px;
+  font-family: $defaultFontFamily;
+  line-height: 1.55;
+}
