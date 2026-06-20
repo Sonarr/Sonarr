@@ -27,8 +27,6 @@ import {
   CircleChevronRight,
   CircleDot,
   CircleHelp,
-  CirclePause,
-  CirclePlay,
   CircleStop,
   CircleX,
   Clock,
@@ -101,6 +99,13 @@ import {
   Wrench,
   X,
 } from 'lucide-react';
+import {
+  CalendarCutoffNotMet,
+  CalendarPremiere,
+  CalendarSeasonFinale,
+  CalendarSeriesFinale,
+  CalendarSpecial,
+} from './customIcons';
 
 export const ACTIONS = EllipsisVertical;
 export const ACTIVITY = Clock;
@@ -127,6 +132,7 @@ export const CLOSE = X;
 export const CLONE = Copy;
 export const COLLAPSE = ChevronUp;
 export const COMPUTER = Monitor;
+export const CUTOFF_NOT_MET = CalendarCutoffNotMet;
 export const DANGER = CircleAlert;
 export const DELETE = Trash;
 export const DOWNLOAD = Download;
@@ -143,8 +149,8 @@ export const FATAL = CircleX;
 export const FILE = File;
 export const FILE_MISSING = FileQuestion;
 export const FILTER = ListFilter;
-export const FINALE_SEASON = CirclePause;
-export const FINALE_SERIES = CircleStop;
+export const FINALE_SEASON = CalendarSeasonFinale;
+export const FINALE_SERIES = CalendarSeriesFinale;
 export const FLAG = Flag;
 export const FOOTNOTE = Asterisk;
 export const FOLDER = Folder;
@@ -182,7 +188,7 @@ export const PARENT = CornerLeftUp;
 export const PARSE = Calculator;
 export const PAUSED = Pause;
 export const PENDING = Clock;
-export const PREMIERE = CirclePlay;
+export const PREMIERE = CalendarPremiere;
 export const PROFILE = User;
 export const POSTER = LayoutGrid;
 export const QUEUED = Cloud;
@@ -207,6 +213,7 @@ export const SHUTDOWN = Power;
 export const SORT = ArrowUpDown;
 export const SORT_ASCENDING = ArrowUp;
 export const SORT_DESCENDING = ArrowDown;
+export const SPECIAL = CalendarSpecial;
 export const SPINNER = Loader;
 export const SQUARE = Square;
 export const SQUARE_MINUS = SquareMinus;

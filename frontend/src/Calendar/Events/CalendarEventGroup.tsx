@@ -147,6 +147,7 @@ function CalendarEventGroup({
             <Icon
               titleWrapperClassName={styles.statusIcon}
               name={icons.WARNING}
+              kind={kinds.WARNING}
               title={translate('EpisodeMissingAbsoluteNumber')}
             />
           ) : null}

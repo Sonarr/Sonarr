@@ -126,6 +126,7 @@ function CalendarEvent(props: CalendarEventProps) {
               <Icon
                 className={styles.statusIcon}
                 name={icons.WARNING}
+                kind={kinds.WARNING}
                 title={translate('EpisodeMissingAbsoluteNumber')}
               />
             ) : null}
@@ -134,6 +135,7 @@ function CalendarEvent(props: CalendarEventProps) {
               <Icon
                 className={styles.statusIcon}
                 name={icons.WARNING}
+                kind={kinds.WARNING}
                 title={translate('SceneNumberNotVerified')}
               />
             ) : null}
@@ -157,7 +159,7 @@ function CalendarEvent(props: CalendarEventProps) {
             episodeFile.qualityCutoffNotMet ? (
               <Icon
                 className={styles.statusIcon}
-                name={icons.EPISODE_FILE}
+                name={icons.CUTOFF_NOT_MET}
                 kind={kinds.WARNING}
                 title={translate('QualityCutoffNotMet')}
               />
@@ -192,7 +194,7 @@ function CalendarEvent(props: CalendarEventProps) {
             {showSpecialIcon && (episodeNumber === 0 || seasonNumber === 0) ? (
               <Icon
                 className={styles.statusIcon}
-                name={icons.INFO}
+                name={icons.SPECIAL}
                 kind={kinds.PINK}
                 title={translate('Special')}
               />

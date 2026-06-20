@@ -139,6 +139,7 @@ function AgendaEvent(props: AgendaEventProps) {
             <Icon
               className={styles.statusIcon}
               name={icons.WARNING}
+              kind={kinds.WARNING}
               title={translate('EpisodeMissingAbsoluteNumber')}
             />
           ) : null}
@@ -147,6 +148,7 @@ function AgendaEvent(props: AgendaEventProps) {
             <Icon
               className={styles.statusIcon}
               name={icons.WARNING}
+              kind={kinds.WARNING}
               title={translate('SceneNumberNotVerified')}
             />
           ) : null}
@@ -170,7 +172,7 @@ function AgendaEvent(props: AgendaEventProps) {
           episodeFile.qualityCutoffNotMet ? (
             <Icon
               className={styles.statusIcon}
-              name={icons.EPISODE_FILE}
+              name={icons.CUTOFF_NOT_MET}
               kind={kinds.WARNING}
               title={translate('QualityCutoffNotMet')}
             />
@@ -179,7 +181,7 @@ function AgendaEvent(props: AgendaEventProps) {
           {episodeNumber === 1 && seasonNumber > 0 && (
             <Icon
               className={styles.statusIcon}
-              name={icons.INFO}
+              name={icons.PREMIERE}
               kind={kinds.INFO}
               title={
                 seasonNumber === 1
@@ -192,8 +194,12 @@ function AgendaEvent(props: AgendaEventProps) {
           {showFinaleIcon && finaleType ? (
             <Icon
               className={styles.statusIcon}
-              name={icons.INFO}
-              kind={kinds.WARNING}
+              name={
+                finaleType === 'series'
+                  ? icons.FINALE_SERIES
+                  : icons.FINALE_SEASON
+              }
+              kind={finaleType === 'series' ? kinds.DANGER : kinds.WARNING}
               title={getFinaleTypeName(finaleType)}
             />
           ) : null}
@@ -201,7 +207,7 @@ function AgendaEvent(props: AgendaEventProps) {
           {showSpecialIcon && (episodeNumber === 0 || seasonNumber === 0) ? (
             <Icon
               className={styles.statusIcon}
-              name={icons.INFO}
+              name={icons.SPECIAL}
               kind={kinds.PINK}
               title={translate('Special')}
             />

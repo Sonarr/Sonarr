@@ -41,7 +41,7 @@ function Legend() {
     iconsToShow.push(
       <LegendItem
         name={translate('Special')}
-        icon={icons.INFO}
+        icon={icons.SPECIAL}
         kind={kinds.PINK}
         fullColorEvents={fullColorEvents}
         tooltip={translate('SpecialEpisode')}
@@ -53,7 +53,7 @@ function Legend() {
     iconsToShow.push(
       <LegendItem
         name={translate('CutoffNotMet')}
-        icon={icons.EPISODE_FILE}
+        icon={icons.CUTOFF_NOT_MET}
         kind={kinds.WARNING}
         fullColorEvents={fullColorEvents}
         tooltip={translate('QualityCutoffNotMet')}

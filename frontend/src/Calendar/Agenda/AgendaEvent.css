@@ -139,7 +139,6 @@
 
 .statusIcon {
   margin-left: 6px;
-  color: var(--inkMuted);
   cursor: default;
   pointer-events: all;
 }

@@ -90,7 +90,6 @@
 }
 
 .statusIcon {
-  color: var(--inkMuted);
   cursor: default;
   pointer-events: all;
 }
