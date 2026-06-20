@@ -102,7 +102,7 @@ function EpisodeStatus({
 
     return (
       <StatusIndicator className={styles.center} label={label} title={label}>
-        <Icon name={icons.UNMONITORED} kind={kinds.DISABLED} />
+        <Icon name={icons.MONITORED} kind={kinds.DISABLED} size={14} />
       </StatusIndicator>
     );
   }
