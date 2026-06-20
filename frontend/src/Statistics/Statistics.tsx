@@ -27,7 +27,7 @@ function Statistics() {
   const customFilters = useCustomFiltersList('statistics');
   const colors = useChartColors();
 
-  const { data, isFetching, isLoading, error } = useStatistics();
+  const { data, isLoading, error } = useStatistics();
 
   const handleFilterSelect = useCallback((key: string | number) => {
     setStatisticsOption('selectedFilterKey', key);
@@ -258,9 +258,9 @@ function Statistics() {
       </PageToolbar>
 
       <PageContentBody>
-        {isFetching && isLoading ? <LoadingIndicator /> : null}
+        {isLoading ? <LoadingIndicator /> : null}
 
-        {!isFetching && error ? (
+        {!isLoading && error ? (
           <Alert kind={kinds.DANGER}>{translate('StatisticsLoadError')}</Alert>
         ) : null}
 
