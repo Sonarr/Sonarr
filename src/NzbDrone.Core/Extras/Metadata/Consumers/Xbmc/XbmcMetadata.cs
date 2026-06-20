@@ -354,7 +354,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                     var video = new XElement("video");
                     video.Add(new XElement("aspect", (float)episodeFile.MediaInfo.Width / (float)episodeFile.MediaInfo.Height));
                     video.Add(new XElement("bitrate", episodeFile.MediaInfo.VideoBitrate));
-                    video.Add(new XElement("codec", MediaInfoFormatter.FormatVideoCodec(episodeFile.MediaInfo, sceneName)));
+                    video.Add(new XElement("codec", episodeFile.MediaInfo.VideoFormat));
                     video.Add(new XElement("framerate", episodeFile.MediaInfo.VideoFps.ToString("0.###")));
                     video.Add(new XElement("height", episodeFile.MediaInfo.Height));
                     video.Add(new XElement("scantype", episodeFile.MediaInfo.ScanType));
@@ -389,7 +389,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                             var audio = new XElement("audio");
                             audio.Add(new XElement("bitrate", audioStream.Bitrate));
                             audio.Add(new XElement("channels", audioStream.Channels));
-                            audio.Add(new XElement("codec", MediaInfoFormatter.FormatAudioCodec(audioStream, sceneName)));
+                            audio.Add(new XElement("codec", XbmcMetadataFormatter.FormatAudioCodec(audioStream)));
                             audio.Add(new XElement("language", audioStream.Language));
                             streamDetails.Add(audio);
                         }
