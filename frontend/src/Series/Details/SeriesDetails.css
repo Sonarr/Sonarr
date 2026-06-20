@@ -5,133 +5,231 @@
 .header {
   position: relative;
   z-index: 0;
+  overflow: hidden;
+  min-height: 380px;
   width: 100%;
+  container-type: inline-size;
 }
 
 .backdrop {
   position: absolute;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
+  inset: 0;
+  z-index: -2;
+  background-position: center 25%;
   background-size: cover;
+  filter: saturate(1.1);
 }
 
 .backdropOverlay {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  background: var(--black);
-  opacity: 0.7;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.42) 0%,
+      rgba(0, 0, 0, 0.56) 50%,
+      rgba(0, 0, 0, 0.78) 100%
+    );
 }
 
 .headerContent {
   display: flex;
-  padding: 30px;
+  align-items: center;
+  gap: 32px;
+
+  padding: 64px 32px 28px;
   width: 100%;
   height: 100%;
-  color: var(--white);
-  gap: 35px;
+  color: var(--seriesOverlayInk);
 }
 
 .poster {
   flex-shrink: 0;
-  width: 250px;
-  height: 368px;
+  overflow: hidden;
+  width: clamp(160px, 20cqi, 210px);
+  height: clamp(236px, 29.5cqi, 310px);
+  border-radius: 12px;
+  box-shadow:
+    0 24px 60px -16px rgba(0, 0, 0, 0.55),
+    0 6px 14px -2px rgba(0, 0, 0, 0.30);
 }
 
 .info {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+  padding-bottom: 4px;
   width: 100%;
+  gap: 12px;
 }
 
 .titleRow {
-  position: relative;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: flex-start;
   flex: 0 0 auto;
+  gap: 16px;
 }
 
 .titleContainer {
   display: flex;
-  margin-bottom: 5px;
+  align-items: center;
+  gap: 16px;
+
+  margin-bottom: 0;
 }
 
 .title {
-  overflow: auto;
-  max-height: calc(3 * 60px);
+  overflow: hidden;
+  max-height: calc(2 * 1.2em);
+  color: var(--white);
   text-wrap: balance;
-  font-weight: 300;
-  font-size: 50px;
-  line-height: 60px;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-}
-
-.toggleMonitoredContainer {
-  align-self: center;
-  margin-right: 10px;
-}
-
-.monitorToggleButton {
-  composes: toggleButton from '~Components/MonitorToggleButton.css';
-
-  width: 40px;
-
-  &:hover {
-    color: var(--iconButtonHoverLightColor);
-  }
+  letter-spacing: -0.025em;
+  font-weight: 600;
+  font-size: clamp(2.25rem, 5cqi, 3.25rem);
+  font-family: $defaultFontFamily;
+  line-height: 1.2;
 }
 
 .alternateTitlesIconContainer {
-  align-self: flex-end;
-  margin-bottom: 10px;
-  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  margin-left: -6px;
+  color: var(--seriesOverlayInk);
+  opacity: 0.85;
+  transition: opacity 200ms cubic-bezier(0.25, 1, 0.5, 1);
+  transform: translateY(3px);
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .seriesNavigationButtons {
   position: absolute;
-  right: 0;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+  display: flex;
+  gap: 4px;
+
   white-space: nowrap;
 }
 
 .seriesNavigationButton {
-  composes: button from '~Components/Link/IconButton.css';
+  composes: link from '~Components/Link/Link.css';
 
-  margin-left: 5px;
-  width: 30px;
-  color: #e1e2e3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background-color: transparent;
+  color: var(--seriesOverlayInk);
   white-space: nowrap;
+  opacity: 0.78;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+  transition: background-color 200ms cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 200ms cubic-bezier(0.25, 1, 0.5, 1),
+              filter 200ms cubic-bezier(0.25, 1, 0.5, 1);
 
   &:hover {
-    color: var(--iconButtonHoverLightColor);
+    opacity: 1;
   }
 }
 
 .details {
-  margin-bottom: 8px;
-  font-weight: 300;
-  font-size: 20px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 6px 0 4px;
+  color: var(--seriesOverlayInk);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+  letter-spacing: 0.01em;
+  font-weight: 400;
+  font-size: 14px;
+  font-family: $defaultFontFamily;
+  row-gap: 6px;
+}
+
+.details > span:not(:last-child)::after {
+  margin: 0 7px;
+  color: color-mix(in oklch, var(--seriesOverlayInk) 45%, transparent);
+  content: "·";
 }
 
 .runtime,
 .genres {
-  margin-right: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.heartRating {
+  margin-right: 0 !important;
+}
+
+.detailsChips {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-top: 4px;
+  gap: 10px;
+}
+
+.chipsRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  row-gap: 8px;
 }
 
 .detailsLabel {
   composes: label from '~Components/Label.css';
 
-  margin: 5px 10px 5px 0;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 5px 12px 5px 10px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--seriesOverlayBackdrop);
+  color: color-mix(in oklch, var(--seriesOverlayInk) 95%, transparent);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  font-size: 12px;
+  gap: 8px;
+  backdrop-filter: blur(8px);
+}
+
+.detailsLabel svg {
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.monitoredToggle {
+  composes: link from '~Components/Link/Link.css';
+
+  display: inline-flex;
+  transition: opacity 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:disabled {
+    opacity: 0.55;
+  }
 }
 
 .fileCountMessage {
-  padding: 5px;
+  padding: 4px 0;
+  color: color-mix(in oklch, var(--seriesOverlayInk) 85%, transparent);
   white-space: nowrap;
-  font-weight: 300;
-  font-size: 15px;
+  font-weight: 500;
+  font-size: 13px;
 }
 
-.path,
 .sizeOnDisk,
 .qualityProfileName,
 .originalCountry,
@@ -139,51 +237,190 @@
 .statusName,
 .network,
 .links,
-.tags {
-  margin-left: 8px;
-  font-weight: 300;
-  font-size: 17px;
+.tags,
+.monitoredText {
+  margin-left: 0;
+  color: color-mix(in oklch, var(--seriesOverlayInk) 92%, transparent);
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.heroFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  color: color-mix(in oklch, var(--seriesOverlayInk) 70%, var(--seriesOverlayBackdrop));
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+  gap: 12px;
+}
+
+.pathLine {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  max-width: 560px;
+  font-size: 12px;
+  gap: 7px;
+}
+
+.pathLine svg {
+  flex-shrink: 0;
+}
+
+.pathLine span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.heroFooter a {
+  color: inherit;
+  font-size: 12px;
+
+  &:hover {
+    color: var(--white);
+    text-decoration: none;
+  }
+}
+
+.overviewSection {
+  position: relative;
+  margin: 0 0 32px;
+}
+
+.overviewFrame {
+  position: relative;
+  margin-bottom: 14px;
+  padding-top: 14px;
+}
+
+.overviewFrame::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 1px;
+  background-color: var(--accent);
+  content: "";
+}
+
+.overviewFrame::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 36px;
+  height: 1px;
+  background-color: var(--borderColor);
+  content: "";
+}
+
+.overviewLabel {
+  position: absolute;
+  top: -9px;
+  left: 0;
+  z-index: 1;
+  padding-right: 8px;
+  background-color: var(--pageBackground);
+  color: var(--accentDeep);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  font-size: 12px;
+  font-family: $monoSpaceFontFamily;
 }
 
 .overview {
-  flex: 1 0 0;
+  margin: 0;
+  color: var(--inkSoft);
+  text-wrap: pretty;
+  font-style: italic;
+  font-size: 16px;
+  font-family: $defaultFontFamily;
+  line-height: 1.6;
+}
+
+.overviewToggle {
+  composes: link from '~Components/Link/Link.css';
+
+  display: none;
   margin-top: 8px;
-  min-height: 0;
-  text-wrap: balance;
-  font-size: $intermediateFontSize;
+  color: var(--accent);
+  font-weight: 500;
+  font-size: 13px;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .contentContainer {
-  padding: 20px;
+  padding: 28px 32px 64px;
+  background-color: var(--pageBackground);
 }
 
 .seriesProgressLabel {
   composes: label from '~Components/Label.css';
 
   margin: 0;
-  font-size: 17px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--seriesOverlayBackdrop);
+  color: color-mix(in oklch, var(--seriesOverlayInk) 95%, transparent);
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  font-size: 12px;
+  backdrop-filter: blur(8px);
 }
 
 @media only screen and (max-width: $breakpointSmall) {
+  .header {
+    min-height: 240px;
+  }
+
+  .poster {
+    display: none;
+  }
+
   .contentContainer {
-    padding: 20px 0;
+    padding: 20px 16px 48px;
   }
 
   .headerContent {
-    padding: 15px;
+    padding: 40px 16px 16px;
+    gap: 16px;
   }
 
   .title {
     overflow: hidden;
-    max-height: calc(3 * 30px);
-    font-weight: 300;
-    font-size: 30px;
-    line-height: 30px;
+    max-height: calc(2 * 1.2em);
+    font-size: 28px;
   }
-}
 
-@media only screen and (max-width: $breakpointLarge) {
-  .poster {
-    display: none;
+  .titleContainer {
+    gap: 10px;
+  }
+
+  .alternateTitlesIconContainer {
+    transform: none;
+  }
+
+  .alternateTitlesIconContainer svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .overviewClamped {
+    /* stylelint-disable-next-line value-no-vendor-prefix -- required for -webkit-line-clamp */
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  .overviewToggle {
+    display: inline-block;
   }
 }

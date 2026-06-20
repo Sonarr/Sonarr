@@ -1,7 +1,5 @@
 import {
   ArrowDown,
-  ArrowLeft,
-  ArrowRight,
   ArrowUp,
   ArrowUpDown,
   Asterisk,
@@ -13,6 +11,7 @@ import {
   Calculator,
   Calendar,
   CalendarDays,
+  Captions,
   Check,
   ChevronDown,
   ChevronLeft,
@@ -24,6 +23,8 @@ import {
   CircleAlert,
   CircleArrowDown,
   CircleCheck,
+  CircleChevronLeft,
+  CircleChevronRight,
   CircleDot,
   CircleHelp,
   CirclePause,
@@ -50,6 +51,7 @@ import {
   FlaskConical,
   Folder,
   FolderOpen,
+  FolderPen,
   FolderTree,
   Globe,
   GripVertical,
@@ -98,16 +100,15 @@ import {
   UserPlus,
   Wrench,
   X,
-  Zap,
 } from 'lucide-react';
 
-export const ACTIONS = Zap;
+export const ACTIONS = EllipsisVertical;
 export const ACTIVITY = Clock;
 export const ADD = Plus;
-export const ALTERNATE_TITLES = Copy;
+export const ALTERNATE_TITLES = Captions;
 export const ADVANCED_SETTINGS = Settings;
-export const ARROW_LEFT = ArrowLeft;
-export const ARROW_RIGHT = ArrowRight;
+export const ARROW_LEFT = CircleChevronLeft;
+export const ARROW_RIGHT = CircleChevronRight;
 export const BACKUP = FileArchive;
 export const BLOCKLIST = Ban;
 export const BUG = Bug;
@@ -170,7 +171,7 @@ export const MONITORED = Bookmark;
 export const NETWORK = Radio;
 export const NAVBAR_COLLAPSE = Menu;
 export const NOT_AIRED = Clock;
-export const ORGANIZE = Network;
+export const ORGANIZE = FolderPen;
 export const OVERFLOW = EllipsisVertical;
 export const OVERVIEW = LayoutList;
 export const PAGE_FIRST = ChevronsLeft;

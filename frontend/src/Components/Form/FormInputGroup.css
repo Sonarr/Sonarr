@@ -20,14 +20,13 @@
 
   &:focus-within {
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px var(--inputFocusBoxShadowColor);
   }
 
   &.hasError {
     border-color: var(--inputErrorBorderColor);
 
     &:focus-within {
-      box-shadow: 0 0 0 4px var(--inputErrorBoxShadowColor);
+      border-color: var(--inputErrorBorderColor);
     }
   }
 
@@ -35,7 +34,7 @@
     border-color: var(--inputWarningBorderColor);
 
     &:focus-within {
-      box-shadow: 0 0 0 4px var(--inputWarningBoxShadowColor);
+      border-color: var(--inputWarningBorderColor);
     }
   }
 }

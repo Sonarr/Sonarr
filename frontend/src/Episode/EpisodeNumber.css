@@ -1,7 +1,14 @@
+.episodeNumber {
+  display: inline-flex;
+  align-items: center;
+}
+
 .absoluteEpisodeNumber {
   margin-left: 5px;
 }
 
 .warning {
+  display: inline-flex;
+  align-items: center;
   margin-left: 8px;
 }

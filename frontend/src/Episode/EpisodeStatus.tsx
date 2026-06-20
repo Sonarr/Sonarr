@@ -95,8 +95,9 @@ function EpisodeStatus({
     return (
       <div className={styles.center}>
         <Icon
-          name={icons.UNMONITORED}
+          name={icons.MONITORED}
           kind={kinds.DISABLED}
+          size={14}
           title={translate('EpisodeIsNotMonitored')}
         />
       </div>

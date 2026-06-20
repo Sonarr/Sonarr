@@ -348,7 +348,7 @@ function SeriesDetailsSeason({
             alignMenu={align.RIGHT}
             enforceMaxHeight={false}
           >
-            <MenuButton>
+            <MenuButton className={styles.actionsMenuButton}>
               <Icon name={icons.ACTIONS} size={22} />
             </MenuButton>
 
@@ -421,7 +421,7 @@ function SeriesDetailsSeason({
                   ? translate('SearchForMonitoredEpisodesSeason')
                   : translate('NoMonitoredEpisodesSeason')
               }
-              size={24}
+              size={20}
               isSpinning={isSearching}
               isDisabled={
                 isSearching || !hasMonitoredEpisodes || !seriesMonitored
@@ -434,7 +434,7 @@ function SeriesDetailsSeason({
               name={icons.INTERACTIVE}
               title={translate('InteractiveSearchSeason')}
               aria-label={translate('InteractiveSearchSeason')}
-              size={24}
+              size={20}
               isDisabled={!totalEpisodeCount}
               onPress={handleInteractiveSearchPress}
             />
@@ -444,7 +444,7 @@ function SeriesDetailsSeason({
               name={icons.ORGANIZE}
               title={translate('PreviewRenameSeason')}
               aria-label={translate('PreviewRenameSeason')}
-              size={24}
+              size={20}
               isDisabled={!episodeFileCount}
               onPress={handleOrganizePress}
             />
@@ -454,7 +454,7 @@ function SeriesDetailsSeason({
               name={icons.EPISODE_FILE}
               title={translate('ManageEpisodesSeason')}
               aria-label={translate('ManageEpisodesSeason')}
-              size={24}
+              size={20}
               isDisabled={!episodeFileCount}
               onPress={handleManageEpisodesPress}
             />
@@ -464,7 +464,7 @@ function SeriesDetailsSeason({
               name={icons.HISTORY}
               title={translate('HistorySeason')}
               aria-label={translate('HistorySeason')}
-              size={24}
+              size={20}
               isDisabled={!totalEpisodeCount}
               onPress={handleHistoryPress}
             />
