@@ -11,6 +11,7 @@ import episodeEntities from 'Episode/episodeEntities';
 import getFinaleTypeName from 'Episode/getFinaleTypeName';
 import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
 import { icons, kinds } from 'Helpers/Props';
+import SeriesPoster from 'Series/SeriesPoster';
 import { useSingleSeries } from 'Series/useSeries';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import { convertToTimezone } from 'Utilities/Date/convertToTimezone';
@@ -33,7 +34,6 @@ interface AgendaEventProps {
   finaleType?: string;
   hasFile: boolean;
   grabbed?: boolean;
-  showDate: boolean;
 }
 
 function AgendaEvent(props: AgendaEventProps) {
@@ -51,16 +51,15 @@ function AgendaEvent(props: AgendaEventProps) {
     finaleType,
     hasFile,
     grabbed,
-    showDate,
   } = props;
 
   const series = useSingleSeries(seriesId)!;
   const episodeFile = useEpisodeFile(episodeFileId);
   const queueItem = useQueueItemForEpisode(id);
-  const { timeFormat, longDateFormat, enableColorImpairedMode, timeZone } =
-    useUiSettingsValues();
+  const { timeFormat, timeZone } = useUiSettingsValues();
 
   const {
+    showCoverArt,
     showEpisodeInformation,
     showFinaleIcon,
     showSpecialIcon,
@@ -98,18 +97,18 @@ function AgendaEvent(props: AgendaEventProps) {
     <div className={styles.event}>
       <Link className={styles.underlay} onPress={handlePress} />
 
-      <div className={styles.overlay}>
-        <div className={styles.date}>
-          {showDate && startTime.format(longDateFormat)}
-        </div>
+      {showCoverArt ? (
+        <SeriesPoster
+          className={styles.cover}
+          images={series.images}
+          title={series.title}
+          size={250}
+          lazy={false}
+        />
+      ) : null}
 
-        <div
-          className={classNames(
-            styles.eventWrapper,
-            styles[statusStyle],
-            enableColorImpairedMode && 'colorImpaired'
-          )}
-        >
+      <div className={styles.overlay}>
+        <div className={classNames(styles.eventWrapper, styles[statusStyle])}>
           <div className={styles.time}>
             {formatTime(airDateUtc, timeFormat, { timeZone })} -{' '}
             {formatTime(endTime.toISOString(), timeFormat, {

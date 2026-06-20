@@ -2,7 +2,8 @@
 // Please do not change this file!
 interface CssExports {
   'absoluteEpisodeNumber': string;
-  'date': string;
+  'agendaNowPulse': string;
+  'cover': string;
   'downloaded': string;
   'downloading': string;
   'episodeSeparator': string;
