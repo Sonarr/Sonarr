@@ -87,12 +87,8 @@
     background-color: var(--dangerColor);
   }
 
-  &.premiere::before {
-    background-color: var(--statusUpcoming);
-  }
-
   &.unaired::before {
-    background-color: var(--inkFaint);
+    background-color: var(--statusUnaired);
   }
 }
 

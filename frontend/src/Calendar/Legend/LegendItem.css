@@ -48,7 +48,7 @@
   }
 
   &.unaired {
-    background-color: var(--inkFaint);
+    background-color: var(--statusUnaired);
   }
 }
 

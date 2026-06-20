@@ -173,10 +173,10 @@
 
 .unaired {
   & .info::before {
-    background-color: var(--inkFaint);
+    background-color: var(--statusUnaired);
   }
 
   &:global(.fullColor) {
-    background-color: color-mix(in oklch, var(--inkFaint) 10%, transparent);
+    background-color: color-mix(in oklch, var(--statusUnaired) 10%, transparent);
   }
 }

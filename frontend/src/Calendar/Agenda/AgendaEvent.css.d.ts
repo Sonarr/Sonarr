@@ -13,7 +13,6 @@ interface CssExports {
   'missing': string;
   'onAir': string;
   'overlay': string;
-  'premiere': string;
   'seasonEpisodeNumber': string;
   'seriesTitle': string;
   'statusIcon': string;

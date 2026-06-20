@@ -108,11 +108,19 @@
   & .info::before {
     background-color: var(--successColor);
   }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--successColor) 10%, transparent);
+  }
 }
 
 .downloading {
   & .info::before {
     background-color: var(--statusGrabbing);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--statusGrabbing) 10%, transparent);
   }
 }
 
@@ -123,11 +131,19 @@
     background-color: var(--inkMuted);
     opacity: 0.5;
   }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--inkMuted) 14%, transparent);
+  }
 }
 
 .onAir {
   & .info::before {
     background-color: var(--statusAiring);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--statusAiring) 14%, transparent);
   }
 }
 
@@ -135,16 +151,18 @@
   & .info::before {
     background-color: var(--dangerColor);
   }
-}
 
-.premiere {
-  & .info::before {
-    background-color: var(--statusUpcoming);
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--dangerColor) 14%, transparent);
   }
 }
 
 .unaired {
   & .info::before {
-    background-color: var(--inkFaint);
+    background-color: var(--statusUnaired);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--statusUnaired) 10%, transparent);
   }
 }
