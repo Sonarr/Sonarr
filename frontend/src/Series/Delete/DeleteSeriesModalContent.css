@@ -7,7 +7,7 @@
 }
 
 .folderPath {
-  font-weight: bold;
+  font-weight: 600;
   font-family: var(--defaultFontFamily);
 }
 

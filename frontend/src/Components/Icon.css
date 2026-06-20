@@ -1,3 +1,7 @@
+.icon {
+  vertical-align: middle;
+}
+
 .danger {
   color: var(--dangerColor);
 }
