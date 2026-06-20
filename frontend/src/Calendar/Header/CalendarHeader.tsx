@@ -88,7 +88,7 @@ function CalendarHeader() {
       <div className={styles.header}>
         <div className={styles.navigationButtons}>
           <Button
-            buttonGroupPosition="left"
+            className={styles.navButton}
             isDisabled={view === 'agenda'}
             onPress={handlePreviousPress}
           >
@@ -96,7 +96,7 @@ function CalendarHeader() {
           </Button>
 
           <Button
-            buttonGroupPosition="right"
+            className={styles.navButton}
             isDisabled={view === 'agenda'}
             onPress={handleNextPress}
           >
@@ -174,37 +174,37 @@ function CalendarHeader() {
           ) : (
             <>
               <CalendarHeaderViewButton
+                className={styles.viewButton}
                 view="month"
                 selectedView={view}
-                buttonGroupPosition="left"
                 onPress={handleViewChange}
               />
 
               <CalendarHeaderViewButton
+                className={styles.viewButton}
                 view="week"
                 selectedView={view}
-                buttonGroupPosition="center"
                 onPress={handleViewChange}
               />
 
               <CalendarHeaderViewButton
+                className={styles.viewButton}
                 view="forecast"
                 selectedView={view}
-                buttonGroupPosition="center"
                 onPress={handleViewChange}
               />
 
               <CalendarHeaderViewButton
+                className={styles.viewButton}
                 view="day"
                 selectedView={view}
-                buttonGroupPosition="center"
                 onPress={handleViewChange}
               />
 
               <CalendarHeaderViewButton
+                className={styles.viewButton}
                 view="agenda"
                 selectedView={view}
-                buttonGroupPosition="right"
                 onPress={handleViewChange}
               />
             </>

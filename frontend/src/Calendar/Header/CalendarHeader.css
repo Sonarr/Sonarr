@@ -1,32 +1,105 @@
 .header {
   display: flex;
+  align-items: center;
+  gap: 16px;
+
+  padding: 4px 0 16px;
 }
 
 .navigationButtons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
   flex: 1 1 33%;
   text-align: left;
+}
+
+.navButton {
+  composes: button from '~Components/Link/Button.css';
+
+  padding: 6px 10px !important;
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  background-color: transparent !important;
+  color: var(--inkSoft) !important;
+
+  &:hover {
+    background-color: var(--paperWarm) !important;
+    color: var(--accent) !important;
+  }
 }
 
 .todayButton {
   composes: button from '~Components/Link/Button.css';
 
-  margin-left: 5px;
+  margin-left: 8px;
+  padding: 6px 14px !important;
+  border: 1px solid var(--borderColor) !important;
+  border-radius: 8px !important;
+  background-color: transparent !important;
+  color: var(--ink) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 11px !important;
+  font-family: var(--defaultFontFamily);
+  transition: background-color var(--transitionSmooth), color var(--transitionSmooth), border-color var(--transitionSmooth);
+
+  &:hover {
+    border-color: var(--accent) !important;
+    background-color: var(--paperWarm) !important;
+    color: var(--accent) !important;
+  }
 }
 
 .titleDesktop,
 .titleMobile {
+  color: var(--ink);
   text-align: center;
-  font-size: 18px;
+  letter-spacing: -0.018em;
+  font-weight: 600;
+  font-size: 28px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.15;
 }
 
 .titleMobile {
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  font-size: 22px;
 }
 
 .viewButtonsContainer {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   flex: 1 1 33%;
+  gap: 2px;
+}
+
+.viewButton {
+  composes: button from '~Components/Link/Button.css';
+
+  padding: 6px 12px !important;
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  background-color: transparent !important;
+  color: var(--inkSoft) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em !important;
+  font-weight: 500 !important;
+  font-size: 11px !important;
+
+  &:hover {
+    background-color: var(--paperWarm) !important;
+    color: var(--ink) !important;
+  }
+
+  &:global(.isDisabled) {
+    background-color: var(--paperWarm) !important;
+    color: var(--accent) !important;
+    opacity: 1 !important;
+  }
 }
 
 .viewMenu {
