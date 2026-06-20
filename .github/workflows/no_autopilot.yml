@@ -14,7 +14,8 @@ jobs:
     name: Flag suspected AI-authored PRs
     runs-on: ubuntu-latest
     if: >-
-      !contains(fromJSON('["OWNER", "MEMBER"]'), github.event.pull_request.author_association)
+      !contains(fromJSON('["OWNER", "MEMBER"]'), github.event.pull_request.author_association) &&
+      github.event.pull_request.head.ref != 'weblate-servarr-sonarr'
     permissions:
       pull-requests: write
       issues: write
@@ -103,18 +104,6 @@ jobs:
 
             core.info(`Flagging PR #${pr.number}:\n- ${reasons.join("\n- ")}`);
 
-            // Convert to draft using GraphQL (REST has no draft toggle) unless already a draft.
-            if (!pr.draft) {
-              await github.graphql(
-                `mutation($id: ID!) {
-                  convertPullRequestToDraft(input: { pullRequestId: $id }) {
-                    clientMutationId
-                  }
-                }`,
-                { id: pr.node_id }
-              );
-            }
-
             await github.rest.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -138,4 +127,15 @@ jobs:
                 ].join("\n"),
               });
             }
-          github-token: ${{ github.token }}
+
+            if (!pr.draft) {
+              await github.graphql(
+                `mutation($id: ID!) {
+                  convertPullRequestToDraft(input: { pullRequestId: $id }) {
+                    clientMutationId
+                  }
+                }`,
+                { id: pr.node_id }
+              );
+            }
+          github-token: ${{ secrets.NO_AUTOPILOT_TOKEN }}
