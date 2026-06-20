@@ -4,7 +4,9 @@ interface CssExports {
   'danger': string;
   'default': string;
   'disabled': string;
+  'hasIcon': string;
   'info': string;
+  'interactive': string;
   'inverse': string;
   'label': string;
   'large': string;

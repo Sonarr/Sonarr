@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'absoluteEpisodeNumber': string;
+  'episodeNumber': string;
   'warning': string;
 }
 export const cssExports: CssExports;
