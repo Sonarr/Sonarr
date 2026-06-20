@@ -62,13 +62,13 @@
 .primary {
   border-color: var(--primaryBorderColor);
   background-color: var(--primaryBackgroundColor);
-  color: var(--primaryColor);
+  color: var(--primaryButtonColor);
 }
 
 .primary:hover {
   border-color: var(--primaryHoverBorderColor);
   background-color: var(--primaryHoverBackgroundColor);
-  color: var(--primaryColor);
+  color: var(--primaryButtonColor);
 }
 
 .success {
