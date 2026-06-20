@@ -5,6 +5,7 @@ interface CssExports {
   'actionMenuIcon': string;
   'actions': string;
   'actionsMenu': string;
+  'actionsMenuButton': string;
   'actionsMenuContent': string;
   'collapseButtonContainer': string;
   'collapseButtonIcon': string;

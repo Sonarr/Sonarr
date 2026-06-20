@@ -8,7 +8,6 @@
   &.isFocused {
     outline: 0;
     border-color: var(--inputFocusBorderColor);
-    box-shadow: 0 0 8px var(--inputFocusBoxShadowColor);
   }
 }
 
@@ -30,4 +29,8 @@
   border: none;
   background-color: var(--inputBackground);
   color: var(--textColor);
+
+  &:focus-visible {
+    box-shadow: none;
+  }
 }

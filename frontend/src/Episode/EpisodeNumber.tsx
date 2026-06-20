@@ -77,7 +77,7 @@ function EpisodeNumber(props: EpisodeNumberProps) {
   );
 
   return (
-    <span>
+    <span className={styles.episodeNumber}>
       {hasSceneInformation ? (
         <Popover
           anchor={
@@ -123,7 +123,7 @@ function EpisodeNumber(props: EpisodeNumberProps) {
 
       {warningMessage ? (
         <Icon
-          className={styles.warning}
+          titleWrapperClassName={styles.warning}
           name={icons.WARNING}
           kind={kinds.WARNING}
           title={warningMessage}

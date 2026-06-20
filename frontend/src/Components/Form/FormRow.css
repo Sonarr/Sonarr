@@ -17,10 +17,8 @@
   padding-bottom: 0;
 }
 
-/* Right layout: 2-column grid; last child (the FormInput) occupies column 2
-   and spans all rows, label/help text flow into column 1. */
 .right {
-  grid-template-columns: minmax(0, 1fr) clamp(280px, 35%, 360px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 
 .right > :last-child {
@@ -47,10 +45,16 @@
 @media only screen and (max-width: 992px) {
   .right {
     grid-template-columns: 1fr;
+    row-gap: 8px;
   }
 
   .right > :last-child {
     grid-column: 1;
     grid-row: auto;
+    order: 1;
+  }
+
+  .right > :not(:first-child):not(:last-child) {
+    order: 2;
   }
 }
