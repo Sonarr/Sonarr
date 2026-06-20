@@ -1,41 +1,59 @@
 .legendItem {
+  display: flex;
+  align-items: center;
   margin: 3px 0;
-  margin-right: 6px;
-  padding-left: 5px;
-  width: 150px;
-  border-left-width: 4px;
-  border-left-style: solid;
+  margin-right: 8px;
+  padding: 4px 8px;
+  width: 160px;
+  color: var(--inkSoft);
+  font-size: 12px;
+  font-family: var(--defaultFontFamily);
   cursor: default;
+  gap: 8px;
 }
 
-/*
- * Status
- */
-
-.downloaded {
-  composes: downloaded from '~Calendar/Events/CalendarEvent.css';
+.indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
 }
 
-.downloading {
-  composes: downloading from '~Calendar/Events/CalendarEvent.css';
+.bar {
+  width: 4px;
+  height: 15px;
+  border-radius: 2px;
+  background-color: var(--inkMuted);
+
+  &.downloaded {
+    background-color: var(--successColor);
+  }
+
+  &.downloading {
+    background-color: var(--statusGrabbing);
+  }
+
+  &.unmonitored {
+    background-color: var(--inkMuted);
+    opacity: 0.5;
+  }
+
+  &.onAir {
+    background-color: var(--statusAiring);
+  }
+
+  &.missing {
+    background-color: var(--dangerColor);
+  }
+
+  &.unaired {
+    background-color: var(--inkFaint);
+  }
 }
 
-.unmonitored {
-  composes: unmonitored from '~Calendar/Events/CalendarEvent.css';
-}
-
-.onAir {
-  composes: onAir from '~Calendar/Events/CalendarEvent.css';
-}
-
-.missing {
-  composes: missing from '~Calendar/Events/CalendarEvent.css';
-}
-
-.premiere {
-  composes: premiere from '~Calendar/Events/CalendarEvent.css';
-}
-
-.unaired {
-  composes: unaired from '~Calendar/Events/CalendarEvent.css';
+.icon {
+  &.fullColor {
+    filter: var(--calendarFullColorFilter);
+  }
 }
