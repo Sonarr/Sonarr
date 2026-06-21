@@ -23,6 +23,7 @@ import Quality from 'Settings/Quality/Quality';
 import Settings from 'Settings/Settings';
 import TagSettings from 'Settings/Tags/TagSettings';
 import UISettings from 'Settings/UI/UISettings';
+import Statistics from 'Statistics/Statistics';
 import Backups from 'System/Backup/Backups';
 import LogsTable from 'System/Events/LogsTable';
 import Logs from 'System/Logs/Logs';
@@ -53,6 +54,8 @@ export function appRouteElements() {
       <Route path="/seasonpass" element={<Navigate to="/" replace={true} />} />
 
       <Route path="/series/:titleSlug" element={<SeriesDetailsPage />} />
+
+      <Route path="/statistics" element={<Statistics />} />
 
       {/*
         Calendar
