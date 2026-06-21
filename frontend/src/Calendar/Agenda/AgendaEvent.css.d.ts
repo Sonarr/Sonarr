@@ -2,7 +2,8 @@
 // Please do not change this file!
 interface CssExports {
   'absoluteEpisodeNumber': string;
-  'date': string;
+  'agendaNowPulse': string;
+  'cover': string;
   'downloaded': string;
   'downloading': string;
   'episodeSeparator': string;
@@ -12,7 +13,6 @@ interface CssExports {
   'missing': string;
   'onAir': string;
   'overlay': string;
-  'premiere': string;
   'seasonEpisodeNumber': string;
   'seriesTitle': string;
   'statusIcon': string;

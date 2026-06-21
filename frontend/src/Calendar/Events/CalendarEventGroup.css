@@ -1,33 +1,63 @@
 .eventGroup {
+  position: relative;
   overflow-x: hidden;
-  margin: 4px 2px;
-  padding: 5px;
-  border-bottom: 1px solid var(--borderColor);
-  border-left: 4px solid var(--borderColor);
+  margin: 2px 0;
+  padding: 6px 8px 6px 10px;
+  border-radius: 8px;
+  color: var(--ink);
   font-size: 12px;
+  font-family: var(--defaultFontFamily);
+  transition: background-color var(--transitionSmooth);
+
+  &:hover {
+    background-color: var(--paperWarm);
+  }
 }
 
-.info,
+.info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &::before {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 4px;
+    height: 15px;
+    border-radius: 2px;
+    background-color: var(--inkMuted);
+    content: "";
+  }
+}
+
 .airingInfo {
   display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .seriesTitle {
   @add-mixin truncate;
   flex: 1 0 1px;
-  margin-right: 10px;
-  color: var(--calendarTextDimAlternate);
-  font-size: $defaultFontSize;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  font-weight: 550;
+  font-size: 13px;
+  line-height: 1.3;
 }
 
 .airTime {
   flex: 1 0 1px;
-  color: var(--calendarTextDim);
+  padding-left: 12px;
+  color: var(--inkMuted);
+  letter-spacing: 0.02em;
+  font-size: 11px;
+  font-family: var(--monoSpaceFontFamily);
 }
 
 .episodeInfo {
-  margin-left: 10px;
-  color: var(--calendarTextDim);
+  color: var(--inkMuted);
+  font-size: 11px;
 }
 
 .absoluteEpisodeNumber {
@@ -38,6 +68,7 @@
   display: flex;
   justify-content: flex-end;
   flex: 1 0 20px;
+  color: var(--inkMuted);
 }
 
 .expandContainer,
@@ -45,53 +76,117 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--inkMuted);
 }
 
 .collapseContainer {
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 
 .statusContainer {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
+  gap: 4px;
 
-   &:global(.fullColor) {
-    filter: var(--calendarFullColorFilter)
+  & > span {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &:global(.fullColor) {
+    filter: var(--calendarFullColorFilter);
   }
 }
 
 .statusIcon {
-  margin-left: 3px;
+  color: var(--inkMuted);
 }
 
-/*
- * Status
- */
 
 .downloaded {
-  composes: downloaded from '~Calendar/Events/CalendarEvent.css';
+  & .info::before {
+    background-color: var(--successColor);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--successColor) 10%, transparent);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--successColor) 26%, transparent);
+    }
+  }
 }
 
 .downloading {
-  composes: downloading from '~Calendar/Events/CalendarEvent.css';
+  & .info::before {
+    background-color: var(--statusGrabbing);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--statusGrabbing) 10%, transparent);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--statusGrabbing) 26%, transparent);
+    }
+  }
 }
 
 .unmonitored {
-  composes: unmonitored from '~Calendar/Events/CalendarEvent.css';
+  color: var(--inkMuted);
+
+  & .info::before {
+    background-color: var(--inkMuted);
+    opacity: 0.5;
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--inkMuted) 14%, transparent);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--inkMuted) 30%, transparent);
+    }
+  }
 }
 
 .onAir {
-  composes: onAir from '~Calendar/Events/CalendarEvent.css';
+  & .info::before {
+    background-color: var(--statusAiring);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--statusAiring) 14%, transparent);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--statusAiring) 30%, transparent);
+    }
+  }
 }
 
 .missing {
-  composes: missing from '~Calendar/Events/CalendarEvent.css';
-}
+  & .info::before {
+    background-color: var(--dangerColor);
+  }
 
-.premiere {
-  composes: premiere from '~Calendar/Events/CalendarEvent.css';
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--dangerColor) 14%, transparent);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--dangerColor) 30%, transparent);
+    }
+  }
 }
 
 .unaired {
-  composes: unaired from '~Calendar/Events/CalendarEvent.css';
+  & .info::before {
+    background-color: var(--statusUnaired);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--statusUnaired) 10%, transparent);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--statusUnaired) 26%, transparent);
+    }
+  }
 }

@@ -6,6 +6,7 @@ interface CssExports {
   'isDifferentMonth': string;
   'isSingleDay': string;
   'isToday': string;
+  'isTodayCell': string;
 }
 export const cssExports: CssExports;
 export default cssExports;
