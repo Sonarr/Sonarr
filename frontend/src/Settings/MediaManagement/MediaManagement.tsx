@@ -663,6 +663,27 @@ function MediaManagement() {
                 </FormGroup>
               </FieldSet>
             ) : null}
+
+            <FieldSet legend={translate('ExperimentalFeatures')}>
+              <FormGroup size={sizes.MEDIUM}>
+                <FormLabel>
+                  {translate('EnableExperimentalMultiSeasonSupport')}
+                </FormLabel>
+
+                <FormInputGroup
+                  type={inputTypes.CHECK}
+                  name="enableExperimentalMultiSeasonSupport"
+                  helpText={translate(
+                    'EnableExperimentalMultiSeasonSupportHelpText'
+                  )}
+                  helpTextWarning={translate(
+                    'EnableExperimentalMultiSeasonSupportHelpTextWarning'
+                  )}
+                  onChange={handleInputChange}
+                  {...settings.enableExperimentalMultiSeasonSupport}
+                />
+              </FormGroup>
+            </FieldSet>
           </Form>
         ) : null}
 

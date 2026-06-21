@@ -39,7 +39,10 @@ namespace Sonarr.Api.V5.Queue
         public string? Indexer { get; set; }
         public string? OutputPath { get; set; }
         public int EpisodesWithFilesCount { get; set; }
+        public Dictionary<int, int> EpisodeCountBySeason { get; set; } = new();
+        public Dictionary<int, int> EpisodesWithFilesCountBySeason { get; set; } = new();
         public bool IsFullSeason { get; set; }
+        public bool IsMultiSeason { get; set; }
     }
 
     public static class QueueResourceMapper
@@ -54,7 +57,10 @@ namespace Sonarr.Api.V5.Queue
                 Id = model.Id,
                 SeriesId = model.Series?.Id,
                 EpisodeIds = model.Episodes?.Select(e => e.Id).ToList() ?? [],
-                SeasonNumbers = model.SeasonNumber.HasValue ? [model.SeasonNumber.Value] : [],
+                SeasonNumbers = (model.RemoteEpisode?.ParsedEpisodeInfo?.IsMultiSeason == true &&
+                                 model.RemoteEpisode.ParsedEpisodeInfo.SeasonNumbers?.Length > 0)
+                    ? model.RemoteEpisode.ParsedEpisodeInfo.SeasonNumbers.ToList()
+                    : model.SeasonNumber.HasValue ? [model.SeasonNumber.Value] : [],
                 Series = includeSeries && model.Series != null ? model.Series.ToResource() : null,
                 Episodes = includeEpisodes ? model.Episodes?.ToResource() : null,
                 Languages = model.Languages,
@@ -79,7 +85,15 @@ namespace Sonarr.Api.V5.Queue
                 Indexer = model.Indexer,
                 OutputPath = model.OutputPath,
                 EpisodesWithFilesCount = model.Episodes?.Count(e => e.HasFile) ?? 0,
-                IsFullSeason = model.RemoteEpisode?.ParsedEpisodeInfo?.FullSeason ?? false
+                EpisodeCountBySeason = model.Episodes?
+                    .GroupBy(e => e.SeasonNumber)
+                    .ToDictionary(g => g.Key, g => g.Count()) ?? new(),
+                EpisodesWithFilesCountBySeason = model.Episodes?
+                    .Where(e => e.HasFile)
+                    .GroupBy(e => e.SeasonNumber)
+                    .ToDictionary(g => g.Key, g => g.Count()) ?? new(),
+                IsFullSeason = model.RemoteEpisode?.ParsedEpisodeInfo?.FullSeason ?? false,
+                IsMultiSeason = model.RemoteEpisode?.ParsedEpisodeInfo?.IsMultiSeason ?? false
             };
         }
 

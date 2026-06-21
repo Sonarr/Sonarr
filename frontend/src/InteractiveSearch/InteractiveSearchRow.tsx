@@ -86,6 +86,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     sceneMapping,
     mappedSeriesId,
     mappedSeasonNumber,
+    mappedSeasonNumbers,
     mappedEpisodeNumbers,
     mappedAbsoluteEpisodeNumbers,
     mappedEpisodeInfo,
@@ -100,7 +101,9 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     absoluteEpisodeNumbers,
     episodeNumbers,
     isDaily,
+    isMultiSeason,
     seasonNumber,
+    seasonNumbers,
     quality,
   } = parsedInfo;
 
@@ -196,13 +199,16 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           <ReleaseSceneIndicator
             className={styles.sceneMapping}
             seasonNumber={mappedSeasonNumber}
+            seasonNumbers={mappedSeasonNumbers}
             episodeNumbers={mappedEpisodeNumbers}
             absoluteEpisodeNumbers={mappedAbsoluteEpisodeNumbers}
             sceneSeasonNumber={seasonNumber}
+            sceneSeasonNumbers={seasonNumbers}
             sceneEpisodeNumbers={episodeNumbers}
             sceneAbsoluteEpisodeNumbers={absoluteEpisodeNumbers}
             sceneMapping={sceneMapping}
             episodeRequested={episodeRequested}
+            isMultiSeason={isMultiSeason}
             isDaily={isDaily}
           />
         </div>

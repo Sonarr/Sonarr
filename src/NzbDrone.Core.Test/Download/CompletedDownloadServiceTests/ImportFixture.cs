@@ -379,6 +379,67 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
         }
 
         [Test]
+        public void should_not_warn_or_block_when_multi_season_import_succeeds()
+        {
+            var episode1 = new Episode { Id = 1, SeasonNumber = 1, EpisodeNumber = 1 };
+            var episode2 = new Episode { Id = 2, SeasonNumber = 2, EpisodeNumber = 1 };
+
+            _trackedDownload.RemoteEpisode.Episodes = new List<Episode> { episode1, episode2 };
+
+            Mocker.GetMock<IDownloadedEpisodesImportService>()
+                .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<ImportMode>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
+                .Returns(new List<ImportResult>
+                {
+                    new ImportResult(
+                        new ImportDecision(
+                            new LocalEpisode { Path = @"C:\TestPath\Show.S01E01.mkv", Episodes = new List<Episode> { episode1 } }),
+                        new EpisodeFile()),
+
+                    new ImportResult(
+                        new ImportDecision(
+                            new LocalEpisode { Path = @"C:\TestPath\Show.S02E01.mkv", Episodes = new List<Episode> { episode2 } }),
+                        new EpisodeFile())
+                });
+
+            Subject.Import(_trackedDownload);
+
+            _trackedDownload.State.Should().NotBe(TrackedDownloadState.ImportBlocked);
+            _trackedDownload.State.Should().Be(TrackedDownloadState.Imported);
+
+            Mocker.GetMock<IEventAggregator>()
+                .Verify(v => v.PublishEvent(It.IsAny<ManualInteractionRequiredEvent>()), Times.Never());
+        }
+
+        [Test]
+        public void should_still_block_if_multi_season_import_returns_single_multi_season_rejection()
+        {
+            Mocker.GetMock<IDownloadedEpisodesImportService>()
+                .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<ImportMode>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
+                .Returns(new List<ImportResult>
+                {
+                    new ImportResult(
+                        new ImportDecision(
+                            new LocalEpisode { Path = @"C:\TestPath\Show.S01-S03", Episodes = { _episode1 } },
+                            new ImportRejection(ImportRejectionReason.MultiSeason, "Multi-season download, unable to import automatically")),
+                        "Multi-season download, unable to import automatically")
+                });
+
+            Mocker.GetMock<IRejectedImportService>()
+                .Setup(s => s.Process(It.IsAny<TrackedDownload>(), It.IsAny<ImportResult>()))
+                .Returns(true);
+
+            Subject.Import(_trackedDownload);
+
+            _trackedDownload.State.Should().Be(TrackedDownloadState.ImportBlocked);
+
+            Mocker.GetMock<IRejectedImportService>()
+                .Verify(s => s.Process(It.IsAny<TrackedDownload>(), It.IsAny<ImportResult>()), Times.Once());
+
+            Mocker.GetMock<IEventAggregator>()
+                .Verify(v => v.PublishEvent(It.IsAny<ManualInteractionRequiredEvent>()), Times.Once());
+        }
+
+        [Test]
         public void should_block_import_and_publish_manual_interaction_event_for_dangerous_file_that_is_not_failed()
         {
             Mocker.GetMock<IDownloadedEpisodesImportService>()

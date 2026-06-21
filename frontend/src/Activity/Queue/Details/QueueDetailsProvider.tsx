@@ -98,8 +98,19 @@ export function useQueueDetailsForSeries(
           return acc;
         }
 
-        acc.count += item.episodeIds.length;
-        acc.episodesWithFiles += item.episodesWithFilesCount;
+        const seasonCount =
+          seasonNumber != null
+            ? item.episodeCountBySeason?.[seasonNumber]
+            : undefined;
+
+        if (seasonCount !== undefined) {
+          acc.count += seasonCount;
+          acc.episodesWithFiles +=
+            item.episodesWithFilesCountBySeason?.[seasonNumber!] ?? 0;
+        } else {
+          acc.count += item.episodeIds.length;
+          acc.episodesWithFiles += item.episodesWithFilesCount;
+        }
 
         return acc;
       },

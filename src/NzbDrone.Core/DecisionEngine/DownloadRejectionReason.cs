@@ -45,6 +45,7 @@ public enum DownloadRejectionReason
     MinimumAge,
     MaximumAge,
     MultiSeason,
+    MultiSeasonNotAllMonitored,
     Sample,
     ProtocolDisabled,
     QualityNotWanted,

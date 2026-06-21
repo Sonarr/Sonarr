@@ -33,6 +33,7 @@ public class MediaManagementSettingsResource : RestResource
     public string? UserRejectedExtensions { get; set; }
     public SeasonPackUpgradeType SeasonPackUpgrade { get; set; }
     public double SeasonPackUpgradeThreshold { get; set; }
+    public bool EnableExperimentalMultiSeasonSupport { get; set; }
 }
 
 public static class MediaManagementConfigResourceMapper
@@ -65,7 +66,8 @@ public static class MediaManagementConfigResourceMapper
             EnableMediaInfo = model.EnableMediaInfo,
             UserRejectedExtensions = model.UserRejectedExtensions,
             SeasonPackUpgrade = model.SeasonPackUpgrade,
-            SeasonPackUpgradeThreshold = model.SeasonPackUpgradeThreshold
+            SeasonPackUpgradeThreshold = model.SeasonPackUpgradeThreshold,
+            EnableExperimentalMultiSeasonSupport = model.EnableExperimentalMultiSeasonSupport,
         };
     }
 }

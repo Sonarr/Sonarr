@@ -46,6 +46,7 @@ namespace Sonarr.Api.V3.Queue
         public string Indexer { get; set; }
         public string OutputPath { get; set; }
         public bool EpisodeHasFile { get; set; }
+        public bool IsMultiSeason { get; set; }
 
         [Obsolete("Will be replaced by SizeLeft")]
         public decimal Sizeleft { get; set; }
@@ -99,6 +100,7 @@ namespace Sonarr.Api.V3.Queue
                 Indexer = model.Indexer,
                 OutputPath = model.OutputPath,
                 EpisodeHasFile = model.Episode?.HasFile ?? false,
+                IsMultiSeason = model.RemoteEpisode?.ParsedEpisodeInfo?.IsMultiSeason ?? false,
 
                 #pragma warning disable CS0618
                 Sizeleft = model.SizeLeft,

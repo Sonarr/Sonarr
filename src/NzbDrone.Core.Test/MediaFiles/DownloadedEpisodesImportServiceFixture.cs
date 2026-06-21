@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.MediaFiles;
@@ -45,7 +46,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Returns(true);
 
             Mocker.GetMock<IImportApprovedEpisodes>()
-                  .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true, null, ImportMode.Auto))
+                  .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), It.IsAny<bool>(), It.IsAny<DownloadClientItem>(), It.IsAny<ImportMode>()))
                   .Returns(new List<ImportResult>());
 
             var downloadItem = Builder<DownloadClientItem>.CreateNew()
@@ -63,6 +64,10 @@ namespace NzbDrone.Core.Test.MediaFiles
                 RemoteEpisode = remoteEpisode,
                 State = TrackedDownloadState.Downloading
             };
+
+            Mocker.GetMock<IConfigService>()
+                .SetupGet(c => c.EnableExperimentalMultiSeasonSupport)
+                .Returns(true);
         }
 
         private void GivenValidSeries()
@@ -500,7 +505,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         }
 
         [Test]
-        public void should_reject_if_download_is_multi_season()
+        public void should_reject_if_download_is_multi_season_with_no_content()
         {
             GivenValidSeries();
 
@@ -508,8 +513,12 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             var folderName = @"C:\media\ba09030e-1234-1234-1234-123456789abc\[HorribleSubs] Maria the Virgin Witch - 09 [720p]".AsOsAgnostic();
 
-            Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(folderName))
-                .Returns(true);
+            // Override global mocks so ProcessMultiSeasonFolder finds no subfolders and no root files → rejection
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.GetDirectories(folderName))
+                .Returns(Array.Empty<string>());
+
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(folderName, false))
+                .Returns(Array.Empty<string>());
 
             var result = Subject.ProcessPath(folderName, ImportMode.Auto, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
 
@@ -517,13 +526,120 @@ namespace NzbDrone.Core.Test.MediaFiles
             result.First().Result.Should().Be(ImportResultType.Rejected);
             result.First().ImportDecision.Rejections.First().Reason.Should().Be(ImportRejectionReason.MultiSeason);
 
-            Mocker.GetMock<IParsingService>().Setup(c => c.GetSeries("foldername")).Returns((Series)null);
-
             Mocker.GetMock<IMakeImportDecision>()
                 .Verify(c => c.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<bool>(), true),
                     Times.Never());
+        }
 
-            VerifyNoImport();
+        [Test]
+        public void should_import_multi_season_with_season_subfolders()
+        {
+            GivenValidSeries();
+
+            _trackedDownload.DownloadItem.Title = "Series Title S01-S02";
+
+            var folderName = @"C:\media\series-title-s01-s02".AsOsAgnostic();
+            var season1Folder = @"C:\media\series-title-s01-s02\Season 01".AsOsAgnostic();
+            var season2Folder = @"C:\media\series-title-s01-s02\Season 02".AsOsAgnostic();
+            var season1Files = new[] { @"C:\media\series-title-s01-s02\Season 01\Series.Title.S01E01.mkv".AsOsAgnostic() };
+            var season2Files = new[] { @"C:\media\series-title-s01-s02\Season 02\Series.Title.S02E01.mkv".AsOsAgnostic() };
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.GetDirectories(folderName))
+                .Returns(new[] { season1Folder, season2Folder });
+
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(folderName, false))
+                .Returns(Array.Empty<string>());
+
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(season1Folder, It.IsAny<bool>()))
+                .Returns(season1Files);
+
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(season2Folder, It.IsAny<bool>()))
+                .Returns(season2Files);
+
+            var localEpisode = new LocalEpisode();
+            var decisions = new List<ImportDecision> { new ImportDecision(localEpisode) };
+            var importResults = decisions.Select(d => new ImportResult(d)).ToList();
+
+            Mocker.GetMock<IMakeImportDecision>()
+                .Setup(s => s.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                .Returns(decisions);
+
+            Mocker.GetMock<IImportApprovedEpisodes>()
+                .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), It.IsAny<bool>(), It.IsAny<DownloadClientItem>(), It.IsAny<ImportMode>()))
+                .Returns(importResults);
+
+            var result = Subject.ProcessPath(folderName, ImportMode.Auto, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
+
+            result.Should().NotBeEmpty();
+            result.All(r => r.Result == ImportResultType.Imported).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_import_multi_season_with_flat_root_files()
+        {
+            GivenValidSeries();
+
+            _trackedDownload.DownloadItem.Title = "Series Title S01-S02";
+
+            var folderName = @"C:\media\series-title-s01-s02".AsOsAgnostic();
+            var flatFiles = new[]
+            {
+                @"C:\media\series-title-s01-s02\Series.Title.S01E01.mkv".AsOsAgnostic(),
+                @"C:\media\series-title-s01-s02\Series.Title.S02E01.mkv".AsOsAgnostic()
+            };
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.GetDirectories(folderName))
+                .Returns(Array.Empty<string>());
+
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(folderName, false))
+                .Returns(flatFiles);
+
+            var localEpisode = new LocalEpisode();
+            var decisions = new List<ImportDecision> { new ImportDecision(localEpisode) };
+            var importResults = decisions.Select(d => new ImportResult(d)).ToList();
+
+            Mocker.GetMock<IMakeImportDecision>()
+                .Setup(s => s.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                .Returns(decisions);
+
+            Mocker.GetMock<IImportApprovedEpisodes>()
+                .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), It.IsAny<bool>(), It.IsAny<DownloadClientItem>(), It.IsAny<ImportMode>()))
+                .Returns(importResults);
+
+            var result = Subject.ProcessPath(folderName, ImportMode.Auto, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
+
+            result.Should().NotBeEmpty();
+            result.All(r => r.Result == ImportResultType.Imported).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_not_process_multi_season_folder_when_experimental_support_disabled()
+        {
+            GivenValidSeries();
+
+            Mocker.GetMock<IConfigService>()
+                .SetupGet(c => c.EnableExperimentalMultiSeasonSupport)
+                .Returns(false);
+
+            _trackedDownload.DownloadItem.Title = "Series Title S01-S02";
+
+            var folderName = @"C:\media\series-title-s01-s02".AsOsAgnostic();
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.GetDirectories(folderName))
+                .Returns(Array.Empty<string>());
+
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(folderName, false))
+                .Returns(Array.Empty<string>());
+
+            Subject.ProcessPath(folderName, ImportMode.Auto, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
+
+            // ProcessMultiSeasonFolder calls GetDirectories on the specific folder — it must not be called
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.GetDirectories(folderName), Times.Never());
+
+            // The normal single-season path calls GetImportDecisions
+            Mocker.GetMock<IMakeImportDecision>()
+                .Verify(v => v.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<bool>()), Times.Once());
         }
 
         private void VerifyNoImport()

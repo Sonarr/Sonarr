@@ -1,3 +1,4 @@
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
@@ -106,6 +107,10 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title Complete Series S01 S04 (1080p BluRay x265 HEVC 10bit AAC 5.1 Vyndros)", "Series Title", 1)]
         [TestCase("Series Title S01 S04 (1080p BluRay x265 HEVC 10bit AAC 5.1 Vyndros)", "Series Title", 1)]
         [TestCase("Series Title S01 04 (1080p BluRay x265 HEVC 10bit AAC 5.1 Vyndros)", "Series Title", 1)]
+        [TestCase("Show.S01S02S03.BluRay.1080p", "Show", 1)]
+        [TestCase("Series.Seasons.1-3.Complete.1080p", "Series", 1)]
+        [TestCase("Show.Seasons.1.2.3.Complete", "Show", 1)]
+        [TestCase("Series Title S01 S02 S03 (1080p BluRay x265)", "Series Title", 1)]
         public void should_parse_multi_season_release(string postTitle, string title, int firstSeason)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
@@ -116,6 +121,35 @@ namespace NzbDrone.Core.Test.ParserTests
             result.FullSeason.Should().BeTrue();
             result.IsPartialSeason.Should().BeFalse();
             result.IsMultiSeason.Should().BeTrue();
+            result.SeasonNumbers.Should().NotBeNullOrEmpty();
+            result.SeasonNumbers.Min().Should().Be(firstSeason);
+        }
+
+        [TestCase("Series.Name.S01E01.1080p.BluRay.x264")]           // single episode
+        [TestCase("Series.Name.S01.COMPLETE.1080p.BluRay")]           // single season pack
+        [TestCase("Series.Name.Season.1.Complete.BluRay")]            // single season word form
+        [TestCase("Series.Name.S01E01E05.1080p")]                     // episode range within one season
+        [TestCase("Series.Name.1x01.HDTV")]                           // alt episode format
+        [TestCase("Series.Name.2012.S01E01.720p")]                    // year in title
+        [TestCase("Series.Name.S01.S01E01.720p")]                     // S-block then episode (not two seasons)
+        [TestCase("Series.Name.Season.1.Episode.1.HDTV")]             // fully spelled out single episode
+        [TestCase("Series.2024.Complete.Season.1.BluRay")]            // year + single season
+        [TestCase("Series.Name.S01E01-S01E05.1080p")]                 // episode range same season
+        public void should_not_parse_single_season_release_as_multi_season(string postTitle)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Should().NotBeNull();
+            result.IsMultiSeason.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_parse_multi_season_numbers_in_ascending_order()
+        {
+            var result = Parser.Parser.ParseTitle("Series.Name.S03S01S02.Complete.BluRay");
+            result.Should().NotBeNull();
+            result.IsMultiSeason.Should().BeTrue();
+            result.SeasonNumbers.Should().BeInAscendingOrder();
+            result.SeasonNumbers.Should().Equal(1, 2, 3);
         }
 
         [Test]
