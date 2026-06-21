@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { saveDimensions, useAppValue } from 'App/appStore';
 import AppUpdatedModal from 'App/AppUpdatedModal';
-import ColorImpairedContext from 'App/ColorImpairedContext';
 import ConnectionLostModal from 'App/ConnectionLostModal';
 import SignalRListener from 'Components/SignalRListener';
 import AuthenticationRequiredModal from 'FirstRun/AuthenticationRequiredModal';
 import useAppPage from 'Helpers/Hooks/useAppPage';
-import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import ErrorPage from './ErrorPage';
 import PageHeader from './Header/PageHeader';
@@ -28,7 +26,6 @@ function Page({ children }: PageProps) {
   const [isConnectionLostModalOpen, setIsConnectionLostModalOpen] =
     useState(false);
 
-  const { enableColorImpairedMode } = useUiSettingsValues();
   const { authentication } = useSystemStatusData();
 
   const authenticationEnabled = authentication !== 'none';
@@ -79,28 +76,26 @@ function Page({ children }: PageProps) {
   }
 
   return (
-    <ColorImpairedContext.Provider value={enableColorImpairedMode}>
-      <div className={styles.page}>
-        <SignalRListener />
+    <div className={styles.page}>
+      <SignalRListener />
 
-        <PageHeader />
+      <PageHeader />
 
-        <div className={styles.main}>
-          <PageSidebar />
+      <div className={styles.main}>
+        <PageSidebar />
 
-          {children}
-        </div>
-
-        <AppUpdatedModal
-          isOpen={isUpdatedModalOpen}
-          onModalClose={handleUpdatedModalClose}
-        />
-
-        <ConnectionLostModal isOpen={isConnectionLostModalOpen} />
-
-        <AuthenticationRequiredModal isOpen={!authenticationEnabled} />
+        {children}
       </div>
-    </ColorImpairedContext.Provider>
+
+      <AppUpdatedModal
+        isOpen={isUpdatedModalOpen}
+        onModalClose={handleUpdatedModalClose}
+      />
+
+      <ConnectionLostModal isOpen={isConnectionLostModalOpen} />
+
+      <AuthenticationRequiredModal isOpen={!authenticationEnabled} />
+    </div>
   );
 }
 
