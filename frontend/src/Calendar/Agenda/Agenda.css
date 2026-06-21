@@ -1,3 +1,17 @@
 .agenda {
   margin-top: 10px;
 }
+
+.dayHeader {
+  margin: 20px 8px 2px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: 14px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
