@@ -600,9 +600,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             {
                 var trackedDownload = groupedTrackedDownload.First().TrackedDownload;
                 var importedSeries = imported.First().ImportDecision.LocalEpisode.Series;
-                var outputPath = trackedDownload.ImportItem.OutputPath.FullPath;
+                var outputPath = trackedDownload.ImportItem?.OutputPath?.FullPath;
 
-                if (_diskProvider.FolderExists(outputPath))
+                if (outputPath.IsNullOrWhiteSpace())
+                {
+                    _logger.Debug("Skipping post-import folder cleanup for tracked download {0}; ImportItem.OutputPath is not available", trackedDownload.DownloadItem?.DownloadId);
+                }
+                else if (_diskProvider.FolderExists(outputPath))
                 {
                     if (_downloadedEpisodesImportService.ShouldDeleteFolder(
                             new DirectoryInfo(outputPath), importedSeries) &&
