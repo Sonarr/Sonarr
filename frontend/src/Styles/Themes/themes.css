@@ -18,12 +18,13 @@
   --accentGlow: oklch(85% 0.100 215);
 
   /* Status */
-  --statusAiring: oklch(62% 0.115 148);
+  --statusAiring: oklch(62% 0.105 195);
   --statusUpcoming: oklch(72% 0.130 65);
   --statusFinished: oklch(60% 0.008 80);
   --statusHiatus: oklch(58% 0.008 80);
   --statusMissing: oklch(58% 0.165 28);
-  --statusGrabbing: oklch(60% 0.085 240);
+  --statusGrabbing: oklch(60% 0.130 305);
+  --statusUnaired: oklch(70% 0.035 245);
 
   /* Semantic & brand aliases */
   --textColor: oklch(32% 0.010 80);
@@ -207,12 +208,13 @@
   --accentGlow: oklch(85% 0.100 215);
 
   /* Status */
-  --statusAiring: oklch(66% 0.115 148);
+  --statusAiring: oklch(66% 0.105 195);
   --statusUpcoming: oklch(76% 0.120 65);
   --statusFinished: oklch(60% 0.008 80);
   --statusHiatus: oklch(58% 0.008 80);
   --statusMissing: oklch(62% 0.150 28);
-  --statusGrabbing: oklch(65% 0.085 240);
+  --statusGrabbing: oklch(65% 0.130 305);
+  --statusUnaired: oklch(58% 0.040 245);
 
   /* Semantic & brand aliases */
   --textColor: oklch(95% 0.006 80);
@@ -370,22 +372,23 @@
 }
 
 [data-color-impaired] {
-  --statusMissing:   oklch(56% 0.180 40);    /* Vermillion  #D55E00 */
-  --statusAiring:    oklch(60% 0.135 165);   /* Bluish green #009E73 */
-  --statusUpcoming:  oklch(76% 0.150 70);    /* Orange      #E69F00 */
-  --statusGrabbing:  oklch(50% 0.135 245);   /* Blue        #0072B2 */
+  --statusMissing:   oklch(62.1% 0.170 48);   /* Vermillion     #D55E00 */
+  --statusAiring:    oklch(73.5% 0.117 236);  /* Sky blue       #56B4E9 */
+  --statusUpcoming:  oklch(75.3% 0.158 77);   /* Orange         #E69F00 */
+  --statusGrabbing:  oklch(67.9% 0.118 346);  /* Reddish purple #CC79A7 */
 
-  --dangerColor:     oklch(56% 0.180 40);
-  --successColor:    oklch(60% 0.135 165);
-  --warningColor:    oklch(76% 0.150 70);
-  --infoColor:       oklch(72% 0.110 230);   /* Sky blue    #56B4E9 */
-  --primaryColor:    oklch(72% 0.110 230);
-  --accent:          oklch(72% 0.110 230);
+  --dangerColor:     oklch(62.1% 0.170 48);
+  --successColor:    oklch(62.0% 0.130 165);  /* Bluish green   #009E73 */
+  --warningColor:    oklch(75.3% 0.158 77);
+  --infoColor:       oklch(73.5% 0.117 236);
+  --primaryColor:    oklch(73.5% 0.117 236);
+  --accent:          oklch(73.5% 0.117 236);
+  --pink:            oklch(67.9% 0.118 346);  /* Reddish purple #CC79A7 */
 
-  --alertDangerColor:  oklch(42% 0.140 40);
-  --alertSuccessColor: oklch(46% 0.105 165);
-  --alertWarningColor: oklch(58% 0.135 70);
-  --alertInfoColor:    oklch(50% 0.130 230);
+  --alertDangerColor:  oklch(45% 0.150 48);
+  --alertSuccessColor: oklch(46% 0.110 165);
+  --alertWarningColor: oklch(58% 0.140 77);
+  --alertInfoColor:    oklch(50% 0.120 236);
 
   --alertDangerBorderColor:      color-mix(in oklch, var(--dangerColor) 30%, transparent);
   --alertSuccessBorderColor:     color-mix(in oklch, var(--successColor) 30%, transparent);
@@ -396,17 +399,18 @@
 }
 
 [data-theme=dark][data-color-impaired] {
-  --statusMissing:   oklch(66% 0.180 40);
-  --statusAiring:    oklch(70% 0.135 165);
-  --statusUpcoming:  oklch(82% 0.150 70);
-  --statusGrabbing:  oklch(60% 0.135 245);
+  --statusMissing:   oklch(68% 0.170 48);    /* Vermillion     */
+  --statusAiring:    oklch(78% 0.117 236);   /* Sky blue       */
+  --statusUpcoming:  oklch(82% 0.158 77);    /* Orange         */
+  --statusGrabbing:  oklch(73% 0.118 346);   /* Reddish purple */
 
-  --dangerColor:     oklch(66% 0.180 40);
-  --successColor:    oklch(70% 0.135 165);
-  --warningColor:    oklch(82% 0.150 70);
-  --infoColor:       oklch(78% 0.110 230);
-  --primaryColor:    oklch(78% 0.110 230);
-  --accent:          oklch(78% 0.110 230);
+  --dangerColor:     oklch(68% 0.170 48);
+  --successColor:    oklch(70% 0.130 165);   /* Bluish green   */
+  --warningColor:    oklch(82% 0.158 77);
+  --infoColor:       oklch(78% 0.117 236);
+  --primaryColor:    oklch(78% 0.117 236);
+  --accent:          oklch(78% 0.117 236);
+  --pink:            oklch(73% 0.118 346);   /* Reddish purple */
 
   --alertDangerBorderColor:      color-mix(in oklch, var(--dangerColor) 30%, transparent);
   --alertSuccessBorderColor:     color-mix(in oklch, var(--successColor) 30%, transparent);
