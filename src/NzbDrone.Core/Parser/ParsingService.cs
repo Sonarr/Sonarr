@@ -260,6 +260,38 @@ namespace NzbDrone.Core.Parser
         {
             if (parsedEpisodeInfo.FullSeason)
             {
+                if (parsedEpisodeInfo.IsMultiSeason && parsedEpisodeInfo.SeasonNumbers.Length > 0)
+                {
+                    var allEpisodes = new List<Episode>();
+
+                    foreach (var seasonNum in parsedEpisodeInfo.SeasonNumbers)
+                    {
+                        // Look up scene mapping per season to handle shows with different offsets per season
+                        var seasonMapping = _sceneMappingService.FindSceneMapping(parsedEpisodeInfo.SeriesTitle, parsedEpisodeInfo.ReleaseTitle, seasonNum);
+                        var mappedSeason = seasonNum;
+
+                        if (seasonMapping?.SeasonNumber is >= 0 && seasonMapping.SceneSeasonNumber <= seasonNum)
+                        {
+                            mappedSeason += seasonMapping.SeasonNumber.Value - seasonMapping.SceneSeasonNumber.Value;
+                        }
+
+                        if (series.UseSceneNumbering && sceneSource)
+                        {
+                            var sceneEpisodes = _episodeService.GetEpisodesBySceneSeason(series.Id, mappedSeason);
+
+                            if (sceneEpisodes.Any())
+                            {
+                                allEpisodes.AddRange(sceneEpisodes);
+                                continue;
+                            }
+                        }
+
+                        allEpisodes.AddRange(_episodeService.GetEpisodesBySeason(series.Id, mappedSeason));
+                    }
+
+                    return allEpisodes;
+                }
+
                 if (series.UseSceneNumbering && sceneSource)
                 {
                     var episodes = _episodeService.GetEpisodesBySceneSeason(series.Id, mappedSeasonNumber);

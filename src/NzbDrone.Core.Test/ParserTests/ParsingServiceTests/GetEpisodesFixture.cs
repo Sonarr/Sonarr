@@ -85,6 +85,13 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             _parsedEpisodeInfo.EpisodeNumbers = Array.Empty<int>();
         }
 
+        private void GivenMultiSeason(int[] seasonNumbers)
+        {
+            GivenFullSeason();
+            _parsedEpisodeInfo.IsMultiSeason = true;
+            _parsedEpisodeInfo.SeasonNumbers = seasonNumbers;
+        }
+
         [Test]
         public void should_get_daily_episode_episode_when_search_criteria_is_null()
         {
@@ -559,6 +566,109 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
             Mocker.GetMock<IEpisodeService>()
                   .Verify(v => v.FindEpisode(_series.TvdbId, _parsedEpisodeInfo.SeasonNumber, _parsedEpisodeInfo.EpisodeNumbers.First()), Times.Once());
+        }
+
+        [Test]
+        public void should_lookup_multi_season_by_season_numbers()
+        {
+            GivenMultiSeason(new[] { 1, 2, 3 });
+
+            Mocker.GetMock<IEpisodeService>()
+                .Setup(s => s.GetEpisodesBySeason(_series.Id, It.IsAny<int>()))
+                .Returns(_episodes);
+
+            Subject.GetEpisodes(_parsedEpisodeInfo, _series, false, null);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySeason(_series.Id, 1), Times.Once);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySeason(_series.Id, 2), Times.Once);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySeason(_series.Id, 3), Times.Once);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySceneSeason(It.IsAny<int>(), It.IsAny<int>()), Times.Never);
+        }
+
+        [Test]
+        public void should_lookup_multi_season_by_scene_season_numbers_when_series_uses_scene_numbering()
+        {
+            GivenSceneNumberingSeries();
+            GivenMultiSeason(new[] { 1, 2 });
+
+            Mocker.GetMock<IEpisodeService>()
+                .Setup(s => s.GetEpisodesBySceneSeason(_series.Id, It.IsAny<int>()))
+                .Returns(_episodes);
+
+            Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySceneSeason(_series.Id, 1), Times.Once);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySceneSeason(_series.Id, 2), Times.Once);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySeason(It.IsAny<int>(), It.IsAny<int>()), Times.Never);
+        }
+
+        [Test]
+        public void should_fallback_to_season_lookup_for_multi_season_when_scene_season_returns_no_results()
+        {
+            GivenSceneNumberingSeries();
+            GivenMultiSeason(new[] { 1, 2 });
+
+            Mocker.GetMock<IEpisodeService>()
+                .Setup(s => s.GetEpisodesBySceneSeason(_series.Id, It.IsAny<int>()))
+                .Returns(new List<Episode>());
+
+            Mocker.GetMock<IEpisodeService>()
+                .Setup(s => s.GetEpisodesBySeason(_series.Id, It.IsAny<int>()))
+                .Returns(_episodes);
+
+            Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySceneSeason(_series.Id, 1), Times.Once);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySceneSeason(_series.Id, 2), Times.Once);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySeason(_series.Id, 1), Times.Once);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySeason(_series.Id, 2), Times.Once);
+        }
+
+        [Test]
+        public void should_apply_scene_mapping_offset_to_multi_season_numbers()
+        {
+            const int tvdbSeasonNumber = 5;
+
+            GivenMultiSeason(new[] { 1, 2, 3 });
+
+            Mocker.GetMock<ISceneMappingService>()
+                .Setup(v => v.FindSceneMapping(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                .Returns<string, string, int>((s, r, sn) => new SceneMapping { SceneSeasonNumber = 1, SeasonNumber = tvdbSeasonNumber });
+
+            Mocker.GetMock<IEpisodeService>()
+                .Setup(s => s.GetEpisodesBySeason(_series.Id, It.IsAny<int>()))
+                .Returns(_episodes);
+
+            Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
+
+            // Scene offset is +4 (tvdb 5 - scene 1), so seasons 1,2,3 become 5,6,7
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySeason(_series.Id, 5), Times.Once);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySeason(_series.Id, 6), Times.Once);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.GetEpisodesBySeason(_series.Id, 7), Times.Once);
         }
     }
 }
