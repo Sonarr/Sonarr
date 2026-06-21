@@ -33,8 +33,7 @@ function CalendarEventGroup({
   const isDownloading = useIsDownloadingEpisodes(episodeIds);
   const series = useSingleSeries(seriesId)!;
 
-  const { timeFormat, enableColorImpairedMode, timeZone } =
-    useUiSettingsValues();
+  const { timeFormat, timeZone } = useUiSettingsValues();
 
   const { showEpisodeInformation, showFinaleIcon, fullColorEvents } =
     useCalendarOptions();
@@ -132,7 +131,6 @@ function CalendarEventGroup({
       className={classNames(
         styles.eventGroup,
         styles[statusStyle],
-        enableColorImpairedMode && 'colorImpaired',
         fullColorEvents && 'fullColor'
       )}
     >
@@ -149,6 +147,7 @@ function CalendarEventGroup({
             <Icon
               titleWrapperClassName={styles.statusIcon}
               name={icons.WARNING}
+              kind={kinds.WARNING}
               title={translate('EpisodeMissingAbsoluteNumber')}
             />
           ) : null}
