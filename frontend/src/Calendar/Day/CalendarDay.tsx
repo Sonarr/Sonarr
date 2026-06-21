@@ -111,7 +111,8 @@ function CalendarDay({
       ref={ref}
       className={classNames(
         styles.day,
-        view === calendarViews.DAY && styles.isSingleDay
+        view === calendarViews.DAY && styles.isSingleDay,
+        isTodaysDate && styles.isTodayCell
       )}
     >
       {view === calendarViews.MONTH && (
