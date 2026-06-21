@@ -1,39 +1,40 @@
 import classNames from 'classnames';
 import React from 'react';
+import Icon, { IconName, IconProps } from 'Components/Icon';
 import { CalendarStatus } from 'typings/Calendar';
 import titleCase from 'Utilities/String/titleCase';
 import styles from './LegendItem.css';
 
 interface LegendItemProps {
   name?: string;
-  status: CalendarStatus;
   tooltip: string;
-  isAgendaView: boolean;
   fullColorEvents: boolean;
-  colorImpairedMode: boolean;
+  status?: CalendarStatus;
+  icon?: IconName;
+  kind?: IconProps['kind'];
 }
 
 function LegendItem(props: LegendItemProps) {
-  const {
-    name,
-    status,
-    tooltip,
-    isAgendaView,
-    fullColorEvents,
-    colorImpairedMode,
-  } = props;
+  const { name, tooltip, fullColorEvents, status, icon, kind } = props;
 
   return (
-    <div
-      className={classNames(
-        styles.legendItem,
-        styles[status],
-        colorImpairedMode && 'colorImpaired',
-        fullColorEvents && !isAgendaView && 'fullColor'
-      )}
-      title={tooltip}
-    >
-      {name ? name : titleCase(status)}
+    <div className={styles.legendItem} title={tooltip}>
+      <span className={styles.indicator}>
+        {icon ? (
+          <Icon
+            className={classNames(
+              styles.icon,
+              fullColorEvents && styles.fullColor
+            )}
+            name={icon}
+            kind={kind}
+          />
+        ) : (
+          <span className={classNames(styles.bar, status && styles[status])} />
+        )}
+      </span>
+
+      {name ?? (status ? titleCase(status) : null)}
     </div>
   );
 }

@@ -1,8 +1,13 @@
 .calendar {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
   width: 100%;
 }
 
 .calendarContent {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   width: 100%;
 }

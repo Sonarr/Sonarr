@@ -1,7 +1,29 @@
 .dateInput {
   position: relative;
-  display: inline-block;
-  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+}
+
+.button {
+  composes: link from '~Components/Link/Link.css';
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--inkSoft);
+  transition: background-color var(--transitionSmooth), color var(--transitionSmooth);
+
+  &:hover {
+    background-color: var(--paperWarm);
+    color: var(--accent);
+  }
+
+  &:global(.isDisabled) {
+    opacity: 0.4;
+  }
 }
 
 .input {
