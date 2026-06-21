@@ -450,7 +450,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            if (SupportsSearch && Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0)
+            if (SupportsSearch && searchCriteria.SeasonNumber > 0)
             {
                 AddTvIdPageableRequests(pageableRequests,
                     Settings.AnimeCategories,

@@ -1,4 +1,5 @@
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.IndexerSearch;
 using Sonarr.Http.REST;
 
 namespace Sonarr.Api.V5.Settings
@@ -9,6 +10,7 @@ namespace Sonarr.Api.V5.Settings
         public int Retention { get; set; }
         public int MaximumSize { get; set; }
         public int RssSyncInterval { get; set; }
+        public AnimeSeasonSearchFallback AnimeSeasonSearchFallback { get; set; }
     }
 
     public static class IndexerConfigResourceMapper
@@ -20,7 +22,8 @@ namespace Sonarr.Api.V5.Settings
                 MinimumAge = model.MinimumAge,
                 Retention = model.Retention,
                 MaximumSize = model.MaximumSize,
-                RssSyncInterval = model.RssSyncInterval
+                RssSyncInterval = model.RssSyncInterval,
+                AnimeSeasonSearchFallback = model.AnimeSeasonSearchFallback
             };
         }
     }

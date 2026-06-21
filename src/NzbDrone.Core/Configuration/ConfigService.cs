@@ -7,6 +7,7 @@ using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Http.Proxy;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.ImportLists;
+using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
@@ -127,6 +128,13 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueInt("MinimumAge", 0); }
 
             set { SetValue("MinimumAge", value); }
+        }
+
+        public AnimeSeasonSearchFallback AnimeSeasonSearchFallback
+        {
+            get { return GetValueEnum("AnimeSeasonSearchFallback", AnimeSeasonSearchFallback.Always); }
+
+            set { SetValue("AnimeSeasonSearchFallback", value); }
         }
 
         public ProperDownloadTypes DownloadPropersAndRepacks
