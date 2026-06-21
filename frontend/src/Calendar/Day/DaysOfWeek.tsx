@@ -39,9 +39,11 @@ function DaysOfWeek() {
     return null;
   }
 
+  const headerDates = view === calendarViews.MONTH ? dates.slice(0, 7) : dates;
+
   return (
     <div className={styles.daysOfWeek}>
-      {dates.map((date) => {
+      {headerDates.map((date) => {
         return (
           <DayOfWeek
             key={date}

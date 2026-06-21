@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import Icon from 'Components/Icon';
-import Button from 'Components/Link/Button';
+import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
 import { isCrossOriginFrame } from 'Utilities/browser';
 import styles from './DateInput.css';
@@ -11,6 +11,7 @@ const hasDatePicker =
 
 interface DateInputProps {
   className?: string;
+  buttonClassName?: string;
   value: string;
   label: string;
   isDisabled?: boolean;
@@ -19,6 +20,7 @@ interface DateInputProps {
 
 function DateInput({
   className = styles.dateInput,
+  buttonClassName = styles.button,
   value,
   label,
   isDisabled = false,
@@ -47,14 +49,15 @@ function DateInput({
 
   return (
     <span className={className}>
-      <Button
+      <Link
+        className={buttonClassName}
         isDisabled={isDisabled}
         aria-label={label}
         title={label}
         onPress={handlePress}
       >
         <Icon name={icons.CALENDAR_O} />
-      </Button>
+      </Link>
 
       <input
         ref={inputRef}
