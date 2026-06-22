@@ -20,24 +20,7 @@ jobs:
         with:
           github-token: ${{ github.token }}
           script: |
-            const BUG_HEADINGS = [
-              "Is there an existing issue for this?",
-              "Current Behavior",
-              "Expected Behavior",
-              "Steps To Reproduce",
-              "Environment",
-              "What branch are you running?",
-              "Trace Logs?",
-              "Anything else?",
-            ];
-
-            const FEATURE_HEADINGS = [
-              "Is there an existing issue for this?",
-              "Is your feature request related to a problem? Please describe",
-              "Describe the solution you'd like",
-              "Describe alternatives you've considered",
-              "Anything else?",
-            ];
+            const AI_SECTIONS = ["validation", "problem", "root cause"];
 
             const AMBIGUOUS_VERSIONS = [
               "latest",
@@ -49,6 +32,21 @@ jobs:
               "beta",
               "develop",
               "main",
+            ];
+
+            const DISMISSIVE_LOGS = [
+              "n/a",
+              "na",
+              "none",
+              "no",
+              "nope",
+              "nothing",
+              "no logs",
+              "no trace logs",
+              "not applicable",
+              "not needed",
+              "not relevant",
+              "no response",
             ];
 
             const issue = context.payload.issue;
@@ -104,20 +102,21 @@ jobs:
             }
 
             if (hasBug || hasFeature) {
-              const allowed = (hasBug ? BUG_HEADINGS : FEATURE_HEADINGS).map((h) => h.toLowerCase());
-              const extras = [
+              const headings = [
                 ...new Set(
                   body
                     .split(/\r?\n/)
                     .filter((l) => /^###\s+/.test(l.trim()))
                     .map((l) => l.trim().replace(/^#{1,6}\s+/, "").trim().toLowerCase())
-                    .filter((h) => !allowed.includes(h))
                 ),
               ];
+              const flagged = headings.filter((h) =>
+                AI_SECTIONS.some((s) => new RegExp(`^${s}\\b`).test(h))
+              );
 
-              if (extras.length > 0) {
+              if (flagged.length > 0) {
                 reasons.push(
-                  `The issue contains section(s) that are not part of the template: ${extras.join(", ")}.`
+                  `The issue contains section(s) commonly added by AI tools and not part of the template: ${flagged.join(", ")}.`
                 );
               }
             }
@@ -142,6 +141,15 @@ jobs:
               if (version === "" || AMBIGUOUS_VERSIONS.some((a) => vLower === a || vLower.includes(a))) {
                 reasons.push(
                   "The **Sonarr** version in the Environment section is missing or ambiguous (e.g. \"latest\"). Please provide the exact version number, such as `4.0.0.766`."
+                );
+              }
+
+              const logs = stripComments(sectionBody(body, "Trace Logs?"));
+              const logsText = logs.replace(/<img[^>]*>/gi, "").replace(/[.!\s]+$/g, "").trim().toLowerCase();
+
+              if (isBlank(logs) || DISMISSIVE_LOGS.includes(logsText)) {
+                reasons.push(
+                  "The **Trace Logs?** section is missing or dismissive (e.g. \"N/A\"). Please attach trace logs as text (not a screenshot). See https://wiki.servarr.com/sonarr/troubleshooting#logging-and-log-files."
                 );
               }
             }
@@ -183,12 +191,7 @@ jobs:
                   if (e.status !== 404) {
                   throw e;
                   }
-                  
+
                   core.info(`removeLabel skipped: ${e.message}`);
                 });
-
-              await github.rest.issues.createComment({
-                ...common,
-                body: `:white_check_mark: Thanks @${issue.user.login}, this issue now looks complete. The \`waiting-for-info\` label has been removed.`,
-              });
             }

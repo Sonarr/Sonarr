@@ -13,9 +13,12 @@ jobs:
   check:
     name: Flag suspected AI-authored PRs
     runs-on: ubuntu-latest
+    # Ignore this check for PRs from owners, members, the weblate-servarr-sonarr
+    # branch, and Bogdan (707714) to avoid false positives.
     if: >-
       !contains(fromJSON('["OWNER", "MEMBER"]'), github.event.pull_request.author_association) &&
-      github.event.pull_request.head.ref != 'weblate-servarr-sonarr'
+      github.event.pull_request.head.ref != 'weblate-servarr-sonarr' &&
+      github.event.pull_request.user.id != 707714
     permissions:
       pull-requests: write
       issues: write
@@ -69,6 +72,19 @@ jobs:
               reasons.push("The checkbox \"This PR was authored and submitted by an AI agent without human review\" was checked.");
             }
 
+            const requiredChecks = [
+              { label: "I have read CONTRIBUTING.md and this PR follows the guidelines", fragment: "this PR follows the guidelines" },
+              { label: "I have fully reviewed all code in this PR and confirm it works as intended", fragment: "I have fully reviewed all code in this PR" },
+            ];
+
+            for (const { label, fragment } of requiredChecks) {
+              const line = body.split(/\r?\n/).find((l) => l.includes(fragment));
+
+              if (!line || !/^\s*-\s*\[[xX]\]\s/.test(line)) {
+                reasons.push(`The required checkbox "${label}" is not correctly checked.`);
+              }
+            }
+
             const placeholder = "A few sentences describing the overall goals of the pull request's commits.";
             const description = stripComments(sectionBody(body, "Description"));
 
@@ -76,13 +92,29 @@ jobs:
               reasons.push("The PR description is empty or still contains the template placeholder.");
             }
 
-            const hasValidationSection = body.split(/\r?\n/).some((l) => {
-              const t = l.trim();
-              return /^#{1,6}\s+.*\bvalidation\b/i.test(t) || /^\*\*\s*validation\b.*\*\*:?$/i.test(t);
-            });
+            const bodyLines = body.split(/\r?\n/);
+            const descIndex = bodyLines.findIndex(
+              (l) => /^#{1,6}\s+/.test(l) && l.replace(/^#{1,6}\s+/, "").trim().toLowerCase() === "description"
+            );
 
-            if (hasValidationSection) {
-              reasons.push("The PR includes a \"Validation\" section that is not part of the template.");
+            if (descIndex > 0 && bodyLines.slice(0, descIndex).some((l) => /^#{1,6}\s+/.test(l))) {
+              reasons.push("The PR adds section headings before the template's \"Description\" section.");
+            }
+
+            const nonTemplateSections = ["validation", "problem", "root cause"];
+
+            for (const name of nonTemplateSections) {
+              const escaped = escapeRegExp(name);
+              const headingRe = new RegExp(`^#{1,6}\\s+.*\\b${escaped}\\b`, "i");
+              const boldRe = new RegExp(`^\\*\\*\\s*${escaped}\\b.*\\*\\*:?$`, "i");
+              const hasSection = body.split(/\r?\n/).some((l) => {
+                const t = l.trim();
+                return headingRe.test(t) || boldRe.test(t);
+              });
+
+              if (hasSection) {
+                reasons.push(`The PR includes a "${name}" section that is not part of the template.`);
+              }
             }
 
             const isLabeled = (pr.labels || []).some((l) => l.name === "autopilot");
