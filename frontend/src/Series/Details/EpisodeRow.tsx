@@ -322,6 +322,4 @@ function EpisodeRow({
   );
 }
 
-// Memoized so that updating one episode's monitored state (which preserves the
-// object identity of unchanged episodes in the cache) doesn't re-render every row.
-export default React.memo(EpisodeRow);
+export default EpisodeRow;

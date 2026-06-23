@@ -26,14 +26,13 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
                                                             })
                                      .Build();
 
-            // By default no seasons have monitored episodes after the update; individual tests override.
             GivenMonitoredSeasons();
         }
 
         private void GivenMonitoredSeasons(params int[] seasonNumbers)
         {
             Mocker.GetMock<IEpisodeService>()
-                  .Setup(s => s.GetMonitoredSeasonNumbers(It.IsAny<int>()))
+                  .Setup(s => s.SetEpisodeMonitoredBySeries(It.IsAny<int>(), It.IsAny<MonitorTypes>(), It.IsAny<int>(), It.IsAny<int>()))
                   .Returns(seasonNumbers.ToList());
         }
 

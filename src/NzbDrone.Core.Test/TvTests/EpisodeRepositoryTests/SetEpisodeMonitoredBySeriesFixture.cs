@@ -208,15 +208,16 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         }
 
         [Test]
-        public void should_return_distinct_monitored_season_numbers()
+        public void should_return_distinct_season_numbers_with_monitored_episodes()
         {
-            GivenEpisode(1, 1, false, DateTime.UtcNow.AddDays(-1), monitored: true);
-            GivenEpisode(1, 2, false, DateTime.UtcNow.AddDays(-1), monitored: true);
-            GivenEpisode(2, 1, false, DateTime.UtcNow.AddDays(-1), monitored: true);
-            GivenEpisode(3, 1, false, DateTime.UtcNow.AddDays(-1));
+            GivenEpisode(1, 1, false, DateTime.UtcNow.AddDays(-1));
+            GivenEpisode(1, 2, true, DateTime.UtcNow.AddDays(-1));
+            GivenEpisode(2, 1, false, DateTime.UtcNow.AddDays(-1));
+            GivenEpisode(3, 1, true, DateTime.UtcNow.AddDays(-1));
 
-            var monitoredSeasons = Subject.GetMonitoredSeasonNumbers(_series.Id);
+            var monitoredSeasons = Subject.SetMonitored(_series.Id, MonitorTypes.Missing, 1, 3);
 
+            // Only seasons 1 and 2 have a missing (and now monitored) episode.
             monitoredSeasons.Should().BeEquivalentTo(new[] { 1, 2 });
         }
     }
