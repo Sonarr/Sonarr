@@ -201,7 +201,6 @@ namespace NzbDrone.Core.Tv
 
             using var conn = _database.OpenConnection();
 
-            // Specials are toggled on their own and the regular seasons are left untouched.
             if (monitor is MonitorTypes.MonitorSpecials or MonitorTypes.UnmonitorSpecials)
             {
                 SetMonitoredWhere(conn, null, "\"SeriesId\" = @seriesId AND \"SeasonNumber\" = 0", monitor == MonitorTypes.MonitorSpecials, parameters);
@@ -216,7 +215,6 @@ namespace NzbDrone.Core.Tv
                 return new List<int>();
             }
 
-            // The predicate selects the episodes to monitor; everything else in the series is unmonitored.
             string predicate;
 
             if (monitor == MonitorTypes.All)
@@ -397,7 +395,6 @@ namespace NzbDrone.Core.Tv
             var p = new DynamicParameters(parameters);
             p.Add("monitored", monitored);
 
-            // Only rows that actually change are written.
             conn.Execute($"UPDATE \"Episodes\" SET \"Monitored\" = @monitored WHERE {whereClause} AND \"Monitored\" <> @monitored", p, tran);
         }
 

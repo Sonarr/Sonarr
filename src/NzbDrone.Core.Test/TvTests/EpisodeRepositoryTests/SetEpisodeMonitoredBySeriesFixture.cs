@@ -185,7 +185,6 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var monitored = MonitoredByEpisodeId();
             monitored[special.Id].Should().BeTrue();
 
-            // Regular seasons must be left untouched.
             monitored[regularMonitored.Id].Should().BeTrue();
             monitored[regularUnmonitored.Id].Should().BeFalse();
         }
@@ -202,7 +201,6 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var monitored = MonitoredByEpisodeId();
             monitored[special.Id].Should().BeFalse();
 
-            // Regular seasons must be left untouched.
             monitored[regularMonitored.Id].Should().BeTrue();
             monitored[regularUnmonitored.Id].Should().BeFalse();
         }
@@ -217,7 +215,6 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
 
             var monitoredSeasons = Subject.SetMonitored(_series.Id, MonitorTypes.Missing, 1, 3);
 
-            // Only seasons 1 and 2 have a missing (and now monitored) episode.
             monitoredSeasons.Should().BeEquivalentTo(new[] { 1, 2 });
         }
     }

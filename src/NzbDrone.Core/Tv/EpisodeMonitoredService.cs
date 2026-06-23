@@ -51,8 +51,6 @@ namespace NzbDrone.Core.Tv
 
             _logger.Debug("[{0}] Setting episode monitored status to {1}", series.Title, monitoringOptions.Monitor);
 
-            // Apply the monitored flag with a set-based database update and use the resulting set of
-            // monitored seasons to recompute the season monitored flags.
             var monitoredSeasons = _episodeService.SetEpisodeMonitoredBySeries(series.Id, monitoringOptions.Monitor, firstSeason, lastSeason);
 
             foreach (var season in series.Seasons)

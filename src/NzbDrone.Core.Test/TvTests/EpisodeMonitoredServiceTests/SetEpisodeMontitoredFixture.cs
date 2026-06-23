@@ -26,7 +26,9 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
                                                             })
                                      .Build();
 
-            GivenMonitoredSeasons();
+            GivenMonitoredSeasons(_series.Seasons.Where(s => s.SeasonNumber > 0 && s.Monitored)
+                                                 .Select(s => s.SeasonNumber)
+                                                 .ToArray());
         }
 
         private void GivenMonitoredSeasons(params int[] seasonNumbers)
@@ -101,6 +103,8 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
         public void should_not_monitor_last_season_when_monitoring_future_and_series_ended()
         {
             _series.Status = SeriesStatusType.Ended;
+
+            GivenMonitoredSeasons();
 
             Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions { Monitor = MonitorTypes.Future });
 
