@@ -9,9 +9,9 @@ namespace Sonarr.Http.Validation;
 
 public class CertificateValidator : PropertyValidator
 {
-    protected override string GetDefaultMessageTemplate() => "Invalid SSL certificate file or {passwordOrKey}. {message}";
-
     private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(CertificateValidator));
+
+    protected override string GetDefaultMessageTemplate() => "Invalid SSL certificate file or {passwordOrKey}. {message}";
 
     protected override bool IsValid(PropertyValidatorContext context)
     {
