@@ -206,10 +206,9 @@ namespace NzbDrone.Core.Tv
             {
                 SetMonitoredWhere(conn, null, "\"SeriesId\" = @seriesId AND \"SeasonNumber\" = 0", monitor == MonitorTypes.MonitorSpecials, parameters);
 
-                return GetMonitoredSeasonNumbers(conn, seriesId);
+                return GetSeasonNumbersWithMonitoredEpisodes(conn, seriesId);
             }
 
-            // None unmonitors every episode in the series.
             if (monitor == MonitorTypes.None)
             {
                 SetMonitoredWhere(conn, null, "\"SeriesId\" = @seriesId", false, parameters);
@@ -261,7 +260,7 @@ namespace NzbDrone.Core.Tv
             }
             else
             {
-                return GetMonitoredSeasonNumbers(conn, seriesId);
+                return GetSeasonNumbersWithMonitoredEpisodes(conn, seriesId);
             }
 
             using (var tran = conn.BeginTransaction(IsolationLevel.ReadCommitted))
@@ -271,7 +270,7 @@ namespace NzbDrone.Core.Tv
                 tran.Commit();
             }
 
-            return GetMonitoredSeasonNumbers(conn, seriesId);
+            return GetSeasonNumbersWithMonitoredEpisodes(conn, seriesId);
         }
 
         public void SetFileId(Episode episode, int fileId)
@@ -387,7 +386,7 @@ namespace NzbDrone.Core.Tv
             return string.Format("({0})", string.Join(" OR ", clauses));
         }
 
-        private List<int> GetMonitoredSeasonNumbers(IDbConnection conn, int seriesId)
+        private List<int> GetSeasonNumbersWithMonitoredEpisodes(IDbConnection conn, int seriesId)
         {
             return conn.Query<int>("SELECT DISTINCT \"SeasonNumber\" FROM \"Episodes\" WHERE \"SeriesId\" = @seriesId AND \"Monitored\" = @monitored",
                 new { seriesId, monitored = true }).ToList();

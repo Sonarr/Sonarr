@@ -110,7 +110,6 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
         [Test]
         public void should_not_monitor_first_season_when_monitoring_pilot()
         {
-            // The pilot episode in the first season is monitored, but the season itself must not be.
             GivenMonitoredSeasons(1);
 
             Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions { Monitor = MonitorTypes.Pilot });
