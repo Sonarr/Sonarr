@@ -5,7 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace NzbDrone.Test.Common;
 
-public sealed class SslTestCertificates : IDisposable
+public class SslTestCertificates : IDisposable
 {
     public const string PfxPassword = "test-password";
 
