@@ -203,7 +203,7 @@ namespace NzbDrone.Host
                                 var sslContext = ValidateSslCertificate(sslCertPath, sslKeyPath, sslCertPassword);
 
                                 configureOptions.ServerCertificate = sslContext.TargetCertificate;
-                                configureOptions.OnAuthenticate = (context, authOptions) =>
+                                configureOptions.OnAuthenticate = (_, authOptions) =>
                                 {
                                     authOptions.ServerCertificateContext = sslContext;
                                 };
