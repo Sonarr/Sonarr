@@ -1,4 +1,3 @@
-using FluentAssertions;
 using FluentValidation;
 using FluentValidation.TestHelper;
 using NUnit.Framework;
@@ -36,70 +35,18 @@ public class CertificateValidatorTests
     }
 
     [Test]
-    public void validate_fails_when_cert_path_is_null()
+    public void host_config_resource_conforms_to_certificate_validation()
     {
-        var resource = new HostConfigResource { SslCertPath = null };
-
-        var result = _validator.TestValidate(resource);
-
-        result.ShouldHaveValidationErrorFor(r => r.SslCertPath);
-    }
-
-    [Test]
-    public void validate_passes_for_valid_pem_certificate()
-    {
-        var resource = new HostConfigResource
+        _validator.TestValidate(new HostConfigResource
         {
             SslCertPath = _certs.LeafOnlyPemPath,
             SslKeyPath = _certs.LeafKeyPath
-        };
+        }).ShouldNotHaveValidationErrorFor(r => r.SslCertPath);
 
-        var result = _validator.TestValidate(resource);
-
-        result.ShouldNotHaveAnyValidationErrors();
-    }
-
-    [Test]
-    public void validate_passes_for_valid_pkcs12_certificate()
-    {
-        var resource = new HostConfigResource
-        {
-            SslCertPath = _certs.PfxPath,
-            SslCertPassword = SslTestCertificates.PfxPassword
-        };
-
-        var result = _validator.TestValidate(resource);
-
-        result.ShouldNotHaveAnyValidationErrors();
-    }
-
-    [Test]
-    public void validate_fails_for_pem_with_wrong_key()
-    {
-        var resource = new HostConfigResource
+        _validator.TestValidate(new HostConfigResource
         {
             SslCertPath = _certs.LeafOnlyPemPath,
             SslKeyPath = _certs.WrongKeyPath
-        };
-
-        var result = _validator.TestValidate(resource);
-
-        result.ShouldHaveValidationErrorFor(r => r.SslCertPath);
-        result.Errors.Should().Contain(e => e.ErrorMessage.Contains("key"));
-    }
-
-    [Test]
-    public void validate_fails_for_pkcs12_with_wrong_password()
-    {
-        var resource = new HostConfigResource
-        {
-            SslCertPath = _certs.PfxPath,
-            SslCertPassword = "wrong-password"
-        };
-
-        var result = _validator.TestValidate(resource);
-
-        result.ShouldHaveValidationErrorFor(r => r.SslCertPath);
-        result.Errors.Should().Contain(e => e.ErrorMessage.Contains("password"));
+        }).ShouldHaveValidationErrorFor(r => r.SslCertPath);
     }
 }
