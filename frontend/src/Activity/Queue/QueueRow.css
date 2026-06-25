@@ -27,4 +27,15 @@
 
   width: 70px;
   text-align: right;
+  white-space: nowrap;
+}
+
+.unmatchedTitle {
+  display: inline-block;
+  color: var(--inkSoft);
+  word-break: normal;
+  font-size: 12px;
+  font-family: var(--monoSpaceFontFamily);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
 }
