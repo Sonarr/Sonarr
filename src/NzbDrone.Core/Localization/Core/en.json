@@ -293,6 +293,7 @@
   "CustomFilter": "Custom Filter",
   "CustomFilters": "Custom Filters",
   "CustomFormat": "Custom Format",
+  "CustomFormatFootNote": "Include a specific Custom Format in the naming scheme by using the format name. For example, if you have a custom format named `Surround Sound`, you can include it in the naming scheme as `{Custom Format:Surround Sound}`.",
   "CustomFormatHelpText": "{appName} scores each release using the sum of scores for matching custom formats. If a new release would improve the score, at the same or better quality, then {appName} will grab it.",
   "CustomFormatJson": "Custom Format JSON",
   "CustomFormatScore": "Custom Format Score",
