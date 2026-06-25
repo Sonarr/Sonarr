@@ -14,6 +14,8 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
+import PageMessage from 'Components/Page/PageMessage';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
@@ -238,6 +240,19 @@ function QueueContent() {
   if (!shouldBlockRefresh.current) {
     currentQueue.current = (
       <PageContentBody>
+        <PageHeading
+          scope={`${translate('Activity')} · ${translate('Queue')}`}
+          title={translate('Queue')}
+          meta={
+            count > 0
+              ? [
+                  translate('QueueActiveCount', { count }),
+                  translate('QueueRecordsCount', { count: totalRecords }),
+                ]
+              : [translate('QueueNoActiveDownloads')]
+          }
+        />
+
         {isRefreshing && !isAllPopulated ? <LoadingIndicator /> : null}
 
         {!isRefreshing && hasError ? (
@@ -245,11 +260,11 @@ function QueueContent() {
         ) : null}
 
         {isAllPopulated && !hasError && !records.length ? (
-          <Alert kind={kinds.INFO}>
+          <PageMessage>
             {selectedFilterKey !== 'all' && count > 0
               ? translate('QueueFilterHasNoItems')
               : translate('QueueIsEmpty')}
-          </Alert>
+          </PageMessage>
         ) : null}
 
         {isAllPopulated && !hasError && !!records.length ? (
@@ -286,6 +301,7 @@ function QueueContent() {
               page={page}
               totalPages={totalPages}
               totalRecords={totalRecords}
+              showTotalRecords={false}
               isFetching={isFetching}
               onPageSelect={goToPage}
             />

@@ -1,17 +1,20 @@
-.torrent {
-  composes: label from '~Components/Label.css';
-
-  border-color: var(--torrentColor);
-  background-color: var(--torrentColor);
-}
-
-.usenet {
-  composes: label from '~Components/Label.css';
-
-  border-color: var(--usenetColor);
-  background-color: var(--usenetColor);
-}
-
+.torrent,
+.usenet,
 .unknown {
   composes: label from '~Components/Label.css';
+}
+
+.torrent::before {
+  background-color: var(--torrentColor);
+  opacity: 1;
+}
+
+.usenet::before {
+  background-color: var(--usenetColor);
+  opacity: 1;
+}
+
+.unknown::before {
+  background-color: var(--inkMuted);
+  opacity: 0.5;
 }
