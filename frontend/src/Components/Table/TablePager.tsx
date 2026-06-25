@@ -13,6 +13,7 @@ interface TablePagerProps {
   page?: number;
   totalPages?: number;
   totalRecords?: number;
+  showTotalRecords?: boolean;
   isFetching?: boolean;
   onFirstPagePress?: () => void;
   onPreviousPagePress?: () => void;
@@ -25,6 +26,7 @@ function TablePager({
   page,
   totalPages,
   totalRecords = 0,
+  showTotalRecords = true,
   isFetching,
   onPageSelect,
 }: TablePagerProps) {
@@ -181,7 +183,9 @@ function TablePager({
 
       <div className={styles.recordsContainer}>
         <div className={styles.records}>
-          {translate('TotalRecords', { totalRecords })}
+          {showTotalRecords
+            ? translate('TotalRecords', { totalRecords })
+            : null}
         </div>
       </div>
     </div>

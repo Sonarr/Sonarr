@@ -67,7 +67,7 @@
   color: var(--inkMuted);
   white-space: nowrap;
   letter-spacing: 0.04em;
-  font-size: 11px;
+  font-size: 13px;
   font-family: $monoSpaceFontFamily;
   gap: 6px;
 }
