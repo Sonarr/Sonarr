@@ -117,18 +117,24 @@ function EpisodeSummary({
 
   return (
     <div>
-      <div>
-        <span className={styles.infoTitle}>{translate('Airs')}</span>
+      <div className={styles.meta}>
+        <div className={styles.metaItem}>
+          <span className={styles.metaLabel}>{translate('Airs')}</span>
 
-        <EpisodeAiring airDateUtc={airDateUtc} network={network} />
-      </div>
+          <div className={styles.metaValue}>
+            <EpisodeAiring airDateUtc={airDateUtc} network={network} />
+          </div>
+        </div>
 
-      <div>
-        <span className={styles.infoTitle}>{translate('QualityProfile')}</span>
+        <div className={styles.metaItem}>
+          <span className={styles.metaLabel}>
+            {translate('QualityProfile')}
+          </span>
 
-        <Label kind={kinds.PRIMARY} size={sizes.MEDIUM}>
-          <QualityProfileName qualityProfileId={qualityProfileId} />
-        </Label>
+          <Label kind={kinds.PRIMARY} size={sizes.MEDIUM}>
+            <QualityProfileName qualityProfileId={qualityProfileId} />
+          </Label>
+        </div>
       </div>
 
       <div className={styles.overview}>
