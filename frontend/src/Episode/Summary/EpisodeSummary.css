@@ -1,59 +1,39 @@
-.infoTitle {
-  display: inline-block;
-  width: 100px;
-  font-weight: 600;
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 48px;
+
+  margin-bottom: 20px;
+}
+
+.metaItem {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.metaLabel {
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  font-size: 10px;
+  font-family: var(--monoSpaceFontFamily);
+}
+
+.metaValue {
+  color: var(--inkSoft);
+  font-size: 14px;
 }
 
 .overview {
-  margin-top: 20px;
-}
-
-.files {
-  overflow-x: auto;
-  margin-top: 20px;
-}
-
-.filesHeader {
-  display: flex;
-  font-weight: 600;
-}
-
-.filesHeader {
-  display: flex;
-  margin-bottom: 10px;
-  border-bottom: 1px solid var(--borderColor);
-}
-
-.fileRow {
-  display: flex;
-}
-
-.path {
-  flex: 1 0 1px;
-  white-space: nowrap !important;
-}
-
-.size,
-.quality {
-  flex: 0 0 125px;
-}
-
-.actions {
-  flex: 0 0 40px;
-  text-align: center;
-}
-
-@media only screen and (max-width: $breakpointMedium) {
-  .size,
-  .quality {
-    flex: 0 0 80px;
-  }
-}
-
-@media only screen and (max-width: $breakpointSmall) {
-  .files {
-    overflow-y: hidden;
-    min-width: 100%;
-    width: 100%;
-  }
+  margin-bottom: 20px;
+  max-width: 80ch;
+  color: var(--inkSoft);
+  text-wrap: pretty;
+  font-style: italic;
+  font-size: 14px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.6;
 }

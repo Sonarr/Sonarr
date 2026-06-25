@@ -1,9 +1,60 @@
-.seriesTitle {
-  margin-left: 5px;
+.header {
+  border-bottom: none !important;
+  white-space: normal !important;
 }
 
-.separator {
-  margin: 0 5px;
+.scopeLine {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.scope {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  flex: 0 1 auto;
+  min-width: 0;
+  color: var(--accentDeep);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  font-size: 10px;
+  font-family: var(--monoSpaceFontFamily);
+}
+
+.scopeSeries {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scopeSeparator {
+  flex: 0 0 auto;
+  opacity: 0.5;
+}
+
+.scopeLine::after {
+  flex: 1;
+  margin-left: 12px;
+  height: 1px;
+  background-color: var(--inputBorderColor);
+  content: "";
+  opacity: 0.5;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.episodeTitle {
+  color: var(--ink);
+  letter-spacing: -0.018em;
+  font-weight: 600;
+  font-size: 20px;
 }
 
 .tabs {
@@ -11,26 +62,28 @@
 }
 
 .tabList {
+  display: flex;
+  gap: 24px;
+
   margin: 0;
   padding: 0;
+  border-bottom: 1px solid var(--borderColor);
 }
 
 .tab {
   position: relative;
   bottom: -1px;
-  display: inline-block;
-  padding: 6px 12px;
-  border: 1px solid transparent;
-  border-top: none;
+  padding: 10px 2px;
+  border-bottom: 2px solid transparent;
+  color: var(--inkMuted);
   list-style: none;
+  font-size: 14px;
   cursor: pointer;
 }
 
 .selectedTab {
-  border-color: var(--borderColor);
-  border-radius: 0 0 8px 8px;
-  background-color: var(--paperWarm);
-  color: var(--textColor);
+  border-bottom-color: var(--accent);
+  color: var(--ink);
 }
 
 .tabContent {
