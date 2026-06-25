@@ -255,7 +255,11 @@ const mediaInfoTokens = [
 const otherTokens = [
   { token: '{Release Group}', example: 'Rls Grp', footNotes: '1' },
   { token: '{Custom Formats}', example: 'iNTERNAL' },
-  { token: '{Custom Format:FormatName}', example: 'AMZN' },
+  {
+    token: '{Custom Format:FormatName}',
+    example: 'Surround Sound',
+    footNotes: '2',
+  },
 ];
 
 const otherAnimeTokens = [{ token: '{Release Hash}', example: 'ABCDEFGH' }];
@@ -637,6 +641,11 @@ function NamingModal(props: NamingModalProps) {
                 <div className={styles.footNote}>
                   <sup className={styles.identifier}>1</sup>
                   <InlineMarkdown data={translate('ReleaseGroupFootNote')} />
+                </div>
+
+                <div className={styles.footNote}>
+                  <sup className={styles.identifier}>2</sup>
+                  <InlineMarkdown data={translate('CustomFormatFootNote')} />
                 </div>
               </FieldSet>
 
