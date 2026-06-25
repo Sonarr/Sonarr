@@ -174,6 +174,17 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
   const isMultiSelect = Array.isArray(value);
   const selectedOption = getSelectedOption(selectedIndex, values);
 
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      if (isMobile) {
+        return;
+      }
+
+      setIsOpen(open);
+    },
+    [isMobile]
+  );
+
   const { refs, context, floatingStyles } = useFloating({
     middleware: [
       flip({
@@ -195,7 +206,7 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
     open: isOpen,
     placement: 'bottom-start',
     whileElementsMounted: autoUpdate,
-    onOpenChange: setIsOpen,
+    onOpenChange: handleOpenChange,
   });
 
   const click = useClick(context);
