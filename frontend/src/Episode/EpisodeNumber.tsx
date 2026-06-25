@@ -82,7 +82,12 @@ function EpisodeNumber(props: EpisodeNumberProps) {
         <Popover
           anchor={
             <span>
-              {showSeasonNumber && seasonNumber != null && <>{seasonNumber}x</>}
+              {showSeasonNumber && seasonNumber != null && (
+                <>
+                  {seasonNumber}
+                  <span className={styles.separator}>x</span>
+                </>
+              )}
 
               {showSeasonNumber ? padNumber(episodeNumber, 2) : episodeNumber}
 
