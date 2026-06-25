@@ -15,6 +15,8 @@ import FilterMenu from 'Components/Menu/FilterMenu';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
+import PageMessage from 'Components/Page/PageMessage';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
@@ -274,6 +276,18 @@ function CutoffUnmetContent() {
         </PageToolbar>
 
         <PageContentBody>
+          <PageHeading
+            scope={`${translate('Activity')} · ${translate(
+              'Wanted'
+            )} · ${translate('CutoffUnmet')}`}
+            title={translate('CutoffUnmet')}
+            meta={
+              totalRecords > 0
+                ? [translate('CutoffUnmetBelowCount', { count: totalRecords })]
+                : [translate('CutoffUnmetAllCaughtUp')]
+            }
+          />
+
           {isFetching && isLoading ? <LoadingIndicator /> : null}
 
           {!isFetching && error ? (
@@ -283,7 +297,7 @@ function CutoffUnmetContent() {
           ) : null}
 
           {!isLoading && !error && !records.length ? (
-            <Alert kind={kinds.INFO}>{translate('CutoffUnmetNoItems')}</Alert>
+            <PageMessage>{translate('CutoffUnmetNoItems')}</PageMessage>
           ) : null}
 
           {!isLoading && !error && !!records.length ? (
@@ -317,6 +331,7 @@ function CutoffUnmetContent() {
                 page={page}
                 totalPages={totalPages}
                 totalRecords={totalRecords}
+                showTotalRecords={false}
                 isFetching={isFetching}
                 onPageSelect={goToPage}
               />
