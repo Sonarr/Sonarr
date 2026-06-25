@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { ForwardedRef, forwardRef, ReactNode } from 'react';
 import { useModalContext } from './ModalContext';
 import styles from './ModalHeader.css';
@@ -8,7 +9,7 @@ interface ModalHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const ModalHeader = forwardRef(
   (
-    { children, ...otherProps }: ModalHeaderProps,
+    { className, children, ...otherProps }: ModalHeaderProps,
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     const { headerId } = useModalContext();
@@ -17,7 +18,7 @@ const ModalHeader = forwardRef(
       <div
         ref={ref}
         id={headerId}
-        className={styles.modalHeader}
+        className={classNames(styles.modalHeader, className)}
         {...otherProps}
       >
         {children}
