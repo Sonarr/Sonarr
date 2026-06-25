@@ -9,6 +9,8 @@ import FilterMenu from 'Components/Menu/FilterMenu';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
+import PageMessage from 'Components/Page/PageMessage';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
@@ -294,6 +296,18 @@ function MissingContent() {
         </PageToolbar>
 
         <PageContentBody>
+          <PageHeading
+            scope={`${translate('Activity')} · ${translate(
+              'Wanted'
+            )} · ${translate('Missing')}`}
+            title={translate('Missing')}
+            meta={
+              totalRecords > 0
+                ? [translate('MissingEpisodesCount', { count: totalRecords })]
+                : [translate('MissingNothingMissing')]
+            }
+          />
+
           {isFetching && isLoading ? <LoadingIndicator /> : null}
 
           {!isFetching && error ? (
@@ -301,7 +315,7 @@ function MissingContent() {
           ) : null}
 
           {!isLoading && !error && !records.length ? (
-            <Alert kind={kinds.INFO}>{translate('MissingNoItems')}</Alert>
+            <PageMessage>{translate('MissingNoItems')}</PageMessage>
           ) : null}
 
           {!isLoading && !error && !!records.length ? (
@@ -331,6 +345,7 @@ function MissingContent() {
                 page={page}
                 totalPages={totalPages}
                 totalRecords={totalRecords}
+                showTotalRecords={false}
                 isFetching={isFetching}
                 onPageSelect={goToPage}
               />
