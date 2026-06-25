@@ -21,8 +21,8 @@
 .label::before {
   display: inline-block;
   flex-shrink: 0;
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
   border-radius: 999px;
   background-color: currentColor;
   content: "";
