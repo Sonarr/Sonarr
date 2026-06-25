@@ -32,7 +32,6 @@
   max-width: 80ch;
   color: var(--inkSoft);
   text-wrap: pretty;
-  font-style: italic;
   font-size: 14px;
   font-family: var(--defaultFontFamily);
   line-height: 1.6;
