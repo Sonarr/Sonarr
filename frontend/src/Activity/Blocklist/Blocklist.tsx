@@ -8,6 +8,8 @@ import FilterMenu from 'Components/Menu/FilterMenu';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
+import PageMessage from 'Components/Page/PageMessage';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
@@ -217,6 +219,20 @@ function BlocklistContent() {
       </PageToolbar>
 
       <PageContentBody>
+        <PageHeading
+          scope={`${translate('Activity')} · ${translate('Blocklist')}`}
+          title={translate('Blocklist')}
+          meta={
+            totalRecords > 0
+              ? [
+                  translate('BlocklistReleasesHeldCount', {
+                    count: totalRecords,
+                  }),
+                ]
+              : [translate('Empty')]
+          }
+        />
+
         {isLoading && !isFetched ? <LoadingIndicator /> : null}
 
         {!isLoading && !!error ? (
@@ -224,11 +240,11 @@ function BlocklistContent() {
         ) : null}
 
         {isFetched && !error && !records.length ? (
-          <Alert kind={kinds.INFO}>
+          <PageMessage>
             {selectedFilterKey === 'all'
               ? translate('NoBlocklistItems')
               : translate('BlocklistFilterHasNoItems')}
-          </Alert>
+          </PageMessage>
         ) : null}
 
         {isFetched && !error && !!records.length ? (
@@ -257,6 +273,7 @@ function BlocklistContent() {
               page={page}
               totalPages={totalPages}
               totalRecords={totalRecords}
+              showTotalRecords={false}
               isFetching={isFetching}
               onPageSelect={goToPage}
             />
