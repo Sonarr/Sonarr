@@ -49,7 +49,12 @@ namespace NzbDrone.Core.Organizer
                 ImdbId = "tt12345",
                 TvdbId = 12345,
                 TvMazeId = 54321,
-                TmdbId = 11223
+                TmdbId = 11223,
+                Translations = new List<SeriesTranslation>
+                {
+                    new SeriesTranslation { Language = "FR", Title = "Le Titre de la Série!" },
+                    new SeriesTranslation { Language = "DE", Title = "Der Serientitel!" }
+                }
             };
 
             _dailySeries = new Series
@@ -60,7 +65,12 @@ namespace NzbDrone.Core.Organizer
                 ImdbId = "tt12345",
                 TvdbId = 12345,
                 TvMazeId = 54321,
-                TmdbId = 11223
+                TmdbId = 11223,
+                Translations = new List<SeriesTranslation>
+                {
+                    new SeriesTranslation { Language = "FR", Title = "Le Titre de la Série!" },
+                    new SeriesTranslation { Language = "DE", Title = "Der Serientitel!" }
+                }
             };
 
             _animeSeries = new Series
@@ -71,7 +81,12 @@ namespace NzbDrone.Core.Organizer
                 ImdbId = "tt12345",
                 TvdbId = 12345,
                 TvMazeId = 54321,
-                TmdbId = 11223
+                TmdbId = 11223,
+                Translations = new List<SeriesTranslation>
+                {
+                    new SeriesTranslation { Language = "FR", Title = "Le Titre de la Série!" },
+                    new SeriesTranslation { Language = "DE", Title = "Der Serientitel!" }
+                }
             };
 
             _episode1 = new Episode
@@ -81,6 +96,11 @@ namespace NzbDrone.Core.Organizer
                 Title = "Episode Title (1)",
                 AirDate = "2013-10-30",
                 AbsoluteEpisodeNumber = 1,
+                Translations = new List<EpisodeTranslation>
+                {
+                    new EpisodeTranslation { Language = "FR", Title = "Titre de l'épisode (1)" },
+                    new EpisodeTranslation { Language = "DE", Title = "Episodentitel (1)" }
+                }
             };
 
             _episode2 = new Episode
@@ -88,7 +108,12 @@ namespace NzbDrone.Core.Organizer
                 SeasonNumber = 1,
                 EpisodeNumber = 2,
                 Title = "Episode Title (2)",
-                AbsoluteEpisodeNumber = 2
+                AbsoluteEpisodeNumber = 2,
+                Translations = new List<EpisodeTranslation>
+                {
+                    new EpisodeTranslation { Language = "FR", Title = "Titre de l'épisode (2)" },
+                    new EpisodeTranslation { Language = "DE", Title = "Episodentitel (2)" }
+                }
             };
 
             _episode3 = new Episode
@@ -96,7 +121,12 @@ namespace NzbDrone.Core.Organizer
                 SeasonNumber = 1,
                 EpisodeNumber = 3,
                 Title = "Episode Title (3)",
-                AbsoluteEpisodeNumber = 3
+                AbsoluteEpisodeNumber = 3,
+                Translations = new List<EpisodeTranslation>
+                {
+                    new EpisodeTranslation { Language = "FR", Title = "Titre de l'épisode (3)" },
+                    new EpisodeTranslation { Language = "DE", Title = "Episodentitel (3)" }
+                }
             };
 
             _singleEpisode = new List<Episode> { _episode1 };

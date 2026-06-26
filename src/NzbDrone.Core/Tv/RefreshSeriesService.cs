@@ -112,6 +112,7 @@ namespace NzbDrone.Core.Tv
             series.Genres = seriesInfo.Genres;
             series.Certification = seriesInfo.Certification;
             series.OriginalCountry = seriesInfo.OriginalCountry;
+            series.Translations = seriesInfo.Translations;
 
             try
             {

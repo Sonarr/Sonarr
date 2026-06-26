@@ -64,10 +64,72 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
                 }
             }
 
-            var episodes = httpResponse.Resource.Episodes.Select(MapEpisode);
+            var episodes = httpResponse.Resource.Episodes.Select(MapEpisode).ToList();
             var series = MapSeries(httpResponse.Resource);
 
-            return new Tuple<Series, List<Episode>>(series, episodes.ToList());
+            FetchTranslations(series, episodes, tvdbSeriesId);
+
+            return new Tuple<Series, List<Episode>>(series, episodes);
+        }
+
+        private void FetchTranslations(Series series, List<Episode> episodes, int tvdbSeriesId)
+        {
+            var translationLanguages = new[] { "fr", "de", "es", "it", "pt", "nl", "ru", "ja", "ko", "zh", "ar" };
+
+            foreach (var language in translationLanguages)
+            {
+                try
+                {
+                    var translationRequest = _requestBuilder.Create()
+                                                            .SetSegment("route", "shows")
+                                                            .SetSegment("language", language, true)
+                                                            .Resource(tvdbSeriesId.ToString())
+                                                            .Build();
+
+                    translationRequest.AllowAutoRedirect = true;
+                    translationRequest.SuppressHttpError = true;
+
+                    var translationResponse = _httpClient.Get<ShowResource>(translationRequest);
+
+                    if (translationResponse.HasHttpError)
+                    {
+                        continue;
+                    }
+
+                    var translatedSeries = translationResponse.Resource;
+
+                    if (translatedSeries.Title != series.Title)
+                    {
+                        series.Translations.Add(new SeriesTranslation
+                        {
+                            Language = language.ToUpperInvariant(),
+                            Title = translatedSeries.Title,
+                            Overview = translatedSeries.Overview
+                        });
+                    }
+
+                    foreach (var translatedTvdbEpisode in translatedSeries.Episodes)
+                    {
+                        var episode = episodes.FirstOrDefault(e =>
+                            e.SeasonNumber == translatedTvdbEpisode.SeasonNumber &&
+                            e.EpisodeNumber == translatedTvdbEpisode.EpisodeNumber);
+
+                        if (episode != null && translatedTvdbEpisode.Title != episode.Title)
+                        {
+                            episode.Translations.Add(new EpisodeTranslation
+                            {
+                                Language = language.ToUpperInvariant(),
+                                Title = translatedTvdbEpisode.Title,
+                                Overview = translatedTvdbEpisode.Overview
+                            });
+                        }
+                    }
+                }
+                catch
+                {
+                    _logger.Trace("Failed to fetch translations for language: {0}", language);
+                }
+            }
         }
 
         public List<Series> SearchForNewSeriesByImdbId(string imdbId)

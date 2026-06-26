@@ -91,6 +91,7 @@ namespace NzbDrone.Core.Tv
                     episodeToUpdate.FinaleType = episode.FinaleType;
                     episodeToUpdate.Ratings = episode.Ratings;
                     episodeToUpdate.Images = episode.Images;
+                    episodeToUpdate.Translations = episode.Translations;
 
                     // TheTVDB has a severe lack of season/series finales, this helps smooth out that limitation so they can be displayed in the UI
                     if (series.Status == SeriesStatusType.Ended &&

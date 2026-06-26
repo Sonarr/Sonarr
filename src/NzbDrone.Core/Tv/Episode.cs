@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Tv
         public Episode()
         {
             Images = new List<MediaCover.MediaCover>();
+            Translations = new List<EpisodeTranslation>();
         }
 
         public const string AIR_DATE_FORMAT = "yyyy-MM-dd";
@@ -44,6 +45,8 @@ namespace NzbDrone.Core.Tv
         public LazyLoaded<EpisodeFile> EpisodeFile { get; set; }
 
         public Series Series { get; set; }
+
+        public List<EpisodeTranslation> Translations { get; set; }
 
         public bool HasFile => EpisodeFileId > 0;
         public bool AbsoluteEpisodeNumberAdded { get; set; }
@@ -79,5 +82,12 @@ namespace NzbDrone.Core.Tv
 
             return 0;
         }
+    }
+
+    public class EpisodeTranslation : IEmbeddedDocument
+    {
+        public string Language { get; set; }
+        public string Title { get; set; }
+        public string Overview { get; set; }
     }
 }

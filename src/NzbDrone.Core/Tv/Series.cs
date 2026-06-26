@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Tv
             OriginalLanguage = Language.English;
             MalIds = new HashSet<int>();
             AniListIds = new HashSet<int>();
+            Translations = new List<SeriesTranslation>();
         }
 
         public int TvdbId { get; set; }
@@ -61,6 +62,7 @@ namespace NzbDrone.Core.Tv
         public List<Season> Seasons { get; set; }
         public HashSet<int> Tags { get; set; }
         public AddSeriesOptions AddOptions { get; set; }
+        public List<SeriesTranslation> Translations { get; set; }
 
         public override string ToString()
         {
@@ -84,5 +86,12 @@ namespace NzbDrone.Core.Tv
             Tags = otherSeries.Tags;
             AddOptions = otherSeries.AddOptions;
         }
+    }
+
+    public class SeriesTranslation : IEmbeddedDocument
+    {
+        public string Language { get; set; }
+        public string Title { get; set; }
+        public string Overview { get; set; }
     }
 }

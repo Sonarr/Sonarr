@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Organizer
         private readonly ICached<bool> _patternHasEpisodeIdentifierCache;
         private readonly Logger _logger;
 
-        private static readonly Regex TitleRegex = new Regex(@"(?<escaped>\{\{|\}\})|\{(?<prefix>[- ._\[(]*)(?<token>(?:[a-z0-9]+)(?:(?<separator>[- ._]+)(?:[a-z0-9]+))?)(?::(?<customFormat>[ ,a-z0-9+-]+(?<![- ])))?(?<suffix>[- ._)\]]*)\}",
+        private static readonly Regex TitleRegex = new Regex(@"(?<escaped>\{\{|\}\})|\{(?<prefix>[- ._\[(]*)(?<token>(?:[a-z0-9]+)(?:(?<separator>[- ._]+)(?:[a-z0-9]+))?)(?::(?<customFormat>[ ,a-zA-Z0-9+-]+(?<![- ])))?(?<suffix>[- ._)\]]*)\}",
                                                              RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
         public static readonly Regex EpisodeRegex = new Regex(@"(?<episode>\{episode(?:\:0+)?})",
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Organizer
 
         public static readonly Regex AirDateRegex = new Regex(@"\{Air(\s|\W|_)Date\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public static readonly Regex SeriesTitleRegex = new Regex(@"(?<token>\{(?:Series)(?<separator>[- ._])(Clean)?Title(The)?(Without)?(Year)?(?::(?<customFormat>[0-9-]+))?\})",
+        public static readonly Regex SeriesTitleRegex = new Regex(@"(?<token>\{(?:Series)(?<separator>[- ._])(Clean)?Title(The)?(Without)?(Year)?(?::(?<customFormat>[a-zA-Z0-9-]+))?\})",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex FileNameCleanupRegex = new Regex(@"([- ._])(\1)+", RegexOptions.Compiled);
@@ -450,19 +450,19 @@ namespace NzbDrone.Core.Organizer
 
         private void AddSeriesTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series)
         {
-            tokenHandlers["{Series Title}"] = m => Truncate(series.Title, m.CustomFormat);
-            tokenHandlers["{Series CleanTitle}"] = m => Truncate(CleanTitle(series.Title), m.CustomFormat);
-            tokenHandlers["{Series TitleYear}"] = m => Truncate(TitleYear(series.Title, series.Year), m.CustomFormat);
-            tokenHandlers["{Series CleanTitleYear}"] = m => Truncate(CleanTitle(TitleYear(series.Title, series.Year)), m.CustomFormat);
-            tokenHandlers["{Series TitleWithoutYear}"] = m => Truncate(TitleWithoutYear(series.Title), m.CustomFormat);
-            tokenHandlers["{Series CleanTitleWithoutYear}"] = m => Truncate(CleanTitle(TitleWithoutYear(series.Title)), m.CustomFormat);
-            tokenHandlers["{Series TitleThe}"] = m => Truncate(TitleThe(series.Title), m.CustomFormat);
-            tokenHandlers["{Series CleanTitleThe}"] = m => Truncate(CleanTitleThe(series.Title), m.CustomFormat);
-            tokenHandlers["{Series TitleTheYear}"] = m => Truncate(TitleYear(TitleThe(series.Title), series.Year), m.CustomFormat);
-            tokenHandlers["{Series CleanTitleTheYear}"] = m => Truncate(CleanTitleTheYear(series.Title, series.Year), m.CustomFormat);
-            tokenHandlers["{Series TitleTheWithoutYear}"] = m => Truncate(TitleWithoutYear(TitleThe(series.Title)), m.CustomFormat);
-            tokenHandlers["{Series CleanTitleTheWithoutYear}"] = m => Truncate(CleanTitleThe(TitleWithoutYear(series.Title)), m.CustomFormat);
-            tokenHandlers["{Series TitleFirstCharacter}"] = m => Truncate(TitleFirstCharacter(TitleThe(series.Title)), m.CustomFormat);
+            tokenHandlers["{Series Title}"] = m => Truncate(GetTranslatedTitle(series.Title, m.CustomFormat, series.Translations), m.CustomFormat);
+            tokenHandlers["{Series CleanTitle}"] = m => Truncate(CleanTitle(GetTranslatedTitle(series.Title, m.CustomFormat, series.Translations)), m.CustomFormat);
+            tokenHandlers["{Series TitleYear}"] = m => Truncate(TitleYear(GetTranslatedTitle(series.Title, m.CustomFormat, series.Translations), series.Year), m.CustomFormat);
+            tokenHandlers["{Series CleanTitleYear}"] = m => Truncate(CleanTitle(TitleYear(GetTranslatedTitle(series.Title, m.CustomFormat, series.Translations), series.Year)), m.CustomFormat);
+            tokenHandlers["{Series TitleWithoutYear}"] = m => Truncate(TitleWithoutYear(GetTranslatedTitle(series.Title, m.CustomFormat, series.Translations)), m.CustomFormat);
+            tokenHandlers["{Series CleanTitleWithoutYear}"] = m => Truncate(CleanTitle(TitleWithoutYear(GetTranslatedTitle(series.Title, m.CustomFormat, series.Translations))), m.CustomFormat);
+            tokenHandlers["{Series TitleThe}"] = m => Truncate(TitleThe(GetTranslatedTitle(series.Title, m.CustomFormat, series.Translations)), m.CustomFormat);
+            tokenHandlers["{Series CleanTitleThe}"] = m => Truncate(CleanTitleThe(GetTranslatedTitle(series.Title, m.CustomFormat, series.Translations)), m.CustomFormat);
+            tokenHandlers["{Series TitleTheYear}"] = m => Truncate(TitleYear(TitleThe(GetTranslatedTitle(series.Title, m.CustomFormat, series.Translations)), series.Year), m.CustomFormat);
+            tokenHandlers["{Series CleanTitleTheYear}"] = m => Truncate(CleanTitleTheYear(GetTranslatedTitle(series.Title, m.CustomFormat, series.Translations), series.Year), m.CustomFormat);
+            tokenHandlers["{Series TitleTheWithoutYear}"] = m => Truncate(TitleWithoutYear(TitleThe(GetTranslatedTitle(series.Title, m.CustomFormat, series.Translations))), m.CustomFormat);
+            tokenHandlers["{Series CleanTitleTheWithoutYear}"] = m => Truncate(CleanTitleThe(TitleWithoutYear(GetTranslatedTitle(series.Title, m.CustomFormat, series.Translations))), m.CustomFormat);
+            tokenHandlers["{Series TitleFirstCharacter}"] = m => Truncate(TitleFirstCharacter(TitleThe(GetTranslatedTitle(series.Title, m.CustomFormat, series.Translations))), m.CustomFormat);
             tokenHandlers["{Series Year}"] = m => series.Year.ToString();
         }
 
@@ -617,8 +617,8 @@ namespace NzbDrone.Core.Organizer
 
         private void AddEpisodeTitleTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, List<Episode> episodes, int maxLength)
         {
-            tokenHandlers["{Episode Title}"] = m => GetEpisodeTitle(GetEpisodeTitles(episodes), "+", maxLength, m.CustomFormat);
-            tokenHandlers["{Episode CleanTitle}"] = m => GetEpisodeTitle(GetEpisodeTitles(episodes).Select(CleanTitle).ToList(), "and", maxLength, m.CustomFormat);
+            tokenHandlers["{Episode Title}"] = m => GetEpisodeTitle(GetEpisodeTitles(episodes, m.CustomFormat), "+", maxLength, m.CustomFormat);
+            tokenHandlers["{Episode CleanTitle}"] = m => GetEpisodeTitle(GetEpisodeTitles(episodes, m.CustomFormat).Select(CleanTitle).ToList(), "and", maxLength, m.CustomFormat);
         }
 
         private void AddEpisodeFileTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, EpisodeFile episodeFile, bool useCurrentFilenameAsFallback)
@@ -1013,24 +1013,24 @@ namespace NzbDrone.Core.Organizer
             });
         }
 
-        private List<string> GetEpisodeTitles(List<Episode> episodes)
+        private List<string> GetEpisodeTitles(List<Episode> episodes, string language = null)
         {
             if (episodes.Count == 1)
             {
                 return new List<string>
                        {
-                           episodes.First().Title.TrimEnd(EpisodeTitleTrimCharacters)
+                           GetTranslatedTitle(episodes.First().Title, language, episodes.First().Translations).TrimEnd(EpisodeTitleTrimCharacters)
                        };
             }
 
-            var titles = episodes.Select(c => c.Title.TrimEnd(EpisodeTitleTrimCharacters))
+            var titles = episodes.Select(c => GetTranslatedTitle(c.Title, language, c.Translations).TrimEnd(EpisodeTitleTrimCharacters))
                                  .Select(CleanupEpisodeTitle)
                                  .Distinct()
                                  .ToList();
 
             if (titles.All(t => t.IsNullOrWhiteSpace()))
             {
-                titles = episodes.Select(c => c.Title.TrimEnd(EpisodeTitleTrimCharacters))
+                titles = episodes.Select(c => GetTranslatedTitle(c.Title, language, c.Translations).TrimEnd(EpisodeTitleTrimCharacters))
                                  .Distinct()
                                  .ToList();
             }
@@ -1202,6 +1202,34 @@ namespace NzbDrone.Core.Organizer
             }
 
             return result.TrimStart(' ', '.').TrimEnd(' ');
+        }
+
+        private string GetTranslatedTitle(string originalTitle, string language, List<EpisodeTranslation> translations)
+        {
+            if (language != null && translations != null && translations.Count > 0)
+            {
+                var translation = translations.FirstOrDefault(t => t.Language == language.ToUpperInvariant());
+                if (translation != null && !translation.Title.IsNullOrWhiteSpace())
+                {
+                    return translation.Title;
+                }
+            }
+
+            return originalTitle;
+        }
+
+        private string GetTranslatedTitle(string originalTitle, string language, List<SeriesTranslation> translations)
+        {
+            if (language != null && translations != null && translations.Count > 0)
+            {
+                var translation = translations.FirstOrDefault(t => t.Language == language.ToUpperInvariant());
+                if (translation != null && !translation.Title.IsNullOrWhiteSpace())
+                {
+                    return translation.Title;
+                }
+            }
+
+            return originalTitle;
         }
 
         private string Truncate(string input, string formatter)
