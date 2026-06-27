@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { DragSourceMonitor, useDrag, useDrop, XYCoord } from 'react-dnd';
 import Icon from 'Components/Icon';
-import Link from 'Components/Link/Link';
+import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import DragType from 'Helpers/DragType';
@@ -196,12 +196,13 @@ function DelayProfile({
         <TagList tags={tags} tagList={tagList} />
 
         <div className={styles.actions}>
-          <Link
+          <IconButton
+            name={icons.EDIT}
+            aria-label={translate('EditDelayProfile')}
             className={id === 1 ? styles.editButton : undefined}
+            title={translate('EditDelayProfile')}
             onPress={handleEditDelayProfilePress}
-          >
-            <Icon name={icons.EDIT} />
-          </Link>
+          />
 
           {id === 1 ? null : (
             <div ref={dragRef} className={styles.dragHandle}>

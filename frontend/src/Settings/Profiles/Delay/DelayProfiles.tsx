@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import FieldSet from 'Components/FieldSet';
-import Icon from 'Components/Icon';
-import Link from 'Components/Link/Link';
+import IconButton from 'Components/Link/IconButton';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import Scroller from 'Components/Scroller/Scroller';
 import { icons, scrollDirections } from 'Helpers/Props';
@@ -136,12 +135,13 @@ function DelayProfiles() {
         </Scroller>
 
         <div className={styles.addDelayProfile}>
-          <Link
+          <IconButton
             className={styles.addButton}
+            name={icons.ADD}
+            aria-label={translate('AddDelayProfile')}
+            title={translate('AddDelayProfile')}
             onPress={handleAddDelayProfilePress}
-          >
-            <Icon name={icons.ADD} />
-          </Link>
+          />
         </div>
 
         <EditDelayProfileModal

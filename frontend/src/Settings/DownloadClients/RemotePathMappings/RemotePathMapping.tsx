@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
-import Icon from 'Components/Icon';
-import Link from 'Components/Link/Link';
+import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import { icons, kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
@@ -62,9 +61,12 @@ function RemotePathMapping({
       <div className={styles.path}>{localPath}</div>
 
       <div className={styles.actions}>
-        <Link onPress={handleEditRemotePathMappingPress}>
-          <Icon name={icons.EDIT} />
-        </Link>
+        <IconButton
+          name={icons.EDIT}
+          aria-label={translate('EditRemotePathMapping')}
+          title={translate('EditRemotePathMapping')}
+          onPress={handleEditRemotePathMappingPress}
+        />
       </div>
 
       <EditRemotePathMappingModal
