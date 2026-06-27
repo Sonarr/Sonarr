@@ -71,6 +71,7 @@ function Tag({ id, label }: TagProps) {
     <Card
       className={styles.tag}
       overlayContent={true}
+      aria-label={translate('TagDetails', { label })}
       onPress={handleShowDetailsPress}
     >
       <div className={styles.label}>{label}</div>

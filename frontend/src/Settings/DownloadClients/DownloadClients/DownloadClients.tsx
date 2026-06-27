@@ -72,6 +72,7 @@ function DownloadClients() {
 
           <Card
             className={styles.addDownloadClient}
+            aria-label={translate('AddDownloadClient')}
             onPress={handleAddDownloadClientPress}
           >
             <div className={styles.center}>

@@ -74,6 +74,7 @@ function Notification({
     <Card
       className={styles.notification}
       overlayContent={true}
+      aria-label={translate('EditConnectionName', { name })}
       onPress={handleEditNotificationPress}
     >
       <div className={styles.name}>{name}</div>
