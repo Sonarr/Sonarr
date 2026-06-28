@@ -163,13 +163,8 @@ function History() {
 
       <PageContentBody>
         <PageHeading
-          scope={`${translate('Activity')} · ${translate('History')}`}
+          scope={translate('Activity')}
           title={translate('History')}
-          meta={
-            totalRecords > 0
-              ? [translate('HistoryEventsCount', { count: totalRecords })]
-              : [translate('HistoryNoEvents')]
-          }
         />
 
         {isFetchingAny && !isAllPopulated ? <LoadingIndicator /> : null}
@@ -210,7 +205,6 @@ function History() {
               page={page}
               totalPages={totalPages}
               totalRecords={totalRecords}
-              showTotalRecords={false}
               isFetching={isFetching}
               onPageSelect={goToPage}
             />

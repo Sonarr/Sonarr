@@ -240,18 +240,7 @@ function QueueContent() {
   if (!shouldBlockRefresh.current) {
     currentQueue.current = (
       <PageContentBody>
-        <PageHeading
-          scope={`${translate('Activity')} · ${translate('Queue')}`}
-          title={translate('Queue')}
-          meta={
-            count > 0
-              ? [
-                  translate('QueueActiveCount', { count }),
-                  translate('QueueRecordsCount', { count: totalRecords }),
-                ]
-              : [translate('QueueNoActiveDownloads')]
-          }
-        />
+        <PageHeading scope={translate('Activity')} title={translate('Queue')} />
 
         {isRefreshing && !isAllPopulated ? <LoadingIndicator /> : null}
 
@@ -301,7 +290,6 @@ function QueueContent() {
               page={page}
               totalPages={totalPages}
               totalRecords={totalRecords}
-              showTotalRecords={false}
               isFetching={isFetching}
               onPageSelect={goToPage}
             />
