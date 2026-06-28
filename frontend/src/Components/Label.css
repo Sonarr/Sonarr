@@ -7,6 +7,7 @@
   border-radius: 999px;
   background-color: var(--paperWarm);
   color: var(--inkSoft);
+  vertical-align: middle;
   text-align: center;
   white-space: nowrap;
   letter-spacing: 0.06em;
@@ -34,6 +35,10 @@
 }
 
 .hasIcon::before {
+  display: none;
+}
+
+.outline::before {
   display: none;
 }
 
