@@ -9,7 +9,7 @@ import Episode from 'Episode/Episode';
 import useEpisode, { EpisodeEntity } from 'Episode/useEpisode';
 import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
 import { useDeleteEpisodeFile } from 'EpisodeFile/useEpisodeFiles';
-import { icons, kinds, sizes } from 'Helpers/Props';
+import { icons, sizes } from 'Helpers/Props';
 import Series from 'Series/Series';
 import { useSingleSeries } from 'Series/useSeries';
 import QualityProfileName from 'Settings/Profiles/Quality/QualityProfileName';
@@ -131,7 +131,7 @@ function EpisodeSummary({
             {translate('QualityProfile')}
           </span>
 
-          <Label kind={kinds.PRIMARY} size={sizes.MEDIUM}>
+          <Label outline={true} size={sizes.MEDIUM}>
             <QualityProfileName qualityProfileId={qualityProfileId} />
           </Label>
         </div>
