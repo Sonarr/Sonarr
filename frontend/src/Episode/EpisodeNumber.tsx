@@ -114,7 +114,12 @@ function EpisodeNumber(props: EpisodeNumberProps) {
         />
       ) : (
         <span>
-          {showSeasonNumber && seasonNumber != null && <>{seasonNumber}x</>}
+          {showSeasonNumber && seasonNumber != null && (
+            <>
+              {seasonNumber}
+              <span className={styles.separator}>x</span>
+            </>
+          )}
 
           {showSeasonNumber ? padNumber(episodeNumber, 2) : episodeNumber}
 
