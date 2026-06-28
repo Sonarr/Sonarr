@@ -2,7 +2,8 @@ import React from 'react';
 import Link, { LinkProps } from 'Components/Link/Link';
 import styles from './Card.css';
 
-interface CardProps extends Pick<LinkProps, 'onPress'> {
+interface CardProps
+  extends Pick<LinkProps, 'aria-label' | 'onPress' | 'title'> {
   // TODO: Consider using different properties for classname depending if it's overlaying content or not
   className?: string;
   overlayClassName?: string;
@@ -16,13 +17,20 @@ function Card(props: CardProps) {
     overlayClassName = styles.overlay,
     overlayContent = false,
     children,
+    'aria-label': ariaLabel,
     onPress,
+    title,
   } = props;
 
   if (overlayContent) {
     return (
       <div className={className}>
-        <Link className={styles.underlay} onPress={onPress} />
+        <Link
+          className={styles.underlay}
+          aria-label={ariaLabel}
+          title={title}
+          onPress={onPress}
+        />
 
         <div className={overlayClassName}>{children}</div>
       </div>
@@ -30,7 +38,12 @@ function Card(props: CardProps) {
   }
 
   return (
-    <Link className={className} onPress={onPress}>
+    <Link
+      className={className}
+      aria-label={ariaLabel}
+      title={title}
+      onPress={onPress}
+    >
       {children}
     </Link>
   );

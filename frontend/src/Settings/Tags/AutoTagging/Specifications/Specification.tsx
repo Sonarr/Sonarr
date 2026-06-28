@@ -80,6 +80,9 @@ export default function Specification({
     <Card
       className={styles.autoTagging}
       overlayContent={true}
+      aria-label={translate('EditConditionImplementation', {
+        implementationName,
+      })}
       onPress={onEditPress}
     >
       <div className={styles.nameContainer}>

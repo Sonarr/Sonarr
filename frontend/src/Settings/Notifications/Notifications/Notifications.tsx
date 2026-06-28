@@ -59,6 +59,7 @@ function Notifications() {
 
           <Card
             className={styles.addNotification}
+            aria-label={translate('AddConnection')}
             onPress={handleAddNotificationPress}
           >
             <div className={styles.center}>
