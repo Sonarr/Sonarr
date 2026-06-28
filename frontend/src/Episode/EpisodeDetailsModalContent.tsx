@@ -98,15 +98,15 @@ function EpisodeDetailsModalContent({
           <span className={styles.scope}>
             <span className={styles.scopeSeries}>{seriesTitle}</span>
 
-            <span className={styles.scopeSeparator}>·</span>
-
-            <SeasonEpisodeNumber
-              seasonNumber={seasonNumber}
-              episodeNumber={episodeNumber}
-              absoluteEpisodeNumber={absoluteEpisodeNumber}
-              airDate={airDate}
-              seriesType={seriesType}
-            />
+            <span className={styles.scopeEpisode}>
+              <SeasonEpisodeNumber
+                seasonNumber={seasonNumber}
+                episodeNumber={episodeNumber}
+                absoluteEpisodeNumber={absoluteEpisodeNumber}
+                airDate={airDate}
+                seriesType={seriesType}
+              />
+            </span>
           </span>
         </div>
 
