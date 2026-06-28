@@ -6,6 +6,14 @@
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+
+  &::after {
+    flex: 1;
+    height: 1px;
+    background-color: var(--inputBorderColor);
+    content: "";
+    opacity: 0.5;
+  }
 }
 
 .scope {
@@ -19,13 +27,6 @@
   font-family: $monoSpaceFontFamily;
 }
 
-.scopeLine::after {
-  flex: 1;
-  height: 1px;
-  background-color: var(--inputBorderColor);
-  content: "";
-  opacity: 0.5;
-}
 
 .row {
   display: flex;
@@ -67,7 +68,7 @@
   color: var(--inkMuted);
   white-space: nowrap;
   letter-spacing: 0.04em;
-  font-size: 11px;
+  font-size: 13px;
   font-family: $monoSpaceFontFamily;
   gap: 6px;
 }

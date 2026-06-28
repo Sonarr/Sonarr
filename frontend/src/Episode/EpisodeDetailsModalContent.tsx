@@ -93,30 +93,34 @@ function EpisodeDetailsModalContent({
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>
-        <MonitorToggleButton
-          monitored={monitored}
-          size={18}
-          isDisabled={!seriesMonitored}
-          isSaving={isToggling}
-          onPress={handleMonitorEpisodePress}
-        />
+      <ModalHeader className={styles.header}>
+        <div className={styles.scopeLine}>
+          <span className={styles.scope}>
+            <span className={styles.scopeSeries}>{seriesTitle}</span>
 
-        <span className={styles.seriesTitle}>{seriesTitle}</span>
+            <span className={styles.scopeEpisode}>
+              <SeasonEpisodeNumber
+                seasonNumber={seasonNumber}
+                episodeNumber={episodeNumber}
+                absoluteEpisodeNumber={absoluteEpisodeNumber}
+                airDate={airDate}
+                seriesType={seriesType}
+              />
+            </span>
+          </span>
+        </div>
 
-        <span className={styles.separator}>-</span>
+        <div className={styles.titleRow}>
+          <MonitorToggleButton
+            monitored={monitored}
+            size={18}
+            isDisabled={!seriesMonitored}
+            isSaving={isToggling}
+            onPress={handleMonitorEpisodePress}
+          />
 
-        <SeasonEpisodeNumber
-          seasonNumber={seasonNumber}
-          episodeNumber={episodeNumber}
-          absoluteEpisodeNumber={absoluteEpisodeNumber}
-          airDate={airDate}
-          seriesType={seriesType}
-        />
-
-        <span className={styles.separator}>-</span>
-
-        {episodeTitle}
+          <span className={styles.episodeTitle}>{episodeTitle}</span>
+        </div>
       </ModalHeader>
 
       <ModalBody>

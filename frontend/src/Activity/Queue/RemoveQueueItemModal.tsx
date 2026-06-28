@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Button from 'Components/Link/Button';
 import Modal from 'Components/Modal/Modal';
@@ -154,56 +155,58 @@ function RemoveQueueItemModal(props: RemoveQueueItemModalProps) {
         <ModalHeader>{title}</ModalHeader>
 
         <ModalBody>
-          <div className={styles.message}>{message}</div>
+          <p className={styles.intro}>{message}</p>
 
           {isPending ? null : (
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('RemoveQueueItemRemovalMethod')}</FormLabel>
 
-              <FormInputGroup
+              <FormInputHelpText
+                text={translate('RemoveQueueItemRemovalMethodHelpTextWarning')}
+                isWarning={true}
+              />
+              {!canChangeCategory && !canIgnore ? (
+                <FormInputHelpText
+                  text={translate(
+                    'RemoveQueueItemRemovalMethodDisabledHelpText',
+                    {
+                      downloadClient: downloadClient
+                        ? downloadClient
+                        : translate('DownloadClient'),
+                    }
+                  )}
+                />
+              ) : null}
+
+              <FormInput
                 type={inputTypes.SELECT}
                 name="removalMethod"
                 value={removalMethod}
                 values={removalMethodOptions}
                 isDisabled={!canChangeCategory && !canIgnore}
-                helpText={
-                  !canChangeCategory && !canIgnore
-                    ? translate(
-                        'RemoveQueueItemRemovalMethodDisabledHelpText',
-                        {
-                          downloadClient: downloadClient
-                            ? downloadClient
-                            : translate('DownloadClient'),
-                        }
-                      )
-                    : undefined
-                }
-                helpTextWarning={translate(
-                  'RemoveQueueItemRemovalMethodHelpTextWarning'
-                )}
                 // @ts-expect-error - The typing for inputs needs more work
                 onChange={handleRemovalOptionInputChange}
               />
-            </FormGroup>
+            </FormRow>
           )}
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>
               {multipleSelected
                 ? translate('BlocklistReleases')
                 : translate('BlocklistRelease')}
             </FormLabel>
 
-            <FormInputGroup
+            <FormInputHelpText text={translate('BlocklistReleaseHelpText')} />
+            <FormInput
               type={inputTypes.SELECT}
               name="blocklistMethod"
               value={blocklistMethod}
               values={blocklistMethodOptions}
-              helpText={translate('BlocklistReleaseHelpText')}
               // @ts-expect-error - The typing for inputs needs more work
               onChange={handleRemovalOptionInputChange}
             />
-          </FormGroup>
+          </FormRow>
         </ModalBody>
 
         <ModalFooter>

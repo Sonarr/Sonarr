@@ -19,6 +19,7 @@
 
 .right {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: min-content min-content 1fr;
 }
 
 .right > :last-child {
@@ -45,6 +46,7 @@
 @media only screen and (max-width: 992px) {
   .right {
     grid-template-columns: 1fr;
+    grid-template-rows: none;
     row-gap: 8px;
   }
 

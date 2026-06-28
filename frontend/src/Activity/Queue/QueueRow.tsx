@@ -210,7 +210,7 @@ function QueueRow(props: QueueRowProps) {
                   title={series.title}
                 />
               ) : (
-                title
+                <span className={styles.unmatchedTitle}>{title}</span>
               )}
             </TableRowCell>
           );
