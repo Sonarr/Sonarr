@@ -1293,7 +1293,7 @@
   "MonitorEpisodes": "Monitor Episodes",
   "MonitorEpisodesModalInfo": "This setting will only adjust which episodes or seasons are monitored within a series. Selecting None will unmonitor the series",
   "MonitorExistingEpisodes": "Existing Episodes",
-  "MonitorExistingEpisodesDescription": "Monitor episodes that have files or have not aired yet",
+  "MonitorExistingEpisodesDescription": "Monitor episodes that have files",
   "MonitorFirstSeason": "First Season",
   "MonitorFirstSeasonDescription": "Monitor all episodes of the first season. All other seasons will be ignored",
   "MonitorFutureEpisodes": "Future Episodes",
