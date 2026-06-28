@@ -5,8 +5,8 @@ interface CssExports {
   'header': string;
   'openSeriesButton': string;
   'scope': string;
+  'scopeEpisode': string;
   'scopeLine': string;
-  'scopeSeparator': string;
   'scopeSeries': string;
   'selectedTab': string;
   'tab': string;
