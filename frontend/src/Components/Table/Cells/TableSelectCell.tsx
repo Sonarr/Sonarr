@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import CheckInput from 'Components/Form/CheckInput';
 import { CheckInputChanged } from 'typings/inputs';
 import { SelectStateInputProps } from 'typings/props';
+import translate from 'Utilities/String/translate';
 import TableRowCell, { TableRowCellProps } from './TableRowCell';
 import styles from './TableSelectCell.css';
 
@@ -49,6 +50,7 @@ function TableSelectCell<T extends number | string = number>({
       <CheckInput
         className={styles.input}
         name={id.toString()}
+        ariaLabel={translate('SelectRow')}
         value={isSelected}
         {...otherProps}
         onChange={handleChange}
