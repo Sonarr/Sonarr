@@ -294,15 +294,8 @@ function MissingContent() {
 
         <PageContentBody>
           <PageHeading
-            scope={`${translate('Activity')} · ${translate(
-              'Wanted'
-            )} · ${translate('Missing')}`}
+            scope={translate('Wanted')}
             title={translate('Missing')}
-            meta={
-              totalRecords > 0
-                ? [translate('MissingEpisodesCount', { count: totalRecords })]
-                : [translate('MissingNothingMissing')]
-            }
           />
 
           {isFetching && isLoading ? <LoadingIndicator /> : null}
@@ -342,7 +335,6 @@ function MissingContent() {
                 page={page}
                 totalPages={totalPages}
                 totalRecords={totalRecords}
-                showTotalRecords={false}
                 isFetching={isFetching}
                 onPageSelect={goToPage}
               />

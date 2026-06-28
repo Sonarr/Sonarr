@@ -277,15 +277,8 @@ function CutoffUnmetContent() {
 
         <PageContentBody>
           <PageHeading
-            scope={`${translate('Activity')} · ${translate(
-              'Wanted'
-            )} · ${translate('CutoffUnmet')}`}
+            scope={translate('Wanted')}
             title={translate('CutoffUnmet')}
-            meta={
-              totalRecords > 0
-                ? [translate('CutoffUnmetBelowCount', { count: totalRecords })]
-                : [translate('CutoffUnmetAllCaughtUp')]
-            }
           />
 
           {isFetching && isLoading ? <LoadingIndicator /> : null}
@@ -331,7 +324,6 @@ function CutoffUnmetContent() {
                 page={page}
                 totalPages={totalPages}
                 totalRecords={totalRecords}
-                showTotalRecords={false}
                 isFetching={isFetching}
                 onPageSelect={goToPage}
               />

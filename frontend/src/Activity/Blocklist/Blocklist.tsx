@@ -220,17 +220,8 @@ function BlocklistContent() {
 
       <PageContentBody>
         <PageHeading
-          scope={`${translate('Activity')} · ${translate('Blocklist')}`}
+          scope={translate('Activity')}
           title={translate('Blocklist')}
-          meta={
-            totalRecords > 0
-              ? [
-                  translate('BlocklistReleasesHeldCount', {
-                    count: totalRecords,
-                  }),
-                ]
-              : [translate('Empty')]
-          }
         />
 
         {isLoading && !isFetched ? <LoadingIndicator /> : null}
@@ -273,7 +264,6 @@ function BlocklistContent() {
               page={page}
               totalPages={totalPages}
               totalRecords={totalRecords}
-              showTotalRecords={false}
               isFetching={isFetching}
               onPageSelect={goToPage}
             />
