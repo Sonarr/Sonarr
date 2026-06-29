@@ -1497,6 +1497,61 @@
             }
           },
           {
+            "name": "seriesIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "qualityProfileIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "seriesType",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/SeriesTypes"
+              }
+            }
+          },
+          {
+            "name": "seriesTags",
+            "in": "query",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "quality",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
             "name": "includeSubresources",
             "in": "query",
             "schema": {
@@ -5009,6 +5064,50 @@
             }
           },
           {
+            "name": "seriesIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "qualityProfileIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "seriesType",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/SeriesTypes"
+              }
+            }
+          },
+          {
+            "name": "seriesTags",
+            "in": "query",
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
             "name": "includeSubresources",
             "in": "query",
             "schema": {
@@ -7128,6 +7227,104 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/statistics": {
+      "get": {
+        "tags": [
+          "Statistics"
+        ],
+        "parameters": [
+          {
+            "name": "rootFolderPaths",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "rootFolderPathsNot",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "tagIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "tagIdsNot",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "qualityProfileIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "qualityProfileIdsNot",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "monitored",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "seriesTypes",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/SeriesTypes"
+              }
+            }
+          },
+          {
+            "name": "seriesTypesNot",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatisticsResource"
+                }
+              }
+            }
           }
         }
       }
@@ -11369,6 +11566,35 @@
         },
         "additionalProperties": false
       },
+      "QualityProfileStatisticsResource": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "qualityProfileId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "seriesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "episodeFileCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sizeOnDisk": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
       "QualitySource": {
         "enum": [
           "unknown",
@@ -11381,6 +11607,26 @@
           "blurayRaw"
         ],
         "type": "string"
+      },
+      "QualityStatisticsResource": {
+        "required": [
+          "quality"
+        ],
+        "type": "object",
+        "properties": {
+          "quality": {
+            "$ref": "#/components/schemas/Quality"
+          },
+          "episodeFileCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sizeOnDisk": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
       },
       "QueueBulkResource": {
         "required": [
@@ -12791,6 +13037,118 @@
         ],
         "type": "string"
       },
+      "StatisticsResource": {
+        "required": [
+          "qualityProfileStatistics",
+          "qualityStatistics",
+          "tagStatistics"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seriesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monitoredSeriesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "completedSeriesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "continuingSeriesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "endedSeriesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "upcomingSeriesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deletedSeriesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "standardSeriesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dailySeriesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "animeSeriesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seasonCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "completedSeasonCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalEpisodeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monitoredEpisodeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "downloadedEpisodeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "missingEpisodeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unairedEpisodeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "episodeFileCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sizeOnDisk": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "qualityProfileStatistics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QualityProfileStatisticsResource"
+            },
+            "nullable": true
+          },
+          "qualityStatistics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QualityStatisticsResource"
+            },
+            "nullable": true
+          },
+          "tagStatistics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TagStatisticsResource"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "SystemResource": {
         "required": [
           "appData",
@@ -13021,6 +13379,35 @@
           "label": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TagStatisticsResource": {
+        "required": [
+          "label"
+        ],
+        "type": "object",
+        "properties": {
+          "tagId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "seriesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "episodeFileCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sizeOnDisk": {
+            "type": "integer",
+            "format": "int64"
           }
         },
         "additionalProperties": false
@@ -13521,6 +13908,9 @@
     },
     {
       "name": "SeriesLookup"
+    },
+    {
+      "name": "Statistics"
     },
     {
       "name": "System"
