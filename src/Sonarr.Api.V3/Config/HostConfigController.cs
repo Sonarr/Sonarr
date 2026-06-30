@@ -13,6 +13,7 @@ using NzbDrone.Core.Validation.Paths;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Sonarr.Http.Validation;
 
 namespace Sonarr.Api.V3.Config
 {

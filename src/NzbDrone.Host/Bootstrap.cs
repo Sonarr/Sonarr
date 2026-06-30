@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using DryIoc;
@@ -19,6 +19,7 @@ using NzbDrone.Common.Composition.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.Options;
@@ -199,7 +200,13 @@ namespace NzbDrone.Host
                         {
                             options.ConfigureHttpsDefaults(configureOptions =>
                             {
-                                configureOptions.ServerCertificate = ValidateSslCertificate(sslCertPath, sslKeyPath, sslCertPassword);
+                                var sslContext = ValidateSslCertificate(sslCertPath, sslKeyPath, sslCertPassword);
+
+                                configureOptions.ServerCertificate = sslContext.TargetCertificate;
+                                configureOptions.OnAuthenticate = (_, authOptions) =>
+                                {
+                                    authOptions.ServerCertificateContext = sslContext;
+                                };
                             });
                         }
                     });
@@ -279,26 +286,11 @@ namespace NzbDrone.Host
             return $"{scheme}://{bindAddress}:{port}";
         }
 
-        private static X509Certificate2 ValidateSslCertificate(string cert, string key, string password)
+        private static SslStreamCertificateContext ValidateSslCertificate(string cert, string key, string password)
         {
-            X509Certificate2 certificate;
-
             try
             {
-                var type = X509Certificate2.GetCertContentType(cert);
-
-                if (type == X509ContentType.Cert)
-                {
-                    certificate = X509Certificate2.CreateFromPemFile(cert, key.IsNullOrWhiteSpace() ? null : key);
-                }
-                else if (type == X509ContentType.Pkcs12)
-                {
-                    certificate = X509CertificateLoader.LoadPkcs12FromFile(cert, password, X509KeyStorageFlags.DefaultKeySet);
-                }
-                else
-                {
-                    throw new SonarrStartupException($"Invalid certificate type: {type}");
-                }
+                return SslCertificateLoader.LoadCertificateContext(cert, key, password);
             }
             catch (CryptographicException ex)
             {
@@ -314,8 +306,6 @@ namespace NzbDrone.Host
             {
                 throw new SonarrStartupException(ex);
             }
-
-            return certificate;
         }
 
         private static bool RunWithRestartCheck(IHost host)

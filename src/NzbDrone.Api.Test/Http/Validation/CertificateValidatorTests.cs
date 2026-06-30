@@ -1,0 +1,102 @@
+using FluentAssertions;
+using FluentValidation;
+using FluentValidation.TestHelper;
+using NUnit.Framework;
+using NzbDrone.Test.Common;
+using Sonarr.Http.Validation;
+
+namespace NzbDrone.Api.Test.Http.Validation;
+
+[TestFixture]
+public class CertificateValidatorTests : TestBase
+{
+    private SslTestCertificates _certs;
+
+    private class TestSslCertificateResource : ISslCertificateResource
+    {
+        public string SslCertPath { get; set; }
+        public string SslKeyPath { get; set; }
+        public string SslCertPassword { get; set; }
+    }
+
+    private class TestCertValidator : AbstractValidator<TestSslCertificateResource>
+    {
+        public TestCertValidator() => RuleFor(x => x.SslCertPath).IsValidCertificate();
+    }
+
+    private readonly TestCertValidator _validator = new();
+
+    [OneTimeSetUp]
+    public void CreateTestCertificates()
+    {
+        _certs = new SslTestCertificates(TempFolder);
+    }
+
+    [Test]
+    public void validate_fails_when_cert_path_is_null()
+    {
+        var resource = new TestSslCertificateResource { SslCertPath = null };
+
+        var result = _validator.TestValidate(resource);
+
+        result.ShouldHaveValidationErrorFor(r => r.SslCertPath);
+    }
+
+    [Test]
+    public void validate_passes_for_valid_pem_certificate()
+    {
+        var resource = new TestSslCertificateResource
+        {
+            SslCertPath = _certs.LeafOnlyPemPath,
+            SslKeyPath = _certs.LeafKeyPath
+        };
+
+        var result = _validator.TestValidate(resource);
+
+        result.ShouldNotHaveAnyValidationErrors();
+    }
+
+    [Test]
+    public void validate_passes_for_valid_pkcs12_certificate()
+    {
+        var resource = new TestSslCertificateResource
+        {
+            SslCertPath = _certs.PfxPath,
+            SslCertPassword = SslTestCertificates.PfxPassword
+        };
+
+        var result = _validator.TestValidate(resource);
+
+        result.ShouldNotHaveAnyValidationErrors();
+    }
+
+    [Test]
+    public void validate_fails_for_pem_with_wrong_key()
+    {
+        var resource = new TestSslCertificateResource
+        {
+            SslCertPath = _certs.LeafOnlyPemPath,
+            SslKeyPath = _certs.WrongKeyPath
+        };
+
+        var result = _validator.TestValidate(resource);
+
+        result.ShouldHaveValidationErrorFor(r => r.SslCertPath);
+        result.Errors.Should().Contain(e => e.ErrorMessage.Contains("key"));
+    }
+
+    [Test]
+    public void validate_fails_for_pkcs12_with_wrong_password()
+    {
+        var resource = new TestSslCertificateResource
+        {
+            SslCertPath = _certs.PfxPath,
+            SslCertPassword = "wrong-password"
+        };
+
+        var result = _validator.TestValidate(resource);
+
+        result.ShouldHaveValidationErrorFor(r => r.SslCertPath);
+        result.Errors.Should().Contain(e => e.ErrorMessage.Contains("password"));
+    }
+}

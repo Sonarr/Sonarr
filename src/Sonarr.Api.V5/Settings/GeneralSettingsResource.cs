@@ -4,10 +4,11 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Security;
 using NzbDrone.Core.Update;
 using Sonarr.Http.REST;
+using Sonarr.Http.Validation;
 
 namespace Sonarr.Api.V5.Settings;
 
-public class GeneralSettingsResource : RestResource
+public class GeneralSettingsResource : RestResource, ISslCertificateResource
 {
     public string? BindAddress { get; set; }
     public int Port { get; set; }
