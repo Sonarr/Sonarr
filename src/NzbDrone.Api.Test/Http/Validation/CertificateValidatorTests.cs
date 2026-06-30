@@ -8,7 +8,7 @@ using Sonarr.Http.Validation;
 namespace NzbDrone.Api.Test.Http.Validation;
 
 [TestFixture]
-public class CertificateValidatorTests
+public class CertificateValidatorTests : TestBase
 {
     private SslTestCertificates _certs;
 
@@ -29,13 +29,7 @@ public class CertificateValidatorTests
     [OneTimeSetUp]
     public void CreateTestCertificates()
     {
-        _certs = new SslTestCertificates();
-    }
-
-    [OneTimeTearDown]
-    public void DeleteTestCertificates()
-    {
-        _certs?.Dispose();
+        _certs = new SslTestCertificates(TempFolder);
     }
 
     [Test]

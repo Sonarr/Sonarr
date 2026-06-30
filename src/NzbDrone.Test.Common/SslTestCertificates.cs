@@ -5,15 +5,12 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace NzbDrone.Test.Common;
 
-public class SslTestCertificates : IDisposable
+public class SslTestCertificates
 {
     public const string PfxPassword = "test-password";
 
-    public SslTestCertificates()
+    public SslTestCertificates(string baseDir)
     {
-        TempDir = Path.Combine(Path.GetTempPath(), $"sonarr-ssl-test-{Guid.NewGuid()}");
-        Directory.CreateDirectory(TempDir);
-
         using var rootKey = RSA.Create(2048);
         var rootReq = new CertificateRequest("CN=Test Root CA", rootKey, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
         rootReq.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, false, 0, true));
@@ -32,31 +29,30 @@ public class SslTestCertificates : IDisposable
         using var leafCert = leafCertPublic.CopyWithPrivateKey(leafKey);
         LeafSerialNumber = leafCert.SerialNumber;
 
-        ChainPemPath = Path.Combine(TempDir, "chain.pem");
+        ChainPemPath = Path.Combine(baseDir, "chain.pem");
         File.WriteAllText(ChainPemPath,
             leafCert.ExportCertificatePem() + "\n" +
             interCert.ExportCertificatePem() + "\n" +
             rootCert.ExportCertificatePem());
 
-        LeafOnlyPemPath = Path.Combine(TempDir, "leaf.pem");
+        LeafOnlyPemPath = Path.Combine(baseDir, "leaf.pem");
         File.WriteAllText(LeafOnlyPemPath, leafCert.ExportCertificatePem());
 
-        LeafKeyPath = Path.Combine(TempDir, "leaf.key");
+        LeafKeyPath = Path.Combine(baseDir, "leaf.key");
         File.WriteAllText(LeafKeyPath, leafKey.ExportRSAPrivateKeyPem());
 
         using var wrongKey = RSA.Create(2048);
-        WrongKeyPath = Path.Combine(TempDir, "wrong.key");
+        WrongKeyPath = Path.Combine(baseDir, "wrong.key");
         File.WriteAllText(WrongKeyPath, wrongKey.ExportRSAPrivateKeyPem());
 
-        PfxPath = Path.Combine(TempDir, "cert.pfx");
+        PfxPath = Path.Combine(baseDir, "cert.pfx");
         File.WriteAllBytes(PfxPath, leafCert.Export(X509ContentType.Pkcs12, PfxPassword));
 
         var noPkeyCollection = new X509Certificate2Collection(X509CertificateLoader.LoadCertificate(leafCert.RawData));
-        PfxNoKeyPath = Path.Combine(TempDir, "cert-no-key.pfx");
+        PfxNoKeyPath = Path.Combine(baseDir, "cert-no-key.pfx");
         File.WriteAllBytes(PfxNoKeyPath, noPkeyCollection.Export(X509ContentType.Pkcs12, "") ?? []);
     }
 
-    public string TempDir { get; }
     public string ChainPemPath { get; }
     public string LeafOnlyPemPath { get; }
     public string LeafKeyPath { get; }
@@ -65,12 +61,4 @@ public class SslTestCertificates : IDisposable
     public string PfxNoKeyPath { get; }
     public string LeafSerialNumber { get; }
     public string IntermediateSerialNumber { get; }
-
-    public void Dispose()
-    {
-        if (Directory.Exists(TempDir))
-        {
-            Directory.Delete(TempDir, recursive: true);
-        }
-    }
 }
