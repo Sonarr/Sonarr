@@ -9,16 +9,6 @@ public class SslTestCertificates : IDisposable
 {
     public const string PfxPassword = "test-password";
 
-    public string TempDir { get; }
-    public string ChainPemPath { get; }
-    public string LeafOnlyPemPath { get; }
-    public string LeafKeyPath { get; }
-    public string WrongKeyPath { get; }
-    public string PfxPath { get; }
-    public string PfxNoKeyPath { get; }
-    public string LeafSerialNumber { get; }
-    public string IntermediateSerialNumber { get; }
-
     public SslTestCertificates()
     {
         TempDir = Path.Combine(Path.GetTempPath(), $"sonarr-ssl-test-{Guid.NewGuid()}");
@@ -65,6 +55,16 @@ public class SslTestCertificates : IDisposable
         PfxNoKeyPath = Path.Combine(TempDir, "cert-no-key.pfx");
         File.WriteAllBytes(PfxNoKeyPath, noPkeyCollection.Export(X509ContentType.Pkcs12, "") ?? []);
     }
+
+    public string TempDir { get; }
+    public string ChainPemPath { get; }
+    public string LeafOnlyPemPath { get; }
+    public string LeafKeyPath { get; }
+    public string WrongKeyPath { get; }
+    public string PfxPath { get; }
+    public string PfxNoKeyPath { get; }
+    public string LeafSerialNumber { get; }
+    public string IntermediateSerialNumber { get; }
 
     public void Dispose()
     {

@@ -15,7 +15,7 @@ public class CertificateValidator : PropertyValidator
 
     protected override bool IsValid(PropertyValidatorContext context)
     {
-        if (context.PropertyValue == null)
+        if (context == null || context.PropertyValue == null)
         {
             return false;
         }
