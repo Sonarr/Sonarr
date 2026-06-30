@@ -8,20 +8,14 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Common.Test.Http;
 
 [TestFixture]
-public class SslCertificateLoaderFixture
+public class SslCertificateLoaderFixture : TestBase
 {
     private SslTestCertificates _certs;
 
     [OneTimeSetUp]
     public void CreateTestCertificates()
     {
-        _certs = new SslTestCertificates();
-    }
-
-    [OneTimeTearDown]
-    public void DeleteTestCertificates()
-    {
-        _certs?.Dispose();
+        _certs = new SslTestCertificates(TempFolder);
     }
 
     [Test]
