@@ -225,7 +225,7 @@ namespace NzbDrone.Core.ImportLists
                 // Break if Series Exists in DB, if it exists, update the tags with the tags in the import list and move to the next item
                 if (existingTvdbIds.Any(x => x == item.TvdbId))
                 {
-                    TagExisting(importList, item);
+                    UpdateTagsOnExistingSeries(importList, item);
                     _logger.Debug("{0} [{1}] Rejected, series exists in database", item.TvdbId, item.Title);
                     continue;
                 }
@@ -289,7 +289,7 @@ namespace NzbDrone.Core.ImportLists
             }
         }
 
-        private void TagExisting(ImportListDefinition importList, ImportListItemInfo report)
+        private void UpdateTagsOnExistingSeries(ImportListDefinition importList, ImportListItemInfo report)
         {
             if (importList.TagExisting)
             {
