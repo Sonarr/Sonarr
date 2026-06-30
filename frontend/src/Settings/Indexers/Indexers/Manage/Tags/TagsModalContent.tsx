@@ -13,7 +13,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import { useIndexersData } from 'Settings/Indexers/useIndexers';
-import { Tag, useTagList } from 'Tags/useTags';
+import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import styles from './TagsModalContent.css';
 
@@ -48,7 +48,7 @@ function TagsModalContent(props: TagsModalContentProps) {
   const { ids, onModalClose, onApplyTagsPress } = props;
 
   const allIndexers = useIndexersData();
-  const tagList: Tag[] = useTagList();
+  const tagList = useTagList();
 
   const [tags, setTags] = useState<number[]>([]);
   const [applyTags, setApplyTags] = useState('add');

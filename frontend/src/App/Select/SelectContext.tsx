@@ -6,7 +6,7 @@ import useSelectStore, {
 
 interface SelectProviderProps<T extends SelectStoreModel<Id>>
   extends PropsWithChildren {
-  items: Array<T>;
+  items: ReadonlyArray<T>;
 }
 
 const SelectContext = createContext<

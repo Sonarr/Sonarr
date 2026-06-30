@@ -23,7 +23,7 @@ function AddIndexerModalContent({
   onIndexerSelect,
   onModalClose,
 }: AddIndexerModalContentProps) {
-  const { isSchemaFetching, isSchemaFetched, schemaError, schema } =
+  const { isSchemaLoading, isSchemaFetched, schemaError, schema } =
     useIndexerSchema();
 
   const { usenetIndexers, torrentIndexers } = useMemo(() => {
@@ -52,9 +52,9 @@ function AddIndexerModalContent({
       <ModalHeader>{translate('AddIndexer')}</ModalHeader>
 
       <ModalBody>
-        {isSchemaFetching ? <LoadingIndicator /> : null}
+        {isSchemaLoading ? <LoadingIndicator /> : null}
 
-        {!isSchemaFetching && !!schemaError ? (
+        {!isSchemaLoading && !!schemaError ? (
           <Alert kind={kinds.DANGER}>{translate('AddIndexerError')}</Alert>
         ) : null}
 

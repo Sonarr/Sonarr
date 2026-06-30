@@ -4,6 +4,7 @@ import FormGroup from 'Components/Form/FormGroup';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
 import Icon from 'Components/Icon';
+import Label from 'Components/Label';
 import Button from 'Components/Link/Button';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import { Failure } from 'typings/pending';
@@ -11,6 +12,7 @@ import translate from 'Utilities/String/translate';
 import QualityProfileItemDragSource, {
   QualityProfileItemDragSourceActionProps,
 } from './QualityProfileItemDragSource';
+import { getItemFailures, ItemFailuresMap } from './qualityProfileItemFailures';
 import { QualityProfileItems as Items } from './useQualityProfiles';
 import styles from './QualityProfileItems.css';
 
@@ -25,6 +27,7 @@ interface QualityProfileItemsProps
   qualityProfileItems: Items;
   errors?: Failure[];
   warnings?: Failure[];
+  itemFailures: ItemFailuresMap;
   onChangeMode: (mode: EditQualityProfileMode) => void;
 }
 
@@ -35,6 +38,7 @@ function QualityProfileItems({
   qualityProfileItems,
   errors = [],
   warnings = [],
+  itemFailures,
   onChangeMode,
   ...otherProps
 }: QualityProfileItemsProps) {
@@ -110,45 +114,62 @@ function QualityProfileItems({
           );
         })}
 
-        <Button
-          className={styles.editGroupsButton}
-          kind={kinds.PRIMARY}
-          onPress={
-            mode === 'editGroups'
-              ? handleDefaultModePress
-              : handleEditGroupsPress
-          }
-        >
-          <div>
-            <Icon
-              className={styles.editButtonIcon}
-              name={mode === 'editGroups' ? icons.REORDER : icons.GROUP}
-            />
+        <div className={styles.modeActions}>
+          <Button
+            className={styles.editGroupsButton}
+            kind={kinds.PRIMARY}
+            onPress={
+              mode === 'editGroups'
+                ? handleDefaultModePress
+                : handleEditGroupsPress
+            }
+          >
+            <div>
+              <Icon
+                className={styles.editButtonIcon}
+                name={mode === 'editGroups' ? icons.REORDER : icons.GROUP}
+              />
 
-            {mode === 'editGroups'
-              ? translate('DoneEditingGroups')
-              : translate('EditGroups')}
-          </div>
-        </Button>
+              {mode === 'editGroups'
+                ? translate('DoneEditingGroups')
+                : translate('EditGroups')}
+            </div>
+          </Button>
 
-        <Button
-          className={styles.editSizesButton}
-          kind={kinds.PRIMARY}
-          onPress={
-            mode === 'editSizes' ? handleDefaultModePress : handleEditSizesPress
-          }
-        >
-          <div>
-            <Icon
-              className={styles.editButtonIcon}
-              name={mode === 'editSizes' ? icons.REORDER : icons.FILE}
-            />
+          <Button
+            className={styles.editSizesButton}
+            kind={kinds.PRIMARY}
+            onPress={
+              mode === 'editSizes'
+                ? handleDefaultModePress
+                : handleEditSizesPress
+            }
+          >
+            <div>
+              <Icon
+                className={styles.editButtonIcon}
+                name={mode === 'editSizes' ? icons.REORDER : icons.FILE}
+              />
 
-            {mode === 'editSizes'
-              ? translate('DoneEditingSizes')
-              : translate('EditSizes')}
-          </div>
-        </Button>
+              {mode === 'editSizes'
+                ? translate('DoneEditingSizes')
+                : translate('EditSizes')}
+            </div>
+          </Button>
+
+          {itemFailures.size > 0 ? (
+            <Label
+              className={styles.editSizesBadge}
+              kind={kinds.DANGER}
+              size={sizes.MEDIUM}
+              title={translate('QualityProfileItemFailureCount', {
+                count: itemFailures.size,
+              })}
+            >
+              {itemFailures.size}
+            </Label>
+          ) : null}
+        </div>
 
         <div
           ref={measureRef}
@@ -173,6 +194,7 @@ function QualityProfileItems({
                     minSize={minSize}
                     maxSize={maxSize}
                     preferredSize={preferredSize}
+                    failures={getItemFailures(itemFailures, index)}
                     qualityIndex={`${index + 1}`}
                     isInGroup={false}
                     isDraggingUp={isDraggingUp}
@@ -193,6 +215,7 @@ function QualityProfileItems({
                   name={name}
                   allowed={allowed}
                   items={items}
+                  itemFailures={itemFailures}
                   qualityIndex={`${index + 1}`}
                   isDraggingUp={isDraggingUp}
                   isDraggingDown={isDraggingDown}

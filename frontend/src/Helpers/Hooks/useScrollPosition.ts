@@ -1,25 +1,25 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { useHistory, useLocation } from 'react-router';
+import { useLocation, useNavigationType } from 'react-router';
 import { OnScroll } from 'Components/Scroller/Scroller';
-import scrollPositions from 'Store/scrollPositions';
+import scrollPositions from 'Helpers/scrollPositions';
 
 function useScrollPosition(key?: string) {
   const { pathname } = useLocation();
-  const { action } = useHistory();
+  const navigationType = useNavigationType();
 
   // Reset window scroll on PUSH/REPLACE (mobile's scroll container).
   // Reset the scroll position unless we're going back, this will allow the scroll
   // position to reset when moving forward (PUSH/REPLACE) and restore when
   // moving backwards (POP).
   useEffect(() => {
-    if (action !== 'POP') {
+    if (navigationType !== 'POP') {
       window.scrollTo(0, 0);
     }
-  }, [pathname, action]);
+  }, [pathname, navigationType]);
 
   const initialScrollTop = useMemo(
-    () => (key && action === 'POP' ? scrollPositions[key] ?? 0 : 0),
-    [key, action]
+    () => (key && navigationType === 'POP' ? scrollPositions[key] ?? 0 : 0),
+    [key, navigationType]
   );
 
   const onScroll = useCallback(

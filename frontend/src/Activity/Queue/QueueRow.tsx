@@ -21,8 +21,8 @@ import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import { useSingleSeries } from 'Series/useSeries';
+import { CustomFormat } from 'Settings/CustomFormats/CustomFormats/useCustomFormats';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
-import CustomFormat from 'typings/CustomFormat';
 import { SelectStateInputProps } from 'typings/props';
 import Queue, {
   QueueTrackedDownloadState,
@@ -434,6 +434,7 @@ function QueueRow(props: QueueRowProps) {
         canChangeCategory={!!downloadClientHasPostImportCategory}
         canIgnore={!!series}
         isPending={isPending}
+        downloadClient={downloadClient}
         onRemovePress={handleRemoveQueueItemModalConfirmed}
         onModalClose={handleRemoveQueueItemModalClose}
       />

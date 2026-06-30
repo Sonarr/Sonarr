@@ -97,8 +97,7 @@ namespace Sonarr.Api.V5.Provider
         [Produces("application/json")]
         public Results<Accepted<TProviderResource>, NotFound> UpdateProvider([FromRoute] int id, [FromBody] TProviderResource providerResource, [FromQuery] bool skipTesting = false, [FromQuery] SkipValidation skipValidation = SkipValidation.None)
         {
-            // TODO: Remove fallback to Id from body in next API version bump
-            var existingDefinition = _providerFactory.Find(id) ?? _providerFactory.Find(providerResource.Id);
+            var existingDefinition = _providerFactory.Find(id);
 
             if (existingDefinition == null)
             {

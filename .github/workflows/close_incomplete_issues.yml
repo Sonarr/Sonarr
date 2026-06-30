@@ -1,0 +1,65 @@
+name: Close stale waiting-for-info issues
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  close-stale-waiting-for-info:
+    name: Close issues labelled waiting-for-info for 7+ days
+    runs-on: ubuntu-latest
+    if: github.repository == 'Sonarr/Sonarr'
+    permissions:
+      issues: write
+    steps:
+      - name: Close stale waiting-for-info issues
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const DAYS = 7;
+            const cutoff = Date.now() - DAYS * 24 * 60 * 60 * 1000;
+
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              labels: "waiting-for-info",
+              per_page: 100,
+            });
+
+            for (const issue of issues) {
+              // Search results include PRs; this reaper is issues-only.
+              if (issue.pull_request)
+              {
+                continue;
+              }
+
+              const lastActivity = new Date(issue.updated_at).getTime();
+
+              if (lastActivity > cutoff) {
+                continue;
+              }
+
+              core.info(
+                `Closing #${issue.number} (no activity since ${issue.updated_at})`
+              );
+
+              const common = {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+              };
+
+              await github.rest.issues.createComment({
+                ...common,
+                body: `:wave: This issue has been closed automatically because it has had no activity for ${DAYS} days while labelled \`waiting-for-info\`. If you update it to follow the issue template, reply here and we'll reopen it.`,
+              });
+
+              await github.rest.issues.update({
+                ...common,
+                state: "closed",
+                state_reason: "not_planned",
+              });
+            }

@@ -95,7 +95,7 @@ export const FILTERS: Filter[] = [
 ];
 
 const SORT_PREDICATES = {
-  status: (item: Series, _direction: SortDirection) => {
+  status: (item: Series, _: SortDirection) => {
     let result = 0;
 
     if (item.monitored) {
@@ -109,11 +109,11 @@ const SORT_PREDICATES = {
     return result;
   },
 
-  sizeOnDisk: (item: Series, _direction: SortDirection) => {
+  sizeOnDisk: (item: Series, _: SortDirection) => {
     return item.statistics?.sizeOnDisk ?? 0;
   },
 
-  averageSizePerEpisode: (item: Series, _direction: SortDirection) => {
+  averageSizePerEpisode: (item: Series, _: SortDirection) => {
     const totalEpisodeCount = item.statistics?.totalEpisodeCount ?? 0;
 
     return totalEpisodeCount > 0
@@ -121,41 +121,35 @@ const SORT_PREDICATES = {
       : 0;
   },
 
-  network: (item: Series, _direction: SortDirection) => {
-    const network = item.network;
+  network: (item: Series, _: SortDirection) => {
+    const { network } = item;
 
-    return network ? network.toLowerCase() : '';
+    return network?.toLowerCase() ?? '';
   },
 
   nextAiring: (item: Series, direction: SortDirection) => {
-    const nextAiring = item.nextAiring;
+    const { nextAiring } = item;
 
     if (nextAiring) {
       return moment(nextAiring).unix();
     }
 
-    if (direction === sortDirections.DESCENDING) {
-      return 0;
-    }
-
-    return Number.MAX_VALUE;
+    return direction === sortDirections.DESCENDING ? 0 : Number.MAX_VALUE;
   },
 
   previousAiring: (item: Series, direction: SortDirection) => {
-    const previousAiring = item.previousAiring;
+    const { previousAiring } = item;
 
     if (previousAiring) {
       return moment(previousAiring).unix();
     }
 
-    if (direction === sortDirections.DESCENDING) {
-      return -Number.MAX_VALUE;
-    }
-
-    return Number.MAX_VALUE;
+    return direction === sortDirections.DESCENDING
+      ? Number.MAX_VALUE * -1
+      : Number.MAX_VALUE;
   },
 
-  episodeProgress: (item: Series, _direction: SortDirection) => {
+  episodeProgress: (item: Series, _: SortDirection) => {
     const statistics = item.statistics;
 
     const episodeCount = statistics?.episodeCount ?? 0;
@@ -168,34 +162,34 @@ const SORT_PREDICATES = {
     return progress + episodeCount / 1000000;
   },
 
-  episodeCount: (item: Series, _direction: SortDirection) => {
+  episodeCount: (item: Series, _: SortDirection) => {
     return item.statistics?.totalEpisodeCount ?? 0;
   },
 
-  seasonCount: (item: Series, _direction: SortDirection) => {
+  seasonCount: (item: Series, _: SortDirection) => {
     return item.statistics?.seasonCount ?? 0;
   },
 
-  originalLanguage: (item: Series, _direction: SortDirection) => {
+  originalLanguage: (item: Series, _: SortDirection) => {
     const { originalLanguage } = item;
 
     return originalLanguage?.name ?? '';
   },
 
-  ratings: (item: Series, _direction: SortDirection) => {
+  ratings: (item: Series, _: SortDirection) => {
     const { ratings } = item;
 
     return ratings.value ?? 0;
   },
 
-  monitorNewItems: (item: Series, _direction: SortDirection) => {
+  monitorNewItems: (item: Series, _: SortDirection) => {
     return item.monitorNewItems === 'all' ? 1 : 0;
   },
 } as const;
 
 const FILTER_PREDICATES = {
   episodeProgress: (item: Series, filterValue: number, type: FilterType) => {
-    const statistics = item.statistics;
+    const { statistics } = item;
     const episodeCount = statistics?.episodeCount ?? 0;
     const episodeFileCount = statistics?.episodeFileCount ?? 0;
 
@@ -207,8 +201,8 @@ const FILTER_PREDICATES = {
     return predicate(progress, filterValue);
   },
 
-  missing: (item: Series, _filterValue: boolean, _type: FilterType) => {
-    const statistics = item.statistics;
+  missing: (item: Series, _filterValue: boolean, _: FilterType) => {
+    const { statistics } = item;
     const episodeCount = statistics?.episodeCount ?? 0;
     const episodeFileCount = statistics?.episodeFileCount ?? 0;
     return episodeCount - episodeFileCount > 0;
@@ -300,7 +294,7 @@ const FILTER_PREDICATES = {
 
   hasMissingSeason: (item: Series, filterValue: boolean, type: FilterType) => {
     const predicate = getFilterTypePredicate(type);
-    const seasons = item.seasons ?? [];
+    const { seasons = [] } = item;
 
     const hasMissingSeason = seasons.some((season) => {
       const { seasonNumber } = season;
@@ -326,7 +320,7 @@ const FILTER_PREDICATES = {
     type: FilterType
   ) => {
     const predicate = getFilterTypePredicate(type);
-    const seasons = item.seasons ?? [];
+    const { seasons = [] } = item;
 
     const { monitoredCount, unmonitoredCount } = seasons.reduce(
       (acc, { seasonNumber, monitored }) => {
@@ -416,7 +410,7 @@ export const FILTER_BUILDER: FilterBuilderProp<Series>[] = [
     name: 'network',
     label: () => translate('Network'),
     type: filterBuilderTypes.ARRAY,
-    optionsSelector: function (items: Series[]) {
+    optionsSelector: function (items: ReadonlyArray<Series>) {
       const tagList = items.reduce<FilterBuilderTag<string, string>[]>(
         (acc, series) => {
           if (series.network) {
@@ -494,7 +488,7 @@ export const FILTER_BUILDER: FilterBuilderProp<Series>[] = [
     name: 'genres',
     label: () => translate('Genres'),
     type: filterBuilderTypes.ARRAY,
-    optionsSelector: function (items: Series[]) {
+    optionsSelector: function (items: ReadonlyArray<Series>) {
       const tagList = items.reduce<FilterBuilderTag<string, string>[]>(
         (acc, series) => {
           series.genres.forEach((genre) => {
@@ -516,7 +510,7 @@ export const FILTER_BUILDER: FilterBuilderProp<Series>[] = [
     name: 'originalLanguage',
     label: () => translate('OriginalLanguage'),
     type: filterBuilderTypes.EXACT,
-    optionsSelector: function (items: Series[]) {
+    optionsSelector: function (items: ReadonlyArray<Series>) {
       const languageList = items.reduce<FilterBuilderTag<string, string>[]>(
         (acc, series) => {
           if (series.originalLanguage) {

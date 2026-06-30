@@ -4,7 +4,7 @@ import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import { sizes } from 'Helpers/Props';
-import { QualityProfileFormatItem as QualityProfileFormatItemModel } from 'typings/CustomFormat';
+import { QualityProfileFormatItem as QualityProfileFormatItemModel } from 'Settings/Profiles/Quality/useQualityProfiles';
 import { Failure } from 'typings/pending';
 import translate from 'Utilities/String/translate';
 import QualityProfileFormatItem from './QualityProfileFormatItem';

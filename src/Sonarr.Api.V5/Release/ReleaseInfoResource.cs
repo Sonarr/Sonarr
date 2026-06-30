@@ -16,7 +16,6 @@ public class ReleaseInfoResource
     public int TvdbId { get; set; }
     public int TvRageId { get; set; }
     public string? ImdbId { get; set; }
-    public IEnumerable<string> Rejections { get; set; } = [];
     public DateTime PublishDate { get; set; }
     public string? CommentUrl { get; set; }
     public string? DownloadUrl { get; set; }

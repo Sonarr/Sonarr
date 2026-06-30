@@ -73,7 +73,7 @@ export const useConnectionsData = () => {
 export const useSortedConnections = () => {
   const { data } = useConnections();
 
-  return useMemo(() => data.sort(sortByProp('name')), [data]);
+  return useMemo(() => [...data].sort(sortByProp('name')), [data]);
 };
 
 export const useConnections = () => {

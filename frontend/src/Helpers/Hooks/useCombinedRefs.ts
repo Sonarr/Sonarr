@@ -15,6 +15,7 @@ function useCombinedRefs<T>(...refs: OptionalRef<T>[]) {
 
   return useCallback((value: T | null) => {
     let index = 0;
+
     for (; index < refs.length; index++) {
       const ref = refs[index];
       const prev = previousRefs.current[index];
@@ -22,6 +23,7 @@ function useCombinedRefs<T>(...refs: OptionalRef<T>[]) {
       if (prev !== ref) {
         setRef(prev, null);
       }
+
       setRef(ref, value);
     }
 

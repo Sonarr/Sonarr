@@ -21,13 +21,10 @@ public class HttpHappyEyeballs
         _logger = logger;
     }
 
-    public async ValueTask<Stream> OnConnect(
-        SocketsHttpConnectionContext context,
-        CancellationToken cancellationToken)
+    public async ValueTask<Stream> OnConnect(SocketsHttpConnectionContext context, CancellationToken cancellationToken = default)
     {
         var endPoint = context.DnsEndPoint;
-        var ipHostEntry = await Dns.GetHostEntryAsync(endPoint.Host, endPoint.AddressFamily, cancellationToken).ConfigureAwait(false);
-        var resolvedAddresses = ipHostEntry.AddressList;
+        var resolvedAddresses = await Dns.GetHostAddressesAsync(endPoint.Host, endPoint.AddressFamily, cancellationToken).ConfigureAwait(false);
 
         if (resolvedAddresses.Length == 0)
         {
@@ -50,7 +47,7 @@ public class HttpHappyEyeballs
             TaskDelay);
     }
 
-    private async Task TaskDelay(CancellationToken cancellationToken)
+    private async Task TaskDelay(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         var timeSpan = TimeSpan.FromMilliseconds(ConnectionAttemptDelay);
@@ -58,12 +55,9 @@ public class HttpHappyEyeballs
         await Task.Delay(timeSpan, cancellationToken).ConfigureAwait(false);
     }
 
-    private async Task<Socket> ConnectSocket(
-        IPAddress ipAddress,
-        DnsEndPoint endPoint,
-        CancellationToken cancellationToken)
+    private async Task<Socket> ConnectSocket(IPAddress ipAddress, DnsEndPoint endPoint, CancellationToken cancellationToken = default)
     {
-        var remoteEP = new IPEndPoint(ipAddress, endPoint.Port);
+        var remoteEndPoint = new IPEndPoint(ipAddress, endPoint.Port);
 
         // The following socket constructor will create a dual-mode socket on
         // systems where IPv6 is available.
@@ -78,7 +72,7 @@ public class HttpHappyEyeballs
 
         try
         {
-            await socket.ConnectAsync(remoteEP, cancellationToken).ConfigureAwait(false);
+            await socket.ConnectAsync(remoteEndPoint, cancellationToken).ConfigureAwait(false);
         }
         catch (Exception e)
         {

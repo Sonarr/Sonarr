@@ -6,8 +6,8 @@ import useApiMutation, {
   getValidationFailures,
 } from 'Helpers/Hooks/useApiMutation';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
-import { ValidationFailures } from 'Store/Selectors/selectSettings';
 import sortByProp from 'Utilities/Array/sortByProp';
+import { ValidationFailures } from 'Utilities/selectSettings';
 
 const DEFAULT_TAGS: Tag[] = [];
 
@@ -40,9 +40,7 @@ export const useTagList = () => {
 export const useSortedTagList = () => {
   const tagList = useTagList();
 
-  return useMemo(() => {
-    return tagList.sort(sortByProp('label'));
-  }, [tagList]);
+  return useMemo(() => [...tagList].sort(sortByProp('label')), [tagList]);
 };
 
 export const useAddTag = (onTagCreated?: (tag: Tag) => void) => {

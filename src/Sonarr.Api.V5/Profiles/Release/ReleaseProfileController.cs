@@ -54,6 +54,7 @@ public class ReleaseProfileController : RestController<ReleaseProfileResource>
     }
 
     [RestPostById]
+    [Consumes("application/json")]
     public Results<Created<ReleaseProfileResource>, NotFound> Create([FromBody] ReleaseProfileResource resource)
     {
         var model = resource.ToModel();
@@ -70,6 +71,7 @@ public class ReleaseProfileController : RestController<ReleaseProfileResource>
     }
 
     [RestPutById]
+    [Consumes("application/json")]
     public Results<Accepted<ReleaseProfileResource>, NotFound> Update([FromBody] ReleaseProfileResource resource)
     {
         var model = resource.ToModel();
@@ -85,6 +87,7 @@ public class ReleaseProfileController : RestController<ReleaseProfileResource>
     }
 
     [HttpGet]
+    [Produces("application/json")]
     public Ok<List<ReleaseProfileResource>> GetAll()
     {
         return TypedResults.Ok(_releaseProfileService.All().ToResource());

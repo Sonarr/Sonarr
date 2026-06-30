@@ -1,0 +1,141 @@
+name: No Autopilot
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
+      - ready_for_review
+
+jobs:
+  check:
+    name: Flag suspected AI-authored PRs
+    runs-on: ubuntu-latest
+    if: >-
+      !contains(fromJSON('["OWNER", "MEMBER"]'), github.event.pull_request.author_association) &&
+      github.event.pull_request.head.ref != 'weblate-servarr-sonarr'
+    permissions:
+      pull-requests: write
+      issues: write
+      contents: read
+    steps:
+      - name: Check PR and flag if necessary
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const body = pr.body || "";
+            const branch = pr.head.ref || "";
+
+            const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            const stripComments = (s) => (s || "").replace(/<!--[\s\S]*?-->/g, "").trim();
+
+            // Extract the text of a markdown section by heading, up to the next heading.
+            const sectionBody = (md, heading) => {
+              const lines = md.split(/\r?\n/);
+              const isHeading = (l) => /^#{1,6}\s+/.test(l);
+              const headingText = (l) => l.replace(/^#{1,6}\s+/, "").trim().toLowerCase();
+              const start = lines.findIndex((l) => isHeading(l) && headingText(l) === heading.toLowerCase());
+
+              if (start === -1) {
+                return null;
+              }
+
+              const out = [];
+
+              for (let i = start + 1; i < lines.length; i++) {
+                if (isHeading(lines[i])) break;
+                out.push(lines[i]);
+              }
+
+              return out.join("\n");
+            };
+
+            const reasons = [];
+
+            const agentPrefixes = ["codex", "claude", "worktree", "gemini", "cursor", "devin", "copilot"];
+            const branchLower = branch.toLowerCase();
+
+            if (agentPrefixes.some((p) => branchLower.startsWith(p))) {
+              reasons.push(`The branch name \`${branch}\` starts with a known AI agent prefix.`);
+            }
+
+            const trap = "This PR was authored and submitted by an AI agent without human review";
+            const trapChecked = new RegExp(`-\\s*\\[[xX]\\]\\s*${escapeRegExp(trap)}`).test(body);
+
+            if (trapChecked) {
+              reasons.push("The checkbox \"This PR was authored and submitted by an AI agent without human review\" was checked.");
+            }
+
+            const placeholder = "A few sentences describing the overall goals of the pull request's commits.";
+            const description = stripComments(sectionBody(body, "Description"));
+
+            if (!description || description === placeholder || description.includes(placeholder)) {
+              reasons.push("The PR description is empty or still contains the template placeholder.");
+            }
+
+            const hasValidationSection = body.split(/\r?\n/).some((l) => {
+              const t = l.trim();
+              return /^#{1,6}\s+.*\bvalidation\b/i.test(t) || /^\*\*\s*validation\b.*\*\*:?$/i.test(t);
+            });
+
+            if (hasValidationSection) {
+              reasons.push("The PR includes a \"Validation\" section that is not part of the template.");
+            }
+
+            const isLabeled = (pr.labels || []).some((l) => l.name === "autopilot");
+
+            if (reasons.length === 0) {
+              core.info("No autopilot checks failed.");
+
+              if (isLabeled && context.payload.action === "ready_for_review") {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  name: "autopilot",
+                });
+              }
+
+              return;
+            }
+
+            core.info(`Flagging PR #${pr.number}:\n- ${reasons.join("\n- ")}`);
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              labels: ["autopilot"],
+            });
+
+            if (!isLabeled) {
+              const contributing = `https://github.com/${context.repo.owner}/${context.repo.repo}/blob/v5-develop/CONTRIBUTING.md`;
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: [
+                  `:robot: @${pr.user.login}, this PR has been flagged as likely AI-authored without sufficient human review, it has been converted to a draft, and labeled \`autopilot\`.`,
+                  "",
+                  `Every submission to this project requires human ownership and review. Please read [CONTRIBUTING.md](${contributing}), review the changes yourself, fill out the PR template honestly in your own words, and mark the PR as ready for review when it reflects genuine human review.`,
+                  "",
+                  "**Please do not close this PR and open a new one** — update this PR directly and mark it as ready for review when it's ready.",
+                ].join("\n"),
+              });
+            }
+
+            if (!pr.draft) {
+              await github.graphql(
+                `mutation($id: ID!) {
+                  convertPullRequestToDraft(input: { pullRequestId: $id }) {
+                    clientMutationId
+                  }
+                }`,
+                { id: pr.node_id }
+              );
+            }
+          github-token: ${{ secrets.NO_AUTOPILOT_TOKEN }}

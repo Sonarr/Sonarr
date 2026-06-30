@@ -172,6 +172,7 @@ export const setVersion = ({ version }: { version: string }) => {
       if (!state.prevVersion) {
         newState.prevVersion = state.version;
       }
+
       newState.isUpdated = true;
     }
 

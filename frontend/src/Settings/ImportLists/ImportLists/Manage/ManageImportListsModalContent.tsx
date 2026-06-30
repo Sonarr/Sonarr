@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
-import { ImportListAppState } from 'App/State/SettingsAppState';
 import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
@@ -15,11 +13,12 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { kinds } from 'Helpers/Props';
 import {
-  bulkDeleteImportLists,
-  bulkEditImportLists,
-} from 'Store/Actions/settingsActions';
-import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
-import ImportList from 'typings/ImportList';
+  ImportListModel,
+  useBulkDeleteImportLists,
+  useBulkEditImportLists,
+  useImportListsData,
+  useSortedImportLists,
+} from 'Settings/ImportLists/ImportLists/useImportLists';
 import { CheckInputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
@@ -86,17 +85,10 @@ function ManageImportListsModalContentInner(
 ) {
   const { onModalClose } = props;
 
-  const {
-    isFetching,
-    isPopulated,
-    isDeleting,
-    isSaving,
-    error,
-    items,
-  }: ImportListAppState = useSelector(
-    createClientSideCollectionSelector('settings.importLists')
-  );
-  const dispatch = useDispatch();
+  const { data, isFetching, isFetched, error } = useSortedImportLists();
+
+  const { isDeleting, bulkDeleteImportLists } = useBulkDeleteImportLists();
+  const { isSaving, bulkEditImportLists } = useBulkEditImportLists();
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -107,10 +99,11 @@ function ManageImportListsModalContentInner(
     allSelected,
     allUnselected,
     anySelected,
+    getSelectedIds,
     selectAll,
     unselectAll,
     useSelectedIds,
-  } = useSelect<ImportList>();
+  } = useSelect<ImportListModel>();
 
   const selectedIds = useSelectedIds();
 
@@ -131,22 +124,20 @@ function ManageImportListsModalContentInner(
   }, [setIsEditModalOpen]);
 
   const onConfirmDelete = useCallback(() => {
-    dispatch(bulkDeleteImportLists({ ids: selectedIds }));
+    bulkDeleteImportLists({ ids: getSelectedIds() });
     setIsDeleteModalOpen(false);
-  }, [selectedIds, dispatch]);
+  }, [bulkDeleteImportLists, getSelectedIds]);
 
   const onSavePress = useCallback(
     (payload: object) => {
       setIsEditModalOpen(false);
 
-      dispatch(
-        bulkEditImportLists({
-          ids: selectedIds,
-          ...payload,
-        })
-      );
+      bulkEditImportLists({
+        ids: getSelectedIds(),
+        ...payload,
+      });
     },
-    [selectedIds, dispatch]
+    [getSelectedIds, bulkEditImportLists]
   );
 
   const onTagsPress = useCallback(() => {
@@ -162,15 +153,13 @@ function ManageImportListsModalContentInner(
       setIsSavingTags(true);
       setIsTagsModalOpen(false);
 
-      dispatch(
-        bulkEditImportLists({
-          ids: selectedIds,
-          tags,
-          applyTags,
-        })
-      );
+      bulkEditImportLists({
+        ids: getSelectedIds(),
+        tags,
+        applyTags,
+      });
     },
-    [selectedIds, dispatch]
+    [getSelectedIds, bulkEditImportLists]
   );
 
   const onSelectAllChange = useCallback(
@@ -194,11 +183,11 @@ function ManageImportListsModalContentInner(
 
         {error ? <div>{errorMessage}</div> : null}
 
-        {isPopulated && !error && !items.length ? (
+        {isFetched && !error && !data.length ? (
           <Alert kind={kinds.INFO}>{translate('NoImportListsFound')}</Alert>
         ) : null}
 
-        {isPopulated && !!items.length && !isFetching && !isFetching ? (
+        {isFetched && !!data.length && !isFetching ? (
           <Table
             columns={COLUMNS}
             horizontalScroll={true}
@@ -208,7 +197,7 @@ function ManageImportListsModalContentInner(
             onSelectAllChange={onSelectAllChange}
           >
             <TableBody>
-              {items.map((item) => {
+              {data.map((item) => {
                 return (
                   <ManageImportListsModalRow
                     key={item.id}
@@ -285,9 +274,7 @@ function ManageImportListsModalContentInner(
 function ManageImportListsModalContent(
   props: ManageImportListsModalContentProps
 ) {
-  const { items }: ImportListAppState = useSelector(
-    createClientSideCollectionSelector('settings.importLists')
-  );
+  const items = useImportListsData();
 
   return (
     <SelectProvider items={items}>

@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Download
                 request.AllowAutoRedirect = true;
 
                 var response = await RetryStrategy
-                    .ExecuteAsync(static async (state, _) => await state._httpClient.GetAsync(state.request), (_httpClient, request))
+                    .ExecuteAsync(static async (state, token) => await state._httpClient.GetAsync(state.request, token), (_httpClient, request))
                     .ConfigureAwait(false);
 
                 nzbData = response.ResponseData;

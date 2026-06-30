@@ -1,31 +1,41 @@
 import { QueryClientProvider } from '@tanstack/react-query';
-import { ConnectedRouter, ConnectedRouterProps } from 'connected-react-router';
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import { Provider } from 'react-redux';
-import { Store } from 'redux';
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Outlet,
+  Route,
+  RouterProvider,
+} from 'react-router-dom';
 import Page from 'Components/Page/Page';
 import ApplyTheme from './ApplyTheme';
-import AppRoutes from './AppRoutes';
+import { appRouteElements } from './AppRoutes';
 import { queryClient } from './queryClient';
 
-interface AppProps {
-  store: Store;
-  history: ConnectedRouterProps['history'];
+function PageLayout() {
+  return (
+    <>
+      <ApplyTheme />
+      <Page>
+        <Outlet />
+      </Page>
+    </>
+  );
 }
 
-function App({ store, history }: AppProps) {
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route element={<PageLayout />}>{appRouteElements()}</Route>
+  ),
+  { basename: window.Sonarr.urlBase || undefined }
+);
+
+function App() {
   return (
     <DocumentTitle title={window.Sonarr.instanceName}>
       <QueryClientProvider client={queryClient}>
-        <Provider store={store}>
-          <ConnectedRouter history={history}>
-            <ApplyTheme />
-            <Page>
-              <AppRoutes />
-            </Page>
-          </ConnectedRouter>
-        </Provider>
+        <RouterProvider router={router} />
       </QueryClientProvider>
     </DocumentTitle>
   );

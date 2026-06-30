@@ -1,0 +1,194 @@
+name: Label incomplete issues
+
+on:
+  issues:
+    types:
+      - opened
+      - reopened
+      - edited
+
+jobs:
+  validate:
+    name: Validate issue and apply/clear waiting-for-info label
+    runs-on: ubuntu-latest
+    if: github.repository == 'Sonarr/Sonarr'
+    permissions:
+      issues: write
+    steps:
+      - name: Validate issue body
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const BUG_HEADINGS = [
+              "Is there an existing issue for this?",
+              "Current Behavior",
+              "Expected Behavior",
+              "Steps To Reproduce",
+              "Environment",
+              "What branch are you running?",
+              "Trace Logs?",
+              "Anything else?",
+            ];
+
+            const FEATURE_HEADINGS = [
+              "Is there an existing issue for this?",
+              "Is your feature request related to a problem? Please describe",
+              "Describe the solution you'd like",
+              "Describe alternatives you've considered",
+              "Anything else?",
+            ];
+
+            const AMBIGUOUS_VERSIONS = [
+              "latest",
+              "most recent",
+              "newest",
+              "current",
+              "n/a",
+              "stable",
+              "beta",
+              "develop",
+              "main",
+            ];
+
+            const issue = context.payload.issue;
+            const body = issue.body || "";
+
+            const stripComments = (s) => (s || "").replace(/<!--[\s\S]*?-->/g, "").trim();
+
+            const sectionBody = (md, heading) => {
+              const lines = md.split(/\r?\n/);
+              const isHeading = (l) => /^#{1,6}\s+/.test(l);
+              const headingText = (l) => l.replace(/^#{1,6}\s+/, "").trim().toLowerCase();
+              const start = lines.findIndex(
+                (l) => isHeading(l) && headingText(l) === heading.toLowerCase()
+              );
+
+              if (start === -1) {
+                return null;
+              }
+
+              const out = [];
+
+              for (let i = start + 1; i < lines.length; i++) {
+                if (isHeading(lines[i])) break;
+                out.push(lines[i]);
+              }
+
+              return out.join("\n");
+            };
+
+            const isBlank = (s) => {
+              const t = stripComments(s);
+              return t === "" || /^_no response_$/i.test(t);
+            };
+
+            const reasons = [];
+
+            const hasBug =
+              sectionBody(body, "Current Behavior") !== null &&
+              sectionBody(body, "Expected Behavior") !== null;
+            const hasFeature =
+              sectionBody(body, "Describe the solution you'd like") !== null;
+
+            if ((issue.labels || []).length === 0) {
+              reasons.push(
+                "The issue has no labels, which usually means it was created without using an issue template."
+              );
+            }
+
+            if (!hasBug && !hasFeature) {
+              reasons.push(
+                "The issue body does not follow either the Bug Report or Feature Request template."
+              );
+            }
+
+            if (hasBug || hasFeature) {
+              const allowed = (hasBug ? BUG_HEADINGS : FEATURE_HEADINGS).map((h) => h.toLowerCase());
+              const extras = [
+                ...new Set(
+                  body
+                    .split(/\r?\n/)
+                    .filter((l) => /^###\s+/.test(l.trim()))
+                    .map((l) => l.trim().replace(/^#{1,6}\s+/, "").trim().toLowerCase())
+                    .filter((h) => !allowed.includes(h))
+                ),
+              ];
+
+              if (extras.length > 0) {
+                reasons.push(
+                  `The issue contains section(s) that are not part of the template: ${extras.join(", ")}.`
+                );
+              }
+            }
+
+            if (hasBug) {
+              if (isBlank(sectionBody(body, "Current Behavior"))) {
+                reasons.push("The **Current Behavior** section is empty.");
+              }
+
+              if (isBlank(sectionBody(body, "Expected Behavior"))) {
+                reasons.push("The **Expected Behavior** section is empty.");
+              }
+
+              const env = sectionBody(body, "Environment") || "";
+              const match = env
+                .split(/\r?\n/)
+                .map((l) => l.trim().match(/^[-*]?\s*\*{0,2}Sonarr\*{0,2}\s*:?\s*(.*)$/i))
+                .find(Boolean);
+              const version = match ? match[1].trim() : "";
+              const vLower = version.toLowerCase();
+
+              if (version === "" || AMBIGUOUS_VERSIONS.some((a) => vLower === a || vLower.includes(a))) {
+                reasons.push(
+                  "The **Sonarr** version in the Environment section is missing or ambiguous (e.g. \"latest\"). Please provide the exact version number, such as `4.0.0.766`."
+                );
+              }
+            }
+
+            const alreadyLabeled = (issue.labels || []).some((l) => l.name === "waiting-for-info");
+            const common = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+            };
+
+            if (reasons.length > 0) {
+              core.info(`Flagging issue #${issue.number}:\n- ${reasons.join("\n- ")}`);
+
+              await github.rest.issues.addLabels({ ...common, labels: ["waiting-for-info"] });
+
+              if (!alreadyLabeled) {
+                const templatesUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/issues/new/choose`;
+                await github.rest.issues.createComment({
+                  ...common,
+                  body: [
+                    `:wave: @${issue.user.login}, this issue looks incomplete:`,
+                    "",
+                    ...reasons.map((r) => `- ${r}`),
+                    "",
+                    `Please edit the issue to address the points above using the [issue templates](${templatesUrl}). It will be closed automatically in 7 days if it is not updated.`,
+                  ].join("\n"),
+                });
+              }
+              return;
+            }
+
+            if (alreadyLabeled) {
+              core.info(`Clearing waiting-for-info label from issue #${issue.number}`);
+
+              await github.rest.issues
+                .removeLabel({ ...common, name: "waiting-for-info" })
+                .catch((e) => {
+                  if (e.status !== 404) {
+                  throw e;
+                  }
+                  
+                  core.info(`removeLabel skipped: ${e.message}`);
+                });
+
+              await github.rest.issues.createComment({
+                ...common,
+                body: `:white_check_mark: Thanks @${issue.user.login}, this issue now looks complete. The \`waiting-for-info\` label has been removed.`,
+              });
+            }

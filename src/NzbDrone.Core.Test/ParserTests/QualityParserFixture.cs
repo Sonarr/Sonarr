@@ -261,6 +261,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.S01E01.Erste.Begegnungen.German.DD51.Synced.DL.1080p.HBOMaxHD.AVC-TVS", false)]
         [TestCase("Series.Title.S01E05.Tavora.greift.an.German.DL.1080p.DisneyHD.h264-4SF", false)]
         [TestCase("Series.Title.S02E04.German.Dubbed.DL.AAC.1080p.WEB.AVC-GROUP", false)]
+        [TestCase("Tiny.Series.2020.DOC.S01.MULTi.1080p.ATVP.WEB.Atmos.H.265-TFA", false)]
+        [TestCase("The.Series.S25E21.Pay.No1.1080p.WEB-DL.DD5.1.H.266-GROUP", false)]
+        [TestCase("Series.Title.S04E01.1080p.WEB.H266-GROUP", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
@@ -273,6 +276,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.1x04.ITA.1080p.WEBMux.x264-NovaRip", false)]
         [TestCase("Series.Title.2019.S02E07.Chapter.15.The.Believer.4Kto1080p.DSNYP.Webrip.x265.10bit.EAC3.5.1.Atmos.GokiTAoE", false)]
         [TestCase("Series.Title.S01.1080p.AMZN.WEB-Rip.DDP5.1.H.264-Telly", false)]
+        [TestCase("Series Title S01 WEBRip 1080p x266-GROUP", false)]
+        [TestCase("Series Title S01 Complete German 1080p HDR UHD WEBRip h266-GROUP", false)]
         public void should_parse_webrip1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBRip1080p, proper);
@@ -288,6 +293,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.S02E02.This.Year.Will.Be.Different.2160p.WEB.H.265", false)]
         [TestCase("Series.Title.S02E04.German.Dubbed.DL.AAC.2160p.DV.HDR.WEB.HEVC-GROUP", false)]
         [TestCase("Series.S01.MULTi.2160p.NF.SDR.WEB.DDP.5.1.Atmos.h265-FRESH", false)]
+        [TestCase("Series.Title.2016.03.14.2160p.WEB.h266-GROUP", false)]
+        [TestCase("Series.Title.2016.03.14.2160p.WEB-DL.H.266-GROUP", false)]
+        [TestCase("Series Title S02 2013 WEB-DL 4k H266 AAC 2Audio-GROUP", false)]
         public void should_parse_webdl2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL2160p, proper);
@@ -340,6 +348,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("S for Series 2005 1080p UHD BluRay DD+7.1 x264-LoRD.mkv", false)]
         [TestCase("Series.Title.2011.1080p.UHD.BluRay.DD5.1.HDR.x265-CtrlHD.mkv", false)]
         [TestCase("Fall.Of.The.Release.Groups.S02E13.1080p.BDLight.x265-AVCDVD", false)]
+        [TestCase("Series Title S01E01 1080p BluRay DD 5 1 Atmos x266-GROUP", false)]
         public void should_parse_bluray1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray1080p, proper);
@@ -366,6 +375,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.2014.2160p.UHD.BluRay.X265-IAMABLE.mkv", false)]
         [TestCase("Series.Title.2014.2160p.UHD.BluRay.X265-IAMABLE.mkv", false)]
         [TestCase("Series.Title.S05EO1.Episode.Title.2160p.BDRip.AAC.7.1.HDR10.x265.10bit-Markll", false)]
+        [TestCase("Series Title S01E01 2160p UHD BluRay H266-GROUP", false)]
         public void should_parse_bluray2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray2160p, proper);

@@ -17,6 +17,8 @@ namespace Sonarr.Api.V5.Series
         }
 
         [HttpPost]
+        [Consumes("application/json")]
+        [Produces("application/json")]
         public Ok<List<SeriesResource>> Import([FromBody] List<SeriesResource> resource)
         {
             var newSeries = resource.ToModel();

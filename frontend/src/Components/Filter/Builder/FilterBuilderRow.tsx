@@ -141,7 +141,7 @@ interface FilterBuilderRowProps<T> {
   filterType: FilterType;
   filterCount: number;
   filterBuilderProps: FilterBuilderProp<T>[];
-  sectionItems: T[];
+  sectionItems: ReadonlyArray<T>;
   onAddPress: () => void;
   onFilterChange: (index: number, filter: PropertyFilter) => void;
   onRemovePress: (index: number) => void;

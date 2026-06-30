@@ -27,6 +27,7 @@ import Episode from 'Episode/Episode';
 import { useToggleEpisodesMonitored } from 'Episode/useEpisode';
 import EpisodeFileProvider from 'EpisodeFile/EpisodeFileProvider';
 import { Filter } from 'Filters/Filter';
+import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, icons, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import { CheckInputChanged } from 'typings/inputs';
@@ -38,6 +39,8 @@ import {
   unregisterPagePopulator,
 } from 'Utilities/pagePopulator';
 import translate from 'Utilities/String/translate';
+import toWantedSearchCommandBody from 'Wanted/toWantedSearchCommandBody';
+import CutoffUnmetFilterModal from './CutoffUnmetFilterModal';
 import {
   setCutoffUnmetOption,
   setCutoffUnmetOptions,
@@ -67,7 +70,10 @@ function CutoffUnmetContent() {
     page,
     goToPage,
     refetch,
+    filters: activeFilters,
   } = useCutoffUnmet();
+
+  const customFilters = useCustomFiltersList('wanted.cutoffUnmet');
 
   const { columns, pageSize, sortKey, sortDirection, selectedFilterKey } =
     useCutoffUnmetOptions();
@@ -140,16 +146,17 @@ function CutoffUnmetContent() {
 
   const handleSearchAllCutoffUnmetConfirmed = useCallback(() => {
     executeCommand(
-      {
-        name: CommandNames.CutoffUnmetEpisodeSearch,
-      },
+      toWantedSearchCommandBody(
+        CommandNames.CutoffUnmetEpisodeSearch,
+        activeFilters
+      ),
       () => {
         refetch();
       }
     );
 
     setIsConfirmSearchAllModalOpen(false);
-  }, [executeCommand, refetch]);
+  }, [activeFilters, executeCommand, refetch]);
 
   const handleToggleSelectedPress = useCallback(() => {
     toggleEpisodesMonitored({
@@ -252,7 +259,8 @@ function CutoffUnmetContent() {
               alignMenu={align.RIGHT}
               selectedFilterKey={selectedFilterKey}
               filters={FILTERS}
-              customFilters={[]}
+              customFilters={customFilters}
+              filterModalConnectorComponent={CutoffUnmetFilterModal}
               onFilterSelect={handleFilterSelect}
             />
           </PageToolbarSection>

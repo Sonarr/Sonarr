@@ -1,9 +1,9 @@
-import { useHistory } from 'react-router-dom';
+import { useNavigationType } from 'react-router-dom';
 
 function useCurrentPage() {
-  const history = useHistory();
+  const navigationType = useNavigationType();
 
-  return history.action === 'POP';
+  return navigationType === 'POP';
 }
 
 export default useCurrentPage;

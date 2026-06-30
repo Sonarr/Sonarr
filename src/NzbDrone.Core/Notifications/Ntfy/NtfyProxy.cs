@@ -137,6 +137,11 @@ namespace NzbDrone.Core.Notifications.Ntfy
                     requestBuilder.NetworkCredential = new BasicNetworkCredential(settings.UserName, settings.Password);
                 }
 
+                foreach (var header in settings.Headers)
+                {
+                    requestBuilder.Headers.Add(header.Key, header.Value);
+                }
+
                 var request = requestBuilder.Build();
 
                 _httpClient.Execute(request);

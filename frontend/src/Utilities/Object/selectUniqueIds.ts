@@ -1,7 +1,7 @@
 import KeysMatching from 'typings/Helpers/KeysMatching';
 
 function selectUniqueIds<T, K>(
-  items: T[],
+  items: ReadonlyArray<T>,
   idProp: KeysMatching<T, K | K[]>
 ): K[] {
   const result = items.reduce((acc: Set<K>, item) => {

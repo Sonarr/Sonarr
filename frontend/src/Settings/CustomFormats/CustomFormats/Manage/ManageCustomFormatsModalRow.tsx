@@ -1,8 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
 import { useSelect } from 'App/Select/SelectContext';
-import AppState from 'App/State/AppState';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
@@ -10,11 +7,10 @@ import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import Column from 'Components/Table/Column';
 import TableRow from 'Components/Table/TableRow';
 import { icons } from 'Helpers/Props';
-import { deleteCustomFormat } from 'Store/Actions/settingsActions';
-import CustomFormat from 'typings/CustomFormat';
 import { SelectStateInputProps } from 'typings/props';
 import translate from 'Utilities/String/translate';
 import EditCustomFormatModal from '../EditCustomFormatModal';
+import { CustomFormat, useDeleteCustomFormat } from '../useCustomFormats';
 import styles from './ManageCustomFormatsModalRow.css';
 
 interface ManageCustomFormatsModalRowProps {
@@ -24,15 +20,6 @@ interface ManageCustomFormatsModalRowProps {
   columns: Column[];
 }
 
-function isDeletingSelector() {
-  return createSelector(
-    (state: AppState) => state.settings.customFormats.isDeleting,
-    (isDeleting) => {
-      return isDeleting;
-    }
-  );
-}
-
 function ManageCustomFormatsModalRow({
   id,
   name,
@@ -40,8 +27,7 @@ function ManageCustomFormatsModalRow({
 }: ManageCustomFormatsModalRowProps) {
   const { toggleSelected, useIsSelected } = useSelect<CustomFormat>();
   const isSelected = useIsSelected(id);
-  const dispatch = useDispatch();
-  const isDeleting = useSelector(isDeletingSelector());
+  const { deleteCustomFormat, isDeleting } = useDeleteCustomFormat(id);
 
   const [isEditCustomFormatModalOpen, setIsEditCustomFormatModalOpen] =
     useState(false);
@@ -49,7 +35,7 @@ function ManageCustomFormatsModalRow({
   const [isDeleteCustomFormatModalOpen, setIsDeleteCustomFormatModalOpen] =
     useState(false);
 
-  const handlelectedChange = useCallback(
+  const handleSelectedChange = useCallback(
     ({ id, value, shiftKey }: SelectStateInputProps) => {
       toggleSelected({ id, isSelected: value, shiftKey });
     },
@@ -58,31 +44,31 @@ function ManageCustomFormatsModalRow({
 
   const handleEditCustomFormatModalOpen = useCallback(() => {
     setIsEditCustomFormatModalOpen(true);
-  }, [setIsEditCustomFormatModalOpen]);
+  }, []);
 
   const handleEditCustomFormatModalClose = useCallback(() => {
     setIsEditCustomFormatModalOpen(false);
-  }, [setIsEditCustomFormatModalOpen]);
+  }, []);
 
   const handleDeleteCustomFormatPress = useCallback(() => {
     setIsEditCustomFormatModalOpen(false);
     setIsDeleteCustomFormatModalOpen(true);
-  }, [setIsEditCustomFormatModalOpen, setIsDeleteCustomFormatModalOpen]);
+  }, []);
 
   const handleDeleteCustomFormatModalClose = useCallback(() => {
     setIsDeleteCustomFormatModalOpen(false);
-  }, [setIsDeleteCustomFormatModalOpen]);
+  }, []);
 
   const handleConfirmDeleteCustomFormat = useCallback(() => {
-    dispatch(deleteCustomFormat({ id }));
-  }, [id, dispatch]);
+    deleteCustomFormat();
+  }, [deleteCustomFormat]);
 
   return (
     <TableRow>
       <TableSelectCell
         id={id}
         isSelected={isSelected}
-        onSelectedChange={handlelectedChange}
+        onSelectedChange={handleSelectedChange}
       />
 
       <TableRowCell className={styles.name}>{name}</TableRowCell>

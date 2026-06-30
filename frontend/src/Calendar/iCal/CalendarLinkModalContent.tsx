@@ -48,7 +48,7 @@ function CalendarLinkModalContent({
   );
 
   const { iCalHttpUrl, iCalWebCalUrl } = useMemo(() => {
-    let icalUrl = `${window.location.host}${window.Sonarr.urlBase}/feed/v3/calendar/Sonarr.ics?`;
+    let icalUrl = `${window.location.host}${window.Sonarr.urlBase}/feed/v5/calendar/Sonarr.ics?`;
 
     if (unmonitored) {
       icalUrl += 'unmonitored=true&';

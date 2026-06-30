@@ -4,6 +4,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.ImportLists.Simkl.User;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -53,11 +54,9 @@ namespace NzbDrone.Core.ImportLists.Simkl
             // Check to see if user has any activity since last sync, if not return empty to avoid work
             if (lastFetch.HasValue && lastActivity < lastFetch.Value.AddHours(-2))
             {
-                // mark failure to avoid deleting series due to emptyness
+                // mark failure to avoid deleting series due to emptiness
                 return new ImportListFetchResult(new List<ImportListItemInfo>(), true);
             }
-
-            var generator = GetRequestGenerator();
 
             return FetchItems(g => g.GetListItems(), true);
         }
@@ -110,7 +109,17 @@ namespace NzbDrone.Core.ImportLists.Simkl
 
                 if (response?.Resource != null)
                 {
-                    return response.Resource.TvShows.All;
+                    var showType = Settings switch
+                    {
+                        SimklUserSettings userSettings => (SimklUserShowType)userSettings.ShowType,
+                        _ => SimklUserShowType.Shows
+                    };
+
+                    return showType switch
+                    {
+                        SimklUserShowType.Anime => response.Resource.Anime.All,
+                        _ => response.Resource.TvShows.All
+                    };
                 }
             }
             catch (HttpException)

@@ -1,8 +1,6 @@
-import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import Modal from 'Components/Modal/Modal';
 import { sizes } from 'Helpers/Props';
-import { clearPendingChanges } from 'Store/Actions/baseActions';
 import EditCustomFormatModalContent, {
   EditCustomFormatModalContentProps,
 } from './EditCustomFormatModalContent';
@@ -16,18 +14,11 @@ function EditCustomFormatModal({
   onModalClose,
   ...otherProps
 }: EditCustomFormatModalProps) {
-  const dispatch = useDispatch();
-
-  const handleModalClose = useCallback(() => {
-    dispatch(clearPendingChanges({ section: 'settings.customFormats' }));
-    onModalClose();
-  }, [dispatch, onModalClose]);
-
   return (
-    <Modal isOpen={isOpen} size={sizes.LARGE} onModalClose={handleModalClose}>
+    <Modal isOpen={isOpen} size={sizes.LARGE} onModalClose={onModalClose}>
       <EditCustomFormatModalContent
         {...otherProps}
-        onModalClose={handleModalClose}
+        onModalClose={onModalClose}
       />
     </Modal>
   );

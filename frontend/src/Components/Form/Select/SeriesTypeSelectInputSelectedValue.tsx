@@ -7,6 +7,7 @@ interface SeriesTypeSelectInputOptionProps {
   values: ISeriesTypeOption[];
   format: string;
 }
+
 function SeriesTypeSelectInputSelectedValue(
   props: SeriesTypeSelectInputOptionProps
 ) {

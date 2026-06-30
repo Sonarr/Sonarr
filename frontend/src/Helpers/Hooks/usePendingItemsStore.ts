@@ -75,7 +75,7 @@ export const usePendingItemsStore = <T extends { id: number }>() => {
   );
 
   const getItemsWithPendingChanges = useCallback(
-    (originalItems: T[]): T[] => {
+    (originalItems: ReadonlyArray<T>): T[] => {
       return originalItems.map((originalItem) => {
         const pendingChanges = pendingItems.get(originalItem.id);
 
@@ -92,7 +92,7 @@ export const usePendingItemsStore = <T extends { id: number }>() => {
   }, [pendingItems]);
 
   const getPendingChangesForSave = useCallback(
-    (originalItems: T[]): T[] => {
+    (originalItems: ReadonlyArray<T>): T[] => {
       return originalItems.reduce<T[]>((acc, originalItem) => {
         const pendingChanges = pendingItems.get(originalItem.id);
 

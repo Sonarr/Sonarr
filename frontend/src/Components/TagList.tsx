@@ -8,7 +8,7 @@ import styles from './TagList.css';
 
 interface TagListProps {
   tags: number[];
-  tagList: Tag[];
+  tagList: ReadonlyArray<Tag>;
   kind?: Extract<Kind, LabelProps['kind']>;
 }
 

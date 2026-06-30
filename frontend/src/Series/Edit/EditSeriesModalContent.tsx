@@ -25,8 +25,8 @@ import {
 import MoveSeriesModal from 'Series/MoveSeries/MoveSeriesModal';
 import Series from 'Series/Series';
 import { useSaveSeries, useSingleSeries } from 'Series/useSeries';
-import selectSettings from 'Store/Selectors/selectSettings';
 import { InputChanged } from 'typings/inputs';
+import selectSettings from 'Utilities/selectSettings';
 import translate from 'Utilities/String/translate';
 import RootFolderModal from './RootFolder/RootFolderModal';
 import { RootFolderUpdated } from './RootFolder/RootFolderModalContent';
@@ -37,6 +37,7 @@ export interface EditSeriesModalContentProps {
   onModalClose: () => void;
   onDeleteSeriesPress: () => void;
 }
+
 function EditSeriesModalContent({
   seriesId,
   onModalClose,

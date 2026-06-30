@@ -18,7 +18,7 @@ import { clearImportSeries } from './importSeriesStore';
 import ImportSeriesTable from './ImportSeriesTable';
 
 function ImportSeries() {
-  const { rootFolderId: rootFolderIdString } = useParams<{
+  const { rootFolderId: rootFolderIdString = '' } = useParams<{
     rootFolderId: string;
   }>();
   const rootFolderId = parseInt(rootFolderIdString);

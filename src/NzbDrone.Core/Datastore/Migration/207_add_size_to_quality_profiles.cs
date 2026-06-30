@@ -154,29 +154,35 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getDefinitionsCmd = _connection.CreateCommand())
             {
                 getDefinitionsCmd.Transaction = _transaction;
-                getDefinitionsCmd.CommandText = "SELECT \"Id\", \"MinSize\", \"MaxSize\", \"PreferredSize\" FROM \"QualityDefinitions\"";
+                getDefinitionsCmd.CommandText = "SELECT \"Quality\", \"MinSize\", \"MaxSize\", \"PreferredSize\" FROM \"QualityDefinitions\"";
 
                 using (var reader = getDefinitionsCmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        var id = reader.GetInt32(0);
+                        var quality = reader.GetInt32(0);
 
-                        double.TryParse(reader.GetValue(1).ToString(), out var minSize);
-                        double.TryParse(reader.GetValue(2).ToString(), out var maxSize);
-                        double.TryParse(reader.GetValue(3).ToString(), out var preferredSize);
-
-                        sizes.Add(id, new Definition207
+                        sizes.Add(quality, new Definition207
                         {
-                            MinSize = minSize,
-                            MaxSize = maxSize,
-                            PreferredSize = preferredSize
+                            MinSize = ReadNullableDouble(reader, 1),
+                            MaxSize = ReadNullableDouble(reader, 2),
+                            PreferredSize = ReadNullableDouble(reader, 3)
                         });
                     }
                 }
             }
 
             return sizes;
+        }
+
+        private static double? ReadNullableDouble(IDataReader reader, int index)
+        {
+            if (reader.IsDBNull(index))
+            {
+                return null;
+            }
+
+            return double.TryParse(reader.GetValue(index).ToString(), out var value) ? value : null;
         }
     }
 }

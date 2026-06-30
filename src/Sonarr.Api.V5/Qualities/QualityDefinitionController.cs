@@ -50,12 +50,14 @@ public class QualityDefinitionController :
     }
 
     [HttpGet]
+    [Produces("application/json")]
     public Ok<List<QualityDefinitionResource>> GetAll()
     {
         return TypedResults.Ok(_qualityDefinitionService.All().ToResource());
     }
 
     [HttpPut]
+    [Consumes("application/json")]
     public Ok<List<QualityDefinitionResource>> UpdateMany([FromBody] List<QualityDefinitionResource> resource)
     {
         // Read from request

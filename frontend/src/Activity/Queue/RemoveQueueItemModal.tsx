@@ -26,6 +26,7 @@ interface RemoveQueueItemModalProps {
   canIgnore: boolean;
   isPending: boolean;
   selectedCount?: number;
+  downloadClient?: string;
   onRemovePress(): void;
   onModalClose: () => void;
 }
@@ -38,6 +39,7 @@ function RemoveQueueItemModal(props: RemoveQueueItemModalProps) {
     canChangeCategory,
     isPending,
     selectedCount,
+    downloadClient,
     onRemovePress,
     onModalClose,
   } = props;
@@ -164,6 +166,18 @@ function RemoveQueueItemModal(props: RemoveQueueItemModalProps) {
                 value={removalMethod}
                 values={removalMethodOptions}
                 isDisabled={!canChangeCategory && !canIgnore}
+                helpText={
+                  !canChangeCategory && !canIgnore
+                    ? translate(
+                        'RemoveQueueItemRemovalMethodDisabledHelpText',
+                        {
+                          downloadClient: downloadClient
+                            ? downloadClient
+                            : translate('DownloadClient'),
+                        }
+                      )
+                    : undefined
+                }
                 helpTextWarning={translate(
                   'RemoveQueueItemRemovalMethodHelpTextWarning'
                 )}

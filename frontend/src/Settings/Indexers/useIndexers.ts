@@ -67,7 +67,7 @@ export const useSortedIndexers = () => {
   const result = useIndexers();
 
   const sortedData = useMemo(
-    () => result.data.sort(sortByProp('name')),
+    () => [...result.data].sort(sortByProp('name')),
     [result.data]
   );
 

@@ -101,12 +101,10 @@ namespace NzbDrone.Core.Download.Pending
 
         public void AddMany(List<Tuple<DownloadDecision, PendingReleaseReason>> decisions)
         {
-            var pending = _pendingReleases;
-
             foreach (var seriesDecisions in decisions.GroupBy(v => v.Item1.RemoteEpisode.Series.Id))
             {
                 var series = seriesDecisions.First().Item1.RemoteEpisode.Series;
-                var alreadyPending = _pendingReleases.Where(p => p.SeriesId == series.Id).SelectList(s => s.JsonClone());
+                var alreadyPending = _pendingReleases.Where(p => p.SeriesId == series.Id).SelectList(s => s.Clone());
 
                 // TODO: Do we need IncludeRemoteEpisodes?
                 alreadyPending = IncludeRemoteEpisodes(alreadyPending, seriesDecisions.ToDictionaryIgnoreDuplicates(v => v.Item1.RemoteEpisode.Release.Title, v => v.Item1.RemoteEpisode));

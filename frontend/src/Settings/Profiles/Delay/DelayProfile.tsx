@@ -1,18 +1,17 @@
 import classNames from 'classnames';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { DragSourceMonitor, useDrag, useDrop, XYCoord } from 'react-dnd';
-import { useDispatch } from 'react-redux';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import DragType from 'Helpers/DragType';
 import { icons, kinds } from 'Helpers/Props';
-import { deleteDelayProfile } from 'Store/Actions/settingsActions';
 import { Tag } from 'Tags/useTags';
 import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
 import EditDelayProfileModal from './EditDelayProfileModal';
+import { useDeleteDelayProfile } from './useDelayProfiles';
 import styles from './DelayProfile.css';
 
 function getDelay(enabled: boolean, delay: number) {
@@ -46,7 +45,7 @@ interface DelayProfileProps {
   torrentDelay: number;
   order: number;
   tags: number[];
-  tagList: Tag[];
+  tagList: ReadonlyArray<Tag>;
   isDraggingDown: boolean;
   isDraggingUp: boolean;
   onDelayProfileDragEnd: (id: number, didDrop: boolean) => void;
@@ -68,7 +67,7 @@ function DelayProfile({
   onDelayProfileDragEnd,
   onDelayProfileDragMove,
 }: DelayProfileProps) {
-  const dispatch = useDispatch();
+  const { deleteDelayProfile } = useDeleteDelayProfile(id);
   const ref = useRef<HTMLDivElement>(null);
 
   const [isEditDelayProfileModalOpen, setIsEditDelayProfileModalOpen] =
@@ -105,8 +104,8 @@ function DelayProfile({
   }, []);
 
   const handleConfirmDeleteDelayProfile = useCallback(() => {
-    dispatch(deleteDelayProfile(id));
-  }, [id, dispatch]);
+    deleteDelayProfile();
+  }, [deleteDelayProfile]);
 
   const [{ isOver }, dropRef] = useDrop<DragItem, void, { isOver: boolean }>({
     accept: DragType.DelayProfile,
@@ -119,6 +118,7 @@ function DelayProfile({
       if (!ref.current) {
         return;
       }
+
       const dragIndex = item.order;
       const hoverIndex = order;
 

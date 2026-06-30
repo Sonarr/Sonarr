@@ -10,6 +10,7 @@ on:
   pull_request:
     branches:
       - v5-develop
+      - v5-redesign
     paths-ignore:
       - "src/NzbDrone.Core/Localization/Core/**"
       - "src/Sonarr.Api.*/openapi.json"
@@ -100,7 +101,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Volta
-        uses: volta-cli/action@v4
+        uses: volta-cli/action@v5
 
       - name: Yarn Install
         run: yarn install
@@ -221,6 +222,8 @@ jobs:
       ]
     secrets: inherit
     uses: ./.github/workflows/deploy.yml
+    permissions:
+      contents: write
     with:
       framework: ${{ needs.prepare.outputs.framework }}
       branch: ${{ github.ref_name }}
@@ -246,7 +249,7 @@ jobs:
 
     steps:
       - name: Notify
-        uses: tsickert/discord-webhook@v6.0.0
+        uses: tsickert/discord-webhook@v7.0.0
         with:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
           username: "GitHub Actions"

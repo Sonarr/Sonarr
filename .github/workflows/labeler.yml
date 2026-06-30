@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'Sonarr/Sonarr'
     steps:
-      - uses: actions/labeler@v5
+      - uses: actions/labeler@v6

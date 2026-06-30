@@ -71,7 +71,6 @@ function Modal({
 }: ModalProps) {
   const backgroundRef = useRef<HTMLDivElement>(null);
   const isBackdropPressed = useRef(false);
-  const bodyScrollTop = useRef(0);
   const wasOpen = usePrevious(isOpen);
   const modalId = useId();
 
@@ -128,8 +127,6 @@ function Modal({
       if (openModals.length === 1) {
         if (isIOS()) {
           setScrollLock(true);
-          bodyScrollTop.current = document.body.scrollTop;
-          elementClass(document.body).add(styles.modalOpenIOS);
         } else {
           elementClass(document.body).add(styles.modalOpen);
         }
@@ -138,11 +135,8 @@ function Modal({
       removeFromOpenModals(modalId);
 
       if (openModals.length === 0) {
-        setScrollLock(false);
-
         if (isIOS()) {
-          elementClass(document.body).remove(styles.modalOpenIOS);
-          document.body.scrollTop = bodyScrollTop.current;
+          setScrollLock(false);
         } else {
           elementClass(document.body).remove(styles.modalOpen);
         }

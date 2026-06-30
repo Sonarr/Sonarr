@@ -16,12 +16,14 @@ namespace Sonarr.Http.Frontend.Mappers
             _appFolderInfo = appFolderInfo;
         }
 
-        public override string Map(string resourceUrl)
+        protected override string FolderPath => _appFolderInfo.GetLogFolder();
+
+        protected override string MapPath(string resourceUrl)
         {
             var path = resourceUrl.Replace('/', Path.DirectorySeparatorChar);
             path = Path.GetFileName(path);
 
-            return Path.Combine(_appFolderInfo.GetLogFolder(), path);
+            return Path.Combine(FolderPath, path);
         }
 
         public override bool CanHandle(string resourceUrl)

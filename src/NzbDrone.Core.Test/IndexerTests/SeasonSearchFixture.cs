@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Threading.Tasks;
+using System.Threading;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.ExecuteAsync(It.Is<HttpRequest>(v => v.Method == HttpMethod.Get)))
-                .Returns<HttpRequest>(r => Task.FromResult(new HttpResponse(r, new HttpHeader(), "<xml></xml>")));
+                .ReturnsAsync((HttpRequest r, CancellationToken _) => new HttpResponse(r, new HttpHeader(), "<xml></xml>"));
         }
 
         private void WithIndexer(bool paging, int resultCount)

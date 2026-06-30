@@ -1,42 +1,43 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { DownloadClientAppState } from 'App/State/SettingsAppState';
+import React, { useCallback, useState } from 'react';
 import Card from 'Components/Card';
 import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { icons } from 'Helpers/Props';
-import { fetchDownloadClients } from 'Store/Actions/settingsActions';
-import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
-import DownloadClientModel from 'typings/DownloadClient';
-import sortByProp from 'Utilities/Array/sortByProp';
+import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import AddDownloadClientModal from './AddDownloadClientModal';
 import DownloadClient from './DownloadClient';
 import EditDownloadClientModal from './EditDownloadClientModal';
+import { useSortedDownloadClients } from './useDownloadClients';
 import styles from './DownloadClients.css';
 
 function DownloadClients() {
-  const dispatch = useDispatch();
-
-  const { error, isFetching, isPopulated, items } = useSelector(
-    createSortedSectionSelector<DownloadClientModel, DownloadClientAppState>(
-      'settings.downloadClients',
-      sortByProp('name')
-    )
-  );
+  const { isFetching, isFetched, data, error } = useSortedDownloadClients();
 
   const [isAddDownloadClientModalOpen, setIsAddDownloadClientModalOpen] =
     useState(false);
-
   const [isEditDownloadClientModalOpen, setIsEditDownloadClientModalOpen] =
     useState(false);
+  const [cloneDownloadClientId, setCloneDownloadClientId] = useState<
+    number | null
+  >(null);
+  const [selectedSchema, setSelectedSchema] = useState<
+    SelectedSchema | undefined
+  >(undefined);
 
   const handleAddDownloadClientPress = useCallback(() => {
+    setCloneDownloadClientId(null);
     setIsAddDownloadClientModalOpen(true);
   }, []);
 
-  const handleDownloadClientSelect = useCallback(() => {
+  const handleCloneDownloadClientPress = useCallback((id: number) => {
+    setCloneDownloadClientId(id);
+    setIsEditDownloadClientModalOpen(true);
+  }, []);
+
+  const handleDownloadClientSelect = useCallback((selected: SelectedSchema) => {
+    setSelectedSchema(selected);
     setIsAddDownloadClientModalOpen(false);
     setIsEditDownloadClientModalOpen(true);
   }, []);
@@ -46,12 +47,9 @@ function DownloadClients() {
   }, []);
 
   const handleEditDownloadClientModalClose = useCallback(() => {
+    setCloneDownloadClientId(null);
     setIsEditDownloadClientModalOpen(false);
   }, []);
-
-  useEffect(() => {
-    dispatch(fetchDownloadClients());
-  }, [dispatch]);
 
   return (
     <FieldSet legend={translate('DownloadClients')}>
@@ -59,11 +57,17 @@ function DownloadClients() {
         errorMessage={translate('DownloadClientsLoadError')}
         error={error}
         isFetching={isFetching}
-        isPopulated={isPopulated}
+        isPopulated={isFetched}
       >
         <div className={styles.downloadClients}>
-          {items.map((item) => {
-            return <DownloadClient key={item.id} {...item} />;
+          {data.map((item) => {
+            return (
+              <DownloadClient
+                key={item.id}
+                {...item}
+                onCloneDownloadClientPress={handleCloneDownloadClientPress}
+              />
+            );
           })}
 
           <Card
@@ -84,6 +88,8 @@ function DownloadClients() {
 
         <EditDownloadClientModal
           isOpen={isEditDownloadClientModalOpen}
+          cloneId={cloneDownloadClientId ?? undefined}
+          selectedSchema={selectedSchema}
           onModalClose={handleEditDownloadClientModalClose}
         />
       </PageSectionContent>

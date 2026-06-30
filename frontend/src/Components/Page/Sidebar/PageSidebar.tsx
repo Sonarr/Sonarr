@@ -62,6 +62,10 @@ const LINKS: SidebarItem[] = [
         title: () => translate('LibraryImport'),
         to: '/add/import',
       },
+      {
+        title: () => translate('Statistics'),
+        to: '/statistics',
+      },
     ],
   },
 
@@ -231,10 +235,7 @@ function PageSidebar() {
     transform: isSidebarVisible ? 0 : SIDEBAR_WIDTH * -1,
   });
 
-  const urlBase = window.Sonarr.urlBase;
-  const pathname = urlBase
-    ? location.pathname.substr(urlBase.length) || '/'
-    : location.pathname;
+  const { pathname } = location;
 
   const activeParent = useMemo(() => {
     return (

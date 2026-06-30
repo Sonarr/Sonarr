@@ -111,31 +111,31 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<SingleEpisodeSearchCriteria>()))
                 .Callback<SingleEpisodeSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .ReturnsAsync(new List<Parser.Model.ReleaseInfo>());
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<SeasonSearchCriteria>()))
                 .Callback<SeasonSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .ReturnsAsync(new List<Parser.Model.ReleaseInfo>());
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<DailyEpisodeSearchCriteria>()))
                 .Callback<DailyEpisodeSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .ReturnsAsync(new List<Parser.Model.ReleaseInfo>());
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<DailySeasonSearchCriteria>()))
                 .Callback<DailySeasonSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .ReturnsAsync(new List<Parser.Model.ReleaseInfo>());
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<AnimeEpisodeSearchCriteria>()))
                 .Callback<AnimeEpisodeSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .ReturnsAsync(new List<Parser.Model.ReleaseInfo>());
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<AnimeSeasonSearchCriteria>()))
                 .Callback<AnimeSeasonSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .ReturnsAsync(new List<Parser.Model.ReleaseInfo>());
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<SpecialEpisodeSearchCriteria>()))
                 .Callback<SpecialEpisodeSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .ReturnsAsync(new List<Parser.Model.ReleaseInfo>());
 
             return result;
         }

@@ -1,0 +1,11 @@
+.chartsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.charts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

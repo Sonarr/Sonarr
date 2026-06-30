@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useAppDimension } from 'App/appStore';
 import CommandNames from 'Commands/CommandNames';
-import { useCommands } from 'Commands/useCommands';
+import { useCommands, useExecuteCommand } from 'Commands/useCommands';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
@@ -112,7 +111,7 @@ function SeriesDetailsSeason({
   isExpanded,
   onExpandPress,
 }: SeriesDetailsSeasonProps) {
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
   const { monitored: seriesMonitored, path } = useSingleSeries(seriesId)!;
   const { data: items } = useSeasonEpisodes(seriesId, seasonNumber);
 
@@ -178,6 +177,7 @@ function SeriesDetailsSeason({
 
       if (shiftKey && lastToggled) {
         const { lower, upper } = getToggledRange(items, episodeId, lastToggled);
+
         for (let i = lower; i < upper; i++) {
           episodeIds.add(items[i].id);
         }
@@ -194,12 +194,12 @@ function SeriesDetailsSeason({
   );
 
   const handleSearchPress = useCallback(() => {
-    dispatch({
+    executeCommand({
       name: CommandNames.SeasonSearch,
       seriesId,
       seasonNumber,
     });
-  }, [seriesId, seasonNumber, dispatch]);
+  }, [seriesId, seasonNumber, executeCommand]);
 
   const handleOrganizePress = useCallback(() => {
     setIsOrganizeModalOpen(true);

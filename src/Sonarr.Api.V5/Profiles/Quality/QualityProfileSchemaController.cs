@@ -17,6 +17,7 @@ namespace Sonarr.Api.V5.Profiles.Quality
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public Ok<QualityProfileResource> GetSchema()
         {
             var qualityProfile = _profileService.GetDefaultProfile(string.Empty);

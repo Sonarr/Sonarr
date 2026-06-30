@@ -17,8 +17,8 @@ import {
 import styles from './ReleaseProfileItem.css';
 
 interface ReleaseProfileProps extends ReleaseProfileModel {
-  tagList: Tag[];
-  indexerList: IndexerModel[];
+  tagList: ReadonlyArray<Tag>;
+  indexerList: ReadonlyArray<IndexerModel>;
 }
 
 function ReleaseProfileItem(props: ReleaseProfileProps) {

@@ -1,22 +1,21 @@
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import Button from 'Components/Link/Button';
 import Link from 'Components/Link/Link';
 import Menu from 'Components/Menu/Menu';
 import MenuContent from 'Components/Menu/MenuContent';
 import { sizes } from 'Helpers/Props';
-import { selectDownloadClientSchema } from 'Store/Actions/settingsActions';
-import DownloadClient from 'typings/DownloadClient';
+import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import AddDownloadClientPresetMenuItem from './AddDownloadClientPresetMenuItem';
+import { DownloadClientModel } from './useDownloadClients';
 import styles from './AddDownloadClientItem.css';
 
 interface AddDownloadClientItemProps {
   implementation: string;
   implementationName: string;
   infoLink: string;
-  presets?: DownloadClient[];
-  onDownloadClientSelect: () => void;
+  presets?: DownloadClientModel[];
+  onDownloadClientSelect: (selectedSchema: SelectedSchema) => void;
 }
 
 function AddDownloadClientItem({
@@ -26,19 +25,11 @@ function AddDownloadClientItem({
   presets,
   onDownloadClientSelect,
 }: AddDownloadClientItemProps) {
-  const dispatch = useDispatch();
   const hasPresets = !!presets && !!presets.length;
 
   const handleDownloadClientSelect = useCallback(() => {
-    dispatch(
-      selectDownloadClientSchema({
-        implementation,
-        implementationName,
-      })
-    );
-
-    onDownloadClientSelect();
-  }, [implementation, implementationName, dispatch, onDownloadClientSelect]);
+    onDownloadClientSelect({ implementation, implementationName });
+  }, [implementation, implementationName, onDownloadClientSelect]);
 
   return (
     <div className={styles.downloadClient}>
