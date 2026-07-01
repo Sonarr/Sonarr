@@ -225,6 +225,7 @@ namespace NzbDrone.Core.ImportLists
                 // Break if Series Exists in DB
                 if (existingTvdbIds.Any(x => x == item.TvdbId))
                 {
+                    RetroApplyTags(importList, item);
                     _logger.Debug("{0} [{1}] Rejected, series exists in database", item.TvdbId, item.Title);
                     continue;
                 }
@@ -261,6 +262,26 @@ namespace NzbDrone.Core.ImportLists
             _addSeriesService.AddSeries(seriesToAdd, true);
 
             _logger.ProgressInfo("Import List Sync Completed. Items found: {0}, Series added: {1}", items.Count, seriesToAdd.Count);
+        }
+
+        private void RetroApplyTags(ImportListDefinition importList, ImportListItemInfo report)
+        {
+            if (importList.RetroApplyTags)
+            {
+                var series = _seriesService.FindByTvdbId(report.TvdbId);
+
+                var preCount = series.Tags.Count;
+                foreach (var tag in importList.Tags)
+                {
+                    series.Tags.Add(tag);
+                }
+
+                if (preCount != series.Tags.Count)
+                {
+                    _seriesService.UpdateSeries(series);
+                    _logger.Debug("{0} [{1}] Retro-Actively added tags to movie", report.TmdbId, report.Title);
+                }
+            }
         }
 
         public void Execute(ImportListSyncCommand message)

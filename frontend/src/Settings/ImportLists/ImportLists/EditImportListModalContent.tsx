@@ -71,6 +71,7 @@ function EditImportListModalContent({
     qualityProfileId,
     seriesType,
     seasonFolder,
+    retroApplyTags,
     tags,
     fields,
   } = item;
@@ -268,6 +269,17 @@ function EditImportListModalContent({
               name="tags"
               helpText={translate('ListTagsHelpText')}
               {...tags}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel>{translate('RadarrRetroactiveApply')}</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.CHECK}
+              name="retroApplyTags"
+              helpText={translate('RetroApplyListTagsHelpText')}
+              {...retroApplyTags}
               onChange={handleInputChange}
             />
           </FormGroup>
