@@ -31,16 +31,16 @@ namespace NzbDrone.Core.ImportLists
         private readonly Logger _logger;
 
         public ImportListSyncService(IImportListFactory importListFactory,
-                              IImportListStatusService importListStatusService,
-                              IImportListExclusionService importListExclusionService,
-                              IImportListItemService importListItemService,
-                              IFetchAndParseImportList listFetcherAndParser,
-                              ISearchForNewSeries seriesSearchService,
-                              ISeriesService seriesService,
-                              IAddSeriesService addSeriesService,
-                              IConfigService configService,
-                              ITaskManager taskManager,
-                              Logger logger)
+            IImportListStatusService importListStatusService,
+            IImportListExclusionService importListExclusionService,
+            IImportListItemService importListItemService,
+            IFetchAndParseImportList listFetcherAndParser,
+            ISearchForNewSeries seriesSearchService,
+            ISeriesService seriesService,
+            IAddSeriesService addSeriesService,
+            IConfigService configService,
+            ITaskManager taskManager,
+            Logger logger)
         {
             _importListFactory = importListFactory;
             _importListStatusService = importListStatusService;
@@ -222,16 +222,21 @@ namespace NzbDrone.Core.ImportLists
                     continue;
                 }
 
-                // Break if Series Exists in DB
+                // Break if Series Exists in DB, if it exists, update the tags with the tags in the import list and move to the next item
                 if (existingTvdbIds.Any(x => x == item.TvdbId))
                 {
+                    UpdateTagsOnExistingSeries(importList, item);
                     _logger.Debug("{0} [{1}] Rejected, series exists in database", item.TvdbId, item.Title);
                     continue;
                 }
 
+                // search the existing seriesToAdd queue to see if we already have the series queued to insert
+                var pendingSeries = seriesToAdd.FirstOrDefault(s => s.TvdbId == item.TvdbId);
+
                 // Append Series if not already in DB or already on add list
-                if (seriesToAdd.All(s => s.TvdbId != item.TvdbId))
+                if (pendingSeries == null)
                 {
+                    // Add the series to `seriesToAdd`
                     var monitored = importList.ShouldMonitor != MonitorTypes.None;
 
                     seriesToAdd.Add(new Series
@@ -256,11 +261,52 @@ namespace NzbDrone.Core.ImportLists
                         }
                     });
                 }
+                else
+                {
+                    // Add the tags for the current import list to the existing queued series.
+                    foreach (var tag in importList.Tags)
+                    {
+                        pendingSeries.Tags.Add(tag);
+                    }
+                }
             }
 
             _addSeriesService.AddSeries(seriesToAdd, true);
 
             _logger.ProgressInfo("Import List Sync Completed. Items found: {0}, Series added: {1}", items.Count, seriesToAdd.Count);
+        }
+
+        private void UpdateExistingTagSeriesRecord(List<Series> existingList, ImportListItemInfo item, ImportListDefinition importList)
+        {
+            var existing = existingList.FirstOrDefault(s => s.TvdbId == item.TvdbId);
+
+            if (existing != null)
+            {
+                foreach (var tag in importList.Tags)
+                {
+                    existing.Tags.Add(tag);
+                }
+            }
+        }
+
+        private void UpdateTagsOnExistingSeries(ImportListDefinition importList, ImportListItemInfo report)
+        {
+            if (importList.TagExisting)
+            {
+                var series = _seriesService.FindByTvdbId(report.TvdbId);
+
+                var preCount = series.Tags.Count;
+                foreach (var tag in importList.Tags)
+                {
+                    series.Tags.Add(tag);
+                }
+
+                if (preCount != series.Tags.Count)
+                {
+                    _seriesService.UpdateTags(series);
+                    _logger.Debug("{0} [{1}] tagged existing series", report.TvdbId, report.Title);
+                }
+            }
         }
 
         public void Execute(ImportListSyncCommand message)
