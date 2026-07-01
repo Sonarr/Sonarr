@@ -56,7 +56,7 @@ public class ImportListResourceMapper : ProviderResourceMapper<ImportListResourc
         definition.SeasonFolder = resource.SeasonFolder;
         definition.ListType = resource.ListType;
         definition.MinRefreshInterval = resource.MinRefreshInterval;
-        resource.TagExisting = definition.TagExisting;
+        definition.TagExisting = resource.TagExisting;
 
         return definition;
     }

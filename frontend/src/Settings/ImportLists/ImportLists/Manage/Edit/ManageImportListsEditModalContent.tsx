@@ -80,6 +80,7 @@ function ManageImportListsEditModalContent(
       hasChanges = true;
       payload.rootFolderPath = rootFolderPath;
     }
+
     if (tagExisting !== NO_CHANGE) {
       hasChanges = true;
       payload.tagExisting = tagExisting === 'enabled';

@@ -8,8 +8,6 @@ interface CssExports {
   'rootFolderPath': string;
   'tagExisting': string;
   'tags': string;
-  'tagExisting': string;
-  
 }
 export const cssExports: CssExports;
 export default cssExports;
