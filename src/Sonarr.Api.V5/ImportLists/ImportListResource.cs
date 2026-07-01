@@ -17,7 +17,7 @@ public class ImportListResource : ProviderResource<ImportListResource>
     public ImportListType ListType { get; set; }
     public int ListOrder { get; set; }
     public TimeSpan MinRefreshInterval { get; set; }
-    public bool RetroApplyTags { get; set; }
+    public bool TagExisting { get; set; }
 }
 
 public class ImportListResourceMapper : ProviderResourceMapper<ImportListResource, ImportListDefinition>
@@ -37,7 +37,7 @@ public class ImportListResourceMapper : ProviderResourceMapper<ImportListResourc
         resource.ListType = definition.ListType;
         resource.ListOrder = (int)definition.ListType;
         resource.MinRefreshInterval = definition.MinRefreshInterval;
-        resource.RetroApplyTags = definition.RetroApplyTags;
+        resource.TagExisting = definition.TagExisting;
 
         return resource;
     }
@@ -56,7 +56,7 @@ public class ImportListResourceMapper : ProviderResourceMapper<ImportListResourc
         definition.SeasonFolder = resource.SeasonFolder;
         definition.ListType = resource.ListType;
         definition.MinRefreshInterval = resource.MinRefreshInterval;
-        definition.RetroApplyTags = resource.RetroApplyTags;
+        resource.TagExisting = definition.TagExisting;
 
         return definition;
     }
