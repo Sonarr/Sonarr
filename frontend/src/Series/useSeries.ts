@@ -918,7 +918,11 @@ export const useUpdateSeriesMonitor = (
     mutationOptions: {
       onSuccess: (_, variables) => {
         if (shouldFetchEpisodesAfterUpdate) {
-          queryClient.invalidateQueries({ queryKey: ['/episode'] });
+          variables.series.forEach((s) => {
+            queryClient.invalidateQueries({
+              queryKey: ['/episode', { seriesId: s.id }],
+            });
+          });
         }
 
         queryClient.setQueryData<Series[]>(['/series'], (oldSeries) => {

@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
@@ -14,63 +12,34 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
     public class SetEpisodeMontitoredFixture : CoreTest<EpisodeMonitoredService>
     {
         private Series _series;
-        private List<Episode> _episodes;
 
         [SetUp]
         public void Setup()
         {
-            var seasons = 4;
-
             _series = Builder<Series>.CreateNew()
-                                     .With(s => s.Seasons = Builder<Season>.CreateListOfSize(seasons)
-                                                                           .All()
-                                                                           .With(n => n.Monitored = true)
-                                                                           .Build()
-                                                                           .ToList())
+                                     .With(s => s.Status = SeriesStatusType.Continuing)
+                                     .With(s => s.Seasons = new List<Season>
+                                                            {
+                                                                new Season { SeasonNumber = 0, Monitored = true },
+                                                                new Season { SeasonNumber = 1, Monitored = true },
+                                                                new Season { SeasonNumber = 2, Monitored = true }
+                                                            })
                                      .Build();
 
-            _episodes = Builder<Episode>.CreateListOfSize(seasons)
-                                        .All()
-                                        .With(e => e.Monitored = true)
-                                        .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-7))
-
-                                        // Missing
-                                        .TheFirst(1)
-                                        .With(e => e.EpisodeFileId = 0)
-
-                                        // Has File
-                                        .TheNext(1)
-                                        .With(e => e.EpisodeFileId = 1)
-
-                                         // Future
-                                        .TheNext(1)
-                                        .With(e => e.EpisodeFileId = 0)
-                                        .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(7))
-
-                                        // Future/TBA
-                                        .TheNext(1)
-                                        .With(e => e.EpisodeFileId = 0)
-                                        .With(e => e.AirDateUtc = null)
-                                        .Build()
-                                        .ToList();
-
-            Mocker.GetMock<IEpisodeService>()
-                  .Setup(s => s.GetEpisodeBySeries(It.IsAny<int>()))
-                  .Returns(_episodes);
+            GivenMonitoredSeasons(_series.Seasons.Where(s => s.SeasonNumber > 0 && s.Monitored)
+                                                 .Select(s => s.SeasonNumber)
+                                                 .ToArray());
         }
 
-        private void GivenSpecials()
+        private void GivenMonitoredSeasons(params int[] seasonNumbers)
         {
-            foreach (var episode in _episodes)
-            {
-                episode.SeasonNumber = 0;
-            }
-
-            _series.Seasons = new List<Season> { new Season { Monitored = false, SeasonNumber = 0 } };
+            Mocker.GetMock<IEpisodeService>()
+                  .Setup(s => s.SetEpisodeMonitoredBySeries(It.IsAny<int>(), It.IsAny<MonitorTypes>(), It.IsAny<int>(), It.IsAny<int>()))
+                  .Returns(seasonNumbers.ToList());
         }
 
         [Test]
-        public void should_be_able_to_monitor_series_without_changing_episodes()
+        public void should_update_series_without_changing_episodes_when_options_are_null()
         {
             Subject.SetEpisodeMonitoredStatus(_series, null);
 
@@ -78,351 +47,123 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
                   .Verify(v => v.UpdateSeries(It.IsAny<Series>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
 
             Mocker.GetMock<IEpisodeService>()
-                  .Verify(v => v.UpdateEpisodes(It.IsAny<List<Episode>>()), Times.Never());
+                  .Verify(v => v.SetEpisodeMonitoredBySeries(It.IsAny<int>(), It.IsAny<MonitorTypes>(), It.IsAny<int>(), It.IsAny<int>()), Times.Never());
         }
 
         [Test]
-        public void should_be_able_to_monitor_all_episodes()
+        public void should_do_nothing_when_skip()
         {
-            Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions());
+            Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions { Monitor = MonitorTypes.Skip });
 
             Mocker.GetMock<IEpisodeService>()
-                  .Verify(v => v.UpdateEpisodes(It.Is<List<Episode>>(l => l.All(e => e.Monitored))));
+                  .Verify(v => v.SetEpisodeMonitoredBySeries(It.IsAny<int>(), It.IsAny<MonitorTypes>(), It.IsAny<int>(), It.IsAny<int>()), Times.Never());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.IsAny<Series>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Never());
         }
 
         [Test]
-        public void should_be_able_to_monitor_missing_episodes_only()
+        public void should_apply_monitored_status_with_first_and_last_season()
         {
-            var monitoringOptions = new MonitoringOptions
-                                    {
-                                        Monitor = MonitorTypes.Missing
-                                    };
-
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
-
-            VerifyMonitored(e => !e.HasFile);
-            VerifyNotMonitored(e => e.HasFile);
-        }
-
-        [Test]
-        public void should_be_able_to_monitor_new_episodes_only()
-        {
-            var monitoringOptions = new MonitoringOptions
-            {
-                Monitor = MonitorTypes.Future
-            };
-
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
-
-            VerifyMonitored(e => e.AirDateUtc.HasValue && e.AirDateUtc.Value.After(DateTime.UtcNow));
-            VerifyMonitored(e => !e.AirDateUtc.HasValue);
-            VerifyNotMonitored(e => e.AirDateUtc.HasValue && e.AirDateUtc.Value.Before(DateTime.UtcNow));
-        }
-
-        [Test]
-        public void should_not_monitor_missing_specials()
-        {
-            GivenSpecials();
-
-            var monitoringOptions = new MonitoringOptions
-            {
-                Monitor = MonitorTypes.Missing
-            };
-
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
-
-            VerifyNotMonitored(e => e.SeasonNumber == 0);
-        }
-
-        [Test]
-        public void should_not_monitor_new_specials()
-        {
-            GivenSpecials();
-
-            var monitoringOptions = new MonitoringOptions
-            {
-                Monitor = MonitorTypes.Future
-            };
-
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
-
-            VerifyNotMonitored(e => e.SeasonNumber == 0);
-        }
-
-        [Test]
-        public void should_monitor_specials()
-        {
-            GivenSpecials();
-
-            var monitoringOptions = new MonitoringOptions
-            {
-                Monitor = MonitorTypes.MonitorSpecials
-            };
-
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
-
-            VerifyMonitored(e => e.SeasonNumber == 0);
-        }
-
-        [Test]
-        public void should_unmonitor_specials()
-        {
-            GivenSpecials();
-
-            var monitoringOptions = new MonitoringOptions
-            {
-                Monitor = MonitorTypes.UnmonitorSpecials
-            };
-
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
-
-            VerifyNotMonitored(e => e.SeasonNumber == 0);
-        }
-
-        [Test]
-        public void should_unmonitor_specials_after_monitoring()
-        {
-            GivenSpecials();
-
-            var monitoringOptions = new MonitoringOptions
-            {
-                Monitor = MonitorTypes.MonitorSpecials
-            };
-
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
-
-            monitoringOptions = new MonitoringOptions
-            {
-                Monitor = MonitorTypes.UnmonitorSpecials
-            };
-
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
-
-            VerifyNotMonitored(e => e.SeasonNumber == 0);
-        }
-
-        [Test]
-        public void should_not_monitor_season_when_all_episodes_are_monitored_except_last_season()
-        {
-            _series.Seasons = Builder<Season>.CreateListOfSize(2)
-                                             .All()
-                                             .With(n => n.Monitored = true)
-                                             .Build()
-                                             .ToList();
-
-            _episodes = Builder<Episode>.CreateListOfSize(5)
-                                        .All()
-                                        .With(e => e.SeasonNumber = 1)
-                                        .With(e => e.EpisodeFileId = 0)
-                                        .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-5))
-                                        .TheLast(1)
-                                        .With(e => e.SeasonNumber = 2)
-                                        .Build()
-                                        .ToList();
+            Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions { Monitor = MonitorTypes.Missing });
 
             Mocker.GetMock<IEpisodeService>()
-                  .Setup(s => s.GetEpisodeBySeries(It.IsAny<int>()))
-                  .Returns(_episodes);
-
-            var monitoringOptions = new MonitoringOptions
-            {
-                Monitor = MonitorTypes.LastSeason
-            };
-
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
-
-            VerifySeasonMonitored(n => n.SeasonNumber == 2);
-            VerifySeasonNotMonitored(n => n.SeasonNumber == 1);
+                  .Verify(v => v.SetEpisodeMonitoredBySeries(_series.Id, MonitorTypes.Missing, 1, 2), Times.Once());
         }
 
         [Test]
-        public void should_be_able_to_monitor_no_episodes()
+        public void should_monitor_last_season_when_monitoring_all()
         {
-            var monitoringOptions = new MonitoringOptions
-                                    {
-                                        Monitor = MonitorTypes.None
-                                    };
+            Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions { Monitor = MonitorTypes.All });
 
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
-
-            Mocker.GetMock<IEpisodeService>()
-                  .Verify(v => v.UpdateEpisodes(It.Is<List<Episode>>(l => l.All(e => !e.Monitored))));
+            VerifySeasonMonitored(2);
         }
 
         [Test]
-        public void should_monitor_missing_episodes()
+        public void should_monitor_last_season_when_monitoring_future_and_series_continuing()
         {
-            var monitoringOptions = new MonitoringOptions
-                                    {
-                                        Monitor = MonitorTypes.Missing
-                                    };
+            _series.Status = SeriesStatusType.Continuing;
 
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
+            Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions { Monitor = MonitorTypes.Future });
 
-            VerifyMonitored(e => !e.HasFile);
-            VerifyNotMonitored(e => e.HasFile);
+            VerifySeasonMonitored(2);
         }
 
         [Test]
-        public void should_monitor_last_season_if_all_episodes_aired_more_than_90_days_ago()
+        public void should_monitor_last_season_when_monitoring_future_and_series_upcoming()
         {
-            _series.Seasons = Builder<Season>.CreateListOfSize(2)
-                .All()
-                .With(n => n.Monitored = true)
-                .Build()
-                .ToList();
+            _series.Status = SeriesStatusType.Upcoming;
 
-            _episodes = Builder<Episode>.CreateListOfSize(5)
-                .All()
-                .With(e => e.SeasonNumber = 1)
-                .With(e => e.EpisodeFileId = 0)
-                .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-200))
-                .TheLast(2)
-                .With(e => e.SeasonNumber = 2)
-                .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-100))
-                .Build()
-                .ToList();
+            Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions { Monitor = MonitorTypes.Future });
 
-            var monitoringOptions = new MonitoringOptions
-            {
-                Monitor = MonitorTypes.LastSeason
-            };
-
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
-
-            VerifySeasonMonitored(n => n.SeasonNumber == 2);
-            VerifyMonitored(n => n.SeasonNumber == 2);
-
-            VerifySeasonNotMonitored(n => n.SeasonNumber == 1);
-            VerifyNotMonitored(n => n.SeasonNumber == 1);
+            VerifySeasonMonitored(2);
         }
 
         [Test]
-        public void should_not_monitor_any_recent_episodes_if_all_episodes_aired_more_than_90_days_ago()
+        public void should_not_monitor_last_season_when_monitoring_future_and_series_ended()
         {
-            _episodes.ForEach(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-100));
+            _series.Status = SeriesStatusType.Ended;
 
-            var monitoringOptions = new MonitoringOptions
-                                    {
-                                        Monitor = MonitorTypes.Recent
-                                    };
+            GivenMonitoredSeasons();
 
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
+            Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions { Monitor = MonitorTypes.Future });
 
-            Mocker.GetMock<IEpisodeService>()
-                  .Verify(v => v.UpdateEpisodes(It.Is<List<Episode>>(l => l.All(e => !e.Monitored))));
+            VerifySeasonNotMonitored(2);
         }
 
         [Test]
-        public void should_not_monitor_last_season_for_future_episodes_if_all_episodes_already_aired()
+        public void should_not_monitor_first_season_when_monitoring_pilot()
         {
-            _episodes.ForEach(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-7));
+            GivenMonitoredSeasons(1);
 
-            var monitoringOptions = new MonitoringOptions
-            {
-                Monitor = MonitorTypes.Future
-            };
+            Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions { Monitor = MonitorTypes.Pilot });
 
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
-
-            VerifySeasonNotMonitored(n => n.SeasonNumber > 0);
-            VerifyNotMonitored(n => n.SeasonNumber > 0);
+            VerifySeasonNotMonitored(1);
         }
 
         [Test]
-        public void should_monitor_any_recent_and_future_episodes_if_all_episodes_aired_within_90_days()
+        public void should_monitor_season_with_monitored_episodes()
         {
-            _series.Seasons = Builder<Season>.CreateListOfSize(1)
-                .All()
-                .With(n => n.Monitored = true)
-                .Build()
-                .ToList();
+            GivenMonitoredSeasons(1);
 
-            _episodes = Builder<Episode>.CreateListOfSize(5)
-                .All()
-                .With(e => e.SeasonNumber = 1)
-                .With(e => e.EpisodeFileId = 0)
-                .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-200))
-                .TheLast(3)
-                .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-5))
-                .TheLast(1)
-                .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(30))
-                .Build()
-                .ToList();
+            Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions { Monitor = MonitorTypes.Missing });
 
-            Mocker.GetMock<IEpisodeService>()
-                .Setup(s => s.GetEpisodeBySeries(It.IsAny<int>()))
-                .Returns(_episodes);
-
-            var monitoringOptions = new MonitoringOptions
-            {
-                Monitor = MonitorTypes.Recent
-            };
-
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
-
-            VerifySeasonMonitored(n => n.SeasonNumber == 1);
-            VerifyNotMonitored(n => n.AirDateUtc.HasValue && n.AirDateUtc.Value.Before(DateTime.UtcNow.AddDays(-90)));
-            VerifyMonitored(n => n.AirDateUtc.HasValue && n.AirDateUtc.Value.After(DateTime.UtcNow.AddDays(-90)));
+            VerifySeasonMonitored(1);
+            VerifySeasonNotMonitored(2);
         }
 
         [Test]
-        public void should_monitor_latest_season_if_some_episodes_have_aired()
+        public void should_unmonitor_seasons_without_monitored_episodes()
         {
-            _series.Seasons = Builder<Season>.CreateListOfSize(2)
-                                             .All()
-                                             .With(n => n.Monitored = true)
-                                             .Build()
-                                             .ToList();
+            GivenMonitoredSeasons();
 
-            _episodes = Builder<Episode>.CreateListOfSize(5)
-                                        .All()
-                                        .With(e => e.SeasonNumber = 1)
-                                        .With(e => e.EpisodeFileId = 0)
-                                        .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-100))
-                                        .TheLast(2)
-                                        .With(e => e.SeasonNumber = 2)
-                                        .TheLast(1)
-                                        .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(100))
-                                        .Build()
-                                        .ToList();
+            Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions { Monitor = MonitorTypes.None });
 
-            var monitoringOptions = new MonitoringOptions
-                                    {
-                                        Monitor = MonitorTypes.LastSeason
-                                    };
-
-            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
-
-            VerifySeasonMonitored(n => n.SeasonNumber == 2);
-            VerifyMonitored(n => n.SeasonNumber == 2);
-
-            VerifySeasonNotMonitored(n => n.SeasonNumber == 1);
-            VerifyNotMonitored(n => n.SeasonNumber == 1);
+            VerifySeasonNotMonitored(0);
+            VerifySeasonNotMonitored(1);
+            VerifySeasonNotMonitored(2);
         }
 
-        private void VerifyMonitored(Func<Episode, bool> predicate)
+        [Test]
+        public void should_monitor_specials_season_when_specials_have_monitored_episodes()
         {
-            Mocker.GetMock<IEpisodeService>()
-                .Verify(v => v.UpdateEpisodes(It.Is<List<Episode>>(l => l.Where(predicate).All(e => e.Monitored))));
+            GivenMonitoredSeasons(0);
+
+            Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions { Monitor = MonitorTypes.MonitorSpecials });
+
+            VerifySeasonMonitored(0);
         }
 
-        private void VerifyNotMonitored(Func<Episode, bool> predicate)
-        {
-            Mocker.GetMock<IEpisodeService>()
-                .Verify(v => v.UpdateEpisodes(It.Is<List<Episode>>(l => l.Where(predicate).All(e => !e.Monitored))));
-        }
-
-        private void VerifySeasonMonitored(Func<Season, bool> predicate)
+        private void VerifySeasonMonitored(int seasonNumber)
         {
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Where(predicate).All(n => n.Monitored)), It.IsAny<bool>(), It.IsAny<bool>()));
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Single(n => n.SeasonNumber == seasonNumber).Monitored), It.IsAny<bool>(), It.IsAny<bool>()));
         }
 
-        private void VerifySeasonNotMonitored(Func<Season, bool> predicate)
+        private void VerifySeasonNotMonitored(int seasonNumber)
         {
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Where(predicate).All(n => !n.Monitored)), It.IsAny<bool>(), It.IsAny<bool>()));
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => !s.Seasons.Single(n => n.SeasonNumber == seasonNumber).Monitored), It.IsAny<bool>(), It.IsAny<bool>()));
         }
     }
 }

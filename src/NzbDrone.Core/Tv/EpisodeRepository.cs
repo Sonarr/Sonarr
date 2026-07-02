@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Dapper;
 using NLog;
@@ -29,6 +30,7 @@ namespace NzbDrone.Core.Tv
         void SetMonitoredFlat(Episode episode, bool monitored);
         void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
         void SetMonitored(IEnumerable<int> ids, bool monitored);
+        List<int> SetMonitored(int seriesId, MonitorTypes monitor, int firstSeason, int lastSeason);
         void SetFileId(Episode episode, int fileId);
         void ClearFileId(Episode episode, bool unmonitor);
     }
@@ -192,6 +194,83 @@ namespace NzbDrone.Core.Tv
             SetFields(episodes, p => p.Monitored);
         }
 
+        public List<int> SetMonitored(int seriesId, MonitorTypes monitor, int firstSeason, int lastSeason)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("seriesId", seriesId);
+
+            using var conn = _database.OpenConnection();
+
+            if (monitor is MonitorTypes.MonitorSpecials or MonitorTypes.UnmonitorSpecials)
+            {
+                SetMonitoredWhere(conn, null, "\"SeriesId\" = @seriesId AND \"SeasonNumber\" = 0", monitor == MonitorTypes.MonitorSpecials, parameters);
+
+                return GetSeasonNumbersWithMonitoredEpisodes(conn, seriesId);
+            }
+
+            if (monitor == MonitorTypes.None)
+            {
+                SetMonitoredWhere(conn, null, "\"SeriesId\" = @seriesId", false, parameters);
+
+                return new List<int>();
+            }
+
+            string predicate;
+
+            if (monitor == MonitorTypes.All)
+            {
+                predicate = "\"SeasonNumber\" > 0";
+            }
+            else if (monitor == MonitorTypes.Future)
+            {
+                predicate = "\"SeasonNumber\" > 0 AND (\"AirDateUtc\" IS NULL OR \"AirDateUtc\" >= @now)";
+                parameters.Add("now", DateTime.UtcNow);
+            }
+            else if (monitor == MonitorTypes.Missing)
+            {
+                predicate = "\"SeasonNumber\" > 0 AND \"EpisodeFileId\" = 0";
+            }
+            else if (monitor == MonitorTypes.Existing)
+            {
+                predicate = "\"SeasonNumber\" > 0 AND \"EpisodeFileId\" <> 0";
+            }
+            else if (monitor == MonitorTypes.Pilot)
+            {
+                predicate = "\"SeasonNumber\" > 0 AND \"SeasonNumber\" = @firstSeason AND \"EpisodeNumber\" = 1";
+                parameters.Add("firstSeason", firstSeason);
+            }
+            else if (monitor == MonitorTypes.FirstSeason)
+            {
+                predicate = "\"SeasonNumber\" > 0 AND \"SeasonNumber\" = @firstSeason";
+                parameters.Add("firstSeason", firstSeason);
+            }
+#pragma warning disable CS0612
+            else if (monitor is MonitorTypes.LastSeason or MonitorTypes.LatestSeason)
+#pragma warning restore CS0612
+            {
+                predicate = "\"SeasonNumber\" > 0 AND \"SeasonNumber\" = @lastSeason";
+                parameters.Add("lastSeason", lastSeason);
+            }
+            else if (monitor == MonitorTypes.Recent)
+            {
+                predicate = "\"SeasonNumber\" > 0 AND (\"AirDateUtc\" IS NULL OR \"AirDateUtc\" >= @cutoff)";
+                parameters.Add("cutoff", DateTime.UtcNow.AddDays(-90));
+            }
+            else
+            {
+                return GetSeasonNumbersWithMonitoredEpisodes(conn, seriesId);
+            }
+
+            using (var tran = conn.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                SetMonitoredWhere(conn, tran, $"\"SeriesId\" = @seriesId AND ({predicate})", true, parameters);
+                SetMonitoredWhere(conn, tran, $"\"SeriesId\" = @seriesId AND NOT ({predicate})", false, parameters);
+                tran.Commit();
+            }
+
+            return GetSeasonNumbersWithMonitoredEpisodes(conn, seriesId);
+        }
+
         public void SetFileId(Episode episode, int fileId)
         {
             episode.EpisodeFileId = fileId;
@@ -303,6 +382,20 @@ namespace NzbDrone.Core.Tv
                 .ToList();
 
             return string.Format("({0})", string.Join(" OR ", clauses));
+        }
+
+        private List<int> GetSeasonNumbersWithMonitoredEpisodes(IDbConnection conn, int seriesId)
+        {
+            return conn.Query<int>("SELECT DISTINCT \"SeasonNumber\" FROM \"Episodes\" WHERE \"SeriesId\" = @seriesId AND \"Monitored\" = @monitored",
+                new { seriesId, monitored = true }).ToList();
+        }
+
+        private void SetMonitoredWhere(IDbConnection conn, IDbTransaction tran, string whereClause, bool monitored, DynamicParameters parameters)
+        {
+            var p = new DynamicParameters(parameters);
+            p.Add("monitored", monitored);
+
+            conn.Execute($"UPDATE \"Episodes\" SET \"Monitored\" = @monitored WHERE {whereClause} AND \"Monitored\" <> @monitored", p, tran);
         }
 
         private Episode FindOneByAirDate(int seriesId, string date)

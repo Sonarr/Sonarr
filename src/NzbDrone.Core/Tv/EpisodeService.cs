@@ -39,6 +39,7 @@ namespace NzbDrone.Core.Tv
         void UpdateMany(List<Episode> episodes);
         void DeleteMany(List<Episode> episodes);
         void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
+        List<int> SetEpisodeMonitoredBySeries(int seriesId, MonitorTypes monitor, int firstSeason, int lastSeason);
     }
 
     public class EpisodeService : IEpisodeService,
@@ -189,6 +190,11 @@ namespace NzbDrone.Core.Tv
         public void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)
         {
             _episodeRepository.SetMonitoredBySeason(seriesId, seasonNumber, monitored);
+        }
+
+        public List<int> SetEpisodeMonitoredBySeries(int seriesId, MonitorTypes monitor, int firstSeason, int lastSeason)
+        {
+            return _episodeRepository.SetMonitored(seriesId, monitor, firstSeason, lastSeason);
         }
 
         public void UpdateEpisodes(List<Episode> episodes)
