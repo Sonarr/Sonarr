@@ -64,6 +64,12 @@ const COLUMNS = [
     isSortable: true,
     isVisible: true,
   },
+  {
+    name: 'tagExisting',
+    label: () => translate('TagExisting'),
+    isSortable: true,
+    isVisible: true,
+  },
 ];
 
 interface ManageImportListsModalContentProps {

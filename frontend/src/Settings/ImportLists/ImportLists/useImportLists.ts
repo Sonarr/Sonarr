@@ -30,6 +30,7 @@ export interface ImportListModel extends Provider {
   listOrder: number;
   minRefreshInterval: string;
   tags: number[];
+  tagExisting: boolean;
 }
 
 interface BulkEditImportListsPayload {
