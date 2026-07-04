@@ -219,10 +219,7 @@ function BlocklistContent() {
       </PageToolbar>
 
       <PageContentBody>
-        <PageHeading
-          scope={translate('Activity')}
-          title={translate('Blocklist')}
-        />
+        <PageHeading title={translate('Blocklist')} />
 
         {isLoading && !isFetched ? <LoadingIndicator /> : null}
 

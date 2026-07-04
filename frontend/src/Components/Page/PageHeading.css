@@ -2,32 +2,6 @@
   margin-bottom: 24px;
 }
 
-.scopeLine {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-
-  &::after {
-    flex: 1;
-    height: 1px;
-    background-color: var(--inputBorderColor);
-    content: "";
-    opacity: 0.5;
-  }
-}
-
-.scope {
-  flex: 0 0 auto;
-  padding-right: 8px;
-  color: var(--accentDeep);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-weight: 500;
-  font-size: 10px;
-  font-family: $monoSpaceFontFamily;
-}
-
-
 .row {
   display: flex;
   align-items: baseline;

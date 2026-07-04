@@ -162,10 +162,7 @@ function History() {
       </PageToolbar>
 
       <PageContentBody>
-        <PageHeading
-          scope={translate('Activity')}
-          title={translate('History')}
-        />
+        <PageHeading title={translate('History')} />
 
         {isFetchingAny && !isAllPopulated ? <LoadingIndicator /> : null}
 
