@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React from 'react';
 import Label from 'Components/Label';
-import { kinds, sizes } from 'Helpers/Props';
+import { sizes } from 'Helpers/Props';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import formatTime from 'Utilities/Date/formatTime';
 import isInNextWeek from 'Utilities/Date/isInNextWeek';
@@ -21,7 +21,7 @@ function EpisodeAiring(props: EpisodeAiringProps) {
     useUiSettingsValues();
 
   const networkLabel = (
-    <Label kind={kinds.INFO} size={sizes.MEDIUM}>
+    <Label outline={true} size={sizes.MEDIUM}>
       {network}
     </Label>
   );

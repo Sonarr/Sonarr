@@ -4,6 +4,8 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
+import PageMessage from 'Components/Page/PageMessage';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
@@ -160,6 +162,11 @@ function History() {
       </PageToolbar>
 
       <PageContentBody>
+        <PageHeading
+          scope={translate('Activity')}
+          title={translate('History')}
+        />
+
         {isFetchingAny && !isAllPopulated ? <LoadingIndicator /> : null}
 
         {!isFetchingAny && hasError ? (
@@ -171,7 +178,7 @@ function History() {
           // wait for the episodes to populate because they are never coming.
 
           isFetched && !hasError && !records.length ? (
-            <Alert kind={kinds.INFO}>{translate('NoHistoryFound')}</Alert>
+            <PageMessage>{translate('NoHistoryFound')}</PageMessage>
           ) : null
         }
 
