@@ -3,6 +3,7 @@
 interface CssExports {
   'absoluteEpisodeNumber': string;
   'episodeNumber': string;
+  'separator': string;
   'warning': string;
 }
 export const cssExports: CssExports;
