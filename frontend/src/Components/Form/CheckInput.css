@@ -109,8 +109,9 @@
 }
 
 .isIndeterminate {
-  border-color: var(--inkMuted);
-  background-color: var(--inkMuted);
+  border-color: var(--accent);
+  background-color: var(--accent);
+  color: var(--paper);
 }
 
 .helpText {

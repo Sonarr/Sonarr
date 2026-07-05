@@ -2,6 +2,10 @@
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   width: 30px;
+
+  label {
+    min-height: 0;
+  }
 }
 
 .input {

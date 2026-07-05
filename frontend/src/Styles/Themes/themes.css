@@ -244,8 +244,8 @@
   --themeDarkColor: oklch(19% 0.008 80);
   --themeLightColor: oklch(23% 0.010 80);
   --pageFooterBackground: oklch(0% 0 0 / 0.25);
-  --torrentColor: oklch(66% 0.115 148);
-  --usenetColor: oklch(85% 0.100 215);
+  --torrentColor: oklch(72% 0.165 148);
+  --usenetColor: oklch(82% 0.140 215);
   --inverseLabelColor: oklch(30% 0.010 80);
   --inverseLabelTextColor: oklch(95% 0.006 80);
   --disabledLabelColor: oklch(50% 0.008 80);
