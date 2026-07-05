@@ -3,16 +3,17 @@ import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 import React, { useCallback, useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd-multi-backend';
 import Form from 'Components/Form/Form';
+import FormInput from 'Components/Form/FormInput';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
 import FormRow from 'Components/Form/FormRow';
-import NumberInput from 'Components/Form/NumberInput';
 import Button from 'Components/Link/Button';
 import Modal from 'Components/Modal/Modal';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import { inputTypes } from 'Helpers/Props';
 import { CheckInputChanged, InputChanged } from 'typings/inputs';
 import { TableOptionsChangePayload } from 'typings/Table';
 import translate from 'Utilities/String/translate';
@@ -140,17 +141,18 @@ function TableOptionsModal({
                   <FormRow>
                     <FormLabel>{translate('TablePageSize')}</FormLabel>
 
-                    <NumberInput
-                      name="pageSize"
-                      value={pageSize || 0}
-                      onChange={handlePageSizeChange}
-                    />
                     <FormInputHelpText
                       text={translate('TablePageSizeHelpText')}
                     />
                     {pageSizeError ? (
                       <FormInputHelpText text={pageSizeError} isError={true} />
                     ) : null}
+                    <FormInput
+                      type={inputTypes.NUMBER}
+                      name="pageSize"
+                      value={pageSize || 0}
+                      onChange={handlePageSizeChange}
+                    />
                   </FormRow>
                 ) : null}
 

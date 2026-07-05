@@ -88,31 +88,6 @@ const GROUPS: SidebarGroup[] = [
         title: () => translate('Statistics'),
         to: '/statistics',
       },
-    ],
-  },
-  {
-    label: () => translate('Activity'),
-    items: [
-      {
-        iconName: icons.ACTIVITY,
-        title: () => translate('Activity'),
-        to: '/activity/queue',
-        children: [
-          {
-            title: () => translate('Queue'),
-            to: '/activity/queue',
-            statusComponent: QueueStatus,
-          },
-          {
-            title: () => translate('History'),
-            to: '/activity/history',
-          },
-          {
-            title: () => translate('Blocklist'),
-            to: '/activity/blocklist',
-          },
-        ],
-      },
       {
         iconName: icons.WARNING,
         title: () => translate('Wanted'),
@@ -127,6 +102,27 @@ const GROUPS: SidebarGroup[] = [
             to: '/wanted/cutoffunmet',
           },
         ],
+      },
+    ],
+  },
+  {
+    label: () => translate('Activity'),
+    items: [
+      {
+        iconName: icons.DOWNLOAD,
+        title: () => translate('Queue'),
+        to: '/activity/queue',
+        statusComponent: QueueStatus,
+      },
+      {
+        iconName: icons.HISTORY,
+        title: () => translate('History'),
+        to: '/activity/history',
+      },
+      {
+        iconName: icons.BLOCKLIST,
+        title: () => translate('Blocklist'),
+        to: '/activity/blocklist',
       },
     ],
   },
