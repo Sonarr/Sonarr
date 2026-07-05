@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './PageHeading.css';
 
 interface PageHeadingProps {
+  scope: string;
   title: string;
   meta?: React.ReactNode | string[];
   subtitle?: React.ReactNode;
@@ -25,12 +26,20 @@ function renderMeta(meta: PageHeadingProps['meta']) {
   return <span className={styles.meta}>{meta}</span>;
 }
 
-function PageHeading({ title, meta, subtitle, actions }: PageHeadingProps) {
+function PageHeading({
+  scope,
+  title,
+  meta,
+  subtitle,
+  actions,
+}: PageHeadingProps) {
   return (
     <div className={styles.heading}>
       <div className={styles.row}>
         <div className={styles.titleBlock}>
-          <h1 className={styles.title}>{title}</h1>
+          <h1 className={styles.title}>
+            <span className={styles.scope}>{scope} ·</span> {title}
+          </h1>
           {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
         </div>
         <div className={styles.right}>

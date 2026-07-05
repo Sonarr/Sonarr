@@ -20,11 +20,15 @@
 .title {
   margin: 0;
   color: var(--ink);
-  letter-spacing: -0.018em;
-  font-weight: 600;
-  font-size: 28px;
+  font-weight: 500;
+  font-size: 13px;
   font-family: $defaultFontFamily;
-  line-height: 1.15;
+  line-height: 1.4;
+}
+
+.scope {
+  color: var(--inkMuted);
+  font-weight: 400;
 }
 
 .subtitle {

@@ -284,7 +284,10 @@ function CutoffUnmetContent() {
         </PageToolbar>
 
         <PageContentBody>
-          <PageHeading title={translate('CutoffUnmet')} />
+          <PageHeading
+            scope={translate('Wanted')}
+            title={translate('CutoffUnmet')}
+          />
 
           {isFetching && isLoading ? <LoadingIndicator /> : null}
 

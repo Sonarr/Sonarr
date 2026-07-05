@@ -296,7 +296,10 @@ function MissingContent() {
         </PageToolbar>
 
         <PageContentBody>
-          <PageHeading title={translate('Missing')} />
+          <PageHeading
+            scope={translate('Wanted')}
+            title={translate('Missing')}
+          />
 
           {isFetching && isLoading ? <LoadingIndicator /> : null}
 

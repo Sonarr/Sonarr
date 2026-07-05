@@ -7,6 +7,7 @@ interface CssExports {
   'metaSep': string;
   'right': string;
   'row': string;
+  'scope': string;
   'subtitle': string;
   'title': string;
   'titleBlock': string;

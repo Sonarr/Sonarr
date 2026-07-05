@@ -240,7 +240,7 @@ function QueueContent() {
   if (!shouldBlockRefresh.current) {
     currentQueue.current = (
       <PageContentBody>
-        <PageHeading title={translate('Queue')} />
+        <PageHeading scope={translate('Activity')} title={translate('Queue')} />
 
         {isRefreshing && !isAllPopulated ? <LoadingIndicator /> : null}
 
