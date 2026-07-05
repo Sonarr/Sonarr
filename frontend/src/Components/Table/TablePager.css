@@ -69,10 +69,7 @@
 
 .records {
   color: var(--inkMuted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 11px;
-  font-family: $monoSpaceFontFamily;
+  font-size: 12px;
 }
 
 .disabledPageButton {

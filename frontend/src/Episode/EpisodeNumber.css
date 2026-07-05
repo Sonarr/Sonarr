@@ -3,6 +3,10 @@
   align-items: center;
 }
 
+.separator {
+  font-size: 0.8em;
+}
+
 .absoluteEpisodeNumber {
   margin-left: 5px;
 }

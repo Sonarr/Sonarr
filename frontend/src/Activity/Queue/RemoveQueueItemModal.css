@@ -1,3 +1,6 @@
-.message {
-  margin-bottom: 30px;
+.intro {
+  margin-bottom: 16px;
+  max-width: 70ch;
+  color: var(--inkMuted);
+  font-size: 13px;
 }

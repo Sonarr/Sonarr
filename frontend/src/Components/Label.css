@@ -7,6 +7,7 @@
   border-radius: 999px;
   background-color: var(--paperWarm);
   color: var(--inkSoft);
+  vertical-align: middle;
   text-align: center;
   white-space: nowrap;
   letter-spacing: 0.06em;
@@ -21,8 +22,8 @@
 .label::before {
   display: inline-block;
   flex-shrink: 0;
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
   border-radius: 999px;
   background-color: currentColor;
   content: "";
@@ -34,6 +35,10 @@
 }
 
 .hasIcon::before {
+  display: none;
+}
+
+.outline::before {
   display: none;
 }
 
