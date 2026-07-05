@@ -73,17 +73,15 @@ function EpisodeStatus({
   if (hasEpisodeFile) {
     const quality = episodeFile.quality;
     const isCutoffNotMet = episodeFile.qualityCutoffNotMet;
+    const label = translate('EpisodeDownloaded');
 
     return (
-      <StatusIndicator
-        className={styles.center}
-        label={translate('EpisodeDownloaded')}
-      >
+      <StatusIndicator className={styles.center} label={label}>
         <EpisodeQuality
           quality={quality}
           size={episodeFile.size}
           isCutoffNotMet={isCutoffNotMet}
-          title={translate('EpisodeDownloaded')}
+          title={label}
         />
       </StatusIndicator>
     );
