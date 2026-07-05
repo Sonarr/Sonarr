@@ -35,12 +35,11 @@ function PageHeading({
 }: PageHeadingProps) {
   return (
     <div className={styles.heading}>
-      <div className={styles.scopeLine}>
-        <span className={styles.scope}>{scope}</span>
-      </div>
       <div className={styles.row}>
         <div className={styles.titleBlock}>
-          <h1 className={styles.title}>{title}</h1>
+          <h1 className={styles.title}>
+            <span className={styles.scope}>{scope} ·</span> {title}
+          </h1>
           {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
         </div>
         <div className={styles.right}>
