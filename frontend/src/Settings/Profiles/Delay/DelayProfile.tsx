@@ -198,8 +198,8 @@ function DelayProfile({
         <div className={styles.actions}>
           <IconButton
             name={icons.EDIT}
-            aria-label={translate('EditDelayProfile')}
             className={id === 1 ? styles.editButton : undefined}
+            aria-label={translate('EditDelayProfile')}
             title={translate('EditDelayProfile')}
             onPress={handleEditDelayProfilePress}
           />
