@@ -260,6 +260,7 @@ function EditImportListModalContent({
               {...seasonFolder}
             />
           </FormGroup>
+
           <FormGroup>
             <FormLabel>{translate('SonarrTags')}</FormLabel>
 
