@@ -12,7 +12,7 @@ public class SslCertificateLoaderFixture : TestBase
 {
     private SslTestCertificates _certs;
 
-    [OneTimeSetUp]
+    [SetUp]
     public void CreateTestCertificates()
     {
         _certs = new SslTestCertificates(TempFolder);

@@ -11,20 +11,22 @@ public class SslTestCertificates
 
     public SslTestCertificates(string baseDir)
     {
+        var id = Guid.NewGuid().ToString("N");
+
         using var rootKey = RSA.Create(2048);
-        var rootReq = new CertificateRequest("CN=Test Root CA", rootKey, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        var rootReq = new CertificateRequest($"CN=Test Root CA {id}", rootKey, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
         rootReq.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, false, 0, true));
         using var rootCert = rootReq.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(10));
 
         using var interKey = RSA.Create(2048);
-        var interReq = new CertificateRequest("CN=Test Intermediate CA", interKey, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        var interReq = new CertificateRequest($"CN=Test Intermediate CA {id}", interKey, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
         interReq.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, false, 0, true));
         using var interCertPublic = interReq.Create(rootCert, DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(5), BitConverter.GetBytes(1));
         using var interCert = interCertPublic.CopyWithPrivateKey(interKey);
         IntermediateSerialNumber = interCert.SerialNumber;
 
         using var leafKey = RSA.Create(2048);
-        var leafReq = new CertificateRequest("CN=Test Leaf", leafKey, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        var leafReq = new CertificateRequest($"CN=Test Leaf {id}", leafKey, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
         using var leafCertPublic = leafReq.Create(interCert, DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1), BitConverter.GetBytes(2));
         using var leafCert = leafCertPublic.CopyWithPrivateKey(leafKey);
         LeafSerialNumber = leafCert.SerialNumber;
