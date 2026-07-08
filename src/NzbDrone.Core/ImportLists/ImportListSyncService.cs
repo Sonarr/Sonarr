@@ -132,6 +132,9 @@ namespace NzbDrone.Core.ImportLists
 
             var listExclusions = _importListExclusionService.All();
             var importLists = _importListFactory.All();
+
+            var relevantTvdbIds = items.Select(x => x.TvdbId).Distinct().ToList();
+
             var existingSeriesIds = _seriesService.AllSeriesTvdbIds();
             var existingSeriesToUpdate = new Dictionary<int, HashSet<int>>();
 
@@ -323,7 +326,7 @@ namespace NzbDrone.Core.ImportLists
                     }
                 }
 
-                _seriesService.UpdateSeries(seriesWithUpdatedTags, true);
+                _seriesService.UpdateTags(seriesWithUpdatedTags);
             }
         }
 

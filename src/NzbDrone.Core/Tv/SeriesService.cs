@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Tv
         bool SeriesPathExists(string folder);
         void RemoveAddOptions(Series series);
         bool UpdateAutotaggingTags(Series series);
-        void UpdateTags(Series series);
+        void UpdateTags(List<Series> series);
     }
 
     public class SeriesService : ISeriesService
@@ -311,7 +311,7 @@ namespace NzbDrone.Core.Tv
             return false;
         }
 
-        public void UpdateTags(Series series)
+        public void UpdateTags(List<Series> series)
         {
             _seriesRepository.SetFields(series, s => s.Tags);
         }
