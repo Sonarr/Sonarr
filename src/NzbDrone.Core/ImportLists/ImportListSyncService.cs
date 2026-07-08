@@ -132,7 +132,8 @@ namespace NzbDrone.Core.ImportLists
 
             var listExclusions = _importListExclusionService.All();
             var importLists = _importListFactory.All();
-            var existingTvdbIds = _seriesService.AllSeriesTvdbIds();
+            var existingSeriesIds = _seriesService.AllSeriesTvdbIds();
+            var existingSeriesToUpdate = new Dictionary<int, HashSet<int>>();
 
             foreach (var item in items)
             {
@@ -223,9 +224,25 @@ namespace NzbDrone.Core.ImportLists
                 }
 
                 // Break if Series Exists in DB, if it exists, update the tags with the tags in the import list and move to the next item
-                if (existingTvdbIds.Any(x => x == item.TvdbId))
+                var existingSeriesId = existingSeriesIds.FirstOrDefault(x => x.Value == item.TvdbId).Key;
+
+                if (existingSeriesId > 0)
                 {
-                    UpdateTagsOnExistingSeries(importList, item);
+                    if (importList.TagExisting)
+                    {
+                        if (existingSeriesToUpdate.TryGetValue(existingSeriesId, out var tagsToAdd))
+                        {
+                            foreach (var importListTag in importList.Tags)
+                            {
+                                tagsToAdd.Add(importListTag);
+                            }
+                        }
+                        else
+                        {
+                            existingSeriesToUpdate.Add(existingSeriesId, new HashSet<int>(importList.Tags));
+                        }
+                    }
+
                     _logger.Debug("{0} [{1}] Rejected, series exists in database", item.TvdbId, item.Title);
                     continue;
                 }
@@ -272,6 +289,31 @@ namespace NzbDrone.Core.ImportLists
             }
 
             _addSeriesService.AddSeries(seriesToAdd, true);
+
+            if (existingSeriesToUpdate.Count > 0)
+            {
+                var possibleSeriesToUpdate = _seriesService.GetSeries(existingSeriesToUpdate.Keys);
+                var seriesWithUpdatedTags = new List<Series>();
+
+                foreach (var series in possibleSeriesToUpdate)
+                {
+                    var tags = existingSeriesToUpdate[series.Id];
+                    var currentTagsCount = series.Tags.Count;
+
+                    foreach (var tag in tags)
+                    {
+                        series.Tags.Add(tag);
+                    }
+
+                    if (currentTagsCount != series.Tags.Count)
+                    {
+                        _logger.Debug("{0} [{1}] tagged existing series", series.TvdbId, series.Title);
+                        seriesWithUpdatedTags.Add(series);
+                    }
+                }
+
+                _seriesService.UpdateSeries(seriesWithUpdatedTags, true);
+            }
 
             _logger.ProgressInfo("Import List Sync Completed. Items found: {0}, Series added: {1}", items.Count, seriesToAdd.Count);
         }

@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             Mocker.GetMock<ISeriesService>()
                   .Setup(v => v.AllSeriesTvdbIds())
-                  .Returns(new List<int>());
+                  .Returns(new Dictionary<int, int>());
 
             Mocker.GetMock<ISeriesService>()
                 .Setup(v => v.GetAllSeries())
@@ -162,7 +162,7 @@ namespace NzbDrone.Core.Test.ImportListTests
         {
             Mocker.GetMock<ISeriesService>()
                   .Setup(v => v.AllSeriesTvdbIds())
-                  .Returns(new List<int> { _list1Series.First().TvdbId });
+                  .Returns(new Dictionary<int, int> { { _list1Series.First().Id, _list1Series.First().TvdbId } });
         }
 
         private void WithExcludedSeries()

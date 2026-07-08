@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Tv
                     var series = AddSkyhookData(s);
                     series = SetPropertiesAndValidate(series);
                     series.Added = added;
-                    if (existingSeriesTvdbIds.Any(f => f == series.TvdbId))
+                    if (existingSeriesTvdbIds.ContainsValue(series.TvdbId))
                     {
                         _logger.Debug("TVDB ID {0} was not added due to validation failure: Series {1} already exists in database", s.TvdbId, s);
                         continue;
