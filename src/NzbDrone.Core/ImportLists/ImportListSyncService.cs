@@ -134,8 +134,8 @@ namespace NzbDrone.Core.ImportLists
             var importLists = _importListFactory.All();
 
             var relevantTvdbIds = items.Select(x => x.TvdbId).Distinct().ToList();
+            var existingSeriesIds = _seriesService.SeriesTvdbIds(relevantTvdbIds);
 
-            var existingSeriesIds = _seriesService.AllSeriesTvdbIds();
             var existingSeriesToUpdate = new Dictionary<int, HashSet<int>>();
 
             foreach (var item in items)
