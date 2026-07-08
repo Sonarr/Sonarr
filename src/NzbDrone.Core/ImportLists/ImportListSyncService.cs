@@ -228,7 +228,7 @@ namespace NzbDrone.Core.ImportLists
 
                 if (existingSeriesId > 0)
                 {
-                    QueueExistingTagSeriesRecord(importList, existingSeriesToUpdate, existingSeriesId);
+                    QueueTagsOnPendingSeries(importList, existingSeriesToUpdate, existingSeriesId);
 
                     _logger.Debug("{0} [{1}] Rejected, series exists in database", item.TvdbId, item.Title);
                     continue;
@@ -276,12 +276,12 @@ namespace NzbDrone.Core.ImportLists
             }
 
             _addSeriesService.AddSeries(seriesToAdd, true);
-            UpdateExistingTagSeriesRecord(existingSeriesToUpdate);
+            UpdateTagsOnPendingSeries(existingSeriesToUpdate);
 
             _logger.ProgressInfo("Import List Sync Completed. Items found: {0}, Series added: {1}", items.Count, seriesToAdd.Count);
         }
 
-        private void QueueExistingTagSeriesRecord(ImportListDefinition importList, Dictionary<int, HashSet<int>> existingSeriesToUpdate, int existingSeriesId)
+        private void QueueTagsOnPendingSeries(ImportListDefinition importList, Dictionary<int, HashSet<int>> existingSeriesToUpdate, int existingSeriesId)
         {
             if (importList.TagExisting && importList.Tags.Count > 0)
             {
@@ -299,7 +299,7 @@ namespace NzbDrone.Core.ImportLists
             }
         }
 
-        private void UpdateExistingTagSeriesRecord(Dictionary<int, HashSet<int>> existingSeriesToUpdate)
+        private void UpdateTagsOnPendingSeries(Dictionary<int, HashSet<int>> existingSeriesToUpdate)
         {
             if (existingSeriesToUpdate.Count > 0)
             {
