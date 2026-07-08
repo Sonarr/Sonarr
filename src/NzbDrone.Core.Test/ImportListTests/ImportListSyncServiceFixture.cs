@@ -162,7 +162,7 @@ namespace NzbDrone.Core.Test.ImportListTests
         {
             Mocker.GetMock<ISeriesService>()
                   .Setup(v => v.AllSeriesTvdbIds())
-                  .Returns(new Dictionary<int, int> { { _list1Series.First().Id, _list1Series.First().TvdbId } });
+                  .Returns(new Dictionary<int, int> { { 1, _list1Series.First().TvdbId } });
         }
 
         private void WithExcludedSeries()
@@ -194,6 +194,16 @@ namespace NzbDrone.Core.Test.ImportListTests
         private void WithMonitorType(MonitorTypes monitor)
         {
             _importLists.ForEach(li => (li.Definition as ImportListDefinition).ShouldMonitor = monitor);
+        }
+
+        private void WithTagExisting(int tagId)
+        {
+            _importLists.ForEach(li =>
+            {
+                var def = li.Definition as ImportListDefinition;
+                def.TagExisting = true;
+                def.Tags = new HashSet<int> { tagId };
+            });
         }
 
         private void WithCleanLevel(ListSyncLevelType cleanLevel, int? tagId = null)
@@ -627,6 +637,86 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             Mocker.GetMock<IAddSeriesService>()
                 .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 0), It.IsAny<bool>()));
+        }
+
+        [Test]
+        public void should_tag_existing_series_if_tag_existing_enabled()
+        {
+            WithList(1, true);
+            WithTvdbId();
+            WithTagExisting(1);
+            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(v => v.AllSeriesTvdbIds())
+                  .Returns(new Dictionary<int, int> { { 5, 81189 } });
+
+            var existingSeries = Builder<Series>.CreateListOfSize(1)
+                .TheFirst(1)
+                .With(s => s.Id = 5)
+                .With(s => s.TvdbId = 81189)
+                .With(s => s.Tags = new HashSet<int>())
+                .Build()
+                .ToList();
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(v => v.GetSeries(It.IsAny<IEnumerable<int>>()))
+                  .Returns(existingSeries);
+
+            Subject.Execute(_commandAll);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.Is<List<Series>>(x => x.Count == 1 && x.All(s => s.Tags.Contains(1))), true), Times.Once());
+        }
+
+        [Test]
+        public void should_not_tag_existing_series_if_tag_existing_disabled()
+        {
+            WithList(1, true);
+            WithTvdbId();
+            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(v => v.AllSeriesTvdbIds())
+                  .Returns(new Dictionary<int, int> { { 5, 81189 } });
+
+            Subject.Execute(_commandAll);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.GetSeries(It.IsAny<IEnumerable<int>>()), Times.Never());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.IsAny<List<Series>>(), true), Times.Never());
+        }
+
+        [Test]
+        public void should_not_update_existing_series_if_tag_already_present()
+        {
+            WithList(1, true);
+            WithTvdbId();
+            WithTagExisting(1);
+            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(v => v.AllSeriesTvdbIds())
+                  .Returns(new Dictionary<int, int> { { 5, 81189 } });
+
+            var existingSeries = Builder<Series>.CreateListOfSize(1)
+                .TheFirst(1)
+                .With(s => s.Id = 5)
+                .With(s => s.TvdbId = 81189)
+                .With(s => s.Tags = new HashSet<int> { 1 })
+                .Build()
+                .ToList();
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(v => v.GetSeries(It.IsAny<IEnumerable<int>>()))
+                  .Returns(existingSeries);
+
+            Subject.Execute(_commandAll);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.Is<List<Series>>(x => x.Count == 0), true), Times.Once());
         }
     }
 }
