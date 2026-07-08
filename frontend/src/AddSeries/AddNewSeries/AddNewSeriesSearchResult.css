@@ -5,6 +5,9 @@
   width: 100%;
   color: inherit;
 }
+.searchResult:nth-child(odd) {
+  margin: 0 !important;
+}
 
 .underlay {
   @add-mixin cover;

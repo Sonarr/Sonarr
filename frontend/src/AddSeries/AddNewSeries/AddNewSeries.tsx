@@ -52,7 +52,7 @@ function AddNewSeries() {
 
   return (
     <PageContent title={translate('AddNewSeries')}>
-      <PageContentBody>
+      <PageContentBody className="noScroll">
         <div className={styles.searchContainer}>
           <div className={styles.searchIconContainer}>
             <Icon name={icons.SEARCH} size={20} />
