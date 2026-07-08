@@ -3,7 +3,6 @@
 interface CssExports {
   'contentBody': string;
   'innerContentBody': string;
-  'noScroll': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

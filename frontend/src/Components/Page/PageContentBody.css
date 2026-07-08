@@ -17,7 +17,3 @@
     padding: $pageContentBodyPaddingSmallScreen;
   }
 }
-
-.noScroll {
-  overflow: hidden;
-}
