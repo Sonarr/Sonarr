@@ -64,5 +64,7 @@
 }
 
 .contentBody {
+    composes: contentBody from '~Components/Page/PageContentBody.css';
+
   overflow-y: hidden !important;
 }
