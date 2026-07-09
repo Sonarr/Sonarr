@@ -66,3 +66,9 @@
 .contentBody {
   overflow-y: hidden !important;
 }
+
+@media only screen and (min-height: 2000px) {
+  .searchResults {
+    height: 90dvh;
+  }
+}
