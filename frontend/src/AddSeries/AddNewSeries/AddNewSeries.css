@@ -64,7 +64,9 @@
 }
 
 .contentBody {
-  overflow-y: hidden !important;
+    composes: contentBody from '~Components/Page/PageContentBody.css';
+
+  overflow-y: hidden;
 }
 
 @media only screen and (min-height: 2000px) {
