@@ -17,6 +17,7 @@ namespace Sonarr.Api.V3.Profiles.Release
         public object Ignored { get; set; }
         public bool AirDateRestriction { get; set; }
         public int AirDateGracePeriod { get; set; }
+        public bool AllowSeasonPackWithoutAllEpisodesAired { get; set; }
         public int IndexerId { get; set; }
         public HashSet<int> Tags { get; set; }
         public HashSet<int> ExcludedTags { get; set; }
@@ -46,6 +47,7 @@ namespace Sonarr.Api.V3.Profiles.Release
                 Ignored = model.Ignored ?? new List<string>(),
                 AirDateRestriction = model.AirDateRestriction,
                 AirDateGracePeriod = model.AirDateGracePeriod,
+                AllowSeasonPackWithoutAllEpisodesAired = model.AllowSeasonPackWithoutAllEpisodesAired,
                 IndexerId = model.IndexerIds.FirstOrDefault(0),
                 Tags = new HashSet<int>(model.Tags),
                 ExcludedTags = new HashSet<int>(model.ExcludedTags)
@@ -68,6 +70,7 @@ namespace Sonarr.Api.V3.Profiles.Release
                 Ignored = resource.MapIgnored(),
                 AirDateRestriction = resource.AirDateRestriction,
                 AirDateGracePeriod = resource.AirDateGracePeriod,
+                AllowSeasonPackWithoutAllEpisodesAired = resource.AllowSeasonPackWithoutAllEpisodesAired,
                 IndexerIds = new List<int> { resource.IndexerId },
                 Tags = new HashSet<int>(resource.Tags),
                 ExcludedTags = new HashSet<int>(resource.ExcludedTags)

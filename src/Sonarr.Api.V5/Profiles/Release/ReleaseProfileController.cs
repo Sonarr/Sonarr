@@ -23,7 +23,7 @@ public class ReleaseProfileController : RestController<ReleaseProfileResource>
 
         SharedValidator.RuleFor(d => d).Custom((restriction, context) =>
         {
-            if (restriction.Required.Empty() && restriction.Ignored.Empty() && !restriction.AirDateRestriction)
+            if (restriction.Required.Empty() && restriction.Ignored.Empty() && !restriction.AirDateRestriction && !restriction.AllowSeasonPackWithoutAllEpisodesAired)
             {
                 context.AddFailure(nameof(ReleaseProfileResource.Required), "'Must contain' or 'Must not contain' is required");
             }

@@ -46,6 +46,7 @@ function EditReleaseProfileModalContent({
     ignored,
     airDateRestriction,
     airDateGracePeriod,
+    allowSeasonPackWithoutAllEpisodesAired,
     indexerIds,
     tags,
     excludedTags,
@@ -166,6 +167,25 @@ function EditReleaseProfileModalContent({
               />
             </FormGroup>
           ) : null}
+
+          <FormGroup>
+            <FormLabel>
+              {translate('AllowSeasonPackWithoutAllEpisodesAired')}
+            </FormLabel>
+
+            <FormInputGroup
+              {...allowSeasonPackWithoutAllEpisodesAired}
+              type={inputTypes.CHECK}
+              name="allowSeasonPackWithoutAllEpisodesAired"
+              helpText={translate(
+                'AllowSeasonPackWithoutAllEpisodesAiredHelpText'
+              )}
+              helpTextWarning={translate(
+                'AllowSeasonPackWithoutAllEpisodesAiredHelpTextWarning'
+              )}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
 
           <FormGroup>
             <FormLabel>{translate('Indexer')}</FormLabel>
