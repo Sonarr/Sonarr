@@ -108,11 +108,13 @@ namespace NzbDrone.Common.Instrumentation
             // Events logged to Sentry go only to Sentry.
             var loggingRuleSentry = new LoggingRule("Sentry", LogLevel.Debug, target) { Final = true };
             LogManager.Configuration.LoggingRules.Insert(0, loggingRuleSentry);
+
+            target.Dispose();
         }
 
         private static void RegisterDebugger()
         {
-            var target = new DebuggerTarget();
+            using var target = new DebuggerTarget();
             target.Name = "debuggerLogger";
             target.Layout = "[${level}] [${threadid}] ${logger}: ${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}";
 
@@ -125,7 +127,7 @@ namespace NzbDrone.Common.Instrumentation
         {
             var level = LogLevel.Trace;
 
-            var coloredConsoleTarget = new ColoredConsoleTarget();
+            using var coloredConsoleTarget = new ColoredConsoleTarget();
 
             coloredConsoleTarget.Name = "consoleLogger";
 
@@ -150,7 +152,7 @@ namespace NzbDrone.Common.Instrumentation
 
         private static void RegisterAppFile(IAppFolderInfo appFolderInfo, string name, string fileName, int maxArchiveFiles, LogLevel minLogLevel)
         {
-            var fileTarget = new CleansingFileTarget();
+            using var fileTarget = new CleansingFileTarget();
 
             fileTarget.Name = name;
             fileTarget.FileName = Path.Combine(appFolderInfo.GetLogFolder(), fileName);
@@ -173,7 +175,7 @@ namespace NzbDrone.Common.Instrumentation
 
         private static void RegisterUpdateFile(IAppFolderInfo appFolderInfo)
         {
-            var fileTarget = new FileTarget();
+            using var fileTarget = new FileTarget();
 
             fileTarget.Name = "updateFileLogger";
             fileTarget.FileName = Path.Combine(appFolderInfo.GetUpdateLogFolder(), DateTime.Now.ToString("yyyy.MM.dd-HH.mm") + ".txt");
@@ -195,7 +197,7 @@ namespace NzbDrone.Common.Instrumentation
             var consoleTarget = LogManager.Configuration.FindTargetByName("console");
             var fileTarget = LogManager.Configuration.FindTargetByName("appFileInfo");
 
-            var target = consoleTarget ?? fileTarget ?? new NullTarget();
+            using var target = consoleTarget ?? fileTarget ?? new NullTarget();
 
             // Send Auth to Console and info app file, but not the log database
             var rule = new LoggingRule("Auth", LogLevel.Info, target) { Final = true };
