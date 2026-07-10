@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MonoTorrent;
@@ -11,6 +14,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Localization;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
@@ -200,6 +204,7 @@ namespace NzbDrone.Core.Download
             var hash = _torrentFileInfoReader.GetHashFromTorrentFile(torrentFile);
 
             EnsureReleaseIsNotBlocklisted(remoteEpisode, indexer, hash);
+            EnsureTorrentContainsNoRejectedFiles(remoteEpisode, indexer, torrentFile);
 
             var actualHash = AddFromTorrentFile(remoteEpisode, hash, filename, torrentFile);
 
@@ -244,6 +249,83 @@ namespace NzbDrone.Core.Download
             }
 
             return actualHash;
+        }
+
+        private void EnsureTorrentContainsNoRejectedFiles(RemoteEpisode remoteEpisode, IIndexer indexer, byte[] torrentFile)
+        {
+            var failDownloads = (indexer?.Definition?.Settings as IIndexerSettings)?.FailDownloads?
+                .Select(f => (FailDownloads)f)
+                .ToHashSet();
+
+            if (failDownloads == null || failDownloads.Count == 0)
+            {
+                return;
+            }
+
+            List<string> fileNames;
+
+            try
+            {
+                fileNames = _torrentFileInfoReader.GetFileNamesFromTorrentFile(torrentFile);
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug(ex, "Unable to parse file list from torrent for '{0}', skipping file extension check", remoteEpisode.Release.Title);
+                return;
+            }
+
+            var rejection = GetFileRejectionReason(fileNames, failDownloads);
+
+            if (rejection == null)
+            {
+                return;
+            }
+
+            _logger.Debug("Torrent for '{0}' rejected: {1}. Blocklisting release.", remoteEpisode.Release.Title, rejection);
+            _blocklistService.Block(remoteEpisode, rejection, "TorrentFileValidation");
+
+            throw new ReleaseBlockedException(remoteEpisode.Release, rejection);
+        }
+
+        private string GetFileRejectionReason(List<string> fileNames, HashSet<FailDownloads> failDownloads)
+        {
+            foreach (var fileName in fileNames)
+            {
+                var extension = Path.GetExtension(fileName);
+
+                if (extension.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
+                if (failDownloads.Contains(FailDownloads.PotentiallyDangerous) &&
+                    FileExtensions.DangerousExtensions.Contains(extension))
+                {
+                    return $"Caution: Found potentially dangerous file with extension: {extension}";
+                }
+
+                if (failDownloads.Contains(FailDownloads.Executables) &&
+                    FileExtensions.ExecutableExtensions.Contains(extension))
+                {
+                    return $"Caution: Found executable file with extension: '{extension}'";
+                }
+
+                if (failDownloads.Contains(FailDownloads.UserDefinedExtensions) &&
+                    _configService.UserRejectedExtensions is not null)
+                {
+                    var userRejectedExtensions = _configService.UserRejectedExtensions.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(e => e.Trim(' ', '.')
+                            .Insert(0, "."))
+                        .ToList();
+
+                    if (userRejectedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
+                    {
+                        return $"Caution: Found file with user defined rejected extension: '{extension}'";
+                    }
+                }
+            }
+
+            return null;
         }
 
         private void EnsureReleaseIsNotBlocklisted(RemoteEpisode remoteEpisode, IIndexer indexer, string hash)
