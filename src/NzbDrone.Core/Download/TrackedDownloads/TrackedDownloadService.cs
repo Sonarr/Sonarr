@@ -27,6 +27,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
     }
 
     public class TrackedDownloadService : ITrackedDownloadService,
+                                          IHandle<EpisodeGrabbedEvent>,
                                           IHandle<EpisodeInfoRefreshedEvent>,
                                           IHandle<SeriesAddedEvent>,
                                           IHandle<SeriesEditedEvent>,
@@ -270,6 +271,23 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                     return TrackedDownloadState.Ignored;
                 default:
                     return TrackedDownloadState.Downloading;
+            }
+        }
+
+        public void Handle(EpisodeGrabbedEvent message)
+        {
+            if (message.DownloadId.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
+            var trackedDownload = _cache.Find(message.DownloadId);
+
+            if (trackedDownload is { State: TrackedDownloadState.Imported or
+                                            TrackedDownloadState.Failed or
+                                            TrackedDownloadState.Ignored })
+            {
+                _cache.Remove(message.DownloadId);
             }
         }
 

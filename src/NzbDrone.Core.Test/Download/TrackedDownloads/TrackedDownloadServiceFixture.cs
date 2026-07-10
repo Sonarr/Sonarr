@@ -405,6 +405,72 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
         }
 
         [Test]
+        public void should_retrack_as_downloading_when_grabbed_again_after_being_imported()
+        {
+            Mocker.GetMock<IHistoryService>()
+                .Setup(s => s.FindByDownloadId(It.Is<string>(sr => sr == "35238")))
+                .Returns([]);
+
+            Mocker.GetMock<IDownloadHistoryService>()
+                .Setup(s => s.GetLatestDownloadHistoryItem(It.Is<string>(sr => sr == "35238")))
+                .Returns(new DownloadHistory
+                {
+                    SeriesId = 5,
+                    EventType = DownloadHistoryEventType.DownloadImported,
+                });
+
+            var remoteEpisode = new RemoteEpisode
+            {
+                Series = new Series { Id = 5 },
+                Episodes = [new Episode { Id = 4 }],
+                ParsedEpisodeInfo = new ParsedEpisodeInfo
+                {
+                    SeriesTitle = "TV Series",
+                    SeasonNumber = 1
+                },
+                MappedSeasonNumber = 1
+            };
+
+            Mocker.GetMock<IParsingService>()
+                .Setup(s => s.Map(It.Is<ParsedEpisodeInfo>(i => i.SeasonNumber == 1 && i.SeriesTitle == "TV Series"), It.IsAny<Series>()))
+                .Returns(remoteEpisode);
+
+            var client = new DownloadClientDefinition
+            {
+                Id = 1,
+                Protocol = DownloadProtocol.Torrent
+            };
+
+            var item = new DownloadClientItem
+            {
+                Title = "TV Series - S01E01",
+                DownloadId = "35238",
+                DownloadClientInfo = new DownloadClientItemClientInfo
+                {
+                    Protocol = client.Protocol,
+                    Id = client.Id,
+                    Name = client.Name
+                }
+            };
+
+            var imported = Subject.TrackDownload(client, item);
+            imported.State.Should().Be(TrackedDownloadState.Imported);
+
+            Subject.Handle(new EpisodeGrabbedEvent(remoteEpisode) { DownloadId = "35238" });
+
+            Mocker.GetMock<IDownloadHistoryService>()
+                .Setup(s => s.GetLatestDownloadHistoryItem(It.Is<string>(sr => sr == "35238")))
+                .Returns(new DownloadHistory
+                {
+                    SeriesId = 5,
+                    EventType = DownloadHistoryEventType.DownloadGrabbed,
+                });
+
+            var regrabbed = Subject.TrackDownload(client, item);
+            regrabbed.State.Should().Be(TrackedDownloadState.Downloading);
+        }
+
+        [Test]
         public void should_track_downloads_using_the_series_id_for_already_imported_downloads()
         {
             Mocker.GetMock<IHistoryService>()
