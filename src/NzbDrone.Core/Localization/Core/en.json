@@ -75,7 +75,7 @@
   "All": "All",
   "AllFiles": "All Files",
   "AllowSeasonPackWithoutAllEpisodesAired": "Allow Season Pack Before All Episodes Have Aired",
-  "AllowSeasonPackWithoutAllEpisodesAiredHelpText": "Allow season pack releases matching this profile to be grabbed even if not all episodes in the season have aired yet",
+  "AllowSeasonPackWithoutAllEpisodesAiredHelpText": "Allow season pack releases matching this profile to be grabbed even if not all episodes in the season have aired yet, or if an episode has no air date at all. Note: if another Release Profile also applies to this series with this option disabled, the more restrictive setting wins and the season pack will still be blocked.",
   "AllowSeasonPackWithoutAllEpisodesAiredHelpTextWarning": "Only enable this if you trust your indexers to not send fake or incomplete season packs",
   "AllResultsAreHiddenByTheAppliedFilter": "All results are hidden by the applied filter",
   "AllSeriesAreHiddenByTheAppliedFilter": "All results are hidden by the applied filter",
