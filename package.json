@@ -21,6 +21,8 @@
     "defaults"
   ],
   "dependencies": {
+    "@dnd-kit/helpers": "0.5.0",
+    "@dnd-kit/react": "0.5.0",
     "@floating-ui/react": "0.27.19",
     "@fluentui/priority-overflow": "9.3.0",
     "@fontsource/fraunces": "5.2.9",
