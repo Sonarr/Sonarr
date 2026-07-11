@@ -117,20 +117,6 @@
   }
 }
 
-.placeholder {
-  height: 50px;
-  border: 1px dashed var(--accent);
-  border-radius: 12px;
-
-  &:first-child {
-    margin-bottom: 12px;
-  }
-
-  &:last-child {
-    margin-top: 12px;
-  }
-}
-
 @media (hover: none) {
   .dragHandle,
   .colActions {
