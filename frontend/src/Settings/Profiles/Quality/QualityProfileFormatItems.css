@@ -1,13 +1,25 @@
 .formats {
+  overflow: hidden;
   margin-top: 10px;
-  /* TODO: This should consider the number of languages in the list */
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
+  background-color: var(--paperWarm);
   user-select: none;
 }
 
 .headerContainer {
   display: flex;
-  font-weight: bold;
-  line-height: 35px;
+  align-items: center;
+  padding: 0 16px;
+  height: 36px;
+  border-bottom: 1px solid var(--borderColor);
+  background-color: var(--paperWarm);
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 11px;
+  font-family: var(--defaultFontFamily);
 }
 
 .headerTitle {
@@ -23,9 +35,10 @@
 }
 
 .addCustomFormatMessage {
-  max-width: $formGroupExtraSmallWidth;
-  color: var(--helpTextColor);
-  text-align: center;
-  font-weight: 300;
-  font-size: 20px;
+  margin-top: 10px;
+  max-width: var(--formGroupExtraSmallWidth);
+  color: var(--inkMuted);
+  font-size: 13px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.55;
 }

@@ -1,0 +1,27 @@
+.section {
+  margin-bottom: 48px;
+}
+
+.sectionHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.sectionHeading {
+  margin: 0;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 11px;
+  font-family: $defaultFontFamily;
+}
+
+.sectionLede {
+  margin: 0 0 16px;
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.5;
+}

@@ -1,15 +1,43 @@
 .metadata {
   composes: card from '~Components/Card.css';
+}
 
-  width: 290px;
+.overlay {
+  composes: overlay from '~Components/Card.css';
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .name {
-  margin-bottom: 20px;
-  font-weight: 300;
-  font-size: 24px;
+  @add-mixin truncate;
+
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.fieldSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .section {
-  margin-top: 10px;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 11px;
+  font-family: $monoSpaceFontFamily;
+}
+
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+
+  pointer-events: all;
 }

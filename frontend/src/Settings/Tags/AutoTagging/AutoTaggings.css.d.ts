@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'addAutoTagging': string;
+  'addLabel': string;
   'autoTaggings': string;
   'center': string;
 }

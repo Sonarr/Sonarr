@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'addIndexer': string;
+  'addLabel': string;
   'center': string;
   'indexers': string;
 }

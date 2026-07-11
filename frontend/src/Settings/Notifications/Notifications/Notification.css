@@ -1,19 +1,27 @@
 .notification {
   composes: card from '~Components/Card.css';
+}
 
-  width: 290px;
+.overlay {
+  composes: overlay from '~Components/Card.css';
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .name {
   @add-mixin truncate;
 
-  margin-bottom: 20px;
-  font-weight: 300;
-  font-size: 24px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.25;
 }
 
-.enabled {
+.labels {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 5px;
+  pointer-events: all;
 }

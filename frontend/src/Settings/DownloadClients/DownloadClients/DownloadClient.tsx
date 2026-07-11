@@ -6,7 +6,7 @@ import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
-import { icons, kinds } from 'Helpers/Props';
+import { icons, kinds, sizes } from 'Helpers/Props';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import EditDownloadClientModal from './EditDownloadClientModal';
@@ -68,6 +68,7 @@ function DownloadClient({
   return (
     <Card
       className={styles.downloadClient}
+      overlayClassName={styles.overlay}
       overlayContent={true}
       aria-label={translate('EditDownloadClientName', { name })}
       onPress={handleEditDownloadClientPress}
@@ -75,28 +76,32 @@ function DownloadClient({
       <div className={styles.nameContainer}>
         <div className={styles.name}>{name}</div>
 
-        <IconButton
-          className={styles.cloneButton}
-          title={translate('CloneDownloadClient')}
-          aria-label={translate('CloneDownloadClient')}
-          name={icons.CLONE}
-          onPress={handleCloneDownloadClientPress}
-        />
+        <div className={styles.rightCluster}>
+          <IconButton
+            className={styles.cloneButton}
+            title={translate('CloneDownloadClient')}
+            aria-label={translate('CloneDownloadClient')}
+            name={icons.CLONE}
+            onPress={handleCloneDownloadClientPress}
+          />
+        </div>
       </div>
 
       <div className={styles.enabled}>
-        <ProtocolLabel protocol={protocol} />
+        <ProtocolLabel protocol={protocol} size={sizes.MEDIUM} />
 
         {enable ? (
-          <Label kind={kinds.SUCCESS}>{translate('Enabled')}</Label>
+          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+            {translate('Enabled')}
+          </Label>
         ) : (
-          <Label kind={kinds.DISABLED} outline={true}>
+          <Label kind={kinds.DISABLED} outline={true} size={sizes.MEDIUM}>
             {translate('Disabled')}
           </Label>
         )}
 
         {priority > 1 ? (
-          <Label kind={kinds.DISABLED} outline={true}>
+          <Label kind={kinds.DISABLED} outline={true} size={sizes.MEDIUM}>
             {translate('PrioritySettings', { priority })}
           </Label>
         ) : null}

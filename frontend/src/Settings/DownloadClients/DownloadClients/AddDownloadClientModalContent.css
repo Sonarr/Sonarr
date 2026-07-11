@@ -1,5 +1,16 @@
 .downloadClients {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  margin: 0 calc(var(--modalBodyPadding) * -1);
+}
+
+.groupLegend {
+  padding: 16px var(--modalBodyPadding) 6px;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 11px;
+
+  &:first-child {
+    padding-top: 6px;
+  }
 }

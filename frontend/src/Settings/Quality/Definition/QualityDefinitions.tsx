@@ -71,8 +71,8 @@ function QualityDefinitions({
         error={error}
       >
         <div className={styles.header}>
-          <div className={styles.quality}>{translate('Quality')}</div>
-          <div className={styles.title}>{translate('Title')}</div>
+          <div className={styles.headerQuality}>{translate('Quality')}</div>
+          <div className={styles.headerTitle}>{translate('Title')}</div>
         </div>
 
         <div className={styles.definitions}>

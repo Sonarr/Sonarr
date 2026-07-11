@@ -4,7 +4,7 @@ import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
-import { icons, kinds } from 'Helpers/Props';
+import { icons, kinds, sizes } from 'Helpers/Props';
 import { Kind } from 'Helpers/Props/kinds';
 import { Tag } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
@@ -64,6 +64,7 @@ export default function AutoTagging({
   return (
     <Card
       className={styles.autoTagging}
+      overlayClassName={styles.overlay}
       overlayContent={true}
       aria-label={translate('EditAutoTagName', { name })}
       onPress={onEditPress}
@@ -71,7 +72,7 @@ export default function AutoTagging({
       <div className={styles.nameContainer}>
         <div className={styles.name}>{name}</div>
 
-        <div>
+        <div className={styles.rightCluster}>
           <IconButton
             className={styles.cloneButton}
             title={translate('CloneAutoTag')}
@@ -84,7 +85,7 @@ export default function AutoTagging({
 
       <TagList tags={tags} tagList={tagList} />
 
-      <div>
+      <div className={styles.formats}>
         {specifications.map((item, index) => {
           if (!item) {
             return null;
@@ -101,7 +102,7 @@ export default function AutoTagging({
           }
 
           return (
-            <Label key={index} kind={kind}>
+            <Label key={index} kind={kind} size={sizes.MEDIUM}>
               {item.name}
             </Label>
           );

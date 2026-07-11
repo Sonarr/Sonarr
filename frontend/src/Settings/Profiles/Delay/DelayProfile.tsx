@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { DragSourceMonitor, useDrag, useDrop, XYCoord } from 'react-dnd';
 import Icon from 'Components/Icon';
-import IconButton from 'Components/Link/IconButton';
+import Link from 'Components/Link/Link';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import DragType from 'Helpers/DragType';
@@ -173,50 +173,54 @@ function DelayProfile({
 
   return (
     <div ref={id === 1 ? undefined : ref}>
-      {isBefore ? (
-        <div
-          className={classNames(styles.placeholder, styles.placeholderBefore)}
-        />
-      ) : null}
+      {isBefore ? <div className={styles.placeholder} /> : null}
 
       <div
         className={classNames(
           styles.delayProfile,
+          id === 1 && styles.isDefault,
           isDragging && styles.isDragging
         )}
       >
-        <div className={styles.column}>{preferred}</div>
-        <div className={styles.column}>
-          {getDelay(enableUsenet, usenetDelay)}
-        </div>
-        <div className={styles.column}>
-          {getDelay(enableTorrent, torrentDelay)}
-        </div>
-
-        <TagList tags={tags} tagList={tagList} />
-
-        <div className={styles.actions}>
-          <IconButton
-            name={icons.EDIT}
-            className={id === 1 ? styles.editButton : undefined}
-            aria-label={translate('EditDelayProfile')}
-            title={translate('EditDelayProfile')}
-            onPress={handleEditDelayProfilePress}
-          />
-
+        <div className={styles.colDrag}>
           {id === 1 ? null : (
             <div ref={dragRef} className={styles.dragHandle}>
-              <Icon className={styles.dragIcon} name={icons.REORDER} />
+              <Icon name={icons.REORDER} />
             </div>
           )}
         </div>
+
+        <div className={styles.colScope}>
+          {tags.length ? (
+            <TagList tags={tags} tagList={tagList} />
+          ) : (
+            <span className={styles.anyText}>{translate('Any')}</span>
+          )}
+        </div>
+
+        <div className={styles.colProto}>{preferred}</div>
+
+        <div className={styles.colUsenet}>
+          {getDelay(enableUsenet, usenetDelay)}
+        </div>
+
+        <div className={styles.colTorrent}>
+          {getDelay(enableTorrent, torrentDelay)}
+        </div>
+
+        <div className={styles.colActions}>
+          <div className={styles.actions}>
+            <Link
+              className={styles.actionButton}
+              onPress={handleEditDelayProfilePress}
+            >
+              <Icon name={icons.EDIT} />
+            </Link>
+          </div>
+        </div>
       </div>
 
-      {isAfter ? (
-        <div
-          className={classNames(styles.placeholder, styles.placeholderAfter)}
-        />
-      ) : null}
+      {isAfter ? <div className={styles.placeholder} /> : null}
 
       <EditDelayProfileModal
         id={id}

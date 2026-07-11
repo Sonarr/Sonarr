@@ -64,8 +64,10 @@ export default function AutoTaggings() {
             onPress={onEditPress}
           >
             <div className={styles.center}>
-              <Icon name={icons.ADD} size={45} />
+              <Icon name={icons.ADD} size={20} />
             </div>
+
+            <div className={styles.addLabel}>{translate('AddAutoTag')}</div>
           </Card>
         </div>
 

@@ -6,6 +6,8 @@ interface CssExports {
   'indexer': string;
   'name': string;
   'nameContainer': string;
+  'overlay': string;
+  'rightCluster': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

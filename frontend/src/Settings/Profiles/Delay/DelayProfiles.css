@@ -1,38 +1,63 @@
-.horizontalScroll {
-  overflow-x: auto;
-}
-
-.delayProfiles {
+.delayList {
+  overflow: hidden;
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
+  background-color: var(--paperCard);
   user-select: none;
 }
 
-.delayProfilesHeader {
+.headerRow {
   display: flex;
-  margin-bottom: 10px;
-  font-weight: bold;
+  align-items: center;
+  padding: 0 12px;
+  height: 36px;
+  border-bottom: 1px solid var(--borderColor);
+  background-color: var(--paperWarm);
 }
 
-.column {
-  flex: 0 0 200px;
+.colDrag    { flex: 0 0 32px; }
+
+.colScope {
+  flex: 1 1 auto;
+  padding-right: 8px;
+  min-width: 80px;
 }
 
-.tags {
-  flex: 1 0 auto;
+.colProto   { flex: 0 0 180px; }
+
+.colUsenet  { flex: 0 0 120px; }
+
+.colTorrent { flex: 0 0 120px; }
+
+.colActions { flex: 0 0 56px; }
+
+.headerCell {
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  white-space: nowrap;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 11px;
+  font-family: $defaultFontFamily;
 }
 
-.addDelayProfile {
+.ghostRow {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 40px;
+  border: 0;
+  border-top: 1px dashed var(--borderColor);
+  background: none;
+  color: var(--inkMuted);
+  letter-spacing: 0.04em;
+  font-size: 11px;
+  font-family: $monoSpaceFontFamily;
+  cursor: pointer;
 }
 
-.addButton {
-  width: $dragHandleWidth;
-  text-align: center;
-}
-
-@media only screen and (max-width: $breakpointSmall) {
-  .horizontalScroll {
-    overflow-y: hidden;
-    width: 100%;
-  }
+.ghostRow:hover {
+  background-color: var(--paperWarm);
+  color: var(--accent);
 }

@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import Card from 'Components/Card';
-import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { icons } from 'Helpers/Props';
@@ -37,43 +36,43 @@ function QualityProfiles() {
   }, []);
 
   return (
-    <FieldSet legend={translate('QualityProfiles')}>
-      <PageSectionContent
-        errorMessage={translate('QualityProfilesLoadError')}
-        error={error}
-        isFetching={isFetching}
-        isPopulated={isFetched}
-      >
-        <div className={styles.qualityProfiles}>
-          {sortedItems.map((item) => {
-            return (
-              <QualityProfile
-                key={item.id}
-                {...item}
-                isDeleting={false}
-                onCloneQualityProfilePress={handleCloneQualityProfilePress}
-              />
-            );
-          })}
+    <PageSectionContent
+      errorMessage={translate('QualityProfilesLoadError')}
+      error={error}
+      isFetching={isFetching}
+      isPopulated={isFetched}
+    >
+      <div className={styles.qualityProfiles}>
+        {sortedItems.map((item) => {
+          return (
+            <QualityProfile
+              key={item.id}
+              {...item}
+              onCloneQualityProfilePress={handleCloneQualityProfilePress}
+            />
+          );
+        })}
 
-          <Card
-            className={styles.addQualityProfile}
-            aria-label={translate('AddQualityProfile')}
-            onPress={handleAddQualityProfilePress}
-          >
-            <div className={styles.center}>
-              <Icon name={icons.ADD} size={45} />
-            </div>
-          </Card>
-        </div>
+        <Card
+          className={styles.addQualityProfile}
+          aria-label={translate('AddQualityProfile')}
+          onPress={handleAddQualityProfilePress}
+        >
+          <div className={styles.center}>
+            <Icon name={icons.ADD} size={20} />
+          </div>
+          <div className={styles.addLabel}>
+            {translate('AddQualityProfile')}
+          </div>
+        </Card>
+      </div>
 
-        <EditQualityProfileModal
-          isOpen={isQualityProfileModalOpen}
-          cloneId={cloneProfileId ?? undefined}
-          onModalClose={handleAddQualityProfileClosePress}
-        />
-      </PageSectionContent>
-    </FieldSet>
+      <EditQualityProfileModal
+        isOpen={isQualityProfileModalOpen}
+        cloneId={cloneProfileId ?? undefined}
+        onModalClose={handleAddQualityProfileClosePress}
+      />
+    </PageSectionContent>
   );
 }
 

@@ -1,11 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
-import MiddleTruncate from 'Components/MiddleTruncate';
+import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
-import TagList from 'Components/TagList';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
-import { kinds } from 'Helpers/Props';
+import { icons, kinds } from 'Helpers/Props';
 import { IndexerModel } from 'Settings/Indexers/useIndexers';
 import { Tag } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
@@ -15,6 +14,8 @@ import {
   useDeleteReleaseProfile,
 } from './useReleaseProfiles';
 import styles from './ReleaseProfileItem.css';
+
+const CHIP_CAP_THRESHOLD = 6;
 
 interface ReleaseProfileProps extends ReleaseProfileModel {
   tagList: ReadonlyArray<Tag>;
@@ -30,103 +31,150 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
     ignored = [],
     indexerIds = [],
     tags,
-    excludedTags,
     tagList,
     indexerList,
   } = props;
 
-  const { deleteReleaseProfile } = useDeleteReleaseProfile(id);
+  const { deleteReleaseProfile, isDeleting } = useDeleteReleaseProfile(id);
 
-  const [
-    isEditReleaseProfileModalOpen,
-    setEditReleaseProfileModalOpen,
-    setEditReleaseProfileModalClosed,
-  ] = useModalOpenState(false);
+  const [isEditModalOpen, setEditModalOpen, setEditModalClosed] =
+    useModalOpenState(false);
 
-  const [
-    isDeleteReleaseProfileModalOpen,
-    setDeleteReleaseProfileModalOpen,
-    setDeleteReleaseProfileModalClosed,
-  ] = useModalOpenState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen, setDeleteModalClosed] =
+    useModalOpenState(false);
 
-  const handleDeletePress = useCallback(() => {
-    deleteReleaseProfile();
-  }, [deleteReleaseProfile]);
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  const indexers = indexerList.filter((i) => indexerIds.includes(i.id));
+  const allChips = useMemo(
+    () => [...required, ...ignored].filter(Boolean),
+    [required, ignored]
+  );
+
+  const isCapped = !isExpanded && allChips.length > CHIP_CAP_THRESHOLD;
+
+  const indexers = useMemo(
+    () => indexerList.filter((i) => indexerIds.includes(i.id)),
+    [indexerList, indexerIds]
+  );
+
+  const tagNames = useMemo(
+    () => tagList.filter((t) => tags.includes(t.id)),
+    [tagList, tags]
+  );
+
+  const handleShowAllPress = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsExpanded(true);
+  }, []);
+
+  const statusSegments = useMemo(() => {
+    const segments: string[] = [];
+
+    if (indexers.length > 0) {
+      segments.push(
+        `${indexers.length} ${indexers.length === 1 ? 'INDEXER' : 'INDEXERS'}`
+      );
+    }
+
+    if (tagNames.length > 0) {
+      segments.push(
+        `${tagNames.length} ${tagNames.length === 1 ? 'TAG' : 'TAGS'}`
+      );
+    }
+
+    return segments;
+  }, [indexers, tagNames]);
 
   return (
     <Card
       className={styles.releaseProfile}
       overlayContent={true}
       aria-label={translate('EditReleaseProfileName', { name: name ?? id })}
-      onPress={setEditReleaseProfileModalOpen}
+      onPress={setEditModalOpen}
     >
-      {name ? <div className={styles.name}>{name}</div> : null}
+      <div className={styles.nameContainer}>
+        <div className={styles.name}>{name || translate('ReleaseProfile')}</div>
 
-      <div>
-        {required.map((item) => {
-          if (!item) {
-            return null;
-          }
+        <div className={styles.rightCluster}>
+          <IconButton
+            className={styles.actionButton}
+            title={translate('EditReleaseProfile')}
+            aria-label={translate('EditReleaseProfile')}
+            name={icons.EDIT}
+            onPress={setEditModalOpen}
+          />
 
-          return (
-            <Label key={item} className={styles.label} kind={kinds.SUCCESS}>
-              <MiddleTruncate text={item} />
-            </Label>
-          );
-        })}
+          <IconButton
+            className={styles.actionButton}
+            title={translate('DeleteReleaseProfile')}
+            aria-label={translate('DeleteReleaseProfile')}
+            name={icons.DELETE}
+            onPress={setDeleteModalOpen}
+          />
+        </div>
       </div>
 
-      <div>
-        {ignored.map((item) => {
-          if (!item) {
-            return null;
-          }
-
-          return (
-            <Label key={item} className={styles.label} kind={kinds.DANGER}>
-              <MiddleTruncate text={item} />
-            </Label>
-          );
-        })}
-      </div>
-
-      <TagList tags={tags} tagList={tagList} />
-
-      <TagList tags={excludedTags} tagList={tagList} kind={kinds.DANGER} />
-
-      <div>
-        {enabled ? null : (
-          <Label kind={kinds.DISABLED} outline={true}>
-            {translate('Disabled')}
-          </Label>
-        )}
-
-        {indexers.map((indexer) => (
-          <Label key={indexer.id} kind={kinds.INFO} outline={true}>
-            {indexer.name}
-          </Label>
+      <div className={styles.statusLine}>
+        {enabled ? <span className={styles.statusDot} /> : null}
+        <span>{enabled ? 'ENABLED' : 'DISABLED'}</span>
+        {statusSegments.map((seg, i) => (
+          <React.Fragment key={i}>
+            <span className={styles.statusSeparator}>·</span>
+            <span>{seg}</span>
+          </React.Fragment>
         ))}
       </div>
 
+      <div className={isCapped ? styles.chipsClipped : styles.chips}>
+        {required.map((item) => {
+          if (!item) return null;
+
+          return (
+            <Label key={item} kind={kinds.SUCCESS}>
+              {item}
+            </Label>
+          );
+        })}
+
+        {ignored.map((item) => {
+          if (!item) return null;
+
+          return (
+            <Label key={item} kind={kinds.DANGER}>
+              {item}
+            </Label>
+          );
+        })}
+      </div>
+
+      {isCapped ? (
+        <button
+          className={styles.showAll}
+          type="button"
+          onClick={handleShowAllPress}
+        >
+          {`Show all ${allChips.length} patterns ↓`}
+        </button>
+      ) : null}
+
       <EditReleaseProfileModal
         id={id}
-        isOpen={isEditReleaseProfileModalOpen}
-        onModalClose={setEditReleaseProfileModalClosed}
-        onDeleteReleaseProfilePress={setDeleteReleaseProfileModalOpen}
+        isOpen={isEditModalOpen}
+        onModalClose={setEditModalClosed}
+        onDeleteReleaseProfilePress={setDeleteModalOpen}
       />
 
       <ConfirmModal
-        isOpen={isDeleteReleaseProfileModalOpen}
+        isOpen={isDeleteModalOpen}
         kind={kinds.DANGER}
         title={translate('DeleteReleaseProfile')}
         message={translate('DeleteReleaseProfileMessageText', {
           name: name ?? id,
         })}
         confirmLabel={translate('Delete')}
-        onConfirm={handleDeletePress}
-        onCancel={setDeleteReleaseProfileModalClosed}
+        isSpinning={isDeleting}
+        onConfirm={deleteReleaseProfile}
+        onCancel={setDeleteModalClosed}
       />
     </Card>
   );

@@ -1,6 +1,5 @@
 .qualityProfileFormatItemContainer {
   display: flex;
-  padding: $qualityProfileItemDragSourcePadding 0;
   width: 100%;
 }
 
@@ -8,19 +7,24 @@
   display: flex;
   align-items: stretch;
   width: 100%;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  background: var(--inputBackgroundColor);
+  border-top: 1px solid var(--borderColor);
+  background: transparent;
+  transition: background-color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.qualityProfileFormatItem:hover {
+  background-color: color-mix(in oklch, var(--paperCard) 60%, transparent);
 }
 
 .formatNameContainer {
   display: flex;
+  align-items: center;
   flex-grow: 1;
   margin-bottom: 0;
-  margin-left: 14px;
+  padding-left: 16px;
   width: 100%;
   font-weight: normal;
-  line-height: $qualityProfileItemHeight;
+  line-height: var(--qualityProfileItemHeight);
   cursor: text;
 }
 
@@ -31,7 +35,9 @@
 
 .scoreContainer {
   display: flex;
+  align-items: center;
   flex-grow: 0;
+  padding-right: 8px;
 }
 
 .scoreInput {
@@ -39,7 +45,4 @@
 
   width: 100px;
   height: 30px;
-  border: unset;
-  border-radius: unset;
-  background-color: unset;
 }

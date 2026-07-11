@@ -2,9 +2,8 @@ import React, { HTMLProps, useCallback, useState } from 'react';
 import ReactSlider from 'react-slider';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import NumberInput from 'Components/Form/NumberInput';
-import Label from 'Components/Label';
 import Popover from 'Components/Tooltip/Popover';
-import { kinds, tooltipPositions } from 'Helpers/Props';
+import { tooltipPositions } from 'Helpers/Props';
 import QualityDefinitionLimits from 'Settings/Quality/Definition/QualityDefinitionLimits';
 import { InputChanged } from 'typings/inputs';
 import { Failure } from 'typings/pending';
@@ -220,10 +219,30 @@ export default function QualityProfileItemSize({
         onAfterChange={handleAfterSliderChange}
       />
 
-      <div className={styles.sizes}>
-        <div>
+      <div className={styles.grid}>
+        <div className={styles.column}>
+          <span className={styles.caption}>{translate('Minimum')}</span>
+
+          <div className={styles.field}>
+            <NumberInput
+              className={styles.sizeInput}
+              name={`${id}.min`}
+              value={minSize ?? MIN}
+              min={MIN}
+              max={preferredSize ? preferredSize - 5 : MAX - 5}
+              step={0.1}
+              isFloat={true}
+              // @ts-expect-error - Typings are too loose
+              onChange={handleMinSizeChange}
+            />
+
+            <span className={styles.unit}>
+              MiB/{translate('MinuteShorthand')}
+            </span>
+          </div>
+
           <Popover
-            anchor={<Label kind={kinds.INFO}>{minSixty}</Label>}
+            anchor={<span className={styles.human}>{minSixty}</span>}
             title={translate('MinimumLimits')}
             body={
               <QualityDefinitionLimits
@@ -235,9 +254,29 @@ export default function QualityProfileItemSize({
           />
         </div>
 
-        <div>
+        <div className={styles.column}>
+          <span className={styles.caption}>{translate('Preferred')}</span>
+
+          <div className={styles.field}>
+            <NumberInput
+              className={styles.sizeInput}
+              name={`${id}.preferred`}
+              value={preferredSize ?? MAX - 5}
+              min={MIN}
+              max={maxSize ? maxSize - 5 : MAX - 5}
+              step={0.1}
+              isFloat={true}
+              // @ts-expect-error - Typings are too loose
+              onChange={handlePreferredSizeChange}
+            />
+
+            <span className={styles.unit}>
+              MiB/{translate('MinuteShorthand')}
+            </span>
+          </div>
+
           <Popover
-            anchor={<Label kind={kinds.SUCCESS}>{preferredSixty}</Label>}
+            anchor={<span className={styles.human}>{preferredSixty}</span>}
             title={translate('PreferredSize')}
             body={
               <QualityDefinitionLimits
@@ -249,9 +288,29 @@ export default function QualityProfileItemSize({
           />
         </div>
 
-        <div>
+        <div className={styles.column}>
+          <span className={styles.caption}>{translate('Maximum')}</span>
+
+          <div className={styles.field}>
+            <NumberInput
+              className={styles.sizeInput}
+              name={`${id}.max`}
+              value={maxSize ?? MAX}
+              min={(preferredSize ?? 0) + STEP_SIZE}
+              max={MAX}
+              step={0.1}
+              isFloat={true}
+              // @ts-expect-error - Typings are too loose
+              onChange={handleMaxSizeChange}
+            />
+
+            <span className={styles.unit}>
+              MiB/{translate('MinuteShorthand')}
+            </span>
+          </div>
+
           <Popover
-            anchor={<Label kind={kinds.WARNING}>{maxSixty}</Label>}
+            anchor={<span className={styles.human}>{maxSixty}</span>}
             title={translate('MaximumLimits')}
             body={
               <QualityDefinitionLimits
@@ -261,64 +320,6 @@ export default function QualityProfileItemSize({
             }
             position={tooltipPositions.BOTTOM}
           />
-        </div>
-      </div>
-
-      <div className={styles.megabytesPerMinuteContainer}>
-        <div className={styles.megabytesPerMinute}>
-          <NumberInput
-            className={styles.sizeInput}
-            name={`${id}.min`}
-            value={minSize ?? MIN}
-            min={MIN}
-            max={preferredSize ? preferredSize - 5 : MAX - 5}
-            step={0.1}
-            isFloat={true}
-            // @ts-expect-error - Typings are too loose
-            onChange={handleMinSizeChange}
-          />
-          <Label kind={kinds.INFO}>
-            {translate('Minimum')} MiB/
-            {translate('MinuteShorthand')}
-          </Label>
-        </div>
-
-        <div className={styles.megabytesPerMinute}>
-          <NumberInput
-            className={styles.sizeInput}
-            name={`${id}.preferred`}
-            value={preferredSize ?? MAX - 5}
-            min={MIN}
-            max={maxSize ? maxSize - 5 : MAX - 5}
-            step={0.1}
-            isFloat={true}
-            // @ts-expect-error - Typings are too loose
-            onChange={handlePreferredSizeChange}
-          />
-
-          <Label kind={kinds.SUCCESS}>
-            {translate('Preferred')} MiB/
-            {translate('MinuteShorthand')}
-          </Label>
-        </div>
-
-        <div className={styles.megabytesPerMinute}>
-          <NumberInput
-            className={styles.sizeInput}
-            name={`${id}.max`}
-            value={maxSize ?? MAX}
-            min={(preferredSize ?? 0) + STEP_SIZE}
-            max={MAX}
-            step={0.1}
-            isFloat={true}
-            // @ts-expect-error - Typings are too loose
-            onChange={handleMaxSizeChange}
-          />
-
-          <Label kind={kinds.WARNING}>
-            {translate('Maximum')} MiB/
-            {translate('MinuteShorthand')}
-          </Label>
         </div>
       </div>
 

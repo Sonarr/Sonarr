@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'addDownloadClient': string;
+  'addLabel': string;
   'center': string;
   'downloadClients': string;
 }

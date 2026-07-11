@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import FieldSet from 'Components/FieldSet';
 import SelectInput, { SelectInputOption } from 'Components/Form/SelectInput';
 import TextInput from 'Components/Form/TextInput';
+import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import Modal from 'Components/Modal/Modal';
@@ -9,13 +10,42 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
-import { sizes } from 'Helpers/Props';
+import { icons, sizes } from 'Helpers/Props';
+import { Size } from 'Helpers/Props/sizes';
 import translate from 'Utilities/String/translate';
 import NamingOption from './NamingOption';
 import TokenCase from './TokenCase';
 import TokenSeparator from './TokenSeparator';
 import { NamingSettingsModel } from './useNamingSettings';
 import styles from './NamingModal.css';
+
+interface Token {
+  token: string;
+  example: string;
+  footNotes?: string;
+}
+
+interface FootNote {
+  identifier: string;
+  text: string;
+}
+
+interface TokenGroup {
+  legend: string;
+  caption?: string;
+  tokens: Token[];
+  size?: Extract<Size, 'large'>;
+  isFullFilename?: boolean;
+  footNotes?: FootNote[];
+}
+
+interface TokenFlags {
+  season: boolean;
+  episode: boolean;
+  daily: boolean;
+  anime: boolean;
+  additional: boolean;
+}
 
 type SeparatorInputOption = Omit<SelectInputOption, 'key'> & {
   key: TokenSeparator;
@@ -275,6 +305,117 @@ const originalTokens = [
   },
 ];
 
+function getNamingTokenGroups({
+  season,
+  episode,
+  daily,
+  anime,
+  additional,
+}: TokenFlags): TokenGroup[] {
+  const groups: TokenGroup[] = [];
+
+  if (episode) {
+    const presets: Token[] = [];
+
+    if (daily) {
+      presets.push(...fileNameDailyTokens);
+    }
+
+    if (anime) {
+      presets.push(...fileNameAnimeTokens);
+    }
+
+    presets.push(...fileNameTokens);
+
+    groups.push({
+      legend: translate('Presets'),
+      caption: translate('NamingPresetsHelpText'),
+      tokens: presets,
+      size: sizes.LARGE,
+      isFullFilename: true,
+    });
+  }
+
+  groups.push({
+    legend: translate('Series'),
+    tokens: seriesTokens,
+    footNotes: [{ identifier: '1', text: translate('SeriesFootNote') }],
+  });
+
+  groups.push({ legend: translate('SeriesID'), tokens: seriesIdTokens });
+
+  if (season) {
+    groups.push({ legend: translate('Season'), tokens: seasonTokens });
+  }
+
+  if (episode) {
+    groups.push({ legend: translate('Episode'), tokens: episodeTokens });
+    groups.push({ legend: translate('AirDate'), tokens: airDateTokens });
+
+    if (anime) {
+      groups.push({
+        legend: translate('AbsoluteEpisodeNumber'),
+        tokens: absoluteTokens,
+      });
+    }
+  }
+
+  if (additional) {
+    groups.push({
+      legend: translate('EpisodeTitle'),
+      tokens: episodeTitleTokens,
+      footNotes: [{ identifier: '1', text: translate('EpisodeTitleFootNote') }],
+    });
+
+    groups.push({ legend: translate('Quality'), tokens: qualityTokens });
+
+    groups.push({
+      legend: translate('MediaInfo'),
+      tokens: mediaInfoTokens,
+      footNotes: [
+        { identifier: '1', text: translate('MediaInfoFootNote') },
+        { identifier: '2', text: translate('MediaInfoFootNote2') },
+      ],
+    });
+
+    groups.push({
+      legend: translate('Other'),
+      tokens: anime ? [...otherTokens, ...otherAnimeTokens] : otherTokens,
+      footNotes: [
+        { identifier: '1', text: translate('ReleaseGroupFootNote') },
+        { identifier: '2', text: translate('CustomFormatFootNote') },
+      ],
+    });
+
+    groups.push({
+      legend: translate('Original'),
+      tokens: originalTokens,
+      size: sizes.LARGE,
+    });
+  }
+
+  return groups;
+}
+
+function filterTokenGroups(groups: TokenGroup[], search: string): TokenGroup[] {
+  const query = search.trim().toLowerCase();
+
+  if (!query) {
+    return groups;
+  }
+
+  return groups
+    .map((group) => ({
+      ...group,
+      tokens: group.tokens.filter(
+        ({ token, example }) =>
+          token.toLowerCase().includes(query) ||
+          example.toLowerCase().includes(query)
+      ),
+    }))
+    .filter((group) => group.tokens.length > 0);
+}
+
 interface NamingModalProps {
   isOpen: boolean;
   name: keyof Pick<
@@ -287,6 +428,7 @@ interface NamingModalProps {
     | 'specialsFolderFormat'
   >;
   value: string;
+  preview?: string;
   season?: boolean;
   episode?: boolean;
   daily?: boolean;
@@ -301,6 +443,7 @@ function NamingModal(props: NamingModalProps) {
     isOpen,
     name,
     value,
+    preview,
     season = false,
     episode = false,
     daily = false,
@@ -312,8 +455,16 @@ function NamingModal(props: NamingModalProps) {
 
   const [tokenSeparator, setTokenSeparator] = useState<TokenSeparator>(' ');
   const [tokenCase, setTokenCase] = useState<TokenCase>('title');
+  const [search, setSearch] = useState('');
   const [selectionStart, setSelectionStart] = useState<number | null>(null);
   const [selectionEnd, setSelectionEnd] = useState<number | null>(null);
+
+  const handleSearchChange = useCallback(
+    ({ value }: { value: string }) => {
+      setSearch(value);
+    },
+    [setSearch]
+  );
 
   const handleTokenSeparatorChange = useCallback(
     ({ value }: { value: TokenSeparator }) => {
@@ -356,15 +507,27 @@ function NamingModal(props: NamingModalProps) {
         const start = value.substring(0, selectionStart);
         const end = value.substring(selectionEnd);
         const newValue = `${start}${tokenValue}${end}`;
+        const caret = selectionStart + tokenValue.length;
 
         onInputChange({ name, value: newValue });
 
-        setSelectionStart(newValue.length - 1);
-        setSelectionEnd(newValue.length - 1);
+        setSelectionStart(caret);
+        setSelectionEnd(caret);
       }
     },
     [name, value, selectionEnd, selectionStart, onInputChange]
   );
+
+  const allGroups = getNamingTokenGroups({
+    season,
+    episode,
+    daily,
+    anime,
+    additional,
+  });
+  const showSearch =
+    allGroups.reduce((total, group) => total + group.tokens.length, 0) > 20;
+  const tokenGroups = filterTokenGroups(allGroups, showSearch ? search : '');
 
   return (
     <Modal isOpen={isOpen} onModalClose={onModalClose}>
@@ -376,306 +539,114 @@ function NamingModal(props: NamingModalProps) {
         </ModalHeader>
 
         <ModalBody>
-          <div className={styles.namingSelectContainer}>
-            <SelectInput
-              className={styles.namingSelect}
-              name="separator"
-              value={tokenSeparator}
-              values={separatorOptions}
-              onChange={handleTokenSeparatorChange}
+          <div className={styles.builder}>
+            <TextInput
+              className={styles.formatInput}
+              name={name}
+              value={value}
+              onChange={onInputChange}
+              onSelectionChange={handleInputSelectionChange}
             />
 
-            <SelectInput
-              className={styles.namingSelect}
-              name="case"
-              value={tokenCase}
-              values={caseOptions}
-              onChange={handleTokenCaseChange}
-            />
+            {preview === undefined ? null : (
+              <div className={styles.preview}>
+                <span className={styles.previewLabel}>
+                  {translate('Preview')}
+                </span>
+
+                {preview ? (
+                  <span className={styles.previewValue}>{preview}</span>
+                ) : (
+                  <span className={styles.previewInvalid}>
+                    {translate('InvalidFormat')}
+                  </span>
+                )}
+              </div>
+            )}
+
+            <div className={styles.controls}>
+              <div className={styles.control}>
+                <span className={styles.controlLabel}>
+                  {translate('Separator')}
+                </span>
+
+                <SelectInput
+                  className={styles.namingSelect}
+                  name="separator"
+                  value={tokenSeparator}
+                  values={separatorOptions}
+                  onChange={handleTokenSeparatorChange}
+                />
+              </div>
+
+              <div className={styles.control}>
+                <span className={styles.controlLabel}>
+                  {translate('Capitalization')}
+                </span>
+
+                <SelectInput
+                  className={styles.namingSelect}
+                  name="case"
+                  value={tokenCase}
+                  values={caseOptions}
+                  onChange={handleTokenCaseChange}
+                />
+              </div>
+            </div>
           </div>
 
-          {episode ? (
-            <FieldSet legend={translate('FileNames')}>
-              <div className={styles.groups}>
-                {daily
-                  ? fileNameDailyTokens.map(({ token, example }) => (
-                      <NamingOption
-                        key={token}
-                        token={token}
-                        example={example}
-                        isFullFilename={true}
-                        tokenSeparator={tokenSeparator}
-                        tokenCase={tokenCase}
-                        size={sizes.LARGE}
-                        onPress={handleOptionPress}
-                      />
-                    ))
-                  : null}
+          <div className={styles.instruction}>
+            <Icon name={icons.INFO} size={14} />
+            <span>{translate('NamingTokenSelectHelpText')}</span>
+          </div>
 
-                {anime
-                  ? fileNameAnimeTokens.map(({ token, example }) => (
-                      <NamingOption
-                        key={token}
-                        token={token}
-                        example={example}
-                        isFullFilename={true}
-                        tokenSeparator={tokenSeparator}
-                        tokenCase={tokenCase}
-                        size={sizes.LARGE}
-                        onPress={handleOptionPress}
-                      />
-                    ))
-                  : null}
-
-                {fileNameTokens.map(({ token, example }) => (
-                  <NamingOption
-                    key={token}
-                    token={token}
-                    example={example}
-                    isFullFilename={true}
-                    tokenSeparator={tokenSeparator}
-                    tokenCase={tokenCase}
-                    size={sizes.LARGE}
-                    onPress={handleOptionPress}
-                  />
-                ))}
-              </div>
-            </FieldSet>
+          {showSearch ? (
+            <TextInput
+              className={styles.search}
+              name="tokenSearch"
+              value={search}
+              placeholder={translate('Search')}
+              onChange={handleSearchChange}
+            />
           ) : null}
 
-          <FieldSet legend={translate('Series')}>
-            <div className={styles.groups}>
-              {seriesTokens.map(({ token, example, footNotes }) => (
-                <NamingOption
-                  key={token}
-                  token={token}
-                  example={example}
-                  footNotes={footNotes}
-                  tokenSeparator={tokenSeparator}
-                  tokenCase={tokenCase}
-                  onPress={handleOptionPress}
-                />
-              ))}
-            </div>
-
-            <div className={styles.footNote}>
-              <sup className={styles.identifier}>1</sup>
-              <InlineMarkdown data={translate('SeriesFootNote')} />
-            </div>
-          </FieldSet>
-
-          <FieldSet legend={translate('SeriesID')}>
-            <div className={styles.groups}>
-              {seriesIdTokens.map(({ token, example }) => (
-                <NamingOption
-                  key={token}
-                  token={token}
-                  example={example}
-                  tokenSeparator={tokenSeparator}
-                  tokenCase={tokenCase}
-                  onPress={handleOptionPress}
-                />
-              ))}
-            </div>
-          </FieldSet>
-
-          {season ? (
-            <FieldSet legend={translate('Season')}>
-              <div className={styles.groups}>
-                {seasonTokens.map(({ token, example }) => (
-                  <NamingOption
-                    key={token}
-                    token={token}
-                    example={example}
-                    tokenSeparator={tokenSeparator}
-                    tokenCase={tokenCase}
-                    onPress={handleOptionPress}
-                  />
-                ))}
-              </div>
-            </FieldSet>
-          ) : null}
-
-          {episode ? (
-            <div>
-              <FieldSet legend={translate('Episode')}>
+          {tokenGroups.length ? (
+            tokenGroups.map((group) => (
+              <FieldSet
+                key={group.legend}
+                legend={group.legend}
+                caption={group.caption}
+              >
                 <div className={styles.groups}>
-                  {episodeTokens.map(({ token, example }) => (
+                  {group.tokens.map(({ token, example, footNotes }) => (
                     <NamingOption
                       key={token}
                       token={token}
                       example={example}
+                      footNotes={footNotes}
+                      isFullFilename={group.isFullFilename}
+                      size={group.size}
                       tokenSeparator={tokenSeparator}
                       tokenCase={tokenCase}
                       onPress={handleOptionPress}
                     />
                   ))}
                 </div>
-              </FieldSet>
 
-              <FieldSet legend={translate('AirDate')}>
-                <div className={styles.groups}>
-                  {airDateTokens.map(({ token, example }) => (
-                    <NamingOption
-                      key={token}
-                      token={token}
-                      example={example}
-                      tokenSeparator={tokenSeparator}
-                      tokenCase={tokenCase}
-                      onPress={handleOptionPress}
-                    />
-                  ))}
-                </div>
-              </FieldSet>
-
-              {anime ? (
-                <FieldSet legend={translate('AbsoluteEpisodeNumber')}>
-                  <div className={styles.groups}>
-                    {absoluteTokens.map(({ token, example }) => (
-                      <NamingOption
-                        key={token}
-                        token={token}
-                        example={example}
-                        tokenSeparator={tokenSeparator}
-                        tokenCase={tokenCase}
-                        onPress={handleOptionPress}
-                      />
-                    ))}
+                {group.footNotes?.map(({ identifier, text }) => (
+                  <div key={identifier} className={styles.footNote}>
+                    <sup className={styles.identifier}>{identifier}</sup>
+                    <InlineMarkdown data={text} />
                   </div>
-                </FieldSet>
-              ) : null}
-            </div>
-          ) : null}
-
-          {additional ? (
-            <div>
-              <FieldSet legend={translate('EpisodeTitle')}>
-                <div className={styles.groups}>
-                  {episodeTitleTokens.map(({ token, example, footNotes }) => (
-                    <NamingOption
-                      key={token}
-                      token={token}
-                      example={example}
-                      footNotes={footNotes}
-                      tokenSeparator={tokenSeparator}
-                      tokenCase={tokenCase}
-                      onPress={handleOptionPress}
-                    />
-                  ))}
-                </div>
-                <div className={styles.footNote}>
-                  <sup className={styles.identifier}>1</sup>
-                  <InlineMarkdown data={translate('EpisodeTitleFootNote')} />
-                </div>
+                ))}
               </FieldSet>
-
-              <FieldSet legend={translate('Quality')}>
-                <div className={styles.groups}>
-                  {qualityTokens.map(({ token, example }) => (
-                    <NamingOption
-                      key={token}
-                      token={token}
-                      example={example}
-                      tokenSeparator={tokenSeparator}
-                      tokenCase={tokenCase}
-                      onPress={handleOptionPress}
-                    />
-                  ))}
-                </div>
-              </FieldSet>
-
-              <FieldSet legend={translate('MediaInfo')}>
-                <div className={styles.groups}>
-                  {mediaInfoTokens.map(({ token, example, footNotes }) => (
-                    <NamingOption
-                      key={token}
-                      token={token}
-                      example={example}
-                      footNotes={footNotes}
-                      tokenSeparator={tokenSeparator}
-                      tokenCase={tokenCase}
-                      onPress={handleOptionPress}
-                    />
-                  ))}
-                </div>
-
-                <div className={styles.footNote}>
-                  <sup className={styles.identifier}>1</sup>
-                  <InlineMarkdown data={translate('MediaInfoFootNote')} />
-                </div>
-
-                <div className={styles.footNote}>
-                  <sup className={styles.identifier}>2</sup>
-                  <InlineMarkdown data={translate('MediaInfoFootNote2')} />
-                </div>
-              </FieldSet>
-
-              <FieldSet legend={translate('Other')}>
-                <div className={styles.groups}>
-                  {otherTokens.map(({ token, example, footNotes }) => (
-                    <NamingOption
-                      key={token}
-                      token={token}
-                      example={example}
-                      footNotes={footNotes}
-                      tokenSeparator={tokenSeparator}
-                      tokenCase={tokenCase}
-                      onPress={handleOptionPress}
-                    />
-                  ))}
-
-                  {anime
-                    ? otherAnimeTokens.map(({ token, example }) => (
-                        <NamingOption
-                          key={token}
-                          token={token}
-                          example={example}
-                          tokenSeparator={tokenSeparator}
-                          tokenCase={tokenCase}
-                          onPress={handleOptionPress}
-                        />
-                      ))
-                    : null}
-                </div>
-
-                <div className={styles.footNote}>
-                  <sup className={styles.identifier}>1</sup>
-                  <InlineMarkdown data={translate('ReleaseGroupFootNote')} />
-                </div>
-
-                <div className={styles.footNote}>
-                  <sup className={styles.identifier}>2</sup>
-                  <InlineMarkdown data={translate('CustomFormatFootNote')} />
-                </div>
-              </FieldSet>
-
-              <FieldSet legend={translate('Original')}>
-                <div className={styles.groups}>
-                  {originalTokens.map(({ token, example }) => (
-                    <NamingOption
-                      key={token}
-                      token={token}
-                      example={example}
-                      tokenSeparator={tokenSeparator}
-                      tokenCase={tokenCase}
-                      size={sizes.LARGE}
-                      onPress={handleOptionPress}
-                    />
-                  ))}
-                </div>
-              </FieldSet>
-            </div>
-          ) : null}
+            ))
+          ) : (
+            <div className={styles.noResults}>{translate('NoTokensFound')}</div>
+          )}
         </ModalBody>
 
         <ModalFooter>
-          <TextInput
-            name={name}
-            value={value}
-            onChange={onInputChange}
-            onSelectionChange={handleInputSelectionChange}
-          />
-
           <Button onPress={onModalClose}>{translate('Close')}</Button>
         </ModalFooter>
       </ModalContent>

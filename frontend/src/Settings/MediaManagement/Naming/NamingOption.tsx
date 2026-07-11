@@ -1,6 +1,8 @@
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
+import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
+import { icons } from 'Helpers/Props';
 import { Size } from 'Helpers/Props/sizes';
 import TokenCase from './TokenCase';
 import TokenSeparator from './TokenSeparator';
@@ -70,6 +72,12 @@ function NamingOption(props: NamingOptionProps) {
           </div>
         ) : null}
       </div>
+
+      {isFullFilename ? null : (
+        <div className={styles.action}>
+          <Icon name={icons.ADD} size={13} />
+        </div>
+      )}
     </Link>
   );
 }

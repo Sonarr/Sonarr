@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useCallback, useEffect, useState } from 'react';
 import Card from 'Components/Card';
 import FieldSet from 'Components/FieldSet';
@@ -174,12 +175,19 @@ export default function EditAutoTaggingModalContent({
               })}
 
               <Card
-                className={styles.addSpecification}
+                className={classNames(
+                  styles.addSpecification,
+                  !specifications.length && styles.fullWidth
+                )}
                 aria-label={translate('AddCondition')}
                 onPress={handleAddSpecificationPress}
               >
                 <div className={styles.center}>
-                  <Icon name={icons.ADD} size={45} />
+                  <Icon name={icons.ADD} size={20} />
+                </div>
+
+                <div className={styles.addLabel}>
+                  {translate('AddCondition')}
                 </div>
               </Card>
             </div>

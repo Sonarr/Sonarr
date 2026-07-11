@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'addCustomFormat': string;
+  'addLabel': string;
   'center': string;
   'customFormats': string;
 }

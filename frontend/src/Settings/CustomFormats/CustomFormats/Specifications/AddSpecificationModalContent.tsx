@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
-import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -20,7 +19,7 @@ type SchemaItem = CustomFormatSpecification & {
   presets?: CustomFormatSpecification[];
 };
 
-interface AddSpecificationModalContentProps {
+export interface AddSpecificationModalContentProps {
   onModalClose: (selectedSpec?: CustomFormatSpecification) => void;
 }
 
@@ -76,29 +75,17 @@ function AddSpecificationModalContent({
         ) : null}
 
         {!isSchemaLoading && !schemaError && schema.length ? (
-          <div>
-            <Alert kind={kinds.INFO}>
-              <div>{translate('SupportedCustomConditions')}</div>
-              <div>
-                {translate('VisitTheWikiForMoreDetails')}{' '}
-                <Link to="https://wiki.servarr.com/sonarr/settings#custom-formats-2">
-                  {translate('Wiki')}
-                </Link>
-              </div>
-            </Alert>
-
-            <div className={styles.specifications}>
-              {schema.map((specification) => (
-                <AddSpecificationItem
-                  key={specification.implementation}
-                  implementation={specification.implementation}
-                  implementationName={specification.implementationName}
-                  infoLink={specification.infoLink}
-                  presets={specification.presets}
-                  onSpecificationSelect={onSpecificationSelect}
-                />
-              ))}
-            </div>
+          <div className={styles.specifications}>
+            {schema.map((specification) => (
+              <AddSpecificationItem
+                key={specification.implementation}
+                implementation={specification.implementation}
+                implementationName={specification.implementationName}
+                infoLink={specification.infoLink}
+                presets={specification.presets}
+                onSpecificationSelect={onSpecificationSelect}
+              />
+            ))}
           </div>
         ) : null}
       </ModalBody>

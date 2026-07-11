@@ -1,35 +1,129 @@
-.groups {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
+.builder {
+  padding: 16px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background-color: var(--paperWarm);
 }
 
-.namingSelectContainer {
+.formatInput {
+  composes: input from '~Components/Form/TextInput.css';
+
+  width: 100%;
+  font-family: var(--monoSpaceFontFamily);
+}
+
+.preview {
   display: flex;
-  justify-content: flex-end;
+  align-items: baseline;
+  gap: 8px;
+
+  margin-top: 10px;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.previewLabel {
+  flex-shrink: 0;
+  color: var(--inkFaint);
+}
+
+.previewValue {
+  color: var(--accent);
+  font-family: var(--monoSpaceFontFamily);
+  overflow-wrap: anywhere;
+}
+
+.previewInvalid {
+  color: var(--dangerColor);
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+
+  margin-top: 14px;
+}
+
+.control {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.controlLabel {
+  color: var(--inkFaint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 11px;
 }
 
 .namingSelect {
   composes: select from '~Components/Form/SelectInput.css';
 
-  margin-left: 10px;
-  width: 200px;
+  width: 100%;
+}
+
+.instruction {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin: 16px 0 10px;
+
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.search {
+  composes: input from '~Components/Form/TextInput.css';
+
+  margin-bottom: 8px;
+
+  width: 100%;
+}
+
+.groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  column-gap: 16px;
+  row-gap: 2px;
 }
 
 .footNote {
   display: flex;
-  color: var(--helpTextColor);
+  gap: 6px;
+
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.5;
 
   .identifier {
-    margin-top: 8px;
-    margin-right: 5px;
-    padding: 2px;
+    flex-shrink: 0;
+    color: var(--inkFaint);
   }
 
   code {
-    padding: 0 1px;
-    border: 1px solid var(--borderColor);
-    background-color: #f7f7f7;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background-color: var(--paperWarm);
+    color: var(--ink);
+    font-family: var(--monoSpaceFontFamily);
+  }
+}
+
+.noResults {
+  padding: 32px 0;
+  color: var(--inkMuted);
+  text-align: center;
+  font-size: 13px;
+}
+
+@media only screen and (max-width: 768px) {
+  .groups {
+    grid-template-columns: 1fr;
   }
 }

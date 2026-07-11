@@ -4,7 +4,7 @@ import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
-import { icons, kinds } from 'Helpers/Props';
+import { icons, kinds, sizes } from 'Helpers/Props';
 import { useTagList } from 'Tags/useTags';
 import formatShortTimeSpan from 'Utilities/Date/formatShortTimeSpan';
 import translate from 'Utilities/String/translate';
@@ -66,6 +66,7 @@ function ImportList({
   return (
     <Card
       className={styles.list}
+      overlayClassName={styles.overlay}
       overlayContent={true}
       aria-label={translate('EditImportListName', { name })}
       onPress={handleEditImportListPress}
@@ -73,30 +74,37 @@ function ImportList({
       <div className={styles.nameContainer}>
         <div className={styles.name}>{name}</div>
 
-        <IconButton
-          className={styles.cloneButton}
-          title={translate('CloneImportList')}
-          aria-label={translate('CloneImportList')}
-          name={icons.CLONE}
-          onPress={handleCloneImportListPress}
-        />
+        <div className={styles.rightCluster}>
+          <IconButton
+            className={styles.cloneButton}
+            title={translate('CloneImportList')}
+            aria-label={translate('CloneImportList')}
+            name={icons.CLONE}
+            onPress={handleCloneImportListPress}
+          />
+        </div>
       </div>
 
-      <div className={styles.enabled}>
+      <div className={styles.labels}>
         {enableAutomaticAdd ? (
-          <Label kind={kinds.SUCCESS}>{translate('AutomaticAdd')}</Label>
+          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+            {translate('AutomaticAdd')}
+          </Label>
         ) : null}
-      </div>
 
-      <TagList tags={tags} tagList={tagList} />
-
-      <div className={styles.enabled}>
-        <Label kind={kinds.DEFAULT} title="List Refresh Interval">
+        <Label
+          dot={false}
+          kind={kinds.DEFAULT}
+          size={sizes.MEDIUM}
+          title="List Refresh Interval"
+        >
           {`${translate('Refresh')}: ${formatShortTimeSpan(
             minRefreshInterval
           )}`}
         </Label>
       </div>
+
+      <TagList tags={tags} tagList={tagList} />
 
       <EditImportListModal
         id={id}

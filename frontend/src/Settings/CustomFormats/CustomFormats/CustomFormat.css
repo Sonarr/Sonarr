@@ -1,49 +1,71 @@
 .customFormat {
   composes: card from '~Components/Card.css';
 
-  width: 300px;
+  width: 290px;
+}
+
+.overlay {
+  composes: overlay from '~Components/Card.css';
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .nameContainer {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 8px;
 }
 
 .name {
   @add-mixin truncate;
 
-  margin-bottom: 20px;
-  font-weight: 300;
-  font-size: 24px;
+  flex: 1 1 auto;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: 16px;
+  font-family: $defaultFontFamily;
+  line-height: 1.25;
 }
 
-.buttons {
-  flex: 0 0 auto;
+.rightCluster {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 8px;
 }
 
-.cloneButton {
+.iconButton {
   composes: button from '~Components/Link/IconButton.css';
-
-  height: 36px;
 }
 
-.formats {
+.statusLine {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
-  margin-top: 5px;
-  pointer-events: all;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 11px;
+  font-family: $monoSpaceFontFamily;
+  gap: 8px;
 }
 
-.tooltipLabel {
-  composes: label from '~Components/Label.css';
-
-  margin: 0;
-  border: none;
+.statusDot,
+.statusDotMuted {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
 }
 
-.label {
-  @add-mixin truncate;
-  composes: label from '~Components/Label.css';
+.statusDot {
+  background-color: var(--statusAiring);
+}
 
-  max-width: 100%;
+.statusDotMuted {
+  background-color: var(--inkFaint);
 }

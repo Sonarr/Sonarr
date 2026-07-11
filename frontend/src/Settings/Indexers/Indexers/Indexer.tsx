@@ -5,7 +5,7 @@ import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
-import { icons, kinds } from 'Helpers/Props';
+import { icons, kinds, sizes } from 'Helpers/Props';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import { IndexerModel, useDeleteIndexer } from '../useIndexers';
@@ -66,6 +66,7 @@ function Indexer({
   return (
     <Card
       className={styles.indexer}
+      overlayClassName={styles.overlay}
       overlayContent={true}
       aria-label={translate('EditIndexerName', { name })}
       onPress={handleEditIndexerPress}
@@ -73,38 +74,46 @@ function Indexer({
       <div className={styles.nameContainer}>
         <div className={styles.name}>{name}</div>
 
-        <IconButton
-          className={styles.cloneButton}
-          title={translate('CloneIndexer')}
-          aria-label={translate('CloneIndexer')}
-          name={icons.CLONE}
-          onPress={handleCloneIndexerPress}
-        />
+        <div className={styles.rightCluster}>
+          <IconButton
+            className={styles.cloneButton}
+            title={translate('CloneIndexer')}
+            aria-label={translate('CloneIndexer')}
+            name={icons.CLONE}
+            onPress={handleCloneIndexerPress}
+          />
+        </div>
       </div>
 
       <div className={styles.enabled}>
-        <ProtocolLabel protocol={protocol} />
+        <ProtocolLabel protocol={protocol} size={sizes.MEDIUM} />
 
         {supportsRss && enableRss ? (
-          <Label kind={kinds.SUCCESS}>{translate('Rss')}</Label>
+          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+            {translate('Rss')}
+          </Label>
         ) : null}
 
         {supportsSearch && enableAutomaticSearch ? (
-          <Label kind={kinds.SUCCESS}>{translate('AutomaticSearch')}</Label>
+          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+            {translate('AutomaticSearch')}
+          </Label>
         ) : null}
 
         {supportsSearch && enableInteractiveSearch ? (
-          <Label kind={kinds.SUCCESS}>{translate('InteractiveSearch')}</Label>
+          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+            {translate('InteractiveSearch')}
+          </Label>
         ) : null}
 
         {showPriority ? (
-          <Label kind={kinds.DEFAULT}>
+          <Label kind={kinds.DEFAULT} size={sizes.MEDIUM}>
             {translate('Priority')}: {priority}
           </Label>
         ) : null}
 
         {!enableRss && !enableAutomaticSearch && !enableInteractiveSearch ? (
-          <Label kind={kinds.DISABLED} outline={true}>
+          <Label kind={kinds.DISABLED} outline={true} size={sizes.MEDIUM}>
             {translate('Disabled')}
           </Label>
         ) : null}
