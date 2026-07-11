@@ -90,13 +90,3 @@
 .isDragging {
   opacity: 0.4;
 }
-
-.isPreview {
-  .qualityName {
-    margin-left: 14px;
-
-    &.isInGroup {
-      margin-left: 28px;
-    }
-  }
-}
