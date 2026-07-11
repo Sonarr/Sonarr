@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import FieldSet from 'Components/FieldSet';
 import PageSectionContent from 'Components/Page/PageSectionContent';
+import SectionHeading from 'Components/SectionHeading';
 import AddCard from 'Components/SettingsCard/AddCard';
 import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
+import settingsStyles from 'Settings/Settings.css';
 import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import AddImportListModal from './AddImportListModal';
@@ -51,7 +52,12 @@ function ImportLists() {
   }, []);
 
   return (
-    <FieldSet legend={translate('ImportLists')}>
+    <div className={settingsStyles.pageSection}>
+      <SectionHeading
+        title={translate('ImportLists')}
+        description={translate('ImportListsSectionDescription')}
+      />
+
       <PageSectionContent
         errorMessage={translate('ImportListsLoadError')}
         error={error}
@@ -88,7 +94,7 @@ function ImportLists() {
           onModalClose={handleEditImportListModalClose}
         />
       </PageSectionContent>
-    </FieldSet>
+    </div>
   );
 }
 

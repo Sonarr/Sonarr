@@ -8,6 +8,7 @@ interface CssExports {
   'cardSummary': string;
   'cardTitle': string;
   'grid': string;
+  'pageSection': string;
   'section': string;
 }
 export const cssExports: CssExports;

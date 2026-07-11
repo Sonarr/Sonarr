@@ -1,7 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 import Alert from 'Components/Alert';
-import FieldSet from 'Components/FieldSet';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
 import { kinds } from 'Helpers/Props';
@@ -45,20 +44,18 @@ function Tags() {
   }
 
   return (
-    <FieldSet legend={translate('Tags')}>
-      <PageSectionContent
-        errorMessage={translate('TagsLoadError')}
-        error={error || detailsError}
-        isFetching={isFetching || isDetailsFetching}
-        isPopulated={isFetched && isDetailsFetched}
-      >
-        <div className={settingsCardStyles.grid}>
-          {items.map((item) => {
-            return <Tag key={item.id} {...item} />;
-          })}
-        </div>
-      </PageSectionContent>
-    </FieldSet>
+    <PageSectionContent
+      errorMessage={translate('TagsLoadError')}
+      error={error || detailsError}
+      isFetching={isFetching || isDetailsFetching}
+      isPopulated={isFetched && isDetailsFetched}
+    >
+      <div className={settingsCardStyles.grid}>
+        {items.map((item) => {
+          return <Tag key={item.id} {...item} />;
+        })}
+      </div>
+    </PageSectionContent>
   );
 }
 

@@ -4,6 +4,7 @@ import PageHeading from 'Components/Page/PageHeading';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
+import SectionHeading from 'Components/SectionHeading';
 import { icons } from 'Helpers/Props';
 import settingsStyles from 'Settings/Settings.css';
 import SettingsPage from 'Settings/SettingsPage';
@@ -95,13 +96,18 @@ function DownloadClientSettings() {
       <PageContentBody>
         <div className={settingsStyles.section}>
           <PageHeading
-            scope={`${translate('Configuration')} · ${translate(
-              'DownloadClients'
-            )}`}
-            title={translate('DownloadClientSettings')}
+            scope={translate('Settings')}
+            title={translate('DownloadClients')}
           />
 
-          <DownloadClients />
+          <div className={settingsStyles.pageSection}>
+            <SectionHeading
+              title={translate('DownloadClients')}
+              description={translate('DownloadClientsSectionDescription')}
+            />
+
+            <DownloadClients />
+          </div>
 
           <DownloadClientOptions
             setChildSave={handleSetChildSave}

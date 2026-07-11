@@ -3,13 +3,13 @@ import React from 'react';
 import { DndProvider } from 'react-dnd-multi-backend';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageHeading from 'Components/Page/PageHeading';
+import SectionHeading from 'Components/SectionHeading';
 import settingsStyles from 'Settings/Settings.css';
 import SettingsPage from 'Settings/SettingsPage';
 import translate from 'Utilities/String/translate';
 import DelayProfiles from './Delay/DelayProfiles';
 import QualityProfiles from './Quality/QualityProfiles';
 import ReleaseProfiles from './Release/ReleaseProfiles';
-import styles from './Profiles.css';
 
 // Only a single DragDrop Context can exist so it's done here to allow editing
 // quality profiles and reordering delay profiles to work.
@@ -25,42 +25,30 @@ function Profiles() {
               title={translate('Profiles')}
             />
 
-            <div className={styles.section}>
-              <div className={styles.sectionHeaderRow}>
-                <h3 className={styles.sectionHeading}>
-                  {translate('QualityProfiles')}
-                </h3>
-              </div>
-              <p className={styles.sectionLede}>
-                Controls which video qualities are acceptable and when to
-                upgrade.
-              </p>
+            <div className={settingsStyles.pageSection}>
+              <SectionHeading
+                title={translate('QualityProfiles')}
+                description={translate('QualityProfilesSectionDescription')}
+              />
+
               <QualityProfiles />
             </div>
 
-            <div className={styles.section}>
-              <div className={styles.sectionHeaderRow}>
-                <h3 className={styles.sectionHeading}>
-                  {translate('DelayProfiles')}
-                </h3>
-              </div>
-              <p className={styles.sectionLede}>
-                Set per-protocol download delays to allow preferred releases to
-                appear first.
-              </p>
+            <div className={settingsStyles.pageSection}>
+              <SectionHeading
+                title={translate('DelayProfiles')}
+                description={translate('DelayProfilesSectionDescription')}
+              />
+
               <DelayProfiles />
             </div>
 
-            <div className={styles.section}>
-              <div className={styles.sectionHeaderRow}>
-                <h3 className={styles.sectionHeading}>
-                  {translate('ReleaseProfiles')}
-                </h3>
-              </div>
-              <p className={styles.sectionLede}>
-                Filter releases by required or unwanted terms, tags, and
-                indexers.
-              </p>
+            <div className={settingsStyles.pageSection}>
+              <SectionHeading
+                title={translate('ReleaseProfiles')}
+                description={translate('ReleaseProfilesSectionDescription')}
+              />
+
               <ReleaseProfiles />
             </div>
           </div>

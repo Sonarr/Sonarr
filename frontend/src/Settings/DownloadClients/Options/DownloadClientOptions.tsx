@@ -70,7 +70,10 @@ function DownloadClientOptions({
       ) : null}
 
       {hasSettings && isFetched && !error && showAdvancedSettings ? (
-        <FieldSet legend={translate('CompletedDownloadHandling')}>
+        <FieldSet
+          legend={translate('CompletedDownloadHandling')}
+          caption={translate('CompletedDownloadHandlingCaption')}
+        >
           <Form>
             <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
               <FormLabel>{translate('Enable')}</FormLabel>

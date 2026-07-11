@@ -63,7 +63,10 @@ function QualityDefinitions({
   ]);
 
   return (
-    <FieldSet legend={translate('QualityDefinitions')}>
+    <FieldSet
+      legend={translate('QualityDefinitions')}
+      caption={translate('QualityDefinitionsCaption')}
+    >
       <PageSectionContent
         errorMessage={translate('QualityDefinitionsLoadError')}
         isFetching={isFetching}

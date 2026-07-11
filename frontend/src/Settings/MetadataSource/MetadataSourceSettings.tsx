@@ -12,9 +12,7 @@ function MetadataSourceSettings() {
       <PageContentBody>
         <div className={settingsStyles.section}>
           <PageHeading
-            scope={`${translate('Configuration')} · ${translate(
-              'MetadataSource'
-            )}`}
+            scope={translate('Settings')}
             title={translate('MetadataSource')}
           />
           <TheTvdb />

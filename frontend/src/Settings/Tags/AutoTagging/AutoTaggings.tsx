@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import FieldSet from 'Components/FieldSet';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import AddCard from 'Components/SettingsCard/AddCard';
 import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
@@ -37,34 +36,32 @@ export default function AutoTaggings() {
   }, []);
 
   return (
-    <FieldSet legend={translate('AutoTagging')}>
-      <PageSectionContent
-        errorMessage={translate('AutoTaggingLoadError')}
-        error={error}
-        isFetching={isFetching}
-        isPopulated={isPopulated}
-      >
-        <div className={settingsCardStyles.grid}>
-          {items.map((item) => {
-            return (
-              <AutoTagging
-                key={item.id}
-                {...item}
-                tagList={tagList}
-                onCloneAutoTaggingPress={onClonePress}
-              />
-            );
-          })}
+    <PageSectionContent
+      errorMessage={translate('AutoTaggingLoadError')}
+      error={error}
+      isFetching={isFetching}
+      isPopulated={isPopulated}
+    >
+      <div className={settingsCardStyles.grid}>
+        {items.map((item) => {
+          return (
+            <AutoTagging
+              key={item.id}
+              {...item}
+              tagList={tagList}
+              onCloneAutoTaggingPress={onClonePress}
+            />
+          );
+        })}
 
-          <AddCard label={translate('AddAutoTag')} onPress={onEditPress} />
-        </div>
+        <AddCard label={translate('AddAutoTag')} onPress={onEditPress} />
+      </div>
 
-        <EditAutoTaggingModal
-          isOpen={isEditModalOpen}
-          cloneId={cloneId}
-          onModalClose={onEditModalClose}
-        />
-      </PageSectionContent>
-    </FieldSet>
+      <EditAutoTaggingModal
+        isOpen={isEditModalOpen}
+        cloneId={cloneId}
+        onModalClose={onEditModalClose}
+      />
+    </PageSectionContent>
   );
 }

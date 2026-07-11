@@ -93,10 +93,8 @@ function ImportListSettings() {
       <PageContentBody>
         <div className={settingsStyles.section}>
           <PageHeading
-            scope={`${translate('Configuration')} · ${translate(
-              'ImportLists'
-            )}`}
-            title={translate('ImportListSettings')}
+            scope={translate('Settings')}
+            title={translate('ImportLists')}
           />
 
           <ImportLists />

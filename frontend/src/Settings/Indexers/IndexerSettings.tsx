@@ -4,6 +4,7 @@ import PageHeading from 'Components/Page/PageHeading';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
+import SectionHeading from 'Components/SectionHeading';
 import { icons } from 'Helpers/Props';
 import settingsStyles from 'Settings/Settings.css';
 import SettingsPage from 'Settings/SettingsPage';
@@ -91,11 +92,18 @@ function IndexerSettings() {
       <PageContentBody>
         <div className={settingsStyles.section}>
           <PageHeading
-            scope={`${translate('Configuration')} · ${translate('Indexers')}`}
-            title={translate('IndexerSettings')}
+            scope={translate('Settings')}
+            title={translate('Indexers')}
           />
 
-          <Indexers />
+          <div className={settingsStyles.pageSection}>
+            <SectionHeading
+              title={translate('Indexers')}
+              description={translate('IndexersSectionDescription')}
+            />
+
+            <Indexers />
+          </div>
 
           <IndexerOptions
             setChildSave={handleSetChildSave}

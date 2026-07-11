@@ -6,6 +6,7 @@ import PageHeading from 'Components/Page/PageHeading';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
+import SectionHeading from 'Components/SectionHeading';
 import { icons } from 'Helpers/Props';
 import ParseModal from 'Parse/ParseModal';
 import settingsStyles from 'Settings/Settings.css';
@@ -72,9 +73,16 @@ function CustomFormatSettingsPage() {
             title={translate('CustomFormats')}
           />
 
-          <DndProvider backend={HTML5Backend}>
-            <CustomFormats />
-          </DndProvider>
+          <div className={settingsStyles.pageSection}>
+            <SectionHeading
+              title={translate('CustomFormats')}
+              description={translate('CustomFormatsSectionDescription')}
+            />
+
+            <DndProvider backend={HTML5Backend}>
+              <CustomFormats />
+            </DndProvider>
+          </div>
         </div>
       </PageContentBody>
 

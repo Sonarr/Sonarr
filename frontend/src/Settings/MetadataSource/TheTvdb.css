@@ -6,15 +6,6 @@
   margin-left: 30px;
 }
 
-.title {
-  margin-bottom: 16px;
-  color: var(--ink);
-  font-weight: 500;
-  font-size: 28px;
-  font-family: 'Fraunces', serif;
-  line-height: 1.2;
-}
-
 .image {
   width: 213px;
   height: 123px;

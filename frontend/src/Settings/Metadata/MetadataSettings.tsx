@@ -1,6 +1,7 @@
 import React from 'react';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageHeading from 'Components/Page/PageHeading';
+import SectionHeading from 'Components/SectionHeading';
 import settingsStyles from 'Settings/Settings.css';
 import SettingsPage from 'Settings/SettingsPage';
 import translate from 'Utilities/String/translate';
@@ -12,11 +13,18 @@ function MetadataSettings() {
       <PageContentBody>
         <div className={settingsStyles.section}>
           <PageHeading
-            scope={`${translate('Configuration')} · ${translate('Metadata')}`}
-            title={translate('MetadataSettings')}
+            scope={translate('Settings')}
+            title={translate('Metadata')}
           />
 
-          <Metadatas />
+          <div className={settingsStyles.pageSection}>
+            <SectionHeading
+              title={translate('Metadata')}
+              description={translate('MetadataSectionDescription')}
+            />
+
+            <Metadatas />
+          </div>
         </div>
       </PageContentBody>
     </SettingsPage>

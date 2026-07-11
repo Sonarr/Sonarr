@@ -153,7 +153,10 @@ function ImportListExclusionsContent() {
   }, [refetch]);
 
   return (
-    <FieldSet legend={translate('ImportListExclusions')}>
+    <FieldSet
+      legend={translate('ImportListExclusions')}
+      caption={translate('ImportListExclusionsCaption')}
+    >
       <PageSectionContent
         errorMessage={translate('ImportListExclusionsLoadError')}
         isFetching={isLoading && !isFetched}
