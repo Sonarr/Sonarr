@@ -1,15 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import Card from 'Components/Card';
 import FieldSet from 'Components/FieldSet';
-import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
-import { icons } from 'Helpers/Props';
+import AddCard from 'Components/SettingsCard/AddCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import AutoTagging from './AutoTagging';
 import EditAutoTaggingModal from './EditAutoTaggingModal';
 import { useSortedAutoTaggings } from './useAutoTaggings';
-import styles from './AutoTaggings.css';
 
 export default function AutoTaggings() {
   const {
@@ -46,7 +44,7 @@ export default function AutoTaggings() {
         isFetching={isFetching}
         isPopulated={isPopulated}
       >
-        <div className={styles.autoTaggings}>
+        <div className={settingsCardStyles.grid}>
           {items.map((item) => {
             return (
               <AutoTagging
@@ -58,17 +56,7 @@ export default function AutoTaggings() {
             );
           })}
 
-          <Card
-            className={styles.addAutoTagging}
-            aria-label={translate('AddAutoTag')}
-            onPress={onEditPress}
-          >
-            <div className={styles.center}>
-              <Icon name={icons.ADD} size={20} />
-            </div>
-
-            <div className={styles.addLabel}>{translate('AddAutoTag')}</div>
-          </Card>
+          <AddCard label={translate('AddAutoTag')} onPress={onEditPress} />
         </div>
 
         <EditAutoTaggingModal

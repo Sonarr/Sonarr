@@ -1,7 +1,10 @@
 import React, { useCallback, useState } from 'react';
-import Card from 'Components/Card';
-import IconButton from 'Components/Link/IconButton';
+import Label from 'Components/Label';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import SettingsCard from 'Components/SettingsCard/SettingsCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
+import SettingsCardAction from 'Components/SettingsCard/SettingsCardAction';
+import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
 import { icons, kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import EditCustomFormatModal from './EditCustomFormatModal';
@@ -10,7 +13,6 @@ import {
   CustomFormatSpecification,
   useDeleteCustomFormat,
 } from './useCustomFormats';
-import styles from './CustomFormat.css';
 
 interface CustomFormatProps {
   id: number;
@@ -71,39 +73,42 @@ function CustomFormat({
   const isActive = conditionCount > 0;
 
   return (
-    <Card
-      className={styles.customFormat}
-      overlayClassName={styles.overlay}
-      overlayContent={true}
+    <SettingsCard
+      name={name}
       aria-label={translate('EditCustomFormatName', { name })}
-      onPress={onEditCustomFormatPress}
-    >
-      <div className={styles.nameContainer}>
-        <div className={styles.name}>{name}</div>
-
-        <div className={styles.rightCluster}>
-          <IconButton
-            className={styles.iconButton}
+      actions={
+        <>
+          <SettingsCardAction
             title={translate('CloneCustomFormat')}
             aria-label={translate('CloneCustomFormat')}
             name={icons.CLONE}
             onPress={handleCloneCustomFormatPressHandler}
           />
 
-          <IconButton
-            className={styles.iconButton}
+          <SettingsCardAction
             title={translate('ExportCustomFormat')}
             aria-label={translate('ExportCustomFormat')}
             name={icons.EXPORT}
             onPress={handleExportCustomFormatPress}
           />
-        </div>
-      </div>
+        </>
+      }
+      onPress={onEditCustomFormatPress}
+    >
+      <SettingsCardStatus
+        dot={isActive ? 'active' : 'muted'}
+        segments={[translate('ConditionsCount', { count: conditionCount })]}
+      />
 
-      <div className={styles.statusLine}>
-        <span className={isActive ? styles.statusDot : styles.statusDotMuted} />
-        <span>{translate('ConditionsCount', { count: conditionCount })}</span>
-      </div>
+      {conditionCount ? (
+        <div className={settingsCardStyles.labels}>
+          {specifications.map((specification) => (
+            <Label key={specification.id} dot={false} kind={kinds.DEFAULT}>
+              {specification.name}
+            </Label>
+          ))}
+        </div>
+      ) : null}
 
       <EditCustomFormatModal
         id={id}
@@ -128,7 +133,7 @@ function CustomFormat({
         onConfirm={handleConfirmDeleteCustomFormat}
         onCancel={handleDeleteCustomFormatModalClose}
       />
-    </Card>
+    </SettingsCard>
   );
 }
 

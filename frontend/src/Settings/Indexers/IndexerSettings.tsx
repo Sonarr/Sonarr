@@ -1,9 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { icons } from 'Helpers/Props';
+import settingsStyles from 'Settings/Settings.css';
 import SettingsPage from 'Settings/SettingsPage';
 import {
   SaveCallback,
@@ -87,17 +89,24 @@ function IndexerSettings() {
       onSavePress={handleSavePress}
     >
       <PageContentBody>
-        <Indexers />
+        <div className={settingsStyles.section}>
+          <PageHeading
+            scope={`${translate('Configuration')} · ${translate('Indexers')}`}
+            title={translate('IndexerSettings')}
+          />
 
-        <IndexerOptions
-          setChildSave={handleSetChildSave}
-          onChildStateChange={handleChildStateChange}
-        />
+          <Indexers />
 
-        <ManageIndexersModal
-          isOpen={isManageIndexersModalOpen}
-          onModalClose={handleManageIndexersModalClose}
-        />
+          <IndexerOptions
+            setChildSave={handleSetChildSave}
+            onChildStateChange={handleChildStateChange}
+          />
+
+          <ManageIndexersModal
+            isOpen={isManageIndexersModalOpen}
+            onModalClose={handleManageIndexersModalClose}
+          />
+        </div>
       </PageContentBody>
     </SettingsPage>
   );

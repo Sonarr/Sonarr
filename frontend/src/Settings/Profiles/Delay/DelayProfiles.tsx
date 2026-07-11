@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 import Link from 'Components/Link/Link';
 import PageSectionContent from 'Components/Page/PageSectionContent';
@@ -85,24 +84,21 @@ function DelayProfiles() {
       isFetching={isFetching}
       isPopulated={isPopulated}
     >
-      <div className={styles.delayList}>
-        <div className={styles.headerRow}>
-          <div className={styles.colDrag} />
-          <div className={classNames(styles.colScope, styles.headerCell)}>
-            {translate('Tags')}
-          </div>
-          <div className={classNames(styles.colProto, styles.headerCell)}>
-            {translate('PreferredProtocol')}
-          </div>
-          <div className={classNames(styles.colUsenet, styles.headerCell)}>
-            {translate('UsenetDelay')}
-          </div>
-          <div className={classNames(styles.colTorrent, styles.headerCell)}>
-            {translate('TorrentDelay')}
-          </div>
-          <div className={styles.colActions} />
-        </div>
+      <div className={styles.headerRow}>
+        <div className={styles.colDrag} />
 
+        <div className={styles.colScope}>{translate('Tags')}</div>
+
+        <div className={styles.colProto}>{translate('PreferredProtocol')}</div>
+
+        <div className={styles.colUsenet}>{translate('UsenetDelay')}</div>
+
+        <div className={styles.colTorrent}>{translate('TorrentDelay')}</div>
+
+        <div className={styles.colActions} />
+      </div>
+
+      <div className={styles.delayList}>
         {items.map((item) => {
           return (
             <DelayProfile
@@ -128,7 +124,7 @@ function DelayProfiles() {
           />
         ) : null}
 
-        <Link className={styles.ghostRow} onPress={handleAddDelayProfilePress}>
+        <Link className={styles.addRow} onPress={handleAddDelayProfilePress}>
           {translate('AddDelayProfile')}
         </Link>
       </div>

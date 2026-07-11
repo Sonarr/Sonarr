@@ -1,16 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import Card from 'Components/Card';
 import FieldSet from 'Components/FieldSet';
-import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
-import { icons } from 'Helpers/Props';
+import AddCard from 'Components/SettingsCard/AddCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
 import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import AddImportListModal from './AddImportListModal';
 import EditImportListModal from './EditImportListModal';
 import ImportList from './ImportList';
 import { useSortedImportLists } from './useImportLists';
-import styles from './ImportLists.css';
 
 function ImportLists() {
   const { isFetching, isFetched, data, error } = useSortedImportLists();
@@ -60,7 +58,7 @@ function ImportLists() {
         isFetching={isFetching}
         isPopulated={isFetched}
       >
-        <div className={styles.lists}>
+        <div className={settingsCardStyles.grid}>
           {data.map((item) => {
             return (
               <ImportList
@@ -71,16 +69,10 @@ function ImportLists() {
             );
           })}
 
-          <Card
-            className={styles.addList}
-            aria-label={translate('AddImportList')}
+          <AddCard
+            label={translate('AddImportList')}
             onPress={handleAddImportListPress}
-          >
-            <div className={styles.center}>
-              <Icon name={icons.ADD} size={20} />
-            </div>
-            <div className={styles.addLabel}>{translate('AddImportList')}</div>
-          </Card>
+          />
         </div>
 
         <AddImportListModal

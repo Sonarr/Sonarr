@@ -1,12 +1,14 @@
 import classNames from 'classnames';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { DragSourceMonitor, useDrag, useDrop, XYCoord } from 'react-dnd';
+import Card from 'Components/Card';
 import Icon from 'Components/Icon';
-import Link from 'Components/Link/Link';
+import Label from 'Components/Label';
+import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import DragType from 'Helpers/DragType';
-import { icons, kinds } from 'Helpers/Props';
+import { icons, kinds, sizes } from 'Helpers/Props';
 import { Tag } from 'Tags/useTags';
 import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
@@ -175,12 +177,16 @@ function DelayProfile({
     <div ref={id === 1 ? undefined : ref}>
       {isBefore ? <div className={styles.placeholder} /> : null}
 
-      <div
+      <Card
         className={classNames(
           styles.delayProfile,
           id === 1 && styles.isDefault,
           isDragging && styles.isDragging
         )}
+        overlayClassName={styles.overlay}
+        overlayContent={true}
+        aria-label={translate('EditDelayProfile')}
+        onPress={handleEditDelayProfilePress}
       >
         <div className={styles.colDrag}>
           {id === 1 ? null : (
@@ -191,6 +197,12 @@ function DelayProfile({
         </div>
 
         <div className={styles.colScope}>
+          {id === 1 ? (
+            <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
+              {translate('Default')}
+            </Label>
+          ) : null}
+
           {tags.length ? (
             <TagList tags={tags} tagList={tagList} />
           ) : (
@@ -201,24 +213,35 @@ function DelayProfile({
         <div className={styles.colProto}>{preferred}</div>
 
         <div className={styles.colUsenet}>
+          <span className={styles.colLabel}>{translate('UsenetDelay')}</span>
           {getDelay(enableUsenet, usenetDelay)}
         </div>
 
         <div className={styles.colTorrent}>
+          <span className={styles.colLabel}>{translate('TorrentDelay')}</span>
           {getDelay(enableTorrent, torrentDelay)}
         </div>
 
         <div className={styles.colActions}>
-          <div className={styles.actions}>
-            <Link
+          <IconButton
+            className={styles.actionButton}
+            title={translate('EditDelayProfile')}
+            aria-label={translate('EditDelayProfile')}
+            name={icons.EDIT}
+            onPress={handleEditDelayProfilePress}
+          />
+
+          {id === 1 ? null : (
+            <IconButton
               className={styles.actionButton}
-              onPress={handleEditDelayProfilePress}
-            >
-              <Icon name={icons.EDIT} />
-            </Link>
-          </div>
+              title={translate('DeleteDelayProfile')}
+              aria-label={translate('DeleteDelayProfile')}
+              name={icons.DELETE}
+              onPress={handleDeleteDelayProfilePress}
+            />
+          )}
         </div>
-      </div>
+      </Card>
 
       {isAfter ? <div className={styles.placeholder} /> : null}
 

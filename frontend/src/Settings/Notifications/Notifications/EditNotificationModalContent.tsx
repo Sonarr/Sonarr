@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
-import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
@@ -94,45 +94,43 @@ function EditNotificationModalContent({
           ? translate('EditConnectionImplementation', { implementationName })
           : translate('AddConnectionImplementation', { implementationName })}
       </ModalHeader>
-
       <ModalBody>
         <Form
           validationErrors={validationErrors}
           validationWarnings={validationWarnings}
         >
           {message ? (
-            <Alert className={styles.message} kind={message.value.type}>
-              {message.value.message}
-            </Alert>
+            <p className={styles.message}>{message.value.message}</p>
           ) : null}
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Name')}</FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.TEXT}
               name="name"
               {...name}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
           <NotificationEventItems
             item={item}
             onInputChange={handleInputChange}
           />
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Tags')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('NotificationsTagsSeriesHelpText')}
+            />
+            <FormInput
               type={inputTypes.TAG}
               name="tags"
-              helpText={translate('NotificationsTagsSeriesHelpText')}
               {...tags}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
           {fields.map((field) => {
             return (
@@ -148,7 +146,6 @@ function EditNotificationModalContent({
           })}
         </Form>
       </ModalBody>
-
       <ModalFooter>
         {id ? (
           <Button

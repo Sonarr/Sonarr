@@ -1,86 +1,3 @@
-.qualityProfile {
-  composes: card from '~Components/Card.css';
-
-  width: 290px;
-}
-
-.overlay {
-  composes: overlay from '~Components/Card.css';
-
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.nameContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.name {
-  @add-mixin truncate;
-
-  flex: 1 1 auto;
-  color: var(--ink);
-  letter-spacing: -0.01em;
-  font-weight: 600;
-  font-size: 16px;
-  font-family: $defaultFontFamily;
-  line-height: 1.25;
-}
-
-.rightCluster {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-  gap: 4px;
-
-  opacity: 0;
-  transition: opacity 0.15s ease;
-}
-
-.qualityProfile:hover .rightCluster {
-  opacity: 1;
-}
-
-.actionButton {
-  composes: button from '~Components/Link/IconButton.css';
-
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-}
-
-.statusLine {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  color: var(--inkMuted);
-  letter-spacing: 0.06em;
-  font-weight: 500;
-  font-size: 11px;
-  font-family: $defaultFontFamily;
-  gap: 8px;
-}
-
-.cutoffName {
-  color: var(--ink);
-}
-
-.statusDot {
-  flex-shrink: 0;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: var(--statusAiring);
-}
-
-.statusSeparator {
-  color: var(--inkFaint);
-}
-
 .chips {
   display: flex;
   flex-wrap: wrap;
@@ -100,18 +17,18 @@
 }
 
 .moreChip {
+  composes: link from '~Components/Link/Link.css';
+
   display: inline-flex;
   align-items: center;
   margin: 2px;
   padding: 3px 10px;
   border: 1px dashed var(--borderColor);
   border-radius: 999px;
-  background: none;
   color: var(--inkMuted);
   letter-spacing: 0.02em;
   font-size: 11px;
-  font-family: $defaultFontFamily;
-  cursor: pointer;
+  font-family: var(--defaultFontFamily);
 }
 
 .moreChip:hover {
@@ -124,5 +41,5 @@
   color: var(--inkFaint);
   letter-spacing: 0.04em;
   font-size: 10px;
-  font-family: $monoSpaceFontFamily;
+  font-family: var(--monoSpaceFontFamily);
 }

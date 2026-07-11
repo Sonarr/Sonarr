@@ -4,12 +4,6 @@
   margin-right: auto;
 }
 
-.error {
-  color: var(--dangerColor);
-  font-size: 13px;
-  line-height: 1.55;
-}
-
 .rightButtons {
   justify-content: flex-end;
   margin-right: auto;
@@ -26,7 +20,7 @@
   letter-spacing: 0.06em;
   font-weight: 500;
   font-size: 12px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
 }
 
 .intro {
@@ -34,7 +28,7 @@
   max-width: 70ch;
   color: var(--inkMuted);
   font-size: 13px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1.55;
 }
 
@@ -45,7 +39,7 @@
 }
 
 .addSpecification {
-  composes: customFormat from '~./CustomFormat.css';
+  composes: card from '~Components/Card.css';
 
   display: flex;
   align-items: center;
@@ -87,5 +81,5 @@
   letter-spacing: 0.06em;
   font-weight: 500;
   font-size: 11px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
 }

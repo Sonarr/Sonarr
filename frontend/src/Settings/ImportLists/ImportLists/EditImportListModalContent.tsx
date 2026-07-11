@@ -4,9 +4,10 @@ import SeriesMonitorNewItemsOptionsPopoverContent from 'AddSeries/SeriesMonitorN
 import SeriesTypePopoverContent from 'AddSeries/SeriesTypePopoverContent';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
@@ -115,7 +116,6 @@ function EditImportListModalContent({
           ? translate('EditImportListImplementation', { implementationName })
           : translate('AddImportListImplementation', { implementationName })}
       </ModalHeader>
-
       <ModalBody>
         <Form
           validationErrors={validationErrors}
@@ -127,44 +127,46 @@ function EditImportListModalContent({
             })}
           </Alert>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Name')}</FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.TEXT}
               name="name"
               {...name}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('EnableAutomaticAdd')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('EnableAutomaticAddSeriesHelpText')}
+            />
+            <FormInput
               type={inputTypes.CHECK}
               name="enableAutomaticAdd"
-              helpText={translate('EnableAutomaticAddSeriesHelpText')}
               {...enableAutomaticAdd}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>
               {translate('ImportListSearchForMissingEpisodes')}
             </FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('ImportListSearchForMissingEpisodesHelpText')}
+            />
+            <FormInput
               type={inputTypes.CHECK}
               name="searchForMissingEpisodes"
-              helpText={translate('ImportListSearchForMissingEpisodesHelpText')}
               {...searchForMissingEpisodes}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>
               {translate('Monitor')}
 
@@ -176,15 +178,15 @@ function EditImportListModalContent({
               />
             </FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.MONITOR_EPISODES_SELECT}
               name="shouldMonitor"
               onChange={handleInputChange}
               {...shouldMonitor}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>
               {translate('MonitorNewSeasons')}
               <Popover
@@ -194,42 +196,39 @@ function EditImportListModalContent({
                 position={tooltipPositions.RIGHT}
               />
             </FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('MonitorNewSeasonsHelpText')} />
+            <FormInput
               type={inputTypes.MONITOR_NEW_ITEMS_SELECT}
               name="monitorNewItems"
-              helpText={translate('MonitorNewSeasonsHelpText')}
               {...monitorNewItems}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('RootFolder')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('ListRootFolderHelpText')} />
+            <FormInput
               type={inputTypes.ROOT_FOLDER_SELECT}
               name="rootFolderPath"
-              helpText={translate('ListRootFolderHelpText')}
               {...rootFolderPath}
               includeMissingValue={true}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('QualityProfile')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('ListQualityProfileHelpText')} />
+            <FormInput
               type={inputTypes.QUALITY_PROFILE_SELECT}
               name="qualityProfileId"
-              helpText={translate('ListQualityProfileHelpText')}
               {...qualityProfileId}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>
               {translate('SeriesType')}
 
@@ -241,36 +240,35 @@ function EditImportListModalContent({
               />
             </FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.SERIES_TYPE_SELECT}
               name="seriesType"
               onChange={handleInputChange}
               {...seriesType}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('SeasonFolder')}</FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.CHECK}
               name="seasonFolder"
               onChange={handleInputChange}
               {...seasonFolder}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('SonarrTags')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('ListTagsHelpText')} />
+            <FormInput
               type={inputTypes.TAG}
               name="tags"
-              helpText={translate('ListTagsHelpText')}
               {...tags}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
           {fields?.map((field) => {
             return (

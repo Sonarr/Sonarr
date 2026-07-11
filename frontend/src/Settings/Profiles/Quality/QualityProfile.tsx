@@ -1,8 +1,11 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import Card from 'Components/Card';
+import React, { MouseEvent, useCallback, useMemo, useState } from 'react';
 import Label from 'Components/Label';
-import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import SettingsCard from 'Components/SettingsCard/SettingsCard';
+import SettingsCardAction from 'Components/SettingsCard/SettingsCardAction';
+import SettingsCardStatus, {
+  SettingsCardStatusValue,
+} from 'Components/SettingsCard/SettingsCardStatus';
 import Tooltip from 'Components/Tooltip/Tooltip';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
@@ -86,53 +89,46 @@ function QualityProfile({
     onCloneQualityProfilePress(id);
   }, [id, onCloneQualityProfilePress]);
 
-  const handleShowAllPress = useCallback((e: React.MouseEvent) => {
+  const handleShowAllPress = useCallback((e: MouseEvent) => {
     e.stopPropagation();
     setIsExpanded(true);
   }, []);
 
   return (
-    <Card
-      className={styles.qualityProfile}
-      overlayClassName={styles.overlay}
-      overlayContent={true}
+    <SettingsCard
+      name={name}
       aria-label={translate('EditQualityProfileName', { name })}
-      onPress={handleEditPress}
-    >
-      <div className={styles.nameContainer}>
-        <div className={styles.name}>{name}</div>
-
-        <div className={styles.rightCluster}>
-          <IconButton
-            className={styles.actionButton}
+      actions={
+        <>
+          <SettingsCardAction
             title={translate('EditQualityProfile')}
             aria-label={translate('EditQualityProfile')}
             name={icons.EDIT}
             onPress={handleEditPress}
           />
 
-          <IconButton
-            className={styles.actionButton}
+          <SettingsCardAction
             title={translate('CloneProfile')}
             aria-label={translate('CloneProfile')}
             name={icons.CLONE}
             onPress={handleClonePress}
           />
-        </div>
-      </div>
-
-      <div className={styles.statusLine}>
-        {upgradeAllowed ? <span className={styles.statusDot} /> : null}
-        <span>{upgradeAllowed ? 'UPGRADES ON' : 'UPGRADES OFF'}</span>
-        {cutoffName ? (
-          <>
-            <span className={styles.statusSeparator}>·</span>
-            <span>
-              CUTOFF <span className={styles.cutoffName}>{cutoffName}</span>
-            </span>
-          </>
-        ) : null}
-      </div>
+        </>
+      }
+      onPress={handleEditPress}
+    >
+      <SettingsCardStatus
+        dot={upgradeAllowed ? 'active' : undefined}
+        segments={[
+          translate(upgradeAllowed ? 'UpgradesOn' : 'UpgradesOff'),
+          cutoffName ? (
+            <>
+              {translate('Cutoff')}{' '}
+              <SettingsCardStatusValue>{cutoffName}</SettingsCardStatusValue>
+            </>
+          ) : null,
+        ]}
+      />
 
       <div className={styles.chips}>
         {visibleItems.map((item) => {
@@ -192,7 +188,7 @@ function QualityProfile({
             type="button"
             onClick={handleShowAllPress}
           >
-            {`+${hiddenCount} more`}
+            {translate('ShowMoreCount', { count: hiddenCount })}
           </button>
         ) : null}
       </div>
@@ -214,7 +210,7 @@ function QualityProfile({
         onConfirm={handleConfirmDelete}
         onCancel={handleDeleteModalClose}
       />
-    </Card>
+    </SettingsCard>
   );
 }
 

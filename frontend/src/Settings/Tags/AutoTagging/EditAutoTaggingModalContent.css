@@ -9,7 +9,7 @@
 }
 
 .addSpecification {
-  composes: autoTagging from '~./AutoTagging.css';
+  composes: card from '~Components/Card.css';
 
   display: flex;
   align-items: center;
@@ -51,7 +51,7 @@
   letter-spacing: 0.06em;
   font-weight: 500;
   font-size: 11px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
 }
 
 .autoTaggings {

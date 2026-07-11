@@ -1,21 +1,20 @@
-.delayList {
-  overflow: hidden;
-  border: 1px solid var(--borderColor);
-  border-radius: 12px;
-  background-color: var(--paperCard);
-  user-select: none;
-}
-
 .headerRow {
   display: flex;
   align-items: center;
-  padding: 0 12px;
-  height: 36px;
-  border-bottom: 1px solid var(--borderColor);
-  background-color: var(--paperWarm);
+  margin-bottom: 8px;
+  padding: 0 19px;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  white-space: nowrap;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 11px;
+  font-family: var(--defaultFontFamily);
 }
 
-.colDrag    { flex: 0 0 32px; }
+.colDrag {
+  flex: 0 0 20px;
+}
 
 .colScope {
   flex: 1 1 auto;
@@ -23,41 +22,58 @@
   min-width: 80px;
 }
 
-.colProto   { flex: 0 0 180px; }
-
-.colUsenet  { flex: 0 0 120px; }
-
-.colTorrent { flex: 0 0 120px; }
-
-.colActions { flex: 0 0 56px; }
-
-.headerCell {
-  color: var(--inkMuted);
-  text-transform: uppercase;
-  white-space: nowrap;
-  letter-spacing: 0.06em;
-  font-weight: 500;
-  font-size: 11px;
-  font-family: $defaultFontFamily;
+.colProto {
+  flex: 0 0 180px;
 }
 
-.ghostRow {
+.colUsenet {
+  flex: 0 0 120px;
+}
+
+.colTorrent {
+  flex: 0 0 120px;
+}
+
+.colActions {
+  flex: 0 0 60px;
+}
+
+.delayList {
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  gap: 12px;
+}
+
+@media only screen and (max-width: 768px) {
+  .headerRow {
+    display: none;
+  }
+}
+
+.addRow {
+  composes: link from '~Components/Link/Link.css';
+
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
   height: 40px;
-  border: 0;
-  border-top: 1px dashed var(--borderColor);
-  background: none;
+  border: 1px dashed var(--inputBorderColor);
+  border-radius: 12px;
   color: var(--inkMuted);
-  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
   font-size: 11px;
-  font-family: $monoSpaceFontFamily;
-  cursor: pointer;
-}
+  font-family: var(--defaultFontFamily);
+  transition:
+    border-color 200ms cubic-bezier(0.25, 1, 0.5, 1),
+    color 200ms cubic-bezier(0.25, 1, 0.5, 1),
+    background-color 200ms cubic-bezier(0.25, 1, 0.5, 1);
 
-.ghostRow:hover {
-  background-color: var(--paperWarm);
-  color: var(--accent);
+  &:hover {
+    border-color: var(--accent);
+    background-color: var(--paperWarm);
+    color: var(--accent);
+  }
 }

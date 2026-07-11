@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -113,48 +113,58 @@ function ManageImportListsEditModalContent(
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('EditSelectedImportLists')}</ModalHeader>
-
       <ModalBody>
-        <FormGroup>
-          <FormLabel>{translate('AutomaticAdd')}</FormLabel>
+        <section className={styles.section}>
+          <h3 className={styles.sectionHeading}>
+            {translate('ManageImportListsEditModalContentImportSection')}
+          </h3>
 
-          <FormInputGroup
-            type={inputTypes.SELECT}
-            name="enableAutomaticAdd"
-            value={enableAutomaticAdd}
-            values={autoAddOptions}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+          <FormRow>
+            <FormLabel>{translate('AutomaticAdd')}</FormLabel>
 
-        <FormGroup>
-          <FormLabel>{translate('QualityProfile')}</FormLabel>
+            <FormInput
+              type={inputTypes.SELECT}
+              name="enableAutomaticAdd"
+              value={enableAutomaticAdd}
+              values={autoAddOptions}
+              onChange={onInputChange}
+            />
+          </FormRow>
+        </section>
 
-          <FormInputGroup
-            type={inputTypes.QUALITY_PROFILE_SELECT}
-            name="qualityProfileId"
-            value={qualityProfileId}
-            includeNoChange={true}
-            includeNoChangeDisabled={false}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+        <section className={styles.section}>
+          <h3 className={styles.sectionHeading}>
+            {translate('ManageImportListsEditModalContentLibrarySection')}
+          </h3>
 
-        <FormGroup>
-          <FormLabel>{translate('RootFolder')}</FormLabel>
+          <FormRow>
+            <FormLabel>{translate('QualityProfile')}</FormLabel>
 
-          <FormInputGroup
-            type={inputTypes.ROOT_FOLDER_SELECT}
-            name="rootFolderPath"
-            value={rootFolderPath}
-            includeNoChange={true}
-            includeNoChangeDisabled={false}
-            selectedValueOptions={{ includeFreeSpace: false }}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+            <FormInput
+              type={inputTypes.QUALITY_PROFILE_SELECT}
+              name="qualityProfileId"
+              value={qualityProfileId}
+              includeNoChange={true}
+              includeNoChangeDisabled={false}
+              onChange={onInputChange}
+            />
+          </FormRow>
+
+          <FormRow>
+            <FormLabel>{translate('RootFolder')}</FormLabel>
+
+            <FormInput
+              type={inputTypes.ROOT_FOLDER_SELECT}
+              name="rootFolderPath"
+              value={rootFolderPath}
+              includeNoChange={true}
+              includeNoChangeDisabled={false}
+              selectedValueOptions={{ includeFreeSpace: false }}
+              onChange={onInputChange}
+            />
+          </FormRow>
+        </section>
       </ModalBody>
-
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>
           {translate('CountImportListsSelected', {

@@ -1,8 +1,15 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import Card from 'Components/Card';
+import React, {
+  MouseEvent,
+  ReactNode,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import Label from 'Components/Label';
-import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import SettingsCard from 'Components/SettingsCard/SettingsCard';
+import SettingsCardAction from 'Components/SettingsCard/SettingsCardAction';
+import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { icons, kinds } from 'Helpers/Props';
 import { IndexerModel } from 'Settings/Indexers/useIndexers';
@@ -62,68 +69,61 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
     [tagList, tags]
   );
 
-  const handleShowAllPress = useCallback((e: React.MouseEvent) => {
+  const handleShowAllPress = useCallback((e: MouseEvent) => {
     e.stopPropagation();
     setIsExpanded(true);
   }, []);
 
   const statusSegments = useMemo(() => {
-    const segments: string[] = [];
+    const segments: ReactNode[] = [translate(enabled ? 'Enabled' : 'Disabled')];
 
     if (indexers.length > 0) {
       segments.push(
-        `${indexers.length} ${indexers.length === 1 ? 'INDEXER' : 'INDEXERS'}`
+        `${indexers.length} ${translate(
+          indexers.length === 1 ? 'Indexer' : 'Indexers'
+        )}`
       );
     }
 
     if (tagNames.length > 0) {
       segments.push(
-        `${tagNames.length} ${tagNames.length === 1 ? 'TAG' : 'TAGS'}`
+        `${tagNames.length} ${translate(
+          tagNames.length === 1 ? 'Tag' : 'Tags'
+        )}`
       );
     }
 
     return segments;
-  }, [indexers, tagNames]);
+  }, [enabled, indexers, tagNames]);
 
   return (
-    <Card
-      className={styles.releaseProfile}
-      overlayContent={true}
+    <SettingsCard
+      name={name || translate('Unnamed')}
+      isUnnamed={!name}
       aria-label={translate('EditReleaseProfileName', { name: name ?? id })}
-      onPress={setEditModalOpen}
-    >
-      <div className={styles.nameContainer}>
-        <div className={styles.name}>{name || translate('ReleaseProfile')}</div>
-
-        <div className={styles.rightCluster}>
-          <IconButton
-            className={styles.actionButton}
+      actions={
+        <>
+          <SettingsCardAction
             title={translate('EditReleaseProfile')}
             aria-label={translate('EditReleaseProfile')}
             name={icons.EDIT}
             onPress={setEditModalOpen}
           />
 
-          <IconButton
-            className={styles.actionButton}
+          <SettingsCardAction
             title={translate('DeleteReleaseProfile')}
             aria-label={translate('DeleteReleaseProfile')}
             name={icons.DELETE}
             onPress={setDeleteModalOpen}
           />
-        </div>
-      </div>
-
-      <div className={styles.statusLine}>
-        {enabled ? <span className={styles.statusDot} /> : null}
-        <span>{enabled ? 'ENABLED' : 'DISABLED'}</span>
-        {statusSegments.map((seg, i) => (
-          <React.Fragment key={i}>
-            <span className={styles.statusSeparator}>·</span>
-            <span>{seg}</span>
-          </React.Fragment>
-        ))}
-      </div>
+        </>
+      }
+      onPress={setEditModalOpen}
+    >
+      <SettingsCardStatus
+        dot={enabled ? 'active' : 'muted'}
+        segments={statusSegments}
+      />
 
       <div className={isCapped ? styles.chipsClipped : styles.chips}>
         {required.map((item) => {
@@ -153,7 +153,7 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
           type="button"
           onClick={handleShowAllPress}
         >
-          {`Show all ${allChips.length} patterns ↓`}
+          {`${translate('ShowAllPatterns', { count: allChips.length })} ↓`}
         </button>
       ) : null}
 
@@ -176,7 +176,7 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
         onConfirm={deleteReleaseProfile}
         onCancel={setDeleteModalClosed}
       />
-    </Card>
+    </SettingsCard>
   );
 }
 

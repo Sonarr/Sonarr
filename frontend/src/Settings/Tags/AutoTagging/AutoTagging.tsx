@@ -1,8 +1,10 @@
 import React, { useCallback, useState } from 'react';
-import Card from 'Components/Card';
 import Label from 'Components/Label';
-import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import SettingsCard from 'Components/SettingsCard/SettingsCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
+import SettingsCardAction from 'Components/SettingsCard/SettingsCardAction';
+import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
 import TagList from 'Components/TagList';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import { Kind } from 'Helpers/Props/kinds';
@@ -13,7 +15,6 @@ import {
   AutoTaggingSpecification,
   useDeleteAutoTagging,
 } from './useAutoTaggings';
-import styles from './AutoTagging.css';
 
 interface AutoTaggingProps {
   id: number;
@@ -62,30 +63,34 @@ export default function AutoTagging({
   }, [id, onCloneAutoTaggingPress]);
 
   return (
-    <Card
-      className={styles.autoTagging}
-      overlayClassName={styles.overlay}
-      overlayContent={true}
+    <SettingsCard
+      name={name}
       aria-label={translate('EditAutoTagName', { name })}
+      actions={
+        <SettingsCardAction
+          title={translate('CloneAutoTag')}
+          aria-label={translate('CloneAutoTag')}
+          name={icons.CLONE}
+          onPress={onClonePress}
+        />
+      }
       onPress={onEditPress}
     >
-      <div className={styles.nameContainer}>
-        <div className={styles.name}>{name}</div>
+      <SettingsCardStatus
+        segments={[
+          <>
+            {tags.length} {translate('Tags')}
+          </>,
 
-        <div className={styles.rightCluster}>
-          <IconButton
-            className={styles.cloneButton}
-            title={translate('CloneAutoTag')}
-            aria-label={translate('CloneAutoTag')}
-            name={icons.CLONE}
-            onPress={onClonePress}
-          />
-        </div>
-      </div>
+          <>
+            {specifications.length} {translate('Formats')}
+          </>,
+        ]}
+      />
 
       <TagList tags={tags} tagList={tagList} />
 
-      <div className={styles.formats}>
+      <div className={settingsCardStyles.labels}>
         {specifications.map((item, index) => {
           if (!item) {
             return null;
@@ -102,7 +107,7 @@ export default function AutoTagging({
           }
 
           return (
-            <Label key={index} kind={kind} size={sizes.MEDIUM}>
+            <Label key={index} kind={kind} size={sizes.MEDIUM} dot={false}>
               {item.name}
             </Label>
           );
@@ -126,6 +131,6 @@ export default function AutoTagging({
         onConfirm={onConfirmDelete}
         onCancel={onDeleteModalClose}
       />
-    </Card>
+    </SettingsCard>
   );
 }

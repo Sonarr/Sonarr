@@ -116,11 +116,11 @@ function EditDownloadClientModalContent({
           validationErrors={validationErrors}
           validationWarnings={validationWarnings}
         >
-          {!!message && (
+          {message ? (
             <Alert className={styles.message} kind={message.value.type}>
               {message.value.message}
             </Alert>
-          )}
+          ) : null}
 
           <FormGroup>
             <FormLabel>{translate('Name')}</FormLabel>

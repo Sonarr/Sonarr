@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import Card from 'Components/Card';
 import Label from 'Components/Label';
+import SettingsCard from 'Components/SettingsCard/SettingsCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
+import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
 import { kinds, sizes } from 'Helpers/Props';
 import Field from 'typings/Field';
 import translate from 'Utilities/String/translate';
@@ -41,32 +43,21 @@ function Metadata({ id, name, enable, fields }: MetadataProps) {
   }, []);
 
   return (
-    <Card
-      className={styles.metadata}
-      overlayClassName={styles.overlay}
-      overlayContent={true}
+    <SettingsCard
+      name={name}
       aria-label={translate('MetadataName', { name })}
       onPress={handleOpenPress}
     >
-      <div className={styles.name}>{name}</div>
-
-      <div className={styles.labels}>
-        {enable ? (
-          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
-            {translate('Enabled')}
-          </Label>
-        ) : (
-          <Label kind={kinds.DISABLED} size={sizes.MEDIUM} outline={true}>
-            {translate('Disabled')}
-          </Label>
-        )}
-      </div>
+      <SettingsCardStatus
+        dot={enable ? 'active' : 'muted'}
+        segments={[translate(enable ? 'Enabled' : 'Disabled')]}
+      />
 
       {enable && metadataFields.length ? (
         <div className={styles.fieldSection}>
           <div className={styles.section}>{translate('Metadata')}</div>
 
-          <div className={styles.labels}>
+          <div className={settingsCardStyles.labels}>
             {metadataFields.map((field) => {
               if (!field.value) {
                 return null;
@@ -75,7 +66,8 @@ function Metadata({ id, name, enable, fields }: MetadataProps) {
               return (
                 <Label
                   key={field.label}
-                  kind={kinds.SUCCESS}
+                  dot={false}
+                  kind={kinds.DEFAULT}
                   size={sizes.MEDIUM}
                 >
                   {field.label}
@@ -90,7 +82,7 @@ function Metadata({ id, name, enable, fields }: MetadataProps) {
         <div className={styles.fieldSection}>
           <div className={styles.section}>{translate('Images')}</div>
 
-          <div className={styles.labels}>
+          <div className={settingsCardStyles.labels}>
             {imageFields.map((field) => {
               if (!field.value) {
                 return null;
@@ -99,7 +91,8 @@ function Metadata({ id, name, enable, fields }: MetadataProps) {
               return (
                 <Label
                   key={field.label}
-                  kind={kinds.SUCCESS}
+                  dot={false}
+                  kind={kinds.DEFAULT}
                   size={sizes.MEDIUM}
                 >
                   {field.label}
@@ -115,7 +108,7 @@ function Metadata({ id, name, enable, fields }: MetadataProps) {
         isOpen={isEditMetadataModalOpen}
         onModalClose={handleModalClose}
       />
-    </Card>
+    </SettingsCard>
   );
 }
 

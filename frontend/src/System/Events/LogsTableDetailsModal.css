@@ -4,14 +4,14 @@
   display: block;
   margin: 0 0 10.5px;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
   background-color: var(--logEventsBackgroundColor);
   color: var(--textColor);
   white-space: pre;
   word-wrap: break-word;
   word-break: break-all;
   font-size: 13px;
-  font-family: $monoSpaceFontFamily;
+  font-family: var(--monoSpaceFontFamily);
   line-height: 1.52857143;
 }

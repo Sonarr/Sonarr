@@ -1,9 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { icons } from 'Helpers/Props';
+import settingsStyles from 'Settings/Settings.css';
 import SettingsPage from 'Settings/SettingsPage';
 import {
   SaveCallback,
@@ -91,19 +93,28 @@ function DownloadClientSettings() {
       onSavePress={handleSavePress}
     >
       <PageContentBody>
-        <DownloadClients />
+        <div className={settingsStyles.section}>
+          <PageHeading
+            scope={`${translate('Configuration')} · ${translate(
+              'DownloadClients'
+            )}`}
+            title={translate('DownloadClientSettings')}
+          />
 
-        <DownloadClientOptions
-          setChildSave={handleSetChildSave}
-          onChildStateChange={handleChildStateChange}
-        />
+          <DownloadClients />
 
-        <RemotePathMappings />
+          <DownloadClientOptions
+            setChildSave={handleSetChildSave}
+            onChildStateChange={handleChildStateChange}
+          />
 
-        <ManageDownloadClientsModal
-          isOpen={isManageDownloadClientsModalOpen}
-          onModalClose={handleManageDownloadClientsModalClose}
-        />
+          <RemotePathMappings />
+
+          <ManageDownloadClientsModal
+            isOpen={isManageDownloadClientsModalOpen}
+            onModalClose={handleManageDownloadClientsModalClose}
+          />
+        </div>
       </PageContentBody>
     </SettingsPage>
   );

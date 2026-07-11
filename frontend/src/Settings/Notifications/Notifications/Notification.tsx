@@ -1,14 +1,15 @@
 import React, { useCallback, useState } from 'react';
-import Card from 'Components/Card';
 import Label from 'Components/Label';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import SettingsCard from 'Components/SettingsCard/SettingsCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
+import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
 import TagList from 'Components/TagList';
 import { kinds, sizes } from 'Helpers/Props';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import { NotificationModel, useDeleteConnection } from '../useConnections';
 import EditNotificationModal from './EditNotificationModal';
-import styles from './Notification.css';
 
 function Notification({
   id,
@@ -70,79 +71,93 @@ function Notification({
     deleteConnection();
   }, [deleteConnection]);
 
+  const enabled =
+    onGrab ||
+    onDownload ||
+    onRename ||
+    onImportComplete ||
+    onHealthIssue ||
+    onHealthRestored ||
+    onApplicationUpdate ||
+    onSeriesAdd ||
+    onSeriesDelete ||
+    onEpisodeFileDelete ||
+    onManualInteractionRequired;
+
   return (
-    <Card
-      className={styles.notification}
-      overlayClassName={styles.overlay}
-      overlayContent={true}
+    <SettingsCard
+      name={name}
       aria-label={translate('EditConnectionName', { name })}
       onPress={handleEditNotificationPress}
     >
-      <div className={styles.name}>{name}</div>
+      <SettingsCardStatus
+        dot={enabled ? 'active' : 'muted'}
+        segments={[translate(enabled ? 'Enabled' : 'Disabled')]}
+      />
 
-      <div className={styles.labels}>
+      <div className={settingsCardStyles.labels}>
         {supportsOnGrab && onGrab ? (
-          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
             {translate('OnGrab')}
           </Label>
         ) : null}
 
         {supportsOnDownload && onDownload ? (
-          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
             {translate('OnFileImport')}
           </Label>
         ) : null}
 
         {supportsOnUpgrade && onDownload && onUpgrade ? (
-          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
             {translate('OnFileUpgrade')}
           </Label>
         ) : null}
 
         {supportsOnImportComplete && onImportComplete ? (
-          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
             {translate('OnImportComplete')}
           </Label>
         ) : null}
 
         {supportsOnRename && onRename ? (
-          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
             {translate('OnRename')}
           </Label>
         ) : null}
 
         {supportsOnHealthIssue && onHealthIssue ? (
-          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
             {translate('OnHealthIssue')}
           </Label>
         ) : null}
 
         {supportsOnHealthRestored && onHealthRestored ? (
-          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
             {translate('OnHealthRestored')}
           </Label>
         ) : null}
 
         {supportsOnApplicationUpdate && onApplicationUpdate ? (
-          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
             {translate('OnApplicationUpdate')}
           </Label>
         ) : null}
 
         {supportsOnSeriesAdd && onSeriesAdd ? (
-          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
             {translate('OnSeriesAdd')}
           </Label>
         ) : null}
 
         {supportsOnSeriesDelete && onSeriesDelete ? (
-          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
             {translate('OnSeriesDelete')}
           </Label>
         ) : null}
 
         {supportsOnEpisodeFileDelete && onEpisodeFileDelete ? (
-          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
             {translate('OnEpisodeFileDelete')}
           </Label>
         ) : null}
@@ -150,35 +165,19 @@ function Notification({
         {supportsOnEpisodeFileDeleteForUpgrade &&
         onEpisodeFileDelete &&
         onEpisodeFileDeleteForUpgrade ? (
-          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
             {translate('OnEpisodeFileDeleteForUpgrade')}
           </Label>
         ) : null}
 
         {supportsOnManualInteractionRequired && onManualInteractionRequired ? (
-          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
             {translate('OnManualInteractionRequired')}
-          </Label>
-        ) : null}
-
-        {!onGrab &&
-        !onDownload &&
-        !onRename &&
-        !onImportComplete &&
-        !onHealthIssue &&
-        !onHealthRestored &&
-        !onApplicationUpdate &&
-        !onSeriesAdd &&
-        !onSeriesDelete &&
-        !onEpisodeFileDelete &&
-        !onManualInteractionRequired ? (
-          <Label kind={kinds.DISABLED} outline={true} size={sizes.MEDIUM}>
-            {translate('Disabled')}
           </Label>
         ) : null}
       </div>
 
-      <TagList tags={tags} tagList={tagList} />
+      {tags.length > 0 ? <TagList tags={tags} tagList={tagList} /> : null}
 
       <EditNotificationModal
         id={id}
@@ -196,7 +195,7 @@ function Notification({
         onConfirm={handleConfirmDeleteNotification}
         onCancel={handleDeleteNotificationModalClose}
       />
-    </Card>
+    </SettingsCard>
   );
 }
 

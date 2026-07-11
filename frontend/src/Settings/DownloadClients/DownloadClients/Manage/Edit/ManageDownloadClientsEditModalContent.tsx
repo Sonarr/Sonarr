@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -125,58 +125,68 @@ function ManageDownloadClientsEditModalContent(
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('EditSelectedDownloadClients')}</ModalHeader>
-
       <ModalBody>
-        <FormGroup>
-          <FormLabel>{translate('Enabled')}</FormLabel>
+        <section className={styles.section}>
+          <h3 className={styles.sectionHeading}>
+            {translate('ManageDownloadClientsEditModalContentStatusSection')}
+          </h3>
 
-          <FormInputGroup
-            type={inputTypes.SELECT}
-            name="enable"
-            value={enable}
-            values={enableOptions}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+          <FormRow>
+            <FormLabel>{translate('Enabled')}</FormLabel>
 
-        <FormGroup>
-          <FormLabel>{translate('Priority')}</FormLabel>
+            <FormInput
+              type={inputTypes.SELECT}
+              name="enable"
+              value={enable}
+              values={enableOptions}
+              onChange={onInputChange}
+            />
+          </FormRow>
 
-          <FormInputGroup
-            type={inputTypes.NUMBER}
-            name="priority"
-            value={priority}
-            min={1}
-            max={50}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+          <FormRow>
+            <FormLabel>{translate('Priority')}</FormLabel>
 
-        <FormGroup>
-          <FormLabel>{translate('RemoveCompletedDownloads')}</FormLabel>
+            <FormInput
+              type={inputTypes.NUMBER}
+              name="priority"
+              value={priority}
+              min={1}
+              max={50}
+              onChange={onInputChange}
+            />
+          </FormRow>
+        </section>
 
-          <FormInputGroup
-            type={inputTypes.SELECT}
-            name="removeCompletedDownloads"
-            value={removeCompletedDownloads}
-            values={enableOptions}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+        <section className={styles.section}>
+          <h3 className={styles.sectionHeading}>
+            {translate('ManageDownloadClientsEditModalContentCompletedSection')}
+          </h3>
 
-        <FormGroup>
-          <FormLabel>{translate('RemoveFailedDownloads')}</FormLabel>
+          <FormRow>
+            <FormLabel>{translate('RemoveCompletedDownloads')}</FormLabel>
 
-          <FormInputGroup
-            type={inputTypes.SELECT}
-            name="removeFailedDownloads"
-            value={removeFailedDownloads}
-            values={enableOptions}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+            <FormInput
+              type={inputTypes.SELECT}
+              name="removeCompletedDownloads"
+              value={removeCompletedDownloads}
+              values={enableOptions}
+              onChange={onInputChange}
+            />
+          </FormRow>
+
+          <FormRow>
+            <FormLabel>{translate('RemoveFailedDownloads')}</FormLabel>
+
+            <FormInput
+              type={inputTypes.SELECT}
+              name="removeFailedDownloads"
+              value={removeFailedDownloads}
+              values={enableOptions}
+              onChange={onInputChange}
+            />
+          </FormRow>
+        </section>
       </ModalBody>
-
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>
           {translate('CountDownloadClientsSelected', {

@@ -2,6 +2,8 @@
 // Please do not change this file!
 interface CssExports {
   'modalFooter': string;
+  'section': string;
+  'sectionHeading': string;
   'selected': string;
 }
 export const cssExports: CssExports;

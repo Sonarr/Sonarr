@@ -1,8 +1,18 @@
 .delayProfile {
+  composes: card from '~Components/Card.css';
+
   display: flex;
   align-items: center;
-  height: 44px;
-  border-top: 1px solid var(--borderColor);
+  padding: 10px 18px !important;
+}
+
+.overlay {
+  composes: overlay from '~Components/Card.css';
+
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .isDefault {
@@ -13,10 +23,30 @@
   opacity: 0.25;
 }
 
-.colDrag    { flex: 0 0 32px; }
+.colDrag {
+  flex: 0 0 20px;
+}
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 28px;
+  color: var(--inkFaint);
+  opacity: 0;
+  cursor: grab;
+  transition: opacity 0.15s ease;
+  pointer-events: all;
+}
+
+.delayProfile:hover .dragHandle {
+  opacity: 1;
+}
 
 .colScope {
   display: flex;
+  align-items: center;
   flex: 1 1 auto;
   flex-wrap: wrap;
   padding-right: 8px;
@@ -28,43 +58,42 @@
   flex: 0 0 180px;
   color: var(--inkMuted);
   letter-spacing: 0.04em;
-  font-size: 11px;
-  font-family: $monoSpaceFontFamily;
+  font-size: 13px;
+  font-family: var(--monoSpaceFontFamily);
 }
 
 .colUsenet {
   flex: 0 0 120px;
-  color: var(--inkMuted);
+  color: var(--inkSoft);
   letter-spacing: 0.04em;
-  font-size: 11px;
-  font-family: $monoSpaceFontFamily;
+  font-size: 13px;
+  font-family: var(--monoSpaceFontFamily);
 }
 
 .colTorrent {
   flex: 0 0 120px;
-  color: var(--inkMuted);
+  color: var(--inkSoft);
   letter-spacing: 0.04em;
-  font-size: 11px;
-  font-family: $monoSpaceFontFamily;
+  font-size: 13px;
+  font-family: var(--monoSpaceFontFamily);
+}
+
+.colLabel {
+  display: none;
 }
 
 .colActions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  flex: 0 0 56px;
-  gap: 4px;
-}
-
-.actions {
-  display: inline-flex;
+  flex: 0 0 60px;
   gap: 4px;
 
   opacity: 0;
   transition: opacity 0.15s ease;
 }
 
-.delayProfile:hover .actions {
+.delayProfile:hover .colActions {
   opacity: 1;
 }
 
@@ -72,34 +101,74 @@
   composes: button from '~Components/Link/IconButton.css';
 
   flex-shrink: 0;
+  margin: 0;
   width: 28px;
   height: 28px;
-}
-
-.dragHandle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 44px;
-  color: var(--inkFaint);
-  opacity: 0;
-  cursor: grab;
-  transition: opacity 0.15s ease;
-}
-
-.delayProfile:hover .dragHandle {
-  opacity: 1;
-}
-
-.placeholder {
-  height: 44px;
-  border-top: 2px solid var(--accent);
 }
 
 .anyText {
   color: var(--inkFaint);
   letter-spacing: 0.04em;
-  font-size: 11px;
-  font-family: $monoSpaceFontFamily;
+  font-size: 13px;
+  font-family: var(--monoSpaceFontFamily);
+
+  &:not(:first-child) {
+    margin-left: 4px;
+  }
+}
+
+.placeholder {
+  height: 50px;
+  border: 1px dashed var(--accent);
+  border-radius: 12px;
+
+  &:first-child {
+    margin-bottom: 12px;
+  }
+
+  &:last-child {
+    margin-top: 12px;
+  }
+}
+
+@media (hover: none) {
+  .dragHandle,
+  .colActions {
+    opacity: 1;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .overlay {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .colProto,
+  .colUsenet,
+  .colTorrent {
+    order: 2;
+
+    flex-basis: 100%;
+  }
+
+  .colUsenet,
+  .colTorrent {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .colActions {
+    order: 1;
+  }
+
+  .colLabel {
+    display: inline;
+    color: var(--inkMuted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+    font-size: 11px;
+    font-family: var(--defaultFontFamily);
+  }
 }

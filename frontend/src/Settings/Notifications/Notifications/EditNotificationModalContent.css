@@ -4,8 +4,16 @@
   margin-right: auto;
 }
 
-.message {
-  composes: alert from '~Components/Alert.css';
+.error {
+  color: var(--dangerColor);
+  font-size: 13px;
+  line-height: 1.55;
+}
 
-  margin-bottom: 30px;
+.message {
+  margin: 0 0 8px;
+  max-width: 70ch;
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.55;
 }

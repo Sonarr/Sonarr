@@ -1,25 +1,3 @@
-.metadata {
-  composes: card from '~Components/Card.css';
-}
-
-.overlay {
-  composes: overlay from '~Components/Card.css';
-
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.name {
-  @add-mixin truncate;
-
-  color: var(--ink);
-  letter-spacing: -0.01em;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 1.25;
-}
-
 .fieldSection {
   display: flex;
   flex-direction: column;
@@ -29,15 +7,8 @@
 .section {
   color: var(--inkMuted);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  font-weight: 500;
   font-size: 11px;
-  font-family: $monoSpaceFontFamily;
-}
-
-.labels {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-
-  pointer-events: all;
+  font-family: var(--defaultFontFamily);
 }

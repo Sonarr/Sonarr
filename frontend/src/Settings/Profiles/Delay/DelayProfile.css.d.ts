@@ -2,10 +2,10 @@
 // Please do not change this file!
 interface CssExports {
   'actionButton': string;
-  'actions': string;
   'anyText': string;
   'colActions': string;
   'colDrag': string;
+  'colLabel': string;
   'colProto': string;
   'colScope': string;
   'colTorrent': string;
@@ -14,6 +14,7 @@ interface CssExports {
   'dragHandle': string;
   'isDefault': string;
   'isDragging': string;
+  'overlay': string;
   'placeholder': string;
 }
 export const cssExports: CssExports;

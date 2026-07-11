@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'deleteButton': string;
+  'error': string;
   'labelIcon': string;
   'message': string;
 }

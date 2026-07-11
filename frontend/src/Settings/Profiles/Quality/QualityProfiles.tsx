@@ -1,14 +1,12 @@
 import React, { useCallback, useState } from 'react';
-import Card from 'Components/Card';
-import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
-import { icons } from 'Helpers/Props';
+import AddCard from 'Components/SettingsCard/AddCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
 import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
 import EditQualityProfileModal from './EditQualityProfileModal';
 import QualityProfile from './QualityProfile';
 import { useQualityProfiles } from './useQualityProfiles';
-import styles from './QualityProfiles.css';
 
 function QualityProfiles() {
   const { data, error, isFetching, isFetched } = useQualityProfiles();
@@ -42,7 +40,7 @@ function QualityProfiles() {
       isFetching={isFetching}
       isPopulated={isFetched}
     >
-      <div className={styles.qualityProfiles}>
+      <div className={settingsCardStyles.grid}>
         {sortedItems.map((item) => {
           return (
             <QualityProfile
@@ -53,18 +51,10 @@ function QualityProfiles() {
           );
         })}
 
-        <Card
-          className={styles.addQualityProfile}
-          aria-label={translate('AddQualityProfile')}
+        <AddCard
+          label={translate('AddQualityProfile')}
           onPress={handleAddQualityProfilePress}
-        >
-          <div className={styles.center}>
-            <Icon name={icons.ADD} size={20} />
-          </div>
-          <div className={styles.addLabel}>
-            {translate('AddQualityProfile')}
-          </div>
-        </Card>
+        />
       </div>
 
       <EditQualityProfileModal

@@ -2,10 +2,6 @@
 // Please do not change this file!
 interface CssExports {
   'fieldSection': string;
-  'labels': string;
-  'metadata': string;
-  'name': string;
-  'overlay': string;
   'section': string;
 }
 export const cssExports: CssExports;

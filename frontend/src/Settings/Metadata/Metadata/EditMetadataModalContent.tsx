@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
-import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
@@ -75,42 +75,47 @@ function EditMetadataModalContent({
       <ModalHeader>
         {translate('EditMetadata', { metadataType: name.value })}
       </ModalHeader>
-
       <ModalBody>
         <Form {...otherSettings}>
           {message ? (
-            <Alert className={styles.message} kind={message.value.type}>
-              {message.value.message}
-            </Alert>
+            <p className={styles.intro}>{message.value.message}</p>
           ) : null}
 
-          <FormGroup>
-            <FormLabel>{translate('Enable')}</FormLabel>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('Status')}</h3>
 
-            <FormInputGroup
-              type={inputTypes.CHECK}
-              name="enable"
-              helpText={translate('EnableMetadataHelpText')}
-              {...enable}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
-
-          {fields.map((field) => {
-            return (
-              <ProviderFieldFormGroup
-                key={field.name}
-                advancedSettings={advancedSettings}
-                provider="metadata"
-                {...field}
-                isDisabled={!enable.value}
-                onChange={handleFieldChange}
+            <FormRow>
+              <FormLabel>{translate('Enable')}</FormLabel>
+              <FormInputHelpText text={translate('EnableMetadataHelpText')} />
+              <FormInput
+                type={inputTypes.CHECK}
+                name="enable"
+                {...enable}
+                onChange={handleInputChange}
               />
-            );
-          })}
+            </FormRow>
+          </section>
+
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>
+              {translate('MetadataSectionFields')}
+            </h3>
+
+            {fields.map((field) => {
+              return (
+                <ProviderFieldFormGroup
+                  key={field.name}
+                  advancedSettings={advancedSettings}
+                  provider="metadata"
+                  {...field}
+                  isDisabled={!enable.value}
+                  onChange={handleFieldChange}
+                />
+              );
+            })}
+          </section>
         </Form>
       </ModalBody>
-
       <ModalFooter>
         <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
