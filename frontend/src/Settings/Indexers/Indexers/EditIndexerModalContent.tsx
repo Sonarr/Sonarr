@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
@@ -114,147 +115,175 @@ function EditIndexerModalContent({
           validationErrors={validationErrors}
           validationWarnings={validationWarnings}
         >
-          <FormGroup>
-            <FormLabel>{translate('Name')}</FormLabel>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('General')}</h3>
 
-            <FormInputGroup
-              type={inputTypes.TEXT}
-              name="name"
-              {...name}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+            <FormRow>
+              <FormLabel>{translate('Name')}</FormLabel>
 
-          <FormGroup>
-            <FormLabel>{translate('EnableRss')}</FormLabel>
-
-            <FormInputGroup
-              type={inputTypes.CHECK}
-              name="enableRss"
-              helpText={
-                supportsRss.value ? translate('EnableRssHelpText') : undefined
-              }
-              helpTextWarning={
-                supportsRss.value
-                  ? undefined
-                  : translate('RssIsNotSupportedWithThisIndexer')
-              }
-              isDisabled={!supportsRss.value}
-              {...enableRss}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <FormLabel>{translate('EnableAutomaticSearch')}</FormLabel>
-
-            <FormInputGroup
-              type={inputTypes.CHECK}
-              name="enableAutomaticSearch"
-              helpText={
-                supportsSearch.value
-                  ? translate('EnableAutomaticSearchHelpText')
-                  : undefined
-              }
-              helpTextWarning={
-                supportsSearch.value
-                  ? undefined
-                  : translate('SearchIsNotSupportedWithThisIndexer')
-              }
-              isDisabled={!supportsSearch.value}
-              {...enableAutomaticSearch}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <FormLabel>{translate('EnableInteractiveSearch')}</FormLabel>
-
-            <FormInputGroup
-              type={inputTypes.CHECK}
-              name="enableInteractiveSearch"
-              helpText={
-                supportsSearch.value
-                  ? translate('EnableInteractiveSearchHelpText')
-                  : undefined
-              }
-              helpTextWarning={
-                supportsSearch.value
-                  ? undefined
-                  : translate('SearchIsNotSupportedWithThisIndexer')
-              }
-              isDisabled={!supportsSearch.value}
-              {...enableInteractiveSearch}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
-
-          {fields?.map((field) => {
-            return (
-              <ProviderFieldFormGroup
-                key={field.name}
-                advancedSettings={showAdvancedSettings}
-                provider="indexer"
-                providerData={item}
-                {...field}
-                onChange={handleFieldChange}
+              <FormInput
+                type={inputTypes.TEXT}
+                name="name"
+                {...name}
+                onChange={handleInputChange}
               />
-            );
-          })}
+            </FormRow>
+          </section>
 
-          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
-            <FormLabel>{translate('IndexerPriority')}</FormLabel>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('Search')}</h3>
 
-            <FormInputGroup
-              type={inputTypes.NUMBER}
-              name="priority"
-              helpText={translate('IndexerPriorityHelpText')}
-              min={1}
-              max={50}
-              {...priority}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+            <FormRow>
+              <FormLabel>{translate('EnableRss')}</FormLabel>
 
-          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
-            <FormLabel>{translate('MaximumSingleEpisodeAge')}</FormLabel>
+              {supportsRss.value ? (
+                <FormInputHelpText text={translate('EnableRssHelpText')} />
+              ) : (
+                <FormInputHelpText
+                  text={translate('RssIsNotSupportedWithThisIndexer')}
+                  isWarning={true}
+                />
+              )}
 
-            <FormInputGroup
-              type={inputTypes.NUMBER}
-              name="seasonSearchMaximumSingleEpisodeAge"
-              helpText={translate('MaximumSingleEpisodeAgeHelpText')}
-              min={0}
-              unit="days"
-              {...seasonSearchMaximumSingleEpisodeAge}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+              <FormInput
+                type={inputTypes.CHECK}
+                name="enableRss"
+                isDisabled={!supportsRss.value}
+                {...enableRss}
+                onChange={handleInputChange}
+              />
+            </FormRow>
 
-          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
-            <FormLabel>{translate('DownloadClient')}</FormLabel>
+            <FormRow>
+              <FormLabel>{translate('EnableAutomaticSearch')}</FormLabel>
 
-            <FormInputGroup
-              type={inputTypes.DOWNLOAD_CLIENT_SELECT}
-              name="downloadClientId"
-              helpText={translate('IndexerDownloadClientHelpText')}
-              {...downloadClientId}
-              includeAny={true}
-              protocol={protocol.value}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+              {supportsSearch.value ? (
+                <FormInputHelpText
+                  text={translate('EnableAutomaticSearchHelpText')}
+                />
+              ) : (
+                <FormInputHelpText
+                  text={translate('SearchIsNotSupportedWithThisIndexer')}
+                  isWarning={true}
+                />
+              )}
 
-          <FormGroup>
-            <FormLabel>{translate('Tags')}</FormLabel>
+              <FormInput
+                type={inputTypes.CHECK}
+                name="enableAutomaticSearch"
+                isDisabled={!supportsSearch.value}
+                {...enableAutomaticSearch}
+                onChange={handleInputChange}
+              />
+            </FormRow>
 
-            <FormInputGroup
-              type={inputTypes.TAG}
-              name="tags"
-              helpText={translate('IndexerTagSeriesHelpText')}
-              {...tags}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+            <FormRow>
+              <FormLabel>{translate('EnableInteractiveSearch')}</FormLabel>
+
+              {supportsSearch.value ? (
+                <FormInputHelpText
+                  text={translate('EnableInteractiveSearchHelpText')}
+                />
+              ) : (
+                <FormInputHelpText
+                  text={translate('SearchIsNotSupportedWithThisIndexer')}
+                  isWarning={true}
+                />
+              )}
+
+              <FormInput
+                type={inputTypes.CHECK}
+                name="enableInteractiveSearch"
+                isDisabled={!supportsSearch.value}
+                {...enableInteractiveSearch}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+          </section>
+
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('Settings')}</h3>
+
+            {fields?.map((field) => {
+              return (
+                <ProviderFieldFormGroup
+                  key={field.name}
+                  advancedSettings={showAdvancedSettings}
+                  provider="indexer"
+                  providerData={item}
+                  layout="row"
+                  {...field}
+                  onChange={handleFieldChange}
+                />
+              );
+            })}
+          </section>
+
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('Options')}</h3>
+
+            <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+              <FormLabel>{translate('IndexerPriority')}</FormLabel>
+
+              <FormInputHelpText text={translate('IndexerPriorityHelpText')} />
+
+              <FormInput
+                type={inputTypes.NUMBER}
+                name="priority"
+                min={1}
+                max={50}
+                {...priority}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+
+            <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+              <FormLabel>{translate('MaximumSingleEpisodeAge')}</FormLabel>
+
+              <FormInputHelpText
+                text={translate('MaximumSingleEpisodeAgeHelpText')}
+              />
+
+              <FormInput
+                type={inputTypes.NUMBER}
+                name="seasonSearchMaximumSingleEpisodeAge"
+                min={0}
+                unit="days"
+                {...seasonSearchMaximumSingleEpisodeAge}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+
+            <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+              <FormLabel>{translate('DownloadClient')}</FormLabel>
+
+              <FormInputHelpText
+                text={translate('IndexerDownloadClientHelpText')}
+              />
+
+              <FormInput
+                type={inputTypes.DOWNLOAD_CLIENT_SELECT}
+                name="downloadClientId"
+                {...downloadClientId}
+                includeAny={true}
+                protocol={protocol.value}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+
+            <FormRow>
+              <FormLabel>{translate('Tags')}</FormLabel>
+
+              <FormInputHelpText text={translate('IndexerTagSeriesHelpText')} />
+
+              <FormInput
+                type={inputTypes.TAG}
+                name="tags"
+                {...tags}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+          </section>
         </Form>
       </ModalBody>
 

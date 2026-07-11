@@ -2,9 +2,10 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
@@ -15,7 +16,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import { icons, inputTypes, kinds, sizes } from 'Helpers/Props';
+import { icons, inputTypes, kinds } from 'Helpers/Props';
 import useQualityProfileInUse from 'Settings/Profiles/Quality/useQualityProfileInUse';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
@@ -493,117 +494,110 @@ function EditQualityProfileModalContent({
           <Form>
             <div className={styles.formGroupsContainer}>
               <div className={styles.formGroupWrapper}>
-                <FormGroup
-                  className={styles.formField}
-                  size={sizes.EXTRA_SMALL}
-                >
-                  <FormLabel size={sizes.SMALL}>{translate('Name')}</FormLabel>
+                <FormRow>
+                  <FormLabel>{translate('Name')}</FormLabel>
 
-                  <FormInputGroup
+                  <FormInput
                     type={inputTypes.TEXT}
                     name="name"
                     {...name}
                     onChange={handleInputChange}
                   />
-                </FormGroup>
+                </FormRow>
 
-                <FormGroup
-                  className={styles.formField}
-                  size={sizes.EXTRA_SMALL}
-                >
-                  <FormLabel size={sizes.SMALL}>
-                    {translate('UpgradesAllowed')}
-                  </FormLabel>
+                <FormRow>
+                  <FormLabel>{translate('UpgradesAllowed')}</FormLabel>
 
-                  <FormInputGroup
+                  <FormInputHelpText
+                    text={translate('UpgradesAllowedHelpText')}
+                  />
+
+                  <FormInput
                     type={inputTypes.CHECK}
                     name="upgradeAllowed"
                     {...upgradeAllowed}
-                    helpText={translate('UpgradesAllowedHelpText')}
                     onChange={handleInputChange}
                   />
-                </FormGroup>
+                </FormRow>
 
                 {upgradeAllowed.value ? (
-                  <FormGroup
-                    className={styles.formField}
-                    size={sizes.EXTRA_SMALL}
-                  >
-                    <FormLabel size={sizes.SMALL}>
-                      {translate('UpgradeUntil')}
-                    </FormLabel>
+                  <FormRow>
+                    <FormLabel>{translate('UpgradeUntil')}</FormLabel>
 
-                    <FormInputGroup
+                    <FormInputHelpText
+                      text={translate('UpgradeUntilEpisodeHelpText')}
+                    />
+
+                    <FormInput
                       type={inputTypes.SELECT}
                       name="cutoff"
                       {...cutoff}
                       values={qualities}
-                      helpText={translate('UpgradeUntilEpisodeHelpText')}
                       onChange={handleCutoffChange}
                     />
-                  </FormGroup>
+                  </FormRow>
                 ) : null}
 
                 {formatItems.value.length > 0 ? (
-                  <FormGroup
-                    className={styles.formField}
-                    size={sizes.EXTRA_SMALL}
-                  >
-                    <FormLabel size={sizes.SMALL}>
+                  <FormRow>
+                    <FormLabel>
                       {translate('MinimumCustomFormatScore')}
                     </FormLabel>
 
-                    <FormInputGroup
+                    <FormInputHelpText
+                      text={translate('MinimumCustomFormatScoreHelpText')}
+                    />
+
+                    <FormInput
                       type={inputTypes.NUMBER}
                       name="minFormatScore"
                       {...minFormatScore}
-                      helpText={translate('MinimumCustomFormatScoreHelpText')}
                       onChange={handleInputChange}
                     />
-                  </FormGroup>
+                  </FormRow>
                 ) : null}
 
                 {upgradeAllowed.value && formatItems.value.length > 0 ? (
-                  <FormGroup
-                    className={styles.formField}
-                    size={sizes.EXTRA_SMALL}
-                  >
-                    <FormLabel size={sizes.SMALL}>
+                  <FormRow>
+                    <FormLabel>
                       {translate('UpgradeUntilCustomFormatScore')}
                     </FormLabel>
 
-                    <FormInputGroup
+                    <FormInputHelpText
+                      text={translate(
+                        'UpgradeUntilCustomFormatScoreEpisodeHelpText'
+                      )}
+                    />
+
+                    <FormInput
                       type={inputTypes.NUMBER}
                       name="cutoffFormatScore"
                       {...cutoffFormatScore}
-                      helpText={translate(
-                        'UpgradeUntilCustomFormatScoreEpisodeHelpText'
-                      )}
                       onChange={handleInputChange}
                     />
-                  </FormGroup>
+                  </FormRow>
                 ) : null}
 
                 {upgradeAllowed.value && formatItems.value.length > 0 ? (
-                  <FormGroup
-                    className={styles.formField}
-                    size={sizes.EXTRA_SMALL}
-                  >
-                    <FormLabel size={sizes.SMALL}>
+                  <FormRow>
+                    <FormLabel>
                       {translate('MinimumCustomFormatScoreIncrement')}
                     </FormLabel>
 
-                    <FormInputGroup
+                    <FormInputHelpText
+                      text={translate(
+                        'MinimumCustomFormatScoreIncrementHelpText'
+                      )}
+                    />
+
+                    <FormInput
                       type={inputTypes.NUMBER}
                       name="minUpgradeFormatScore"
                       min={1}
                       {...minUpgradeFormatScore}
-                      helpText={translate(
-                        'MinimumCustomFormatScoreIncrementHelpText'
-                      )}
                       onChange={handleInputChange}
                     />
-                  </FormGroup>
+                  </FormRow>
                 ) : null}
 
                 <div className={styles.formatItemLarge}>

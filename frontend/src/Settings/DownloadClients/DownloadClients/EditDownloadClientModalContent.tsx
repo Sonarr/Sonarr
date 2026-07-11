@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect } from 'react';
 import Alert from 'Components/Alert';
-import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
@@ -13,7 +13,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import { inputTypes, kinds, sizes } from 'Helpers/Props';
+import { inputTypes, kinds } from 'Helpers/Props';
 import AdvancedSettingsButton from 'Settings/AdvancedSettingsButton';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
 import { SelectedSchema } from 'Settings/useProviderSchema';
@@ -122,95 +122,121 @@ function EditDownloadClientModalContent({
             </Alert>
           ) : null}
 
-          <FormGroup>
-            <FormLabel>{translate('Name')}</FormLabel>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('General')}</h3>
 
-            <FormInputGroup
-              type={inputTypes.TEXT}
-              name="name"
-              {...name}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+            <FormRow>
+              <FormLabel>{translate('Name')}</FormLabel>
 
-          <FormGroup>
-            <FormLabel>{translate('Enable')}</FormLabel>
-
-            <FormInputGroup
-              type={inputTypes.CHECK}
-              name="enable"
-              {...enable}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
-
-          {fields?.map((field) => {
-            return (
-              <ProviderFieldFormGroup
-                key={field.name}
-                advancedSettings={showAdvancedSettings}
-                provider="downloadClient"
-                providerData={item}
-                {...field}
-                onChange={handleFieldChange}
+              <FormInput
+                type={inputTypes.TEXT}
+                name="name"
+                {...name}
+                onChange={handleInputChange}
               />
-            );
-          })}
+            </FormRow>
 
-          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
-            <FormLabel>{translate('ClientPriority')}</FormLabel>
+            <FormRow>
+              <FormLabel>{translate('Enable')}</FormLabel>
 
-            <FormInputGroup
-              type={inputTypes.NUMBER}
-              name="priority"
-              helpText={translate('DownloadClientPriorityHelpText')}
-              min={1}
-              max={50}
-              {...priority}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+              <FormInput
+                type={inputTypes.CHECK}
+                name="enable"
+                {...enable}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+          </section>
 
-          <FormGroup>
-            <FormLabel>{translate('Tags')}</FormLabel>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('Settings')}</h3>
 
-            <FormInputGroup
-              type={inputTypes.TAG}
-              name="tags"
-              helpText={translate('DownloadClientSeriesTagHelpText')}
-              {...tags}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+            {fields?.map((field) => {
+              return (
+                <ProviderFieldFormGroup
+                  key={field.name}
+                  advancedSettings={showAdvancedSettings}
+                  provider="downloadClient"
+                  providerData={item}
+                  layout="row"
+                  {...field}
+                  onChange={handleFieldChange}
+                />
+              );
+            })}
+          </section>
 
-          <FieldSet
-            size={sizes.SMALL}
-            legend={translate('CompletedDownloadHandling')}
-          >
-            <FormGroup>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('Options')}</h3>
+
+            <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+              <FormLabel>{translate('ClientPriority')}</FormLabel>
+
+              <FormInputHelpText
+                text={translate('DownloadClientPriorityHelpText')}
+              />
+
+              <FormInput
+                type={inputTypes.NUMBER}
+                name="priority"
+                min={1}
+                max={50}
+                {...priority}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+
+            <FormRow>
+              <FormLabel>{translate('Tags')}</FormLabel>
+
+              <FormInputHelpText
+                text={translate('DownloadClientSeriesTagHelpText')}
+              />
+
+              <FormInput
+                type={inputTypes.TAG}
+                name="tags"
+                {...tags}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+          </section>
+
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>
+              {translate('CompletedDownloadHandling')}
+            </h3>
+
+            <FormRow>
               <FormLabel>{translate('RemoveCompleted')}</FormLabel>
 
-              <FormInputGroup
+              <FormInputHelpText
+                text={translate('RemoveCompletedDownloadsHelpText')}
+              />
+
+              <FormInput
                 type={inputTypes.CHECK}
                 name="removeCompletedDownloads"
-                helpText={translate('RemoveCompletedDownloadsHelpText')}
                 {...removeCompletedDownloads}
                 onChange={handleInputChange}
               />
-            </FormGroup>
+            </FormRow>
 
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('RemoveFailed')}</FormLabel>
 
-              <FormInputGroup
+              <FormInputHelpText
+                text={translate('RemoveFailedDownloadsHelpText')}
+              />
+
+              <FormInput
                 type={inputTypes.CHECK}
                 name="removeFailedDownloads"
-                helpText={translate('RemoveFailedDownloadsHelpText')}
                 {...removeFailedDownloads}
                 onChange={handleInputChange}
               />
-            </FormGroup>
-          </FieldSet>
+            </FormRow>
+          </section>
         </Form>
       </ModalBody>
 

@@ -3,7 +3,7 @@
   max-width: 70ch;
   color: var(--inkMuted);
   font-size: 13px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1.55;
 }
 
@@ -22,7 +22,7 @@
   letter-spacing: 0.06em;
   font-weight: 500;
   font-size: 12px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
 }
 
 .sectionHeadingRow {
@@ -36,12 +36,6 @@
 
 .sectionHeadingRow .sectionHeading {
   margin: 0;
-}
-
-.formField {
-  display: block;
-  margin-bottom: 18px;
-  max-width: 100%;
 }
 
 .bordered {
@@ -60,7 +54,7 @@
 
 .formGroupWrapper,
 .formatItemLarge {
-  flex: 0 0 calc($formGroupSmallWidth - 100px);
+  flex: 0 0 calc(var(--formGroupSmallWidth) - 100px);
 }
 
 .qualitiesColumn {

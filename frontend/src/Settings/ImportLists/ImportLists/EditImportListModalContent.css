@@ -1,3 +1,21 @@
+.section {
+  margin-top: 24px;
+
+  &:first-of-type {
+    margin-top: 16px;
+  }
+}
+
+.sectionHeading {
+  margin: 0 0 12px;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: var(--defaultFontFamily);
+}
+
 .deleteButton {
   composes: button from '~Components/Link/Button.css';
 
@@ -6,12 +24,6 @@
 
 .labelIcon {
   margin-left: 8px;
-}
-
-.error {
-  color: var(--dangerColor);
-  font-size: 13px;
-  line-height: 1.55;
 }
 
 .message {

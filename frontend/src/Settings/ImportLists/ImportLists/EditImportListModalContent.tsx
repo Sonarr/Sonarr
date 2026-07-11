@@ -127,161 +127,188 @@ function EditImportListModalContent({
             })}
           </Alert>
 
-          <FormRow>
-            <FormLabel>{translate('Name')}</FormLabel>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('General')}</h3>
 
-            <FormInput
-              type={inputTypes.TEXT}
-              name="name"
-              {...name}
-              onChange={handleInputChange}
-            />
-          </FormRow>
+            <FormRow>
+              <FormLabel>{translate('Name')}</FormLabel>
 
-          <FormRow>
-            <FormLabel>{translate('EnableAutomaticAdd')}</FormLabel>
-            <FormInputHelpText
-              text={translate('EnableAutomaticAddSeriesHelpText')}
-            />
-            <FormInput
-              type={inputTypes.CHECK}
-              name="enableAutomaticAdd"
-              {...enableAutomaticAdd}
-              onChange={handleInputChange}
-            />
-          </FormRow>
-
-          <FormRow>
-            <FormLabel>
-              {translate('ImportListSearchForMissingEpisodes')}
-            </FormLabel>
-            <FormInputHelpText
-              text={translate('ImportListSearchForMissingEpisodesHelpText')}
-            />
-            <FormInput
-              type={inputTypes.CHECK}
-              name="searchForMissingEpisodes"
-              {...searchForMissingEpisodes}
-              onChange={handleInputChange}
-            />
-          </FormRow>
-
-          <FormRow>
-            <FormLabel>
-              {translate('Monitor')}
-
-              <Popover
-                anchor={<Icon className={styles.labelIcon} name={icons.INFO} />}
-                title={translate('MonitoringOptions')}
-                body={<SeriesMonitoringOptionsPopoverContent />}
-                position={tooltipPositions.RIGHT}
+              <FormInput
+                type={inputTypes.TEXT}
+                name="name"
+                {...name}
+                onChange={handleInputChange}
               />
-            </FormLabel>
+            </FormRow>
 
-            <FormInput
-              type={inputTypes.MONITOR_EPISODES_SELECT}
-              name="shouldMonitor"
-              onChange={handleInputChange}
-              {...shouldMonitor}
-            />
-          </FormRow>
-
-          <FormRow>
-            <FormLabel>
-              {translate('MonitorNewSeasons')}
-              <Popover
-                anchor={<Icon className={styles.labelIcon} name={icons.INFO} />}
-                title={translate('MonitorNewSeasons')}
-                body={<SeriesMonitorNewItemsOptionsPopoverContent />}
-                position={tooltipPositions.RIGHT}
+            <FormRow>
+              <FormLabel>{translate('EnableAutomaticAdd')}</FormLabel>
+              <FormInputHelpText
+                text={translate('EnableAutomaticAddSeriesHelpText')}
               />
-            </FormLabel>
-            <FormInputHelpText text={translate('MonitorNewSeasonsHelpText')} />
-            <FormInput
-              type={inputTypes.MONITOR_NEW_ITEMS_SELECT}
-              name="monitorNewItems"
-              {...monitorNewItems}
-              onChange={handleInputChange}
-            />
-          </FormRow>
-
-          <FormRow>
-            <FormLabel>{translate('RootFolder')}</FormLabel>
-            <FormInputHelpText text={translate('ListRootFolderHelpText')} />
-            <FormInput
-              type={inputTypes.ROOT_FOLDER_SELECT}
-              name="rootFolderPath"
-              {...rootFolderPath}
-              includeMissingValue={true}
-              onChange={handleInputChange}
-            />
-          </FormRow>
-
-          <FormRow>
-            <FormLabel>{translate('QualityProfile')}</FormLabel>
-            <FormInputHelpText text={translate('ListQualityProfileHelpText')} />
-            <FormInput
-              type={inputTypes.QUALITY_PROFILE_SELECT}
-              name="qualityProfileId"
-              {...qualityProfileId}
-              onChange={handleInputChange}
-            />
-          </FormRow>
-
-          <FormRow>
-            <FormLabel>
-              {translate('SeriesType')}
-
-              <Popover
-                anchor={<Icon className={styles.labelIcon} name={icons.INFO} />}
-                title={translate('SeriesTypes')}
-                body={<SeriesTypePopoverContent />}
-                position={tooltipPositions.RIGHT}
+              <FormInput
+                type={inputTypes.CHECK}
+                name="enableAutomaticAdd"
+                {...enableAutomaticAdd}
+                onChange={handleInputChange}
               />
-            </FormLabel>
+            </FormRow>
 
-            <FormInput
-              type={inputTypes.SERIES_TYPE_SELECT}
-              name="seriesType"
-              onChange={handleInputChange}
-              {...seriesType}
-            />
-          </FormRow>
-
-          <FormRow>
-            <FormLabel>{translate('SeasonFolder')}</FormLabel>
-
-            <FormInput
-              type={inputTypes.CHECK}
-              name="seasonFolder"
-              onChange={handleInputChange}
-              {...seasonFolder}
-            />
-          </FormRow>
-
-          <FormRow>
-            <FormLabel>{translate('SonarrTags')}</FormLabel>
-            <FormInputHelpText text={translate('ListTagsHelpText')} />
-            <FormInput
-              type={inputTypes.TAG}
-              name="tags"
-              {...tags}
-              onChange={handleInputChange}
-            />
-          </FormRow>
-
-          {fields?.map((field) => {
-            return (
-              <ProviderFieldFormGroup
-                key={field.name}
-                advancedSettings={showAdvancedSettings}
-                provider="importList"
-                providerData={item}
-                {...field}
-                onChange={handleFieldChange}
+            <FormRow>
+              <FormLabel>
+                {translate('ImportListSearchForMissingEpisodes')}
+              </FormLabel>
+              <FormInputHelpText
+                text={translate('ImportListSearchForMissingEpisodesHelpText')}
               />
-            );
-          })}
+              <FormInput
+                type={inputTypes.CHECK}
+                name="searchForMissingEpisodes"
+                {...searchForMissingEpisodes}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+          </section>
+
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('Series')}</h3>
+
+            <FormRow>
+              <FormLabel>
+                {translate('Monitor')}
+
+                <Popover
+                  anchor={
+                    <Icon className={styles.labelIcon} name={icons.INFO} />
+                  }
+                  title={translate('MonitoringOptions')}
+                  body={<SeriesMonitoringOptionsPopoverContent />}
+                  position={tooltipPositions.RIGHT}
+                />
+              </FormLabel>
+
+              <FormInput
+                type={inputTypes.MONITOR_EPISODES_SELECT}
+                name="shouldMonitor"
+                onChange={handleInputChange}
+                {...shouldMonitor}
+              />
+            </FormRow>
+
+            <FormRow>
+              <FormLabel>
+                {translate('MonitorNewSeasons')}
+                <Popover
+                  anchor={
+                    <Icon className={styles.labelIcon} name={icons.INFO} />
+                  }
+                  title={translate('MonitorNewSeasons')}
+                  body={<SeriesMonitorNewItemsOptionsPopoverContent />}
+                  position={tooltipPositions.RIGHT}
+                />
+              </FormLabel>
+              <FormInputHelpText
+                text={translate('MonitorNewSeasonsHelpText')}
+              />
+              <FormInput
+                type={inputTypes.MONITOR_NEW_ITEMS_SELECT}
+                name="monitorNewItems"
+                {...monitorNewItems}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+
+            <FormRow>
+              <FormLabel>{translate('RootFolder')}</FormLabel>
+              <FormInputHelpText text={translate('ListRootFolderHelpText')} />
+              <FormInput
+                type={inputTypes.ROOT_FOLDER_SELECT}
+                name="rootFolderPath"
+                {...rootFolderPath}
+                includeMissingValue={true}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+
+            <FormRow>
+              <FormLabel>{translate('QualityProfile')}</FormLabel>
+              <FormInputHelpText
+                text={translate('ListQualityProfileHelpText')}
+              />
+              <FormInput
+                type={inputTypes.QUALITY_PROFILE_SELECT}
+                name="qualityProfileId"
+                {...qualityProfileId}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+
+            <FormRow>
+              <FormLabel>
+                {translate('SeriesType')}
+
+                <Popover
+                  anchor={
+                    <Icon className={styles.labelIcon} name={icons.INFO} />
+                  }
+                  title={translate('SeriesTypes')}
+                  body={<SeriesTypePopoverContent />}
+                  position={tooltipPositions.RIGHT}
+                />
+              </FormLabel>
+
+              <FormInput
+                type={inputTypes.SERIES_TYPE_SELECT}
+                name="seriesType"
+                onChange={handleInputChange}
+                {...seriesType}
+              />
+            </FormRow>
+
+            <FormRow>
+              <FormLabel>{translate('SeasonFolder')}</FormLabel>
+
+              <FormInput
+                type={inputTypes.CHECK}
+                name="seasonFolder"
+                onChange={handleInputChange}
+                {...seasonFolder}
+              />
+            </FormRow>
+          </section>
+
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('Settings')}</h3>
+
+            {fields?.map((field) => {
+              return (
+                <ProviderFieldFormGroup
+                  key={field.name}
+                  advancedSettings={showAdvancedSettings}
+                  provider="importList"
+                  providerData={item}
+                  layout="row"
+                  {...field}
+                  onChange={handleFieldChange}
+                />
+              );
+            })}
+          </section>
+
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('Tags')}</h3>
+
+            <FormRow>
+              <FormLabel>{translate('SonarrTags')}</FormLabel>
+              <FormInputHelpText text={translate('ListTagsHelpText')} />
+              <FormInput
+                type={inputTypes.TAG}
+                name="tags"
+                {...tags}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+          </section>
         </Form>
       </ModalBody>
       <ModalFooter>

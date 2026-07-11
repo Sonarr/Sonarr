@@ -103,47 +103,66 @@ function EditNotificationModalContent({
             <p className={styles.message}>{message.value.message}</p>
           ) : null}
 
-          <FormRow>
-            <FormLabel>{translate('Name')}</FormLabel>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('General')}</h3>
 
-            <FormInput
-              type={inputTypes.TEXT}
-              name="name"
-              {...name}
-              onChange={handleInputChange}
-            />
-          </FormRow>
+            <FormRow>
+              <FormLabel>{translate('Name')}</FormLabel>
 
-          <NotificationEventItems
-            item={item}
-            onInputChange={handleInputChange}
-          />
-
-          <FormRow>
-            <FormLabel>{translate('Tags')}</FormLabel>
-            <FormInputHelpText
-              text={translate('NotificationsTagsSeriesHelpText')}
-            />
-            <FormInput
-              type={inputTypes.TAG}
-              name="tags"
-              {...tags}
-              onChange={handleInputChange}
-            />
-          </FormRow>
-
-          {fields.map((field) => {
-            return (
-              <ProviderFieldFormGroup
-                key={field.name}
-                {...field}
-                advancedSettings={showAdvancedSettings}
-                provider="notification"
-                providerData={item}
-                onChange={handleFieldChange}
+              <FormInput
+                type={inputTypes.TEXT}
+                name="name"
+                {...name}
+                onChange={handleInputChange}
               />
-            );
-          })}
+            </FormRow>
+          </section>
+
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>
+              {translate('NotificationTriggers')}
+            </h3>
+
+            <NotificationEventItems
+              item={item}
+              onInputChange={handleInputChange}
+            />
+          </section>
+
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('Settings')}</h3>
+
+            {fields.map((field) => {
+              return (
+                <ProviderFieldFormGroup
+                  key={field.name}
+                  {...field}
+                  advancedSettings={showAdvancedSettings}
+                  provider="notification"
+                  providerData={item}
+                  layout="row"
+                  onChange={handleFieldChange}
+                />
+              );
+            })}
+          </section>
+
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('Tags')}</h3>
+
+            <FormRow>
+              <FormLabel>{translate('Tags')}</FormLabel>
+              <FormInputHelpText
+                text={translate('NotificationsTagsSeriesHelpText')}
+              />
+              <FormInput
+                type={inputTypes.TAG}
+                name="tags"
+                {...tags}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+          </section>
         </Form>
       </ModalBody>
       <ModalFooter>

@@ -4,7 +4,6 @@ interface CssExports {
   'bordered': string;
   'deleteButtonContainer': string;
   'deleteButtonInfoIcon': string;
-  'formField': string;
   'formGroupWrapper': string;
   'formGroupsContainer': string;
   'formatItemLarge': string;

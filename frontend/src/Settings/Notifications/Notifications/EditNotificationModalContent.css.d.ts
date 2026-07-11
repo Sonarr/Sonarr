@@ -2,8 +2,9 @@
 // Please do not change this file!
 interface CssExports {
   'deleteButton': string;
-  'error': string;
   'message': string;
+  'section': string;
+  'sectionHeading': string;
 }
 export const cssExports: CssExports;
 export default cssExports;
