@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import ModelBase from 'App/ModelBase';
-import FieldSet from 'Components/FieldSet';
 import Label from 'Components/Label';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -97,18 +96,26 @@ function TagDetailsModalContent({
       <ModalHeader>{translate('TagDetails', { label })}</ModalHeader>
 
       <ModalBody>
-        {!isTagUsed && <div>{translate('TagIsNotUsedAndCanBeDeleted')}</div>}
+        {isTagUsed ? null : (
+          <div>{translate('TagIsNotUsedAndCanBeDeleted')}</div>
+        )}
 
         {series.length ? (
-          <FieldSet legend={translate('Series')}>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('Series')}</h3>
+
             {series.map((item) => {
               return <div key={item.id}>{item.title}</div>;
             })}
-          </FieldSet>
+          </section>
         ) : null}
 
         {delayProfiles.length ? (
-          <FieldSet legend={translate('DelayProfile')}>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>
+              {translate('DelayProfile')}
+            </h3>
+
             {delayProfiles.map((item) => {
               const {
                 id,
@@ -130,27 +137,39 @@ function TagDetailsModalContent({
                 />
               );
             })}
-          </FieldSet>
+          </section>
         ) : null}
 
         {notifications.length ? (
-          <FieldSet legend={translate('Connections')}>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>
+              {translate('Connections')}
+            </h3>
+
             {notifications.map((item) => {
               return <div key={item.id}>{item.name}</div>;
             })}
-          </FieldSet>
+          </section>
         ) : null}
 
         {importLists.length ? (
-          <FieldSet legend={translate('ImportLists')}>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>
+              {translate('ImportLists')}
+            </h3>
+
             {importLists.map((item) => {
               return <div key={item.id}>{item.name}</div>;
             })}
-          </FieldSet>
+          </section>
         ) : null}
 
         {releaseProfiles.length ? (
-          <FieldSet legend={translate('ReleaseProfiles')}>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>
+              {translate('ReleaseProfiles')}
+            </h3>
+
             {releaseProfiles.map((item) => {
               return (
                 <div key={item.id} className={styles.restriction}>
@@ -176,31 +195,41 @@ function TagDetailsModalContent({
                 </div>
               );
             })}
-          </FieldSet>
+          </section>
         ) : null}
 
         {indexers.length ? (
-          <FieldSet legend={translate('Indexers')}>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('Indexers')}</h3>
+
             {indexers.map((item) => {
               return <div key={item.id}>{item.name}</div>;
             })}
-          </FieldSet>
+          </section>
         ) : null}
 
         {downloadClients.length ? (
-          <FieldSet legend={translate('DownloadClients')}>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>
+              {translate('DownloadClients')}
+            </h3>
+
             {downloadClients.map((item) => {
               return <div key={item.id}>{item.name}</div>;
             })}
-          </FieldSet>
+          </section>
         ) : null}
 
         {autoTags.length ? (
-          <FieldSet legend={translate('AutoTagging')}>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>
+              {translate('AutoTagging')}
+            </h3>
+
             {autoTags.map((item) => {
               return <div key={item.id}>{item.name}</div>;
             })}
-          </FieldSet>
+          </section>
         ) : null}
       </ModalBody>
 

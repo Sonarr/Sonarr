@@ -8,6 +8,20 @@
   justify-content: flex-end;
 }
 
+.section {
+  margin-top: 24px;
+}
+
+.sectionHeading {
+  margin: 0 0 12px;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: var(--defaultFontFamily);
+}
+
 .addSpecification {
   composes: card from '~Components/Card.css';
 

@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useState } from 'react';
 import Card from 'Components/Card';
-import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
 import FormInput from 'Components/Form/FormInput';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
@@ -164,7 +163,9 @@ export default function EditAutoTaggingModalContent({
             </FormRow>
           </Form>
 
-          <FieldSet legend={translate('Conditions')}>
+          <section className={styles.section}>
+            <h3 className={styles.sectionHeading}>{translate('Conditions')}</h3>
+
             <div className={styles.autoTaggings}>
               {specifications.map((specification) => {
                 return (
@@ -195,7 +196,7 @@ export default function EditAutoTaggingModalContent({
                 </div>
               </Card>
             </div>
-          </FieldSet>
+          </section>
 
           <AddSpecificationModal
             isOpen={isAddSpecificationModalOpen}

@@ -8,6 +8,8 @@ interface CssExports {
   'deleteButton': string;
   'fullWidth': string;
   'rightButtons': string;
+  'section': string;
+  'sectionHeading': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

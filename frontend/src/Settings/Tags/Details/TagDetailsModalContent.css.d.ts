@@ -5,6 +5,8 @@ interface CssExports {
   'item': string;
   'items': string;
   'restriction': string;
+  'section': string;
+  'sectionHeading': string;
 }
 export const cssExports: CssExports;
 export default cssExports;
