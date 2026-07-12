@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { MouseEvent, useCallback, useMemo, useState } from 'react';
 import Label from 'Components/Label';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
@@ -149,10 +150,19 @@ function QualityProfile({
               key={item.id}
               anchor={
                 <Label
-                  className={isCutoff ? styles.cutoffChip : undefined}
+                  className={classNames(
+                    styles.groupChip,
+                    isCutoff && styles.cutoffChip
+                  )}
                   outline={!isCutoff}
+                  title={
+                    isCutoff && upgradeAllowed
+                      ? translate('UpgradeUntilThisQualityIsMetOrExceeded')
+                      : undefined
+                  }
                 >
-                  {item.name}
+                  <span className={styles.groupName}>{item.name}</span>
+
                   <span className={styles.groupCount}>
                     +{item.items.length}
                   </span>

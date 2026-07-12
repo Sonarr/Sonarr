@@ -3,7 +3,9 @@
 interface CssExports {
   'chips': string;
   'cutoffChip': string;
+  'groupChip': string;
   'groupCount': string;
+  'groupName': string;
   'moreChip': string;
 }
 export const cssExports: CssExports;

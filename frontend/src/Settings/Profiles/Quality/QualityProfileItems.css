@@ -12,6 +12,12 @@
   margin: 0 0 12px;
 }
 
+.headingCluster {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .heading {
   margin: 0;
   color: var(--inkMuted);

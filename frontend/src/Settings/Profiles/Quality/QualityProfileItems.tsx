@@ -1,11 +1,13 @@
 import React, { MouseEvent, useCallback, useMemo } from 'react';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
-import { sizes } from 'Helpers/Props';
+import Label from 'Components/Label';
+import { kinds, sizes } from 'Helpers/Props';
 import { Failure } from 'typings/pending';
 import translate from 'Utilities/String/translate';
 import QualityProfileItemDragSource, {
   QualityProfileItemDragSourceActionProps,
 } from './QualityProfileItemDragSource';
+import { getItemFailures, ItemFailuresMap } from './qualityProfileItemFailures';
 import { QualityProfileItems as Items } from './useQualityProfiles';
 import styles from './QualityProfileItems.css';
 
@@ -20,6 +22,7 @@ interface QualityProfileItemsProps
   qualityProfileItems: Items;
   errors?: Failure[];
   warnings?: Failure[];
+  itemFailures: ItemFailuresMap;
   onChangeMode: (mode: EditQualityProfileMode) => void;
 }
 
@@ -35,6 +38,7 @@ function QualityProfileItems({
   qualityProfileItems,
   errors = [],
   warnings = [],
+  itemFailures,
   onChangeMode,
   ...otherProps
 }: QualityProfileItemsProps) {
@@ -66,7 +70,21 @@ function QualityProfileItems({
   return (
     <div className={styles.qualitiesSection} data-size={sizes.EXTRA_SMALL}>
       <div className={styles.headingRow}>
-        <h3 className={styles.heading}>{translate('Qualities')}</h3>
+        <div className={styles.headingCluster}>
+          <h3 className={styles.heading}>{translate('Qualities')}</h3>
+
+          {itemFailures.size > 0 ? (
+            <Label
+              kind={kinds.DANGER}
+              size={sizes.MEDIUM}
+              title={translate('QualityProfileItemFailureCount', {
+                count: itemFailures.size,
+              })}
+            >
+              {itemFailures.size}
+            </Label>
+          ) : null}
+        </div>
 
         <div className={styles.modeCluster} role="group">
           {modeOptions.map((option) => {
@@ -130,6 +148,7 @@ function QualityProfileItems({
                   minSize={minSize}
                   maxSize={maxSize}
                   preferredSize={preferredSize}
+                  failures={getItemFailures(itemFailures, index)}
                   qualityIndex={`${index + 1}`}
                   isInGroup={false}
                   isDraggingUp={isDraggingUp}
@@ -150,6 +169,7 @@ function QualityProfileItems({
                 name={name}
                 allowed={allowed}
                 items={items}
+                itemFailures={itemFailures}
                 qualityIndex={`${index + 1}`}
                 isDraggingUp={isDraggingUp}
                 isDraggingDown={isDraggingDown}

@@ -3,6 +3,7 @@ import Label from 'Components/Label';
 import MiddleTruncate from 'Components/MiddleTruncate';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import SettingsCard from 'Components/SettingsCard/SettingsCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
 import SettingsCardAction from 'Components/SettingsCard/SettingsCardAction';
 import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
 import TagList from 'Components/TagList';
@@ -66,10 +67,6 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
 
   const statusSegments = [translate(enabled ? 'Enabled' : 'Disabled')];
 
-  if (indexers.length > 0) {
-    statusSegments.push(translate('CountIndexers', { count: indexers.length }));
-  }
-
   return (
     <SettingsCard
       name={name || translate('Unnamed')}
@@ -95,7 +92,11 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
           if (!item) return null;
 
           return (
-            <Label key={item} className={styles.label} kind={kinds.SUCCESS}>
+            <Label
+              key={item}
+              className={settingsCardStyles.truncatedLabel}
+              kind={kinds.SUCCESS}
+            >
               <MiddleTruncate text={item} />
             </Label>
           );
@@ -105,7 +106,11 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
           if (!item) return null;
 
           return (
-            <Label key={item} className={styles.label} kind={kinds.DANGER}>
+            <Label
+              key={item}
+              className={settingsCardStyles.truncatedLabel}
+              kind={kinds.DANGER}
+            >
               <MiddleTruncate text={item} />
             </Label>
           );
@@ -126,6 +131,16 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
 
       {excludedTags.length ? (
         <TagList tags={excludedTags} tagList={tagList} kind={kinds.DANGER} />
+      ) : null}
+
+      {indexers.length ? (
+        <div className={settingsCardStyles.labels}>
+          {indexers.map((indexer) => (
+            <Label key={indexer.id} kind={kinds.INFO} outline={true}>
+              {indexer.name}
+            </Label>
+          ))}
+        </div>
       ) : null}
 
       <EditReleaseProfileModal

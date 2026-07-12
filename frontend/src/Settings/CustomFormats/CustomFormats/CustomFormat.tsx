@@ -1,11 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import Label from 'Components/Label';
+import MiddleTruncate from 'Components/MiddleTruncate';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import SettingsCard from 'Components/SettingsCard/SettingsCard';
 import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
 import SettingsCardAction from 'Components/SettingsCard/SettingsCardAction';
 import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
 import { icons, kinds } from 'Helpers/Props';
+import { Kind } from 'Helpers/Props/kinds';
 import translate from 'Utilities/String/translate';
 import EditCustomFormatModal from './EditCustomFormatModal';
 import ExportCustomFormatModal from './ExportCustomFormatModal';
@@ -102,11 +104,32 @@ function CustomFormat({
 
       {conditionCount ? (
         <div className={settingsCardStyles.labels}>
-          {specifications.map((specification) => (
-            <Label key={specification.id} dot={false} kind={kinds.DEFAULT}>
-              {specification.name}
-            </Label>
-          ))}
+          {specifications.map((specification) => {
+            if (!specification) {
+              return null;
+            }
+
+            let kind: Kind = kinds.DEFAULT;
+
+            if (specification.required) {
+              kind = kinds.SUCCESS;
+            }
+
+            if (specification.negate) {
+              kind = kinds.DANGER;
+            }
+
+            return (
+              <Label
+                key={specification.id}
+                className={settingsCardStyles.truncatedLabel}
+                kind={kind}
+                dot={specification.required || specification.negate}
+              >
+                <MiddleTruncate text={specification.name} />
+              </Label>
+            );
+          })}
         </div>
       ) : null}
 

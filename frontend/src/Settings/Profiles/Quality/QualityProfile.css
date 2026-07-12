@@ -36,6 +36,18 @@
   color: var(--ink);
 }
 
+.groupChip {
+  composes: label from '~Components/Label.css';
+
+  max-width: 100%;
+}
+
+.groupName {
+  @add-mixin truncate;
+
+  min-width: 0;
+}
+
 .groupCount {
   margin-left: 4px;
   color: var(--inkFaint);

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormInput from 'Components/Form/FormInput';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
@@ -78,7 +79,9 @@ function EditMetadataModalContent({
       <ModalBody>
         <Form {...otherSettings}>
           {message ? (
-            <p className={styles.intro}>{message.value.message}</p>
+            <Alert className={styles.message} kind={message.value.type}>
+              {message.value.message}
+            </Alert>
           ) : null}
 
           <section className={styles.section}>

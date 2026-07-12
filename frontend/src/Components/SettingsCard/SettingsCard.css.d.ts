@@ -17,6 +17,7 @@ interface CssExports {
   'statusLine': string;
   'statusSeparator': string;
   'statusValue': string;
+  'truncatedLabel': string;
   'unnamedName': string;
 }
 export const cssExports: CssExports;

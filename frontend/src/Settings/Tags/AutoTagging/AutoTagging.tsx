@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Label from 'Components/Label';
+import MiddleTruncate from 'Components/MiddleTruncate';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import SettingsCard from 'Components/SettingsCard/SettingsCard';
 import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
@@ -78,41 +79,43 @@ export default function AutoTagging({
     >
       <SettingsCardStatus
         segments={[
-          <>
-            {tags.length} {translate('Tags')}
-          </>,
-
-          <>
-            {specifications.length} {translate('Formats')}
-          </>,
+          translate('ConditionsCount', { count: specifications.length }),
         ]}
       />
 
-      <TagList tags={tags} tagList={tagList} />
+      {tags.length ? <TagList tags={tags} tagList={tagList} /> : null}
 
-      <div className={settingsCardStyles.labels}>
-        {specifications.map((item, index) => {
-          if (!item) {
-            return null;
-          }
+      {specifications.length ? (
+        <div className={settingsCardStyles.labels}>
+          {specifications.map((item, index) => {
+            if (!item) {
+              return null;
+            }
 
-          let kind: Kind = 'default';
+            let kind: Kind = 'default';
 
-          if (item.required) {
-            kind = 'success';
-          }
+            if (item.required) {
+              kind = 'success';
+            }
 
-          if (item.negate) {
-            kind = 'danger';
-          }
+            if (item.negate) {
+              kind = 'danger';
+            }
 
-          return (
-            <Label key={index} kind={kind} size={sizes.MEDIUM} dot={false}>
-              {item.name}
-            </Label>
-          );
-        })}
-      </div>
+            return (
+              <Label
+                key={index}
+                className={settingsCardStyles.truncatedLabel}
+                kind={kind}
+                size={sizes.MEDIUM}
+                dot={item.required || item.negate}
+              >
+                <MiddleTruncate text={item.name} />
+              </Label>
+            );
+          })}
+        </div>
+      ) : null}
 
       <EditAutoTaggingModal
         id={id}

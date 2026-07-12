@@ -42,6 +42,12 @@
   opacity: 1;
 }
 
+@media (hover: none) {
+  .rightCluster {
+    opacity: 1;
+  }
+}
+
 .cloneButton {
   composes: button from '~Components/Link/IconButton.css';
 

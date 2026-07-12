@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'heading': string;
+  'headingCluster': string;
   'headingRow': string;
   'modeCell': string;
   'modeCellActive': string;
