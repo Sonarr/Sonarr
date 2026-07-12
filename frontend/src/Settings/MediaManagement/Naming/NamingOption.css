@@ -34,17 +34,18 @@
 .token {
   flex: 0 1 auto;
   padding: 2px 7px;
+  min-width: 0;
   border: 1px solid var(--hairlineStrong);
   border-radius: 4px;
   background-color: var(--paperWarm);
   color: var(--ink);
-  overflow-wrap: break-word;
 
   font-size: 13px;
   font-family: var(--monoSpaceFontFamily);
   line-height: 1.5;
   transition: border-color 120ms cubic-bezier(0.25, 1, 0.5, 1),
     background-color 120ms cubic-bezier(0.25, 1, 0.5, 1);
+  overflow-wrap: break-word;
 }
 
 .example {

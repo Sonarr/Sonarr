@@ -223,14 +223,6 @@ function DelayProfile({
         </div>
 
         <div className={styles.colActions}>
-          <IconButton
-            className={styles.actionButton}
-            title={translate('EditDelayProfile')}
-            aria-label={translate('EditDelayProfile')}
-            name={icons.EDIT}
-            onPress={handleEditDelayProfilePress}
-          />
-
           {id === 1 ? null : (
             <IconButton
               className={styles.actionButton}
