@@ -12,32 +12,6 @@
   font-family: var(--monoSpaceFontFamily);
 }
 
-.preview {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-
-  margin-top: 10px;
-
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.previewLabel {
-  flex-shrink: 0;
-  color: var(--inkFaint);
-}
-
-.previewValue {
-  color: var(--accent);
-  font-family: var(--monoSpaceFontFamily);
-  overflow-wrap: anywhere;
-}
-
-.previewInvalid {
-  color: var(--dangerColor);
-}
-
 .controls {
   display: flex;
   gap: 12px;

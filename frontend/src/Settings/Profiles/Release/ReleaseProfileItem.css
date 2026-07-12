@@ -4,28 +4,3 @@
   gap: 4px;
 }
 
-.chipsClipped {
-  composes: chips;
-
-  overflow: hidden;
-
-  max-height: 72px;
-
-  /* stylelint-disable-next-line property-no-vendor-prefix */
-  -webkit-mask-image: linear-gradient(to bottom, #000 48px, transparent 72px);
-  mask-image: linear-gradient(to bottom, #000 48px, transparent 72px);
-}
-
-.showAll {
-  composes: link from '~Components/Link/Link.css';
-
-  color: var(--inkMuted);
-  text-align: left;
-  letter-spacing: 0.04em;
-  font-size: 11px;
-  font-family: var(--monoSpaceFontFamily);
-}
-
-.showAll:hover {
-  color: var(--accent);
-}

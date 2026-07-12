@@ -409,7 +409,6 @@ interface NamingModalProps {
     | 'specialsFolderFormat'
   >;
   value: string;
-  preview?: string;
   season?: boolean;
   episode?: boolean;
   daily?: boolean;
@@ -424,7 +423,6 @@ function NamingModal(props: NamingModalProps) {
     isOpen,
     name,
     value,
-    preview,
     season = false,
     episode = false,
     daily = false,
@@ -517,22 +515,6 @@ function NamingModal(props: NamingModalProps) {
               onChange={onInputChange}
               onSelectionChange={handleInputSelectionChange}
             />
-
-            {preview === undefined ? null : (
-              <div className={styles.preview}>
-                <span className={styles.previewLabel}>
-                  {translate('Preview')}
-                </span>
-
-                {preview ? (
-                  <span className={styles.previewValue}>{preview}</span>
-                ) : (
-                  <span className={styles.previewInvalid}>
-                    {translate('InvalidFormat')}
-                  </span>
-                )}
-              </div>
-            )}
 
             <div className={styles.controls}>
               <div className={styles.control}>

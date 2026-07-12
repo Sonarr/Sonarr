@@ -17,24 +17,11 @@ import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import NamingModal from './NamingModal';
 import {
-  NamingExamples,
   NamingSettingsModel,
   useManageNamingSettings,
   useNamingExamples,
 } from './useNamingSettings';
 import styles from './Naming.css';
-
-const previewExampleByName: Record<
-  NamingModalOptions['name'],
-  keyof NamingExamples
-> = {
-  standardEpisodeFormat: 'singleEpisodeExample',
-  dailyEpisodeFormat: 'dailyEpisodeExample',
-  animeEpisodeFormat: 'animeEpisodeExample',
-  seriesFolderFormat: 'seriesFolderExample',
-  seasonFolderFormat: 'seasonFolderExample',
-  specialsFolderFormat: 'specialsFolderExample',
-};
 
 interface NamingModalOptions {
   name: keyof Pick<
@@ -539,11 +526,6 @@ function Naming({ setChildSave, onChildStateChange }: NamingProps) {
               isOpen={isNamingModalOpen}
               {...namingModalOptions}
               value={settings[namingModalOptions.name].value}
-              preview={
-                examples
-                  ? examples[previewExampleByName[namingModalOptions.name]]
-                  : undefined
-              }
               onInputChange={handleInputChange}
               onModalClose={setNamingModalClosed}
             />

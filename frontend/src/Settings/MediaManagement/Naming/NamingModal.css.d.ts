@@ -11,10 +11,6 @@ interface CssExports {
   'identifier': string;
   'instruction': string;
   'namingSelect': string;
-  'preview': string;
-  'previewInvalid': string;
-  'previewLabel': string;
-  'previewValue': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

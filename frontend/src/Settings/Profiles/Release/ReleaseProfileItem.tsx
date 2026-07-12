@@ -1,4 +1,4 @@
-import React, { MouseEvent, useCallback, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import Label from 'Components/Label';
 import MiddleTruncate from 'Components/MiddleTruncate';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
@@ -18,8 +18,6 @@ import {
   useDeleteReleaseProfile,
 } from './useReleaseProfiles';
 import styles from './ReleaseProfileItem.css';
-
-const CHIP_CAP_THRESHOLD = 6;
 
 interface ReleaseProfileProps extends ReleaseProfileModel {
   tagList: ReadonlyArray<Tag>;
@@ -48,22 +46,10 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
   const [isDeleteModalOpen, setDeleteModalOpen, setDeleteModalClosed] =
     useModalOpenState(false);
 
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const chipCount =
-    required.filter(Boolean).length + ignored.filter(Boolean).length;
-
-  const isCapped = !isExpanded && chipCount > CHIP_CAP_THRESHOLD;
-
   const indexers = useMemo(
     () => indexerList.filter((i) => indexerIds.includes(i.id)),
     [indexerList, indexerIds]
   );
-
-  const handleShowAllPress = useCallback((e: MouseEvent) => {
-    e.stopPropagation();
-    setIsExpanded(true);
-  }, []);
 
   const statusSegments = [translate(enabled ? 'Enabled' : 'Disabled')];
 
@@ -87,7 +73,7 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
         segments={statusSegments}
       />
 
-      <div className={isCapped ? styles.chipsClipped : styles.chips}>
+      <div className={styles.chips}>
         {required.map((item) => {
           if (!item) return null;
 
@@ -116,16 +102,6 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
           );
         })}
       </div>
-
-      {isCapped ? (
-        <button
-          className={styles.showAll}
-          type="button"
-          onClick={handleShowAllPress}
-        >
-          {`${translate('ShowAllPatterns', { count: chipCount })} ↓`}
-        </button>
-      ) : null}
 
       {tags.length ? <TagList tags={tags} tagList={tagList} /> : null}
 
