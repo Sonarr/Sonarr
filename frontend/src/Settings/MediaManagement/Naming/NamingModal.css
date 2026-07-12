@@ -77,14 +77,6 @@
   line-height: 1.5;
 }
 
-.search {
-  composes: input from '~Components/Form/TextInput.css';
-
-  margin-bottom: 8px;
-
-  width: 100%;
-}
-
 .groups {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -113,13 +105,6 @@
     color: var(--ink);
     font-family: var(--monoSpaceFontFamily);
   }
-}
-
-.noResults {
-  padding: 32px 0;
-  color: var(--inkMuted);
-  text-align: center;
-  font-size: 13px;
 }
 
 @media only screen and (max-width: 768px) {

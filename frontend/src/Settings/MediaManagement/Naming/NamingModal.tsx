@@ -397,25 +397,6 @@ function getNamingTokenGroups({
   return groups;
 }
 
-function filterTokenGroups(groups: TokenGroup[], search: string): TokenGroup[] {
-  const query = search.trim().toLowerCase();
-
-  if (!query) {
-    return groups;
-  }
-
-  return groups
-    .map((group) => ({
-      ...group,
-      tokens: group.tokens.filter(
-        ({ token, example }) =>
-          token.toLowerCase().includes(query) ||
-          example.toLowerCase().includes(query)
-      ),
-    }))
-    .filter((group) => group.tokens.length > 0);
-}
-
 interface NamingModalProps {
   isOpen: boolean;
   name: keyof Pick<
@@ -455,16 +436,8 @@ function NamingModal(props: NamingModalProps) {
 
   const [tokenSeparator, setTokenSeparator] = useState<TokenSeparator>(' ');
   const [tokenCase, setTokenCase] = useState<TokenCase>('title');
-  const [search, setSearch] = useState('');
   const [selectionStart, setSelectionStart] = useState<number | null>(null);
   const [selectionEnd, setSelectionEnd] = useState<number | null>(null);
-
-  const handleSearchChange = useCallback(
-    ({ value }: { value: string }) => {
-      setSearch(value);
-    },
-    [setSearch]
-  );
 
   const handleTokenSeparatorChange = useCallback(
     ({ value }: { value: TokenSeparator }) => {
@@ -518,16 +491,13 @@ function NamingModal(props: NamingModalProps) {
     [name, value, selectionEnd, selectionStart, onInputChange]
   );
 
-  const allGroups = getNamingTokenGroups({
+  const tokenGroups = getNamingTokenGroups({
     season,
     episode,
     daily,
     anime,
     additional,
   });
-  const showSearch =
-    allGroups.reduce((total, group) => total + group.tokens.length, 0) > 20;
-  const tokenGroups = filterTokenGroups(allGroups, showSearch ? search : '');
 
   return (
     <Modal isOpen={isOpen} onModalClose={onModalClose}>
@@ -600,50 +570,36 @@ function NamingModal(props: NamingModalProps) {
             <span>{translate('NamingTokenSelectHelpText')}</span>
           </div>
 
-          {showSearch ? (
-            <TextInput
-              className={styles.search}
-              name="tokenSearch"
-              value={search}
-              placeholder={translate('Search')}
-              onChange={handleSearchChange}
-            />
-          ) : null}
-
-          {tokenGroups.length ? (
-            tokenGroups.map((group) => (
-              <FieldSet
-                key={group.legend}
-                legend={group.legend}
-                caption={group.caption}
-              >
-                <div className={styles.groups}>
-                  {group.tokens.map(({ token, example, footNotes }) => (
-                    <NamingOption
-                      key={token}
-                      token={token}
-                      example={example}
-                      footNotes={footNotes}
-                      isFullFilename={group.isFullFilename}
-                      size={group.size}
-                      tokenSeparator={tokenSeparator}
-                      tokenCase={tokenCase}
-                      onPress={handleOptionPress}
-                    />
-                  ))}
-                </div>
-
-                {group.footNotes?.map(({ identifier, text }) => (
-                  <div key={identifier} className={styles.footNote}>
-                    <sup className={styles.identifier}>{identifier}</sup>
-                    <InlineMarkdown data={text} />
-                  </div>
+          {tokenGroups.map((group) => (
+            <FieldSet
+              key={group.legend}
+              legend={group.legend}
+              caption={group.caption}
+            >
+              <div className={styles.groups}>
+                {group.tokens.map(({ token, example, footNotes }) => (
+                  <NamingOption
+                    key={token}
+                    token={token}
+                    example={example}
+                    footNotes={footNotes}
+                    isFullFilename={group.isFullFilename}
+                    size={group.size}
+                    tokenSeparator={tokenSeparator}
+                    tokenCase={tokenCase}
+                    onPress={handleOptionPress}
+                  />
                 ))}
-              </FieldSet>
-            ))
-          ) : (
-            <div className={styles.noResults}>{translate('NoTokensFound')}</div>
-          )}
+              </div>
+
+              {group.footNotes?.map(({ identifier, text }) => (
+                <div key={identifier} className={styles.footNote}>
+                  <sup className={styles.identifier}>{identifier}</sup>
+                  <InlineMarkdown data={text} />
+                </div>
+              ))}
+            </FieldSet>
+          ))}
         </ModalBody>
 
         <ModalFooter>

@@ -11,12 +11,10 @@ interface CssExports {
   'identifier': string;
   'instruction': string;
   'namingSelect': string;
-  'noResults': string;
   'preview': string;
   'previewInvalid': string;
   'previewLabel': string;
   'previewValue': string;
-  'search': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

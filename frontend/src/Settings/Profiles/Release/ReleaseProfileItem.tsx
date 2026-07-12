@@ -1,15 +1,11 @@
-import React, {
-  MouseEvent,
-  ReactNode,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import React, { MouseEvent, useCallback, useMemo, useState } from 'react';
 import Label from 'Components/Label';
+import MiddleTruncate from 'Components/MiddleTruncate';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import SettingsCard from 'Components/SettingsCard/SettingsCard';
 import SettingsCardAction from 'Components/SettingsCard/SettingsCardAction';
 import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
+import TagList from 'Components/TagList';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { icons, kinds } from 'Helpers/Props';
 import { IndexerModel } from 'Settings/Indexers/useIndexers';
@@ -38,6 +34,7 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
     ignored = [],
     indexerIds = [],
     tags,
+    excludedTags,
     tagList,
     indexerList,
   } = props;
@@ -52,21 +49,14 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
 
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const allChips = useMemo(
-    () => [...required, ...ignored].filter(Boolean),
-    [required, ignored]
-  );
+  const chipCount =
+    required.filter(Boolean).length + ignored.filter(Boolean).length;
 
-  const isCapped = !isExpanded && allChips.length > CHIP_CAP_THRESHOLD;
+  const isCapped = !isExpanded && chipCount > CHIP_CAP_THRESHOLD;
 
   const indexers = useMemo(
     () => indexerList.filter((i) => indexerIds.includes(i.id)),
     [indexerList, indexerIds]
-  );
-
-  const tagNames = useMemo(
-    () => tagList.filter((t) => tags.includes(t.id)),
-    [tagList, tags]
   );
 
   const handleShowAllPress = useCallback((e: MouseEvent) => {
@@ -74,27 +64,11 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
     setIsExpanded(true);
   }, []);
 
-  const statusSegments = useMemo(() => {
-    const segments: ReactNode[] = [translate(enabled ? 'Enabled' : 'Disabled')];
+  const statusSegments = [translate(enabled ? 'Enabled' : 'Disabled')];
 
-    if (indexers.length > 0) {
-      segments.push(
-        `${indexers.length} ${translate(
-          indexers.length === 1 ? 'Indexer' : 'Indexers'
-        )}`
-      );
-    }
-
-    if (tagNames.length > 0) {
-      segments.push(
-        `${tagNames.length} ${translate(
-          tagNames.length === 1 ? 'Tag' : 'Tags'
-        )}`
-      );
-    }
-
-    return segments;
-  }, [enabled, indexers, tagNames]);
+  if (indexers.length > 0) {
+    statusSegments.push(translate('CountIndexers', { count: indexers.length }));
+  }
 
   return (
     <SettingsCard
@@ -102,21 +76,12 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
       isUnnamed={!name}
       aria-label={translate('EditReleaseProfileName', { name: name ?? id })}
       actions={
-        <>
-          <SettingsCardAction
-            title={translate('EditReleaseProfile')}
-            aria-label={translate('EditReleaseProfile')}
-            name={icons.EDIT}
-            onPress={setEditModalOpen}
-          />
-
-          <SettingsCardAction
-            title={translate('DeleteReleaseProfile')}
-            aria-label={translate('DeleteReleaseProfile')}
-            name={icons.DELETE}
-            onPress={setDeleteModalOpen}
-          />
-        </>
+        <SettingsCardAction
+          title={translate('DeleteReleaseProfile')}
+          aria-label={translate('DeleteReleaseProfile')}
+          name={icons.DELETE}
+          onPress={setDeleteModalOpen}
+        />
       }
       onPress={setEditModalOpen}
     >
@@ -130,8 +95,8 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
           if (!item) return null;
 
           return (
-            <Label key={item} kind={kinds.SUCCESS}>
-              {item}
+            <Label key={item} className={styles.label} kind={kinds.SUCCESS}>
+              <MiddleTruncate text={item} />
             </Label>
           );
         })}
@@ -140,8 +105,8 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
           if (!item) return null;
 
           return (
-            <Label key={item} kind={kinds.DANGER}>
-              {item}
+            <Label key={item} className={styles.label} kind={kinds.DANGER}>
+              <MiddleTruncate text={item} />
             </Label>
           );
         })}
@@ -153,8 +118,14 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
           type="button"
           onClick={handleShowAllPress}
         >
-          {`${translate('ShowAllPatterns', { count: allChips.length })} ↓`}
+          {`${translate('ShowAllPatterns', { count: chipCount })} ↓`}
         </button>
+      ) : null}
+
+      {tags.length ? <TagList tags={tags} tagList={tagList} /> : null}
+
+      {excludedTags.length ? (
+        <TagList tags={excludedTags} tagList={tagList} kind={kinds.DANGER} />
       ) : null}
 
       <EditReleaseProfileModal

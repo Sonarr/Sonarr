@@ -104,20 +104,22 @@ function Settings() {
   return (
     <SettingsPage title={translate('Settings')}>
       <PageContentBody className={styles.body}>
-        <PageHeading title={translate('Settings')} />
+        <div className={styles.section}>
+          <PageHeading title={translate('Settings')} />
 
-        <div className={styles.grid}>
-          {sections.map((section) => (
-            <Link key={section.to} className={styles.card} to={section.to}>
-              <div className={styles.cardHead}>
-                <span className={styles.cardIcon}>
-                  <Icon name={section.iconName} size={16} />
-                </span>
-                <h2 className={styles.cardTitle}>{section.title}</h2>
-              </div>
-              <p className={styles.cardSummary}>{section.summary}</p>
-            </Link>
-          ))}
+          <div className={styles.grid}>
+            {sections.map((section) => (
+              <Link key={section.to} className={styles.card} to={section.to}>
+                <div className={styles.cardHead}>
+                  <span className={styles.cardIcon}>
+                    <Icon name={section.iconName} size={16} />
+                  </span>
+                  <h2 className={styles.cardTitle}>{section.title}</h2>
+                </div>
+                <p className={styles.cardSummary}>{section.summary}</p>
+              </Link>
+            ))}
+          </div>
         </div>
       </PageContentBody>
     </SettingsPage>

@@ -113,7 +113,10 @@ function IndexerOptions({
 
           <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
             <FormLabel>{translate('RssSyncInterval')}</FormLabel>
-            <FormInputHelpText text={translate('RssSyncIntervalHelpText')} />
+            <FormInputHelpText
+              text={translate('RssSyncIntervalHelpText')}
+              link="https://wiki.servarr.com/sonarr/faq#how-does-sonarr-find-episodes"
+            />
             <FormInputHelpText
               text={translate('RssSyncIntervalHelpTextWarning')}
               isWarning={true}

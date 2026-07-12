@@ -1,3 +1,13 @@
+.label {
+  composes: label from '~Components/Label.css';
+
+  max-width: 100%;
+
+  > div {
+    min-width: 0;
+  }
+}
+
 .chips {
   display: flex;
   flex-wrap: wrap;

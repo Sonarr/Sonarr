@@ -3,6 +3,7 @@
 interface CssExports {
   'chips': string;
   'chipsClipped': string;
+  'label': string;
   'showAll': string;
 }
 export const cssExports: CssExports;

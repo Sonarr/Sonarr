@@ -99,21 +99,12 @@ function QualityProfile({
       name={name}
       aria-label={translate('EditQualityProfileName', { name })}
       actions={
-        <>
-          <SettingsCardAction
-            title={translate('EditQualityProfile')}
-            aria-label={translate('EditQualityProfile')}
-            name={icons.EDIT}
-            onPress={handleEditPress}
-          />
-
-          <SettingsCardAction
-            title={translate('CloneProfile')}
-            aria-label={translate('CloneProfile')}
-            name={icons.CLONE}
-            onPress={handleClonePress}
-          />
-        </>
+        <SettingsCardAction
+          title={translate('CloneProfile')}
+          aria-label={translate('CloneProfile')}
+          name={icons.CLONE}
+          onPress={handleClonePress}
+        />
       }
       onPress={handleEditPress}
     >
