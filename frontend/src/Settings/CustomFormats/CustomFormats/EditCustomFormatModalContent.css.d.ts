@@ -4,13 +4,12 @@ interface CssExports {
   'addLabel': string;
   'addSpecification': string;
   'center': string;
+  'conditions': string;
+  'conditionsTitle': string;
   'customFormats': string;
-  'deleteButton': string;
   'fullWidth': string;
   'intro': string;
   'rightButtons': string;
-  'section': string;
-  'sectionHeading': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

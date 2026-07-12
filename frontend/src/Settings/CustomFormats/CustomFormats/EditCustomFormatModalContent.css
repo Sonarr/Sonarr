@@ -1,26 +1,20 @@
-.deleteButton {
-  composes: button from '~Components/Link/Button.css';
-
-  margin-right: auto;
-}
-
 .rightButtons {
-  justify-content: flex-end;
+  display: flex;
+  gap: 10px;
+
   margin-right: auto;
 }
 
-.section {
-  margin-top: 24px;
+.conditions {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--borderColor);
 }
 
-.sectionHeading {
-  margin: 0 0 12px;
-  color: var(--inkMuted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-weight: 500;
-  font-size: 12px;
-  font-family: var(--defaultFontFamily);
+.conditionsTitle {
+  composes: label from '~Components/Form/FormLabel.css';
+
+  margin-top: 0;
 }
 
 .intro {

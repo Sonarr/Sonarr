@@ -3,15 +3,16 @@
   margin-top: 10px;
   border: 1px solid var(--borderColor);
   border-radius: 12px;
-  background-color: var(--paperWarm);
-  user-select: none;
+  background-color: var(--paperCard);
 }
 
 .headerContainer {
   display: flex;
   align-items: center;
+  gap: 16px;
+
   padding: 0 16px;
-  height: 36px;
+  height: 40px;
   border-bottom: 1px solid var(--borderColor);
   background-color: var(--paperWarm);
   color: var(--inkMuted);
@@ -23,15 +24,13 @@
 }
 
 .headerTitle {
-  display: flex;
   flex-grow: 1;
 }
 
 .headerScore {
-  display: flex;
-  flex-grow: 0;
-  padding-left: 16px;
-  width: 100px;
+  flex-shrink: 0;
+  width: 80px;
+  text-align: right;
 }
 
 .addCustomFormatMessage {

@@ -5,7 +5,7 @@
 .fieldSet {
   display: flex;
   flex-direction: column;
-  padding: 28px 28px 24px;
+  padding: 20px 28px;
   min-width: 0;
   border: 1px solid var(--borderColor);
   border-radius: 12px;

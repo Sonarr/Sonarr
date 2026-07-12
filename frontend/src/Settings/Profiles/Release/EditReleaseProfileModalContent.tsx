@@ -10,6 +10,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import ModalSection from 'Components/ModalSection';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { inputTypes, kinds } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
@@ -82,11 +83,7 @@ function EditReleaseProfileModalContent({
           validationErrors={validationErrors}
           validationWarnings={validationWarnings}
         >
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>
-              {translate('ProfileSectionIdentity')}
-            </h3>
-
+          <ModalSection title={translate('ProfileSectionIdentity')}>
             <FormRow>
               <FormLabel>{translate('Name')}</FormLabel>
 
@@ -109,13 +106,9 @@ function EditReleaseProfileModalContent({
                 onChange={handleInputChange}
               />
             </FormRow>
-          </section>
+          </ModalSection>
 
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>
-              {translate('ProfileSectionPatterns')}
-            </h3>
-
+          <ModalSection title={translate('ProfileSectionPatterns')}>
             <FormRow>
               <FormLabel>{translate('MustContain')}</FormLabel>
               <FormInputHelpText text={translate('MustContainHelpText')} />
@@ -147,12 +140,6 @@ function EditReleaseProfileModalContent({
                 onChange={handleInputChange}
               />
             </FormRow>
-          </section>
-
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>
-              {translate('AirDateRestriction')}
-            </h3>
 
             <FormRow>
               <FormLabel>{translate('AirDateRestriction')}</FormLabel>
@@ -182,13 +169,9 @@ function EditReleaseProfileModalContent({
                 />
               </FormRow>
             ) : null}
-          </section>
+          </ModalSection>
 
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>
-              {translate('ProfileSectionScope')}
-            </h3>
-
+          <ModalSection title={translate('ProfileSectionScope')}>
             <FormRow>
               <FormLabel>{translate('Indexer')}</FormLabel>
               <FormInputHelpText
@@ -232,7 +215,7 @@ function EditReleaseProfileModalContent({
                 onChange={handleInputChange}
               />
             </FormRow>
-          </section>
+          </ModalSection>
         </Form>
       </ModalBody>
       <ModalFooter>

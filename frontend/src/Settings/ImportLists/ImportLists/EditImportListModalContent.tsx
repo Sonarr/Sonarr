@@ -16,6 +16,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import ModalSection from 'Components/ModalSection';
 import Popover from 'Components/Tooltip/Popover';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
@@ -127,9 +128,7 @@ function EditImportListModalContent({
             })}
           </Alert>
 
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>{translate('General')}</h3>
-
+          <ModalSection title={translate('General')}>
             <FormRow>
               <FormLabel>{translate('Name')}</FormLabel>
 
@@ -168,11 +167,9 @@ function EditImportListModalContent({
                 onChange={handleInputChange}
               />
             </FormRow>
-          </section>
+          </ModalSection>
 
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>{translate('Series')}</h3>
-
+          <ModalSection title={translate('Series')}>
             <FormRow>
               <FormLabel>
                 {translate('Monitor')}
@@ -275,11 +272,9 @@ function EditImportListModalContent({
                 {...seasonFolder}
               />
             </FormRow>
-          </section>
+          </ModalSection>
 
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>{translate('Settings')}</h3>
-
+          <ModalSection title={translate('Settings')}>
             {fields?.map((field) => {
               return (
                 <ProviderFieldFormGroup
@@ -293,11 +288,9 @@ function EditImportListModalContent({
                 />
               );
             })}
-          </section>
+          </ModalSection>
 
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>{translate('Tags')}</h3>
-
+          <ModalSection title={translate('Tags')}>
             <FormRow>
               <FormLabel>{translate('SonarrTags')}</FormLabel>
               <FormInputHelpText text={translate('ListTagsHelpText')} />
@@ -308,7 +301,7 @@ function EditImportListModalContent({
                 onChange={handleInputChange}
               />
             </FormRow>
-          </section>
+          </ModalSection>
         </Form>
       </ModalBody>
       <ModalFooter>

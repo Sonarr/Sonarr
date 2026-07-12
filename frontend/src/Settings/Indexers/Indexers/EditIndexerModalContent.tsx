@@ -11,6 +11,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import ModalSection from 'Components/ModalSection';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { inputTypes, kinds } from 'Helpers/Props';
 import AdvancedSettingsButton from 'Settings/AdvancedSettingsButton';
@@ -115,9 +116,7 @@ function EditIndexerModalContent({
           validationErrors={validationErrors}
           validationWarnings={validationWarnings}
         >
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>{translate('General')}</h3>
-
+          <ModalSection title={translate('General')}>
             <FormRow>
               <FormLabel>{translate('Name')}</FormLabel>
 
@@ -128,11 +127,9 @@ function EditIndexerModalContent({
                 onChange={handleInputChange}
               />
             </FormRow>
-          </section>
+          </ModalSection>
 
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>{translate('Search')}</h3>
-
+          <ModalSection title={translate('Search')}>
             <FormRow>
               <FormLabel>{translate('EnableRss')}</FormLabel>
 
@@ -199,11 +196,9 @@ function EditIndexerModalContent({
                 onChange={handleInputChange}
               />
             </FormRow>
-          </section>
+          </ModalSection>
 
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>{translate('Settings')}</h3>
-
+          <ModalSection title={translate('Settings')}>
             {fields?.map((field) => {
               return (
                 <ProviderFieldFormGroup
@@ -217,11 +212,9 @@ function EditIndexerModalContent({
                 />
               );
             })}
-          </section>
+          </ModalSection>
 
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>{translate('Options')}</h3>
-
+          <ModalSection title={translate('Options')}>
             <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
               <FormLabel>{translate('IndexerPriority')}</FormLabel>
 
@@ -283,7 +276,7 @@ function EditIndexerModalContent({
                 onChange={handleInputChange}
               />
             </FormRow>
-          </section>
+          </ModalSection>
         </Form>
       </ModalBody>
 

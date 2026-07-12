@@ -3,8 +3,6 @@
 interface CssExports {
   'deleteButton': string;
   'intro': string;
-  'section': string;
-  'sectionHeading': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

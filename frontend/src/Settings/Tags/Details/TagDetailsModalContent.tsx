@@ -6,6 +6,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import ModalSection from 'Components/ModalSection';
 import { kinds } from 'Helpers/Props';
 import useSeries from 'Series/useSeries';
 import { useDownloadClientsWithIds } from 'Settings/DownloadClients/DownloadClients/useDownloadClients';
@@ -101,21 +102,15 @@ function TagDetailsModalContent({
         )}
 
         {series.length ? (
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>{translate('Series')}</h3>
-
+          <ModalSection title={translate('Series')}>
             {series.map((item) => {
               return <div key={item.id}>{item.title}</div>;
             })}
-          </section>
+          </ModalSection>
         ) : null}
 
         {delayProfiles.length ? (
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>
-              {translate('DelayProfile')}
-            </h3>
-
+          <ModalSection title={translate('DelayProfile')}>
             {delayProfiles.map((item) => {
               const {
                 id,
@@ -137,39 +132,27 @@ function TagDetailsModalContent({
                 />
               );
             })}
-          </section>
+          </ModalSection>
         ) : null}
 
         {notifications.length ? (
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>
-              {translate('Connections')}
-            </h3>
-
+          <ModalSection title={translate('Connections')}>
             {notifications.map((item) => {
               return <div key={item.id}>{item.name}</div>;
             })}
-          </section>
+          </ModalSection>
         ) : null}
 
         {importLists.length ? (
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>
-              {translate('ImportLists')}
-            </h3>
-
+          <ModalSection title={translate('ImportLists')}>
             {importLists.map((item) => {
               return <div key={item.id}>{item.name}</div>;
             })}
-          </section>
+          </ModalSection>
         ) : null}
 
         {releaseProfiles.length ? (
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>
-              {translate('ReleaseProfiles')}
-            </h3>
-
+          <ModalSection title={translate('ReleaseProfiles')}>
             {releaseProfiles.map((item) => {
               return (
                 <div key={item.id} className={styles.restriction}>
@@ -195,41 +178,31 @@ function TagDetailsModalContent({
                 </div>
               );
             })}
-          </section>
+          </ModalSection>
         ) : null}
 
         {indexers.length ? (
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>{translate('Indexers')}</h3>
-
+          <ModalSection title={translate('Indexers')}>
             {indexers.map((item) => {
               return <div key={item.id}>{item.name}</div>;
             })}
-          </section>
+          </ModalSection>
         ) : null}
 
         {downloadClients.length ? (
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>
-              {translate('DownloadClients')}
-            </h3>
-
+          <ModalSection title={translate('DownloadClients')}>
             {downloadClients.map((item) => {
               return <div key={item.id}>{item.name}</div>;
             })}
-          </section>
+          </ModalSection>
         ) : null}
 
         {autoTags.length ? (
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>
-              {translate('AutoTagging')}
-            </h3>
-
+          <ModalSection title={translate('AutoTagging')}>
             {autoTags.map((item) => {
               return <div key={item.id}>{item.name}</div>;
             })}
-          </section>
+          </ModalSection>
         ) : null}
       </ModalBody>
 

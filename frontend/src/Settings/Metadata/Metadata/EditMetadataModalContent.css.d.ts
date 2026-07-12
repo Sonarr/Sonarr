@@ -2,8 +2,6 @@
 // Please do not change this file!
 interface CssExports {
   'message': string;
-  'section': string;
-  'sectionHeading': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

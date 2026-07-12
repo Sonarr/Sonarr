@@ -8,6 +8,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import ModalSection from 'Components/ModalSection';
 import { inputTypes } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
@@ -126,11 +127,11 @@ function ManageDownloadClientsEditModalContent(
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('EditSelectedDownloadClients')}</ModalHeader>
       <ModalBody>
-        <section className={styles.section}>
-          <h3 className={styles.sectionHeading}>
-            {translate('ManageDownloadClientsEditModalContentStatusSection')}
-          </h3>
-
+        <ModalSection
+          title={translate(
+            'ManageDownloadClientsEditModalContentStatusSection'
+          )}
+        >
           <FormRow>
             <FormLabel>{translate('Enabled')}</FormLabel>
 
@@ -155,13 +156,13 @@ function ManageDownloadClientsEditModalContent(
               onChange={onInputChange}
             />
           </FormRow>
-        </section>
+        </ModalSection>
 
-        <section className={styles.section}>
-          <h3 className={styles.sectionHeading}>
-            {translate('ManageDownloadClientsEditModalContentCompletedSection')}
-          </h3>
-
+        <ModalSection
+          title={translate(
+            'ManageDownloadClientsEditModalContentCompletedSection'
+          )}
+        >
           <FormRow>
             <FormLabel>{translate('RemoveCompletedDownloads')}</FormLabel>
 
@@ -185,7 +186,7 @@ function ManageDownloadClientsEditModalContent(
               onChange={onInputChange}
             />
           </FormRow>
-        </section>
+        </ModalSection>
       </ModalBody>
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>

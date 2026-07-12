@@ -4,8 +4,6 @@ interface CssExports {
   'deleteButton': string;
   'labelIcon': string;
   'message': string;
-  'section': string;
-  'sectionHeading': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

@@ -163,8 +163,10 @@ export default function EditAutoTaggingModalContent({
             </FormRow>
           </Form>
 
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>{translate('Conditions')}</h3>
+          <div className={styles.conditions}>
+            <h3 className={styles.conditionsTitle}>
+              {translate('Conditions')}
+            </h3>
 
             <div className={styles.autoTaggings}>
               {specifications.map((specification) => {
@@ -196,7 +198,7 @@ export default function EditAutoTaggingModalContent({
                 </div>
               </Card>
             </div>
-          </section>
+          </div>
 
           <AddSpecificationModal
             isOpen={isAddSpecificationModalOpen}

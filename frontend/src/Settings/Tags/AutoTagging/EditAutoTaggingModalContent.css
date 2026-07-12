@@ -8,20 +8,6 @@
   justify-content: flex-end;
 }
 
-.section {
-  margin-top: 24px;
-}
-
-.sectionHeading {
-  margin: 0 0 12px;
-  color: var(--inkMuted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-weight: 500;
-  font-size: 12px;
-  font-family: var(--defaultFontFamily);
-}
-
 .addSpecification {
   composes: card from '~Components/Card.css';
 
@@ -66,6 +52,18 @@
   font-weight: 500;
   font-size: 11px;
   font-family: var(--defaultFontFamily);
+}
+
+.conditions {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--borderColor);
+}
+
+.conditionsTitle {
+  composes: label from '~Components/Form/FormLabel.css';
+
+  margin-top: 0;
 }
 
 .autoTaggings {

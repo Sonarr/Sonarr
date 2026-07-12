@@ -1,0 +1,17 @@
+.section {
+  margin-top: 36px;
+}
+
+.section:first-of-type {
+  margin-top: 16px;
+}
+
+.heading {
+  margin: 0 0 12px;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: var(--defaultFontFamily);
+}

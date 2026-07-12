@@ -5,11 +5,11 @@ interface CssExports {
   'addSpecification': string;
   'autoTaggings': string;
   'center': string;
+  'conditions': string;
+  'conditionsTitle': string;
   'deleteButton': string;
   'fullWidth': string;
   'rightButtons': string;
-  'section': string;
-  'sectionHeading': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

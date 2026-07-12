@@ -177,8 +177,10 @@ function EditCustomFormatModalContent({
             </FormRow>
           </Form>
 
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeading}>{translate('Conditions')}</h3>
+          <div className={styles.conditions}>
+            <h3 className={styles.conditionsTitle}>
+              {translate('Conditions')}
+            </h3>
 
             <p className={styles.intro}>
               {translate('CustomFormatsMatchInfo')}
@@ -210,7 +212,7 @@ function EditCustomFormatModalContent({
                 </div>
               </Card>
             </div>
-          </section>
+          </div>
 
           <AddSpecificationModal
             isOpen={isAddSpecificationModalOpen}
@@ -236,18 +238,12 @@ function EditCustomFormatModalContent({
       <ModalFooter>
         <div className={styles.rightButtons}>
           {id ? (
-            <Button
-              className={styles.deleteButton}
-              kind={kinds.DANGER}
-              onPress={onDeleteCustomFormatPress}
-            >
+            <Button kind={kinds.DANGER} onPress={onDeleteCustomFormatPress}>
               {translate('Delete')}
             </Button>
           ) : null}
 
-          <Button className={styles.deleteButton} onPress={handleImportPress}>
-            {translate('Import')}
-          </Button>
+          <Button onPress={handleImportPress}>{translate('Import')}</Button>
         </div>
 
         <Button onPress={onModalClose}>{translate('Cancel')}</Button>
