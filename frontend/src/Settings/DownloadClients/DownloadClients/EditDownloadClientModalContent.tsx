@@ -123,79 +123,73 @@ function EditDownloadClientModalContent({
             </Alert>
           ) : null}
 
-          <ModalSection title={translate('General')}>
-            <FormRow>
-              <FormLabel>{translate('Name')}</FormLabel>
+          <FormRow>
+            <FormLabel>{translate('Name')}</FormLabel>
 
-              <FormInput
-                type={inputTypes.TEXT}
-                name="name"
-                {...name}
-                onChange={handleInputChange}
+            <FormInput
+              type={inputTypes.TEXT}
+              name="name"
+              {...name}
+              onChange={handleInputChange}
+            />
+          </FormRow>
+
+          <FormRow>
+            <FormLabel>{translate('Enable')}</FormLabel>
+
+            <FormInput
+              type={inputTypes.CHECK}
+              name="enable"
+              {...enable}
+              onChange={handleInputChange}
+            />
+          </FormRow>
+
+          {fields?.map((field) => {
+            return (
+              <ProviderFieldFormGroup
+                key={field.name}
+                advancedSettings={showAdvancedSettings}
+                provider="downloadClient"
+                providerData={item}
+                layout="row"
+                {...field}
+                onChange={handleFieldChange}
               />
-            </FormRow>
+            );
+          })}
 
-            <FormRow>
-              <FormLabel>{translate('Enable')}</FormLabel>
+          <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+            <FormLabel>{translate('ClientPriority')}</FormLabel>
 
-              <FormInput
-                type={inputTypes.CHECK}
-                name="enable"
-                {...enable}
-                onChange={handleInputChange}
-              />
-            </FormRow>
-          </ModalSection>
+            <FormInputHelpText
+              text={translate('DownloadClientPriorityHelpText')}
+            />
 
-          <ModalSection title={translate('Settings')}>
-            {fields?.map((field) => {
-              return (
-                <ProviderFieldFormGroup
-                  key={field.name}
-                  advancedSettings={showAdvancedSettings}
-                  provider="downloadClient"
-                  providerData={item}
-                  layout="row"
-                  {...field}
-                  onChange={handleFieldChange}
-                />
-              );
-            })}
-          </ModalSection>
+            <FormInput
+              type={inputTypes.NUMBER}
+              name="priority"
+              min={1}
+              max={50}
+              {...priority}
+              onChange={handleInputChange}
+            />
+          </FormRow>
 
-          <ModalSection title={translate('Options')}>
-            <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
-              <FormLabel>{translate('ClientPriority')}</FormLabel>
+          <FormRow>
+            <FormLabel>{translate('Tags')}</FormLabel>
 
-              <FormInputHelpText
-                text={translate('DownloadClientPriorityHelpText')}
-              />
+            <FormInputHelpText
+              text={translate('DownloadClientSeriesTagHelpText')}
+            />
 
-              <FormInput
-                type={inputTypes.NUMBER}
-                name="priority"
-                min={1}
-                max={50}
-                {...priority}
-                onChange={handleInputChange}
-              />
-            </FormRow>
-
-            <FormRow>
-              <FormLabel>{translate('Tags')}</FormLabel>
-
-              <FormInputHelpText
-                text={translate('DownloadClientSeriesTagHelpText')}
-              />
-
-              <FormInput
-                type={inputTypes.TAG}
-                name="tags"
-                {...tags}
-                onChange={handleInputChange}
-              />
-            </FormRow>
-          </ModalSection>
+            <FormInput
+              type={inputTypes.TAG}
+              name="tags"
+              {...tags}
+              onChange={handleInputChange}
+            />
+          </FormRow>
 
           <ModalSection title={translate('CompletedDownloadHandling')}>
             <FormRow>

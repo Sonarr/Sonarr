@@ -12,7 +12,6 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
-import ModalSection from 'Components/ModalSection';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { inputTypes } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
@@ -85,34 +84,30 @@ function EditMetadataModalContent({
             </Alert>
           ) : null}
 
-          <ModalSection title={translate('Status')}>
-            <FormRow>
-              <FormLabel>{translate('Enable')}</FormLabel>
-              <FormInputHelpText text={translate('EnableMetadataHelpText')} />
-              <FormInput
-                type={inputTypes.CHECK}
-                name="enable"
-                {...enable}
-                onChange={handleInputChange}
-              />
-            </FormRow>
-          </ModalSection>
+          <FormRow>
+            <FormLabel>{translate('Enable')}</FormLabel>
+            <FormInputHelpText text={translate('EnableMetadataHelpText')} />
+            <FormInput
+              type={inputTypes.CHECK}
+              name="enable"
+              {...enable}
+              onChange={handleInputChange}
+            />
+          </FormRow>
 
-          <ModalSection title={translate('MetadataSectionFields')}>
-            {fields.map((field) => {
-              return (
-                <ProviderFieldFormGroup
-                  key={field.name}
-                  advancedSettings={advancedSettings}
-                  layout="row"
-                  provider="metadata"
-                  {...field}
-                  isDisabled={!enable.value}
-                  onChange={handleFieldChange}
-                />
-              );
-            })}
-          </ModalSection>
+          {fields.map((field) => {
+            return (
+              <ProviderFieldFormGroup
+                key={field.name}
+                advancedSettings={advancedSettings}
+                layout="row"
+                provider="metadata"
+                {...field}
+                isDisabled={!enable.value}
+                onChange={handleFieldChange}
+              />
+            );
+          })}
         </Form>
       </ModalBody>
       <ModalFooter>

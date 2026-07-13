@@ -128,46 +128,44 @@ function EditImportListModalContent({
             })}
           </Alert>
 
-          <ModalSection title={translate('General')}>
-            <FormRow>
-              <FormLabel>{translate('Name')}</FormLabel>
+          <FormRow>
+            <FormLabel>{translate('Name')}</FormLabel>
 
-              <FormInput
-                type={inputTypes.TEXT}
-                name="name"
-                {...name}
-                onChange={handleInputChange}
-              />
-            </FormRow>
+            <FormInput
+              type={inputTypes.TEXT}
+              name="name"
+              {...name}
+              onChange={handleInputChange}
+            />
+          </FormRow>
 
-            <FormRow>
-              <FormLabel>{translate('EnableAutomaticAdd')}</FormLabel>
-              <FormInputHelpText
-                text={translate('EnableAutomaticAddSeriesHelpText')}
-              />
-              <FormInput
-                type={inputTypes.CHECK}
-                name="enableAutomaticAdd"
-                {...enableAutomaticAdd}
-                onChange={handleInputChange}
-              />
-            </FormRow>
+          <FormRow>
+            <FormLabel>{translate('EnableAutomaticAdd')}</FormLabel>
+            <FormInputHelpText
+              text={translate('EnableAutomaticAddSeriesHelpText')}
+            />
+            <FormInput
+              type={inputTypes.CHECK}
+              name="enableAutomaticAdd"
+              {...enableAutomaticAdd}
+              onChange={handleInputChange}
+            />
+          </FormRow>
 
-            <FormRow>
-              <FormLabel>
-                {translate('ImportListSearchForMissingEpisodes')}
-              </FormLabel>
-              <FormInputHelpText
-                text={translate('ImportListSearchForMissingEpisodesHelpText')}
-              />
-              <FormInput
-                type={inputTypes.CHECK}
-                name="searchForMissingEpisodes"
-                {...searchForMissingEpisodes}
-                onChange={handleInputChange}
-              />
-            </FormRow>
-          </ModalSection>
+          <FormRow>
+            <FormLabel>
+              {translate('ImportListSearchForMissingEpisodes')}
+            </FormLabel>
+            <FormInputHelpText
+              text={translate('ImportListSearchForMissingEpisodesHelpText')}
+            />
+            <FormInput
+              type={inputTypes.CHECK}
+              name="searchForMissingEpisodes"
+              {...searchForMissingEpisodes}
+              onChange={handleInputChange}
+            />
+          </FormRow>
 
           <ModalSection title={translate('Series')}>
             <FormRow>
@@ -274,34 +272,30 @@ function EditImportListModalContent({
             </FormRow>
           </ModalSection>
 
-          <ModalSection title={translate('Settings')}>
-            {fields?.map((field) => {
-              return (
-                <ProviderFieldFormGroup
-                  key={field.name}
-                  advancedSettings={showAdvancedSettings}
-                  provider="importList"
-                  providerData={item}
-                  layout="row"
-                  {...field}
-                  onChange={handleFieldChange}
-                />
-              );
-            })}
-          </ModalSection>
-
-          <ModalSection title={translate('Tags')}>
-            <FormRow>
-              <FormLabel>{translate('SonarrTags')}</FormLabel>
-              <FormInputHelpText text={translate('ListTagsHelpText')} />
-              <FormInput
-                type={inputTypes.TAG}
-                name="tags"
-                {...tags}
-                onChange={handleInputChange}
+          {fields?.map((field) => {
+            return (
+              <ProviderFieldFormGroup
+                key={field.name}
+                advancedSettings={showAdvancedSettings}
+                provider="importList"
+                providerData={item}
+                layout="row"
+                {...field}
+                onChange={handleFieldChange}
               />
-            </FormRow>
-          </ModalSection>
+            );
+          })}
+
+          <FormRow>
+            <FormLabel>{translate('SonarrTags')}</FormLabel>
+            <FormInputHelpText text={translate('ListTagsHelpText')} />
+            <FormInput
+              type={inputTypes.TAG}
+              name="tags"
+              {...tags}
+              onChange={handleInputChange}
+            />
+          </FormRow>
         </Form>
       </ModalBody>
       <ModalFooter>

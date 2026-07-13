@@ -116,18 +116,16 @@ function EditIndexerModalContent({
           validationErrors={validationErrors}
           validationWarnings={validationWarnings}
         >
-          <ModalSection title={translate('General')}>
-            <FormRow>
-              <FormLabel>{translate('Name')}</FormLabel>
+          <FormRow>
+            <FormLabel>{translate('Name')}</FormLabel>
 
-              <FormInput
-                type={inputTypes.TEXT}
-                name="name"
-                {...name}
-                onChange={handleInputChange}
-              />
-            </FormRow>
-          </ModalSection>
+            <FormInput
+              type={inputTypes.TEXT}
+              name="name"
+              {...name}
+              onChange={handleInputChange}
+            />
+          </FormRow>
 
           <ModalSection title={translate('Search')}>
             <FormRow>
@@ -198,85 +196,81 @@ function EditIndexerModalContent({
             </FormRow>
           </ModalSection>
 
-          <ModalSection title={translate('Settings')}>
-            {fields?.map((field) => {
-              return (
-                <ProviderFieldFormGroup
-                  key={field.name}
-                  advancedSettings={showAdvancedSettings}
-                  provider="indexer"
-                  providerData={item}
-                  layout="row"
-                  {...field}
-                  onChange={handleFieldChange}
-                />
-              );
-            })}
-          </ModalSection>
-
-          <ModalSection title={translate('Options')}>
-            <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
-              <FormLabel>{translate('IndexerPriority')}</FormLabel>
-
-              <FormInputHelpText text={translate('IndexerPriorityHelpText')} />
-
-              <FormInput
-                type={inputTypes.NUMBER}
-                name="priority"
-                min={1}
-                max={50}
-                {...priority}
-                onChange={handleInputChange}
+          {fields?.map((field) => {
+            return (
+              <ProviderFieldFormGroup
+                key={field.name}
+                advancedSettings={showAdvancedSettings}
+                provider="indexer"
+                providerData={item}
+                layout="row"
+                {...field}
+                onChange={handleFieldChange}
               />
-            </FormRow>
+            );
+          })}
 
-            <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
-              <FormLabel>{translate('MaximumSingleEpisodeAge')}</FormLabel>
+          <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+            <FormLabel>{translate('IndexerPriority')}</FormLabel>
 
-              <FormInputHelpText
-                text={translate('MaximumSingleEpisodeAgeHelpText')}
-              />
+            <FormInputHelpText text={translate('IndexerPriorityHelpText')} />
 
-              <FormInput
-                type={inputTypes.NUMBER}
-                name="seasonSearchMaximumSingleEpisodeAge"
-                min={0}
-                unit="days"
-                {...seasonSearchMaximumSingleEpisodeAge}
-                onChange={handleInputChange}
-              />
-            </FormRow>
+            <FormInput
+              type={inputTypes.NUMBER}
+              name="priority"
+              min={1}
+              max={50}
+              {...priority}
+              onChange={handleInputChange}
+            />
+          </FormRow>
 
-            <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
-              <FormLabel>{translate('DownloadClient')}</FormLabel>
+          <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+            <FormLabel>{translate('MaximumSingleEpisodeAge')}</FormLabel>
 
-              <FormInputHelpText
-                text={translate('IndexerDownloadClientHelpText')}
-              />
+            <FormInputHelpText
+              text={translate('MaximumSingleEpisodeAgeHelpText')}
+            />
 
-              <FormInput
-                type={inputTypes.DOWNLOAD_CLIENT_SELECT}
-                name="downloadClientId"
-                {...downloadClientId}
-                includeAny={true}
-                protocol={protocol.value}
-                onChange={handleInputChange}
-              />
-            </FormRow>
+            <FormInput
+              type={inputTypes.NUMBER}
+              name="seasonSearchMaximumSingleEpisodeAge"
+              min={0}
+              unit="days"
+              {...seasonSearchMaximumSingleEpisodeAge}
+              onChange={handleInputChange}
+            />
+          </FormRow>
 
-            <FormRow>
-              <FormLabel>{translate('Tags')}</FormLabel>
+          <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+            <FormLabel>{translate('DownloadClient')}</FormLabel>
 
-              <FormInputHelpText text={translate('IndexerTagSeriesHelpText')} />
+            <FormInputHelpText
+              text={translate('IndexerDownloadClientHelpText')}
+            />
 
-              <FormInput
-                type={inputTypes.TAG}
-                name="tags"
-                {...tags}
-                onChange={handleInputChange}
-              />
-            </FormRow>
-          </ModalSection>
+            <FormInput
+              type={inputTypes.DOWNLOAD_CLIENT_SELECT}
+              name="downloadClientId"
+              {...downloadClientId}
+              includeAny={true}
+              protocol={protocol.value}
+              onChange={handleInputChange}
+            />
+          </FormRow>
+
+          <FormRow>
+            <FormLabel>{translate('Tags')}</FormLabel>
+
+            <FormInputHelpText text={translate('IndexerTagSeriesHelpText')} />
+
+            <FormInput
+              type={inputTypes.TAG}
+              name="tags"
+              {...tags}
+              onChange={handleInputChange}
+            />
+          </FormRow>
         </Form>
       </ModalBody>
 

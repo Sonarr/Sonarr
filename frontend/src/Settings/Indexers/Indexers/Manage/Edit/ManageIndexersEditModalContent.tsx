@@ -181,37 +181,33 @@ function ManageIndexersEditModalContent(
           </FormRow>
         </ModalSection>
 
-        <ModalSection
-          title={translate('ManageIndexersEditModalContentBehaviorSection')}
-        >
-          <FormRow>
-            <FormLabel>{translate('Priority')}</FormLabel>
+        <FormRow>
+          <FormLabel>{translate('Priority')}</FormLabel>
 
-            <FormInput
-              type={inputTypes.NUMBER}
-              name="priority"
-              value={priority}
-              min={1}
-              max={50}
-              onChange={onInputChange}
-            />
-          </FormRow>
+          <FormInput
+            type={inputTypes.NUMBER}
+            name="priority"
+            value={priority}
+            min={1}
+            max={50}
+            onChange={onInputChange}
+          />
+        </FormRow>
 
-          <FormRow>
-            <FormLabel>{translate('MaximumSingleEpisodeAge')}</FormLabel>
-            <FormInputHelpText
-              text={translate('MaximumSingleEpisodeAgeHelpText')}
-            />
-            <FormInput
-              type={inputTypes.NUMBER}
-              name="seasonSearchMaximumSingleEpisodeAge"
-              value={seasonSearchMaximumSingleEpisodeAge}
-              min={0}
-              unit="days"
-              onChange={onInputChange}
-            />
-          </FormRow>
-        </ModalSection>
+        <FormRow>
+          <FormLabel>{translate('MaximumSingleEpisodeAge')}</FormLabel>
+          <FormInputHelpText
+            text={translate('MaximumSingleEpisodeAgeHelpText')}
+          />
+          <FormInput
+            type={inputTypes.NUMBER}
+            name="seasonSearchMaximumSingleEpisodeAge"
+            value={seasonSearchMaximumSingleEpisodeAge}
+            min={0}
+            unit="days"
+            onChange={onInputChange}
+          />
+        </FormRow>
       </ModalBody>
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>

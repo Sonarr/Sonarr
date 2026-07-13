@@ -127,36 +127,30 @@ function ManageDownloadClientsEditModalContent(
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('EditSelectedDownloadClients')}</ModalHeader>
       <ModalBody>
-        <ModalSection
-          title={translate(
-            'ManageDownloadClientsEditModalContentStatusSection'
-          )}
-        >
-          <FormRow>
-            <FormLabel>{translate('Enabled')}</FormLabel>
+        <FormRow>
+          <FormLabel>{translate('Enabled')}</FormLabel>
 
-            <FormInput
-              type={inputTypes.SELECT}
-              name="enable"
-              value={enable}
-              values={enableOptions}
-              onChange={onInputChange}
-            />
-          </FormRow>
+          <FormInput
+            type={inputTypes.SELECT}
+            name="enable"
+            value={enable}
+            values={enableOptions}
+            onChange={onInputChange}
+          />
+        </FormRow>
 
-          <FormRow>
-            <FormLabel>{translate('Priority')}</FormLabel>
+        <FormRow>
+          <FormLabel>{translate('Priority')}</FormLabel>
 
-            <FormInput
-              type={inputTypes.NUMBER}
-              name="priority"
-              value={priority}
-              min={1}
-              max={50}
-              onChange={onInputChange}
-            />
-          </FormRow>
-        </ModalSection>
+          <FormInput
+            type={inputTypes.NUMBER}
+            name="priority"
+            value={priority}
+            min={1}
+            max={50}
+            onChange={onInputChange}
+          />
+        </FormRow>
 
         <ModalSection
           title={translate(

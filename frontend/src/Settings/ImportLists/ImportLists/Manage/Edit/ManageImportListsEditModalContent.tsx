@@ -115,21 +115,17 @@ function ManageImportListsEditModalContent(
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('EditSelectedImportLists')}</ModalHeader>
       <ModalBody>
-        <ModalSection
-          title={translate('ManageImportListsEditModalContentImportSection')}
-        >
-          <FormRow>
-            <FormLabel>{translate('AutomaticAdd')}</FormLabel>
+        <FormRow>
+          <FormLabel>{translate('AutomaticAdd')}</FormLabel>
 
-            <FormInput
-              type={inputTypes.SELECT}
-              name="enableAutomaticAdd"
-              value={enableAutomaticAdd}
-              values={autoAddOptions}
-              onChange={onInputChange}
-            />
-          </FormRow>
-        </ModalSection>
+          <FormInput
+            type={inputTypes.SELECT}
+            name="enableAutomaticAdd"
+            value={enableAutomaticAdd}
+            values={autoAddOptions}
+            onChange={onInputChange}
+          />
+        </FormRow>
 
         <ModalSection
           title={translate('ManageImportListsEditModalContentLibrarySection')}

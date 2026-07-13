@@ -246,26 +246,24 @@ function EditDelayProfileModalContent({
             ) : null}
           </ModalSection>
 
-          <ModalSection title={translate('ProfileSectionScope')}>
-            {id === 1 ? (
-              <p className={styles.intro}>
-                {translate('DefaultDelayProfileSeries')}
-              </p>
-            ) : (
-              <FormRow>
-                <FormLabel>{translate('Tags')}</FormLabel>
-                <FormInputHelpText
-                  text={translate('DelayProfileSeriesTagsHelpText')}
-                />
-                <FormInput
-                  type={inputTypes.TAG}
-                  name="tags"
-                  {...tags}
-                  onChange={handleInputChange}
-                />
-              </FormRow>
-            )}
-          </ModalSection>
+          {id === 1 ? (
+            <p className={styles.intro}>
+              {translate('DefaultDelayProfileSeries')}
+            </p>
+          ) : (
+            <FormRow>
+              <FormLabel>{translate('Tags')}</FormLabel>
+              <FormInputHelpText
+                text={translate('DelayProfileSeriesTagsHelpText')}
+              />
+              <FormInput
+                type={inputTypes.TAG}
+                name="tags"
+                {...tags}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+          )}
         </Form>
       </ModalBody>
       <ModalFooter>

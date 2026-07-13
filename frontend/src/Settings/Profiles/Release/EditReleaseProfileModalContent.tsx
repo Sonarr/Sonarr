@@ -83,30 +83,28 @@ function EditReleaseProfileModalContent({
           validationErrors={validationErrors}
           validationWarnings={validationWarnings}
         >
-          <ModalSection title={translate('ProfileSectionIdentity')}>
-            <FormRow>
-              <FormLabel>{translate('Name')}</FormLabel>
+          <FormRow>
+            <FormLabel>{translate('Name')}</FormLabel>
 
-              <FormInput
-                type={inputTypes.TEXT}
-                name="name"
-                {...name}
-                placeholder={translate('OptionalName')}
-                onChange={handleInputChange}
-              />
-            </FormRow>
+            <FormInput
+              type={inputTypes.TEXT}
+              name="name"
+              {...name}
+              placeholder={translate('OptionalName')}
+              onChange={handleInputChange}
+            />
+          </FormRow>
 
-            <FormRow>
-              <FormLabel>{translate('EnableProfile')}</FormLabel>
-              <FormInputHelpText text={translate('EnableProfileHelpText')} />
-              <FormInput
-                type={inputTypes.CHECK}
-                name="enabled"
-                {...enabled}
-                onChange={handleInputChange}
-              />
-            </FormRow>
-          </ModalSection>
+          <FormRow>
+            <FormLabel>{translate('EnableProfile')}</FormLabel>
+            <FormInputHelpText text={translate('EnableProfileHelpText')} />
+            <FormInput
+              type={inputTypes.CHECK}
+              name="enabled"
+              {...enabled}
+              onChange={handleInputChange}
+            />
+          </FormRow>
 
           <ModalSection title={translate('ProfileSectionPatterns')}>
             <FormRow>

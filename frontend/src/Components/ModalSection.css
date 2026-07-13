@@ -1,9 +1,21 @@
 .section {
-  margin-top: 36px;
+  padding: 16px 0;
+  border-top: 1px solid var(--borderColor);
+  border-bottom: 1px solid var(--borderColor);
 }
 
-.section:first-of-type {
-  margin-top: 16px;
+.section:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.section:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.section + .section {
+  border-top: none;
 }
 
 .heading {
