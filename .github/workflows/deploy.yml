@@ -68,6 +68,7 @@ jobs:
 
     - name: Get Previous Release
       id: previous-release
+      continue-on-error: true
       uses: cardinalby/git-get-release-action@v1
       env:
         GITHUB_TOKEN: ${{ github.token }}
@@ -82,13 +83,15 @@ jobs:
         github-token: ${{ github.token }}
         result-encoding: string
         script: |
-          const { data } = await github.rest.repos.generateReleaseNotes({
+          const params = {
             owner: context.repo.owner,
             repo: context.repo.repo,
             tag_name: 'v${{ inputs.version }}',
             target_commitish: '${{ github.sha }}',
-            previous_tag_name: '${{ steps.previous-release.outputs.tag_name }}',
-          })
+          }
+          const previousTag = '${{ steps.previous-release.outputs.tag_name }}'
+          if (previousTag) params.previous_tag_name = previousTag
+          const { data } = await github.rest.repos.generateReleaseNotes(params)
           return data.body
 
     - name: Create release
