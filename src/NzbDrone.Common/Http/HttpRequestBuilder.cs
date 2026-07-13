@@ -28,6 +28,7 @@ namespace NzbDrone.Common.Http
         public TimeSpan RateLimit { get; set; }
         public bool LogResponseContent { get; set; }
         public ICredentials NetworkCredential { get; set; }
+        public bool StoreRequestCookie { get; set; }
         public Dictionary<string, string> Cookies { get; private set; }
         public List<HttpFormData> FormData { get; private set; }
         public Action<HttpRequest> PostProcess { get; set; }
@@ -44,6 +45,7 @@ namespace NzbDrone.Common.Http
             Cookies = new Dictionary<string, string>();
             FormData = new List<HttpFormData>();
             LogHttpError = true;
+            StoreRequestCookie = true;
         }
 
         public HttpRequestBuilder(bool useHttps, string host, int port, string urlBase = null)
@@ -111,6 +113,7 @@ namespace NzbDrone.Common.Http
             request.RateLimit = RateLimit;
             request.LogResponseContent = LogResponseContent;
             request.Credentials = NetworkCredential;
+            request.StoreRequestCookie = StoreRequestCookie;
 
             foreach (var header in Headers)
             {
