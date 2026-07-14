@@ -98,6 +98,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Босх: Спадок / Series: Legacy / S2E1-4 of 10 (2023) WEB-DL 1080p Ukr/Eng | sub Eng", "Босх: Спадок", "Series: Legacy")]
         [TestCase("Босх: Спадок AKA Series: Legacy S02 1080p NF WEB-DL Dual- Audio DD+ 5.1 Atmos H.264-APEX", "Босх: Спадок", "Series: Legacy")]
         [TestCase("Босх.Спадок.AKA.Series.Legacy.S02.1080p.NF.WEB-DL.DUAL.DDP5.1.Atmos.H.264-APEX", "Босх Спадок", "Series Legacy")]
+        [TestCase("[Judas] Series E (Series J) (Season 04) [1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs] (Batch)", "Series E", "Series J")]
         public void should_parse_multiple_series_titles(string postTitle, params string[] titles)
         {
             var seriesTitleInfo = Parser.Parser.ParseTitle(postTitle).SeriesTitleInfo;
