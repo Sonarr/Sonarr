@@ -2,13 +2,12 @@
 // Please do not change this file!
 interface CssExports {
   'builder': string;
+  'caption': string;
   'control': string;
   'controlLabel': string;
   'controls': string;
-  'footNote': string;
   'formatInput': string;
   'groups': string;
-  'identifier': string;
   'instruction': string;
   'namingSelect': string;
 }

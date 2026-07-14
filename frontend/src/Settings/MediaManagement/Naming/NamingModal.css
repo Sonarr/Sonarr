@@ -57,34 +57,19 @@
   line-height: 1.5;
 }
 
+.caption {
+  margin: 0 0 12px;
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .groups {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
   column-gap: 16px;
   row-gap: 2px;
-}
-
-.footNote {
-  display: flex;
-  gap: 6px;
-
-  color: var(--inkMuted);
-  font-size: 13px;
-  line-height: 1.5;
-
-  .identifier {
-    flex-shrink: 0;
-    color: var(--inkFaint);
-  }
-
-  code {
-    padding: 1px 5px;
-    border-radius: 4px;
-    background-color: var(--paperWarm);
-    color: var(--ink);
-    font-family: var(--monoSpaceFontFamily);
-  }
 }
 
 @media only screen and (max-width: 768px) {

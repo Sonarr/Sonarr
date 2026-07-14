@@ -20,7 +20,7 @@
 
 .heading {
   margin: 0 0 12px;
-  color: var(--inkMuted);
+  color: var(--inkSoft);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-weight: 500;

@@ -1,15 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import FieldSet from 'Components/FieldSet';
 import SelectInput, { SelectInputOption } from 'Components/Form/SelectInput';
 import TextInput from 'Components/Form/TextInput';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
-import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import Modal from 'Components/Modal/Modal';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import ModalSection from 'Components/ModalSection';
 import { icons, sizes } from 'Helpers/Props';
 import { Size } from 'Helpers/Props/sizes';
 import translate from 'Utilities/String/translate';
@@ -23,11 +22,7 @@ interface Token {
   token: string;
   example: string;
   footNotes?: string;
-}
-
-interface FootNote {
-  identifier: string;
-  text: string;
+  notes?: string[];
 }
 
 interface TokenGroup {
@@ -36,7 +31,23 @@ interface TokenGroup {
   tokens: Token[];
   size?: Extract<Size, 'large'>;
   isFullFilename?: boolean;
-  footNotes?: FootNote[];
+}
+
+function withFootNotes(
+  tokens: Token[],
+  notes: Record<string, string>
+): Token[] {
+  return tokens.map((token) =>
+    token.footNotes
+      ? {
+          ...token,
+          notes: token.footNotes
+            .split(',')
+            .map((id) => notes[id.trim()])
+            .filter((note): note is string => note != null),
+        }
+      : token
+  );
 }
 
 interface TokenFlags {
@@ -338,8 +349,7 @@ function getNamingTokenGroups({
 
   groups.push({
     legend: translate('Series'),
-    tokens: seriesTokens,
-    footNotes: [{ identifier: '1', text: translate('SeriesFootNote') }],
+    tokens: withFootNotes(seriesTokens, { 1: translate('SeriesFootNote') }),
   });
 
   groups.push({ legend: translate('SeriesID'), tokens: seriesIdTokens });
@@ -363,28 +373,30 @@ function getNamingTokenGroups({
   if (additional) {
     groups.push({
       legend: translate('EpisodeTitle'),
-      tokens: episodeTitleTokens,
-      footNotes: [{ identifier: '1', text: translate('EpisodeTitleFootNote') }],
+      tokens: withFootNotes(episodeTitleTokens, {
+        1: translate('EpisodeTitleFootNote'),
+      }),
     });
 
     groups.push({ legend: translate('Quality'), tokens: qualityTokens });
 
     groups.push({
       legend: translate('MediaInfo'),
-      tokens: mediaInfoTokens,
-      footNotes: [
-        { identifier: '1', text: translate('MediaInfoFootNote') },
-        { identifier: '2', text: translate('MediaInfoFootNote2') },
-      ],
+      tokens: withFootNotes(mediaInfoTokens, {
+        1: translate('MediaInfoFootNote'),
+        2: translate('MediaInfoFootNote2'),
+      }),
     });
 
     groups.push({
       legend: translate('Other'),
-      tokens: anime ? [...otherTokens, ...otherAnimeTokens] : otherTokens,
-      footNotes: [
-        { identifier: '1', text: translate('ReleaseGroupFootNote') },
-        { identifier: '2', text: translate('CustomFormatFootNote') },
-      ],
+      tokens: withFootNotes(
+        anime ? [...otherTokens, ...otherAnimeTokens] : otherTokens,
+        {
+          1: translate('ReleaseGroupFootNote'),
+          2: translate('CustomFormatFootNote'),
+        }
+      ),
     });
 
     groups.push({
@@ -553,18 +565,18 @@ function NamingModal(props: NamingModalProps) {
           </div>
 
           {tokenGroups.map((group) => (
-            <FieldSet
-              key={group.legend}
-              legend={group.legend}
-              caption={group.caption}
-            >
+            <ModalSection key={group.legend} title={group.legend}>
+              {group.caption ? (
+                <p className={styles.caption}>{group.caption}</p>
+              ) : null}
+
               <div className={styles.groups}>
-                {group.tokens.map(({ token, example, footNotes }) => (
+                {group.tokens.map(({ token, example, notes }) => (
                   <NamingOption
                     key={token}
                     token={token}
                     example={example}
-                    footNotes={footNotes}
+                    notes={notes}
                     isFullFilename={group.isFullFilename}
                     size={group.size}
                     tokenSeparator={tokenSeparator}
@@ -573,14 +585,7 @@ function NamingModal(props: NamingModalProps) {
                   />
                 ))}
               </div>
-
-              {group.footNotes?.map(({ identifier, text }) => (
-                <div key={identifier} className={styles.footNote}>
-                  <sup className={styles.identifier}>{identifier}</sup>
-                  <InlineMarkdown data={text} />
-                </div>
-              ))}
-            </FieldSet>
+            </ModalSection>
           ))}
         </ModalBody>
 

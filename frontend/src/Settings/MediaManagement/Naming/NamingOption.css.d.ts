@@ -3,10 +3,12 @@
 interface CssExports {
   'action': string;
   'example': string;
-  'footNotes': string;
+  'insert': string;
   'isFullFilename': string;
   'large': string;
   'lower': string;
+  'note': string;
+  'noteBody': string;
   'option': string;
   'small': string;
   'title': string;
