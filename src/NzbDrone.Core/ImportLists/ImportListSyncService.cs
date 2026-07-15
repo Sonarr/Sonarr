@@ -304,29 +304,22 @@ namespace NzbDrone.Core.ImportLists
 
         private void UpdateTagsOnPendingSeries(Dictionary<int, HashSet<int>> existingSeriesToUpdate)
         {
-            if (existingSeriesToUpdate.Count > 0)
+            if (!importList.TagExisting || importList.Tags.Count > 0)
             {
-                var possibleSeriesToUpdate = _seriesService.GetSeries(existingSeriesToUpdate.Keys);
-                var seriesWithUpdatedTags = new List<Series>();
-
-                foreach (var series in possibleSeriesToUpdate)
+                return;
+          	}
+                
+            if (existingSeriesToUpdate.TryGetValue(existingSeriesId, out var tagsToAdd))
+            {
+                foreach (var importListTag in importList.Tags)
                 {
-                    var tags = existingSeriesToUpdate[series.Id];
-                    var currentTagsCount = series.Tags.Count;
-
-                    foreach (var tag in tags)
-                    {
-                        series.Tags.Add(tag);
-                    }
-
-                    if (currentTagsCount != series.Tags.Count)
-                    {
-                        _logger.Debug("{0} [{1}] tagged existing series", series.TvdbId, series.Title);
-                        seriesWithUpdatedTags.Add(series);
-                    }
+                    tagsToAdd.Add(importListTag);
                 }
-
-                _seriesService.UpdateTags(seriesWithUpdatedTags);
+            }
+            else
+            {
+                existingSeriesToUpdate.Add(existingSeriesId, new HashSet<int>(importList.Tags));
+            }
             }
         }
 
