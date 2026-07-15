@@ -809,8 +809,8 @@ namespace NzbDrone.Common.Test.Http
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(culture);
             try
             {
-                // the date is bad in the below - should be 13-Jul-2026
-                var malformedCookie = @"__cfduid=d29e686a9d65800021c66faca0a29b4261436890790; expires=Mon, 13-Jul-26 16:19:50 GMT; path=/; HttpOnly";
+                // the date is bad in the below - should be 16-Jul-2046
+                var malformedCookie = @"__cfduid=d29e686a9d65800021c66faca0a29b4261436890790; expires=Mon, 16-Jul-46 16:19:50 GMT; path=/; HttpOnly";
                 var requestSet = new HttpRequestBuilder($"https://{_httpBinHost}/response-headers")
                     .AddQueryParam("Set-Cookie", malformedCookie)
                     .Build();
@@ -818,7 +818,7 @@ namespace NzbDrone.Common.Test.Http
                 requestSet.AllowAutoRedirect = false;
                 requestSet.StoreResponseCookie = true;
 
-                var responseSet = await Subject.GetAsync(requestSet);
+                await Subject.GetAsync(requestSet);
 
                 var request = new HttpRequest($"https://{_httpBinHost}/get");
 
