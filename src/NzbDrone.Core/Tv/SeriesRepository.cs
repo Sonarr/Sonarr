@@ -17,7 +17,6 @@ namespace NzbDrone.Core.Tv
         Series FindByImdbId(string imdbId);
         Series FindByPath(string path);
         Dictionary<int, int> AllSeriesTvdbIds();
-        Dictionary<int, int> SeriesTvdbIds(List<int> tvdbIds);
         Dictionary<int, string> AllSeriesPaths();
         Dictionary<int, List<int>> AllSeriesTags();
         Dictionary<int, int> AllSeriesQualityProfiles();
@@ -94,12 +93,6 @@ namespace NzbDrone.Core.Tv
                 var strSql = "SELECT \"Id\" AS Key, \"TvdbId\" AS Value FROM \"Series\"";
                 return conn.Query<KeyValuePair<int, int>>(strSql).ToDictionary(x => x.Key, x => x.Value);
             }
-        }
-
-        public Dictionary<int, int> SeriesTvdbIds(List<int> tvdbIds)
-        {
-            var result = Query(s => tvdbIds.Contains(s.TvdbId));
-            return result.ToDictionary(x => x.Id, x => x.TvdbId);
         }
 
         public Dictionary<int, string> AllSeriesPaths()

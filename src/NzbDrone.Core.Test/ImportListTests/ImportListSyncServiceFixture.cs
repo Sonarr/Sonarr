@@ -97,8 +97,8 @@ namespace NzbDrone.Core.Test.ImportListTests
             var mockImportList = new Mock<IImportList>();
 
             Mocker.GetMock<ISeriesService>()
-                .Setup(v => v.SeriesTvdbIds(It.IsAny<List<int>>()))
-                .Returns(new Dictionary<int, int>());
+                  .Setup(v => v.AllSeriesTvdbIds())
+                  .Returns(new Dictionary<int, int>());
 
             Mocker.GetMock<ISeriesService>()
                 .Setup(v => v.GetAllSeries())
@@ -161,8 +161,8 @@ namespace NzbDrone.Core.Test.ImportListTests
         private void WithExistingSeries()
         {
             Mocker.GetMock<ISeriesService>()
-                .Setup(v => v.SeriesTvdbIds(It.IsAny<List<int>>()))
-                .Returns(new Dictionary<int, int> { { 1, _list1Series.First().TvdbId } });
+                  .Setup(v => v.AllSeriesTvdbIds())
+                  .Returns(new Dictionary<int, int> { { 1, _list1Series.First().TvdbId } });
         }
 
         private void WithExcludedSeries()
