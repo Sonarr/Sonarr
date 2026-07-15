@@ -286,48 +286,52 @@ namespace NzbDrone.Core.ImportLists
 
         private void QueueTagsOnPendingSeries(ImportListDefinition importList, Dictionary<int, HashSet<int>> existingSeriesToUpdate, int existingSeriesId)
         {
-            if (importList.TagExisting && importList.Tags.Count > 0)
+            if (!importList.TagExisting || importList.Tags.Count > 0)
             {
-                if (existingSeriesToUpdate.TryGetValue(existingSeriesId, out var tagsToAdd))
+                return;
+            }
+
+            if (existingSeriesToUpdate.TryGetValue(existingSeriesId, out var tagsToAdd))
+            {
+                foreach (var importListTag in importList.Tags)
                 {
-                    foreach (var importListTag in importList.Tags)
-                    {
-                        tagsToAdd.Add(importListTag);
-                    }
+                    tagsToAdd.Add(importListTag);
                 }
-                else
-                {
-                    existingSeriesToUpdate.Add(existingSeriesId, new HashSet<int>(importList.Tags));
-                }
+            }
+            else
+            {
+                existingSeriesToUpdate.Add(existingSeriesId, new HashSet<int>(importList.Tags));
             }
         }
 
         private void UpdateTagsOnPendingSeries(Dictionary<int, HashSet<int>> existingSeriesToUpdate)
         {
-            if (existingSeriesToUpdate.Count > 0)
+            if (existingSeriesToUpdate.Count == 0)
             {
-                var possibleSeriesToUpdate = _seriesService.GetSeries(existingSeriesToUpdate.Keys);
-                var seriesWithUpdatedTags = new List<Series>();
+                return;
+            }
 
-                foreach (var series in possibleSeriesToUpdate)
+            var possibleSeriesToUpdate = _seriesService.GetSeries(existingSeriesToUpdate.Keys);
+            var seriesWithUpdatedTags = new List<Series>();
+
+            foreach (var series in possibleSeriesToUpdate)
+            {
+                var tags = existingSeriesToUpdate[series.Id];
+                var currentTagsCount = series.Tags.Count;
+
+                foreach (var tag in tags)
                 {
-                    var tags = existingSeriesToUpdate[series.Id];
-                    var currentTagsCount = series.Tags.Count;
-
-                    foreach (var tag in tags)
-                    {
-                        series.Tags.Add(tag);
-                    }
-
-                    if (currentTagsCount != series.Tags.Count)
-                    {
-                        _logger.Debug("{0} [{1}] tagged existing series", series.TvdbId, series.Title);
-                        seriesWithUpdatedTags.Add(series);
-                    }
+                    series.Tags.Add(tag);
                 }
 
-                _seriesService.UpdateTags(seriesWithUpdatedTags);
+                if (currentTagsCount != series.Tags.Count)
+                {
+                    _logger.Debug("{0} [{1}] tagged existing series", series.TvdbId, series.Title);
+                    seriesWithUpdatedTags.Add(series);
+                }
             }
+
+            _seriesService.UpdateTags(seriesWithUpdatedTags);
         }
 
         public void Execute(ImportListSyncCommand message)
