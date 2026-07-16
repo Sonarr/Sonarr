@@ -285,7 +285,7 @@ namespace NzbDrone.Core.ImportLists
 
         private void QueueTagsOnPendingSeries(ImportListDefinition importList, Dictionary<int, HashSet<int>> existingSeriesToUpdate, int existingSeriesId)
         {
-            if (!importList.TagExisting || importList.Tags.Count > 0)
+            if (!importList.TagExisting || importList.Tags.Count == 0)
             {
                 return;
             }
