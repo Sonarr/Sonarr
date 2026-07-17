@@ -200,7 +200,7 @@ namespace NzbDrone.Core.Tv
 
         private void UpdateTags(Series series)
         {
-            var tagsUpdated = _seriesService.UpdateAutotaggingTags(series);
+            var tagsUpdated = _seriesService.UpdateAutoTaggingTags(series);
 
             if (tagsUpdated)
             {

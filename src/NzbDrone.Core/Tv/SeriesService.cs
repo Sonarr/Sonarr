@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Tv
         List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder);
         bool SeriesPathExists(string folder);
         void RemoveAddOptions(Series series);
-        bool UpdateAutotaggingTags(Series series);
+        bool UpdateAutoTaggingTags(Series series);
         void UpdateTags(List<Series> series);
     }
 
@@ -223,7 +223,7 @@ namespace NzbDrone.Core.Tv
 
             // Never update AddOptions when updating a series, keep it the same as the existing stored series.
             series.AddOptions = storedSeries.AddOptions;
-            UpdateAutotaggingTags(series);
+            UpdateAutoTaggingTags(series);
 
             var updatedSeries = _seriesRepository.Update(series);
             if (publishUpdatedEvent)
@@ -253,7 +253,7 @@ namespace NzbDrone.Core.Tv
                     _logger.Trace("Not changing path for: {0}", s.Title);
                 }
 
-                UpdateAutotaggingTags(s);
+                UpdateAutoTaggingTags(s);
             }
 
             _seriesRepository.UpdateMany(series);
@@ -273,7 +273,7 @@ namespace NzbDrone.Core.Tv
             _seriesRepository.SetFields(series, s => s.AddOptions);
         }
 
-        public bool UpdateAutotaggingTags(Series series)
+        public bool UpdateAutoTaggingTags(Series series)
         {
             _logger.Trace("Updating tags for {0}", series);
 
@@ -313,7 +313,13 @@ namespace NzbDrone.Core.Tv
 
         public void UpdateTags(List<Series> series)
         {
+            if (series.Count == 0)
+            {
+                return;
+            }
+
             _seriesRepository.SetFields(series, s => s.Tags);
+            _eventAggregator.PublishEvent(new SeriesBulkEditedEvent(series));
         }
     }
 }
