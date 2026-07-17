@@ -9,6 +9,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { kinds } from 'Helpers/Props';
@@ -19,6 +20,10 @@ import {
   useImportListsData,
   useSortedImportLists,
 } from 'Settings/ImportLists/ImportLists/useImportLists';
+import {
+  setManageImportListsSort,
+  useManageImportListsOptions,
+} from 'Settings/ImportLists/useManageImportListsOptionsStore';
 import { CheckInputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
@@ -27,7 +32,7 @@ import ManageImportListsModalRow from './ManageImportListsModalRow';
 import TagsModal from './Tags/TagsModal';
 import styles from './ManageImportListsModalContent.css';
 
-const COLUMNS = [
+const COLUMNS: Column[] = [
   {
     name: 'name',
     label: () => translate('Name'),
@@ -85,7 +90,11 @@ function ManageImportListsModalContentInner(
 ) {
   const { onModalClose } = props;
 
-  const { data, isFetching, isFetched, error } = useSortedImportLists();
+  const { sortKey, sortDirection } = useManageImportListsOptions();
+  const { data, isFetching, isFetched, error } = useSortedImportLists(
+    sortKey,
+    sortDirection
+  );
 
   const { isDeleting, bulkDeleteImportLists } = useBulkDeleteImportLists();
   const { isSaving, bulkEditImportLists } = useBulkEditImportLists();
@@ -173,6 +182,10 @@ function ManageImportListsModalContentInner(
     [selectAll, unselectAll]
   );
 
+  const onSortPress = useCallback((value: string) => {
+    setManageImportListsSort({ sortKey: value });
+  }, []);
+
   const errorMessage = getErrorMessage(error, 'Unable to load import lists.');
 
   return (
@@ -194,7 +207,10 @@ function ManageImportListsModalContentInner(
             selectAll={true}
             allSelected={allSelected}
             allUnselected={allUnselected}
+            sortKey={sortKey}
+            sortDirection={sortDirection}
             onSelectAllChange={onSelectAllChange}
+            onSortPress={onSortPress}
           >
             <TableBody>
               {data.map((item) => {

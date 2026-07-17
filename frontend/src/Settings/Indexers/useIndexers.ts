@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import useApiMutation from 'Helpers/Hooks/useApiMutation';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 import {
   SelectedSchema,
   useProviderSchema,
@@ -13,8 +14,8 @@ import {
   useProviderSettings,
 } from 'Settings/useProviderSettings';
 import Provider from 'typings/Provider';
-import { sortByProp } from 'Utilities/Array/sortByProp';
 import { ApiError } from 'Utilities/Fetch/fetchJson';
+import clientSideFilterAndSort from 'Utilities/Filter/clientSideFilterAndSort';
 import translate from 'Utilities/String/translate';
 
 export interface IndexerModel extends Provider {
@@ -63,12 +64,31 @@ export const useIndexersData = () => {
   return data;
 };
 
-export const useSortedIndexers = () => {
+const SORT_PREDICATES = {
+  name: (item: IndexerModel) => item.name.toLowerCase(),
+  protocol: (item: IndexerModel) =>
+    item.protocol === 'usenet' ? 'nzb' : item.protocol,
+};
+
+export const useSortedIndexers = (
+  sortKey: keyof IndexerModel = 'name',
+  sortDirection: SortDirection = 'ascending'
+) => {
   const result = useIndexers();
 
   const sortedData = useMemo(
-    () => [...result.data].sort(sortByProp('name')),
-    [result.data]
+    () =>
+      clientSideFilterAndSort<IndexerModel, never, typeof SORT_PREDICATES>(
+        result.data,
+        {
+          sortKey,
+          sortDirection,
+          secondarySortKey: 'name',
+          secondarySortDirection: 'ascending',
+          sortPredicates: SORT_PREDICATES,
+        }
+      ).data,
+    [result.data, sortKey, sortDirection]
   );
 
   return {
