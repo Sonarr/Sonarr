@@ -109,6 +109,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)(?:(?<!\b[0]\d+))(?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+|[-]))[. ]-[. ](?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+|[-]))(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>[(\[]\w{8}[)\]])?(?:$|\.mkv)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Anime - [SubGroup] Title (Season only)
+                new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ])?(?<title>.+?)[-_. ]+?[\[(](?:S|Season|Saison|Series|Stagione)[-_. ]?(?<season>\d{1,2}(?![-_. ]?\d+))(?:[-_. )\]]|$)+(?<extras>EXTRAS|SUBPACK)?(?!\\)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 // Anime - [SubGroup] Title Absolute Episode Number
                 new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)[-_. ]+\(?(?:[-_. ]?#?(?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+|-[a-z]+)))+\)?(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>[(\[]\w{8}[)\]])?(?:$|\.mkv)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -436,10 +440,6 @@ namespace NzbDrone.Core.Parser
 
                 // Extant, terrible multi-episode naming (extant.10708.hdtv-lol.mp4)
                 new Regex(@"^(?<title>.+?)[-_. ](?<season>[0]?\d?)(?:(?<episode>\d{2}){2}(?!\d+))[-_. ]",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
-                // Season only releases for poorly named anime
-                new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ])?(?<title>.+?)[-_. ]+?[\[(](?:S|Season|Saison|Series|Stagione)[-_. ]?(?<season>\d{1,2}(?![-_. ]?\d+))(?:[-_. )\]]|$)+(?<extras>EXTRAS|SUBPACK)?(?!\\)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Episodes without a title, Single episode numbers (S1E1, 1x1)
