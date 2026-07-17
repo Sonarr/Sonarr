@@ -31,6 +31,14 @@ jobs:
             const pr = context.payload.pull_request;
             const body = pr.body || "";
             const branch = pr.head.ref || "";
+            const labels = pr.labels || [];
+
+            const SKIP_LABEL = "autopilot: skip";
+
+            if (labels.some((l) => l.name === SKIP_LABEL)) {
+              core.info(`PR #${pr.number} has the "${SKIP_LABEL}" label; skipping autopilot checks.`);
+              return;
+            }
 
             const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
             const stripComments = (s) => (s || "").replace(/<!--[\s\S]*?-->/g, "").trim();
