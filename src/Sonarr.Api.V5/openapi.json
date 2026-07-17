@@ -10011,6 +10011,9 @@
           "minRefreshInterval": {
             "type": "string",
             "format": "date-span"
+          },
+          "tagExisting": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -12106,6 +12109,9 @@
           "airDateGracePeriod": {
             "type": "integer",
             "format": "int32"
+          },
+          "allowSeasonPackWithoutAllEpisodesAired": {
+            "type": "boolean"
           },
           "indexerIds": {
             "type": "array",
