@@ -2,11 +2,13 @@ import React, { useMemo } from 'react';
 import ModelBase from 'App/ModelBase';
 import Label from 'Components/Label';
 import Button from 'Components/Link/Button';
+import MiddleTruncate from 'Components/MiddleTruncate';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalSection from 'Components/ModalSection';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
 import { kinds } from 'Helpers/Props';
 import useSeries from 'Series/useSeries';
 import { useDownloadClientsWithIds } from 'Settings/DownloadClients/DownloadClients/useDownloadClients';
@@ -159,8 +161,12 @@ function TagDetailsModalContent({
                   <div>
                     {item.required.map((r) => {
                       return (
-                        <Label key={r} kind={kinds.SUCCESS}>
-                          {r}
+                        <Label
+                          key={r}
+                          className={settingsCardStyles.truncatedLabel}
+                          kind={kinds.SUCCESS}
+                        >
+                          <MiddleTruncate text={r} />
                         </Label>
                       );
                     })}
@@ -169,8 +175,12 @@ function TagDetailsModalContent({
                   <div>
                     {item.ignored.map((i) => {
                       return (
-                        <Label key={i} kind={kinds.DANGER}>
-                          {i}
+                        <Label
+                          key={i}
+                          className={settingsCardStyles.truncatedLabel}
+                          kind={kinds.DANGER}
+                        >
+                          <MiddleTruncate text={i} />
                         </Label>
                       );
                     })}

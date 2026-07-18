@@ -2,8 +2,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-
   padding: 5px 10px;
   width: 100%;
   cursor: default;
@@ -21,6 +19,7 @@
   composes: container from '~Components/Form/CheckInput.css';
 
   flex: 0 0 0;
+  margin-right: 8px;
 }
 
 .optionCheckInput {
