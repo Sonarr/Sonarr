@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import Icon from 'Components/Icon';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
+import StatusIndicator from 'Components/StatusIndicator';
 import VirtualTableRowCell from 'Components/Table/Cells/TableRowCell';
 import { icons } from 'Helpers/Props';
 import { SeriesStatus } from 'Series/Series';
@@ -45,22 +46,30 @@ function SeriesStatusCell({
           onPress={onMonitoredPress}
         />
       ) : (
-        <Icon
+        <StatusIndicator
           className={styles.statusIcon}
-          name={monitored ? icons.MONITORED : icons.UNMONITORED}
+          label={
+            monitored
+              ? translate('SeriesIsMonitored')
+              : translate('SeriesIsUnmonitored')
+          }
           title={
             monitored
               ? translate('SeriesIsMonitored')
               : translate('SeriesIsUnmonitored')
           }
-        />
+        >
+          <Icon name={monitored ? icons.MONITORED : icons.UNMONITORED} />
+        </StatusIndicator>
       )}
 
-      <Icon
+      <StatusIndicator
         className={styles.statusIcon}
-        name={statusDetails.icon}
+        label={statusDetails.message}
         title={`${statusDetails.title}: ${statusDetails.message}`}
-      />
+      >
+        <Icon name={statusDetails.icon} />
+      </StatusIndicator>
     </Component>
   );
 }
