@@ -58,7 +58,7 @@
   top: 0;
   right: 20px;
   margin-top: 7px;
-  width: 75px;
+  width: max-content;
   color: var(--inkFaint);
   text-align: right;
   pointer-events: none;

@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'actions': string;
+  'infoLink': string;
   'list': string;
   'name': string;
   'overlay': string;

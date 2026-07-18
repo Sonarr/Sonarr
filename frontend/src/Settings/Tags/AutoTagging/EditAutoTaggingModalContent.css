@@ -6,27 +6,68 @@
 
 .rightButtons {
   justify-content: flex-end;
-  margin-right: auto;
 }
 
 .addSpecification {
-  composes: autoTagging from '~./AutoTagging.css';
+  composes: card from '~Components/Card.css';
 
-  background-color: var(--cardAlternateBackgroundColor);
-  color: var(--gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100% !important;
+  border: 1px dashed var(--inputBorderColor);
+  background-color: transparent;
+  color: var(--inkMuted);
   text-align: center;
-  font-size: 45px;
+  transition:
+    border-color 200ms cubic-bezier(0.25, 1, 0.5, 1),
+    color 200ms cubic-bezier(0.25, 1, 0.5, 1),
+    background-color 200ms cubic-bezier(0.25, 1, 0.5, 1);
+  gap: 12px;
+
+  &:hover {
+    border-color: var(--accent);
+    background-color: var(--paperWarm);
+    box-shadow: none;
+    color: var(--accent);
+    transform: none;
+  }
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
 }
 
 .center {
-  display: inline-block;
-  padding: 5px 20px 0;
-  border: 1px solid var(--borderColor);
-  border-radius: 4px;
-  background-color: var(--cardCenterBackgroundColor);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addLabel {
+  color: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 11px;
+  font-family: var(--defaultFontFamily);
+}
+
+.conditions {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--borderColor);
+}
+
+.conditionsTitle {
+  composes: label from '~Components/Form/FormLabel.css';
+
+  margin-top: 0;
 }
 
 .autoTaggings {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
 }

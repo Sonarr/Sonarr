@@ -1,45 +1,53 @@
 .qualityProfileFormatItemContainer {
   display: flex;
-  padding: $qualityProfileItemDragSourcePadding 0;
   width: 100%;
 }
 
 .qualityProfileFormatItem {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   width: 100%;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  background: var(--inputBackgroundColor);
+  border-top: 1px solid var(--borderColor);
+  transition: background-color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    background-color: var(--paperWarm);
+  }
 }
 
 .formatNameContainer {
   display: flex;
+  align-items: center;
   flex-grow: 1;
+
   margin-bottom: 0;
-  margin-left: 14px;
+  padding: 0 16px;
+  min-height: 44px;
   width: 100%;
   font-weight: normal;
-  line-height: $qualityProfileItemHeight;
   cursor: text;
+  gap: 16px;
 }
 
 .formatName {
-  display: flex;
   flex-grow: 1;
+  color: var(--ink);
+  font-size: 13px;
 }
 
 .scoreContainer {
-  display: flex;
-  flex-grow: 0;
+  flex-shrink: 0;
 }
 
 .scoreInput {
   composes: input from '~Components/Form/Input.css';
 
-  width: 100px;
-  height: 30px;
-  border: unset;
-  border-radius: unset;
-  background-color: unset;
+  padding: 0 10px;
+
+  width: 80px;
+  height: 32px;
+  border-color: transparent;
+  background-color: transparent;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }

@@ -1,3 +1,11 @@
+.intro {
+  margin-bottom: 16px;
+  max-width: 70ch;
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
 .deleteButton {
   composes: button from '~Components/Link/Button.css';
 

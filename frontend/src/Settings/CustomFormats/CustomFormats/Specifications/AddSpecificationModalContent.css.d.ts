@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'specifications': string;
+  'wikiNote': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

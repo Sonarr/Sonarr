@@ -1,8 +1,9 @@
 import React from 'react';
 import FieldSet from 'Components/FieldSet';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import { inputTypes, sizes } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
@@ -49,47 +50,46 @@ function ProxySettings({
   ];
 
   return (
-    <FieldSet legend={translate('Proxy')}>
-      <FormGroup size={sizes.MEDIUM}>
+    <FieldSet legend={translate('Proxy')} caption={translate('ProxyCaption')}>
+      <FormRow size={sizes.MEDIUM}>
         <FormLabel>{translate('UseProxy')}</FormLabel>
 
-        <FormInputGroup
+        <FormInput
           type={inputTypes.CHECK}
           name="proxyEnabled"
           onChange={onInputChange}
           {...proxyEnabled}
         />
-      </FormGroup>
-
+      </FormRow>
       {proxyEnabled.value && (
         <div>
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('ProxyType')}</FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.SELECT}
               name="proxyType"
               values={proxyTypeOptions}
               onChange={onInputChange}
               {...proxyType}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Hostname')}</FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.TEXT}
               name="proxyHostname"
               onChange={onInputChange}
               {...proxyHostname}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Port')}</FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.NUMBER}
               name="proxyPort"
               min={1}
@@ -97,54 +97,51 @@ function ProxySettings({
               onChange={onInputChange}
               {...proxyPort}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Username')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('ProxyUsernameHelpText')} />
+            <FormInput
               type={inputTypes.TEXT}
               name="proxyUsername"
-              helpText={translate('ProxyUsernameHelpText')}
               onChange={onInputChange}
               {...proxyUsername}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Password')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('ProxyPasswordHelpText')} />
+            <FormInput
               type={inputTypes.PASSWORD}
               name="proxyPassword"
-              helpText={translate('ProxyPasswordHelpText')}
               onChange={onInputChange}
               {...proxyPassword}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('IgnoredAddresses')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('ProxyBypassFilterHelpText')} />
+            <FormInput
               type={inputTypes.TEXT}
               name="proxyBypassFilter"
-              helpText={translate('ProxyBypassFilterHelpText')}
               onChange={onInputChange}
               {...proxyBypassFilter}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup size={sizes.MEDIUM}>
+          <FormRow size={sizes.MEDIUM}>
             <FormLabel>{translate('BypassProxyForLocalAddresses')}</FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.CHECK}
               name="proxyBypassLocalAddresses"
               onChange={onInputChange}
               {...proxyBypassLocalAddresses}
             />
-          </FormGroup>
+          </FormRow>
         </div>
       )}
     </FieldSet>

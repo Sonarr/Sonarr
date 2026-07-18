@@ -246,6 +246,7 @@ function FormInputGroup<T, C extends InputType>(
         <div
           className={classNames(
             className,
+            checkInput && styles.checkInput,
             hasButton && styles.hasButtons,
             hasButton && hasError && styles.hasError,
             hasButton && hasWarning && styles.hasWarning

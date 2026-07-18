@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
-import { kinds } from 'Helpers/Props';
 import useOAuth from 'OAuth/useOAuth';
 import { InputOnChange } from 'typings/inputs';
 import { getValidationFailures } from 'Utilities/selectSettings';
@@ -61,7 +60,6 @@ function OAuthInput({
   return (
     <div>
       <SpinnerErrorButton
-        kind={kinds.PRIMARY}
         isSpinning={authorizing}
         error={error}
         onPress={handlePress}
