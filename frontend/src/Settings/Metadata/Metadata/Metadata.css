@@ -1,15 +1,14 @@
-.metadata {
-  composes: card from '~Components/Card.css';
-
-  width: 290px;
-}
-
-.name {
-  margin-bottom: 20px;
-  font-weight: 300;
-  font-size: 24px;
+.fieldSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .section {
-  margin-top: 10px;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 11px;
+  font-family: var(--defaultFontFamily);
 }

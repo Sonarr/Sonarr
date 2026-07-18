@@ -1,9 +1,8 @@
 import React from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import CheckInput from 'Components/Form/CheckInput';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
-import { inputTypes } from 'Helpers/Props';
+import FormRow from 'Components/Form/FormRow';
 import { CheckInputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
 import translate from 'Utilities/String/translate';
@@ -50,7 +49,7 @@ function NotificationEventItems({
   } = item;
 
   return (
-    <FormGroup>
+    <FormRow>
       <FormLabel>{translate('NotificationTriggers')}</FormLabel>
       <div>
         <FormInputHelpText
@@ -59,8 +58,7 @@ function NotificationEventItems({
         />
         <div className={styles.events}>
           <div>
-            <FormInputGroup
-              type={inputTypes.CHECK}
+            <CheckInput
               name="onGrab"
               helpText={translate('OnGrab')}
               isDisabled={!supportsOnGrab.value}
@@ -70,8 +68,7 @@ function NotificationEventItems({
           </div>
 
           <div>
-            <FormInputGroup
-              type={inputTypes.CHECK}
+            <CheckInput
               name="onDownload"
               helpText={translate('OnFileImport')}
               isDisabled={!supportsOnDownload.value}
@@ -82,8 +79,7 @@ function NotificationEventItems({
 
           {onDownload.value && (
             <div>
-              <FormInputGroup
-                type={inputTypes.CHECK}
+              <CheckInput
                 name="onUpgrade"
                 helpText={translate('OnFileUpgrade')}
                 isDisabled={!supportsOnUpgrade.value}
@@ -94,8 +90,7 @@ function NotificationEventItems({
           )}
 
           <div>
-            <FormInputGroup
-              type={inputTypes.CHECK}
+            <CheckInput
               name="onImportComplete"
               helpText={translate('OnImportComplete')}
               isDisabled={!supportsOnImportComplete.value}
@@ -105,8 +100,7 @@ function NotificationEventItems({
           </div>
 
           <div>
-            <FormInputGroup
-              type={inputTypes.CHECK}
+            <CheckInput
               name="onRename"
               helpText={translate('OnRename')}
               isDisabled={!supportsOnRename.value}
@@ -116,8 +110,7 @@ function NotificationEventItems({
           </div>
 
           <div>
-            <FormInputGroup
-              type={inputTypes.CHECK}
+            <CheckInput
               name="onSeriesAdd"
               helpText={translate('OnSeriesAdd')}
               isDisabled={!supportsOnSeriesAdd.value}
@@ -127,8 +120,7 @@ function NotificationEventItems({
           </div>
 
           <div>
-            <FormInputGroup
-              type={inputTypes.CHECK}
+            <CheckInput
               name="onSeriesDelete"
               helpText={translate('OnSeriesDelete')}
               isDisabled={!supportsOnSeriesDelete.value}
@@ -138,8 +130,7 @@ function NotificationEventItems({
           </div>
 
           <div>
-            <FormInputGroup
-              type={inputTypes.CHECK}
+            <CheckInput
               name="onEpisodeFileDelete"
               helpText={translate('OnEpisodeFileDelete')}
               isDisabled={!supportsOnEpisodeFileDelete.value}
@@ -150,8 +141,7 @@ function NotificationEventItems({
 
           {onEpisodeFileDelete.value && (
             <div>
-              <FormInputGroup
-                type={inputTypes.CHECK}
+              <CheckInput
                 name="onEpisodeFileDeleteForUpgrade"
                 helpText={translate('OnEpisodeFileDeleteForUpgrade')}
                 isDisabled={!supportsOnEpisodeFileDeleteForUpgrade.value}
@@ -162,8 +152,7 @@ function NotificationEventItems({
           )}
 
           <div>
-            <FormInputGroup
-              type={inputTypes.CHECK}
+            <CheckInput
               name="onHealthIssue"
               helpText={translate('OnHealthIssue')}
               isDisabled={!supportsOnHealthIssue.value}
@@ -173,8 +162,7 @@ function NotificationEventItems({
           </div>
 
           <div>
-            <FormInputGroup
-              type={inputTypes.CHECK}
+            <CheckInput
               name="onHealthRestored"
               helpText={translate('OnHealthRestored')}
               isDisabled={!supportsOnHealthRestored.value}
@@ -185,8 +173,7 @@ function NotificationEventItems({
 
           {(onHealthIssue.value || onHealthRestored.value) && (
             <div>
-              <FormInputGroup
-                type={inputTypes.CHECK}
+              <CheckInput
                 name="includeHealthWarnings"
                 helpText={translate('IncludeHealthWarnings')}
                 isDisabled={!supportsOnHealthIssue.value}
@@ -197,8 +184,7 @@ function NotificationEventItems({
           )}
 
           <div>
-            <FormInputGroup
-              type={inputTypes.CHECK}
+            <CheckInput
               name="onApplicationUpdate"
               helpText={translate('OnApplicationUpdate')}
               isDisabled={!supportsOnApplicationUpdate.value}
@@ -208,8 +194,7 @@ function NotificationEventItems({
           </div>
 
           <div>
-            <FormInputGroup
-              type={inputTypes.CHECK}
+            <CheckInput
               name="onManualInteractionRequired"
               helpText={translate('OnManualInteractionRequired')}
               isDisabled={!supportsOnManualInteractionRequired.value}
@@ -219,7 +204,7 @@ function NotificationEventItems({
           </div>
         </div>
       </div>
-    </FormGroup>
+    </FormRow>
   );
 }
 

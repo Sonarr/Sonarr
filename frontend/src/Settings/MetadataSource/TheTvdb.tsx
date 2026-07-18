@@ -1,5 +1,6 @@
 import React from 'react';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
+import SectionHeading from 'Components/SectionHeading';
 import useTheme from 'Helpers/Hooks/useTheme';
 import translate from 'Utilities/String/translate';
 import styles from './TheTvdb.css';
@@ -15,11 +16,18 @@ function TheTvdb() {
       />
 
       <div className={styles.info}>
-        <div className={styles.title}>{translate('TheTvdb')}</div>
-        <InlineMarkdown
-          data={translate('SeriesAndEpisodeInformationIsProvidedByTheTVDB', {
-            url: 'https://www.thetvdb.com/subscribe',
-          })}
+        <SectionHeading
+          title={translate('TheTvdb')}
+          description={
+            <InlineMarkdown
+              data={translate(
+                'SeriesAndEpisodeInformationIsProvidedByTheTVDB',
+                {
+                  url: 'https://www.thetvdb.com/subscribe',
+                }
+              )}
+            />
+          }
         />
       </div>
     </div>

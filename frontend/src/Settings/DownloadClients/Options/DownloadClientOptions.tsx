@@ -2,11 +2,12 @@ import React, { useCallback, useEffect } from 'react';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import { inputTypes, kinds, sizes } from 'Helpers/Props';
+import { inputTypes, kinds } from 'Helpers/Props';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
 import { InputChanged } from 'typings/inputs';
 import {
@@ -69,60 +70,63 @@ function DownloadClientOptions({
       ) : null}
 
       {hasSettings && isFetched && !error && showAdvancedSettings ? (
-        <FieldSet legend={translate('CompletedDownloadHandling')}>
+        <FieldSet
+          legend={translate('CompletedDownloadHandling')}
+          caption={translate('CompletedDownloadHandlingCaption')}
+        >
           <Form>
-            <FormGroup
-              advancedSettings={showAdvancedSettings}
-              isAdvanced={true}
-              size={sizes.MEDIUM}
-            >
+            <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
               <FormLabel>{translate('Enable')}</FormLabel>
 
-              <FormInputGroup
+              <FormInputHelpText
+                text={translate('EnableCompletedDownloadHandlingHelpText')}
+              />
+
+              <FormInput
                 type={inputTypes.CHECK}
                 name="enableCompletedDownloadHandling"
-                helpText={translate('EnableCompletedDownloadHandlingHelpText')}
                 onChange={handleInputChange}
                 {...settings.enableCompletedDownloadHandling}
               />
-            </FormGroup>
+            </FormRow>
 
-            <FormGroup
-              advancedSettings={showAdvancedSettings}
-              isAdvanced={true}
-              size={sizes.MEDIUM}
-            >
+            <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
               <FormLabel>{translate('AutoRedownloadFailed')}</FormLabel>
 
-              <FormInputGroup
+              <FormInputHelpText
+                text={translate('AutoRedownloadFailedHelpText')}
+              />
+
+              <FormInput
                 type={inputTypes.CHECK}
                 name="autoRedownloadFailed"
-                helpText={translate('AutoRedownloadFailedHelpText')}
                 onChange={handleInputChange}
                 {...settings.autoRedownloadFailed}
               />
-            </FormGroup>
+            </FormRow>
 
             {settings.autoRedownloadFailed.value ? (
-              <FormGroup
+              <FormRow
                 advancedSettings={showAdvancedSettings}
                 isAdvanced={true}
-                size={sizes.MEDIUM}
               >
                 <FormLabel>
                   {translate('AutoRedownloadFailedFromInteractiveSearch')}
                 </FormLabel>
 
-                <FormInputGroup
-                  type={inputTypes.CHECK}
-                  name="autoRedownloadFailedFromInteractiveSearch"
-                  helpText={translate(
+                <FormInputHelpText
+                  text={translate(
                     'AutoRedownloadFailedFromInteractiveSearchHelpText'
                   )}
+                />
+
+                <FormInput
+                  type={inputTypes.CHECK}
+                  name="autoRedownloadFailedFromInteractiveSearch"
                   onChange={handleInputChange}
                   {...settings.autoRedownloadFailedFromInteractiveSearch}
                 />
-              </FormGroup>
+              </FormRow>
             ) : null}
           </Form>
         </FieldSet>

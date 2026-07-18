@@ -1,12 +1,18 @@
 .name,
-.protocol,
-.enable,
-.tags,
-.priority,
-.removeCompletedDownloads,
-.removeFailedDownloads,
-.implementation {
+.implementation,
+.tags {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   word-break: break-all;
+}
+
+.protocol,
+.enable,
+.priority,
+.removeCompletedDownloads,
+.removeFailedDownloads {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  width: 1%;
+  white-space: nowrap;
 }

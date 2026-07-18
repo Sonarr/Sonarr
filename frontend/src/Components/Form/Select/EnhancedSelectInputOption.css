@@ -19,6 +19,7 @@
   composes: container from '~Components/Form/CheckInput.css';
 
   flex: 0 0 0;
+  margin-right: 8px;
 }
 
 .optionCheckInput {

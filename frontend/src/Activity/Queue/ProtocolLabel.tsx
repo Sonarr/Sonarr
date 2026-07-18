@@ -1,16 +1,21 @@
 import React from 'react';
-import Label from 'Components/Label';
+import Label, { LabelProps } from 'Components/Label';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import styles from './ProtocolLabel.css';
 
-interface ProtocolLabelProps {
+interface ProtocolLabelProps
+  extends Omit<LabelProps, 'children' | 'className'> {
   protocol: DownloadProtocol;
 }
 
-function ProtocolLabel({ protocol }: ProtocolLabelProps) {
+function ProtocolLabel({ protocol, ...otherProps }: ProtocolLabelProps) {
   const protocolName = protocol === 'usenet' ? 'nzb' : protocol;
 
-  return <Label className={styles[protocol]}>{protocolName}</Label>;
+  return (
+    <Label className={styles[protocol]} {...otherProps}>
+      {protocolName}
+    </Label>
+  );
 }
 
 export default ProtocolLabel;

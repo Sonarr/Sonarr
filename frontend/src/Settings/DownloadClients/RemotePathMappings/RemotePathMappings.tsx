@@ -26,7 +26,10 @@ function RemotePathMappings() {
   }, []);
 
   return (
-    <FieldSet legend={translate('RemotePathMappings')}>
+    <FieldSet
+      legend={translate('RemotePathMappings')}
+      caption={translate('RemotePathMappingsCaption')}
+    >
       <PageSectionContent
         errorMessage={translate('RemotePathMappingsLoadError')}
         error={error}
