@@ -1,9 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import FieldSet from 'Components/FieldSet';
-import IconButton from 'Components/Link/IconButton';
+import Link from 'Components/Link/Link';
 import PageSectionContent from 'Components/Page/PageSectionContent';
-import Scroller from 'Components/Scroller/Scroller';
-import { icons, scrollDirections } from 'Helpers/Props';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import DelayProfile from './DelayProfile';
@@ -81,75 +78,62 @@ function DelayProfiles() {
   );
 
   return (
-    <FieldSet legend={translate('DelayProfiles')}>
-      <PageSectionContent
-        errorMessage={translate('DelayProfilesLoadError')}
-        error={error}
-        isFetching={isFetching}
-        isPopulated={isPopulated}
-      >
-        <Scroller
-          className={styles.horizontalScroll}
-          scrollDirection={scrollDirections.HORIZONTAL}
-          autoFocus={false}
-        >
-          <div>
-            <div className={styles.delayProfilesHeader}>
-              <div className={styles.column}>
-                {translate('PreferredProtocol')}
-              </div>
-              <div className={styles.column}>{translate('UsenetDelay')}</div>
-              <div className={styles.column}>{translate('TorrentDelay')}</div>
-              <div className={styles.tags}>{translate('Tags')}</div>
-            </div>
+    <PageSectionContent
+      errorMessage={translate('DelayProfilesLoadError')}
+      error={error}
+      isFetching={isFetching}
+      isPopulated={isPopulated}
+    >
+      <div className={styles.headerRow}>
+        <div className={styles.colDrag} />
 
-            <div className={styles.delayProfiles}>
-              {items.map((item) => {
-                return (
-                  <DelayProfile
-                    key={item.id}
-                    {...item}
-                    tagList={tagList}
-                    isDraggingUp={isDraggingUp}
-                    isDraggingDown={isDraggingDown}
-                    onDelayProfileDragEnd={handleDelayProfileDragEnd}
-                    onDelayProfileDragMove={handleDelayProfileDragMove}
-                  />
-                );
-              })}
-            </div>
+        <div className={styles.colScope}>{translate('Tags')}</div>
 
-            {defaultProfile ? (
-              <div>
-                <DelayProfile
-                  {...defaultProfile}
-                  tagList={tagList}
-                  isDraggingDown={false}
-                  isDraggingUp={false}
-                  onDelayProfileDragEnd={handleDelayProfileDragEnd}
-                  onDelayProfileDragMove={handleDelayProfileDragMove}
-                />
-              </div>
-            ) : null}
-          </div>
-        </Scroller>
+        <div className={styles.colProto}>{translate('PreferredProtocol')}</div>
 
-        <div className={styles.addDelayProfile}>
-          <IconButton
-            className={styles.addButton}
-            name={icons.ADD}
-            aria-label={translate('AddDelayProfile')}
-            title={translate('AddDelayProfile')}
-            onPress={handleAddDelayProfilePress}
+        <div className={styles.colUsenet}>{translate('UsenetDelay')}</div>
+
+        <div className={styles.colTorrent}>{translate('TorrentDelay')}</div>
+
+        <div className={styles.colActions} />
+      </div>
+
+      <div className={styles.delayList}>
+        {items.map((item) => {
+          return (
+            <DelayProfile
+              key={item.id}
+              {...item}
+              tagList={tagList}
+              isDraggingUp={isDraggingUp}
+              isDraggingDown={isDraggingDown}
+              onDelayProfileDragEnd={handleDelayProfileDragEnd}
+              onDelayProfileDragMove={handleDelayProfileDragMove}
+            />
+          );
+        })}
+
+        {defaultProfile ? (
+          <DelayProfile
+            {...defaultProfile}
+            tagList={tagList}
+            isDraggingDown={false}
+            isDraggingUp={false}
+            onDelayProfileDragEnd={handleDelayProfileDragEnd}
+            onDelayProfileDragMove={handleDelayProfileDragMove}
           />
-        </div>
+        ) : null}
 
-        <EditDelayProfileModal
-          isOpen={isAddDelayProfileModalOpen}
-          onModalClose={handleAddDelayProfileModalClose}
-        />
-      </PageSectionContent>
-    </FieldSet>
+        <Link className={styles.addRow} onPress={handleAddDelayProfilePress}>
+          {translate('AddDelayProfile')}
+        </Link>
+      </div>
+
+      <EditDelayProfileModal
+        isOpen={isAddDelayProfileModalOpen}
+        onModalClose={handleAddDelayProfileModalClose}
+      />
+    </PageSectionContent>
   );
 }
 

@@ -1,13 +1,15 @@
 import React, { useCallback, useState } from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import ModalSection from 'Components/ModalSection';
 import { inputTypes } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
@@ -138,48 +140,51 @@ function ManageIndexersEditModalContent(
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('EditSelectedIndexers')}</ModalHeader>
-
       <ModalBody>
-        <FormGroup>
-          <FormLabel>{translate('EnableRss')}</FormLabel>
+        <ModalSection
+          title={translate('ManageIndexersEditModalContentSearchSection')}
+        >
+          <FormRow>
+            <FormLabel>{translate('EnableRss')}</FormLabel>
 
-          <FormInputGroup
-            type={inputTypes.SELECT}
-            name="enableRss"
-            value={enableRss}
-            values={enableOptions}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+            <FormInput
+              type={inputTypes.SELECT}
+              name="enableRss"
+              value={enableRss}
+              values={enableOptions}
+              onChange={onInputChange}
+            />
+          </FormRow>
 
-        <FormGroup>
-          <FormLabel>{translate('EnableAutomaticSearch')}</FormLabel>
+          <FormRow>
+            <FormLabel>{translate('EnableAutomaticSearch')}</FormLabel>
 
-          <FormInputGroup
-            type={inputTypes.SELECT}
-            name="enableAutomaticSearch"
-            value={enableAutomaticSearch}
-            values={enableOptions}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+            <FormInput
+              type={inputTypes.SELECT}
+              name="enableAutomaticSearch"
+              value={enableAutomaticSearch}
+              values={enableOptions}
+              onChange={onInputChange}
+            />
+          </FormRow>
 
-        <FormGroup>
-          <FormLabel>{translate('EnableInteractiveSearch')}</FormLabel>
+          <FormRow>
+            <FormLabel>{translate('EnableInteractiveSearch')}</FormLabel>
 
-          <FormInputGroup
-            type={inputTypes.SELECT}
-            name="enableInteractiveSearch"
-            value={enableInteractiveSearch}
-            values={enableOptions}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+            <FormInput
+              type={inputTypes.SELECT}
+              name="enableInteractiveSearch"
+              value={enableInteractiveSearch}
+              values={enableOptions}
+              onChange={onInputChange}
+            />
+          </FormRow>
+        </ModalSection>
 
-        <FormGroup>
+        <FormRow>
           <FormLabel>{translate('Priority')}</FormLabel>
 
-          <FormInputGroup
+          <FormInput
             type={inputTypes.NUMBER}
             name="priority"
             value={priority}
@@ -187,23 +192,23 @@ function ManageIndexersEditModalContent(
             max={50}
             onChange={onInputChange}
           />
-        </FormGroup>
+        </FormRow>
 
-        <FormGroup>
+        <FormRow>
           <FormLabel>{translate('MaximumSingleEpisodeAge')}</FormLabel>
-
-          <FormInputGroup
+          <FormInputHelpText
+            text={translate('MaximumSingleEpisodeAgeHelpText')}
+          />
+          <FormInput
             type={inputTypes.NUMBER}
             name="seasonSearchMaximumSingleEpisodeAge"
-            helpText={translate('MaximumSingleEpisodeAgeHelpText')}
             value={seasonSearchMaximumSingleEpisodeAge}
             min={0}
             unit="days"
             onChange={onInputChange}
           />
-        </FormGroup>
+        </FormRow>
       </ModalBody>
-
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>
           {translate('CountIndexersSelected', {

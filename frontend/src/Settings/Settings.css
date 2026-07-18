@@ -1,18 +1,93 @@
-.link {
-  composes: link from '~Components/Link/Link.css';
+.body {
+  composes: contentBody from 'Components/Page/PageContentBody.css';
+}
 
-  border-bottom: 1px solid #e5e5e5;
-  color: var(--textColor);
-  font-size: 21px;
+.section {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  width: 100%;
+  margin-inline: auto;
+  gap: 16px;
+}
+
+.pageSection {
+  margin-bottom: 48px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+
+  margin-top: 8px;
+}
+
+.card {
+  composes: link from 'Components/Link/Link.css';
+
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
+  background-color: var(--paperCard);
+  color: var(--ink);
+  text-decoration: none;
+  transition:
+    background-color 200ms cubic-bezier(0.25, 1, 0.5, 1),
+    border-color 200ms cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow 200ms cubic-bezier(0.25, 1, 0.5, 1);
+  gap: 8px;
 
   &:hover {
-    color: #616573;
+    border-color: var(--accent);
+    box-shadow:
+      0 6px 20px -8px rgba(0, 0, 0, 0.18),
+      0 2px 4px -2px rgba(0, 0, 0, 0.08);
     text-decoration: none;
   }
 }
 
-.summary {
-  margin-top: 10px;
-  margin-bottom: 30px;
-  color: var(--helpTextColor);
+.cardHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cardIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: var(--paperWarm);
+  color: var(--inkSoft);
+  transition: background-color 200ms cubic-bezier(0.25, 1, 0.5, 1), color 200ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.card:hover .cardIcon {
+  background-color: color-mix(in oklch, var(--accent) 12%, transparent);
+  color: var(--accent);
+}
+
+.cardTitle {
+  margin: 0;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: 16px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.25;
+}
+
+.cardSummary {
+  margin: 0;
+  max-width: 65ch;
+  color: var(--inkMuted);
+  font-size: 13px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.5;
 }

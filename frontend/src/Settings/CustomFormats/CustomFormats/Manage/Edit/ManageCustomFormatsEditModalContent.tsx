@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -93,17 +93,17 @@ function ManageCustomFormatsEditModalContent(
       <ModalHeader>{translate('EditSelectedCustomFormats')}</ModalHeader>
 
       <ModalBody>
-        <FormGroup>
+        <FormRow>
           <FormLabel>{translate('IncludeCustomFormatWhenRenaming')}</FormLabel>
 
-          <FormInputGroup
+          <FormInput
             type={inputTypes.SELECT}
             name="includeCustomFormatWhenRenaming"
             value={includeCustomFormatWhenRenaming}
             values={enableOptions}
             onChange={onInputChange}
           />
-        </FormGroup>
+        </FormRow>
       </ModalBody>
 
       <ModalFooter className={styles.modalFooter}>

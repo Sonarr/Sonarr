@@ -1,38 +1,63 @@
 .customFormat {
   composes: card from '~Components/Card.css';
+}
 
-  width: 300px;
+.overlay {
+  composes: overlay from '~Components/Card.css';
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .nameContainer {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 8px;
 }
 
 .name {
   @add-mixin truncate;
 
-  margin-bottom: 20px;
-  font-weight: 300;
-  font-size: 24px;
+  flex: 1 1 auto;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.rightCluster {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 4px;
+
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.customFormat:hover .rightCluster {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .rightCluster {
+    opacity: 1;
+  }
 }
 
 .cloneButton {
   composes: button from '~Components/Link/IconButton.css';
 
-  height: 36px;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
 }
 
 .labels {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 5px;
   pointer-events: all;
-}
-
-.tooltipLabel {
-  composes: label from '~Components/Label.css';
-
-  margin: 0;
-  border: none;
 }

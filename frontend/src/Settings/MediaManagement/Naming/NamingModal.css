@@ -1,35 +1,79 @@
-.groups {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
+.builder {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  padding: 16px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background-color: var(--paperWarm);
 }
 
-.namingSelectContainer {
+.formatInput {
+  composes: input from '~Components/Form/TextInput.css';
+
+  width: 100%;
+  font-family: var(--monoSpaceFontFamily);
+}
+
+.controls {
   display: flex;
-  justify-content: flex-end;
+  gap: 12px;
+
+  margin-top: 14px;
+}
+
+.control {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 5px;
+
+  min-width: 0;
+}
+
+.controlLabel {
+  color: var(--inkFaint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 11px;
 }
 
 .namingSelect {
   composes: select from '~Components/Form/SelectInput.css';
 
-  margin-left: 10px;
-  width: 200px;
+  width: 100%;
 }
 
-.footNote {
+.instruction {
   display: flex;
-  color: var(--helpTextColor);
+  align-items: center;
+  gap: 8px;
 
-  .identifier {
-    margin-top: 8px;
-    margin-right: 5px;
-    padding: 2px;
-  }
+  margin: 16px 0 10px;
 
-  code {
-    padding: 0 1px;
-    border: 1px solid var(--borderColor);
-    background-color: #f7f7f7;
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.caption {
+  margin: 0 0 12px;
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  column-gap: 16px;
+  row-gap: 2px;
+}
+
+@media only screen and (max-width: 768px) {
+  .groups {
+    grid-template-columns: 1fr;
   }
 }

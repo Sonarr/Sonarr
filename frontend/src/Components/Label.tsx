@@ -10,6 +10,7 @@ export interface LabelProps extends ComponentProps<'span'> {
   kind?: Extract<Kind, keyof typeof styles>;
   size?: Extract<Size, keyof typeof styles>;
   outline?: boolean;
+  dot?: boolean;
   icon?: IconName;
   iconFilled?: boolean;
   interactive?: boolean;
@@ -21,6 +22,7 @@ export default function Label({
   kind = kinds.DEFAULT,
   size = sizes.SMALL,
   outline = false,
+  dot = true,
   icon,
   iconFilled = false,
   interactive = false,
@@ -34,6 +36,7 @@ export default function Label({
         styles[kind],
         styles[size],
         outline && styles.outline,
+        !dot && styles.noDot,
         icon && styles.hasIcon,
         interactive && styles.interactive
       )}

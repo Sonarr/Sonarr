@@ -6,6 +6,7 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
@@ -145,6 +146,8 @@ function LogsTable() {
       </PageToolbar>
 
       <PageContentBody>
+        <PageHeading scope={translate('System')} title={translate('Events')} />
+
         {isLoading ? <LoadingIndicator /> : null}
 
         {isFetched && !error && !records.length ? (

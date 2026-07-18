@@ -1,18 +1,10 @@
 .qualityProfileItemDragSource {
-  margin: $qualityProfileItemDragSourcePadding 0;
+  margin: 0;
 }
 
 .qualityProfileItemPlaceholder {
+  margin: -1px 0;
   width: 100%;
-  /* height: $qualityProfileItemHeight; */
-  border: 1px dotted #aaa;
-  border-radius: 4px;
-}
-
-.qualityProfileItemPlaceholderBefore {
-  margin-bottom: 8px;
-}
-
-.qualityProfileItemPlaceholderAfter {
-  margin-top: 8px;
+  height: 2px;
+  background-color: var(--accent);
 }

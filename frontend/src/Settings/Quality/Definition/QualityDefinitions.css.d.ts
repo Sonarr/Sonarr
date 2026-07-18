@@ -3,9 +3,8 @@
 interface CssExports {
   'definitions': string;
   'header': string;
-  'notice': string;
-  'quality': string;
-  'title': string;
+  'headerQuality': string;
+  'headerTitle': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

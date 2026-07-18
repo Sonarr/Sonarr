@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
-import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -53,19 +52,22 @@ const COLUMNS: Column[] = [
   },
   {
     name: 'enableRss',
-    label: () => translate('EnableRss'),
+    label: () => translate('Rss'),
+    columnLabel: () => translate('EnableRss'),
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'enableAutomaticSearch',
-    label: () => translate('EnableAutomaticSearch'),
+    label: () => translate('Automatic'),
+    columnLabel: () => translate('EnableAutomaticSearch'),
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'enableInteractiveSearch',
-    label: () => translate('EnableInteractiveSearch'),
+    label: () => translate('Interactive'),
+    columnLabel: () => translate('EnableInteractiveSearch'),
     isSortable: true,
     isVisible: true,
   },
@@ -77,7 +79,8 @@ const COLUMNS: Column[] = [
   },
   {
     name: 'seasonSearchMaximumSingleEpisodeAge',
-    label: () => translate('MaximumSingleEpisodeAge'),
+    label: () => translate('MaxEpisodeAge'),
+    columnLabel: () => translate('MaximumSingleEpisodeAge'),
     isSortable: true,
     isVisible: true,
   },
@@ -208,7 +211,9 @@ function ManageIndexersModalContentInner(
         {error ? <div>{errorMessage}</div> : null}
 
         {isFetched && !error && !data.length ? (
-          <Alert kind={kinds.INFO}>{translate('NoIndexersFound')}</Alert>
+          <p className={styles.filteredMessage}>
+            {translate('NoIndexersFound')}
+          </p>
         ) : null}
 
         {isFetched && !!data.length && !isFetching && !isFetching ? (

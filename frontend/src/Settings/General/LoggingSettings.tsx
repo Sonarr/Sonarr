@@ -1,8 +1,9 @@
 import React from 'react';
 import FieldSet from 'Components/FieldSet';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import { inputTypes } from 'Helpers/Props';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
@@ -46,38 +47,41 @@ function LoggingSettings({
   const showAdvancedSettings = useShowAdvancedSettings();
 
   return (
-    <FieldSet legend={translate('Logging')}>
-      <FormGroup>
+    <FieldSet
+      legend={translate('Logging')}
+      caption={translate('LoggingCaption')}
+    >
+      <FormRow>
         <FormLabel>{translate('LogLevel')}</FormLabel>
-
-        <FormInputGroup
-          type={inputTypes.SELECT}
-          name="logLevel"
-          values={logLevelOptions}
-          helpTextWarning={
+        <FormInputHelpText
+          text={
             logLevel.value === 'trace'
               ? translate('LogLevelTraceHelpTextWarning')
               : undefined
           }
+          isWarning={true}
+        />
+        <FormInput
+          type={inputTypes.SELECT}
+          name="logLevel"
+          values={logLevelOptions}
           onChange={onInputChange}
           {...logLevel}
         />
-      </FormGroup>
-
-      <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+      </FormRow>
+      <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
         <FormLabel>{translate('LogSizeLimit')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('LogSizeLimitHelpText')} />
+        <FormInput
           type={inputTypes.NUMBER}
           name="logSizeLimit"
           min={1}
           max={10}
           unit="MB"
-          helpText={translate('LogSizeLimitHelpText')}
           onChange={onInputChange}
           {...logSizeLimit}
         />
-      </FormGroup>
+      </FormRow>
     </FieldSet>
   );
 }

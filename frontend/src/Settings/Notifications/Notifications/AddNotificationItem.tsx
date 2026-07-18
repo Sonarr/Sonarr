@@ -1,9 +1,11 @@
 import React, { useCallback } from 'react';
 import Card from 'Components/Card';
+import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
+import Link from 'Components/Link/Link';
 import Menu from 'Components/Menu/Menu';
 import MenuContent from 'Components/Menu/MenuContent';
-import { sizes } from 'Helpers/Props';
+import { icons, sizes } from 'Helpers/Props';
 import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import { NotificationModel } from '../useConnections';
@@ -45,36 +47,33 @@ function AddNotificationItem({
 
       <div className={styles.actions}>
         {hasPresets ? (
-          <span>
-            <Button size={sizes.SMALL} onPress={handleNotificationSelect}>
-              {translate('Custom')}
+          <Menu className={styles.presetsMenu} alignMenu="right">
+            <Button className={styles.presetsMenuButton} size={sizes.SMALL}>
+              {translate('Presets')}
             </Button>
 
-            <Menu className={styles.presetsMenu}>
-              <Button className={styles.presetsMenuButton} size={sizes.SMALL}>
-                {translate('Presets')}
-              </Button>
-
-              <MenuContent>
-                {presets.map((preset) => {
-                  return (
-                    <AddNotificationPresetMenuItem
-                      key={preset.name}
-                      name={preset.name}
-                      implementation={implementation}
-                      implementationName={implementationName}
-                      onPress={onNotificationSelect}
-                    />
-                  );
-                })}
-              </MenuContent>
-            </Menu>
-          </span>
+            <MenuContent>
+              {presets.map((preset) => (
+                <AddNotificationPresetMenuItem
+                  key={preset.name}
+                  name={preset.name}
+                  implementation={implementation}
+                  implementationName={implementationName}
+                  onPress={onNotificationSelect}
+                />
+              ))}
+            </MenuContent>
+          </Menu>
         ) : null}
 
-        <Button to={infoLink} size={sizes.SMALL}>
-          {translate('MoreInfo')}
-        </Button>
+        <Link
+          className={styles.infoLink}
+          to={infoLink}
+          title={translate('MoreInfo')}
+          aria-label={translate('MoreInfo')}
+        >
+          <Icon name={icons.INFO} size={18} />
+        </Link>
       </div>
     </Card>
   );

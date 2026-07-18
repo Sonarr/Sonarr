@@ -2,9 +2,10 @@ import React, { useCallback, useEffect } from 'react';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import { inputTypes, kinds } from 'Helpers/Props';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
@@ -59,75 +60,77 @@ function IndexerOptions({
   }, [hasPendingChanges, isSaving, onChildStateChange]);
 
   return (
-    <FieldSet legend={translate('Options')}>
+    <FieldSet
+      legend={translate('Options')}
+      caption={translate('IndexerOptionsCaption')}
+    >
       {isFetching ? <LoadingIndicator /> : null}
-
       {!isFetching && error ? (
         <Alert kind={kinds.DANGER}>
           {translate('IndexerOptionsLoadError')}
         </Alert>
       ) : null}
-
       {hasSettings && isFetched && !error ? (
         <Form>
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('MinimumAge')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('MinimumAgeHelpText')} />
+            <FormInput
               type={inputTypes.NUMBER}
               name="minimumAge"
               min={0}
               unit="minutes"
-              helpText={translate('MinimumAgeHelpText')}
               onChange={handleInputChange}
               {...settings.minimumAge}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Retention')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('RetentionHelpText')} />
+            <FormInput
               type={inputTypes.NUMBER}
               name="retention"
               min={0}
               unit="days"
-              helpText={translate('RetentionHelpText')}
               onChange={handleInputChange}
               {...settings.retention}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('MaximumSize')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('MaximumSizeHelpText')} />
+            <FormInput
               type={inputTypes.NUMBER}
               name="maximumSize"
               min={0}
               unit="MB"
-              helpText={translate('MaximumSizeHelpText')}
               onChange={handleInputChange}
               {...settings.maximumSize}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+          <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
             <FormLabel>{translate('RssSyncInterval')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('RssSyncIntervalHelpText')}
+              link="https://wiki.servarr.com/sonarr/faq#how-does-sonarr-find-episodes"
+            />
+            <FormInputHelpText
+              text={translate('RssSyncIntervalHelpTextWarning')}
+              isWarning={true}
+            />
+            <FormInput
               type={inputTypes.NUMBER}
               name="rssSyncInterval"
               min={0}
               max={120}
               unit="minutes"
-              helpText={translate('RssSyncIntervalHelpText')}
-              helpTextWarning={translate('RssSyncIntervalHelpTextWarning')}
-              helpLink="https://wiki.servarr.com/sonarr/faq#how-does-sonarr-find-episodes"
               onChange={handleInputChange}
               {...settings.rssSyncInterval}
             />
-          </FormGroup>
+          </FormRow>
         </Form>
       ) : null}
     </FieldSet>

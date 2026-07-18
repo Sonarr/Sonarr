@@ -2,9 +2,10 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
@@ -14,11 +15,9 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
-import useMeasure from 'Helpers/Hooks/useMeasure';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import { icons, inputTypes, kinds, sizes } from 'Helpers/Props';
+import { icons, inputTypes, kinds } from 'Helpers/Props';
 import useQualityProfileInUse from 'Settings/Profiles/Quality/useQualityProfileInUse';
-import dimensions from 'Styles/Variables/dimensions';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import QualityProfileFormatItems from './QualityProfileFormatItems';
@@ -35,8 +34,6 @@ import {
 } from './useQualityProfiles';
 import styles from './EditQualityProfileModalContent.css';
 
-const MODAL_BODY_PADDING = parseInt(dimensions.modalBodyPadding);
-
 function parseIndex(index: string): [number | null, number] {
   const split = index.split('.');
 
@@ -50,7 +47,6 @@ function parseIndex(index: string): [number | null, number] {
 interface EditQualityProfileModalContentProps {
   id?: number;
   cloneId?: number;
-  onContentHeightChange: (height: number) => void;
   onDeleteQualityProfilePress?: () => void;
   onModalClose: () => void;
 }
@@ -58,7 +54,6 @@ interface EditQualityProfileModalContentProps {
 function EditQualityProfileModalContent({
   id,
   cloneId,
-  onContentHeightChange,
   onDeleteQualityProfilePress,
   onModalClose,
 }: EditQualityProfileModalContentProps) {
@@ -83,14 +78,7 @@ function EditQualityProfileModalContent({
   const { seriesCount, importListCount } = useQualityProfileInUse(id);
   const isInUse = seriesCount !== 0 || importListCount !== 0;
 
-  const [measureHeaderRef, { height: headerHeight }] = useMeasure();
-  const [measureBodyRef, { height: bodyHeight }] = useMeasure();
-  const [measureFooterRef, { height: footerHeight }] = useMeasure();
-
   const [mode, setMode] = useState<EditQualityProfileMode>('default');
-  const [defaultBodyHeight, setDefaultBodyHeight] = useState(0);
-  const [editGroupsBodyHeight, setEditGroupsBodyHeight] = useState(0);
-  const [editSizesBodyHeight, setEditSizesBodyHeight] = useState(0);
   const [dndState, setDndState] = useState<DragMoveState>({
     dragQualityIndex: null,
     dropQualityIndex: null,
@@ -466,40 +454,6 @@ function EditQualityProfileModalContent({
   );
 
   useEffect(() => {
-    let bodyHeight = 0;
-
-    if (mode === 'default') {
-      bodyHeight = defaultBodyHeight;
-    } else if (mode === 'editGroups') {
-      bodyHeight = editGroupsBodyHeight;
-    } else if (mode === 'editSizes') {
-      bodyHeight = editSizesBodyHeight;
-    }
-
-    const padding = MODAL_BODY_PADDING * 2;
-
-    onContentHeightChange(headerHeight + bodyHeight + footerHeight + padding);
-  }, [
-    headerHeight,
-    defaultBodyHeight,
-    editGroupsBodyHeight,
-    editSizesBodyHeight,
-    footerHeight,
-    mode,
-    onContentHeightChange,
-  ]);
-
-  useEffect(() => {
-    if (mode === 'default') {
-      setDefaultBodyHeight(bodyHeight);
-    } else if (mode === 'editGroups') {
-      setEditGroupsBodyHeight(bodyHeight);
-    } else if (mode === 'editSizes') {
-      setEditSizesBodyHeight(bodyHeight);
-    }
-  }, [bodyHeight, mode]);
-
-  useEffect(() => {
     if (wasSaving && !isSaving && !saveError) {
       onModalClose();
     }
@@ -531,156 +485,130 @@ function EditQualityProfileModalContent({
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader ref={measureHeaderRef}>
+      <ModalHeader>
         {id ? translate('EditQualityProfile') : translate('AddQualityProfile')}
       </ModalHeader>
 
       <ModalBody>
-        <div ref={measureBodyRef}>
-          {isSchemaFetched ? null : <LoadingIndicator />}
+        {isSchemaFetched ? null : <LoadingIndicator />}
 
-          {!isSchemaLoading && schemaError ? (
-            <Alert kind={kinds.DANGER}>
-              {translate('AddQualityProfileError')}
-            </Alert>
-          ) : null}
+        {!isSchemaLoading && schemaError ? (
+          <Alert kind={kinds.DANGER}>
+            {translate('AddQualityProfileError')}
+          </Alert>
+        ) : null}
 
-          {isSchemaFetched && !schemaError ? (
-            <Form>
-              <div className={styles.formGroupsContainer}>
-                <div className={styles.formGroupWrapper}>
-                  <FormGroup size={sizes.EXTRA_SMALL}>
-                    <FormLabel size={sizes.SMALL}>
-                      {translate('Name')}
-                    </FormLabel>
+        {isSchemaFetched && !schemaError ? (
+          <Form>
+            <div className={styles.formGroupsContainer}>
+              <div className={styles.formGroupWrapper}>
+                <FormRow>
+                  <FormLabel>{translate('Name')}</FormLabel>
 
-                    <FormInputGroup
-                      type={inputTypes.TEXT}
-                      name="name"
-                      {...name}
-                      onChange={handleInputChange}
-                    />
-                  </FormGroup>
-
-                  <FormGroup size={sizes.EXTRA_SMALL}>
-                    <FormLabel size={sizes.SMALL}>
-                      {translate('UpgradesAllowed')}
-                    </FormLabel>
-
-                    <FormInputGroup
-                      type={inputTypes.CHECK}
-                      name="upgradeAllowed"
-                      {...upgradeAllowed}
-                      helpText={translate('UpgradesAllowedHelpText')}
-                      onChange={handleInputChange}
-                    />
-                  </FormGroup>
-
-                  {upgradeAllowed.value ? (
-                    <FormGroup size={sizes.EXTRA_SMALL}>
-                      <FormLabel size={sizes.SMALL}>
-                        {translate('UpgradeUntil')}
-                      </FormLabel>
-
-                      <FormInputGroup
-                        type={inputTypes.SELECT}
-                        name="cutoff"
-                        {...cutoff}
-                        values={qualities}
-                        helpText={translate('UpgradeUntilEpisodeHelpText')}
-                        onChange={handleCutoffChange}
-                      />
-                    </FormGroup>
-                  ) : null}
-
-                  {formatItems.value.length > 0 ? (
-                    <FormGroup size={sizes.EXTRA_SMALL}>
-                      <FormLabel size={sizes.SMALL}>
-                        {translate('MinimumCustomFormatScore')}
-                      </FormLabel>
-
-                      <FormInputGroup
-                        type={inputTypes.NUMBER}
-                        name="minFormatScore"
-                        {...minFormatScore}
-                        helpText={translate('MinimumCustomFormatScoreHelpText')}
-                        onChange={handleInputChange}
-                      />
-                    </FormGroup>
-                  ) : null}
-
-                  {upgradeAllowed.value && formatItems.value.length > 0 ? (
-                    <FormGroup size={sizes.EXTRA_SMALL}>
-                      <FormLabel size={sizes.SMALL}>
-                        {translate('UpgradeUntilCustomFormatScore')}
-                      </FormLabel>
-
-                      <FormInputGroup
-                        type={inputTypes.NUMBER}
-                        name="cutoffFormatScore"
-                        {...cutoffFormatScore}
-                        helpText={translate(
-                          'UpgradeUntilCustomFormatScoreEpisodeHelpText'
-                        )}
-                        onChange={handleInputChange}
-                      />
-                    </FormGroup>
-                  ) : null}
-
-                  {upgradeAllowed.value && formatItems.value.length > 0 ? (
-                    <FormGroup size={sizes.EXTRA_SMALL}>
-                      <FormLabel size={sizes.SMALL}>
-                        {translate('MinimumCustomFormatScoreIncrement')}
-                      </FormLabel>
-
-                      <FormInputGroup
-                        type={inputTypes.NUMBER}
-                        name="minUpgradeFormatScore"
-                        min={1}
-                        {...minUpgradeFormatScore}
-                        helpText={translate(
-                          'MinimumCustomFormatScoreIncrementHelpText'
-                        )}
-                        onChange={handleInputChange}
-                      />
-                    </FormGroup>
-                  ) : null}
-
-                  <div className={styles.formatItemLarge}>
-                    <QualityProfileFormatItems
-                      profileFormatItems={formatItems.value}
-                      errors={formatItems.errors}
-                      warnings={formatItems.warnings}
-                      onQualityProfileFormatItemScoreChange={
-                        handleFormatItemScoreChange
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div className={styles.formGroupWrapper}>
-                  <QualityProfileItems
-                    mode={mode}
-                    qualityProfileItems={items.value}
-                    errors={items.errors}
-                    warnings={items.warnings}
-                    itemFailures={itemFailures}
-                    dragQualityIndex={dragQualityIndex}
-                    dropQualityIndex={dropQualityIndex}
-                    dropPosition={dropPosition}
-                    onChangeMode={handleChangeMode}
-                    onCreateGroupPress={handleCreateGroupPress}
-                    onDeleteGroupPress={handleDeleteGroupPress}
-                    onItemAllowedChange={handleItemAllowedChange}
-                    onGroupAllowedChange={handleGroupAllowedChange}
-                    onItemGroupNameChange={handleGroupNameChange}
-                    onDragMove={handleDragMove}
-                    onDragEnd={handleDragEnd}
-                    onSizeChange={handleSizeChange}
+                  <FormInput
+                    type={inputTypes.TEXT}
+                    name="name"
+                    {...name}
+                    onChange={handleInputChange}
                   />
-                </div>
+                </FormRow>
 
-                <div className={styles.formatItemSmall}>
+                <FormRow>
+                  <FormLabel>{translate('UpgradesAllowed')}</FormLabel>
+
+                  <FormInputHelpText
+                    text={translate('UpgradesAllowedHelpText')}
+                  />
+
+                  <FormInput
+                    type={inputTypes.CHECK}
+                    name="upgradeAllowed"
+                    {...upgradeAllowed}
+                    onChange={handleInputChange}
+                  />
+                </FormRow>
+
+                {upgradeAllowed.value ? (
+                  <FormRow>
+                    <FormLabel>{translate('UpgradeUntil')}</FormLabel>
+
+                    <FormInputHelpText
+                      text={translate('UpgradeUntilEpisodeHelpText')}
+                    />
+
+                    <FormInput
+                      type={inputTypes.SELECT}
+                      name="cutoff"
+                      {...cutoff}
+                      values={qualities}
+                      onChange={handleCutoffChange}
+                    />
+                  </FormRow>
+                ) : null}
+
+                {formatItems.value.length > 0 ? (
+                  <FormRow>
+                    <FormLabel>
+                      {translate('MinimumCustomFormatScore')}
+                    </FormLabel>
+
+                    <FormInputHelpText
+                      text={translate('MinimumCustomFormatScoreHelpText')}
+                    />
+
+                    <FormInput
+                      type={inputTypes.NUMBER}
+                      name="minFormatScore"
+                      {...minFormatScore}
+                      onChange={handleInputChange}
+                    />
+                  </FormRow>
+                ) : null}
+
+                {upgradeAllowed.value && formatItems.value.length > 0 ? (
+                  <FormRow>
+                    <FormLabel>
+                      {translate('UpgradeUntilCustomFormatScore')}
+                    </FormLabel>
+
+                    <FormInputHelpText
+                      text={translate(
+                        'UpgradeUntilCustomFormatScoreEpisodeHelpText'
+                      )}
+                    />
+
+                    <FormInput
+                      type={inputTypes.NUMBER}
+                      name="cutoffFormatScore"
+                      {...cutoffFormatScore}
+                      onChange={handleInputChange}
+                    />
+                  </FormRow>
+                ) : null}
+
+                {upgradeAllowed.value && formatItems.value.length > 0 ? (
+                  <FormRow>
+                    <FormLabel>
+                      {translate('MinimumCustomFormatScoreIncrement')}
+                    </FormLabel>
+
+                    <FormInputHelpText
+                      text={translate(
+                        'MinimumCustomFormatScoreIncrementHelpText'
+                      )}
+                    />
+
+                    <FormInput
+                      type={inputTypes.NUMBER}
+                      name="minUpgradeFormatScore"
+                      min={1}
+                      {...minUpgradeFormatScore}
+                      onChange={handleInputChange}
+                    />
+                  </FormRow>
+                ) : null}
+
+                <div className={styles.formatItemLarge}>
                   <QualityProfileFormatItems
                     profileFormatItems={formatItems.value}
                     errors={formatItems.errors}
@@ -691,12 +619,45 @@ function EditQualityProfileModalContent({
                   />
                 </div>
               </div>
-            </Form>
-          ) : null}
-        </div>
+
+              <div className={styles.qualitiesColumn}>
+                <QualityProfileItems
+                  mode={mode}
+                  qualityProfileItems={items.value}
+                  errors={items.errors}
+                  warnings={items.warnings}
+                  itemFailures={itemFailures}
+                  dragQualityIndex={dragQualityIndex}
+                  dropQualityIndex={dropQualityIndex}
+                  dropPosition={dropPosition}
+                  onChangeMode={handleChangeMode}
+                  onCreateGroupPress={handleCreateGroupPress}
+                  onDeleteGroupPress={handleDeleteGroupPress}
+                  onItemAllowedChange={handleItemAllowedChange}
+                  onGroupAllowedChange={handleGroupAllowedChange}
+                  onItemGroupNameChange={handleGroupNameChange}
+                  onDragMove={handleDragMove}
+                  onDragEnd={handleDragEnd}
+                  onSizeChange={handleSizeChange}
+                />
+              </div>
+
+              <div className={styles.formatItemSmall}>
+                <QualityProfileFormatItems
+                  profileFormatItems={formatItems.value}
+                  errors={formatItems.errors}
+                  warnings={formatItems.warnings}
+                  onQualityProfileFormatItemScoreChange={
+                    handleFormatItemScoreChange
+                  }
+                />
+              </div>
+            </div>
+          </Form>
+        ) : null}
       </ModalBody>
 
-      <ModalFooter ref={measureFooterRef}>
+      <ModalFooter>
         {id ? (
           <div
             className={styles.deleteButtonContainer}

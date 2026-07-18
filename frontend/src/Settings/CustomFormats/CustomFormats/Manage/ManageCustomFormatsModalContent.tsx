@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
-import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -171,7 +170,9 @@ function ManageCustomFormatsModalContentInner({
       <ModalHeader>{translate('ManageCustomFormats')}</ModalHeader>
       <ModalBody>
         {sortedItems.length === 0 ? (
-          <Alert kind={kinds.INFO}>{translate('NoCustomFormatsFound')}</Alert>
+          <p className={styles.filteredMessage}>
+            {translate('NoCustomFormatsFound')}
+          </p>
         ) : (
           <Table
             columns={COLUMNS}

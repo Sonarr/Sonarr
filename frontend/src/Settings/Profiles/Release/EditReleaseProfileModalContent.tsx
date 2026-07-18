@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect } from 'react';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import ModalSection from 'Components/ModalSection';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { inputTypes, kinds } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
@@ -77,158 +79,167 @@ function EditReleaseProfileModalContent({
       <ModalHeader>
         {id ? translate('EditReleaseProfile') : translate('AddReleaseProfile')}
       </ModalHeader>
-
       <ModalBody>
         <Form
           validationErrors={validationErrors}
           validationWarnings={validationWarnings}
         >
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Name')}</FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.TEXT}
               name="name"
               {...name}
               placeholder={translate('OptionalName')}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('EnableProfile')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('EnableProfileHelpText')} />
+            <FormInput
               type={inputTypes.CHECK}
               name="enabled"
-              helpText={translate('EnableProfileHelpText')}
               {...enabled}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
-            <FormLabel>{translate('MustContain')}</FormLabel>
-
-            <FormInputGroup
-              {...required}
-              inputClassName={styles.tagInternalInput}
-              type={inputTypes.TEXT_TAG}
-              name="required"
-              helpText={translate('MustContainHelpText')}
-              kind={kinds.SUCCESS}
-              placeholder={translate('AddNewRestriction')}
-              delimiters={tagInputDelimiters}
-              canEdit={true}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <FormLabel>{translate('MustNotContain')}</FormLabel>
-
-            <FormInputGroup
-              {...ignored}
-              inputClassName={styles.tagInternalInput}
-              type={inputTypes.TEXT_TAG}
-              name="ignored"
-              helpText={translate('MustNotContainHelpText')}
-              kind={kinds.DANGER}
-              placeholder={translate('AddNewRestriction')}
-              delimiters={tagInputDelimiters}
-              canEdit={true}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <FormLabel>{translate('AirDateRestriction')}</FormLabel>
-
-            <FormInputGroup
-              {...airDateRestriction}
-              type={inputTypes.CHECK}
-              name="airDateRestriction"
-              helpText={translate('AirDateRestrictionHelpText')}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
-
-          {airDateRestriction.value ? (
-            <FormGroup>
-              <FormLabel>{translate('AirDateGracePeriod')}</FormLabel>
-
-              <FormInputGroup
-                {...airDateGracePeriod}
-                type={inputTypes.NUMBER}
-                unit="days"
-                name="airDateGracePeriod"
-                helpText={translate('AirDateGracePeriodHelpText')}
+          <ModalSection title={translate('ProfileSectionPatterns')}>
+            <FormRow>
+              <FormLabel>{translate('MustContain')}</FormLabel>
+              <FormInputHelpText text={translate('MustContainHelpText')} />
+              <FormInput
+                {...required}
+                inputClassName={styles.tagInternalInput}
+                type={inputTypes.TEXT_TAG}
+                name="required"
+                kind={kinds.SUCCESS}
+                placeholder={translate('AddNewRestriction')}
+                delimiters={tagInputDelimiters}
+                canEdit={true}
                 onChange={handleInputChange}
               />
-            </FormGroup>
-          ) : null}
+            </FormRow>
 
-          <FormGroup>
-            <FormLabel>
-              {translate('AllowSeasonPackWithoutAllEpisodesAired')}
-            </FormLabel>
+            <FormRow>
+              <FormLabel>{translate('MustNotContain')}</FormLabel>
+              <FormInputHelpText text={translate('MustNotContainHelpText')} />
+              <FormInput
+                {...ignored}
+                inputClassName={styles.tagInternalInput}
+                type={inputTypes.TEXT_TAG}
+                name="ignored"
+                kind={kinds.DANGER}
+                placeholder={translate('AddNewRestriction')}
+                delimiters={tagInputDelimiters}
+                canEdit={true}
+                onChange={handleInputChange}
+              />
+            </FormRow>
 
-            <FormInputGroup
-              {...allowSeasonPackWithoutAllEpisodesAired}
-              type={inputTypes.CHECK}
-              name="allowSeasonPackWithoutAllEpisodesAired"
-              helpText={translate(
-                'AllowSeasonPackWithoutAllEpisodesAiredHelpText'
-              )}
-              helpTextWarning={translate(
-                'AllowSeasonPackWithoutAllEpisodesAiredHelpTextWarning'
-              )}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+            <FormRow>
+              <FormLabel>{translate('AirDateRestriction')}</FormLabel>
+              <FormInputHelpText
+                text={translate('AirDateRestrictionHelpText')}
+              />
+              <FormInput
+                {...airDateRestriction}
+                type={inputTypes.CHECK}
+                name="airDateRestriction"
+                onChange={handleInputChange}
+              />
+            </FormRow>
 
-          <FormGroup>
-            <FormLabel>{translate('Indexer')}</FormLabel>
+            {airDateRestriction.value ? (
+              <FormRow>
+                <FormLabel>{translate('AirDateGracePeriod')}</FormLabel>
+                <FormInputHelpText
+                  text={translate('AirDateGracePeriodHelpText')}
+                />
+                <FormInput
+                  {...airDateGracePeriod}
+                  type={inputTypes.NUMBER}
+                  unit="days"
+                  name="airDateGracePeriod"
+                  onChange={handleInputChange}
+                />
+              </FormRow>
+            ) : null}
 
-            <FormInputGroup
-              type={inputTypes.INDEXER_SELECT}
-              name="indexerIds"
-              helpText={translate('ReleaseProfileIndexerHelpText')}
-              helpTextWarning={translate(
-                'ReleaseProfileIndexerHelpTextWarning'
-              )}
-              {...indexerIds}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+            <FormRow>
+              <FormLabel>
+                {translate('AllowSeasonPackWithoutAllEpisodesAired')}
+              </FormLabel>
+              <FormInputHelpText
+                text={translate(
+                  'AllowSeasonPackWithoutAllEpisodesAiredHelpText'
+                )}
+              />
+              <FormInputHelpText
+                text={translate(
+                  'AllowSeasonPackWithoutAllEpisodesAiredHelpTextWarning'
+                )}
+                isWarning={true}
+              />
+              <FormInput
+                {...allowSeasonPackWithoutAllEpisodesAired}
+                type={inputTypes.CHECK}
+                name="allowSeasonPackWithoutAllEpisodesAired"
+                onChange={handleInputChange}
+              />
+            </FormRow>
+          </ModalSection>
 
-          <FormGroup>
-            <FormLabel>{translate('Tags')}</FormLabel>
+          <ModalSection title={translate('ProfileSectionScope')}>
+            <FormRow>
+              <FormLabel>{translate('Indexer')}</FormLabel>
+              <FormInputHelpText
+                text={translate('ReleaseProfileIndexerHelpText')}
+              />
+              <FormInputHelpText
+                text={translate('ReleaseProfileIndexerHelpTextWarning')}
+                isWarning={true}
+              />
+              <FormInput
+                type={inputTypes.INDEXER_SELECT}
+                name="indexerIds"
+                {...indexerIds}
+                onChange={handleInputChange}
+              />
+            </FormRow>
 
-            <FormInputGroup
-              type={inputTypes.TAG}
-              name="tags"
-              helpText={translate('ReleaseProfileTagSeriesHelpText')}
-              {...tags}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+            <FormRow>
+              <FormLabel>{translate('Tags')}</FormLabel>
+              <FormInputHelpText
+                text={translate('ReleaseProfileTagSeriesHelpText')}
+              />
+              <FormInput
+                type={inputTypes.TAG}
+                name="tags"
+                {...tags}
+                onChange={handleInputChange}
+              />
+            </FormRow>
 
-          <FormGroup>
-            <FormLabel>{translate('ExcludedTags')}</FormLabel>
-
-            <FormInputGroup
-              type={inputTypes.TAG}
-              name="excludedTags"
-              helpText={translate('ReleaseProfileExcludedTagSeriesHelpText')}
-              kind={kinds.DANGER}
-              {...excludedTags}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+            <FormRow>
+              <FormLabel>{translate('ExcludedTags')}</FormLabel>
+              <FormInputHelpText
+                text={translate('ReleaseProfileExcludedTagSeriesHelpText')}
+              />
+              <FormInput
+                type={inputTypes.TAG}
+                name="excludedTags"
+                kind={kinds.DANGER}
+                {...excludedTags}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+          </ModalSection>
         </Form>
       </ModalBody>
-
       <ModalFooter>
         {id ? (
           <Button
