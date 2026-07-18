@@ -1,12 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import useMeasure from 'react-use-measure';
-import FormGroup from 'Components/Form/FormGroup';
+import React, { MouseEvent, useCallback, useMemo } from 'react';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
-import FormLabel from 'Components/Form/FormLabel';
-import Icon from 'Components/Icon';
 import Label from 'Components/Label';
-import Button from 'Components/Link/Button';
-import { icons, kinds, sizes } from 'Helpers/Props';
+import { kinds, sizes } from 'Helpers/Props';
 import { Failure } from 'typings/pending';
 import translate from 'Utilities/String/translate';
 import QualityProfileItemDragSource, {
@@ -31,6 +26,11 @@ interface QualityProfileItemsProps
   onChangeMode: (mode: EditQualityProfileMode) => void;
 }
 
+interface ModeOption {
+  key: EditQualityProfileMode;
+  label: string;
+}
+
 function QualityProfileItems({
   mode,
   dropQualityIndex,
@@ -42,124 +42,39 @@ function QualityProfileItems({
   onChangeMode,
   ...otherProps
 }: QualityProfileItemsProps) {
-  const [measureRef, { height: measuredHeight }] = useMeasure();
-  const [defaultHeight, setDefaultHeight] = useState(0);
-  const [editGroupsHeight, setEditGroupsHeight] = useState(0);
-  const [editSizesHeight, setEditSizesHeight] = useState(0);
-
   const isDragging = dropQualityIndex !== null;
   const isDraggingUp = isDragging && dropPosition === 'above';
   const isDraggingDown = isDragging && dropPosition === 'below';
 
-  const height = useMemo(() => {
-    if (mode === 'default' && defaultHeight > 0) {
-      return defaultHeight;
-    } else if (mode === 'editGroups' && editGroupsHeight > 0) {
-      return editGroupsHeight;
-    } else if (mode === 'editSizes' && editSizesHeight > 0) {
-      return editSizesHeight;
-    }
+  const modeOptions: ModeOption[] = useMemo(
+    () => [
+      { key: 'default', label: translate('Qualities') },
+      { key: 'editGroups', label: translate('Groups') },
+      { key: 'editSizes', label: translate('Sizes') },
+    ],
+    []
+  );
 
-    return 'auto';
-  }, [mode, defaultHeight, editGroupsHeight, editSizesHeight]);
+  const handleSelectMode = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      const next = event.currentTarget.dataset
+        .modeKey as EditQualityProfileMode;
 
-  const handleEditGroupsPress = useCallback(() => {
-    onChangeMode('editGroups');
-  }, [onChangeMode]);
-
-  const handleEditSizesPress = useCallback(() => {
-    onChangeMode('editSizes');
-  }, [onChangeMode]);
-
-  const handleDefaultModePress = useCallback(() => {
-    onChangeMode('default');
-  }, [onChangeMode]);
-
-  useEffect(() => {
-    if (mode === 'default') {
-      setDefaultHeight(measuredHeight);
-    } else if (mode === 'editGroups') {
-      setEditGroupsHeight(measuredHeight);
-    } else if (mode === 'editSizes') {
-      setEditSizesHeight(measuredHeight);
-    }
-  }, [mode, measuredHeight]);
+      if (next) {
+        onChangeMode(next);
+      }
+    },
+    [onChangeMode]
+  );
 
   return (
-    <FormGroup size={sizes.EXTRA_SMALL}>
-      <FormLabel size={sizes.SMALL}>{translate('Qualities')}</FormLabel>
-
-      <div>
-        <FormInputHelpText text={translate('QualitiesHelpText')} />
-
-        {errors.map((error, index) => {
-          return (
-            <FormInputHelpText
-              key={index}
-              text={error.message}
-              isError={true}
-              isCheckInput={false}
-            />
-          );
-        })}
-
-        {warnings.map((warning, index) => {
-          return (
-            <FormInputHelpText
-              key={index}
-              text={warning.message}
-              isWarning={true}
-              isCheckInput={false}
-            />
-          );
-        })}
-
-        <div className={styles.modeActions}>
-          <Button
-            className={styles.editGroupsButton}
-            kind={kinds.PRIMARY}
-            onPress={
-              mode === 'editGroups'
-                ? handleDefaultModePress
-                : handleEditGroupsPress
-            }
-          >
-            <div>
-              <Icon
-                className={styles.editButtonIcon}
-                name={mode === 'editGroups' ? icons.REORDER : icons.GROUP}
-              />
-
-              {mode === 'editGroups'
-                ? translate('DoneEditingGroups')
-                : translate('EditGroups')}
-            </div>
-          </Button>
-
-          <Button
-            className={styles.editSizesButton}
-            kind={kinds.PRIMARY}
-            onPress={
-              mode === 'editSizes'
-                ? handleDefaultModePress
-                : handleEditSizesPress
-            }
-          >
-            <div>
-              <Icon
-                className={styles.editButtonIcon}
-                name={mode === 'editSizes' ? icons.REORDER : icons.FILE}
-              />
-
-              {mode === 'editSizes'
-                ? translate('DoneEditingSizes')
-                : translate('EditSizes')}
-            </div>
-          </Button>
+    <div className={styles.qualitiesSection} data-size={sizes.EXTRA_SMALL}>
+      <div className={styles.headingRow}>
+        <div className={styles.headingCluster}>
+          <h3 className={styles.heading}>{translate('Qualities')}</h3>
 
           {itemFailures.size > 0 ? (
             <Label
-              className={styles.editSizesBadge}
               kind={kinds.DANGER}
               size={sizes.MEDIUM}
               title={translate('QualityProfileItemFailureCount', {
@@ -171,61 +86,99 @@ function QualityProfileItems({
           ) : null}
         </div>
 
-        <div
-          ref={measureRef}
-          className={styles.qualities}
-          style={{ minHeight: `${height}px` }}
-        >
-          {qualityProfileItems
-            .map((item, index) => {
-              if ('quality' in item) {
-                const { quality, allowed, minSize, maxSize, preferredSize } =
-                  item;
+        <div className={styles.modeCluster} role="group">
+          {modeOptions.map((option) => {
+            const isActive = mode === option.key;
+            return (
+              <button
+                key={option.key}
+                type="button"
+                className={isActive ? styles.modeCellActive : styles.modeCell}
+                data-mode-key={option.key}
+                aria-pressed={isActive}
+                onClick={handleSelectMode}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-                return (
-                  <QualityProfileItemDragSource
-                    key={item.quality.id}
-                    {...otherProps}
-                    mode={mode}
-                    groupId={undefined}
-                    qualityId={quality.id}
-                    name={quality.name}
-                    allowed={allowed}
-                    minSize={minSize}
-                    maxSize={maxSize}
-                    preferredSize={preferredSize}
-                    failures={getItemFailures(itemFailures, index)}
-                    qualityIndex={`${index + 1}`}
-                    isInGroup={false}
-                    isDraggingUp={isDraggingUp}
-                    isDraggingDown={isDraggingDown}
-                  />
-                );
-              }
+      <FormInputHelpText text={translate('QualitiesHelpText')} />
 
-              const { id, name, allowed, items } = item;
+      {errors.map((error, index) => {
+        return (
+          <FormInputHelpText
+            key={index}
+            text={error.message}
+            isError={true}
+            isCheckInput={false}
+          />
+        );
+      })}
+
+      {warnings.map((warning, index) => {
+        return (
+          <FormInputHelpText
+            key={index}
+            text={warning.message}
+            isWarning={true}
+            isCheckInput={false}
+          />
+        );
+      })}
+
+      <div className={styles.qualities}>
+        {qualityProfileItems
+          .map((item, index) => {
+            if ('quality' in item) {
+              const { quality, allowed, minSize, maxSize, preferredSize } =
+                item;
 
               return (
                 <QualityProfileItemDragSource
-                  key={id}
+                  key={item.quality.id}
                   {...otherProps}
                   mode={mode}
-                  groupId={id}
-                  qualityId={undefined}
-                  name={name}
+                  groupId={undefined}
+                  qualityId={quality.id}
+                  name={quality.name}
                   allowed={allowed}
-                  items={items}
-                  itemFailures={itemFailures}
+                  minSize={minSize}
+                  maxSize={maxSize}
+                  preferredSize={preferredSize}
+                  failures={getItemFailures(itemFailures, index)}
                   qualityIndex={`${index + 1}`}
+                  isInGroup={false}
                   isDraggingUp={isDraggingUp}
                   isDraggingDown={isDraggingDown}
                 />
               );
-            })
-            .reverse()}
-        </div>
+            }
+
+            const { id, name, allowed, items } = item;
+
+            return (
+              <QualityProfileItemDragSource
+                key={id}
+                {...otherProps}
+                mode={mode}
+                groupId={id}
+                qualityId={undefined}
+                name={name}
+                allowed={allowed}
+                items={items}
+                itemFailures={itemFailures}
+                qualityIndex={`${index + 1}`}
+                isDraggingUp={isDraggingUp}
+                isDraggingDown={isDraggingDown}
+              />
+            );
+          })
+          .reverse()}
       </div>
-    </FormGroup>
+    </div>
   );
 }
 

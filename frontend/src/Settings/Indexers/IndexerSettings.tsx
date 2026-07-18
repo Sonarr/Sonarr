@@ -1,9 +1,12 @@
 import React, { useCallback, useRef, useState } from 'react';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
+import SectionHeading from 'Components/SectionHeading';
 import { icons } from 'Helpers/Props';
+import settingsStyles from 'Settings/Settings.css';
 import SettingsPage from 'Settings/SettingsPage';
 import {
   SaveCallback,
@@ -87,17 +90,31 @@ function IndexerSettings() {
       onSavePress={handleSavePress}
     >
       <PageContentBody>
-        <Indexers />
+        <div className={settingsStyles.section}>
+          <PageHeading
+            scope={translate('Settings')}
+            title={translate('Indexers')}
+          />
 
-        <IndexerOptions
-          setChildSave={handleSetChildSave}
-          onChildStateChange={handleChildStateChange}
-        />
+          <div className={settingsStyles.pageSection}>
+            <SectionHeading
+              title={translate('Indexers')}
+              description={translate('IndexersSectionDescription')}
+            />
 
-        <ManageIndexersModal
-          isOpen={isManageIndexersModalOpen}
-          onModalClose={handleManageIndexersModalClose}
-        />
+            <Indexers />
+          </div>
+
+          <IndexerOptions
+            setChildSave={handleSetChildSave}
+            onChildStateChange={handleChildStateChange}
+          />
+
+          <ManageIndexersModal
+            isOpen={isManageIndexersModalOpen}
+            onModalClose={handleManageIndexersModalClose}
+          />
+        </div>
       </PageContentBody>
     </SettingsPage>
   );

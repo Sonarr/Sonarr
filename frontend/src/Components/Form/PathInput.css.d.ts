@@ -2,9 +2,11 @@
 // Please do not change this file!
 interface CssExports {
   'fileBrowserButton': string;
+  'fileBrowserGroup': string;
   'fileBrowserMiddleButton': string;
   'hasFileBrowser': string;
   'inputWrapper': string;
+  'pathInput': string;
   'pathMatch': string;
 }
 export const cssExports: CssExports;

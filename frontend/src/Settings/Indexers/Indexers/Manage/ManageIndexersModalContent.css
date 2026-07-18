@@ -1,8 +1,16 @@
+.filteredMessage {
+  margin-top: 10px;
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
 .leftButtons,
 .rightButtons {
   display: flex;
   flex: 1 0 50%;
   flex-wrap: wrap;
+  gap: 10px;
 }
 
 .rightButtons {

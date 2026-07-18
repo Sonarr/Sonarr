@@ -1,6 +1,10 @@
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
+import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
+import Tooltip from 'Components/Tooltip/Tooltip';
+import { icons, tooltipPositions } from 'Helpers/Props';
 import { Size } from 'Helpers/Props/sizes';
 import TokenCase from './TokenCase';
 import TokenSeparator from './TokenSeparator';
@@ -12,7 +16,7 @@ interface NamingOptionProps {
   example: string;
   tokenCase: TokenCase;
   isFullFilename?: boolean;
-  footNotes?: string;
+  notes?: string[];
   size?: Extract<Size, keyof typeof styles>;
   onPress: ({
     isFullFilename,
@@ -30,7 +34,7 @@ function NamingOption(props: NamingOptionProps) {
     example,
     tokenCase,
     isFullFilename = false,
-    footNotes,
+    notes,
     size = 'small',
     onPress,
   } = props;
@@ -50,27 +54,47 @@ function NamingOption(props: NamingOptionProps) {
   }, [token, tokenCase, tokenSeparator, isFullFilename, onPress]);
 
   return (
-    <Link
+    <div
       className={classNames(
         styles.option,
         styles[size],
         styles[tokenCase],
         isFullFilename && styles.isFullFilename
       )}
-      onPress={handlePress}
     >
-      <div className={styles.token}>{token.replace(/ /g, tokenSeparator)}</div>
+      <Link className={styles.insert} onPress={handlePress}>
+        <div className={styles.token}>
+          {token.replace(/ /g, tokenSeparator)}
+        </div>
 
-      <div className={styles.example}>
-        {example.replace(/ /g, tokenSeparator)}
+        <div className={styles.example}>
+          {example.replace(/ /g, tokenSeparator)}
+        </div>
 
-        {footNotes ? (
-          <div className={styles.footNotes}>
-            <sup>{footNotes}</sup>
+        {isFullFilename ? null : (
+          <div className={styles.action}>
+            <Icon name={icons.ADD} size={13} />
           </div>
-        ) : null}
-      </div>
-    </Link>
+        )}
+      </Link>
+
+      {notes?.length ? (
+        <Tooltip
+          className={styles.note}
+          anchor={<Icon name={icons.INFO} size={13} />}
+          tooltip={
+            <div className={styles.noteBody}>
+              {notes.map((note, index) => (
+                <p key={index}>
+                  <InlineMarkdown data={note} />
+                </p>
+              ))}
+            </div>
+          }
+          position={tooltipPositions.TOP}
+        />
+      ) : null}
+    </div>
   );
 }
 

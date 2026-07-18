@@ -1,7 +1,7 @@
 .row {
   display: grid;
   align-items: start;
-  padding: 24px 0;
+  padding: 16px 0;
   column-gap: 32px;
 }
 

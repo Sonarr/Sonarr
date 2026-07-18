@@ -1,9 +1,8 @@
 import React, { useCallback, useRef, useState } from 'react';
-import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -11,7 +10,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
-import { inputTypes, kinds, sizes } from 'Helpers/Props';
+import { inputTypes, sizes } from 'Helpers/Props';
 import Field from 'typings/Field';
 import { InputChanged } from 'typings/inputs';
 import { ValidationError } from 'typings/pending';
@@ -150,22 +149,21 @@ function ImportCustomFormatModalContent({
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('ImportCustomFormat')}</ModalHeader>
-
       <ModalBody>
         <div>
           {isSchemaLoading ? <LoadingIndicator /> : null}
 
           {!isSchemaLoading && schemaError ? (
-            <Alert kind={kinds.DANGER}>
+            <p className={styles.error}>
               {translate('CustomFormatsLoadError')}
-            </Alert>
+            </p>
           ) : null}
 
           {!isSchemaLoading && !schemaError ? (
             <Form>
-              <FormGroup size={sizes.MEDIUM}>
+              <FormRow size={sizes.MEDIUM}>
                 <FormLabel>{translate('CustomFormatJson')}</FormLabel>
-                <FormInputGroup
+                <FormInput
                   key={0}
                   inputClassName={styles.input}
                   type={inputTypes.TEXT_AREA}
@@ -175,12 +173,11 @@ function ImportCustomFormatModalContent({
                   errors={parseError ? [parseError] : []}
                   onChange={handleChange}
                 />
-              </FormGroup>
+              </FormRow>
             </Form>
           ) : null}
         </div>
       </ModalBody>
-
       <ModalFooter>
         <Button onPress={onModalClose}>{translate('Cancel')}</Button>
         <SpinnerErrorButton

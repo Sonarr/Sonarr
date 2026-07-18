@@ -2,8 +2,6 @@ import classNames from 'classnames';
 import React, { useRef } from 'react';
 import { DragSourceMonitor, useDrag, useDrop, XYCoord } from 'react-dnd';
 import DragType from 'Helpers/DragType';
-import useMeasure from 'Helpers/Hooks/useMeasure';
-import { qualityProfileItemHeight } from 'Styles/Variables/dimensions';
 import QualityProfileItem from './QualityProfileItem';
 import { ItemFailures, ItemFailuresMap } from './qualityProfileItemFailures';
 import QualityProfileItemGroup from './QualityProfileItemGroup';
@@ -25,7 +23,6 @@ interface DragItem {
   isGroup: boolean;
   name: string;
   allowed: boolean;
-  height: number;
 }
 
 interface ItemProps {
@@ -93,70 +90,57 @@ function QualityProfileItemDragSource({
   ...otherProps
 }: QualityProfileItemDragSourceProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [measureRef, { height }] = useMeasure();
+  const itemRef = useRef<HTMLDivElement | null>(null);
+  const lastMoveRef = useRef<string | null>(null);
 
-  const [{ isOver, dragHeight }, dropRef] = useDrop<
-    DragItem,
-    void,
-    { isOver: boolean; dragHeight: number }
-  >({
+  const [{ isOver }, dropRef] = useDrop<DragItem, void, { isOver: boolean }>({
     accept: DragType.QualityProfileItem,
     collect(monitor) {
       return {
-        isOver: monitor.isOver(),
-        dragHeight: monitor.getItem()?.height ?? qualityProfileItemHeight,
+        isOver: monitor.isOver({ shallow: true }),
       };
     },
     hover(item: DragItem, monitor) {
-      if (!ref.current) {
+      if (!itemRef.current || !monitor.isOver({ shallow: true })) {
+        lastMoveRef.current = null;
         return;
       }
 
       const { qualityIndex: dragQualityIndex, isGroup: isDragGroup } = item;
-
       const dropQualityIndex = qualityIndex;
       const isDropGroupItem = !!(qualityId && groupId);
 
-      const hoverBoundingRect = ref.current?.getBoundingClientRect();
-      const hoverHeight = hoverBoundingRect.bottom - hoverBoundingRect.top;
-
-      // Smooth out updates when dragging down and the size grows to avoid flickering
-      const hoverMiddleY = Math.max(hoverHeight - height, height) / 2;
-
-      const clientOffset = monitor.getClientOffset();
-      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-
-      // If we're hovering over a child don't trigger on the parent
-      if (!monitor.isOver({ shallow: true })) {
-        return;
-      }
-
-      // Don't show targets for dropping on self
       if (dragQualityIndex === dropQualityIndex) {
         return;
       }
 
-      // Don't allow a group to be dropped inside a group
       if (isDragGroup && isDropGroupItem) {
         return;
       }
 
+      const rect = itemRef.current.getBoundingClientRect();
+      const deadZone = rect.height * 0.15;
+      const offsetY = (monitor.getClientOffset() as XYCoord).y - rect.top;
+
       let dropPosition: 'above' | 'below' | null = null;
 
-      // Determine drop position based on position over target
-      if (hoverClientY > hoverMiddleY) {
+      if (offsetY > rect.height / 2 + deadZone) {
         dropPosition = 'below';
-      } else if (hoverClientY < hoverMiddleY) {
+      } else if (offsetY < rect.height / 2 - deadZone) {
         dropPosition = 'above';
       } else {
         return;
       }
 
-      onDragMove({
-        dragQualityIndex,
-        dropQualityIndex,
-        dropPosition,
-      });
+      const moveKey = `${dropQualityIndex}:${dropPosition}`;
+
+      if (lastMoveRef.current === moveKey) {
+        return;
+      }
+
+      lastMoveRef.current = moveKey;
+
+      onDragMove({ dragQualityIndex, dropQualityIndex, dropPosition });
     },
   });
 
@@ -175,13 +159,13 @@ function QualityProfileItemDragSource({
         isGroup: !qualityId,
         name,
         allowed,
-        height,
       };
     },
     collect: (monitor: DragSourceMonitor<unknown, unknown>) => ({
       isDragging: monitor.isDragging(),
     }),
     end: (_item: DragItem, monitor) => {
+      lastMoveRef.current = null;
       onDragEnd(monitor.didDrop());
     },
   });
@@ -194,18 +178,10 @@ function QualityProfileItemDragSource({
   return (
     <div ref={ref} className={classNames(styles.qualityProfileItemDragSource)}>
       {isBefore ? (
-        <div
-          className={classNames(
-            styles.qualityProfileItemPlaceholder,
-            styles.qualityProfileItemPlaceholderBefore
-          )}
-          style={{
-            height: dragHeight,
-          }}
-        />
+        <div className={styles.qualityProfileItemPlaceholder} />
       ) : null}
 
-      <div ref={measureRef}>
+      <div ref={itemRef}>
         {'items' in otherProps && groupId ? (
           <QualityProfileItemGroup
             {...otherProps}
@@ -228,6 +204,7 @@ function QualityProfileItemDragSource({
             {...otherProps}
             dragRef={dragRef}
             mode={mode}
+            groupId={groupId}
             qualityId={qualityId}
             name={name}
             allowed={allowed}
@@ -237,15 +214,7 @@ function QualityProfileItemDragSource({
       </div>
 
       {isAfter ? (
-        <div
-          className={classNames(
-            styles.qualityProfileItemPlaceholder,
-            styles.qualityProfileItemPlaceholderAfter
-          )}
-          style={{
-            height: dragHeight,
-          }}
-        />
+        <div className={styles.qualityProfileItemPlaceholder} />
       ) : null}
     </div>
   );

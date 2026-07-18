@@ -4,7 +4,7 @@
 }
 
 .upToDateIcon {
-  color: #37bc9b;
+  color: var(--successColor);
   font-size: 30px;
 }
 
@@ -30,11 +30,12 @@
   align-items: center;
   margin-bottom: 10px;
   padding-bottom: 5px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--borderColor);
 }
 
 .version {
-  font-size: 21px;
+  font-weight: 600;
+  font-size: var(--largeFontSize);
 }
 
 .space {

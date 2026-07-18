@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -78,29 +79,33 @@ function EditImportListExclusionModalContent({
           validationErrors={validationErrors}
           validationWarnings={validationWarnings}
         >
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Title')}</FormLabel>
 
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('SeriesTitleToExcludeHelpText')}
+            />
+
+            <FormInput
               type={inputTypes.TEXT}
               name="title"
-              helpText={translate('SeriesTitleToExcludeHelpText')}
               {...title}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('TvdbId')}</FormLabel>
 
-            <FormInputGroup
+            <FormInputHelpText text={translate('TvdbIdExcludeHelpText')} />
+
+            <FormInput
               type={inputTypes.NUMBER}
               name="tvdbId"
-              helpText={translate('TvdbIdExcludeHelpText')}
               {...tvdbId}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
         </Form>
       </ModalBody>
 

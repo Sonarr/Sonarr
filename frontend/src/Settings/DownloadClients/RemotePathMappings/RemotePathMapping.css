@@ -1,6 +1,8 @@
 .remotePathMapping {
   display: flex;
   align-items: stretch;
+  gap: 16px;
+
   margin-bottom: 10px;
   height: 30px;
   border-bottom: 1px solid var(--borderColor);

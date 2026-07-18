@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
-import Card from 'Components/Card';
+import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
+import Link from 'Components/Link/Link';
 import Menu from 'Components/Menu/Menu';
 import MenuContent from 'Components/Menu/MenuContent';
-import { sizes } from 'Helpers/Props';
+import { icons, sizes } from 'Helpers/Props';
 import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import AddDownloadClientPresetMenuItem from './AddDownloadClientPresetMenuItem';
@@ -32,51 +33,50 @@ function AddDownloadClientItem({
   }, [implementation, implementationName, onDownloadClientSelect]);
 
   return (
-    <Card
-      className={styles.downloadClient}
-      overlayClassName={styles.overlay}
-      overlayContent={true}
-      aria-label={translate('AddDownloadClientImplementation', {
-        implementationName,
-      })}
-      onPress={handleDownloadClientSelect}
-    >
-      <div className={styles.name}>{implementationName}</div>
+    <div className={styles.downloadClient}>
+      <Link
+        className={styles.underlay}
+        aria-label={translate('AddDownloadClientImplementation', {
+          implementationName,
+        })}
+        onPress={handleDownloadClientSelect}
+      />
 
-      <div className={styles.actions}>
-        {hasPresets ? (
-          <span>
-            <Button size={sizes.SMALL} onPress={handleDownloadClientSelect}>
-              {translate('Custom')}
-            </Button>
+      <div className={styles.overlay}>
+        <div className={styles.name}>{implementationName}</div>
 
-            <Menu className={styles.presetsMenu}>
+        <div className={styles.actions}>
+          {hasPresets ? (
+            <Menu className={styles.presetsMenu} alignMenu="right">
               <Button className={styles.presetsMenuButton} size={sizes.SMALL}>
                 {translate('Presets')}
               </Button>
 
               <MenuContent>
-                {presets.map((preset) => {
-                  return (
-                    <AddDownloadClientPresetMenuItem
-                      key={preset.name}
-                      name={preset.name}
-                      implementation={implementation}
-                      implementationName={implementationName}
-                      onPress={onDownloadClientSelect}
-                    />
-                  );
-                })}
+                {presets.map((preset) => (
+                  <AddDownloadClientPresetMenuItem
+                    key={preset.name}
+                    name={preset.name}
+                    implementation={implementation}
+                    implementationName={implementationName}
+                    onPress={onDownloadClientSelect}
+                  />
+                ))}
               </MenuContent>
             </Menu>
-          </span>
-        ) : null}
+          ) : null}
 
-        <Button to={infoLink} size={sizes.SMALL}>
-          {translate('MoreInfo')}
-        </Button>
+          <Link
+            className={styles.infoLink}
+            to={infoLink}
+            title={translate('MoreInfo')}
+            aria-label={translate('MoreInfo')}
+          >
+            <Icon name={icons.INFO} size={18} />
+          </Link>
+        </div>
       </div>
-    </Card>
+    </div>
   );
 }
 

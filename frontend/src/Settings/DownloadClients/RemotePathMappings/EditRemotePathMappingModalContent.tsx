@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -92,43 +93,52 @@ function EditRemotePathMappingModalContent({
           validationErrors={validationErrors}
           validationWarnings={validationWarnings}
         >
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Host')}</FormLabel>
 
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('RemotePathMappingHostHelpText')}
+            />
+
+            <FormInput
               type={inputTypes.SELECT}
               name="host"
-              helpText={translate('RemotePathMappingHostHelpText')}
               {...host}
               values={downloadClientHosts}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('RemotePath')}</FormLabel>
 
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('RemotePathMappingRemotePathHelpText')}
+            />
+
+            <FormInput
               type={inputTypes.TEXT}
               name="remotePath"
-              helpText={translate('RemotePathMappingRemotePathHelpText')}
               {...remotePath}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('LocalPath')}</FormLabel>
 
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('RemotePathMappingLocalPathHelpText')}
+            />
+
+            <FormInput
               type={inputTypes.PATH}
               name="localPath"
-              helpText={translate('RemotePathMappingLocalPathHelpText')}
               includeFiles={false}
               {...localPath}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
         </Form>
       </ModalBody>
 

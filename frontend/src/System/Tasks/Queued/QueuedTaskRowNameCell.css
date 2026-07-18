@@ -4,5 +4,5 @@
 }
 
 .userAgent {
-  color: #b0b0b0;
+  color: var(--inkMuted);
 }

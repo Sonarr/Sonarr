@@ -15,22 +15,47 @@ import {
 import AddSpecificationItem from './AddSpecificationItem';
 import styles from './AddSpecificationModalContent.css';
 
-interface AddSpecificationModalContentProps {
+type SchemaItem = AutoTaggingSpecification & {
+  infoLink?: string;
+  presets?: AutoTaggingSpecification[];
+};
+
+export interface AddSpecificationModalContentProps {
   onModalClose: (selectedSpec?: AutoTaggingSpecification) => void;
 }
 
-export default function AddSpecificationModalContent({
+function AddSpecificationModalContent({
   onModalClose,
 }: AddSpecificationModalContentProps) {
-  const { schema, isSchemaLoading, schemaError } = useAutoTaggingSchema();
+  const schemaResult = useAutoTaggingSchema();
+  const schema = schemaResult.schema as SchemaItem[];
+  const { isSchemaLoading, schemaError } = schemaResult;
 
   const onSpecificationSelect = useCallback(
-    ({ implementation }: { implementation: string }) => {
+    ({
+      implementation,
+      presetName,
+    }: {
+      implementation: string;
+      presetName?: string;
+    }) => {
       const selected = schema.find((s) => s.implementation === implementation);
 
-      if (selected) {
-        onModalClose(selected);
+      if (!selected) {
+        return;
       }
+
+      if (presetName) {
+        const preset = selected.presets?.find((p) => p.name === presetName);
+
+        if (preset) {
+          onModalClose({ ...preset });
+          return;
+        }
+      }
+
+      const { presets: _unused, ...rest } = selected;
+      onModalClose(rest as AutoTaggingSpecification);
     },
     [schema, onModalClose]
   );
@@ -51,22 +76,17 @@ export default function AddSpecificationModalContent({
         ) : null}
 
         {!isSchemaLoading && !schemaError && schema.length ? (
-          <div>
-            <Alert kind={kinds.INFO}>
-              <div>{translate('SupportedAutoTaggingProperties')}</div>
-            </Alert>
-
-            <div className={styles.specifications}>
-              {schema.map((specification) => {
-                return (
-                  <AddSpecificationItem
-                    key={specification.implementation}
-                    {...specification}
-                    onSpecificationSelect={onSpecificationSelect}
-                  />
-                );
-              })}
-            </div>
+          <div className={styles.specifications}>
+            {schema.map((specification) => (
+              <AddSpecificationItem
+                key={specification.implementation}
+                implementation={specification.implementation}
+                implementationName={specification.implementationName}
+                infoLink={specification.infoLink}
+                presets={specification.presets}
+                onSpecificationSelect={onSpecificationSelect}
+              />
+            ))}
           </div>
         ) : null}
       </ModalBody>
@@ -77,3 +97,5 @@ export default function AddSpecificationModalContent({
     </ModalContent>
   );
 }
+
+export default AddSpecificationModalContent;

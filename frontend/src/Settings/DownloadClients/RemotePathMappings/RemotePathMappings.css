@@ -1,7 +1,10 @@
 .remotePathMappingsHeader {
   display: flex;
+  align-items: center;
+  gap: 16px;
+
   margin-bottom: 10px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .host {

@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useCallback } from 'react';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
@@ -30,28 +31,28 @@ function AdvancedSettingsButton({ showLabel }: AdvancedSettingsButtonProps) {
       }
       onPress={handlePress}
     >
-      <Icon name={icons.ADVANCED_SETTINGS} size={21} />
+      <div className={styles.iconWrapper}>
+        <Icon name={icons.ADVANCED_SETTINGS} size={16} />
 
-      <span className={styles.indicatorContainer}>
-        <Icon
-          className={styles.indicatorBackground}
-          name={icons.CIRCLE}
-          size={16}
-        />
-
-        <Icon
-          className={showAdvancedSettings ? styles.enabled : styles.disabled}
-          name={showAdvancedSettings ? icons.CHECK : icons.CLOSE}
-          size={10}
-        />
-      </span>
+        <span
+          className={classNames(
+            styles.indicatorContainer,
+            showAdvancedSettings ? styles.enabled : styles.disabled
+          )}
+        >
+          <Icon
+            name={showAdvancedSettings ? icons.CHECK_CIRCLE : icons.FATAL}
+            size={9}
+          />
+        </span>
+      </div>
 
       {showLabel ? (
-        <div className={styles.label}>
+        <span className={styles.label}>
           {showAdvancedSettings
             ? translate('HideAdvanced')
             : translate('ShowAdvanced')}
-        </div>
+        </span>
       ) : null}
     </Link>
   );

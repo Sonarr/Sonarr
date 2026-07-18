@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './PageHeading.css';
 
 interface PageHeadingProps {
-  scope: string;
+  scope?: string;
   title: string;
   meta?: React.ReactNode | string[];
   subtitle?: React.ReactNode;
@@ -38,7 +38,8 @@ function PageHeading({
       <div className={styles.row}>
         <div className={styles.titleBlock}>
           <h1 className={styles.title}>
-            <span className={styles.scope}>{scope} ·</span> {title}
+            {scope ? <span className={styles.scope}>{scope} ·</span> : null}{' '}
+            {title}
           </h1>
           {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
         </div>

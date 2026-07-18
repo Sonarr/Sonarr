@@ -6,7 +6,8 @@ interface CssExports {
   'labels': string;
   'name': string;
   'nameContainer': string;
-  'tooltipLabel': string;
+  'overlay': string;
+  'rightCluster': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

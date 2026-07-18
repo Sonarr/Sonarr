@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import Card from 'Components/Card';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import SettingsCard from 'Components/SettingsCard/SettingsCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
 import { kinds } from 'Helpers/Props';
 import { useTagDetail } from 'Tags/useTagDetails';
 import { useDeleteTag } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import TagDetailsModal from './Details/TagDetailsModal';
 import TagInUse from './TagInUse';
-import styles from './Tag.css';
 
 interface TagProps {
   id: number;
@@ -68,16 +68,13 @@ function Tag({ id, label }: TagProps) {
   }, []);
 
   return (
-    <Card
-      className={styles.tag}
-      overlayContent={true}
+    <SettingsCard
+      name={label}
       aria-label={translate('TagDetails', { label })}
       onPress={handleShowDetailsPress}
     >
-      <div className={styles.label}>{label}</div>
-
       {isTagUsed ? (
-        <div>
+        <div className={settingsCardStyles.labels}>
           <TagInUse label={translate('Series')} count={seriesIds.length} />
 
           <TagInUse
@@ -121,9 +118,9 @@ function Tag({ id, label }: TagProps) {
             count={autoTagIds.length}
           />
         </div>
-      ) : null}
-
-      {!isTagUsed && <div>{translate('NoLinks')}</div>}
+      ) : (
+        <div>{translate('NoLinks')}</div>
+      )}
 
       <TagDetailsModal
         label={label}
@@ -150,7 +147,7 @@ function Tag({ id, label }: TagProps) {
         onConfirm={handleConfirmDeleteTag}
         onCancel={handleDeleteTagModalClose}
       />
-    </Card>
+    </SettingsCard>
   );
 }
 

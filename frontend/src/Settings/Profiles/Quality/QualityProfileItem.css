@@ -1,42 +1,42 @@
 .qualityProfileItem {
   display: flex;
-  align-items: stretch;
+  align-items: center;
+  padding: 7px 12px;
   width: 100%;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  background: var(--inputBackgroundColor);
+  border-top: 1px solid var(--borderColor);
+  background: transparent;
+  gap: 10px;
 
-  &.isInGroup {
-    border-style: dashed;
+  &:hover {
+    background-color: var(--paperCard);
   }
 
   &.editSizes {
+    align-items: stretch;
     flex-direction: column;
-    padding: 10px;
+    padding: 10px 12px;
   }
 }
 
 .checkInputContainer {
-  position: relative;
-  margin-right: 4px;
-  margin-bottom: 5px;
-  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .checkInput {
   composes: input from '~Components/Form/CheckInput.css';
-
-  margin-top: 5px;
 }
 
 .qualityNameContainer {
   display: flex;
+  align-items: center;
   flex-grow: 1;
-  margin-bottom: 0;
-  margin-left: 2px;
+  margin: 0;
+  min-width: 0;
   font-weight: normal;
-  line-height: $qualityProfileItemHeight;
   cursor: pointer;
+  gap: 10px;
 
   &.editSizes {
     cursor: default;
@@ -44,25 +44,32 @@
 }
 
 .qualityName {
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.3;
+
   &.isInGroup {
     margin-left: 14px;
+    color: var(--inkMuted);
   }
 
   &.notAllowed {
-    color: #c6c6c6;
+    color: var(--inkFaint);
   }
 }
 
 .createGroupButton {
   composes: button from '~Components/Link/IconButton.css';
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
-  margin-right: 5px;
-  margin-left: 8px;
-  width: 20px;
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.qualityProfileItem:hover .createGroupButton {
+  opacity: 1;
 }
 
 .dragHandle {
@@ -71,8 +78,8 @@
   justify-content: center;
   flex-shrink: 0;
   margin-left: auto;
-  width: $dragHandleWidth;
-  text-align: center;
+  width: 28px;
+  color: var(--inkFaint);
   cursor: grab;
 }
 
@@ -81,7 +88,7 @@
 }
 
 .isDragging {
-  opacity: 0.25;
+  opacity: 0.4;
 }
 
 .isPreview {

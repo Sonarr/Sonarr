@@ -2,12 +2,12 @@
 // Please do not change this file!
 interface CssExports {
   'actions': string;
+  'infoLink': string;
   'name': string;
   'overlay': string;
   'presetsMenu': string;
   'presetsMenuButton': string;
   'specification': string;
-  'underlay': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

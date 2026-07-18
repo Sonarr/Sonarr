@@ -4,6 +4,7 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
@@ -99,6 +100,11 @@ function LogFiles({
         />
       </PageToolbar>
       <PageContentBody>
+        <PageHeading
+          scope={translate('System')}
+          title={translate('LogFiles')}
+        />
+
         <Alert>
           <div>
             {translate('LogFilesLocation', {

@@ -1,9 +1,14 @@
 .downloadClient {
-  composes: card from '~Components/Card.css';
-
   position: relative;
-  width: 300px;
-  height: 100px;
+  border-bottom: 1px solid var(--hairline);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &:hover {
+    background-color: var(--tableRowHoverBackgroundColor);
+  }
 }
 
 .underlay {
@@ -11,27 +16,37 @@
 }
 
 .overlay {
-  @add-mixin linkOverlay;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 
-  padding: 10px;
+  padding: 12px var(--modalBodyPadding);
+  pointer-events: none;
+  user-select: none;
+
+  & a,
+  & button {
+    pointer-events: all;
+  }
 }
 
 .name {
-  text-align: center;
-  font-weight: lighter;
-  font-size: 24px;
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--ink);
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .actions {
-  margin-top: 20px;
-  text-align: right;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .presetsMenu {
   composes: menu from '~Components/Menu/Menu.css';
-
-  display: inline-block;
-  margin: 0 5px;
 }
 
 .presetsMenuButton {
@@ -40,5 +55,15 @@
   &::after {
     margin-left: 5px;
     content: '\25BE';
+  }
+}
+
+.infoLink {
+  display: inline-flex;
+  align-items: center;
+  color: var(--inkFaint);
+
+  &:hover {
+    color: var(--ink);
   }
 }

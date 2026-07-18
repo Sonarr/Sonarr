@@ -1,5 +1,11 @@
+.wikiNote {
+  margin: 0 0 12px;
+  color: var(--inkMuted);
+  font-size: 13px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.55;
+}
+
 .specifications {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  margin: 0 calc(var(--modalBodyPadding) * -1);
 }

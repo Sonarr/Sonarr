@@ -1,12 +1,14 @@
 import classNames from 'classnames';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { DragSourceMonitor, useDrag, useDrop, XYCoord } from 'react-dnd';
+import Card from 'Components/Card';
 import Icon from 'Components/Icon';
+import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import DragType from 'Helpers/DragType';
-import { icons, kinds } from 'Helpers/Props';
+import { icons, kinds, sizes } from 'Helpers/Props';
 import { Tag } from 'Tags/useTags';
 import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
@@ -173,50 +175,67 @@ function DelayProfile({
 
   return (
     <div ref={id === 1 ? undefined : ref}>
-      {isBefore ? (
-        <div
-          className={classNames(styles.placeholder, styles.placeholderBefore)}
-        />
-      ) : null}
+      {isBefore ? <div className={styles.placeholder} /> : null}
 
-      <div
+      <Card
         className={classNames(
           styles.delayProfile,
+          id === 1 && styles.isDefault,
           isDragging && styles.isDragging
         )}
+        overlayClassName={styles.overlay}
+        overlayContent={true}
+        aria-label={translate('EditDelayProfile')}
+        onPress={handleEditDelayProfilePress}
       >
-        <div className={styles.column}>{preferred}</div>
-        <div className={styles.column}>
-          {getDelay(enableUsenet, usenetDelay)}
-        </div>
-        <div className={styles.column}>
-          {getDelay(enableTorrent, torrentDelay)}
-        </div>
-
-        <TagList tags={tags} tagList={tagList} />
-
-        <div className={styles.actions}>
-          <IconButton
-            name={icons.EDIT}
-            className={id === 1 ? styles.editButton : undefined}
-            aria-label={translate('EditDelayProfile')}
-            title={translate('EditDelayProfile')}
-            onPress={handleEditDelayProfilePress}
-          />
-
+        <div className={styles.colDrag}>
           {id === 1 ? null : (
             <div ref={dragRef} className={styles.dragHandle}>
-              <Icon className={styles.dragIcon} name={icons.REORDER} />
+              <Icon name={icons.REORDER} />
             </div>
           )}
         </div>
-      </div>
 
-      {isAfter ? (
-        <div
-          className={classNames(styles.placeholder, styles.placeholderAfter)}
-        />
-      ) : null}
+        <div className={styles.colScope}>
+          {id === 1 ? (
+            <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
+              {translate('Default')}
+            </Label>
+          ) : null}
+
+          {tags.length ? (
+            <TagList tags={tags} tagList={tagList} />
+          ) : (
+            <span className={styles.anyText}>{translate('Any')}</span>
+          )}
+        </div>
+
+        <div className={styles.colProto}>{preferred}</div>
+
+        <div className={styles.colUsenet}>
+          <span className={styles.colLabel}>{translate('UsenetDelay')}</span>
+          {getDelay(enableUsenet, usenetDelay)}
+        </div>
+
+        <div className={styles.colTorrent}>
+          <span className={styles.colLabel}>{translate('TorrentDelay')}</span>
+          {getDelay(enableTorrent, torrentDelay)}
+        </div>
+
+        <div className={styles.colActions}>
+          {id === 1 ? null : (
+            <IconButton
+              className={styles.actionButton}
+              title={translate('DeleteDelayProfile')}
+              aria-label={translate('DeleteDelayProfile')}
+              name={icons.DELETE}
+              onPress={handleDeleteDelayProfilePress}
+            />
+          )}
+        </div>
+      </Card>
+
+      {isAfter ? <div className={styles.placeholder} /> : null}
 
       <EditDelayProfileModal
         id={id}

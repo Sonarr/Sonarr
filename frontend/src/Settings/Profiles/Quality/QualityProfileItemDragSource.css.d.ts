@@ -3,8 +3,6 @@
 interface CssExports {
   'qualityProfileItemDragSource': string;
   'qualityProfileItemPlaceholder': string;
-  'qualityProfileItemPlaceholderAfter': string;
-  'qualityProfileItemPlaceholderBefore': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

@@ -2,10 +2,11 @@ import React, { FocusEvent, useCallback, useState } from 'react';
 import CommandNames from 'Commands/CommandNames';
 import { useExecuteCommand } from 'Commands/useCommands';
 import FieldSet from 'Components/FieldSet';
-import FormGroup from 'Components/Form/FormGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormInputButton from 'Components/Form/FormInputButton';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Icon from 'Components/Icon';
 import ClipboardButton from 'Components/Link/ClipboardButton';
@@ -145,83 +146,86 @@ function SecuritySettings({
     authenticationMethod && authenticationMethod.value !== 'none';
 
   return (
-    <FieldSet legend={translate('Security')}>
-      <FormGroup>
+    <FieldSet
+      legend={translate('Security')}
+      caption={translate('SecurityCaption')}
+    >
+      <FormRow>
         <FormLabel>{translate('Authentication')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('AuthenticationMethodHelpText')} />
+        <FormInputHelpText
+          text={translate('AuthenticationRequiredWarning')}
+          isWarning={true}
+        />
+        <FormInput
           type={inputTypes.SELECT}
           name="authenticationMethod"
           values={authenticationMethodOptions}
-          helpText={translate('AuthenticationMethodHelpText')}
-          helpTextWarning={translate('AuthenticationRequiredWarning')}
           onChange={onInputChange}
           {...authenticationMethod}
         />
-      </FormGroup>
-
+      </FormRow>
       {authenticationEnabled ? (
-        <FormGroup>
+        <FormRow>
           <FormLabel>{translate('AuthenticationRequired')}</FormLabel>
-
-          <FormInputGroup
+          <FormInputHelpText
+            text={translate('AuthenticationRequiredHelpText')}
+          />
+          <FormInput
             type={inputTypes.SELECT}
             name="authenticationRequired"
             values={authenticationRequiredOptions}
-            helpText={translate('AuthenticationRequiredHelpText')}
             onChange={onInputChange}
             {...authenticationRequired}
           />
-        </FormGroup>
+        </FormRow>
       ) : null}
-
       {authenticationEnabled ? (
-        <FormGroup>
+        <FormRow>
           <FormLabel>{translate('Username')}</FormLabel>
 
-          <FormInputGroup
+          <FormInput
             type={inputTypes.TEXT}
             name="username"
             onChange={onInputChange}
             {...username}
           />
-        </FormGroup>
+        </FormRow>
       ) : null}
-
       {authenticationEnabled ? (
-        <FormGroup>
+        <FormRow>
           <FormLabel>{translate('Password')}</FormLabel>
 
-          <FormInputGroup
+          <FormInput
             type={inputTypes.PASSWORD}
             name="password"
             onChange={onInputChange}
             {...password}
           />
-        </FormGroup>
+        </FormRow>
       ) : null}
-
       {authenticationEnabled ? (
-        <FormGroup>
+        <FormRow>
           <FormLabel>{translate('PasswordConfirmation')}</FormLabel>
 
-          <FormInputGroup
+          <FormInput
             type={inputTypes.PASSWORD}
             name="passwordConfirmation"
             onChange={onInputChange}
             {...passwordConfirmation}
           />
-        </FormGroup>
+        </FormRow>
       ) : null}
-
-      <FormGroup>
+      <FormRow>
         <FormLabel>{translate('ApiKey')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText
+          text={translate('RestartRequiredHelpTextWarning')}
+          isWarning={true}
+        />
+        <FormInput
           type={inputTypes.TEXT}
           name="apiKey"
           readOnly={true}
-          helpTextWarning={translate('RestartRequiredHelpTextWarning')}
           buttons={[
             <ClipboardButton
               key="copy"
@@ -241,21 +245,18 @@ function SecuritySettings({
           onFocus={handleApikeyFocus}
           {...apiKey}
         />
-      </FormGroup>
-
-      <FormGroup>
+      </FormRow>
+      <FormRow>
         <FormLabel>{translate('CertificateValidation')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('CertificateValidationHelpText')} />
+        <FormInput
           type={inputTypes.SELECT}
           name="certificateValidation"
           values={certificateValidationOptions}
-          helpText={translate('CertificateValidationHelpText')}
           onChange={onInputChange}
           {...certificateValidation}
         />
-      </FormGroup>
-
+      </FormRow>
       <ConfirmModal
         isOpen={isConfirmApiKeyResetModalOpen}
         kind={kinds.DANGER}

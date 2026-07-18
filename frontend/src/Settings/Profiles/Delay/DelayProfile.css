@@ -1,54 +1,174 @@
 .delayProfile {
-  display: flex;
-  align-items: stretch;
-  margin-bottom: 10px;
-  height: 30px;
-  border-bottom: 1px solid var(--borderColor);
-  line-height: 30px;
-}
+  composes: card from '~Components/Card.css';
 
-.column {
-  flex: 0 0 200px;
-}
-
-.actions {
-  display: flex;
-}
-
-.dragHandle {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-left: auto;
-  width: $dragHandleWidth;
-  text-align: center;
-  cursor: grab;
+  padding: 10px 18px !important;
 }
 
-.dragIcon {
-  top: 0;
+.overlay {
+  composes: overlay from '~Components/Card.css';
+
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.isDefault {
+  background-color: color-mix(in oklch, var(--accent) 4%, var(--paperCard));
 }
 
 .isDragging {
   opacity: 0.25;
 }
 
-.editButton {
-  width: $dragHandleWidth;
-  text-align: center;
+.colDrag {
+  flex: 0 0 20px;
+}
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 28px;
+  color: var(--inkFaint);
+  opacity: 0;
+  cursor: grab;
+  transition: opacity 0.15s ease;
+  pointer-events: all;
+}
+
+.delayProfile:hover .dragHandle {
+  opacity: 1;
+}
+
+.colScope {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  padding-right: 8px;
+  min-width: 80px;
+  gap: 4px;
+}
+
+.colProto {
+  flex: 0 0 180px;
+  color: var(--inkMuted);
+  letter-spacing: 0.04em;
+  font-size: 13px;
+  font-family: var(--monoSpaceFontFamily);
+}
+
+.colUsenet {
+  flex: 0 0 120px;
+  color: var(--inkSoft);
+  letter-spacing: 0.04em;
+  font-size: 13px;
+  font-family: var(--monoSpaceFontFamily);
+}
+
+.colTorrent {
+  flex: 0 0 120px;
+  color: var(--inkSoft);
+  letter-spacing: 0.04em;
+  font-size: 13px;
+  font-family: var(--monoSpaceFontFamily);
+}
+
+.colLabel {
+  display: none;
+}
+
+.colActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 28px;
+  gap: 4px;
+
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.delayProfile:hover .colActions {
+  opacity: 1;
+}
+
+.actionButton {
+  composes: button from '~Components/Link/IconButton.css';
+
+  flex-shrink: 0;
+  margin: 0;
+  width: 28px;
+  height: 28px;
+}
+
+.anyText {
+  color: var(--inkFaint);
+  letter-spacing: 0.04em;
+  font-size: 13px;
+  font-family: var(--monoSpaceFontFamily);
+
+  &:not(:first-child) {
+    margin-left: 4px;
+  }
 }
 
 .placeholder {
-  width: 100%;
-  height: 30px;
-  border-bottom: 1px dotted #aaa;
+  height: 50px;
+  border: 1px dashed var(--accent);
+  border-radius: 12px;
+
+  &:first-child {
+    margin-bottom: 12px;
+  }
+
+  &:last-child {
+    margin-top: 12px;
+  }
 }
 
-.placeholderBefore {
-  margin-bottom: 8px;
+@media (hover: none) {
+  .dragHandle,
+  .colActions {
+    opacity: 1;
+  }
 }
 
-.placeholderAfter {
-  margin-top: 8px;
+@media only screen and (max-width: 768px) {
+  .overlay {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .colProto,
+  .colUsenet,
+  .colTorrent {
+    order: 2;
+
+    flex-basis: 100%;
+  }
+
+  .colUsenet,
+  .colTorrent {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .colActions {
+    order: 1;
+  }
+
+  .colLabel {
+    display: inline;
+    color: var(--inkMuted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+    font-size: 11px;
+    font-family: var(--defaultFontFamily);
+  }
 }

@@ -1,13 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import ModalSection from 'Components/ModalSection';
 import { inputTypes } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
@@ -125,24 +126,23 @@ function ManageDownloadClientsEditModalContent(
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('EditSelectedDownloadClients')}</ModalHeader>
-
       <ModalBody>
-        <FormGroup>
+        <FormRow>
           <FormLabel>{translate('Enabled')}</FormLabel>
 
-          <FormInputGroup
+          <FormInput
             type={inputTypes.SELECT}
             name="enable"
             value={enable}
             values={enableOptions}
             onChange={onInputChange}
           />
-        </FormGroup>
+        </FormRow>
 
-        <FormGroup>
+        <FormRow>
           <FormLabel>{translate('Priority')}</FormLabel>
 
-          <FormInputGroup
+          <FormInput
             type={inputTypes.NUMBER}
             name="priority"
             value={priority}
@@ -150,33 +150,38 @@ function ManageDownloadClientsEditModalContent(
             max={50}
             onChange={onInputChange}
           />
-        </FormGroup>
+        </FormRow>
 
-        <FormGroup>
-          <FormLabel>{translate('RemoveCompletedDownloads')}</FormLabel>
+        <ModalSection
+          title={translate(
+            'ManageDownloadClientsEditModalContentCompletedSection'
+          )}
+        >
+          <FormRow>
+            <FormLabel>{translate('RemoveCompletedDownloads')}</FormLabel>
 
-          <FormInputGroup
-            type={inputTypes.SELECT}
-            name="removeCompletedDownloads"
-            value={removeCompletedDownloads}
-            values={enableOptions}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+            <FormInput
+              type={inputTypes.SELECT}
+              name="removeCompletedDownloads"
+              value={removeCompletedDownloads}
+              values={enableOptions}
+              onChange={onInputChange}
+            />
+          </FormRow>
 
-        <FormGroup>
-          <FormLabel>{translate('RemoveFailedDownloads')}</FormLabel>
+          <FormRow>
+            <FormLabel>{translate('RemoveFailedDownloads')}</FormLabel>
 
-          <FormInputGroup
-            type={inputTypes.SELECT}
-            name="removeFailedDownloads"
-            value={removeFailedDownloads}
-            values={enableOptions}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+            <FormInput
+              type={inputTypes.SELECT}
+              name="removeFailedDownloads"
+              value={removeFailedDownloads}
+              values={enableOptions}
+              onChange={onInputChange}
+            />
+          </FormRow>
+        </ModalSection>
       </ModalBody>
-
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>
           {translate('CountDownloadClientsSelected', {

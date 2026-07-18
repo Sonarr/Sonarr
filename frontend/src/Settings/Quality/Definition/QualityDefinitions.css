@@ -1,28 +1,27 @@
 .header {
   display: flex;
-  font-weight: bold;
+  margin-top: 16px;
+  gap: 24px;
+
+  font-weight: 600;
+  font-size: 13px;
 }
 
-.quality,
-.title {
-  flex: 0 1 250px;
+.headerQuality {
+  flex: 0 0 240px;
 }
 
-.notice {
-  composes: alert from '~Components/Alert.css';
-
-  margin: 0;
-  margin-bottom: 20px;
+.headerTitle {
+  flex: 1 1 auto;
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+.definitions {
+  display: flex;
+  flex-direction: column;
+}
+
+@media only screen and (max-width: 768px) {
   .header {
     display: none;
-  }
-
-  .definitions {
-    &:first-child {
-      border-top: none;
-    }
   }
 }

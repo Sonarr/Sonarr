@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'deleteButton': string;
+  'intro': string;
   'tagInternalInput': string;
 }
 export const cssExports: CssExports;

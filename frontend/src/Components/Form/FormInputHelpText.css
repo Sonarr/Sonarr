@@ -10,15 +10,20 @@
   gap: 8px;
 }
 
+.isError,
+.isWarning {
+  position: relative;
+}
+
 .isError::before,
 .isWarning::before {
-  display: inline-block;
-  flex-shrink: 0;
+  position: absolute;
+  top: 7px;
+  left: -13px;
   width: 5px;
   height: 5px;
   border-radius: 999px;
   content: "";
-  transform: translateY(-1px);
 }
 
 .isError {

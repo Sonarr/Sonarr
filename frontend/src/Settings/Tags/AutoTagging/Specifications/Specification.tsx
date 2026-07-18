@@ -3,7 +3,7 @@ import Card from 'Components/Card';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
-import { icons, kinds } from 'Helpers/Props';
+import { icons, kinds, sizes } from 'Helpers/Props';
 import Field from 'typings/Field';
 import translate from 'Utilities/String/translate';
 import { AutoTaggingSpecification } from '../useAutoTaggings';
@@ -23,7 +23,7 @@ interface SpecificationProps {
   onCloneSpecificationPress: (specId: number) => void;
 }
 
-export default function Specification({
+function Specification({
   id,
   implementation,
   implementationName,
@@ -79,6 +79,7 @@ export default function Specification({
   return (
     <Card
       className={styles.autoTagging}
+      overlayClassName={styles.overlay}
       overlayContent={true}
       aria-label={translate('EditConditionImplementation', {
         implementationName,
@@ -88,24 +89,32 @@ export default function Specification({
       <div className={styles.nameContainer}>
         <div className={styles.name}>{name}</div>
 
-        <IconButton
-          className={styles.cloneButton}
-          title={translate('Clone')}
-          aria-label={translate('Clone')}
-          name={icons.CLONE}
-          onPress={onClonePress}
-        />
+        <div className={styles.rightCluster}>
+          <IconButton
+            className={styles.cloneButton}
+            title={translate('CloneCondition')}
+            aria-label={translate('CloneCondition')}
+            name={icons.CLONE}
+            onPress={onClonePress}
+          />
+        </div>
       </div>
 
       <div className={styles.labels}>
-        <Label kind={kinds.DEFAULT}>{implementationName}</Label>
+        <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
+          {implementationName}
+        </Label>
 
         {negate ? (
-          <Label kind={kinds.DANGER}>{translate('Negated')}</Label>
+          <Label kind={kinds.DANGER} size={sizes.MEDIUM}>
+            {translate('Negated')}
+          </Label>
         ) : null}
 
         {required ? (
-          <Label kind={kinds.SUCCESS}>{translate('Required')}</Label>
+          <Label kind={kinds.SUCCESS} size={sizes.MEDIUM}>
+            {translate('Required')}
+          </Label>
         ) : null}
       </div>
 
@@ -120,8 +129,8 @@ export default function Specification({
       <ConfirmModal
         isOpen={isDeleteModalOpen}
         kind={kinds.DANGER}
-        title={translate('DeleteSpecification')}
-        message={translate('DeleteSpecificationHelpText', { name })}
+        title={translate('DeleteCondition')}
+        message={translate('DeleteConditionMessageText', { name })}
         confirmLabel={translate('Delete')}
         onConfirm={onConfirmDelete}
         onCancel={onDeleteModalClose}
@@ -129,3 +138,5 @@ export default function Specification({
     </Card>
   );
 }
+
+export default Specification;

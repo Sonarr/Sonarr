@@ -40,7 +40,11 @@ function HintedSelectInputSelectedValue<
           ? selectedValue.map((key) => {
               const v = valuesMap.get(key);
 
-              return <Label key={key}>{v ? v : key}</Label>;
+              return (
+                <Label key={key} dot={false}>
+                  {v ? v : key}
+                </Label>
+              );
             })
           : valuesMap.get(selectedValue as ArrayElement<V>)}
       </div>

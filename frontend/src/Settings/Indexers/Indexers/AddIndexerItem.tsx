@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
-import Card from 'Components/Card';
+import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
+import Link from 'Components/Link/Link';
 import Menu from 'Components/Menu/Menu';
 import MenuContent from 'Components/Menu/MenuContent';
-import { sizes } from 'Helpers/Props';
+import { icons, sizes } from 'Helpers/Props';
 import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import { IndexerModel } from '../useIndexers';
@@ -32,49 +33,50 @@ function AddIndexerItem({
   }, [implementation, implementationName, onIndexerSelect]);
 
   return (
-    <Card
-      className={styles.indexer}
-      overlayClassName={styles.overlay}
-      overlayContent={true}
-      aria-label={translate('AddIndexerImplementation', { implementationName })}
-      onPress={handleIndexerSelect}
-    >
-      <div className={styles.name}>{implementationName}</div>
+    <div className={styles.indexer}>
+      <Link
+        className={styles.underlay}
+        aria-label={translate('AddIndexerImplementation', {
+          implementationName,
+        })}
+        onPress={handleIndexerSelect}
+      />
 
-      <div className={styles.actions}>
-        {hasPresets && (
-          <span>
-            <Button size={sizes.SMALL} onPress={handleIndexerSelect}>
-              {translate('Custom')}
-            </Button>
+      <div className={styles.overlay}>
+        <div className={styles.name}>{implementationName}</div>
 
-            <Menu className={styles.presetsMenu}>
+        <div className={styles.actions}>
+          {hasPresets ? (
+            <Menu className={styles.presetsMenu} alignMenu="right">
               <Button className={styles.presetsMenuButton} size={sizes.SMALL}>
                 {translate('Presets')}
               </Button>
 
               <MenuContent>
-                {presets.map((preset) => {
-                  return (
-                    <AddIndexerPresetMenuItem
-                      key={preset.name}
-                      name={preset.name}
-                      implementation={implementation}
-                      implementationName={implementationName}
-                      onPress={onIndexerSelect}
-                    />
-                  );
-                })}
+                {presets.map((preset) => (
+                  <AddIndexerPresetMenuItem
+                    key={preset.name}
+                    name={preset.name}
+                    implementation={implementation}
+                    implementationName={implementationName}
+                    onPress={onIndexerSelect}
+                  />
+                ))}
               </MenuContent>
             </Menu>
-          </span>
-        )}
+          ) : null}
 
-        <Button to={infoLink} size={sizes.SMALL}>
-          {translate('MoreInfo')}
-        </Button>
+          <Link
+            className={styles.infoLink}
+            to={infoLink}
+            title={translate('MoreInfo')}
+            aria-label={translate('MoreInfo')}
+          >
+            <Icon name={icons.INFO} size={18} />
+          </Link>
+        </div>
       </div>
-    </Card>
+    </div>
   );
 }
 

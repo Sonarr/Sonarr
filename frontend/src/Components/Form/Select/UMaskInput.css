@@ -16,7 +16,7 @@
 .inputUnit {
   composes: inputUnit from '~Components/Form/FormInputGroup.css';
 
-  right: 40px;
+  right: 40px !important;
   font-family: $monoSpaceFontFamily;
 }
 

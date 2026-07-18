@@ -13,7 +13,7 @@
   letter-spacing: 0.06em;
   font-weight: 500;
   font-size: 11px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1;
   cursor: default;
   gap: 6px;
@@ -35,6 +35,10 @@
 }
 
 .hasIcon::before {
+  display: none;
+}
+
+.noDot::before {
   display: none;
 }
 

@@ -1,17 +1,14 @@
 import React from 'react';
-import Card from 'Components/Card';
-import FieldSet from 'Components/FieldSet';
-import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
+import AddCard from 'Components/SettingsCard/AddCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
-import { icons } from 'Helpers/Props';
 import { useIndexersData } from 'Settings/Indexers/useIndexers';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import EditReleaseProfileModal from './EditReleaseProfileModal';
 import ReleaseProfileItem from './ReleaseProfileItem';
 import { useReleaseProfiles } from './useReleaseProfiles';
-import styles from './ReleaseProfiles.css';
 
 function ReleaseProfiles() {
   const { data, isFetching, isFetched, error } = useReleaseProfiles();
@@ -26,42 +23,35 @@ function ReleaseProfiles() {
   ] = useModalOpenState(false);
 
   return (
-    <FieldSet legend={translate('ReleaseProfiles')}>
-      <PageSectionContent
-        errorMessage={translate('ReleaseProfilesLoadError')}
-        isFetching={isFetching}
-        isPopulated={isFetched}
-        error={error}
-      >
-        <div className={styles.releaseProfiles}>
-          <Card
-            className={styles.addReleaseProfile}
-            aria-label={translate('AddReleaseProfile')}
-            onPress={setAddReleaseProfileModalOpen}
-          >
-            <div className={styles.center}>
-              <Icon name={icons.ADD} size={45} />
-            </div>
-          </Card>
+    <PageSectionContent
+      errorMessage={translate('ReleaseProfilesLoadError')}
+      isFetching={isFetching}
+      isPopulated={isFetched}
+      error={error}
+    >
+      <div className={settingsCardStyles.grid}>
+        {data.map((item) => {
+          return (
+            <ReleaseProfileItem
+              key={item.id}
+              tagList={tagList}
+              indexerList={indexerList}
+              {...item}
+            />
+          );
+        })}
 
-          {data.map((item) => {
-            return (
-              <ReleaseProfileItem
-                key={item.id}
-                tagList={tagList}
-                indexerList={indexerList}
-                {...item}
-              />
-            );
-          })}
-        </div>
-
-        <EditReleaseProfileModal
-          isOpen={isAddReleaseProfileModalOpen}
-          onModalClose={setAddReleaseProfileModalClosed}
+        <AddCard
+          label={translate('AddReleaseProfile')}
+          onPress={setAddReleaseProfileModalOpen}
         />
-      </PageSectionContent>
-    </FieldSet>
+      </div>
+
+      <EditReleaseProfileModal
+        isOpen={isAddReleaseProfileModalOpen}
+        onModalClose={setAddReleaseProfileModalClosed}
+      />
+    </PageSectionContent>
   );
 }
 

@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect } from 'react';
 import Alert from 'Components/Alert';
-import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
@@ -12,8 +12,9 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import ModalSection from 'Components/ModalSection';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import { inputTypes, kinds, sizes } from 'Helpers/Props';
+import { inputTypes, kinds } from 'Helpers/Props';
 import AdvancedSettingsButton from 'Settings/AdvancedSettingsButton';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
 import { SelectedSchema } from 'Settings/useProviderSchema';
@@ -116,33 +117,33 @@ function EditDownloadClientModalContent({
           validationErrors={validationErrors}
           validationWarnings={validationWarnings}
         >
-          {!!message && (
+          {message ? (
             <Alert className={styles.message} kind={message.value.type}>
               {message.value.message}
             </Alert>
-          )}
+          ) : null}
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Name')}</FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.TEXT}
               name="name"
               {...name}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Enable')}</FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.CHECK}
               name="enable"
               {...enable}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
           {fields?.map((field) => {
             return (
@@ -151,66 +152,76 @@ function EditDownloadClientModalContent({
                 advancedSettings={showAdvancedSettings}
                 provider="downloadClient"
                 providerData={item}
+                layout="row"
                 {...field}
                 onChange={handleFieldChange}
               />
             );
           })}
 
-          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+          <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
             <FormLabel>{translate('ClientPriority')}</FormLabel>
 
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('DownloadClientPriorityHelpText')}
+            />
+
+            <FormInput
               type={inputTypes.NUMBER}
               name="priority"
-              helpText={translate('DownloadClientPriorityHelpText')}
               min={1}
               max={50}
               {...priority}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Tags')}</FormLabel>
 
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('DownloadClientSeriesTagHelpText')}
+            />
+
+            <FormInput
               type={inputTypes.TAG}
               name="tags"
-              helpText={translate('DownloadClientSeriesTagHelpText')}
               {...tags}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FieldSet
-            size={sizes.SMALL}
-            legend={translate('CompletedDownloadHandling')}
-          >
-            <FormGroup>
+          <ModalSection title={translate('CompletedDownloadHandling')}>
+            <FormRow>
               <FormLabel>{translate('RemoveCompleted')}</FormLabel>
 
-              <FormInputGroup
+              <FormInputHelpText
+                text={translate('RemoveCompletedDownloadsHelpText')}
+              />
+
+              <FormInput
                 type={inputTypes.CHECK}
                 name="removeCompletedDownloads"
-                helpText={translate('RemoveCompletedDownloadsHelpText')}
                 {...removeCompletedDownloads}
                 onChange={handleInputChange}
               />
-            </FormGroup>
+            </FormRow>
 
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('RemoveFailed')}</FormLabel>
 
-              <FormInputGroup
+              <FormInputHelpText
+                text={translate('RemoveFailedDownloadsHelpText')}
+              />
+
+              <FormInput
                 type={inputTypes.CHECK}
                 name="removeFailedDownloads"
-                helpText={translate('RemoveFailedDownloadsHelpText')}
                 {...removeFailedDownloads}
                 onChange={handleInputChange}
               />
-            </FormGroup>
-          </FieldSet>
+            </FormRow>
+          </ModalSection>
         </Form>
       </ModalBody>
 

@@ -81,7 +81,6 @@ function QualityProfileItemGroup({
     <div
       className={classNames(
         styles.qualityProfileItemGroup,
-        mode === 'editGroups' && styles.editGroups,
         mode === 'editSizes' && styles.editSizes,
         isDragging && styles.isDragging
       )}
@@ -129,7 +128,11 @@ function QualityProfileItemGroup({
               <div className={styles.groupQualities}>
                 {items
                   .map(({ quality }) => {
-                    return <Label key={quality.id}>{quality.name}</Label>;
+                    return (
+                      <Label key={quality.id} outline={true}>
+                        {quality.name}
+                      </Label>
+                    );
                   })
                   .reverse()}
               </div>
