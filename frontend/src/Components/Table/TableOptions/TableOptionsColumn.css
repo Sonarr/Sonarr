@@ -53,6 +53,7 @@
   color: var(--inkFaint);
   cursor: grab;
   transition: opacity 120ms ease;
+  touch-action: none;
 }
 
 .isDragging {

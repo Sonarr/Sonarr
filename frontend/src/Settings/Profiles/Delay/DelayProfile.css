@@ -38,6 +38,7 @@
   cursor: grab;
   transition: opacity 0.15s ease;
   pointer-events: all;
+  touch-action: none;
 }
 
 .delayProfile:hover .dragHandle {

@@ -81,6 +81,7 @@
   width: 28px;
   color: var(--inkFaint);
   cursor: grab;
+  touch-action: none;
 }
 
 .dragIcon {
