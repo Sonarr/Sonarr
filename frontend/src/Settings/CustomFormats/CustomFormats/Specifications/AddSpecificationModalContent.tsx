@@ -20,7 +20,7 @@ type SchemaItem = CustomFormatSpecification & {
   presets?: CustomFormatSpecification[];
 };
 
-interface AddSpecificationModalContentProps {
+export interface AddSpecificationModalContentProps {
   onModalClose: (selectedSpec?: CustomFormatSpecification) => void;
 }
 
@@ -76,16 +76,13 @@ function AddSpecificationModalContent({
         ) : null}
 
         {!isSchemaLoading && !schemaError && schema.length ? (
-          <div>
-            <Alert kind={kinds.INFO}>
-              <div>{translate('SupportedCustomConditions')}</div>
-              <div>
-                {translate('VisitTheWikiForMoreDetails')}{' '}
-                <Link to="https://wiki.servarr.com/sonarr/settings#custom-formats-2">
-                  {translate('Wiki')}
-                </Link>
-              </div>
-            </Alert>
+          <>
+            <p className={styles.wikiNote}>
+              {translate('VisitTheWikiForMoreDetails')}
+              <Link to="https://wiki.servarr.com/sonarr/settings#custom-formats-2">
+                {translate('Wiki')}
+              </Link>
+            </p>
 
             <div className={styles.specifications}>
               {schema.map((specification) => (
@@ -99,7 +96,7 @@ function AddSpecificationModalContent({
                 />
               ))}
             </div>
-          </div>
+          </>
         ) : null}
       </ModalBody>
 

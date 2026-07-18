@@ -1,9 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { icons } from 'Helpers/Props';
+import settingsStyles from 'Settings/Settings.css';
 import SettingsPage from 'Settings/SettingsPage';
 import {
   SaveCallback,
@@ -89,19 +91,26 @@ function ImportListSettings() {
       onSavePress={handleSavePress}
     >
       <PageContentBody>
-        <ImportLists />
+        <div className={settingsStyles.section}>
+          <PageHeading
+            scope={translate('Settings')}
+            title={translate('ImportLists')}
+          />
 
-        <ImportListOptions
-          setChildSave={handleSetChildSave}
-          onChildStateChange={handleChildStateChange}
-        />
+          <ImportLists />
 
-        <ImportListExclusions />
+          <ImportListOptions
+            setChildSave={handleSetChildSave}
+            onChildStateChange={handleChildStateChange}
+          />
 
-        <ManageImportListsModal
-          isOpen={isManageImportListsModalOpen}
-          onModalClose={handleManageImportListsModalClose}
-        />
+          <ImportListExclusions />
+
+          <ManageImportListsModal
+            isOpen={isManageImportListsModalOpen}
+            onModalClose={handleManageImportListsModalClose}
+          />
+        </div>
       </PageContentBody>
     </SettingsPage>
   );

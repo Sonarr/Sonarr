@@ -3,6 +3,7 @@
   display: flex;
   flex: 1 0 50%;
   flex-wrap: wrap;
+  gap: 10px;
 }
 
 .rightButtons {

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import Modal from 'Components/Modal/Modal';
 import { sizes } from 'Helpers/Props';
 import EditQualityProfileModalContent from './EditQualityProfileModalContent';
@@ -18,28 +18,11 @@ function EditQualityProfileModal({
   onDeleteQualityProfilePress,
   onModalClose,
 }: EditQualityProfileModalProps) {
-  const [height, setHeight] = useState<'auto' | number>('auto');
-
-  const handleContentHeightChange = useCallback(
-    (newHeight: number) => {
-      if (height === 'auto' || newHeight !== 0) {
-        setHeight(newHeight);
-      }
-    },
-    [height]
-  );
-
   return (
-    <Modal
-      style={{ height: height === 'auto' ? 'auto' : `${height}px` }}
-      isOpen={isOpen}
-      size={sizes.EXTRA_LARGE}
-      onModalClose={onModalClose}
-    >
+    <Modal isOpen={isOpen} size={sizes.EXTRA_LARGE} onModalClose={onModalClose}>
       <EditQualityProfileModalContent
         id={id}
         cloneId={cloneId}
-        onContentHeightChange={handleContentHeightChange}
         onDeleteQualityProfilePress={onDeleteQualityProfilePress}
         onModalClose={onModalClose}
       />

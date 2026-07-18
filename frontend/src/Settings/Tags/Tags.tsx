@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 import Alert from 'Components/Alert';
-import FieldSet from 'Components/FieldSet';
 import PageSectionContent from 'Components/Page/PageSectionContent';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
 import { kinds } from 'Helpers/Props';
 import { useDownloadClients } from 'Settings/DownloadClients/DownloadClients/useDownloadClients';
 import { useImportLists } from 'Settings/ImportLists/ImportLists/useImportLists';
@@ -14,7 +14,6 @@ import useTagDetails from 'Tags/useTagDetails';
 import useTags, { useSortedTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import Tag from './Tag';
-import styles from './Tags.css';
 
 function Tags() {
   const queryClient = useQueryClient();
@@ -45,20 +44,18 @@ function Tags() {
   }
 
   return (
-    <FieldSet legend={translate('Tags')}>
-      <PageSectionContent
-        errorMessage={translate('TagsLoadError')}
-        error={error || detailsError}
-        isFetching={isFetching || isDetailsFetching}
-        isPopulated={isFetched && isDetailsFetched}
-      >
-        <div className={styles.tags}>
-          {items.map((item) => {
-            return <Tag key={item.id} {...item} />;
-          })}
-        </div>
-      </PageSectionContent>
-    </FieldSet>
+    <PageSectionContent
+      errorMessage={translate('TagsLoadError')}
+      error={error || detailsError}
+      isFetching={isFetching || isDetailsFetching}
+      isPopulated={isFetched && isDetailsFetched}
+    >
+      <div className={settingsCardStyles.grid}>
+        {items.map((item) => {
+          return <Tag key={item.id} {...item} />;
+        })}
+      </div>
+    </PageSectionContent>
   );
 }
 

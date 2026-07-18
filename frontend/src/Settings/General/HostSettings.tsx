@@ -1,8 +1,9 @@
 import React from 'react';
 import FieldSet from 'Components/FieldSet';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { inputTypes, sizes } from 'Helpers/Props';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
 import { useIsWindowsService } from 'System/Status/useSystemStatus';
@@ -44,160 +45,165 @@ function HostSettings({
   const isWindowsService = useIsWindowsService();
 
   return (
-    <FieldSet legend={translate('Host')}>
-      <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+    <FieldSet legend={translate('Host')} caption={translate('HostCaption')}>
+      <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
         <FormLabel>{translate('BindAddress')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('BindAddressHelpText')} />
+        <FormInputHelpText
+          text={translate('RestartRequiredHelpTextWarning')}
+          isWarning={true}
+        />
+        <FormInput
           type={inputTypes.TEXT}
           name="bindAddress"
-          helpText={translate('BindAddressHelpText')}
-          helpTextWarning={translate('RestartRequiredHelpTextWarning')}
           onChange={onInputChange}
           {...bindAddress}
         />
-      </FormGroup>
-
-      <FormGroup>
+      </FormRow>
+      <FormRow>
         <FormLabel>{translate('PortNumber')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText
+          text={translate('RestartRequiredHelpTextWarning')}
+          isWarning={true}
+        />
+        <FormInput
           type={inputTypes.NUMBER}
           name="port"
           min={1}
           max={65535}
           autocomplete="off"
-          helpTextWarning={translate('RestartRequiredHelpTextWarning')}
           onChange={onInputChange}
           {...port}
         />
-      </FormGroup>
-
-      <FormGroup>
+      </FormRow>
+      <FormRow>
         <FormLabel>{translate('UrlBase')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('UrlBaseHelpText')} />
+        <FormInputHelpText
+          text={translate('RestartRequiredHelpTextWarning')}
+          isWarning={true}
+        />
+        <FormInput
           type={inputTypes.TEXT}
           name="urlBase"
-          helpText={translate('UrlBaseHelpText')}
-          helpTextWarning={translate('RestartRequiredHelpTextWarning')}
           onChange={onInputChange}
           {...urlBase}
         />
-      </FormGroup>
-
-      <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+      </FormRow>
+      <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
         <FormLabel>{translate('InstanceName')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('InstanceNameHelpText')} />
+        <FormInputHelpText
+          text={translate('RestartRequiredHelpTextWarning')}
+          isWarning={true}
+        />
+        <FormInput
           type={inputTypes.TEXT}
           name="instanceName"
-          helpText={translate('InstanceNameHelpText')}
-          helpTextWarning={translate('RestartRequiredHelpTextWarning')}
           onChange={onInputChange}
           {...instanceName}
         />
-      </FormGroup>
-
-      <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+      </FormRow>
+      <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
         <FormLabel>{translate('ApplicationURL')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('ApplicationUrlHelpText')} />
+        <FormInput
           type={inputTypes.TEXT}
           name="applicationUrl"
-          helpText={translate('ApplicationUrlHelpText')}
           onChange={onInputChange}
           {...applicationUrl}
         />
-      </FormGroup>
-
-      <FormGroup
+      </FormRow>
+      <FormRow
         advancedSettings={showAdvancedSettings}
         isAdvanced={true}
         size={sizes.MEDIUM}
       >
         <FormLabel>{translate('EnableSsl')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('EnableSslHelpText')} />
+        <FormInput
           type={inputTypes.CHECK}
           name="enableSsl"
-          helpText={translate('EnableSslHelpText')}
           onChange={onInputChange}
           {...enableSsl}
         />
-      </FormGroup>
-
+      </FormRow>
       {enableSsl.value ? (
-        <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+        <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
           <FormLabel>{translate('SslPort')}</FormLabel>
-
-          <FormInputGroup
+          <FormInputHelpText
+            text={translate('RestartRequiredHelpTextWarning')}
+            isWarning={true}
+          />
+          <FormInput
             type={inputTypes.NUMBER}
             name="sslPort"
             min={1}
             max={65535}
-            helpTextWarning={translate('RestartRequiredHelpTextWarning')}
             onChange={onInputChange}
             {...sslPort}
           />
-        </FormGroup>
+        </FormRow>
       ) : null}
-
       {enableSsl.value ? (
         <>
-          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+          <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
             <FormLabel>{translate('SslCertPath')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('SslCertPathHelpText')} />
+            <FormInputHelpText
+              text={translate('RestartRequiredHelpTextWarning')}
+              isWarning={true}
+            />
+            <FormInput
               type={inputTypes.TEXT}
               name="sslCertPath"
-              helpText={translate('SslCertPathHelpText')}
-              helpTextWarning={translate('RestartRequiredHelpTextWarning')}
               onChange={onInputChange}
               {...sslCertPath}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+          <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
             <FormLabel>{translate('SslKeyPath')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('SslKeyPathHelpText')} />
+            <FormInputHelpText
+              text={translate('RestartRequiredHelpTextWarning')}
+              isWarning={true}
+            />
+            <FormInput
               type={inputTypes.TEXT}
               name="sslKeyPath"
-              helpText={translate('SslKeyPathHelpText')}
-              helpTextWarning={translate('RestartRequiredHelpTextWarning')}
               onChange={onInputChange}
               {...sslKeyPath}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+          <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
             <FormLabel>{translate('SslCertPassword')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('SslCertPasswordHelpText')} />
+            <FormInputHelpText
+              text={translate('RestartRequiredHelpTextWarning')}
+              isWarning={true}
+            />
+            <FormInput
               type={inputTypes.PASSWORD}
               name="sslCertPassword"
-              helpText={translate('SslCertPasswordHelpText')}
-              helpTextWarning={translate('RestartRequiredHelpTextWarning')}
               onChange={onInputChange}
               {...sslCertPassword}
             />
-          </FormGroup>
+          </FormRow>
         </>
       ) : null}
-
       {isWindowsService ? null : (
-        <FormGroup size={sizes.MEDIUM}>
+        <FormRow size={sizes.MEDIUM}>
           <FormLabel>{translate('OpenBrowserOnStart')}</FormLabel>
-
-          <FormInputGroup
+          <FormInputHelpText text={translate('OpenBrowserOnStartHelpText')} />
+          <FormInput
             type={inputTypes.CHECK}
             name="launchBrowser"
-            helpText={translate('OpenBrowserOnStartHelpText')}
             onChange={onInputChange}
             {...launchBrowser}
           />
-        </FormGroup>
+        </FormRow>
       )}
     </FieldSet>
   );

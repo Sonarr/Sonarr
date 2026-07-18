@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
@@ -11,6 +11,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import ModalSection from 'Components/ModalSection';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { inputTypes, kinds } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
@@ -148,120 +149,123 @@ function EditDelayProfileModalContent({
       <ModalHeader>
         {id ? translate('EditDelayProfile') : translate('AddDelayProfile')}
       </ModalHeader>
-
       <ModalBody>
         <Form
           {...otherProps}
           validationErrors={validationErrors}
           validationWarnings={validationWarnings}
         >
-          <FormGroup>
-            <FormLabel>{translate('PreferredProtocol')}</FormLabel>
+          <ModalSection title={translate('Protocol')}>
+            <FormRow>
+              <FormLabel>{translate('PreferredProtocol')}</FormLabel>
+              <FormInputHelpText text={translate('ProtocolHelpText')} />
+              <FormInput
+                type={inputTypes.SELECT}
+                name="protocol"
+                value={protocol}
+                values={protocolOptions}
+                onChange={handleProtocolChange}
+              />
+            </FormRow>
 
-            <FormInputGroup
-              type={inputTypes.SELECT}
-              name="protocol"
-              value={protocol}
-              values={protocolOptions}
-              helpText={translate('ProtocolHelpText')}
-              onChange={handleProtocolChange}
-            />
-          </FormGroup>
+            {enableUsenet.value ? (
+              <FormRow>
+                <FormLabel>{translate('UsenetDelay')}</FormLabel>
+                <FormInputHelpText text={translate('UsenetDelayHelpText')} />
+                <FormInput
+                  type={inputTypes.NUMBER}
+                  name="usenetDelay"
+                  unit="minutes"
+                  {...usenetDelay}
+                  onChange={handleInputChange}
+                />
+              </FormRow>
+            ) : null}
 
-          {enableUsenet.value ? (
-            <FormGroup>
-              <FormLabel>{translate('UsenetDelay')}</FormLabel>
+            {enableTorrent.value ? (
+              <FormRow>
+                <FormLabel>{translate('TorrentDelay')}</FormLabel>
+                <FormInputHelpText text={translate('TorrentDelayHelpText')} />
+                <FormInput
+                  type={inputTypes.NUMBER}
+                  name="torrentDelay"
+                  unit="minutes"
+                  {...torrentDelay}
+                  onChange={handleInputChange}
+                />
+              </FormRow>
+            ) : null}
+          </ModalSection>
 
-              <FormInputGroup
-                type={inputTypes.NUMBER}
-                name="usenetDelay"
-                unit="minutes"
-                {...usenetDelay}
-                helpText={translate('UsenetDelayHelpText')}
+          <ModalSection title={translate('ProfileSectionBypass')}>
+            <FormRow>
+              <FormLabel>{translate('BypassDelayIfHighestQuality')}</FormLabel>
+              <FormInputHelpText
+                text={translate('BypassDelayIfHighestQualityHelpText')}
+              />
+              <FormInput
+                type={inputTypes.CHECK}
+                name="bypassIfHighestQuality"
+                {...bypassIfHighestQuality}
                 onChange={handleInputChange}
               />
-            </FormGroup>
-          ) : null}
+            </FormRow>
 
-          {enableTorrent.value ? (
-            <FormGroup>
-              <FormLabel>{translate('TorrentDelay')}</FormLabel>
-
-              <FormInputGroup
-                type={inputTypes.NUMBER}
-                name="torrentDelay"
-                unit="minutes"
-                {...torrentDelay}
-                helpText={translate('TorrentDelayHelpText')}
-                onChange={handleInputChange}
-              />
-            </FormGroup>
-          ) : null}
-
-          <FormGroup>
-            <FormLabel>{translate('BypassDelayIfHighestQuality')}</FormLabel>
-
-            <FormInputGroup
-              type={inputTypes.CHECK}
-              name="bypassIfHighestQuality"
-              {...bypassIfHighestQuality}
-              helpText={translate('BypassDelayIfHighestQualityHelpText')}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <FormLabel>
-              {translate('BypassDelayIfAboveCustomFormatScore')}
-            </FormLabel>
-
-            <FormInputGroup
-              type={inputTypes.CHECK}
-              name="bypassIfAboveCustomFormatScore"
-              {...bypassIfAboveCustomFormatScore}
-              helpText={translate(
-                'BypassDelayIfAboveCustomFormatScoreHelpText'
-              )}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
-
-          {bypassIfAboveCustomFormatScore.value ? (
-            <FormGroup>
+            <FormRow>
               <FormLabel>
-                {translate('BypassDelayIfAboveCustomFormatScoreMinimumScore')}
+                {translate('BypassDelayIfAboveCustomFormatScore')}
               </FormLabel>
-
-              <FormInputGroup
-                type={inputTypes.NUMBER}
-                name="minimumCustomFormatScore"
-                {...minimumCustomFormatScore}
-                helpText={translate(
-                  'BypassDelayIfAboveCustomFormatScoreMinimumScoreHelpText'
-                )}
+              <FormInputHelpText
+                text={translate('BypassDelayIfAboveCustomFormatScoreHelpText')}
+              />
+              <FormInput
+                type={inputTypes.CHECK}
+                name="bypassIfAboveCustomFormatScore"
+                {...bypassIfAboveCustomFormatScore}
                 onChange={handleInputChange}
               />
-            </FormGroup>
-          ) : null}
+            </FormRow>
+
+            {bypassIfAboveCustomFormatScore.value ? (
+              <FormRow>
+                <FormLabel>
+                  {translate('BypassDelayIfAboveCustomFormatScoreMinimumScore')}
+                </FormLabel>
+                <FormInputHelpText
+                  text={translate(
+                    'BypassDelayIfAboveCustomFormatScoreMinimumScoreHelpText'
+                  )}
+                />
+                <FormInput
+                  type={inputTypes.NUMBER}
+                  name="minimumCustomFormatScore"
+                  {...minimumCustomFormatScore}
+                  onChange={handleInputChange}
+                />
+              </FormRow>
+            ) : null}
+          </ModalSection>
 
           {id === 1 ? (
-            <Alert>{translate('DefaultDelayProfileSeries')}</Alert>
+            <p className={styles.intro}>
+              {translate('DefaultDelayProfileSeries')}
+            </p>
           ) : (
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('Tags')}</FormLabel>
-
-              <FormInputGroup
+              <FormInputHelpText
+                text={translate('DelayProfileSeriesTagsHelpText')}
+              />
+              <FormInput
                 type={inputTypes.TAG}
                 name="tags"
                 {...tags}
-                helpText={translate('DelayProfileSeriesTagsHelpText')}
                 onChange={handleInputChange}
               />
-            </FormGroup>
+            </FormRow>
           )}
         </Form>
       </ModalBody>
-
       <ModalFooter>
         {id && id > 1 ? (
           <Button

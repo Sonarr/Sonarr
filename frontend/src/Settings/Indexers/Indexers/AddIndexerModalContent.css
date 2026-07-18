@@ -1,5 +1,18 @@
 .indexers {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  margin: 0 calc(var(--modalBodyPadding) * -1);
+}
+
+.group:first-child .groupHeading {
+  padding-top: 6px;
+}
+
+.groupHeading {
+  margin: 0;
+  padding: 16px var(--modalBodyPadding) 6px;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: var(--defaultFontFamily);
 }

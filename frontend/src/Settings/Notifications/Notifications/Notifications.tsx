@@ -1,16 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import Card from 'Components/Card';
-import FieldSet from 'Components/FieldSet';
-import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
-import { icons } from 'Helpers/Props';
+import AddCard from 'Components/SettingsCard/AddCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
 import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import { useConnections, useSortedConnections } from '../useConnections';
 import AddNotificationModal from './AddNotificationModal';
 import EditNotificationModal from './EditNotificationModal';
 import Notification from './Notification';
-import styles from './Notifications.css';
 
 function Notifications() {
   const { error, isFetching, isFetched } = useConnections();
@@ -45,42 +42,35 @@ function Notifications() {
   }, []);
 
   return (
-    <FieldSet legend={translate('Connections')}>
-      <PageSectionContent
-        errorMessage={translate('ConnectionsLoadError')}
-        error={error}
-        isFetching={isFetching}
-        isPopulated={isFetched}
-      >
-        <div className={styles.notifications}>
-          {items.map((item) => (
-            <Notification key={item.id} {...item} />
-          ))}
+    <PageSectionContent
+      errorMessage={translate('ConnectionsLoadError')}
+      error={error}
+      isFetching={isFetching}
+      isPopulated={isFetched}
+    >
+      <div className={settingsCardStyles.grid}>
+        {items.map((item) => (
+          <Notification key={item.id} {...item} />
+        ))}
 
-          <Card
-            className={styles.addNotification}
-            aria-label={translate('AddConnection')}
-            onPress={handleAddNotificationPress}
-          >
-            <div className={styles.center}>
-              <Icon name={icons.ADD} size={45} />
-            </div>
-          </Card>
-        </div>
-
-        <AddNotificationModal
-          isOpen={isAddNotificationModalOpen}
-          onNotificationSelect={handleNotificationSelect}
-          onModalClose={handleAddNotificationModalClose}
+        <AddCard
+          label={translate('AddConnection')}
+          onPress={handleAddNotificationPress}
         />
+      </div>
 
-        <EditNotificationModal
-          isOpen={isEditNotificationModalOpen}
-          selectedSchema={selectedSchema}
-          onModalClose={handleEditNotificationModalClose}
-        />
-      </PageSectionContent>
-    </FieldSet>
+      <AddNotificationModal
+        isOpen={isAddNotificationModalOpen}
+        onNotificationSelect={handleNotificationSelect}
+        onModalClose={handleAddNotificationModalClose}
+      />
+
+      <EditNotificationModal
+        isOpen={isEditNotificationModalOpen}
+        selectedSchema={selectedSchema}
+        onModalClose={handleEditNotificationModalClose}
+      />
+    </PageSectionContent>
   );
 }
 

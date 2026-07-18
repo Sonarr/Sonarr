@@ -1,32 +1,79 @@
-.deleteButton {
-  composes: button from '~Components/Link/Button.css';
-
-  margin-right: auto;
-}
-
 .rightButtons {
-  justify-content: flex-end;
+  display: flex;
+  gap: 10px;
+
   margin-right: auto;
 }
 
-.addSpecification {
-  composes: customFormat from '~./CustomFormat.css';
-
-  background-color: var(--cardAlternateBackgroundColor);
-  color: var(--gray);
-  text-align: center;
-  font-size: 45px;
+.conditions {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--borderColor);
 }
 
-.center {
-  display: inline-block;
-  padding: 5px 20px 0;
-  border: 1px solid var(--borderColor);
-  border-radius: 4px;
-  background-color: var(--cardCenterBackgroundColor);
+.conditionsTitle {
+  composes: label from '~Components/Form/FormLabel.css';
+
+  margin-top: 0;
+}
+
+.intro {
+  margin: 0 0 12px;
+  max-width: 70ch;
+  color: var(--inkMuted);
+  font-size: 13px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.55;
 }
 
 .customFormats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+}
+
+.addSpecification {
+  composes: card from '~Components/Card.css';
+
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100% !important;
+  border: 1px dashed var(--inputBorderColor);
+  background-color: transparent;
+  color: var(--inkMuted);
+  text-align: center;
+  transition:
+    border-color 200ms cubic-bezier(0.25, 1, 0.5, 1),
+    color 200ms cubic-bezier(0.25, 1, 0.5, 1),
+    background-color 200ms cubic-bezier(0.25, 1, 0.5, 1);
+  gap: 12px;
+
+  &:hover {
+    border-color: var(--accent);
+    background-color: var(--paperWarm);
+    box-shadow: none;
+    color: var(--accent);
+    transform: none;
+  }
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.center {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addLabel {
+  color: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 11px;
+  font-family: var(--defaultFontFamily);
 }

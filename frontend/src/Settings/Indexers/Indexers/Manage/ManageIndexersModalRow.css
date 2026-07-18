@@ -1,13 +1,19 @@
 .name,
+.implementation,
+.tags {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  word-break: break-all;
+}
+
 .protocol,
-.tags,
 .enableRss,
 .enableAutomaticSearch,
 .enableInteractiveSearch,
 .priority,
-.seasonSearchMaximumSingleEpisodeAge,
-.implementation {
+.seasonSearchMaximumSingleEpisodeAge {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
-  word-break: break-all;
+  width: 1%;
+  white-space: nowrap;
 }

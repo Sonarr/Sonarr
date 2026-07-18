@@ -1,13 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import ModalSection from 'Components/ModalSection';
 import { inputTypes } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
@@ -124,60 +125,62 @@ function ManageImportListsEditModalContent(
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('EditSelectedImportLists')}</ModalHeader>
-
       <ModalBody>
-        <FormGroup>
+        <FormRow>
           <FormLabel>{translate('AutomaticAdd')}</FormLabel>
 
-          <FormInputGroup
+          <FormInput
             type={inputTypes.SELECT}
             name="enableAutomaticAdd"
             value={enableAutomaticAdd}
             values={autoAddOptions}
             onChange={onInputChange}
           />
-        </FormGroup>
+        </FormRow>
 
-        <FormGroup>
-          <FormLabel>{translate('QualityProfile')}</FormLabel>
+        <ModalSection
+          title={translate('ManageImportListsEditModalContentLibrarySection')}
+        >
+          <FormRow>
+            <FormLabel>{translate('QualityProfile')}</FormLabel>
 
-          <FormInputGroup
-            type={inputTypes.QUALITY_PROFILE_SELECT}
-            name="qualityProfileId"
-            value={qualityProfileId}
-            includeNoChange={true}
-            includeNoChangeDisabled={false}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+            <FormInput
+              type={inputTypes.QUALITY_PROFILE_SELECT}
+              name="qualityProfileId"
+              value={qualityProfileId}
+              includeNoChange={true}
+              includeNoChangeDisabled={false}
+              onChange={onInputChange}
+            />
+          </FormRow>
 
-        <FormGroup>
-          <FormLabel>{translate('RootFolder')}</FormLabel>
+          <FormRow>
+            <FormLabel>{translate('RootFolder')}</FormLabel>
 
-          <FormInputGroup
-            type={inputTypes.ROOT_FOLDER_SELECT}
-            name="rootFolderPath"
-            value={rootFolderPath}
-            includeNoChange={true}
-            includeNoChangeDisabled={false}
-            selectedValueOptions={{ includeFreeSpace: false }}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+            <FormInput
+              type={inputTypes.ROOT_FOLDER_SELECT}
+              name="rootFolderPath"
+              value={rootFolderPath}
+              includeNoChange={true}
+              includeNoChangeDisabled={false}
+              selectedValueOptions={{ includeFreeSpace: false }}
+              onChange={onInputChange}
+            />
+          </FormRow>
 
-        <FormGroup>
-          <FormLabel>{translate('TagExisting')}</FormLabel>
+          <FormRow>
+            <FormLabel>{translate('TagExisting')}</FormLabel>
 
-          <FormInputGroup
-            type={inputTypes.SELECT}
-            name="tagExisting"
-            value={tagExisting}
-            values={autoAddOptions}
-            onChange={onInputChange}
-          />
-        </FormGroup>
+            <FormInput
+              type={inputTypes.SELECT}
+              name="tagExisting"
+              value={tagExisting}
+              values={autoAddOptions}
+              onChange={onInputChange}
+            />
+          </FormRow>
+        </ModalSection>
       </ModalBody>
-
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>
           {translate('CountImportListsSelected', {
