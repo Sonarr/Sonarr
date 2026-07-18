@@ -2,6 +2,9 @@ import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 import React from 'react';
 import { DndProvider } from 'react-dnd-multi-backend';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
+import SectionHeading from 'Components/SectionHeading';
+import settingsStyles from 'Settings/Settings.css';
 import SettingsPage from 'Settings/SettingsPage';
 import translate from 'Utilities/String/translate';
 import DelayProfiles from './Delay/DelayProfiles';
@@ -16,9 +19,39 @@ function Profiles() {
     <SettingsPage title={translate('Profiles')} showSave={false}>
       <PageContentBody>
         <DndProvider options={HTML5toTouch}>
-          <QualityProfiles />
-          <DelayProfiles />
-          <ReleaseProfiles />
+          <div className={settingsStyles.section}>
+            <PageHeading
+              scope={translate('Settings')}
+              title={translate('Profiles')}
+            />
+
+            <div className={settingsStyles.pageSection}>
+              <SectionHeading
+                title={translate('QualityProfiles')}
+                description={translate('QualityProfilesSectionDescription')}
+              />
+
+              <QualityProfiles />
+            </div>
+
+            <div className={settingsStyles.pageSection}>
+              <SectionHeading
+                title={translate('DelayProfiles')}
+                description={translate('DelayProfilesSectionDescription')}
+              />
+
+              <DelayProfiles />
+            </div>
+
+            <div className={settingsStyles.pageSection}>
+              <SectionHeading
+                title={translate('ReleaseProfiles')}
+                description={translate('ReleaseProfilesSectionDescription')}
+              />
+
+              <ReleaseProfiles />
+            </div>
+          </div>
         </DndProvider>
       </PageContentBody>
     </SettingsPage>

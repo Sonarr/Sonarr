@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'Components/Modal/Modal';
+import { sizes } from 'Helpers/Props';
 import AddNotificationModalContent, {
   AddNotificationModalContentProps,
 } from './AddNotificationModalContent';
@@ -14,7 +15,7 @@ function AddNotificationModal({
   ...otherProps
 }: AddNotificationModalProps) {
   return (
-    <Modal isOpen={isOpen} onModalClose={onModalClose}>
+    <Modal isOpen={isOpen} size={sizes.MEDIUM} onModalClose={onModalClose}>
       <AddNotificationModalContent
         {...otherProps}
         onModalClose={onModalClose}

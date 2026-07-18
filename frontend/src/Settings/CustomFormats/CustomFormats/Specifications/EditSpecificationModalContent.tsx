@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
-import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
@@ -62,7 +62,7 @@ function EditSpecificationModalContent({
     return selectSettings(specification, combinedPendingChanges);
   }, [specification, pendingChanges, pendingFields, hasPendingFields]);
 
-  const onInputChange = useCallback(
+  const handleInputChange = useCallback(
     ({ name, value }: InputChanged) => {
       setPendingChange(
         name as keyof CustomFormatSpecification,
@@ -72,26 +72,20 @@ function EditSpecificationModalContent({
     [setPendingChange]
   );
 
-  const onFieldChange = useCallback(
+  const handleFieldChange = useCallback(
     ({ name, value }: InputChanged) => {
       setPendingField(name, value);
     },
     [setPendingField]
   );
 
-  const onDeletePress = useCallback(() => {
-    if (onDeleteSpecificationPress) {
-      onDeleteSpecificationPress();
-    }
-  }, [onDeleteSpecificationPress]);
-
-  const onCancelPress = useCallback(() => {
+  const handleCancelPress = useCallback(() => {
     clearPendingChanges();
     clearPendingFields();
     onModalClose();
   }, [clearPendingChanges, clearPendingFields, onModalClose]);
 
-  const onSavePress = useCallback(() => {
+  const handleSavePress = useCallback(() => {
     let updatedSpec: CustomFormatSpecification = {
       ...specification,
       ...pendingChanges,
@@ -122,13 +116,12 @@ function EditSpecificationModalContent({
   const { implementationName, name, negate, required, fields } = item;
 
   return (
-    <ModalContent onModalClose={onCancelPress}>
+    <ModalContent onModalClose={handleCancelPress}>
       <ModalHeader>
         {specification.id
           ? translate('EditConditionImplementation', { implementationName })
           : translate('AddConditionImplementation', { implementationName })}
       </ModalHeader>
-
       <ModalBody>
         <Form
           validationErrors={validationErrors}
@@ -139,39 +132,33 @@ function EditSpecificationModalContent({
               x.label ===
               translate('CustomFormatsSpecificationRegularExpression')
           ) ? (
-            <Alert kind={kinds.INFO}>
-              <div>
-                <InlineMarkdown
-                  data={translate('ConditionUsingRegularExpressions')}
-                />
-              </div>
-              <div>
-                <InlineMarkdown
-                  data={translate('RegularExpressionsTutorialLink', {
-                    url: 'https://www.regular-expressions.info/tutorial.html',
-                  })}
-                />
-              </div>
-              <div>
-                <InlineMarkdown
-                  data={translate('RegularExpressionsCanBeTested', {
-                    url: 'http://regexstorm.net/tester',
-                  })}
-                />
-              </div>
-            </Alert>
+            <p className={styles.intro}>
+              <InlineMarkdown
+                data={translate('ConditionUsingRegularExpressions')}
+              />{' '}
+              <InlineMarkdown
+                data={translate('RegularExpressionsTutorialLink', {
+                  url: 'https://www.regular-expressions.info/tutorial.html',
+                })}
+              />{' '}
+              <InlineMarkdown
+                data={translate('RegularExpressionsCanBeTested', {
+                  url: 'http://regexstorm.net/tester',
+                })}
+              />
+            </p>
           ) : null}
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Name')}</FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.TEXT}
               name="name"
               {...name}
-              onChange={onInputChange}
+              onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
           {fields
             ? fields.map((field) => {
@@ -179,38 +166,41 @@ function EditSpecificationModalContent({
                   <ProviderFieldFormGroup
                     key={field.name}
                     advancedSettings={advancedSettings}
+                    layout="row"
                     provider="specifications"
                     providerData={item}
                     {...field}
-                    onChange={onFieldChange}
+                    onChange={handleFieldChange}
                   />
                 );
               })
             : null}
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Negate')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('NegateHelpText', { implementationName })}
+            />
+            <FormInput
               type={inputTypes.CHECK}
               name="negate"
               {...negate}
-              helpText={translate('NegateHelpText', { implementationName })}
-              onChange={onInputChange}
+              onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Required')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('RequiredHelpText', { implementationName })}
+            />
+            <FormInput
               type={inputTypes.CHECK}
               name="required"
               {...required}
-              helpText={translate('RequiredHelpText', { implementationName })}
-              onChange={onInputChange}
+              onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
         </Form>
       </ModalBody>
       <ModalFooter>
@@ -218,15 +208,15 @@ function EditSpecificationModalContent({
           <Button
             className={styles.deleteButton}
             kind={kinds.DANGER}
-            onPress={onDeletePress}
+            onPress={onDeleteSpecificationPress}
           >
             {translate('Delete')}
           </Button>
         ) : null}
 
-        <Button onPress={onCancelPress}>{translate('Cancel')}</Button>
+        <Button onPress={handleCancelPress}>{translate('Cancel')}</Button>
 
-        <SpinnerErrorButton isSpinning={false} onPress={onSavePress}>
+        <SpinnerErrorButton isSpinning={false} onPress={handleSavePress}>
           {translate('Save')}
         </SpinnerErrorButton>
       </ModalFooter>

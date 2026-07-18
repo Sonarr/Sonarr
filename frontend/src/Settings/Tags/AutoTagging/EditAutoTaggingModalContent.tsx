@@ -1,10 +1,11 @@
+import classNames from 'classnames';
 import React, { useCallback, useEffect, useState } from 'react';
 import Card from 'Components/Card';
-import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
@@ -124,42 +125,49 @@ export default function EditAutoTaggingModalContent({
             validationErrors={validationErrors}
             validationWarnings={validationWarnings}
           >
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('Name')}</FormLabel>
 
-              <FormInputGroup
+              <FormInput
                 type={inputTypes.TEXT}
                 name="name"
                 {...name}
                 onChange={handleInputChange}
               />
-            </FormGroup>
+            </FormRow>
 
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('RemoveTagsAutomatically')}</FormLabel>
 
-              <FormInputGroup
+              <FormInputHelpText
+                text={translate('RemoveTagsAutomaticallyHelpText')}
+              />
+
+              <FormInput
                 type={inputTypes.CHECK}
                 name="removeTagsAutomatically"
-                helpText={translate('RemoveTagsAutomaticallyHelpText')}
                 {...removeTagsAutomatically}
                 onChange={handleInputChange}
               />
-            </FormGroup>
+            </FormRow>
 
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('Tags')}</FormLabel>
 
-              <FormInputGroup
+              <FormInput
                 type={inputTypes.TAG}
                 name="tags"
                 onChange={handleInputChange}
                 {...tags}
               />
-            </FormGroup>
+            </FormRow>
           </Form>
 
-          <FieldSet legend={translate('Conditions')}>
+          <div className={styles.conditions}>
+            <h3 className={styles.conditionsTitle}>
+              {translate('Conditions')}
+            </h3>
+
             <div className={styles.autoTaggings}>
               {specifications.map((specification) => {
                 return (
@@ -174,16 +182,23 @@ export default function EditAutoTaggingModalContent({
               })}
 
               <Card
-                className={styles.addSpecification}
+                className={classNames(
+                  styles.addSpecification,
+                  !specifications.length && styles.fullWidth
+                )}
                 aria-label={translate('AddCondition')}
                 onPress={handleAddSpecificationPress}
               >
                 <div className={styles.center}>
-                  <Icon name={icons.ADD} size={45} />
+                  <Icon name={icons.ADD} size={20} />
+                </div>
+
+                <div className={styles.addLabel}>
+                  {translate('AddCondition')}
                 </div>
               </Card>
             </div>
-          </FieldSet>
+          </div>
 
           <AddSpecificationModal
             isOpen={isAddSpecificationModalOpen}

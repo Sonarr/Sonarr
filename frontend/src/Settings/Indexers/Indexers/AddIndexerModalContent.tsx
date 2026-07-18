@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import Alert from 'Components/Alert';
-import FieldSet from 'Components/FieldSet';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -59,41 +58,32 @@ function AddIndexerModalContent({
         ) : null}
 
         {isSchemaFetched && !schemaError ? (
-          <div>
-            <Alert kind={kinds.INFO}>
-              <div>{translate('SupportedIndexers')}</div>
-              <div>{translate('SupportedIndexersMoreInfo')}</div>
-            </Alert>
+          <div className={styles.indexers}>
+            <div className={styles.group}>
+              <h3 className={styles.groupHeading}>{translate('Usenet')}</h3>
 
-            <FieldSet legend={translate('Usenet')}>
-              <div className={styles.indexers}>
-                {usenetIndexers.map((indexer) => {
-                  return (
-                    <AddIndexerItem
-                      key={indexer.implementation}
-                      {...indexer}
-                      implementation={indexer.implementation}
-                      onIndexerSelect={onIndexerSelect}
-                    />
-                  );
-                })}
-              </div>
-            </FieldSet>
+              {usenetIndexers.map((indexer) => (
+                <AddIndexerItem
+                  key={indexer.implementation}
+                  {...indexer}
+                  implementation={indexer.implementation}
+                  onIndexerSelect={onIndexerSelect}
+                />
+              ))}
+            </div>
 
-            <FieldSet legend={translate('Torrents')}>
-              <div className={styles.indexers}>
-                {torrentIndexers.map((indexer) => {
-                  return (
-                    <AddIndexerItem
-                      key={indexer.implementation}
-                      {...indexer}
-                      implementation={indexer.implementation}
-                      onIndexerSelect={onIndexerSelect}
-                    />
-                  );
-                })}
-              </div>
-            </FieldSet>
+            <div className={styles.group}>
+              <h3 className={styles.groupHeading}>{translate('Torrents')}</h3>
+
+              {torrentIndexers.map((indexer) => (
+                <AddIndexerItem
+                  key={indexer.implementation}
+                  {...indexer}
+                  implementation={indexer.implementation}
+                  onIndexerSelect={onIndexerSelect}
+                />
+              ))}
+            </div>
           </div>
         ) : null}
       </ModalBody>

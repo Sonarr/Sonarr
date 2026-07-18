@@ -3,6 +3,7 @@
 interface CssExports {
   'actions': string;
   'downloadClient': string;
+  'infoLink': string;
   'name': string;
   'overlay': string;
   'presetsMenu': string;

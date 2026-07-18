@@ -1,11 +1,65 @@
+.intro {
+  margin: 0 0 8px;
+  max-width: 70ch;
+  color: var(--inkMuted);
+  font-size: 13px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.55;
+}
+
+.section {
+  margin-top: 24px;
+
+  &:first-of-type {
+    margin-top: 16px;
+  }
+}
+
+.sectionHeading {
+  margin: 0 0 12px;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: var(--defaultFontFamily);
+}
+
+.sectionHeadingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin: 0 0 12px;
+}
+
+.sectionHeadingRow .sectionHeading {
+  margin: 0;
+}
+
+.bordered {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
+  background-color: var(--paperWarm);
+}
+
 .formGroupsContainer {
   display: flex;
-  flex-wrap: wrap;
+  column-gap: 32px;
 }
 
 .formGroupWrapper,
 .formatItemLarge {
-  flex: 0 0 calc($formGroupSmallWidth - 100px);
+  flex: 0 0 calc(var(--formGroupSmallWidth) - 100px);
+}
+
+.qualitiesColumn {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .deleteButtonContainer {

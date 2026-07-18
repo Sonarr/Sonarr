@@ -1,11 +1,11 @@
+import classNames from 'classnames';
 import React, { useCallback, useEffect, useState } from 'react';
-import Alert from 'Components/Alert';
 import Card from 'Components/Card';
-import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
@@ -144,43 +144,47 @@ function EditCustomFormatModalContent({
       <ModalHeader>
         {id ? translate('EditCustomFormat') : translate('AddCustomFormat')}
       </ModalHeader>
-
       <ModalBody>
         <div>
           <Form
             validationErrors={validationErrors}
             validationWarnings={validationWarnings}
           >
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('Name')}</FormLabel>
 
-              <FormInputGroup
+              <FormInput
                 type={inputTypes.TEXT}
                 name="name"
                 {...name}
                 onChange={handleInputChange}
               />
-            </FormGroup>
+            </FormRow>
 
-            <FormGroup>
+            <FormRow>
               <FormLabel>
                 {translate('IncludeCustomFormatWhenRenaming')}
               </FormLabel>
-
-              <FormInputGroup
+              <FormInputHelpText
+                text={translate('IncludeCustomFormatWhenRenamingHelpText')}
+              />
+              <FormInput
                 type={inputTypes.CHECK}
                 name="includeCustomFormatWhenRenaming"
-                helpText={translate('IncludeCustomFormatWhenRenamingHelpText')}
                 {...includeCustomFormatWhenRenaming}
                 onChange={handleInputChange}
               />
-            </FormGroup>
+            </FormRow>
           </Form>
 
-          <FieldSet legend={translate('Conditions')}>
-            <Alert kind={kinds.INFO}>
-              <div>{translate('CustomFormatsSettingsTriggerInfo')}</div>
-            </Alert>
+          <div className={styles.conditions}>
+            <h3 className={styles.conditionsTitle}>
+              {translate('Conditions')}
+            </h3>
+
+            <p className={styles.intro}>
+              {translate('CustomFormatsMatchInfo')}
+            </p>
 
             <div className={styles.customFormats}>
               {specifications.map((specification) => (
@@ -194,16 +198,21 @@ function EditCustomFormatModalContent({
               ))}
 
               <Card
-                className={styles.addSpecification}
-                aria-label={translate('AddCondition')}
+                className={classNames(
+                  styles.addSpecification,
+                  !specifications.length && styles.fullWidth
+                )}
                 onPress={handleAddSpecificationPress}
               >
                 <div className={styles.center}>
-                  <Icon name={icons.ADD} size={45} />
+                  <Icon name={icons.ADD} size={20} />
+                </div>
+                <div className={styles.addLabel}>
+                  {translate('AddCondition')}
                 </div>
               </Card>
             </div>
-          </FieldSet>
+          </div>
 
           <AddSpecificationModal
             isOpen={isAddSpecificationModalOpen}
@@ -226,22 +235,15 @@ function EditCustomFormatModalContent({
           />
         </div>
       </ModalBody>
-
       <ModalFooter>
         <div className={styles.rightButtons}>
           {id ? (
-            <Button
-              className={styles.deleteButton}
-              kind={kinds.DANGER}
-              onPress={onDeleteCustomFormatPress}
-            >
+            <Button kind={kinds.DANGER} onPress={onDeleteCustomFormatPress}>
               {translate('Delete')}
             </Button>
           ) : null}
 
-          <Button className={styles.deleteButton} onPress={handleImportPress}>
-            {translate('Import')}
-          </Button>
+          <Button onPress={handleImportPress}>{translate('Import')}</Button>
         </div>
 
         <Button onPress={onModalClose}>{translate('Cancel')}</Button>

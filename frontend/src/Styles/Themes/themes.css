@@ -137,7 +137,7 @@
   --alertWarningBorderColor: oklch(72% 0.130 65);
   --alertWarningBackgroundColor: oklch(72% 0.130 65 / 0.08);
   --alertWarningColor: oklch(52% 0.095 65);
-  --sliderAccentColor: oklch(78% 0.130 215);
+  --sliderAccentColor: oklch(52% 0.125 220);
   --inputBackgroundColor: oklch(98% 0.006 80);
   --inputReadOnlyBackgroundColor: oklch(96% 0.008 80);
   --inputHoverBackgroundColor: oklch(100% 0 0);
@@ -327,7 +327,7 @@
   --alertWarningBorderColor: oklch(76% 0.120 65);
   --alertWarningBackgroundColor: oklch(76% 0.120 65 / 0.10);
   --alertWarningColor: oklch(95% 0.006 80);
-  --sliderAccentColor: oklch(82% 0.115 215);
+  --sliderAccentColor: oklch(58% 0.105 218);
   --inputBackgroundColor: oklch(19% 0.008 80);
   --inputReadOnlyBackgroundColor: oklch(15% 0.008 80);
   --inputHoverBackgroundColor: oklch(23% 0.010 80);
