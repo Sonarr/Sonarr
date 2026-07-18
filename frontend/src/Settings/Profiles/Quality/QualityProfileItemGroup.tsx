@@ -51,7 +51,7 @@ function QualityProfileItemGroup({
     index,
     group: ROOT_CONTAINER,
     type: 'group',
-    accept: mode === 'editGroups' ? ['quality'] : [],
+    accept: ['quality', 'group'],
     collisionPriority: CollisionPriority.Low,
     disabled: mode === 'editSizes',
   });
