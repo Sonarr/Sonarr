@@ -636,6 +636,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                   </Label>
 
                   <Tooltip
+                    accessibleLabel={translate('Links')}
                     anchor={
                       <Label className={styles.detailsLabel} size={sizes.LARGE}>
                         <div>
@@ -749,6 +750,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                         </div>
                       </Label>
                     }
+                    contentRole="dialog"
                     tooltip={
                       <SeriesDetailsLinks
                         tvdbId={tvdbId}
