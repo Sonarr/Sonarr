@@ -2,11 +2,14 @@ import React, { useCallback, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
+import SectionHeading from 'Components/SectionHeading';
 import { icons } from 'Helpers/Props';
 import ParseModal from 'Parse/ParseModal';
+import settingsStyles from 'Settings/Settings.css';
 import SettingsPage from 'Settings/SettingsPage';
 import translate from 'Utilities/String/translate';
 import CustomFormats from './CustomFormats/CustomFormats';
@@ -64,9 +67,23 @@ function CustomFormatSettingsPage() {
       }
     >
       <PageContentBody>
-        <DndProvider backend={HTML5Backend}>
-          <CustomFormats />
-        </DndProvider>
+        <div className={settingsStyles.section}>
+          <PageHeading
+            scope={translate('Settings')}
+            title={translate('CustomFormats')}
+          />
+
+          <div className={settingsStyles.pageSection}>
+            <SectionHeading
+              title={translate('CustomFormats')}
+              description={translate('CustomFormatsSectionDescription')}
+            />
+
+            <DndProvider backend={HTML5Backend}>
+              <CustomFormats />
+            </DndProvider>
+          </div>
+        </div>
       </PageContentBody>
 
       <ParseModal

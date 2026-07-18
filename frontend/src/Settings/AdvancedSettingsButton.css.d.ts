@@ -4,7 +4,7 @@ interface CssExports {
   'button': string;
   'disabled': string;
   'enabled': string;
-  'indicatorBackground': string;
+  'iconWrapper': string;
   'indicatorContainer': string;
   'label': string;
 }

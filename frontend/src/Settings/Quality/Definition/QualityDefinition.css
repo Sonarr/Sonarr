@@ -1,35 +1,39 @@
 .qualityDefinition {
   display: flex;
-  align-content: stretch;
-  margin: 5px 0;
-  padding-top: 5px;
-  height: 45px;
-  border-top: 1px solid var(--borderColor);
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hairline);
+  gap: 24px;
 }
 
-.quality,
+.quality {
+  flex: 0 0 240px;
+  overflow: hidden;
+  min-width: 0;
+  color: var(--ink);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
 .title {
-  flex: 0 1 250px;
-  padding-right: 20px;
-  line-height: 40px;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 700px;
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media only screen and (max-width: 768px) {
   .qualityDefinition {
     flex-wrap: wrap;
-    height: auto;
-
-    &:first-child {
-      border-top: none;
-    }
-  }
-
-  .qualityDefinition:first-child {
-    border-top: none;
+    gap: 6px;
   }
 
   .quality {
-    font-weight: bold;
-    line-height: inherit;
+    flex-basis: 100%;
+    font-weight: 500;
+  }
+
+  .title {
+    flex-basis: 100%;
   }
 }

@@ -1,10 +1,27 @@
-.hasFileBrowser {
+.inputWrapper {
+  display: flex;
+}
+
+.pathInput {
   composes: input from '~./AutoSuggestInput.css';
+
+  font-family: var(--monoSpaceFontFamily);
+}
+
+.hasFileBrowser {
+  composes: pathInput;
   composes: hasButton from '~Components/Form/Input.css';
 }
 
-.inputWrapper {
-  display: flex;
+.fileBrowserGroup {
+  border: 1px solid var(--inputBorderColor);
+  border-radius: 8px;
+  background-color: var(--inputBackgroundColor);
+  transition: border-color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:focus-within {
+    border-color: var(--accent);
+  }
 }
 
 .pathMatch {
@@ -14,9 +31,11 @@
 .fileBrowserButton {
   composes: button from '~./FormInputButton.css';
 
-  height: 35px;
+  border-radius: 0 8px 8px 0;
 }
 
 .fileBrowserMiddleButton {
   composes: middleButton from '~./FormInputButton.css';
+
+  border-radius: 0;
 }

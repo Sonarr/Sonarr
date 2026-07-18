@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'Components/Modal/Modal';
+import { sizes } from 'Helpers/Props';
 import AddIndexerModalContent, {
   AddIndexerModalContentProps,
 } from './AddIndexerModalContent';
@@ -14,7 +15,7 @@ function AddIndexerModal({
   onModalClose,
 }: AddIndexerModalProps) {
   return (
-    <Modal isOpen={isOpen} onModalClose={onModalClose}>
+    <Modal isOpen={isOpen} size={sizes.MEDIUM} onModalClose={onModalClose}>
       <AddIndexerModalContent
         onIndexerSelect={onIndexerSelect}
         onModalClose={onModalClose}

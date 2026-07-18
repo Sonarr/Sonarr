@@ -144,10 +144,15 @@ export function PathInputInternal({
   }, [inputValue, previousInputValue, setValue]);
 
   return (
-    <div className={className}>
+    <div
+      className={classNames(
+        className,
+        hasFileBrowser && styles.fileBrowserGroup
+      )}
+    >
       <AutoSuggestInput
         {...otherProps}
-        className={hasFileBrowser ? styles.hasFileBrowser : undefined}
+        className={hasFileBrowser ? styles.hasFileBrowser : styles.pathInput}
         name={name}
         value={value}
         suggestions={paths}

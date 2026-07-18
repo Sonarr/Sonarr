@@ -1,4 +1,5 @@
 import React from 'react';
+import Label from 'Components/Label';
 
 interface TagInUseProps {
   label: string;
@@ -13,15 +14,15 @@ export default function TagInUse({ label, labelPlural, count }: TagInUseProps) {
 
   if (count > 1 && labelPlural) {
     return (
-      <div>
+      <Label kind="default">
         {count} {labelPlural.toLowerCase()}
-      </div>
+      </Label>
     );
   }
 
   return (
-    <div>
+    <Label kind="default">
       {count} {label.toLowerCase()}
-    </div>
+    </Label>
   );
 }

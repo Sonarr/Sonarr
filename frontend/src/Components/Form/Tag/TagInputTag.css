@@ -32,4 +32,6 @@
 
   display: flex;
   max-width: 100%;
+  letter-spacing: normal;
+  font-size: 14px;
 }
