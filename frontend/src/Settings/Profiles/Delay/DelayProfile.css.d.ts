@@ -15,7 +15,6 @@ interface CssExports {
   'isDefault': string;
   'isDragging': string;
   'overlay': string;
-  'placeholder': string;
 }
 export const cssExports: CssExports;
 export default cssExports;
