@@ -53,22 +53,9 @@
   color: var(--inkFaint);
   cursor: grab;
   transition: opacity 120ms ease;
+  touch-action: none;
 }
 
 .isDragging {
   opacity: 0.25;
-}
-
-.placeholder {
-  height: 2px;
-  border-radius: 2px;
-  background-color: var(--accent);
-}
-
-.placeholderBefore {
-  margin-bottom: 6px;
-}
-
-.placeholderAfter {
-  margin-top: 6px;
 }
