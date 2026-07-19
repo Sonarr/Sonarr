@@ -100,7 +100,12 @@ namespace NzbDrone.Core.Download.Clients.RQBit
                         torrent.Name = torrentWithStats.Name;
                         torrent.Hash = torrentWithStats.InfoHash;
                         torrent.TotalSize = torrentWithStats.Stats.TotalBytes;
-                        torrent.Path = torrentWithStats.OutputFolder + torrentWithStats.Name;
+                        torrent.Path = torrentWithStats.OutputFolder;
+
+                        if (!torrentWithStats.OutputFolder.EndsWith(torrentWithStats.Name))
+                        {
+                            torrent.Path += torrentWithStats.Name;
+                        }
 
                         var statsLive = torrentWithStats.Stats.Live;
                         if (statsLive?.DownloadSpeed != null)
