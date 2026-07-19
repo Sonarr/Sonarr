@@ -8,9 +8,6 @@ interface CssExports {
   'hidden': string;
   'isDragging': string;
   'label': string;
-  'placeholder': string;
-  'placeholderAfter': string;
-  'placeholderBefore': string;
 }
 export const cssExports: CssExports;
 export default cssExports;
