@@ -16,6 +16,10 @@
     flex-direction: column;
     padding: 10px 12px;
   }
+
+  &.isInGroup:not(.editSizes) {
+    padding-left: 32px;
+  }
 }
 
 .checkInputContainer {

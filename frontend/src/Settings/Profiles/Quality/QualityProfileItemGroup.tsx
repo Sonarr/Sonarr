@@ -1,4 +1,5 @@
 import { CollisionPriority } from '@dnd-kit/abstract';
+import { useDragOperation } from '@dnd-kit/react';
 import { useSortable } from '@dnd-kit/react/sortable';
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
@@ -52,9 +53,12 @@ function QualityProfileItemGroup({
     group: ROOT_CONTAINER,
     type: 'group',
     accept: ['quality', 'group'],
-    collisionPriority: CollisionPriority.Low,
+    collisionPriority:
+      mode === 'editGroups' ? CollisionPriority.Low : CollisionPriority.Normal,
     disabled: mode === 'editSizes',
   });
+
+  const { source } = useDragOperation();
 
   const handleAllowedChange = useCallback(
     ({ value }: InputChanged<boolean>) => {
@@ -163,7 +167,12 @@ function QualityProfileItemGroup({
       </div>
 
       {mode === 'default' ? null : (
-        <div className={mode === 'editGroups' ? styles.items : undefined}>
+        <div
+          className={classNames(
+            mode === 'editGroups' && styles.items,
+            mode === 'editGroups' && source && styles.isDragActive
+          )}
+        >
           {items.map((subItem, subIndex) => {
             const { quality, minSize, maxSize, preferredSize } = subItem;
 

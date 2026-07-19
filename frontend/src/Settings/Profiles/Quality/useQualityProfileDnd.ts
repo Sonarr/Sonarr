@@ -9,13 +9,8 @@ import {
 
 export const ROOT_CONTAINER = 'root';
 
-export function qualityKey(id: number) {
-  return `q-${id}`;
-}
-
-export function groupContainerKey(id: number) {
-  return `g-${id}`;
-}
+export const qualityKey = (id: number) => `q-${id}`;
+export const groupContainerKey = (id: number) => `g-${id}`;
 
 type Board = Record<string, string[]>;
 

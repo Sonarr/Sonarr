@@ -9,6 +9,7 @@ interface CssExports {
   'editSizes': string;
   'editSizesQualityNameLabel': string;
   'groupQualities': string;
+  'isDragActive': string;
   'isDragging': string;
   'items': string;
   'name': string;
