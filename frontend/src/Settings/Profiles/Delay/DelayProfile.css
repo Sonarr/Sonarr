@@ -16,7 +16,7 @@
 }
 
 .isDefault {
-  background-color: color-mix(in oklch, var(--accent) 4%, var(--paperCard));
+  background-color: color-mix(in oklab, var(--accent) 4%, var(--paperCard));
 }
 
 .isDragging {
