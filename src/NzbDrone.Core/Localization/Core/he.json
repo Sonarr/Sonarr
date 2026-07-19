@@ -2049,8 +2049,6 @@
     "Size": "גודל",
     "SizeLimit": "הגבלת גודל",
     "SizeOnDisk": "גודל בכונן",
-    "SkipFreeSpaceCheck": "דלג על בדיקת שטח פנוי",
-    "SkipFreeSpaceCheckHelpText": "השתמש כאשר {appName} אינו מצליח לזהות את השטח הפנוי בתיקיית השורש שלך",
     "SkipRedownload": "דלג על הורדה מחדש",
     "SkipRedownloadHelpText": "מונע מ-{appName} לנסות להוריד גרסת הפצה חלופית עבור פריט זה",
     "Small": "קטן",

@@ -1351,8 +1351,6 @@
     "Size": "Veľkosť",
     "SizeLimit": "Obmedzenie veľkosti",
     "SizeOnDisk": "Veľkosť na disku",
-    "SkipFreeSpaceCheck": "Preskočiť kontrolu voľného miesta",
-    "SkipFreeSpaceCheckHelpText": "Použiť, keď {appName} nedokáže zistiť voľné miesto v koreňovom priečinku",
     "SkipRedownload": "Preskočiť znovu stiahnutie",
     "Small": "Malý",
     "SmartReplace": "Smart výmena",

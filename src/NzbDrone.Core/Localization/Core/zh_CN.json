@@ -1890,8 +1890,6 @@
     "Size": "大小",
     "SizeLimit": "尺寸限制",
     "SizeOnDisk": "磁盘占用空间",
-    "SkipFreeSpaceCheck": "跳过剩余空间检查",
-    "SkipFreeSpaceCheckHelpText": "当 {appName} 无法检测到根目录的剩余空间时使用",
     "SkipRedownload": "跳过重新下载",
     "SkipRedownloadHelpText": "阻止{appName}尝试下载此项目的替代版本",
     "Small": "小",

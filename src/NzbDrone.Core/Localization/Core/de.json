@@ -2059,8 +2059,6 @@
     "Size": "Größe",
     "SizeLimit": "Größenlimit",
     "SizeOnDisk": "Größe auf Festplatte",
-    "SkipFreeSpaceCheck": "Prüfung des freien Speichers überspringen",
-    "SkipFreeSpaceCheckHelpText": "Verwenden, wenn {appName} freien Speicherplatz im Stammordner nicht feststellen kann",
     "SkipRedownload": "Neu-Download überspringen",
     "SkipRedownloadHelpText": "Verhindert, dass {appName} ein alternatives Release für dieses Element herunterlädt",
     "Small": "Klein",
