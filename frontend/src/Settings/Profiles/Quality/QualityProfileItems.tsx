@@ -4,26 +4,28 @@ import Label from 'Components/Label';
 import { kinds, sizes } from 'Helpers/Props';
 import { Failure } from 'typings/pending';
 import translate from 'Utilities/String/translate';
-import QualityProfileItemDragSource, {
-  QualityProfileItemDragSourceActionProps,
-} from './QualityProfileItemDragSource';
-import { getItemFailures, ItemFailuresMap } from './qualityProfileItemFailures';
-import { QualityProfileItems as Items } from './useQualityProfiles';
+import QualityProfileItem from './QualityProfileItem';
+import { ItemFailures } from './qualityProfileItemFailures';
+import QualityProfileItemGroup from './QualityProfileItemGroup';
+import { SizeChanged } from './QualityProfileItemSize';
+import { DisplayItem, ROOT_CONTAINER } from './useQualityProfileDnd';
 import styles from './QualityProfileItems.css';
 
 export type EditQualityProfileMode = 'default' | 'editGroups' | 'editSizes';
 
-interface QualityProfileItemsProps
-  extends QualityProfileItemDragSourceActionProps {
+interface QualityProfileItemsProps {
   mode: EditQualityProfileMode;
-  dragQualityIndex: string | null;
-  dropQualityIndex: string | null;
-  dropPosition: string | null;
-  qualityProfileItems: Items;
+  displayItems: DisplayItem[];
   errors?: Failure[];
   warnings?: Failure[];
-  itemFailures: ItemFailuresMap;
+  failuresByQualityId: Map<number, ItemFailures>;
   onChangeMode: (mode: EditQualityProfileMode) => void;
+  onCreateGroupPress: (qualityId: number) => void;
+  onItemAllowedChange: (id: number, allowed: boolean) => void;
+  onDeleteGroupPress: (groupId: number) => void;
+  onGroupAllowedChange: (id: number, allowed: boolean) => void;
+  onItemGroupNameChange: (groupId: number, name: string) => void;
+  onSizeChange: (sizeChange: SizeChanged) => void;
 }
 
 interface ModeOption {
@@ -33,19 +35,18 @@ interface ModeOption {
 
 function QualityProfileItems({
   mode,
-  dropQualityIndex,
-  dropPosition,
-  qualityProfileItems,
+  displayItems,
   errors = [],
   warnings = [],
-  itemFailures,
+  failuresByQualityId,
   onChangeMode,
-  ...otherProps
+  onCreateGroupPress,
+  onItemAllowedChange,
+  onDeleteGroupPress,
+  onGroupAllowedChange,
+  onItemGroupNameChange,
+  onSizeChange,
 }: QualityProfileItemsProps) {
-  const isDragging = dropQualityIndex !== null;
-  const isDraggingUp = isDragging && dropPosition === 'above';
-  const isDraggingDown = isDragging && dropPosition === 'below';
-
   const modeOptions: ModeOption[] = useMemo(
     () => [
       { key: 'default', label: translate('Qualities') },
@@ -73,15 +74,15 @@ function QualityProfileItems({
         <div className={styles.headingCluster}>
           <h3 className={styles.heading}>{translate('Qualities')}</h3>
 
-          {itemFailures.size > 0 ? (
+          {failuresByQualityId.size > 0 ? (
             <Label
               kind={kinds.DANGER}
               size={sizes.MEDIUM}
               title={translate('QualityProfileItemFailureCount', {
-                count: itemFailures.size,
+                count: failuresByQualityId.size,
               })}
             >
-              {itemFailures.size}
+              {failuresByQualityId.size}
             </Label>
           ) : null}
         </div>
@@ -130,53 +131,49 @@ function QualityProfileItems({
       })}
 
       <div className={styles.qualities}>
-        {qualityProfileItems
-          .map((item, index) => {
-            if ('quality' in item) {
-              const { quality, allowed, minSize, maxSize, preferredSize } =
-                item;
-
-              return (
-                <QualityProfileItemDragSource
-                  key={item.quality.id}
-                  {...otherProps}
-                  mode={mode}
-                  groupId={undefined}
-                  qualityId={quality.id}
-                  name={quality.name}
-                  allowed={allowed}
-                  minSize={minSize}
-                  maxSize={maxSize}
-                  preferredSize={preferredSize}
-                  failures={getItemFailures(itemFailures, index)}
-                  qualityIndex={`${index + 1}`}
-                  isInGroup={false}
-                  isDraggingUp={isDraggingUp}
-                  isDraggingDown={isDraggingDown}
-                />
-              );
-            }
-
-            const { id, name, allowed, items } = item;
-
+        {displayItems.map((entry, index) => {
+          if (entry.kind === 'group') {
             return (
-              <QualityProfileItemDragSource
-                key={id}
-                {...otherProps}
+              <QualityProfileItemGroup
+                key={entry.group.id}
                 mode={mode}
-                groupId={id}
-                qualityId={undefined}
-                name={name}
-                allowed={allowed}
-                items={items}
-                itemFailures={itemFailures}
-                qualityIndex={`${index + 1}`}
-                isDraggingUp={isDraggingUp}
-                isDraggingDown={isDraggingDown}
+                index={index}
+                groupId={entry.group.id}
+                name={entry.group.name}
+                allowed={entry.group.allowed}
+                items={entry.items}
+                failuresByQualityId={failuresByQualityId}
+                onGroupAllowedChange={onGroupAllowedChange}
+                onItemAllowedChange={onItemAllowedChange}
+                onItemGroupNameChange={onItemGroupNameChange}
+                onDeleteGroupPress={onDeleteGroupPress}
+                onSizeChange={onSizeChange}
               />
             );
-          })
-          .reverse()}
+          }
+
+          const { quality, allowed, minSize, maxSize, preferredSize } =
+            entry.item;
+
+          return (
+            <QualityProfileItem
+              key={quality.id}
+              mode={mode}
+              index={index}
+              containerId={ROOT_CONTAINER}
+              qualityId={quality.id}
+              name={quality.name}
+              allowed={allowed}
+              minSize={minSize}
+              maxSize={maxSize}
+              preferredSize={preferredSize}
+              failures={failuresByQualityId.get(quality.id)}
+              onCreateGroupPress={onCreateGroupPress}
+              onItemAllowedChange={onItemAllowedChange}
+              onSizeChange={onSizeChange}
+            />
+          );
+        })}
       </div>
     </div>
   );

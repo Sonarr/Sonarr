@@ -1,6 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageHeading from 'Components/Page/PageHeading';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
@@ -79,9 +77,7 @@ function CustomFormatSettingsPage() {
               description={translate('CustomFormatsSectionDescription')}
             />
 
-            <DndProvider backend={HTML5Backend}>
-              <CustomFormats />
-            </DndProvider>
+            <CustomFormats />
           </div>
         </div>
       </PageContentBody>
