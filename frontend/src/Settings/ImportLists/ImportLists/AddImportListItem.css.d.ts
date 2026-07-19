@@ -7,7 +7,6 @@ interface CssExports {
   'overlay': string;
   'presetsMenu': string;
   'presetsMenuButton': string;
-  'underlay': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

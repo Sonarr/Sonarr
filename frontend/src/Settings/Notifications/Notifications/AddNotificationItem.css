@@ -6,10 +6,6 @@
   height: 100px;
 }
 
-.underlay {
-  @add-mixin cover;
-}
-
 .overlay {
   @add-mixin linkOverlay;
 
