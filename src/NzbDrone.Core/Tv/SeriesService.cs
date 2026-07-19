@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Tv
         Dictionary<int, int> GetAllSeriesQualityProfiles();
         Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true, bool publishUpdatedEvent = true);
         List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder);
-        List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder, bool deferPathUpdate);
+        List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder, bool deferPathUpdate = false);
         bool SeriesPathExists(string folder);
         void RemoveAddOptions(Series series);
         bool UpdateAutoTaggingTags(Series series);
@@ -240,7 +240,7 @@ namespace NzbDrone.Core.Tv
             return UpdateSeries(series, useExistingRelativeFolder, false);
         }
 
-        public List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder, bool deferPathUpdate)
+        public List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder, bool deferPathUpdate = false)
         {
             _logger.Debug("Updating {0} series", series.Count);
 
@@ -248,19 +248,20 @@ namespace NzbDrone.Core.Tv
             {
                 _logger.Trace("Updating: {0}", s.Title);
 
-                if (deferPathUpdate)
+                if (!s.RootFolderPath.IsNullOrWhiteSpace())
                 {
-                    // The file move is queued as a separate, asynchronous command. Path is
-                    // updated by MoveSeriesService once the move has actually completed, so an
-                    // interrupted move (crash, full disk) doesn't leave the DB pointing at files
-                    // that were never actually relocated.
-                    _logger.Trace("Path update for {0} deferred until file move completes", s.Title);
-                }
-                else if (!s.RootFolderPath.IsNullOrWhiteSpace())
-                {
-                    s.Path = _seriesPathBuilder.BuildPath(s, useExistingRelativeFolder);
+                    if (deferPathUpdate)
+                    {
+                        var updatedPath = _seriesPathBuilder.BuildPath(s, useExistingRelativeFolder);
 
-                    _logger.Trace("Changing path for {0} to {1}", s.Title, s.Path);
+                        _logger.Trace("Path for '{0}' will be updated from {1} to {2} after files are moved successfully", s.Title, s.Path, updatedPath);
+                    }
+                    else
+                    {
+                        s.Path = _seriesPathBuilder.BuildPath(s, useExistingRelativeFolder);
+
+                        _logger.Trace("Changing path for {0} to {1}", s.Title, s.Path);
+                    }
                 }
                 else
                 {

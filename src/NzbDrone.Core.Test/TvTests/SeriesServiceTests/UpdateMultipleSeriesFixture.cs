@@ -84,6 +84,20 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
         }
 
         [Test]
+        public void should_not_update_path_when_deferred_and_rootFolderPath_is_empty()
+        {
+            var result = Subject.UpdateSeries(_series, false, true);
+
+            result.ForEach(s =>
+            {
+                var expectedPath = _series.Single(ser => ser.Id == s.Id).Path;
+                s.Path.Should().Be(expectedPath);
+            });
+
+            Mocker.GetMock<IBuildSeriesPaths>().Verify(v => v.BuildPath(It.IsAny<Series>(), It.IsAny<bool>()), Times.Never());
+        }
+
+        [Test]
         public void should_be_able_to_update_many_series()
         {
             var series = Builder<Series>.CreateListOfSize(50)
