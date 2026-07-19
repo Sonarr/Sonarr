@@ -9,13 +9,15 @@ import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
 import { kinds } from 'Helpers/Props';
 import useRootFolders, { useRootFolder } from 'RootFolder/useRootFolders';
 import { useQualityProfilesData } from 'Settings/Profiles/Quality/useQualityProfiles';
 import translate from 'Utilities/String/translate';
 import ImportSeriesFooter from './ImportSeriesFooter';
+import ImportSeriesList from './ImportSeriesList';
 import { clearImportSeries } from './importSeriesStore';
-import ImportSeriesTable from './ImportSeriesTable';
+import styles from './ImportSeries.css';
 
 function ImportSeries() {
   const { rootFolderId: rootFolderIdString = '' } = useParams<{
@@ -81,31 +83,38 @@ function ImportSeries() {
     <SelectProvider items={items}>
       <PageContent title={translate('ImportSeries')}>
         <PageContentBody ref={scrollerRef}>
-          {rootFoldersFetching && !rootFoldersFetched ? (
-            <LoadingIndicator />
-          ) : null}
+          <div className={styles.content}>
+            <PageHeading
+              scope={translate('Media')}
+              title={translate('ImportSeries')}
+            />
 
-          {!rootFoldersFetching && !!rootFoldersError ? (
-            <Alert kind={kinds.DANGER}>
-              {translate('RootFoldersLoadError')}
-            </Alert>
-          ) : null}
+            {rootFoldersFetching && !rootFoldersFetched ? (
+              <LoadingIndicator />
+            ) : null}
 
-          {!rootFoldersError &&
-          !rootFoldersFetching &&
-          rootFoldersFetched &&
-          !unmappedFolders.length ? (
-            <Alert kind={kinds.INFO}>
-              {translate('AllSeriesInRootFolderHaveBeenImported', { path })}
-            </Alert>
-          ) : null}
+            {!rootFoldersFetching && !!rootFoldersError ? (
+              <Alert kind={kinds.DANGER}>
+                {translate('RootFoldersLoadError')}
+              </Alert>
+            ) : null}
 
-          {!rootFoldersError &&
-          rootFoldersFetched &&
-          !!unmappedFolders.length &&
-          scrollerRef.current ? (
-            <ImportSeriesTable items={items} scrollerRef={scrollerRef} />
-          ) : null}
+            {!rootFoldersError &&
+            !rootFoldersFetching &&
+            rootFoldersFetched &&
+            !unmappedFolders.length ? (
+              <Alert kind={kinds.INFO}>
+                {translate('AllSeriesInRootFolderHaveBeenImported', { path })}
+              </Alert>
+            ) : null}
+
+            {!rootFoldersError &&
+            rootFoldersFetched &&
+            !!unmappedFolders.length &&
+            scrollerRef.current ? (
+              <ImportSeriesList items={items} scrollerRef={scrollerRef} />
+            ) : null}
+          </div>
         </PageContentBody>
 
         {!rootFoldersError && rootFoldersFetched && !!unmappedFolders.length ? (
