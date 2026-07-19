@@ -25,7 +25,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, ReleaseDecisionInformation information)
         {
-            if (_configService.SkipFreeSpaceCheckWhenImporting)
+            if (_configService.SkipFreeSpaceCheckWhenGrabbing)
             {
                 _logger.Debug("Skipping free space check");
                 return DownloadSpecDecision.Accept();

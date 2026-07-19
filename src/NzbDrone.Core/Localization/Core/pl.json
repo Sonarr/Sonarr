@@ -2047,8 +2047,6 @@
     "Size": "Rozmiar",
     "SizeLimit": "Limit rozmiaru",
     "SizeOnDisk": "Rozmiar na dysku",
-    "SkipFreeSpaceCheck": "Pomiń sprawdzanie wolnego miejsca",
-    "SkipFreeSpaceCheckHelpText": "Użyj, gdy {appName} nie może wykryć wolnego miejsca w folderze głównym",
     "SkipRedownload": "Pomiń ponowne pobieranie",
     "SkipRedownloadHelpText": "Zapobiega próbom pobrania alternatywnego wydania dla tego elementu przez {appName}",
     "Small": "Mały",

@@ -2063,8 +2063,6 @@
     "Size": "Tamanho",
     "SizeLimit": "Limite de Tamanho",
     "SizeOnDisk": "Tamanho no disco",
-    "SkipFreeSpaceCheck": "Ignorar verificação de espaço livre",
-    "SkipFreeSpaceCheckHelpText": "Usar quando o {appName} não conseguir detectar espaço livre em sua pasta raiz",
     "SkipRedownload": "Ignorar o Redownload",
     "SkipRedownloadHelpText": "Impede que o {appName} tente baixar uma versão alternativa para este item",
     "Small": "Pequeno",

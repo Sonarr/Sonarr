@@ -2063,8 +2063,6 @@
     "Size": "Méret",
     "SizeLimit": "Méretkorlát",
     "SizeOnDisk": "Lemezen foglalt hely",
-    "SkipFreeSpaceCheck": "Hagyja ki a szabad hely ellenőrzést",
-    "SkipFreeSpaceCheckHelpText": "Akkor használja, ha a {appName} nem tudja felismerni a gyökérmappán rendelkezésre álló szabad tárhelyet",
     "SkipRedownload": "Az újraletöltés kihagyása",
     "SkipRedownloadHelpText": "Megakadályozza, hogy {appName} megpróbáljon letölteni egy alternatív kiadást ehhez az elemhez",
     "Small": "Kicsi",

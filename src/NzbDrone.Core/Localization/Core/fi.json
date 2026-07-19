@@ -2049,8 +2049,6 @@
     "Size": "Koko",
     "SizeLimit": "Kokorajoitus",
     "SizeOnDisk": "Koko levyllä",
-    "SkipFreeSpaceCheck": "Ohita vapaan tilan tarkastus",
-    "SkipFreeSpaceCheckHelpText": "Käytä, kun {appName} ei kykene tunnistamaan juurikansiosi käytettävissä olevaa vapaata tallennustilaa.",
     "SkipRedownload": "Ohita uudelleenlataus",
     "SkipRedownloadHelpText": "Estää {appName}ia lataamasta kohteelle vaihtoehtoista julkaisua.",
     "Small": "Pieni",
