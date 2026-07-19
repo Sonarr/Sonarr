@@ -1293,7 +1293,7 @@
     "MonitorEpisodes": "Valvo jaksoja",
     "MonitorEpisodesModalInfo": "Tämä määrittää vain mitä jaksoja tai kausia sarjasta valvotaan. Valinta \"Ei mitään\" lopettaa sarjan valvonnan.",
     "MonitorExistingEpisodes": "Olemassa olevat jaksot",
-    "MonitorExistingEpisodesDescription": "Valvo jaksoja, joille on tiedostoja tai joita ei ole vielä esitetty.",
+    "MonitorExistingEpisodesDescription": "Valvo jaksoja, joille on tiedostoja.",
     "MonitorFirstSeason": "Ensimmäinen kausi",
     "MonitorFirstSeasonDescription": "Valvo kaikkia ensimmäisen kauden jaksoja. Muita kausia ei huomioida.",
     "MonitorFutureEpisodes": "Tulevat jaksot",
