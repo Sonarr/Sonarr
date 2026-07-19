@@ -16,7 +16,7 @@
 }
 
 .isDefault {
-  background-color: color-mix(in oklch, var(--accent) 4%, var(--paperCard));
+  background-color: color-mix(in oklab, var(--accent) 4%, var(--paperCard));
 }
 
 .isDragging {
@@ -38,6 +38,7 @@
   cursor: grab;
   transition: opacity 0.15s ease;
   pointer-events: all;
+  touch-action: none;
 }
 
 .delayProfile:hover .dragHandle {
@@ -114,20 +115,6 @@
 
   &:not(:first-child) {
     margin-left: 4px;
-  }
-}
-
-.placeholder {
-  height: 50px;
-  border: 1px dashed var(--accent);
-  border-radius: 12px;
-
-  &:first-child {
-    margin-bottom: 12px;
-  }
-
-  &:last-child {
-    margin-top: 12px;
   }
 }
 

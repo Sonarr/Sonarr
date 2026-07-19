@@ -1,3 +1,5 @@
+import { move } from '@dnd-kit/helpers';
+import { DragDropProvider, DragEndEvent, DragOverEvent } from '@dnd-kit/react';
 import React, { useCallback, useState } from 'react';
 import Link from 'Components/Link/Link';
 import PageSectionContent from 'Components/Page/PageSectionContent';
@@ -6,6 +8,7 @@ import translate from 'Utilities/String/translate';
 import DelayProfile from './DelayProfile';
 import EditDelayProfileModal from './EditDelayProfileModal';
 import {
+  DelayProfile as DelayProfileType,
   useReorderDelayProfile,
   useSortedDelayProfiles,
 } from './useDelayProfiles';
@@ -24,22 +27,11 @@ function DelayProfiles() {
 
   const tagList = useTagList();
 
-  const [dragIndex, setDragIndex] = useState<number | null>(null);
-  const [dropIndex, setDropIndex] = useState<number | null>(null);
+  const [localItems, setLocalItems] = useState<DelayProfileType[] | null>(null);
   const [isAddDelayProfileModalOpen, setIsAddDelayProfileModalOpen] =
     useState(false);
 
-  const isDragging = dropIndex !== null;
-  const isDraggingUp =
-    isDragging &&
-    dropIndex != null &&
-    dragIndex != null &&
-    dropIndex < dragIndex;
-  const isDraggingDown =
-    isDragging &&
-    dropIndex != null &&
-    dragIndex != null &&
-    dropIndex > dragIndex;
+  const displayedItems = localItems ?? items;
 
   const handleAddDelayProfilePress = useCallback(() => {
     setIsAddDelayProfileModalOpen(true);
@@ -49,32 +41,33 @@ function DelayProfiles() {
     setIsAddDelayProfileModalOpen(false);
   }, []);
 
-  const handleDelayProfileDragMove = useCallback(
-    (newDragIndex: number, newDropIndex: number) => {
-      setDragIndex(newDragIndex);
-      setDropIndex(newDropIndex);
-    },
-    []
-  );
+  const handleDragStart = useCallback(() => {
+    setLocalItems([...items]);
+  }, [items]);
 
-  const handleDelayProfileDragEnd = useCallback(
-    (id: number, didDrop: boolean) => {
-      if (didDrop && dropIndex !== null) {
-        const moveOrder = dropIndex;
-        const moving = items.find((p) => p.id === id);
+  const handleDragOver = useCallback((event: DragOverEvent) => {
+    setLocalItems((current) => (current ? move(current, event) : current));
+  }, []);
 
-        if (moving && moving.order !== moveOrder) {
-          const after =
-            moveOrder > 1 ? items.find((p) => p.order === moveOrder - 1) : null;
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      setLocalItems((current) => {
+        if (current && !event.canceled) {
+          const moved = move(current, event);
+          const id = event.operation.source?.id;
+          const index = moved.findIndex((item) => item.id === id);
 
-          reorderDelayProfile({ id, after: after?.id });
+          if (id != null && index !== -1) {
+            const after = index > 0 ? moved[index - 1].id : undefined;
+
+            reorderDelayProfile({ id: id as number, after });
+          }
         }
-      }
 
-      setDragIndex(null);
-      setDropIndex(null);
+        return null;
+      });
     },
-    [dropIndex, items, reorderDelayProfile]
+    [reorderDelayProfile]
   );
 
   return (
@@ -98,36 +91,32 @@ function DelayProfiles() {
         <div className={styles.colActions} />
       </div>
 
-      <div className={styles.delayList}>
-        {items.map((item) => {
-          return (
-            <DelayProfile
-              key={item.id}
-              {...item}
-              tagList={tagList}
-              isDraggingUp={isDraggingUp}
-              isDraggingDown={isDraggingDown}
-              onDelayProfileDragEnd={handleDelayProfileDragEnd}
-              onDelayProfileDragMove={handleDelayProfileDragMove}
-            />
-          );
-        })}
+      <DragDropProvider
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+      >
+        <div className={styles.delayList}>
+          {displayedItems.map((item, index) => {
+            return (
+              <DelayProfile
+                key={item.id}
+                {...item}
+                index={index}
+                tagList={tagList}
+              />
+            );
+          })}
 
-        {defaultProfile ? (
-          <DelayProfile
-            {...defaultProfile}
-            tagList={tagList}
-            isDraggingDown={false}
-            isDraggingUp={false}
-            onDelayProfileDragEnd={handleDelayProfileDragEnd}
-            onDelayProfileDragMove={handleDelayProfileDragMove}
-          />
-        ) : null}
+          {defaultProfile ? (
+            <DelayProfile {...defaultProfile} index={-1} tagList={tagList} />
+          ) : null}
 
-        <Link className={styles.addRow} onPress={handleAddDelayProfilePress}>
-          {translate('AddDelayProfile')}
-        </Link>
-      </div>
+          <Link className={styles.addRow} onPress={handleAddDelayProfilePress}>
+            {translate('AddDelayProfile')}
+          </Link>
+        </div>
+      </DragDropProvider>
 
       <EditDelayProfileModal
         isOpen={isAddDelayProfileModalOpen}

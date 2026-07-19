@@ -1,13 +1,12 @@
+import { useSortable } from '@dnd-kit/react/sortable';
 import classNames from 'classnames';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { DragSourceMonitor, useDrag, useDrop, XYCoord } from 'react-dnd';
+import React, { useCallback, useMemo, useState } from 'react';
 import Card from 'Components/Card';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
-import DragType from 'Helpers/DragType';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import { Tag } from 'Tags/useTags';
 import titleCase from 'Utilities/String/titleCase';
@@ -33,44 +32,36 @@ function getDelay(enabled: boolean, delay: number) {
   return translate('DelayMinutes', { delay });
 }
 
-interface DragItem {
-  id: number;
-  order: number;
-}
-
 interface DelayProfileProps {
   id: number;
+  index: number;
   enableUsenet: boolean;
   enableTorrent: boolean;
   preferredProtocol: string;
   usenetDelay: number;
   torrentDelay: number;
-  order: number;
   tags: number[];
   tagList: ReadonlyArray<Tag>;
-  isDraggingDown: boolean;
-  isDraggingUp: boolean;
-  onDelayProfileDragEnd: (id: number, didDrop: boolean) => void;
-  onDelayProfileDragMove: (dragIndex: number, hoverIndex: number) => void;
 }
 
 function DelayProfile({
   id,
+  index,
   enableUsenet,
   enableTorrent,
   preferredProtocol,
   usenetDelay,
   torrentDelay,
-  order,
   tags,
   tagList,
-  isDraggingDown,
-  isDraggingUp,
-  onDelayProfileDragEnd,
-  onDelayProfileDragMove,
 }: DelayProfileProps) {
   const { deleteDelayProfile } = useDeleteDelayProfile(id);
-  const ref = useRef<HTMLDivElement>(null);
+
+  const { ref, handleRef, isDragging } = useSortable({
+    id,
+    index,
+    disabled: id === 1,
+  });
 
   const [isEditDelayProfileModalOpen, setIsEditDelayProfileModalOpen] =
     useState(false);
@@ -109,74 +100,8 @@ function DelayProfile({
     deleteDelayProfile();
   }, [deleteDelayProfile]);
 
-  const [{ isOver }, dropRef] = useDrop<DragItem, void, { isOver: boolean }>({
-    accept: DragType.DelayProfile,
-    collect(monitor) {
-      return {
-        isOver: monitor.isOver(),
-      };
-    },
-    hover(item: DragItem, monitor) {
-      if (!ref.current) {
-        return;
-      }
-
-      const dragIndex = item.order;
-      const hoverIndex = order;
-
-      // Don't replace items with themselves
-      if (dragIndex === hoverIndex) {
-        return;
-      }
-
-      const hoverBoundingRect = ref.current?.getBoundingClientRect();
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      const clientOffset = monitor.getClientOffset();
-      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-
-      // When moving up, only trigger if drag position is above 50% and
-      // when moving down, only trigger if drag position is below 50%.
-      // If we're moving down the hoverIndex needs to be increased
-      // by one so it's ordered properly. Otherwise the hoverIndex will work.
-
-      if (dragIndex < hoverIndex && hoverClientY > hoverMiddleY) {
-        onDelayProfileDragMove(dragIndex, hoverIndex + 1);
-      } else if (dragIndex > hoverIndex && hoverClientY < hoverMiddleY) {
-        onDelayProfileDragMove(dragIndex, hoverIndex);
-      }
-    },
-  });
-
-  const [{ isDragging }, dragRef, previewRef] = useDrag<
-    DragItem,
-    unknown,
-    { isDragging: boolean }
-  >({
-    type: DragType.DelayProfile,
-    item: () => {
-      return {
-        id,
-        order,
-      };
-    },
-    collect: (monitor: DragSourceMonitor<unknown, unknown>) => ({
-      isDragging: monitor.isDragging(),
-    }),
-    end: (item: DragItem, monitor) => {
-      onDelayProfileDragEnd(item.id, monitor.didDrop());
-    },
-  });
-
-  dropRef(previewRef(ref));
-
-  const isBefore = !isDragging && isDraggingUp && isOver;
-  const isAfter = !isDragging && isDraggingDown && isOver;
-
   return (
-    <div ref={id === 1 ? undefined : ref}>
-      {isBefore ? <div className={styles.placeholder} /> : null}
-
+    <div ref={ref}>
       <Card
         className={classNames(
           styles.delayProfile,
@@ -190,7 +115,7 @@ function DelayProfile({
       >
         <div className={styles.colDrag}>
           {id === 1 ? null : (
-            <div ref={dragRef} className={styles.dragHandle}>
+            <div ref={handleRef} className={styles.dragHandle}>
               <Icon name={icons.REORDER} />
             </div>
           )}
@@ -234,8 +159,6 @@ function DelayProfile({
           )}
         </div>
       </Card>
-
-      {isAfter ? <div className={styles.placeholder} /> : null}
 
       <EditDelayProfileModal
         id={id}

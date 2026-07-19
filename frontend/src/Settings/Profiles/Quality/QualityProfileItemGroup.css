@@ -113,6 +113,7 @@
   width: 28px;
   color: var(--inkFaint);
   cursor: grab;
+  touch-action: none;
 }
 
 .dragIcon {
@@ -124,6 +125,9 @@
 }
 
 .items {
-  padding-left: 20px;
   background-color: var(--paper);
+
+  &.isDragActive {
+    background-color: color-mix(in oklab, var(--accent) 20%, var(--paper));
+  }
 }
