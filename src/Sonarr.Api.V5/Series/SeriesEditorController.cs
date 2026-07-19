@@ -103,7 +103,7 @@ public class SeriesEditorController : Controller
             });
         }
 
-        return TypedResults.Ok(_seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles).ToResource());
+        return TypedResults.Ok(_seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles, resource.MoveFiles).ToResource());
     }
 
     [HttpDelete]

@@ -73,17 +73,19 @@ namespace NzbDrone.Core.Tv
 
                 _logger.ProgressInfo("{0} moved successfully to {1}", series.Title, destinationPath);
 
+                UpdatePath(series.Id, destinationPath);
+
                 _eventAggregator.PublishEvent(new SeriesMovedEvent(series, sourcePath, destinationPath));
             }
             catch (IOException ex)
             {
                 _logger.Error(ex, "Unable to move series from '{0}' to '{1}'. Try moving files manually", sourcePath, destinationPath);
 
-                RevertPath(series.Id, sourcePath);
+                UpdatePath(series.Id, sourcePath);
             }
         }
 
-        private void RevertPath(int seriesId, string path)
+        private void UpdatePath(int seriesId, string path)
         {
             var series = _seriesService.GetSeries(seriesId);
 

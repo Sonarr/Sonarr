@@ -57,6 +57,23 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
         }
 
         [Test]
+        public void should_not_update_path_for_series_pending_a_file_move()
+        {
+            var newRoot = @"C:\Test\TV2".AsOsAgnostic();
+            _series.ForEach(s => s.RootFolderPath = newRoot);
+
+            Mocker.GetMock<IBuildSeriesPaths>()
+                  .Setup(s => s.BuildPath(It.IsAny<Series>(), false))
+                  .Returns<Series, bool>((s, u) => Path.Combine(s.RootFolderPath, s.Title));
+
+            var originalPaths = _series.ToDictionary(s => s.Id, s => s.Path);
+
+            var result = Subject.UpdateSeries(_series, false, true);
+
+            result.Should().OnlyContain(s => s.Path == originalPaths[s.Id]);
+        }
+
+        [Test]
         public void should_not_update_path_when_rootFolderPath_is_empty()
         {
             Subject.UpdateSeries(_series, false).ForEach(s =>
