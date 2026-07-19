@@ -10,6 +10,7 @@ import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectI
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageHeading from 'Components/Page/PageHeading';
+import SectionHeading from 'Components/SectionHeading';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import RootFolders from 'RootFolder/RootFolders';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
@@ -757,13 +758,14 @@ function MediaManagement() {
             </Form>
           ) : null}
 
-          <FieldSet
-            legend={translate('RootFolders')}
-            caption={translate('RootFoldersCaption')}
-          >
-            <RootFolders />
-            <AddRootFolder />
-          </FieldSet>
+          <SectionHeading
+            title={translate('RootFolders')}
+            description={translate('RootFoldersCaption')}
+          />
+
+          <RootFolders />
+
+          <AddRootFolder />
         </div>
       </PageContentBody>
     </SettingsPage>
