@@ -3,18 +3,25 @@
   align-items: center;
   flex: 0 1 auto;
   overflow: hidden;
+  min-width: 0;
 }
 
 .title {
   @add-mixin truncate;
+
+  color: var(--ink);
 }
 
 .year {
-  margin-right: 5px;
-  margin-left: 5px;
-  color: var(--disabledColor);
+  flex-shrink: 0;
+  margin-right: 4px;
+  margin-left: 4px;
+  color: var(--inkMuted);
+  font-size: var(--smallFontSize);
 }
 
 .existing {
-  margin-left: 5px;
+  flex-shrink: 0;
+  margin-left: 4px;
+  color: var(--inkMuted);
 }

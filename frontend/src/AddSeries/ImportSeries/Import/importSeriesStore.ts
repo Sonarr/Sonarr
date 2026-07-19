@@ -144,7 +144,7 @@ export const useIsCurrentLookupQueueItem = (id: string) => {
   return importSeriesStore((state) => state.lookupQueue[0] === id);
 };
 
-export const useIsCurrentedItemQueued = (id: string) => {
+export const useIsCurrentItemQueued = (id: string) => {
   return importSeriesStore((state) => state.lookupQueue.includes(id));
 };
 

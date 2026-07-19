@@ -9,6 +9,7 @@ import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
 import { kinds } from 'Helpers/Props';
 import useRootFolders, { useRootFolder } from 'RootFolder/useRootFolders';
 import { useQualityProfilesData } from 'Settings/Profiles/Quality/useQualityProfiles';
@@ -81,6 +82,11 @@ function ImportSeries() {
     <SelectProvider items={items}>
       <PageContent title={translate('ImportSeries')}>
         <PageContentBody ref={scrollerRef}>
+          <PageHeading
+            scope={translate('Library')}
+            title={translate('ImportSeries')}
+          />
+
           {rootFoldersFetching && !rootFoldersFetched ? (
             <LoadingIndicator />
           ) : null}

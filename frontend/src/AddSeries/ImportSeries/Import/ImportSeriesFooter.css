@@ -1,51 +1,90 @@
 .inputContainer {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   margin-right: 20px;
   min-width: 150px;
+  max-width: 210px;
 }
 
 .label {
-  margin-bottom: 10px;
-  font-weight: bold;
+  margin-bottom: 4px;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 0.6875rem;
+  line-height: 1;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
 }
 
 .importButtonContainer {
   display: flex;
   align-items: center;
+  gap: 8px;
 }
 
 .importButton {
   composes: button from '~Components/Link/SpinnerButton.css';
-
-  height: 35px;
 }
 
 .loadingButton {
   composes: importButton;
-
-  margin-left: 10px;
 }
 
 .loading {
   composes: loading from '~Components/Loading/LoadingIndicator.css';
+}
 
-  margin: 0 10px 0 12px;
-  text-align: left;
+.processingLabel {
+  color: var(--inkMuted);
+  font-style: italic;
+  font-size: var(--smallFontSize);
 }
 
 .importError {
-  margin-left: 10px;
+  flex-shrink: 0;
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+.selectionGroup {
+  display: flex;
+  align-items: center;
+  align-self: flex-end;
+  margin-right: 20px;
+  padding-bottom: 6px;
+  gap: 10px;
+}
+
+.selectAllInput {
+  composes: input from '~Components/Form/CheckInput.css';
+}
+
+.selectionLabel {
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  white-space: nowrap;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 0.6875rem;
+}
+
+@media only screen and (max-width: 768px) {
   .inputContainer {
-    margin-top: 10px;
+    margin-top: 12px;
+    max-width: none;
 
     &:first-child {
       margin-top: 0;
     }
   }
 
-  .importButtonContainer {
-    margin-top: 10px;
+  .buttonGroup {
+    margin-top: 12px;
+    margin-left: 0;
   }
 }

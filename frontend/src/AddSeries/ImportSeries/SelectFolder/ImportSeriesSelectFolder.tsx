@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Alert from 'Components/Alert';
-import FieldSet from 'Components/FieldSet';
 import FileBrowserModal from 'Components/FileBrowser/FileBrowserModal';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
@@ -8,8 +8,10 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
+import SectionHeading from 'Components/SectionHeading';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import { icons, kinds, sizes } from 'Helpers/Props';
+import { icons, kinds } from 'Helpers/Props';
 import RootFolders from 'RootFolder/RootFolders';
 import useRootFolders, { useAddRootFolder } from 'RootFolder/useRootFolders';
 import { useIsWindows } from 'System/Status/useSystemStatus';
@@ -20,6 +22,7 @@ import styles from './ImportSeriesSelectFolder.css';
 function ImportSeriesSelectFolder() {
   const { isFetching, isFetched, error, data } = useRootFolders();
   const { addRootFolder, isAdding, addError } = useAddRootFolder();
+  const navigate = useNavigate();
 
   const isWindows = useIsWindows();
 
@@ -51,42 +54,54 @@ function ImportSeriesSelectFolder() {
 
   useEffect(() => {
     if (!isAdding && wasAdding && !addError) {
-      data.reduce((acc, item) => {
-        if (item.id > acc) {
-          return item.id;
-        }
-
-        return acc;
+      const newFolderId = data.reduce((acc, item) => {
+        return item.id > acc ? item.id : acc;
       }, 0);
+
+      navigate(`/add/import/${newFolderId}`);
     }
-  }, [isAdding, wasAdding, addError, data]);
+  }, [isAdding, wasAdding, addError, data, navigate]);
 
   return (
     <PageContent title={translate('ImportSeries')}>
       <PageContentBody>
+        <PageHeading
+          scope={translate('Library')}
+          title={translate('ImportSeries')}
+        />
+
         {isFetching && !isFetched ? <LoadingIndicator /> : null}
 
         {!isFetching && error ? (
           <Alert kind={kinds.DANGER}>{translate('RootFoldersLoadError')}</Alert>
         ) : null}
 
-        {!error && isFetched && (
+        {!error && isFetched ? (
           <div>
-            <div className={styles.header}>
-              {translate('LibraryImportSeriesHeader')}
-            </div>
+            <SectionHeading
+              title={translate('LibraryImportSeriesHeader')}
+              description={translate('LibraryImportSeriesDescription')}
+            />
 
-            <div className={styles.tips}>
-              {translate('LibraryImportTips')}
-              <ul>
-                <li className={styles.tip}>
+            <details className={styles.tips}>
+              <summary className={styles.tipsSummary}>
+                <Icon
+                  className={styles.tipsChevron}
+                  name={icons.EXPAND_INDETERMINATE}
+                  size={12}
+                />
+                {translate('LibraryImportTips')}
+              </summary>
+
+              <ul className={styles.tipsList}>
+                <li>
                   <InlineMarkdown
                     data={translate(
                       'LibraryImportTipsQualityInEpisodeFilename'
                     )}
                   />
                 </li>
-                <li className={styles.tip}>
+                <li>
                   <InlineMarkdown
                     data={translate('LibraryImportTipsSeriesUseRootFolder', {
                       goodFolderExample,
@@ -94,19 +109,11 @@ function ImportSeriesSelectFolder() {
                     })}
                   />
                 </li>
-                <li className={styles.tip}>
-                  {translate('LibraryImportTipsDontUseDownloadsFolder')}
-                </li>
+                <li>{translate('LibraryImportTipsDontUseDownloadsFolder')}</li>
               </ul>
-            </div>
+            </details>
 
-            {hasRootFolders ? (
-              <div className={styles.recentFolders}>
-                <FieldSet legend={translate('RootFolders')}>
-                  <RootFolders />
-                </FieldSet>
-              </div>
-            ) : null}
+            {hasRootFolders ? <RootFolders /> : null}
 
             {!isAdding && addError ? (
               <Alert className={styles.addErrorAlert} kind={kinds.DANGER}>
@@ -114,9 +121,9 @@ function ImportSeriesSelectFolder() {
 
                 <ul>
                   {Array.isArray(addError.statusBody) ? (
-                    addError.statusBody.map((e, index) => {
-                      return <li key={index}>{e.errorMessage}</li>;
-                    })
+                    addError.statusBody.map((e, index) => (
+                      <li key={index}>{e.errorMessage}</li>
+                    ))
                   ) : (
                     <li>{JSON.stringify(addError.statusBody)}</li>
                   )}
@@ -124,10 +131,9 @@ function ImportSeriesSelectFolder() {
               </Alert>
             ) : null}
 
-            <div className={hasRootFolders ? undefined : styles.startImport}>
+            <div className={styles.chooseFolderButtonContainer}>
               <Button
-                kind={kinds.PRIMARY}
-                size={sizes.LARGE}
+                kind={hasRootFolders ? kinds.DEFAULT : kinds.PRIMARY}
                 onPress={handleAddNewRootFolderPress}
               >
                 <Icon className={styles.importButtonIcon} name={icons.DRIVE} />
@@ -145,7 +151,7 @@ function ImportSeriesSelectFolder() {
               onModalClose={handleAddRootFolderModalClose}
             />
           </div>
-        )}
+        ) : null}
       </PageContentBody>
     </PageContent>
   );

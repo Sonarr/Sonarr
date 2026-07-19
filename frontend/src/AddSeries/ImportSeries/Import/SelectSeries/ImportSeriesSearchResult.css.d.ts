@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'container': string;
+  'highlighted': string;
   'series': string;
   'tvdbLink': string;
   'tvdbLinkIcon': string;

@@ -1,69 +1,53 @@
-.button {
-  composes: link from '~Components/Link/Link.css';
-
+.field {
   display: flex;
   align-items: center;
-  padding: 6px 16px;
+  gap: 6px;
+
+  padding: 0 10px;
   width: 100%;
-  height: 35px;
+  height: 38px;
   border: 1px solid var(--inputBorderColor);
-  border-radius: 4px;
+  border-radius: 8px;
   background-color: var(--inputBackgroundColor);
-  box-shadow: inset 0 1px 1px var(--inputBoxShadowColor);
+  transition: border-color 120ms ease-out;
+
+  &:focus-within {
+    border-color: var(--accent);
+  }
 }
 
-.loading {
-  display: inline-block;
+.searchIcon {
+  flex-shrink: 0;
+  color: var(--inkFaint);
 }
 
-.warningIcon {
-  margin-right: 8px;
+.input {
+  composes: input from '~Components/Form/TextInput.css';
+
+  flex: 1;
+  padding: 0;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
 }
 
-.existing {
-  margin-left: 5px;
+.status {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
-.dropdownArrowContainer {
-  flex: 1 0 auto;
-  margin-left: 5px;
-  text-align: right;
+.loadingIndicator {
+  display: flex;
+  align-items: center;
+  margin: 0;
 }
 
 .contentContainer {
-  z-index: $popperZIndex;
+  z-index: var(--popperZIndex);
   margin-top: 4px;
-  /* 400px container width with 8px padding on each side */
-  width: 384px;
-}
-
-.content {
-  padding: 4px;
-  border: 1px solid var(--inputBorderColor);
-  border-radius: 4px;
-  background-color: var(--inputBackgroundColor);
-}
-
-.searchContainer {
-  display: flex;
-}
-
-.searchIconContainer {
-  width: 58px;
-  border: 1px solid var(--inputBorderColor);
-  border-right: none;
-  border-radius: 4px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  background-color: var(--searchIconContainerBackgroundColor);
-  text-align: center;
-  line-height: 33px;
-}
-
-.searchInput {
-  composes: input from '~Components/Form/TextInput.css';
-
-  border-radius: 0;
 }
 
 .results {
@@ -72,6 +56,12 @@
   @add-mixin scrollbarThumb;
 
   overflow-x: hidden;
-  overflow-y: scroll;
-  max-height: 165px;
+  overflow-y: auto;
+  max-height: 200px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background-color: var(--paperCard);
+  box-shadow:
+    0 12px 32px -12px var(--popoverShadowColor),
+    0 2px 8px -2px rgba(0, 0, 0, 0.08);
 }
