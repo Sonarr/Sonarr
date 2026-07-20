@@ -820,6 +820,7 @@
   "FilterNotEqual": "not equal",
   "FilterNotInLast": "not in the last",
   "FilterNotInNext": "not in the next",
+  "FilterReleasesPlaceholder": "Filter releases by title",
   "FilterSeriesPlaceholder": "Filter series",
   "FilterStartsWith": "starts with",
   "Filters": "Filters",
