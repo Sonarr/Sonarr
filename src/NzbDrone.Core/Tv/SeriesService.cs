@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Tv
         List<Series> AllForTag(int tagId);
         Dictionary<int, int> GetAllSeriesQualityProfiles();
         Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true, bool publishUpdatedEvent = true);
-        List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder, bool deferPathUpdate = false);
+        List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder);
         bool SeriesPathExists(string folder);
         void RemoveAddOptions(Series series);
         bool UpdateAutoTaggingTags(Series series);
@@ -234,9 +234,11 @@ namespace NzbDrone.Core.Tv
             return updatedSeries;
         }
 
-        public List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder, bool deferPathUpdate = false)
+        public List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder)
         {
             _logger.Debug("Updating {0} series", series.Count);
+
+            var deferPathUpdate = !useExistingRelativeFolder;
 
             foreach (var s in series)
             {
