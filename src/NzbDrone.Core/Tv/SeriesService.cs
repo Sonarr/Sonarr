@@ -30,7 +30,6 @@ namespace NzbDrone.Core.Tv
         List<Series> AllForTag(int tagId);
         Dictionary<int, int> GetAllSeriesQualityProfiles();
         Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true, bool publishUpdatedEvent = true);
-        List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder);
         List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder, bool deferPathUpdate = false);
         bool SeriesPathExists(string folder);
         void RemoveAddOptions(Series series);
@@ -235,11 +234,6 @@ namespace NzbDrone.Core.Tv
             return updatedSeries;
         }
 
-        public List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder)
-        {
-            return UpdateSeries(series, useExistingRelativeFolder, false);
-        }
-
         public List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder, bool deferPathUpdate = false)
         {
             _logger.Debug("Updating {0} series", series.Count);
@@ -250,15 +244,15 @@ namespace NzbDrone.Core.Tv
 
                 if (!s.RootFolderPath.IsNullOrWhiteSpace())
                 {
+                    var updatedPath = _seriesPathBuilder.BuildPath(s, useExistingRelativeFolder);
+
                     if (deferPathUpdate)
                     {
-                        var updatedPath = _seriesPathBuilder.BuildPath(s, useExistingRelativeFolder);
-
                         _logger.Trace("Path for '{0}' will be updated from {1} to {2} after files are moved successfully", s.Title, s.Path, updatedPath);
                     }
                     else
                     {
-                        s.Path = _seriesPathBuilder.BuildPath(s, useExistingRelativeFolder);
+                        s.Path = updatedPath;
 
                         _logger.Trace("Changing path for {0} to {1}", s.Title, s.Path);
                     }

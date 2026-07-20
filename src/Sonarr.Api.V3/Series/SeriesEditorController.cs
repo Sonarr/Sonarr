@@ -103,7 +103,7 @@ namespace Sonarr.Api.V3.Series
                 });
             }
 
-            return Accepted(_seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles).ToResource());
+            return Accepted(_seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles, resource.MoveFiles).ToResource());
         }
 
         [HttpDelete]
