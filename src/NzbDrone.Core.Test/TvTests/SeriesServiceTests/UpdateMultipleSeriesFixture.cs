@@ -50,10 +50,27 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
             _series.ForEach(s => s.RootFolderPath = newRoot);
 
             Mocker.GetMock<IBuildSeriesPaths>()
+                  .Setup(s => s.BuildPath(It.IsAny<Series>(), true))
+                  .Returns<Series, bool>((s, u) => Path.Combine(s.RootFolderPath, s.Title));
+
+            Subject.UpdateSeries(_series, true).ForEach(s => s.Path.Should().StartWith(newRoot));
+        }
+
+        [Test]
+        public void should_not_update_path_for_series_pending_a_file_move()
+        {
+            var newRoot = @"C:\Test\TV2".AsOsAgnostic();
+            _series.ForEach(s => s.RootFolderPath = newRoot);
+
+            Mocker.GetMock<IBuildSeriesPaths>()
                   .Setup(s => s.BuildPath(It.IsAny<Series>(), false))
                   .Returns<Series, bool>((s, u) => Path.Combine(s.RootFolderPath, s.Title));
 
-            Subject.UpdateSeries(_series, false).ForEach(s => s.Path.Should().StartWith(newRoot));
+            var originalPaths = _series.ToDictionary(s => s.Id, s => s.Path);
+
+            var result = Subject.UpdateSeries(_series, false);
+
+            result.Should().OnlyContain(s => s.Path == originalPaths[s.Id]);
         }
 
         [Test]
@@ -64,6 +81,20 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                 var expectedPath = _series.Single(ser => ser.Id == s.Id).Path;
                 s.Path.Should().Be(expectedPath);
             });
+        }
+
+        [Test]
+        public void should_not_update_path_when_deferred_and_rootFolderPath_is_empty()
+        {
+            var result = Subject.UpdateSeries(_series, false);
+
+            result.ForEach(s =>
+            {
+                var expectedPath = _series.Single(ser => ser.Id == s.Id).Path;
+                s.Path.Should().Be(expectedPath);
+            });
+
+            Mocker.GetMock<IBuildSeriesPaths>().Verify(v => v.BuildPath(It.IsAny<Series>(), It.IsAny<bool>()), Times.Never());
         }
 
         [Test]

@@ -87,6 +87,18 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
+        public void should_update_series_path_only_after_successful_move()
+        {
+            Subject.Execute(_command);
+
+            Mocker.GetMock<IDiskTransferService>()
+                  .Verify(v => v.TransferFolder(_command.SourcePath, _command.DestinationPath, TransferMode.Move), Times.Once());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Path == _command.DestinationPath), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
+        }
+
+        [Test]
         public void should_use_destination_path()
         {
             Subject.Execute(_command);

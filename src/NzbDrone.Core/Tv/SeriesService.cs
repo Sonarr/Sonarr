@@ -238,15 +238,26 @@ namespace NzbDrone.Core.Tv
         {
             _logger.Debug("Updating {0} series", series.Count);
 
+            var deferPathUpdate = !useExistingRelativeFolder;
+
             foreach (var s in series)
             {
                 _logger.Trace("Updating: {0}", s.Title);
 
                 if (!s.RootFolderPath.IsNullOrWhiteSpace())
                 {
-                    s.Path = _seriesPathBuilder.BuildPath(s, useExistingRelativeFolder);
+                    var updatedPath = _seriesPathBuilder.BuildPath(s, useExistingRelativeFolder);
 
-                    _logger.Trace("Changing path for {0} to {1}", s.Title, s.Path);
+                    if (deferPathUpdate)
+                    {
+                        _logger.Trace("Path for '{0}' will be updated from {1} to {2} after files are moved successfully", s.Title, s.Path, updatedPath);
+                    }
+                    else
+                    {
+                        s.Path = updatedPath;
+
+                        _logger.Trace("Changing path for {0} to {1}", s.Title, s.Path);
+                    }
                 }
                 else
                 {
