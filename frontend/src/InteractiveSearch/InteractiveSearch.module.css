@@ -1,7 +1,20 @@
-.filterMenuContainer {
+.filterRow {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
   display: flex;
+  align-items: center;
   justify-content: flex-end;
-  margin-bottom: 10px;
+  gap: 10px;
+
+  padding: 10px 0;
+  background-color: var(--modalBackgroundColor);
+}
+
+.filterInput {
+  flex: 0 0 auto;
+  width: 250px;
 }
 
 .filteredMessage {

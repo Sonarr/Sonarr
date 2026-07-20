@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -25,6 +25,7 @@ function SeasonInteractiveSearchModalContent({
   onModalClose,
 }: SeasonInteractiveSearchModalContentProps) {
   useClearReleasesOnUnmount({ seriesId, seasonNumber });
+  const modalBodyRef = useRef<HTMLDivElement>(null);
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -36,13 +37,14 @@ function SeasonInteractiveSearchModalContent({
             })}
       </ModalHeader>
 
-      <ModalBody scrollDirection={scrollDirections.BOTH}>
+      <ModalBody ref={modalBodyRef} scrollDirection={scrollDirections.BOTH}>
         <InteractiveSearch
           type="season"
           searchPayload={{
             seriesId,
             seasonNumber,
           }}
+          scrollerRef={modalBodyRef}
         />
       </ModalBody>
 
