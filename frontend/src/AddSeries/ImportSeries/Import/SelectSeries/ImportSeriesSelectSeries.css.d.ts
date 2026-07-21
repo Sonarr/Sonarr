@@ -5,6 +5,9 @@ interface CssExports {
   'field': string;
   'input': string;
   'loadingIndicator': string;
+  'matchedIcon': string;
+  'matchedSeries': string;
+  'matchedTitle': string;
   'results': string;
   'searchIcon': string;
   'status': string;

@@ -19,6 +19,8 @@ import React, {
 import { useLookupSeries } from 'AddSeries/AddNewSeries/useAddSeries';
 import TextInput from 'Components/Form/TextInput';
 import Icon from 'Components/Icon';
+import Button from 'Components/Link/Button';
+import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import useDebounce from 'Helpers/Hooks/useDebounce';
 import { icons, kinds } from 'Helpers/Props';
@@ -72,7 +74,7 @@ function ImportSeriesSelectSeries({
 
   const errorMessage = getErrorMessage(error);
   const isLookingUpSeries = isFetching || isQueued;
-  const isOpen = isEditing && (isFetching || data.length > 0);
+  const isOpen = isEditing && data.length > 0;
 
   const { refs, context, floatingStyles } = useFloating({
     middleware: [
@@ -106,6 +108,10 @@ function ImportSeriesSelectSeries({
       addToLookupQueue(id);
     }
   }, [id, name, selectedSeries]);
+
+  const handleFindSeriesPress = useCallback(() => {
+    setIsEditing(true);
+  }, []);
 
   const handleBlur = useCallback(() => {
     setIsEditing(false);
@@ -168,12 +174,12 @@ function ImportSeriesSelectSeries({
       updateImportSeriesItem({
         id,
         hasSearched: isFetched,
-        selectedSeries: data[0],
+        selectedSeries: isEditing ? selectedSeries : selectedSeries ?? data[0],
       });
 
       removeFromLookupQueue(id);
     }
-  }, [id, isFetched, data]);
+  }, [id, isFetched, data, selectedSeries, isEditing]);
 
   useEffect(() => {
     setTerm(name);
@@ -185,11 +191,10 @@ function ImportSeriesSelectSeries({
 
   useEffect(() => {
     if (isEditing) {
+      inputRef.current?.focus();
       inputRef.current?.select();
     }
   }, [isEditing]);
-
-  const value = isEditing ? editText : selectedSeries?.title ?? '';
 
   const listboxId = `${id}_series_listbox`;
   const activeOptionId =
@@ -208,8 +213,10 @@ function ImportSeriesSelectSeries({
     warningTitle = translate('NoMatchFound');
   }
 
-  return (
-    <>
+  let seriesControl: React.ReactNode = null;
+
+  if (isEditing) {
+    seriesControl = (
       <div
         ref={refs.setReference}
         className={styles.field}
@@ -227,7 +234,7 @@ function ImportSeriesSelectSeries({
           ref={inputRef}
           className={styles.input}
           name={`${id}_series`}
-          value={value}
+          value={editText}
           placeholder={translate('SearchForSeries')}
           onChange={handleInputChange}
           onFocus={handleFocus}
@@ -248,6 +255,32 @@ function ImportSeriesSelectSeries({
           ) : null}
         </div>
       </div>
+    );
+  } else if (selectedSeries) {
+    seriesControl = (
+      <Link
+        className={styles.matchedSeries}
+        title={translate('ChangeMatch')}
+        onPress={handleFindSeriesPress}
+      >
+        <span className={styles.matchedTitle}>
+          {selectedSeries.title} ({selectedSeries.year})
+        </span>
+
+        <Icon className={styles.matchedIcon} name={icons.SEARCH} size={13} />
+      </Link>
+    );
+  } else {
+    seriesControl = (
+      <Button kind={kinds.DEFAULT} onPress={handleFindSeriesPress}>
+        {translate('FindSeries')}
+      </Button>
+    );
+  }
+
+  return (
+    <>
+      {seriesControl}
 
       {isOpen ? (
         <FloatingPortal id="portal-root">

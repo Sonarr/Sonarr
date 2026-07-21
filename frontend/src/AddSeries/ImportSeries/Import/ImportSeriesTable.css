@@ -1,6 +1,0 @@
-.row {
-  /* The .rowLayout card sits flush to the top of its slot.
-     ROW_HEIGHT = 150 (card) + 8 (gap below). The bottom 8px of each
-     row slot is empty, showing the page background through. */
-  padding-bottom: 8px;
-}

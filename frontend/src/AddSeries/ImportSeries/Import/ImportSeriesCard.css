@@ -1,0 +1,181 @@
+.rowLayout {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 12px 8px;
+  height: 112px;
+  border-bottom: 1px solid var(--hairline);
+  background-color: transparent;
+  gap: 14px;
+}
+
+.selectInput {
+  composes: input from '~Components/Form/CheckInput.css';
+}
+
+.selectContainer {
+  flex: 0 0 auto;
+}
+
+.folder {
+  overflow: hidden;
+  min-width: 0;
+  color: var(--inkMuted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 400;
+  font-size: 0.6875rem;
+  font-family: var(--monoSpaceFontFamily);
+  line-height: 1.5;
+}
+
+.folderName {
+  overflow: hidden;
+  color: var(--ink);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.source {
+  overflow: hidden;
+  margin-top: 3px;
+  color: var(--inkMuted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+}
+
+.poster {
+  position: relative;
+  flex: 0 0 46px;
+  flex-shrink: 0;
+  overflow: hidden;
+  width: 46px;
+  height: 69px;
+  border-radius: 6px;
+  background-color: var(--paperWarm);
+}
+
+.poster :global(img) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.posterPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: 1px dashed var(--hairlineStrong);
+  border-radius: 6px;
+  color: var(--inkFaint);
+  font-size: 22px;
+}
+
+.seriesInfo {
+  display: grid;
+  align-items: center;
+  flex: 1;
+  grid-template-columns: minmax(190px, 0.72fr) minmax(560px, 2fr);
+
+  min-width: 0;
+  gap: 14px;
+}
+
+.attentionInfo {
+  grid-template-columns: minmax(240px, 1fr) auto auto;
+  gap: 20px;
+}
+
+.identity {
+  min-width: 0;
+}
+
+.titleRow {
+  min-width: 0;
+}
+
+.settingsRow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(112px, 1fr));
+
+  min-width: 0;
+  gap: 9px;
+}
+
+.setting {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.settingLabel {
+  composes: label from './ImportSeriesFooter.css';
+}
+
+.matchStatus {
+  justify-self: start;
+
+  margin: 0;
+}
+
+.compact {
+  padding-block: 0;
+
+  height: 64px;
+
+  .poster {
+    display: none;
+  }
+}
+
+.matchAction {
+  justify-self: end;
+}
+
+.stacked {
+  align-items: flex-start;
+  padding: 14px 4px;
+  height: 203px;
+  gap: 12px;
+
+  &.needsAttention {
+    align-items: center;
+    height: 80px;
+  }
+
+  .seriesInfo {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .attentionInfo {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .matchStatusStackedHidden {
+    display: none;
+  }
+
+  .matchAction {
+    grid-column: 2;
+    justify-self: end;
+
+    align-self: center;
+  }
+
+  .settingsRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .poster {
+    display: none;
+  }
+}

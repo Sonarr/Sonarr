@@ -1,0 +1,84 @@
+.defaultsBar {
+  padding: 12px 24px;
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  background-color: var(--paperWarm);
+}
+
+.defaultsContent {
+  display: grid;
+  align-items: end;
+  margin-inline: auto;
+
+  max-width: 1440px;
+  grid-template-columns:
+    minmax(150px, 0.8fr)
+    repeat(4, minmax(112px, 1fr))
+    auto;
+  gap: 9px;
+}
+
+.defaultsIdentity {
+  align-self: center;
+  min-width: 0;
+}
+
+.defaultsTitle {
+  color: var(--inkSoft);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  font-size: 0.6875rem;
+}
+
+.defaultsHint {
+  overflow: hidden;
+  margin-top: 3px;
+  color: var(--inkFaint);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+}
+
+.setting {
+  min-width: 0;
+}
+
+.settingLabel {
+  composes: label from './ImportSeriesFooter.css';
+}
+
+.applyButton {
+  composes: button from '~Components/Link/Button.css';
+
+  margin-bottom: 1px;
+}
+
+@media only screen and (max-width: 768px) {
+  .defaultsBar {
+    padding: 12px 16px;
+  }
+
+  .defaultsContent {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .defaultsIdentity,
+  .applyButton {
+    grid-column: 1 / -1;
+  }
+
+  .defaultsIdentity {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .defaultsHint {
+    margin-top: 0;
+  }
+
+  .applyButton {
+    justify-self: stretch;
+  }
+}

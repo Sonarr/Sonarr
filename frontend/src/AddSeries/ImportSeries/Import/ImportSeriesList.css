@@ -1,0 +1,7 @@
+.listScroller {
+  position: relative;
+}
+
+.item {
+  padding: 0 4px;
+}

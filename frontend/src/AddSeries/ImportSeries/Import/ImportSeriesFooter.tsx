@@ -1,60 +1,41 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  AddSeriesOptions,
-  setAddSeriesOption,
-  useAddSeriesOptions,
-} from 'AddSeries/addSeriesOptionsStore';
+import React, { useCallback, useMemo } from 'react';
+import { useAddSeriesOptions } from 'AddSeries/addSeriesOptionsStore';
 import { useSelect } from 'App/Select/SelectContext';
 import CheckInput from 'Components/Form/CheckInput';
-import MonitorEpisodesSelectInput from 'Components/Form/Select/MonitorEpisodesSelectInput';
-import QualityProfileSelectInput from 'Components/Form/Select/QualityProfileSelectInput';
-import SeriesTypeSelectInput from 'Components/Form/Select/SeriesTypeSelectInput';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
-import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContentFooter from 'Components/Page/PageContentFooter';
 import Popover from 'Components/Tooltip/Popover';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
-import { SeriesMonitor, SeriesType } from 'Series/Series';
-import { CheckInputChanged, InputChanged } from 'typings/inputs';
+import useSeries from 'Series/useSeries';
+import { CheckInputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
+import ImportSeriesDefaults from './ImportSeriesDefaults';
 import {
   ImportSeriesItem,
+  isReadyToImport,
+  setImportSeriesViewOption,
   startProcessing,
   stopProcessing,
   updateImportSeriesItem,
   useImportSeriesItems,
+  useImportSeriesViewOption,
   useLookupQueueHasItems,
 } from './importSeriesStore';
 import { useImportSeries } from './useImportSeries';
 import styles from './ImportSeriesFooter.css';
 
-type MixedType = 'mixed';
-
 function ImportSeriesFooter() {
-  const {
-    monitor: defaultMonitor,
-    qualityProfileId: defaultQualityProfileId,
-    seriesType: defaultSeriesType,
-    seasonFolder: defaultSeasonFolder,
-  } = useAddSeriesOptions();
-
+  const defaults = useAddSeriesOptions();
   const items = useImportSeriesItems();
+  const compactRows = useImportSeriesViewOption('compactRows');
   const isLookingUpSeries = useLookupQueueHasItems();
+  const { data: existingSeries = [] } = useSeries();
 
-  const [monitor, setMonitor] = useState<SeriesMonitor | MixedType>(
-    defaultMonitor
-  );
-  const [qualityProfileId, setQualityProfileId] = useState<number | MixedType>(
-    defaultQualityProfileId
-  );
-  const [seriesType, setSeriesType] = useState<SeriesType | MixedType>(
-    defaultSeriesType
-  );
-  const [seasonFolder, setSeasonFolder] = useState<boolean | MixedType>(
-    defaultSeasonFolder
-  );
+  const existingTvdbIds = useMemo(() => {
+    return new Set(existingSeries.map((series) => series.tvdbId));
+  }, [existingSeries]);
 
   const {
     selectedCount,
@@ -67,56 +48,28 @@ function ImportSeriesFooter() {
 
   const { importSeries, isImporting, importError } = useImportSeries();
 
-  const {
-    hasUnsearchedItems,
-    isMonitorMixed,
-    isQualityProfileIdMixed,
-    isSeriesTypeMixed,
-    isSeasonFolderMixed,
-  } = useMemo(() => {
-    let isMonitorMixed = false;
-    let isQualityProfileIdMixed = false;
-    let isSeriesTypeMixed = false;
-    let isSeasonFolderMixed = false;
-    let hasUnsearchedItems = false;
+  const { hasUnsearchedItems, lookupCount, needsAttentionCount, readyCount } =
+    useMemo(() => {
+      let unsearchedCount = 0;
+      let matchedCount = 0;
 
-    items.forEach((item) => {
-      if (item.monitor !== defaultMonitor) {
-        isMonitorMixed = true;
-      }
+      items.forEach((item) => {
+        if (!item.hasSearched) {
+          unsearchedCount++;
+        }
 
-      if (item.qualityProfileId !== defaultQualityProfileId) {
-        isQualityProfileIdMixed = true;
-      }
+        if (isReadyToImport(item, existingTvdbIds)) {
+          matchedCount++;
+        }
+      });
 
-      if (item.seriesType !== defaultSeriesType) {
-        isSeriesTypeMixed = true;
-      }
-
-      if (item.seasonFolder !== defaultSeasonFolder) {
-        isSeasonFolderMixed = true;
-      }
-
-      if (!item.hasSearched) {
-        hasUnsearchedItems = true;
-      }
-    });
-
-    return {
-      hasUnsearchedItems: !isLookingUpSeries && hasUnsearchedItems,
-      isMonitorMixed,
-      isQualityProfileIdMixed,
-      isSeriesTypeMixed,
-      isSeasonFolderMixed,
-    };
-  }, [
-    defaultMonitor,
-    defaultQualityProfileId,
-    defaultSeasonFolder,
-    defaultSeriesType,
-    items,
-    isLookingUpSeries,
-  ]);
+      return {
+        hasUnsearchedItems: !isLookingUpSeries && unsearchedCount > 0,
+        lookupCount: unsearchedCount,
+        needsAttentionCount: items.length - matchedCount,
+        readyCount: matchedCount,
+      };
+    }, [existingTvdbIds, items, isLookingUpSeries]);
 
   const selectAllValue = useMemo(() => {
     if (allSelected) {
@@ -141,28 +94,11 @@ function ImportSeriesFooter() {
     [selectAll, unselectAll]
   );
 
-  const handleInputChange = useCallback(
-    ({ name, value }: InputChanged<string | number | boolean | number[]>) => {
-      if (name === 'monitor') {
-        setMonitor(value as SeriesMonitor);
-      } else if (name === 'qualityProfileId') {
-        setQualityProfileId(value as number);
-      } else if (name === 'seriesType') {
-        setSeriesType(value as SeriesType);
-      } else if (name === 'seasonFolder') {
-        setSeasonFolder(value as boolean);
-      }
-
-      setAddSeriesOption(name as keyof AddSeriesOptions, value);
-
-      getSelectedIds().forEach((id) => {
-        updateImportSeriesItem({
-          id,
-          [name]: value,
-        });
-      });
+  const handleCompactRowsChange = useCallback(
+    ({ value }: CheckInputChanged) => {
+      setImportSeriesViewOption('compactRows', value);
     },
-    [getSelectedIds]
+    []
   );
 
   const handleLookupPress = useCallback(() => {
@@ -177,174 +113,136 @@ function ImportSeriesFooter() {
     importSeries(getSelectedIds());
   }, [importSeries, getSelectedIds]);
 
-  useEffect(() => {
-    if (isMonitorMixed && monitor !== 'mixed') {
-      setMonitor('mixed');
-    } else if (!isMonitorMixed && monitor !== defaultMonitor) {
-      setMonitor(defaultMonitor);
-    }
-  }, [defaultMonitor, isMonitorMixed, monitor]);
-
-  useEffect(() => {
-    if (isQualityProfileIdMixed && qualityProfileId !== 'mixed') {
-      setQualityProfileId('mixed');
-    } else if (
-      !isQualityProfileIdMixed &&
-      qualityProfileId !== defaultQualityProfileId
-    ) {
-      setQualityProfileId(defaultQualityProfileId);
-    }
-  }, [defaultQualityProfileId, isQualityProfileIdMixed, qualityProfileId]);
-
-  useEffect(() => {
-    if (isSeriesTypeMixed && seriesType !== 'mixed') {
-      setSeriesType('mixed');
-    } else if (!isSeriesTypeMixed && seriesType !== defaultSeriesType) {
-      setSeriesType(defaultSeriesType);
-    }
-  }, [defaultSeriesType, isSeriesTypeMixed, seriesType]);
-
-  useEffect(() => {
-    if (isSeasonFolderMixed && seasonFolder !== 'mixed') {
-      setSeasonFolder('mixed');
-    } else if (!isSeasonFolderMixed && seasonFolder !== defaultSeasonFolder) {
-      setSeasonFolder(defaultSeasonFolder);
-    }
-  }, [defaultSeasonFolder, isSeasonFolderMixed, seasonFolder]);
+  const handleApplyDefaults = useCallback(() => {
+    getSelectedIds().forEach((id) => {
+      updateImportSeriesItem({
+        id,
+        monitor: defaults.monitor,
+        qualityProfileId: defaults.qualityProfileId,
+        seasonFolder: defaults.seasonFolder,
+        seriesType: defaults.seriesType,
+      });
+    });
+  }, [defaults, getSelectedIds]);
 
   return (
-    <PageContentFooter>
-      <div className={styles.inputContainer}>
-        <div className={styles.label}>{translate('Monitor')}</div>
+    <PageContentFooter className={styles.footerShell}>
+      <ImportSeriesDefaults
+        isApplyDisabled={!selectedCount}
+        onApplyDefaults={handleApplyDefaults}
+      />
 
-        <MonitorEpisodesSelectInput
-          name="monitor"
-          value={monitor}
-          isDisabled={!selectedCount}
-          includeMixed={isMonitorMixed}
-          onChange={handleInputChange}
-        />
-      </div>
-
-      <div className={styles.inputContainer}>
-        <div className={styles.label}>{translate('QualityProfile')}</div>
-
-        <QualityProfileSelectInput
-          name="qualityProfileId"
-          value={qualityProfileId}
-          isDisabled={!selectedCount}
-          includeMixed={isQualityProfileIdMixed}
-          onChange={handleInputChange}
-        />
-      </div>
-
-      <div className={styles.inputContainer}>
-        <div className={styles.label}>{translate('SeriesType')}</div>
-
-        <SeriesTypeSelectInput
-          name="seriesType"
-          value={seriesType}
-          isDisabled={!selectedCount}
-          includeMixed={isSeriesTypeMixed}
-          onChange={handleInputChange}
-        />
-      </div>
-
-      <div className={styles.inputContainer}>
-        <div className={styles.label}>{translate('SeasonFolder')}</div>
-
-        <CheckInput
-          name="seasonFolder"
-          value={seasonFolder}
-          isDisabled={!selectedCount}
-          onChange={handleInputChange}
-        />
-      </div>
-
-      <div className={styles.selectionGroup}>
-        <CheckInput
-          className={styles.selectAllInput}
-          name="selectAllRows"
-          value={selectAllValue}
-          onChange={handleSelectAllChange}
-        />
-
-        <span className={styles.selectionLabel}>
-          {translate('CountOfTotalSelected', {
-            selectedCount,
-            totalCount: items.length,
-          })}
-        </span>
-      </div>
-
-      <div className={styles.buttonGroup}>
-        <div className={styles.label}>&nbsp;</div>
-
-        <div className={styles.importButtonContainer}>
-          <SpinnerButton
-            className={styles.importButton}
-            kind={kinds.PRIMARY}
-            isSpinning={isImporting}
-            isDisabled={!selectedCount || isLookingUpSeries}
-            onPress={handleImportPress}
-          >
-            {translate('ImportCountSeries', { selectedCount })}
-          </SpinnerButton>
-
-          {isLookingUpSeries ? (
-            <Button
-              className={styles.loadingButton}
-              kind={kinds.DEFAULT}
-              onPress={handleCancelLookupPress}
-            >
-              {translate('Stop')}
-            </Button>
-          ) : null}
-
-          {hasUnsearchedItems ? (
-            <Button
-              className={styles.loadingButton}
-              kind={kinds.DEFAULT}
-              onPress={handleLookupPress}
-            >
-              {translate('LookUpSeries')}
-            </Button>
-          ) : null}
-
-          {isLookingUpSeries ? (
-            <LoadingIndicator className={styles.loading} size={24} />
-          ) : null}
-
-          {isLookingUpSeries ? (
-            <span className={styles.processingLabel}>
-              {translate('LookingUpSeries')}
-            </span>
-          ) : null}
-
-          {importError ? (
-            <Popover
-              anchor={
-                <Icon
-                  className={styles.importError}
-                  name={icons.WARNING}
-                  kind={kinds.WARNING}
-                />
-              }
-              title={translate('ImportErrors')}
-              body={
-                <ul>
-                  {Array.isArray(importError.statusBody) ? (
-                    importError.statusBody.map((error, index) => {
-                      return <li key={index}>{error.errorMessage}</li>;
-                    })
-                  ) : (
-                    <li>{JSON.stringify(importError.statusBody)}</li>
-                  )}
-                </ul>
-              }
-              position={tooltipPositions.RIGHT}
+      <div className={styles.footerContent}>
+        <div className={styles.footerRow}>
+          <div className={styles.selectionGroup}>
+            <CheckInput
+              className={styles.selectAllInput}
+              containerClassName={styles.selectAllContainer}
+              name="selectAllRows"
+              ariaLabel={translate('SelectAll')}
+              value={selectAllValue}
+              onChange={handleSelectAllChange}
             />
-          ) : null}
+
+            <span className={styles.selectionLabel}>
+              {translate('CountOfTotalSelected', {
+                selectedCount,
+                totalCount: items.length,
+              })}
+            </span>
+          </div>
+
+          <div className={styles.queueStatus}>
+            <span className={styles.statusItem}>
+              <span className={styles.readyDot} />
+              <strong>{translate('CountReady', { count: readyCount })}</strong>
+            </span>
+
+            {needsAttentionCount ? (
+              <span className={styles.statusItem}>
+                <span className={styles.attentionDot} />
+                {translate('CountNeedsAMatch', { count: needsAttentionCount })}
+              </span>
+            ) : null}
+          </div>
+
+          <div className={styles.compactToggle}>
+            <CheckInput
+              className={styles.selectAllInput}
+              containerClassName={styles.selectAllContainer}
+              name="compactRows"
+              ariaLabel={translate('CompactRows')}
+              value={compactRows}
+              onChange={handleCompactRowsChange}
+            />
+
+            <span className={styles.selectionLabel}>
+              {translate('CompactRows')}
+            </span>
+          </div>
+
+          <div className={styles.buttonGroup}>
+            <div className={styles.importButtonContainer}>
+              <SpinnerButton
+                className={styles.importButton}
+                kind={kinds.DEFAULT}
+                isSpinning={isImporting}
+                isDisabled={!selectedCount || isLookingUpSeries}
+                onPress={handleImportPress}
+              >
+                {translate('ImportCountSeries', {
+                  selectedCount,
+                })}
+              </SpinnerButton>
+
+              {isLookingUpSeries ? (
+                <Button
+                  className={styles.stopButton}
+                  kind={kinds.PRIMARY}
+                  onPress={handleCancelLookupPress}
+                >
+                  <Icon name={icons.SPINNER} isSpinning={true} size={14} />
+
+                  {translate('Stop')}
+                </Button>
+              ) : null}
+
+              {hasUnsearchedItems ? (
+                <Button
+                  className={styles.loadingButton}
+                  kind={kinds.PRIMARY}
+                  onPress={handleLookupPress}
+                >
+                  {translate('ResolveUnmatched', { count: lookupCount })}
+                </Button>
+              ) : null}
+
+              {importError ? (
+                <Popover
+                  anchor={
+                    <Icon
+                      className={styles.importError}
+                      name={icons.WARNING}
+                      kind={kinds.WARNING}
+                    />
+                  }
+                  title={translate('ImportErrors')}
+                  body={
+                    <ul>
+                      {Array.isArray(importError.statusBody) ? (
+                        importError.statusBody.map((error, index) => {
+                          return <li key={index}>{error.errorMessage}</li>;
+                        })
+                      ) : (
+                        <li>{JSON.stringify(importError.statusBody)}</li>
+                      )}
+                    </ul>
+                  }
+                  position={tooltipPositions.RIGHT}
+                />
+              ) : null}
+            </div>
+          </div>
         </div>
       </div>
     </PageContentFooter>

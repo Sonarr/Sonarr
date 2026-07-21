@@ -15,8 +15,9 @@ import useRootFolders, { useRootFolder } from 'RootFolder/useRootFolders';
 import { useQualityProfilesData } from 'Settings/Profiles/Quality/useQualityProfiles';
 import translate from 'Utilities/String/translate';
 import ImportSeriesFooter from './ImportSeriesFooter';
+import ImportSeriesList from './ImportSeriesList';
 import { clearImportSeries } from './importSeriesStore';
-import ImportSeriesTable from './ImportSeriesTable';
+import styles from './ImportSeries.css';
 
 function ImportSeries() {
   const { rootFolderId: rootFolderIdString = '' } = useParams<{
@@ -82,36 +83,38 @@ function ImportSeries() {
     <SelectProvider items={items}>
       <PageContent title={translate('ImportSeries')}>
         <PageContentBody ref={scrollerRef}>
-          <PageHeading
-            scope={translate('Library')}
-            title={translate('ImportSeries')}
-          />
+          <div className={styles.content}>
+            <PageHeading
+              scope={translate('Library')}
+              title={translate('ImportSeries')}
+            />
 
-          {rootFoldersFetching && !rootFoldersFetched ? (
-            <LoadingIndicator />
-          ) : null}
+            {rootFoldersFetching && !rootFoldersFetched ? (
+              <LoadingIndicator />
+            ) : null}
 
-          {!rootFoldersFetching && !!rootFoldersError ? (
-            <Alert kind={kinds.DANGER}>
-              {translate('RootFoldersLoadError')}
-            </Alert>
-          ) : null}
+            {!rootFoldersFetching && !!rootFoldersError ? (
+              <Alert kind={kinds.DANGER}>
+                {translate('RootFoldersLoadError')}
+              </Alert>
+            ) : null}
 
-          {!rootFoldersError &&
-          !rootFoldersFetching &&
-          rootFoldersFetched &&
-          !unmappedFolders.length ? (
-            <Alert kind={kinds.INFO}>
-              {translate('AllSeriesInRootFolderHaveBeenImported', { path })}
-            </Alert>
-          ) : null}
+            {!rootFoldersError &&
+            !rootFoldersFetching &&
+            rootFoldersFetched &&
+            !unmappedFolders.length ? (
+              <Alert kind={kinds.INFO}>
+                {translate('AllSeriesInRootFolderHaveBeenImported', { path })}
+              </Alert>
+            ) : null}
 
-          {!rootFoldersError &&
-          rootFoldersFetched &&
-          !!unmappedFolders.length &&
-          scrollerRef.current ? (
-            <ImportSeriesTable items={items} scrollerRef={scrollerRef} />
-          ) : null}
+            {!rootFoldersError &&
+            rootFoldersFetched &&
+            !!unmappedFolders.length &&
+            scrollerRef.current ? (
+              <ImportSeriesList items={items} scrollerRef={scrollerRef} />
+            ) : null}
+          </div>
         </PageContentBody>
 
         {!rootFoldersError && rootFoldersFetched && !!unmappedFolders.length ? (
