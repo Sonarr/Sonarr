@@ -105,6 +105,10 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                         {
                             model.Title = audioTitle.Trim();
                         }
+                        else if ((stream.Tags?.TryGetValue("name", out var audioName) ?? false) && audioName.IsNotNullOrWhiteSpace())
+                        {
+                            model.Title = audioName.Trim();
+                        }
 
                         return  model;
                     })
@@ -124,6 +128,10 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                         if ((stream.Tags?.TryGetValue("title", out var subtitleTitle) ?? false) && subtitleTitle.IsNotNullOrWhiteSpace())
                         {
                             model.Title = subtitleTitle.Trim();
+                        }
+                        else if ((stream.Tags?.TryGetValue("name", out var subtitleName) ?? false) && subtitleName.IsNotNullOrWhiteSpace())
+                        {
+                            model.Title = subtitleName.Trim();
                         }
 
                         if (stream.Disposition?.TryGetValue("forced", out var forcedSubtitle) ?? false)
