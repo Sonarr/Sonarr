@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 
@@ -8,11 +10,15 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
     {
         private readonly TraktUserSettings _settings;
         private readonly string _clientId;
+        private readonly int _pageSize;
+        private readonly int _maxNumResults;
 
-        public TraktUserRequestGenerator(TraktUserSettings settings, string clientId)
+        public TraktUserRequestGenerator(TraktUserSettings settings, string clientId, int pageSize, int maxNumResults)
         {
             _settings = settings;
             _clientId = clientId;
+            _pageSize = pageSize;
+            _maxNumResults = maxNumResults;
         }
 
         public virtual ImportListPageableRequestChain GetListItems()
@@ -26,7 +32,17 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
 
         private IEnumerable<ImportListRequest> GetSeriesRequest()
         {
-            var link = _settings.BaseUrl.Trim();
+            var requestBuilder = new HttpRequestBuilder(_settings.BaseUrl.Trim());
+
+            requestBuilder
+                .Accept(HttpAccept.Json)
+                .SetHeader("trakt-api-version", "2")
+                .SetHeader("trakt-api-key", _clientId);
+
+            if (_settings.AccessToken.IsNotNullOrWhiteSpace())
+            {
+                requestBuilder.SetHeader("Authorization", $"Bearer {_settings.AccessToken}");
+            }
 
             var userName = _settings.Username.IsNotNullOrWhiteSpace() ? _settings.Username.Trim() : _settings.AuthUser.Trim();
 
@@ -41,36 +57,50 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
                         _ => "rank"
                     };
 
-                    link += $"/users/{userName}/watchlist/shows/{watchSorting}";
+                    requestBuilder
+                        .Resource("/users/{userName}/watchlist/shows/{watchSorting}")
+                        .SetSegment("userName", userName)
+                        .SetSegment("watchSorting", watchSorting);
                     break;
                 case (int)TraktUserListType.UserWatchedList:
-                    link += $"/users/{userName}/watched/shows";
+                    requestBuilder
+                        .Resource("/users/{userName}/watched/shows")
+                        .SetSegment("userName", userName);
                     break;
                 case (int)TraktUserListType.UserCollectionList:
-                    link += $"/users/{userName}/collection/shows";
+                    requestBuilder
+                        .Resource("/users/{userName}/collection/shows")
+                        .SetSegment("userName", userName);
                     break;
             }
 
-            var filterParams = TraktQueryHelper.BuildFilterParameters(_settings.Rating, _settings.Genres, _settings.Years, _settings.Limit, _settings.TraktAdditionalParameters);
+            var filterParams = TraktQueryHelper.BuildFilterParameters(_settings.Rating, _settings.Genres, _settings.Years, _pageSize, _settings.TraktAdditionalParameters);
 
             if (_settings.TraktListType == (int)TraktUserListType.UserWatchedList)
             {
                 filterParams["extended"] = "full";
             }
 
-            link += "?" + filterParams.ToQueryString();
-
-            var request = new ImportListRequest(link, HttpAccept.Json);
-
-            request.HttpRequest.Headers.Add("trakt-api-version", "2");
-            request.HttpRequest.Headers.Add("trakt-api-key", _clientId);
-
-            if (_settings.AccessToken.IsNotNullOrWhiteSpace())
+            foreach (var param in filterParams)
             {
-                request.HttpRequest.Headers.Add("Authorization", $"Bearer {_settings.AccessToken}");
+                requestBuilder.AddQueryParam(param.Key, param.Value);
             }
 
-            yield return request;
+            var limit = Math.Clamp(_settings.Limit, 0, _maxNumResults);
+            var maxPages = (int)Math.Ceiling(decimal.Divide(limit, _pageSize));
+            var remainderLimit = limit % _pageSize;
+
+            for (var page = 1; page <= maxPages; page++)
+            {
+                if (maxPages == 1 && remainderLimit > 0)
+                {
+                    requestBuilder.AddQueryParam("limit", remainderLimit.ToString(CultureInfo.InvariantCulture), true);
+                }
+
+                requestBuilder.AddQueryParam("page", page.ToString(CultureInfo.InvariantCulture), true);
+
+                yield return new ImportListRequest(requestBuilder.Build());
+            }
         }
     }
 }
