@@ -1186,7 +1186,6 @@
     "Size": "Dimensione",
     "SizeLimit": "Limite Dimensione",
     "SizeOnDisk": "Dimensione sul disco",
-    "SkipFreeSpaceCheckHelpText": "Da usare quando {appName} non riesce a rilevare lo spazio libero della cartella radice",
     "SkipRedownload": "Non riscaricare",
     "SkipRedownloadHelpText": "{appName} non proverà a scaricare una release alternativa per questo elemento",
     "Small": "Piccolo",
