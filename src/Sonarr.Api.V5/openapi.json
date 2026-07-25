@@ -10836,6 +10836,9 @@
           "episodeTitleRequired": {
             "$ref": "#/components/schemas/EpisodeTitleRequiredType"
           },
+          "skipFreeSpaceCheckWhenGrabbing": {
+            "type": "boolean"
+          },
           "skipFreeSpaceCheckWhenImporting": {
             "type": "boolean"
           },
