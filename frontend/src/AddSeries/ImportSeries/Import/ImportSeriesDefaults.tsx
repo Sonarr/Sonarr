@@ -60,6 +60,7 @@ function ImportSeriesDefaults({
           <MonitorEpisodesSelectInput
             name="monitor"
             value={monitor}
+            modalTitle={translate('Monitor')}
             onChange={handleInputChange}
           />
         </div>
@@ -71,6 +72,7 @@ function ImportSeriesDefaults({
           <QualityProfileSelectInput
             name="qualityProfileId"
             value={qualityProfileId}
+            modalTitle={translate('QualityProfile')}
             onChange={handleInputChange}
           />
         </div>
@@ -80,6 +82,7 @@ function ImportSeriesDefaults({
           <SeriesTypeSelectInput
             name="seriesType"
             value={seriesType}
+            modalTitle={translate('SeriesType')}
             selectedValueOptions={HIDE_HINT}
             onChange={handleInputChange}
           />
@@ -90,6 +93,7 @@ function ImportSeriesDefaults({
           <EnhancedSelectInput
             name="seasonFolder"
             value={seasonFolder}
+            modalTitle={translate('SeasonFolder')}
             values={seasonFolderOptions}
             onChange={handleInputChange}
           />

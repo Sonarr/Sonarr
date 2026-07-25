@@ -137,6 +137,7 @@ export interface EnhancedSelectInputProps<
   isEditable?: boolean;
   hasError?: boolean;
   hasWarning?: boolean;
+  modalTitle?: string;
   valueOptions?: object;
   selectedValueOptions?: object;
   selectedValueComponent?: string | ElementType;
@@ -159,6 +160,7 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
     isFetching,
     hasError,
     hasWarning,
+    modalTitle,
     valueOptions,
     selectedValueOptions,
     selectedValueComponent:
@@ -526,6 +528,10 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
           >
             <Scroller className={styles.optionsModalScroller}>
               <div className={styles.mobileCloseButtonContainer}>
+                {modalTitle ? (
+                  <div className={styles.mobileTitle}>{modalTitle}</div>
+                ) : null}
+
                 <Link
                   className={styles.mobileCloseButton}
                   onPress={handleOptionsModalClose}
