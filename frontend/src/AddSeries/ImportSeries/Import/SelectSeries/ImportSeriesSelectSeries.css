@@ -26,8 +26,8 @@
 
   display: inline-flex;
   align-items: center;
-  align-self: flex-start;
   min-width: 0;
+  max-width: 100%;
   gap: 6px;
 
   &:hover .matchedTitle {
