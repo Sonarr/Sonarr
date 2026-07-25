@@ -15,8 +15,11 @@ import useMeasure from 'Helpers/Hooks/useMeasure';
 import useSeries from 'Series/useSeries';
 import ImportSeriesCard from './ImportSeriesCard';
 import {
+  getImportSeriesEligibility,
+  ImportSeriesEligibility,
+} from './importSeriesEligibility';
+import {
   ImportSeriesItem,
-  isReadyToImport,
   UnamppedFolderItem,
   useEnsureImportSeriesItems,
   useImportSeriesItems,
@@ -31,6 +34,8 @@ const ITEM_HEIGHT_STACKED_UNMATCHED = 80;
 const STACKED_WIDTH = 960;
 
 interface Row {
+  duplicateIds: string[];
+  eligibility: ImportSeriesEligibility;
   isReady: boolean;
   item: UnamppedFolderItem;
 }
@@ -62,6 +67,8 @@ function Item({ index, style, data }: ListChildComponentProps<ItemData>) {
     <div style={style} className={styles.item}>
       <ImportSeriesCard
         unmappedFolder={row.item}
+        duplicateIds={row.duplicateIds}
+        eligibility={row.eligibility}
         isCompact={isCompact}
         isStacked={isStacked}
       />
@@ -75,8 +82,9 @@ function ImportSeriesList({ items, scrollerRef }: ImportSeriesListProps) {
     height: windowHeight,
     isSmallScreen,
   } = useAppDimensions();
-  const { useHasItems, toggleDisabled, toggleSelected } =
+  const { setItemStates, useHasItems, useSelectedIds } =
     useSelect<ImportSeriesItem>();
+  const selectedIds = useSelectedIds();
   const compactRows = useImportSeriesViewOption('compactRows');
   const importSeriesItems = useImportSeriesItems();
   const { data: existingSeries = [] } = useSeries();
@@ -90,41 +98,90 @@ function ImportSeriesList({ items, scrollerRef }: ImportSeriesListProps) {
 
   useEnsureImportSeriesItems(items);
 
-  const importSeriesItemById = useMemo(() => {
-    return new Map(importSeriesItems.map((item) => [item.id, item]));
-  }, [importSeriesItems]);
-
   const existingTvdbIds = useMemo(() => {
     return new Set(existingSeries.map((series) => series.tvdbId));
   }, [existingSeries]);
 
+  const importSeriesItemById = useMemo(() => {
+    return new Map(importSeriesItems.map((item) => [item.id, item]));
+  }, [importSeriesItems]);
+
+  const eligibility = useMemo(
+    () => getImportSeriesEligibility(importSeriesItems, existingTvdbIds),
+    [importSeriesItems, existingTvdbIds]
+  );
+
+  const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
+
   const rows = useMemo(() => {
-    return items.map((item) => ({
-      item,
-      isReady: isReadyToImport(
-        importSeriesItemById.get(item.id),
-        existingTvdbIds
-      ),
-    }));
-  }, [items, importSeriesItemById, existingTvdbIds]);
+    return items.map((item) => {
+      const importSeriesItem = importSeriesItemById.get(item.id);
+      const tvdbId = importSeriesItem?.selectedSeries?.tvdbId;
+      const status = eligibility.eligibilityById.get(item.id) ?? 'unmatched';
+
+      return {
+        item,
+        duplicateIds:
+          tvdbId == null
+            ? []
+            : eligibility.duplicateIdsByTvdbId.get(tvdbId) ?? [],
+        eligibility: status,
+        isReady:
+          status === 'ready' ||
+          (status === 'duplicate' && selectedIdSet.has(item.id)),
+      };
+    });
+  }, [items, importSeriesItemById, eligibility, selectedIdSet]);
 
   useEffect(() => {
     const nextReadyIds = new Set<string>();
+    const duplicateIdsToDeselect = new Set<string>();
 
-    rows.forEach(({ item, isReady }) => {
-      toggleDisabled(item.id, !isReady);
+    eligibility.duplicateIdsByTvdbId.forEach((duplicateIds) => {
+      let hasSelectedId = false;
 
-      if (isReady) {
-        nextReadyIds.add(item.id);
-
-        if (!readyIdsRef.current.has(item.id)) {
-          toggleSelected({ id: item.id, isSelected: true, shiftKey: false });
+      duplicateIds.forEach((id) => {
+        if (!selectedIdSet.has(id)) {
+          return;
         }
-      }
+
+        if (hasSelectedId) {
+          duplicateIdsToDeselect.add(id);
+        } else {
+          hasSelectedId = true;
+        }
+      });
     });
 
+    const updates = rows.map(({ item, eligibility }) => {
+      if (eligibility === 'ready') {
+        nextReadyIds.add(item.id);
+
+        return {
+          id: item.id,
+          isDisabled: false,
+          isSelected: readyIdsRef.current.has(item.id) ? undefined : true,
+        };
+      }
+
+      if (eligibility === 'duplicate') {
+        return {
+          id: item.id,
+          isDisabled: false,
+          isSelected: duplicateIdsToDeselect.has(item.id) ? false : undefined,
+        };
+      }
+
+      return {
+        id: item.id,
+        isDisabled: true,
+        isSelected: false,
+      };
+    });
+
+    setItemStates(updates);
     readyIdsRef.current = nextReadyIds;
-  }, [rows, toggleDisabled, toggleSelected]);
+  }, [rows, eligibility, selectedIdSet, setItemStates]);
 
   const isStacked = size.width > 0 && size.width < STACKED_WIDTH;
   const isCompact = compactRows && !isStacked;

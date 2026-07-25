@@ -87,15 +87,6 @@ export const useEnsureImportSeriesItems = (
   }, [unmappedFolders, monitor, qualityProfileId, seriesType, seasonFolder]);
 };
 
-export const isReadyToImport = (
-  item: Pick<ImportSeriesItem, 'selectedSeries'> | undefined,
-  existingTvdbIds: Set<number>
-) => {
-  const tvdbId = item?.selectedSeries?.tvdbId;
-
-  return tvdbId != null && !existingTvdbIds.has(tvdbId);
-};
-
 export const updateImportSeriesItem = (
   itemData: Partial<ImportSeriesItem> & Pick<ImportSeriesItem, 'id'>
 ) => {

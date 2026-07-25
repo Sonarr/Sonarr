@@ -12,9 +12,9 @@ import useSeries from 'Series/useSeries';
 import { CheckInputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import ImportSeriesDefaults from './ImportSeriesDefaults';
+import { getImportSeriesEligibility } from './importSeriesEligibility';
 import {
   ImportSeriesItem,
-  isReadyToImport,
   setImportSeriesViewOption,
   startProcessing,
   stopProcessing,
@@ -37,61 +37,130 @@ function ImportSeriesFooter() {
     return new Set(existingSeries.map((series) => series.tvdbId));
   }, [existingSeries]);
 
-  const {
-    selectedCount,
-    getSelectedIds,
-    allSelected,
-    allUnselected,
-    selectAll,
-    unselectAll,
-  } = useSelect<ImportSeriesItem>();
+  const { selectedCount, setItemStates, unselectAll, useSelectedIds } =
+    useSelect<ImportSeriesItem>();
+  const selectedIds = useSelectedIds();
 
   const { importSeries, isImporting, importError } = useImportSeries();
+
+  const eligibility = useMemo(
+    () => getImportSeriesEligibility(items, existingTvdbIds),
+    [items, existingTvdbIds]
+  );
+
+  const itemById = useMemo(
+    () => new Map(items.map((item) => [item.id, item])),
+    [items]
+  );
+
+  const selectedReadyIds = useMemo(() => {
+    const selectedTvdbIds = new Set<number>();
+
+    return selectedIds.reduce<string[]>((readyIds, id) => {
+      const item = itemById.get(id);
+      const tvdbId = item?.selectedSeries?.tvdbId;
+      const status = eligibility.eligibilityById.get(id);
+
+      if (
+        tvdbId != null &&
+        (status === 'ready' || status === 'duplicate') &&
+        !selectedTvdbIds.has(tvdbId)
+      ) {
+        selectedTvdbIds.add(tvdbId);
+        readyIds.push(id);
+      }
+
+      return readyIds;
+    }, []);
+  }, [selectedIds, itemById, eligibility]);
+
+  const selectedReadyIdSet = useMemo(
+    () => new Set(selectedReadyIds),
+    [selectedReadyIds]
+  );
+
+  const selectableCount = useMemo(() => {
+    let count = eligibility.duplicateIdsByTvdbId.size;
+
+    eligibility.eligibilityById.forEach((status) => {
+      if (status === 'ready') {
+        count++;
+      }
+    });
+
+    return count;
+  }, [eligibility]);
 
   const { hasUnsearchedItems, lookupCount, needsAttentionCount, readyCount } =
     useMemo(() => {
       let unsearchedCount = 0;
-      let matchedCount = 0;
+      let readyCount = 0;
 
       items.forEach((item) => {
         if (!item.hasSearched) {
           unsearchedCount++;
         }
 
-        if (isReadyToImport(item, existingTvdbIds)) {
-          matchedCount++;
+        const status = eligibility.eligibilityById.get(item.id);
+
+        if (
+          status === 'ready' ||
+          (status === 'duplicate' && selectedReadyIdSet.has(item.id))
+        ) {
+          readyCount++;
         }
       });
 
       return {
         hasUnsearchedItems: !isLookingUpSeries && unsearchedCount > 0,
         lookupCount: unsearchedCount,
-        needsAttentionCount: items.length - matchedCount,
-        readyCount: matchedCount,
+        needsAttentionCount: items.length - readyCount,
+        readyCount,
       };
-    }, [existingTvdbIds, items, isLookingUpSeries]);
+    }, [items, isLookingUpSeries, eligibility, selectedReadyIdSet]);
 
   const selectAllValue = useMemo(() => {
-    if (allSelected) {
+    if (
+      selectedReadyIds.length > 0 &&
+      selectedReadyIds.length === selectableCount
+    ) {
       return true;
     }
 
-    if (allUnselected) {
+    if (selectedReadyIds.length === 0) {
       return false;
     }
 
     return null;
-  }, [allSelected, allUnselected]);
+  }, [selectableCount, selectedReadyIds]);
 
   const handleSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
       if (value) {
-        selectAll();
+        const selectedIdSet = new Set(selectedIds);
+        const duplicateChoiceIds = new Set<string>();
+
+        eligibility.duplicateIdsByTvdbId.forEach((ids) => {
+          duplicateChoiceIds.add(
+            ids.find((id) => selectedIdSet.has(id)) ?? ids[0]
+          );
+        });
+
+        setItemStates(
+          items.map((item) => {
+            const status = eligibility.eligibilityById.get(item.id);
+
+            return {
+              id: item.id,
+              isSelected: status === 'ready' || duplicateChoiceIds.has(item.id),
+            };
+          })
+        );
       } else {
         unselectAll();
       }
     },
-    [selectAll, unselectAll]
+    [eligibility, items, selectedIds, setItemStates, unselectAll]
   );
 
   const handleCompactRowsChange = useCallback(
@@ -110,11 +179,11 @@ function ImportSeriesFooter() {
   }, []);
 
   const handleImportPress = useCallback(() => {
-    importSeries(getSelectedIds());
-  }, [importSeries, getSelectedIds]);
+    importSeries(selectedReadyIds);
+  }, [importSeries, selectedReadyIds]);
 
   const handleApplyDefaults = useCallback(() => {
-    getSelectedIds().forEach((id) => {
+    selectedReadyIds.forEach((id) => {
       updateImportSeriesItem({
         id,
         monitor: defaults.monitor,
@@ -123,12 +192,12 @@ function ImportSeriesFooter() {
         seriesType: defaults.seriesType,
       });
     });
-  }, [defaults, getSelectedIds]);
+  }, [defaults, selectedReadyIds]);
 
   return (
     <PageContentFooter className={styles.footerShell}>
       <ImportSeriesDefaults
-        isApplyDisabled={!selectedCount}
+        isApplyDisabled={!selectedReadyIds.length}
         onApplyDefaults={handleApplyDefaults}
       />
 
@@ -187,11 +256,11 @@ function ImportSeriesFooter() {
                 className={styles.importButton}
                 kind={kinds.DEFAULT}
                 isSpinning={isImporting}
-                isDisabled={!selectedCount || isLookingUpSeries}
+                isDisabled={!selectedReadyIds.length || isLookingUpSeries}
                 onPress={handleImportPress}
               >
                 {translate('ImportCountSeries', {
-                  selectedCount,
+                  selectedCount: selectedReadyIds.length,
                 })}
               </SpinnerButton>
 

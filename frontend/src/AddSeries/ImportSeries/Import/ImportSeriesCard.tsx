@@ -12,9 +12,9 @@ import SeriesTypeSelectInput from 'Components/Form/Select/SeriesTypeSelectInput'
 import Label from 'Components/Label';
 import { kinds } from 'Helpers/Props';
 import SeriesPoster from 'Series/SeriesPoster';
-import useExistingSeries from 'Series/useExistingSeries';
 import { CheckInputChanged, InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
+import { ImportSeriesEligibility } from './importSeriesEligibility';
 import {
   ImportSeriesItem,
   UnamppedFolderItem,
@@ -26,14 +26,32 @@ import styles from './ImportSeriesCard.css';
 
 const HIDE_HINT = { includeHint: false };
 
+function getMatchStatusLabel(eligibility: ImportSeriesEligibility) {
+  switch (eligibility) {
+    case 'existing':
+      return translate('AlreadyInLibrary');
+    case 'duplicate':
+      return translate('DuplicateMatch');
+    case 'unmatched':
+      return translate('Pending');
+    case 'ready':
+    default:
+      return null;
+  }
+}
+
 interface ImportSeriesCardProps {
   unmappedFolder: UnamppedFolderItem;
+  duplicateIds: string[];
+  eligibility: ImportSeriesEligibility;
   isCompact: boolean;
   isStacked: boolean;
 }
 
 function ImportSeriesCard({
   unmappedFolder,
+  duplicateIds,
+  eligibility,
   isCompact,
   isStacked,
 }: ImportSeriesCardProps) {
@@ -52,12 +70,13 @@ function ImportSeriesCard({
 
   const { seasonFolder: defaultSeasonFolder } = useAddSeriesOptions();
 
-  const isExistingSeries = useExistingSeries(selectedSeries?.tvdbId);
-  const needsAttention = !selectedSeries || isExistingSeries;
-
-  const { getIsSelected, toggleSelected } = useSelect<ImportSeriesItem>();
-
-  const isSelected = getIsSelected(id);
+  const { setItemStates, toggleSelected, useIsSelected } =
+    useSelect<ImportSeriesItem>();
+  const isSelected = useIsSelected(id);
+  const isBlocked = eligibility === 'unmatched' || eligibility === 'existing';
+  const needsAttention =
+    isBlocked || (eligibility === 'duplicate' && !isSelected);
+  const matchStatusLabel = getMatchStatusLabel(eligibility);
 
   const handleInputChange = useCallback(
     ({ name, value }: InputChanged) => {
@@ -68,13 +87,26 @@ function ImportSeriesCard({
 
   const handleSelectedChange = useCallback(
     ({ value, shiftKey }: CheckInputChanged) => {
+      if (eligibility === 'duplicate') {
+        setItemStates(
+          value
+            ? duplicateIds.map((duplicateId) => ({
+                id: duplicateId,
+                isSelected: duplicateId === id,
+              }))
+            : [{ id, isSelected: false }]
+        );
+
+        return;
+      }
+
       toggleSelected({
         id,
         isSelected: value,
         shiftKey,
       });
     },
-    [id, toggleSelected]
+    [id, duplicateIds, eligibility, setItemStates, toggleSelected]
   );
 
   const [isSearching, setIsSearching] = useState(false);
@@ -103,7 +135,7 @@ function ImportSeriesCard({
         name={id}
         ariaLabel={translate('SelectRow')}
         value={isSelected}
-        isDisabled={needsAttention}
+        isDisabled={isBlocked}
         onChange={handleSelectedChange}
       />
 
@@ -153,7 +185,7 @@ function ImportSeriesCard({
           )}
         </div>
 
-        {needsAttention ? (
+        {needsAttention && matchStatusLabel ? (
           <>
             <Label
               className={classNames(
@@ -162,7 +194,7 @@ function ImportSeriesCard({
               )}
               kind={kinds.WARNING}
             >
-              {translate(isExistingSeries ? 'AlreadyInLibrary' : 'Pending')}
+              {matchStatusLabel}
             </Label>
 
             {selectedSeries ? null : (
