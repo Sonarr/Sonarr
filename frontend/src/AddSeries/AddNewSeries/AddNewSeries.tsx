@@ -97,7 +97,9 @@ function AddNewSeries() {
         {!isFetching && !error && !!data.length ? (
           <div className={styles.searchResults}>
             <div className={styles.resultsLabel}>
-              {translate('CountResults', { count: data.length })}
+              {data.length === 1
+                ? translate('CountResult', { count: data.length })
+                : translate('CountResults', { count: data.length })}
             </div>
 
             {data.map((item) => (
@@ -147,8 +149,6 @@ function AddNewSeries() {
             )}
           </div>
         )}
-
-        <div />
       </PageContentBody>
     </PageContent>
   );

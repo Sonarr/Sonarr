@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 import AddSeries from 'AddSeries/AddSeries';
 import { useAppDimension } from 'App/appStore';
@@ -14,12 +15,20 @@ import translate from 'Utilities/String/translate';
 import AddNewSeriesModal from './AddNewSeriesModal';
 import styles from './AddNewSeriesSearchResult.css';
 
-const statusChips: Record<string, { dot: string; label: string }> = {
-  continuing: { dot: styles.chipDotAiring, label: 'Continuing' },
-  upcoming: { dot: styles.chipDotUpcoming, label: 'Upcoming' },
-  ended: { dot: styles.chipDotEnded, label: 'Ended' },
-  deleted: { dot: styles.chipDotFinished, label: 'Deleted' },
-};
+function getStatusChip(status: string) {
+  switch (status) {
+    case 'continuing':
+      return { dot: styles.chipDotAiring, label: translate('Continuing') };
+    case 'upcoming':
+      return { dot: styles.chipDotUpcoming, label: translate('Upcoming') };
+    case 'ended':
+      return { dot: styles.chipDotEnded, label: translate('Ended') };
+    case 'deleted':
+      return { dot: styles.chipDotFinished, label: translate('Deleted') };
+    default:
+      return null;
+  }
+}
 
 interface AddNewSeriesSearchResultProps {
   series: AddSeries;
@@ -69,13 +78,14 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
     seasons = translate('CountSeasons', { count: seasonCount });
   }
 
-  const statusChip = statusChips[status];
+  const statusChip = getStatusChip(status);
 
   return (
     <div
-      className={`${styles.searchResult}${
-        isExcluded ? ` ${styles.searchResultExcluded}` : ''
-      }`}
+      className={classNames(
+        styles.searchResult,
+        isExcluded && styles.searchResultExcluded
+      )}
     >
       <Link
         className={styles.underlay}
@@ -140,9 +150,10 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
           </div>
 
           <div className={styles.chips}>
-            {ratings?.votes > 0 ? (
+            {ratings.votes > 0 ? (
               <span className={styles.chip}>
                 <HeartRating
+                  className={styles.chipRating}
                   rating={ratings.value}
                   votes={ratings.votes}
                   iconSize={11}
@@ -152,8 +163,8 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
 
             {statusChip ? (
               <span className={styles.chip}>
-                <span className={`${styles.chipDot} ${statusChip.dot}`} />
-                {translate(statusChip.label)}
+                <span className={classNames(styles.chipDot, statusChip.dot)} />
+                {statusChip.label}
               </span>
             ) : null}
 
@@ -174,7 +185,7 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
             ) : null}
 
             {isExcluded ? (
-              <span className={`${styles.chip} ${styles.chipExcluded}`}>
+              <span className={classNames(styles.chip, styles.chipExcluded)}>
                 {translate('SeriesInImportListExclusions')}
               </span>
             ) : null}

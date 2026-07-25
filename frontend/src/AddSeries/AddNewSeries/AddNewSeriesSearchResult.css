@@ -28,8 +28,6 @@
 
 .underlay {
   @add-mixin cover;
-
-  background-color: transparent;
 }
 
 .overlay {
@@ -81,7 +79,7 @@
   letter-spacing: -0.015em;
   font-weight: 600;
   font-size: 1.125rem;
-  font-family: var(--fontFamily);
+  font-family: var(--defaultFontFamily);
   line-height: 1.25;
 }
 
@@ -145,8 +143,6 @@
   border-radius: 999px;
   background: var(--paperWarm);
   color: var(--inkMuted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
   font-weight: 500;
   font-size: 11px;
   gap: 5px;
@@ -154,6 +150,10 @@
 
 .chipExcluded {
   color: var(--statusMissing);
+}
+
+.chip .chipRating {
+  margin-right: 0;
 }
 
 .chipDot {

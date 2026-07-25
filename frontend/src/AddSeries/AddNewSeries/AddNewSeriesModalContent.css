@@ -37,6 +37,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  margin-right: auto;
   gap: 8px 14px;
 }
 
@@ -61,7 +62,6 @@
 .modalFooter {
   composes: modalFooter from '~Components/Modal/ModalFooter.css';
 
-  justify-content: space-between !important;
   gap: 16px;
 }
 

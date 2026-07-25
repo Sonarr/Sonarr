@@ -9,6 +9,7 @@ interface CssExports {
   'chipDotFinished': string;
   'chipDotUpcoming': string;
   'chipExcluded': string;
+  'chipRating': string;
   'chips': string;
   'content': string;
   'excludedIcon': string;

@@ -129,6 +129,7 @@ function AddNewSeriesModalContent({
           <span className={styles.year}>({year})</span>
         ) : null}
       </ModalHeader>
+
       <ModalBody>
         <div className={styles.container}>
           {isSmallScreen ? null : (
@@ -251,6 +252,7 @@ function AddNewSeriesModalContent({
           </div>
         </div>
       </ModalBody>
+
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.searchOptions}>
           <span className={styles.searchLabel}>{translate('Search')}</span>
