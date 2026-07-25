@@ -39,6 +39,9 @@ import {
 import ImportSeriesSearchResult from './ImportSeriesSearchResult';
 import styles from './ImportSeriesSelectSeries.css';
 
+const DROPDOWN_MIN_WIDTH = 360;
+const DROPDOWN_VIEWPORT_MARGIN = 12;
+
 function handleResultsMouseDown(event: MouseEvent<HTMLDivElement>) {
   event.preventDefault();
 }
@@ -79,10 +82,16 @@ function ImportSeriesSelectSeries({
   const { refs, context, floatingStyles } = useFloating({
     middleware: [
       flip({ crossAxis: false, mainAxis: true }),
-      shift({ padding: 12 }),
+      shift({ padding: DROPDOWN_VIEWPORT_MARGIN }),
       size({
         apply({ rects, elements }) {
-          elements.floating.style.width = `${rects.reference.width}px`;
+          const maxWidth =
+            document.documentElement.clientWidth - DROPDOWN_VIEWPORT_MARGIN * 2;
+
+          elements.floating.style.width = `${Math.min(
+            Math.max(rects.reference.width, DROPDOWN_MIN_WIDTH),
+            maxWidth
+          )}px`;
         },
       }),
     ],
