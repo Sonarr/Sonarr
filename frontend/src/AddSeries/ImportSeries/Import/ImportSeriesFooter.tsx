@@ -161,7 +161,7 @@ function ImportSeriesFooter() {
             {needsAttentionCount ? (
               <span className={styles.statusItem}>
                 <span className={styles.attentionDot} />
-                {translate('CountNeedsAMatch', { count: needsAttentionCount })}
+                {translate('CountPending', { count: needsAttentionCount })}
               </span>
             ) : null}
           </div>
@@ -213,7 +213,7 @@ function ImportSeriesFooter() {
                   kind={kinds.PRIMARY}
                   onPress={handleLookupPress}
                 >
-                  {translate('ResolveUnmatched', { count: lookupCount })}
+                  {translate('SearchCountFolders', { count: lookupCount })}
                 </Button>
               ) : null}
 

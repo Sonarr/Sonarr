@@ -85,7 +85,7 @@ function ImportSeries() {
         <PageContentBody ref={scrollerRef}>
           <div className={styles.content}>
             <PageHeading
-              scope={translate('Library')}
+              scope={translate('Media')}
               title={translate('ImportSeries')}
             />
 

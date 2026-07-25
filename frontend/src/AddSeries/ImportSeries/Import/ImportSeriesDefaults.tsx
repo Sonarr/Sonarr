@@ -49,7 +49,7 @@ function ImportSeriesDefaults({
         <div className={styles.defaultsIdentity}>
           <div className={styles.defaultsTitle}>{translate('Defaults')}</div>
           <div className={styles.defaultsHint}>
-            {translate('UsedForNewMatches')}
+            {translate('UsedForNewLookups')}
           </div>
         </div>
 

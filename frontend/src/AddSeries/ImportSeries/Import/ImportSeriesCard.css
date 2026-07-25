@@ -121,6 +121,8 @@
 }
 
 .matchStatus {
+  composes: label from '~Components/Label.css';
+
   justify-self: start;
 
   margin: 0;

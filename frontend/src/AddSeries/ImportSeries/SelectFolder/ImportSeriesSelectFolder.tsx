@@ -66,7 +66,7 @@ function ImportSeriesSelectFolder() {
     <PageContent title={translate('ImportSeries')}>
       <PageContentBody>
         <PageHeading
-          scope={translate('Library')}
+          scope={translate('Media')}
           title={translate('ImportSeries')}
         />
 

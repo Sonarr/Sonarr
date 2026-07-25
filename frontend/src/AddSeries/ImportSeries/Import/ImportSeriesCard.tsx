@@ -156,7 +156,7 @@ function ImportSeriesCard({
               )}
               kind={kinds.WARNING}
             >
-              {translate(isExistingSeries ? 'AlreadyInLibrary' : 'NeedsAMatch')}
+              {translate(isExistingSeries ? 'AlreadyInLibrary' : 'Pending')}
             </Label>
 
             {selectedSeries ? null : (
