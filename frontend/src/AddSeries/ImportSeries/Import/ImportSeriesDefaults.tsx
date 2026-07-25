@@ -16,6 +16,8 @@ import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './ImportSeriesDefaults.css';
 
+const HIDE_HINT = { includeHint: false };
+
 interface ImportSeriesDefaultsProps {
   isApplyDisabled: boolean;
   onApplyDefaults: () => void;
@@ -78,6 +80,7 @@ function ImportSeriesDefaults({
           <SeriesTypeSelectInput
             name="seriesType"
             value={seriesType}
+            selectedValueOptions={HIDE_HINT}
             onChange={handleInputChange}
           />
         </div>

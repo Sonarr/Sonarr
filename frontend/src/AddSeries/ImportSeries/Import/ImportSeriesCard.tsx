@@ -24,6 +24,8 @@ import {
 import ImportSeriesSelectSeries from './SelectSeries/ImportSeriesSelectSeries';
 import styles from './ImportSeriesCard.css';
 
+const HIDE_HINT = { includeHint: false };
+
 interface ImportSeriesCardProps {
   unmappedFolder: UnamppedFolderItem;
   isCompact: boolean;
@@ -203,6 +205,7 @@ function ImportSeriesCard({
                 name="seriesType"
                 value={seriesType}
                 isDisabled={!selectedSeries}
+                selectedValueOptions={HIDE_HINT}
                 onChange={handleInputChange}
               />
             </div>
