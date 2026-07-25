@@ -49,11 +49,13 @@ function handleResultsMouseDown(event: MouseEvent<HTMLDivElement>) {
 interface ImportSeriesSelectSeriesProps {
   id: string;
   onInputChange: (input: InputChanged) => void;
+  onEditingChange: (isEditing: boolean) => void;
 }
 
 function ImportSeriesSelectSeries({
   id,
   onInputChange,
+  onEditingChange,
 }: ImportSeriesSelectSeriesProps) {
   const importSeriesItem = useImportSeriesItem(id);
   const { selectedSeries, name } = importSeriesItem ?? {};
@@ -189,6 +191,14 @@ function ImportSeriesSelectSeries({
       removeFromLookupQueue(id);
     }
   }, [id, isFetched, data, selectedSeries, isEditing]);
+
+  useEffect(() => {
+    onEditingChange(isEditing);
+
+    return () => {
+      onEditingChange(false);
+    };
+  }, [isEditing, onEditingChange]);
 
   useEffect(() => {
     setTerm(name);

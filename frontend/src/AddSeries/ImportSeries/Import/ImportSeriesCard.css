@@ -138,6 +138,30 @@
   }
 }
 
+.searching {
+  .poster,
+  .source,
+  .settingsRow,
+  .matchStatus {
+    display: none;
+  }
+
+  .seriesInfo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  &.needsAttention {
+    .identity {
+      display: none;
+    }
+
+    .matchAction {
+      grid-column: 1 / -1;
+      justify-self: stretch;
+    }
+  }
+}
+
 .matchAction {
   justify-self: end;
 }

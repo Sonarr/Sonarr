@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useAddSeriesOptions } from 'AddSeries/addSeriesOptionsStore';
 import { useSelect } from 'App/Select/SelectContext';
 import CheckInput from 'Components/Form/CheckInput';
@@ -77,6 +77,8 @@ function ImportSeriesCard({
     [id, toggleSelected]
   );
 
+  const [isSearching, setIsSearching] = useState(false);
+
   const seasonFolderOptions: EnhancedSelectInputValue<boolean>[] = useMemo(
     () => [
       { key: true, value: translate('Yes') },
@@ -91,7 +93,8 @@ function ImportSeriesCard({
         styles.rowLayout,
         isCompact && styles.compact,
         isStacked && styles.stacked,
-        needsAttention && styles.needsAttention
+        needsAttention && styles.needsAttention,
+        isSearching && styles.searching
       )}
     >
       <CheckInput
@@ -131,6 +134,7 @@ function ImportSeriesCard({
                 <ImportSeriesSelectSeries
                   id={id}
                   onInputChange={handleInputChange}
+                  onEditingChange={setIsSearching}
                 />
               </div>
 
@@ -166,6 +170,7 @@ function ImportSeriesCard({
                 <ImportSeriesSelectSeries
                   id={id}
                   onInputChange={handleInputChange}
+                  onEditingChange={setIsSearching}
                 />
               </div>
             )}
@@ -178,6 +183,7 @@ function ImportSeriesCard({
               <MonitorEpisodesSelectInput
                 name="monitor"
                 value={monitor}
+                modalTitle={translate('Monitor')}
                 isDisabled={!selectedSeries}
                 onChange={handleInputChange}
               />
@@ -191,6 +197,7 @@ function ImportSeriesCard({
               <QualityProfileSelectInput
                 name="qualityProfileId"
                 value={qualityProfileId}
+                modalTitle={translate('QualityProfile')}
                 isDisabled={!selectedSeries}
                 onChange={handleInputChange}
               />
@@ -204,6 +211,7 @@ function ImportSeriesCard({
               <SeriesTypeSelectInput
                 name="seriesType"
                 value={seriesType}
+                modalTitle={translate('SeriesType')}
                 isDisabled={!selectedSeries}
                 selectedValueOptions={HIDE_HINT}
                 onChange={handleInputChange}
@@ -218,6 +226,7 @@ function ImportSeriesCard({
               <EnhancedSelectInput
                 name="seasonFolder"
                 value={seasonFolder ?? defaultSeasonFolder}
+                modalTitle={translate('SeasonFolder')}
                 values={seasonFolderOptions}
                 isDisabled={!selectedSeries}
                 onChange={handleInputChange}

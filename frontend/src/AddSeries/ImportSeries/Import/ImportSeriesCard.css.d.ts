@@ -13,6 +13,7 @@ interface CssExports {
   'poster': string;
   'posterPlaceholder': string;
   'rowLayout': string;
+  'searching': string;
   'selectContainer': string;
   'selectInput': string;
   'seriesInfo': string;
