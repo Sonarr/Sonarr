@@ -144,12 +144,12 @@ jobs:
                 );
               }
 
-              const logs = stripComments(sectionBody(body, "Trace Logs?"));
+              const logs = stripComments(sectionBody(body, "Trace Logs"));
               const logsText = logs.replace(/<img[^>]*>/gi, "").replace(/[.!\s]+$/g, "").trim().toLowerCase();
 
               if (isBlank(logs) || DISMISSIVE_LOGS.includes(logsText)) {
                 reasons.push(
-                  "The **Trace Logs?** section is missing or dismissive (e.g. \"N/A\"). Please attach trace logs as text (not a screenshot). See https://wiki.servarr.com/sonarr/troubleshooting#logging-and-log-files."
+                  "The **Trace Logs** section is missing or dismissive (e.g. \"N/A\"). Please attach trace logs as text (not a screenshot). See https://wiki.servarr.com/sonarr/troubleshooting#logging-and-log-files."
                 );
               }
             }
