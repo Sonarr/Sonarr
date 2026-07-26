@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 
 namespace Sonarr.Http.Frontend.Mappers
@@ -24,7 +25,7 @@ namespace Sonarr.Http.Frontend.Mappers
             _configFileProvider = configFileProvider;
         }
 
-        protected override string FolderPath => Path.Combine(_appFolderInfo.StartUpFolder, _configFileProvider.UiFolder);
+        protected override string FolderPath => _appFolderInfo.GetUiFolder();
         protected override string HtmlPath => Path.Combine(FolderPath, "logout.html");
 
         protected override string MapPath(string resourceUrl)

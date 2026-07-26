@@ -52,7 +52,6 @@ namespace NzbDrone.Core.Configuration
         string SslCertPassword { get; }
         string UrlBase { get; }
         string TrustedNetworks { get; }
-        string UiFolder { get; }
         string InstanceName { get; }
         bool UpdateAutomatically { get; }
         UpdateMechanism UpdateMechanism { get; }
@@ -305,8 +304,6 @@ namespace NzbDrone.Core.Configuration
         }
 
         public string TrustedNetworks => _serverOptions.TrustedNetworks ?? GetValue("TrustedNetworks", string.Empty);
-
-        public string UiFolder => BuildInfo.IsDebug ? Path.Combine("..", "UI") : "UI";
 
         public string InstanceName
         {
