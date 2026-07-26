@@ -380,11 +380,52 @@ namespace NzbDrone.Common.Test
         [TestCase(@"C:\ Test\TV\")]
         [TestCase(@" C:\Test\TV\")]
         [TestCase(@" C:\Test\TV")]
+        [TestCase(@"C:\Test.\TV")]
+        [TestCase(@"C:\Test\TV.")]
+        [TestCase(@"C:\Test\TV...")]
 
         public void IsPathValid_should_be_false_on_windows(string path)
         {
             WindowsOnly();
             path.IsPathValid(PathValidationType.CurrentOs).Should().BeFalse();
+        }
+
+        [TestCase(@"C:\Test\..\TV")]
+        [TestCase(@"C:\Test\.\TV")]
+        [TestCase(@"C:\Test\TV\..")]
+        [TestCase(@"C:\Test\TV\.")]
+        [TestCase(@"C:\..\Test\TV")]
+        [TestCase(@"C:\Test\..\..\..\TV")]
+        public void IsPathValid_should_be_false_for_path_traversal(string path)
+        {
+            path.AsOsAgnostic().IsPathValid(PathValidationType.CurrentOs).Should().BeFalse();
+        }
+
+        [TestCase(@"C:\Test\..\TV")]
+        [TestCase(@"C:\Test\.\TV")]
+        [TestCase(@"C:\Test\TV\..")]
+        public void ContainsPathTraversal_should_be_true(string path)
+        {
+            path.AsOsAgnostic().ContainsPathTraversal().Should().BeTrue();
+        }
+
+        [TestCase(@"C:\Test\TV")]
+        [TestCase(@"C:\Test\.hidden\TV")]
+        [TestCase(@"C:\Test\..hidden\TV")]
+        [TestCase(@"C:\Test\Series Title (2010)\Season 1")]
+        public void ContainsPathTraversal_should_be_false(string path)
+        {
+            path.AsOsAgnostic().ContainsPathTraversal().Should().BeFalse();
+        }
+
+        [TestCase(@"/Test/TV\ Shows")]
+        [TestCase(@"/Test/TV\ Shows/Series Title\ (2010)")]
+        [TestCase(@"/Test/TV.")]
+        [TestCase(@"/Test/TV /Season 1")]
+        public void ContainsPathTraversal_should_be_false_on_unix(string path)
+        {
+            PosixOnly();
+            path.ContainsPathTraversal().Should().BeFalse();
         }
 
         [TestCase(@"")]

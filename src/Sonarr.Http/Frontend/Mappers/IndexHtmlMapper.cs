@@ -33,7 +33,7 @@ namespace Sonarr.Http.Frontend.Mappers
             _logger = logger;
         }
 
-        protected override string FolderPath => Path.Combine(_appFolderInfo.StartUpFolder, _configFileProvider.UiFolder);
+        protected override string FolderPath => _appFolderInfo.GetUiFolder();
         protected override string HtmlPath => Path.Combine(FolderPath, "index.html");
 
         protected override string MapPath(string resourceUrl)
