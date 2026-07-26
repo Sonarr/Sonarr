@@ -15,7 +15,12 @@ function LegendIconItem(props: LegendIconItemProps) {
   const { name, fullColorEvents, icon, kind, tooltip } = props;
 
   return (
-    <div className={styles.legendIconItem} role="listitem" title={tooltip}>
+    <div
+      className={styles.legendIconItem}
+      role="listitem"
+      aria-label={`${name}. ${tooltip}`}
+      title={tooltip}
+    >
       <Icon
         className={classNames(
           styles.icon,
@@ -23,6 +28,7 @@ function LegendIconItem(props: LegendIconItemProps) {
         )}
         name={icon}
         kind={kind}
+        aria-hidden={true}
       />
 
       {name}

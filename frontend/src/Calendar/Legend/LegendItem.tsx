@@ -30,10 +30,12 @@ function LegendItem(props: LegendItemProps) {
     missing: 'Missing',
     unaired: 'Unaired',
   };
+  const statusName = name ?? translate(statusTranslationKeys[status]);
 
   return (
     <div
       role="listitem"
+      aria-label={`${statusName}. ${tooltip}`}
       className={classNames(
         styles.legendItem,
         styles[status],
@@ -42,7 +44,7 @@ function LegendItem(props: LegendItemProps) {
       )}
       title={tooltip}
     >
-      {name ? name : translate(statusTranslationKeys[status])}
+      {statusName}
     </div>
   );
 }
