@@ -4,8 +4,7 @@ interface CssExports {
   'header': string;
   'loading': string;
   'navigationButtons': string;
-  'titleDesktop': string;
-  'titleMobile': string;
+  'title': string;
   'todayButton': string;
   'viewButtonsContainer': string;
   'viewMenu': string;

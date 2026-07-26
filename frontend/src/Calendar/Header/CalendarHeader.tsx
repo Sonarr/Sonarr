@@ -1,6 +1,5 @@
 import moment from 'moment';
 import React, { useCallback, useMemo } from 'react';
-import { useAppDimensions } from 'App/appStore';
 import {
   setCalendarOption,
   useCalendarOption,
@@ -29,8 +28,6 @@ function CalendarHeader() {
   const view = useCalendarOption('view');
   const time = useCalendarTime();
   const { start, end } = useCalendarRange();
-
-  const { isSmallScreen } = useAppDimensions();
 
   const { longDateFormat } = useUiSettingsValues();
 
@@ -82,63 +79,7 @@ function CalendarHeader() {
 
   return (
     <div>
-      {isSmallScreen ? (
-        <h2
-          className={styles.titleMobile}
-          aria-live="polite"
-          aria-atomic={true}
-        >
-          {title}
-        </h2>
-      ) : null}
-
       <div className={styles.header}>
-        <div
-          className={styles.navigationButtons}
-          role="group"
-          aria-label={translate('CalendarNavigation')}
-        >
-          <Button
-            buttonGroupPosition="left"
-            isDisabled={view === 'agenda'}
-            aria-label={translate('CalendarPreviousRange', {
-              view: viewLabel,
-            })}
-            onPress={handlePreviousPress}
-          >
-            <Icon name={icons.PAGE_PREVIOUS} aria-hidden={true} />
-          </Button>
-
-          <Button
-            buttonGroupPosition="right"
-            isDisabled={view === 'agenda'}
-            aria-label={translate('CalendarNextRange', {
-              view: viewLabel,
-            })}
-            onPress={handleNextPress}
-          >
-            <Icon name={icons.PAGE_NEXT} aria-hidden={true} />
-          </Button>
-
-          <Button
-            className={styles.todayButton}
-            isDisabled={view === 'agenda'}
-            onPress={handleTodayPress}
-          >
-            {translate('Today')}
-          </Button>
-        </div>
-
-        {isSmallScreen ? null : (
-          <h2
-            className={styles.titleDesktop}
-            aria-live="polite"
-            aria-atomic={true}
-          >
-            {title}
-          </h2>
-        )}
-
         <div
           className={styles.viewButtonsContainer}
           role="group"
@@ -188,7 +129,47 @@ function CalendarHeader() {
             onPress={handleViewChange}
           />
         </div>
+
+        <div
+          className={styles.navigationButtons}
+          role="group"
+          aria-label={translate('CalendarNavigation')}
+        >
+          <Button
+            buttonGroupPosition="left"
+            isDisabled={view === 'agenda'}
+            aria-label={translate('CalendarPreviousRange', {
+              view: viewLabel,
+            })}
+            onPress={handlePreviousPress}
+          >
+            <Icon name={icons.PAGE_PREVIOUS} aria-hidden={true} />
+          </Button>
+
+          <Button
+            buttonGroupPosition="right"
+            isDisabled={view === 'agenda'}
+            aria-label={translate('CalendarNextRange', {
+              view: viewLabel,
+            })}
+            onPress={handleNextPress}
+          >
+            <Icon name={icons.PAGE_NEXT} aria-hidden={true} />
+          </Button>
+
+          <Button
+            className={styles.todayButton}
+            isDisabled={view === 'agenda'}
+            onPress={handleTodayPress}
+          >
+            {translate('Today')}
+          </Button>
+        </div>
       </div>
+
+      <h2 className={styles.title} aria-live="polite" aria-atomic={true}>
+        {title}
+      </h2>
     </div>
   );
 }

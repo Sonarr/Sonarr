@@ -1,9 +1,11 @@
 .header {
   display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .navigationButtons {
-  flex: 1 1 33%;
   text-align: left;
 }
 
@@ -13,23 +15,17 @@
   margin-left: 5px;
 }
 
-.titleDesktop,
-.titleMobile {
-  margin-top: 0;
+.title {
+  margin-top: 5px;
   margin-bottom: 0;
+  width: 100%;
   text-align: center;
   font-weight: normal;
   font-size: 18px;
 }
 
-.titleMobile {
-  margin-bottom: 5px;
-}
-
 .viewButtonsContainer {
   display: flex;
-  justify-content: flex-end;
-  flex: 1 1 33%;
   flex-wrap: wrap;
 }
 
@@ -46,12 +42,3 @@
   margin-right: 10px;
 }
 
-@media only screen and (max-width: $breakpointSmall) {
-  .navigationButtons {
-    flex: 1 0 50%;
-  }
-
-  .viewButtonsContainer {
-    flex: 0 0 100px;
-  }
-}
