@@ -809,11 +809,8 @@ namespace NzbDrone.Common.Test.Http
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(culture);
             try
             {
-                // the 2-digit year below is intentionally malformed (Cloudflare quirk). CookieContainer resolves
-                // two-digit years via GregorianCalendar.TwoDigitYearMax, which defaults to 2029 - anything 00-29
-                // maps to 2000-2029, but 30+ wraps backward to 1930-1999 (always in the past, cookie rejected).
-                // 29 is the maximum value that stays in the future; this test will need bumping again before 2029.
-                var malformedCookie = @"__cfduid=d29e686a9d65800021c66faca0a29b4261436890790; expires=Mon, 13-Jul-29 16:19:50 GMT; path=/; HttpOnly";
+                // the date is bad in the below - should be 16-Jul-2029
+                var malformedCookie = @"__cfduid=d29e686a9d65800021c66faca0a29b4261436890790; expires=Mon, 16-Jul-2029 16:19:50 GMT; path=/; HttpOnly";
                 var requestSet = new HttpRequestBuilder($"https://{_httpBinHost}/response-headers")
                     .AddQueryParam("Set-Cookie", malformedCookie)
                     .Build();
@@ -821,7 +818,7 @@ namespace NzbDrone.Common.Test.Http
                 requestSet.AllowAutoRedirect = false;
                 requestSet.StoreResponseCookie = true;
 
-                var responseSet = await Subject.GetAsync(requestSet);
+                await Subject.GetAsync(requestSet);
 
                 var request = new HttpRequest($"https://{_httpBinHost}/get");
 
