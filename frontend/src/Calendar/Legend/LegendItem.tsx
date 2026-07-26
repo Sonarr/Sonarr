@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
+import ScreenReaderOnly from 'Components/ScreenReaderOnly';
 import { CalendarStatus } from 'typings/Calendar';
 import translate from 'Utilities/String/translate';
 import styles from './LegendItem.css';
@@ -35,7 +36,6 @@ function LegendItem(props: LegendItemProps) {
   return (
     <div
       role="listitem"
-      aria-label={`${statusName}. ${tooltip}`}
       className={classNames(
         styles.legendItem,
         styles[status],
@@ -44,7 +44,10 @@ function LegendItem(props: LegendItemProps) {
       )}
       title={tooltip}
     >
-      {statusName}
+      <span aria-hidden={true}>{statusName}</span>
+      <ScreenReaderOnly>
+        {statusName}. {tooltip}
+      </ScreenReaderOnly>
     </div>
   );
 }

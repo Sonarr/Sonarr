@@ -2,6 +2,7 @@ import { FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React from 'react';
 import Icon, { IconProps } from 'Components/Icon';
+import ScreenReaderOnly from 'Components/ScreenReaderOnly';
 import styles from './LegendIconItem.css';
 
 interface LegendIconItemProps extends Pick<IconProps, 'kind'> {
@@ -15,12 +16,7 @@ function LegendIconItem(props: LegendIconItemProps) {
   const { name, fullColorEvents, icon, kind, tooltip } = props;
 
   return (
-    <div
-      className={styles.legendIconItem}
-      role="listitem"
-      aria-label={`${name}. ${tooltip}`}
-      title={tooltip}
-    >
+    <div className={styles.legendIconItem} role="listitem" title={tooltip}>
       <Icon
         className={classNames(
           styles.icon,
@@ -31,7 +27,10 @@ function LegendIconItem(props: LegendIconItemProps) {
         aria-hidden={true}
       />
 
-      {name}
+      <span aria-hidden={true}>{name}</span>
+      <ScreenReaderOnly>
+        {name}. {tooltip}
+      </ScreenReaderOnly>
     </div>
   );
 }
