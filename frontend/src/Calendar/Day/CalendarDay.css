@@ -1,9 +1,10 @@
 .day {
-  flex: 1 0 14.28%;
   overflow: hidden;
+  padding: 0;
   min-height: 70px;
   border-bottom: 1px solid var(--calendarBorderColor);
   border-left: 1px solid var(--calendarBorderColor);
+  vertical-align: top;
 }
 
 .isSingleDay {
@@ -11,9 +12,12 @@
 }
 
 .dayOfMonth {
+  margin: 0;
   padding-right: 5px;
   border-bottom: 1px solid var(--calendarBorderColor);
   text-align: right;
+  font-weight: normal;
+  font-size: inherit;
 }
 
 .isToday {
@@ -22,4 +26,23 @@
 
 .isDifferentMonth {
   color: var(--disabledColor);
+}
+
+.dateHeading {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  margin: -1px;
+  padding: 0;
+  width: 1px;
+  height: 1px;
+  border: 0;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.eventList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }

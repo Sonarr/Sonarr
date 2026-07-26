@@ -115,7 +115,7 @@ function CalendarPage() {
         <PageToolbar>
           <PageToolbarSection>
             <PageToolbarButton
-              label={translate('ICalLink')}
+              label={translate('ICalFeed')}
               iconName={icons.CALENDAR}
               onPress={handleGetCalendarLinkPress}
             />

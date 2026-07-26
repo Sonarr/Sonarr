@@ -11,6 +11,7 @@ interface CssExports {
   'eventGroup': string;
   'expandContainer': string;
   'expandContainerInline': string;
+  'expandedEventList': string;
   'info': string;
   'missing': string;
   'onAir': string;

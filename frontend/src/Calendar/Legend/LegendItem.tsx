@@ -1,7 +1,8 @@
 import classNames from 'classnames';
 import React from 'react';
+import ScreenReaderOnly from 'Components/ScreenReaderOnly';
 import { CalendarStatus } from 'typings/Calendar';
-import titleCase from 'Utilities/String/titleCase';
+import translate from 'Utilities/String/translate';
 import styles from './LegendItem.css';
 
 interface LegendItemProps {
@@ -22,9 +23,19 @@ function LegendItem(props: LegendItemProps) {
     fullColorEvents,
     colorImpairedMode,
   } = props;
+  const statusTranslationKeys: Record<CalendarStatus, string> = {
+    downloaded: 'Downloaded',
+    downloading: 'Downloading',
+    unmonitored: 'Unmonitored',
+    onAir: 'OnAir',
+    missing: 'Missing',
+    unaired: 'Unaired',
+  };
+  const statusName = name ?? translate(statusTranslationKeys[status]);
 
   return (
     <div
+      role="listitem"
       className={classNames(
         styles.legendItem,
         styles[status],
@@ -33,7 +44,10 @@ function LegendItem(props: LegendItemProps) {
       )}
       title={tooltip}
     >
-      {name ? name : titleCase(status)}
+      <span aria-hidden={true}>{statusName}</span>
+      <ScreenReaderOnly>
+        {statusName}. {tooltip}
+      </ScreenReaderOnly>
     </div>
   );
 }

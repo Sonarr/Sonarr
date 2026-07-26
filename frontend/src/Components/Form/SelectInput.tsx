@@ -60,6 +60,7 @@ function SelectInput<T>({
         isDisabled && disabledClassName
       )}
       disabled={isDisabled}
+      id={name}
       name={name}
       value={value}
       autoFocus={autoFocus}

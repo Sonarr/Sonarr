@@ -14,7 +14,6 @@ import translate from 'Utilities/String/translate';
 import Agenda from './Agenda/Agenda';
 import { useCalendarOption } from './calendarOptionsStore';
 import CalendarDays from './Day/CalendarDays';
-import DaysOfWeek from './Day/DaysOfWeek';
 import CalendarHeader from './Header/CalendarHeader';
 import useCalendar, { goToToday } from './useCalendar';
 import styles from './Calendar.css';
@@ -36,12 +35,12 @@ function Calendar() {
     clearTimeout(updateTimeout.current);
 
     function updateCalendar() {
-      goToToday();
+      refetch();
       updateTimeout.current = setTimeout(updateCalendar, UPDATE_DELAY);
     }
 
     updateTimeout.current = setTimeout(updateCalendar, UPDATE_DELAY);
-  }, []);
+  }, [refetch]);
 
   useEffect(() => {
     handleScheduleUpdate();
@@ -73,10 +72,6 @@ function Calendar() {
   }, [refetch]);
 
   useEffect(() => {
-    handleScheduleUpdate();
-  }, [handleScheduleUpdate]);
-
-  useEffect(() => {
     if (wasRefreshingSeries && !isRefreshingSeries) {
       refetch();
     }
@@ -97,7 +92,6 @@ function Calendar() {
       {!error && !isLoading && view !== 'agenda' ? (
         <div className={styles.calendarContent}>
           <CalendarHeader />
-          <DaysOfWeek />
           <CalendarDays />
         </div>
       ) : null}

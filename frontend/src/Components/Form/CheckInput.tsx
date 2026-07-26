@@ -108,6 +108,7 @@ function CheckInput(props: CheckInputProps) {
           ref={inputRef}
           className={styles.checkbox}
           type="checkbox"
+          id={name}
           name={name}
           aria-label={ariaLabel}
           checked={isChecked}

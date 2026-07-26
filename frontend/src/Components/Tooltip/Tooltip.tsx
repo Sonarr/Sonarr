@@ -26,6 +26,7 @@ export interface TooltipProps {
   className?: string;
   bodyClassName?: string;
   anchor: React.ReactNode;
+  accessibleLabel?: string;
   tooltip: string | React.ReactNode;
   kind?: Extract<Kind, 'default' | 'inverse'>;
   position?: Placement;
@@ -37,6 +38,7 @@ function Tooltip(props: TooltipProps) {
     className,
     bodyClassName = styles.body,
     anchor,
+    accessibleLabel,
     tooltip,
     kind = kinds.DEFAULT,
     position,
@@ -90,6 +92,7 @@ function Tooltip(props: TooltipProps) {
         ref={refs.setReference}
         {...getReferenceProps()}
         className={className}
+        aria-label={accessibleLabel}
       >
         {anchor}
       </span>

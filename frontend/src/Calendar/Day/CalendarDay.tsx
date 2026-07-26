@@ -6,11 +6,13 @@ import * as calendarViews from 'Calendar/calendarViews';
 import CalendarEvent from 'Calendar/Events/CalendarEvent';
 import CalendarEventGroup from 'Calendar/Events/CalendarEventGroup';
 import useCalendar, { useCalendarTime } from 'Calendar/useCalendar';
+import ScreenReaderOnly from 'Components/ScreenReaderOnly';
 import {
   CalendarEvent as CalendarEventModel,
   CalendarEventGroup as CalendarEventGroupModel,
   CalendarItem,
 } from 'typings/Calendar';
+import translate from 'Utilities/String/translate';
 import styles from './CalendarDay.css';
 
 function sort(items: (CalendarEventModel | CalendarEventGroupModel)[]) {
@@ -98,59 +100,74 @@ function CalendarDay({
   const time = useCalendarTime();
   const events = useCalendarEvents(date);
 
-  const ref = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    if (isTodaysDate && view === calendarViews.MONTH && ref.current) {
-      ref.current.scrollIntoView();
-    }
-  }, [time, isTodaysDate, view]);
+  const ref = React.useRef<HTMLTableCellElement>(null);
+  const momentDate = moment(date);
+  const fullDate = momentDate.format('dddd, MMMM D, YYYY');
+  const isDifferentMonth = !momentDate.isSame(moment(time), 'month');
 
   return (
-    <div
+    <td
       ref={ref}
       className={classNames(
         styles.day,
         view === calendarViews.DAY && styles.isSingleDay
       )}
     >
-      {view === calendarViews.MONTH && (
-        <div
-          className={classNames(
-            styles.dayOfMonth,
-            isTodaysDate && styles.isToday,
-            !moment(date).isSame(moment(time), 'month') &&
-              styles.isDifferentMonth
-          )}
+      <h3
+        className={
+          view === calendarViews.MONTH
+            ? classNames(
+                styles.dayOfMonth,
+                isTodaysDate && styles.isToday,
+                isDifferentMonth && styles.isDifferentMonth
+              )
+            : styles.dateHeading
+        }
+      >
+        <time
+          dateTime={momentDate.format('YYYY-MM-DD')}
+          aria-current={isTodaysDate ? 'date' : undefined}
+          aria-label={fullDate}
         >
-          {moment(date).date()}
-        </div>
-      )}
-      <div>
-        {events.map((event) => {
-          if (event.isGroup) {
-            return (
-              <CalendarEventGroup
-                key={event.seriesId}
-                {...event}
-                onEventModalOpenToggle={onEventModalOpenToggle}
-              />
-            );
-          }
+          {view === calendarViews.MONTH ? momentDate.date() : fullDate}
+        </time>
 
-          return (
-            <CalendarEvent
-              key={event.id}
-              {...event}
-              episodeId={event.id}
-              seriesId={event.seriesId}
-              airDateUtc={event.airDateUtc as string}
-              onEventModalOpenToggle={onEventModalOpenToggle}
-            />
-          );
-        })}
-      </div>
-    </div>
+        {isTodaysDate ? (
+          <ScreenReaderOnly>, {translate('Today')}</ScreenReaderOnly>
+        ) : null}
+      </h3>
+
+      {events.length ? (
+        <ul className={styles.eventList}>
+          {events.map((event) => {
+            if (event.isGroup) {
+              return (
+                <li key={`${event.seriesId}-${event.seasonNumber}`}>
+                  <CalendarEventGroup
+                    {...event}
+                    onEventModalOpenToggle={onEventModalOpenToggle}
+                  />
+                </li>
+              );
+            }
+
+            return (
+              <li key={event.id}>
+                <CalendarEvent
+                  {...event}
+                  episodeId={event.id}
+                  seriesId={event.seriesId}
+                  airDateUtc={event.airDateUtc as string}
+                  onEventModalOpenToggle={onEventModalOpenToggle}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <ScreenReaderOnly>{translate('CalendarNoEpisodes')}</ScreenReaderOnly>
+      )}
+    </td>
   );
 }
 

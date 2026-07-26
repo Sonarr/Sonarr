@@ -81,7 +81,9 @@ function CalendarLinkModalContent({
       <ModalBody>
         <Form>
           <FormGroup>
-            <FormLabel>{translate('IncludeUnmonitored')}</FormLabel>
+            <FormLabel name="unmonitored">
+              {translate('IncludeUnmonitored')}
+            </FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
@@ -93,7 +95,9 @@ function CalendarLinkModalContent({
           </FormGroup>
 
           <FormGroup>
-            <FormLabel>{translate('SeasonPremieresOnly')}</FormLabel>
+            <FormLabel name="premieresOnly">
+              {translate('SeasonPremieresOnly')}
+            </FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
@@ -105,7 +109,9 @@ function CalendarLinkModalContent({
           </FormGroup>
 
           <FormGroup>
-            <FormLabel>{translate('ICalShowAsAllDayEvents')}</FormLabel>
+            <FormLabel name="asAllDay">
+              {translate('ICalShowAsAllDayEvents')}
+            </FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
@@ -117,7 +123,7 @@ function CalendarLinkModalContent({
           </FormGroup>
 
           <FormGroup>
-            <FormLabel>{translate('Tags')}</FormLabel>
+            <FormLabel name="tags">{translate('Tags')}</FormLabel>
 
             <FormInputGroup
               type={inputTypes.SERIES_TAG}
@@ -129,7 +135,7 @@ function CalendarLinkModalContent({
           </FormGroup>
 
           <FormGroup size={sizes.LARGE}>
-            <FormLabel>{translate('ICalFeed')}</FormLabel>
+            <FormLabel name="iCalHttpUrl">{translate('ICalFeed')}</FormLabel>
 
             <FormInputGroup
               type={inputTypes.TEXT}
@@ -147,11 +153,12 @@ function CalendarLinkModalContent({
                 <FormInputButton
                   key="webcal"
                   kind={kinds.DEFAULT}
+                  aria-label={translate('SubscribeToICalFeed')}
                   to={iCalWebCalUrl}
                   target="_blank"
                   noRouter={true}
                 >
-                  <Icon name={icons.CALENDAR_O} />
+                  <Icon name={icons.CALENDAR_O} aria-hidden={true} />
                 </FormInputButton>,
               ]}
               onChange={handleInputChange}

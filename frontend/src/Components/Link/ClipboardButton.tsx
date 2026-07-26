@@ -2,7 +2,9 @@ import copy from 'copy-to-clipboard';
 import React, { useCallback, useEffect, useState } from 'react';
 import FormInputButton from 'Components/Form/FormInputButton';
 import Icon from 'Components/Icon';
+import ScreenReaderOnly from 'Components/ScreenReaderOnly';
 import { icons, kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import { ButtonProps } from './Button';
 import styles from './ClipboardButton.css';
 
@@ -56,6 +58,7 @@ export default function ClipboardButton({
   return (
     <FormInputButton
       className={className}
+      aria-label={translate('CopyToClipboard')}
       onClick={handleClick}
       {...otherProps}
     >
@@ -65,15 +68,26 @@ export default function ClipboardButton({
             <Icon
               name={state === 'error' ? icons.DANGER : icons.CHECK}
               kind={state === 'error' ? kinds.DANGER : kinds.SUCCESS}
+              aria-hidden={true}
             />
           </span>
         ) : null}
 
         <span className={styles.clipboardIconContainer}>
           {label ? <span className={styles.buttonText}>{label}</span> : null}
-          <Icon name={icons.CLIPBOARD} />
+          <Icon name={icons.CLIPBOARD} aria-hidden={true} />
         </span>
       </span>
+
+      {state ? (
+        <ScreenReaderOnly role="status">
+          {translate(
+            state === 'success'
+              ? 'CopiedToClipboard'
+              : 'UnableToCopyToClipboard'
+          )}
+        </ScreenReaderOnly>
+      ) : null}
     </FormInputButton>
   );
 }

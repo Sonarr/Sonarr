@@ -51,6 +51,12 @@
   margin-bottom: 5px;
 }
 
+.expandedEventList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .statusContainer {
   display: flex;
   align-items: center;

@@ -17,6 +17,8 @@ import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
 import CalendarEventQueueDetails from './CalendarEventQueueDetails';
+import getCalendarEventStatusDetails from './getCalendarEventStatusDetails';
+import getCalendarStatusLabel from './getCalendarStatusLabel';
 import styles from './CalendarEvent.css';
 
 interface CalendarEventProps {
@@ -59,7 +61,7 @@ function CalendarEvent(props: CalendarEventProps) {
   const episodeFile = useEpisodeFile(episodeFileId);
   const queueItem = useQueueItemForEpisode(id);
 
-  const { timeFormat, enableColorImpairedMode, timeZone } =
+  const { timeFormat, longDateFormat, enableColorImpairedMode, timeZone } =
     useUiSettingsValues();
 
   const {
@@ -102,6 +104,29 @@ function CalendarEvent(props: CalendarEventProps) {
   );
   const missingAbsoluteNumber =
     series.seriesType === 'anime' && seasonNumber > 0 && !absoluteEpisodeNumber;
+  const episodeNumberLabel = `${seasonNumber}x${padNumber(episodeNumber, 2)}`;
+  const statusLabels = [
+    getCalendarStatusLabel(statusStyle),
+    ...getCalendarEventStatusDetails({
+      missingAbsoluteNumber,
+      unverifiedSceneNumbering,
+      qualityCutoffNotMet: !!episodeFile?.qualityCutoffNotMet,
+      seasonNumber,
+      episodeNumber,
+      finaleType,
+    }),
+  ];
+  const eventLabel = translate('CalendarOpenEpisodeDetails', {
+    series: series.title,
+    episode: episodeNumberLabel,
+    title,
+    airDate: `${startTime.format(longDateFormat)}, ${formatTime(
+      airDateUtc,
+      timeFormat,
+      { timeZone }
+    )}`,
+    status: statusLabels.join('. '),
+  });
 
   return (
     <div
@@ -112,7 +137,11 @@ function CalendarEvent(props: CalendarEventProps) {
         fullColorEvents && 'fullColor'
       )}
     >
-      <Link className={styles.underlay} onPress={handlePress} />
+      <Link
+        className={styles.underlay}
+        aria-label={eventLabel}
+        onPress={handlePress}
+      />
 
       <div className={styles.overlay}>
         <div className={styles.info}>
