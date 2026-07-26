@@ -13,14 +13,15 @@ const useMissingEpisodeIdsSelector = () => {
   const { start, end } = useCalendarRange();
   const { data } = useCalendar();
   const queueDetails = useQueueDetails();
+  const rangeStart = moment(start).startOf('day');
+  const rangeEnd = moment(end).endOf('day');
 
   return data.reduce<number[]>((acc, episode) => {
     const airDateUtc = episode.airDateUtc;
 
     if (
       !episode.episodeFileId &&
-      moment(airDateUtc).isAfter(start) &&
-      moment(airDateUtc).isBefore(end) &&
+      moment(airDateUtc).isBetween(rangeStart, rangeEnd, undefined, '[]') &&
       isBefore(episode.airDateUtc) &&
       !queueDetails.some((details) => details.episodeIds?.includes(episode.id))
     ) {

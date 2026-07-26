@@ -131,19 +131,21 @@ function CalendarEventGroup({
   if (isExpanded) {
     return (
       <div>
-        <ul id={expandedContentId} className={styles.expandedEventList}>
-          {events.map((event) => {
-            return (
-              <li key={event.id}>
-                <CalendarEvent
-                  episodeId={event.id}
-                  {...event}
-                  onEventModalOpenToggle={onEventModalOpenToggle}
-                />
-              </li>
-            );
-          })}
-        </ul>
+        <div id={expandedContentId}>
+          <ul className={styles.expandedEventList}>
+            {events.map((event) => {
+              return (
+                <li key={event.id}>
+                  <CalendarEvent
+                    episodeId={event.id}
+                    {...event}
+                    onEventModalOpenToggle={onEventModalOpenToggle}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
 
         <Link
           className={styles.collapseContainer}
@@ -167,6 +169,8 @@ function CalendarEventGroup({
         fullColorEvents && 'fullColor'
       )}
     >
+      <div id={expandedContentId} hidden={true} />
+
       <div className={styles.info}>
         <div className={styles.seriesTitle}>{series.title}</div>
 
