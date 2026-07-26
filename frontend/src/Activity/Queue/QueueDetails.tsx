@@ -59,6 +59,7 @@ function QueueDetails(props: QueueDetailsProps) {
       <Popover
         className={styles.progressBarContainer}
         anchor={progressBar!}
+        accessibleLabel={`${state} - ${progress.toFixed(1)}% ${title}`}
         title={`${state} - ${progress.toFixed(1)}%`}
         body={<div>{title}</div>}
         position="bottom-start"

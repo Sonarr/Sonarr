@@ -1,3 +1,20 @@
 .agenda {
   margin-top: 10px;
 }
+
+.day {
+  margin-bottom: 15px;
+}
+
+.dayHeading {
+  margin: 0;
+  padding: 8px 10px;
+  background-color: var(--calendarBackgroundColor);
+  font-size: $defaultFontSize;
+}
+
+.eventList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

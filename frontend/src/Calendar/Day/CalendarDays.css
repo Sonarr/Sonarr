@@ -1,14 +1,28 @@
-.days {
-  display: flex;
-  border-right: 1px solid var(--calendarBorderColor);
+.tableContainer {
+  overflow-x: auto;
+  width: 100%;
 }
 
-.day,
-.week,
+.calendarTable {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: separate;
+  border-right: 1px solid var(--calendarBorderColor);
+  table-layout: fixed;
+}
+
+.day {
+  min-width: 100%;
+}
+
+.week {
+  min-width: 840px;
+}
+
 .forecast {
-  flex-wrap: nowrap;
+  min-width: 360px;
 }
 
 .month {
-  flex-wrap: wrap;
+  min-width: 840px;
 }

@@ -15,7 +15,10 @@
 
 .titleDesktop,
 .titleMobile {
+  margin-top: 0;
+  margin-bottom: 0;
   text-align: center;
+  font-weight: normal;
   font-size: 18px;
 }
 
@@ -27,6 +30,7 @@
   display: flex;
   justify-content: flex-end;
   flex: 1 1 33%;
+  flex-wrap: wrap;
 }
 
 .viewMenu {

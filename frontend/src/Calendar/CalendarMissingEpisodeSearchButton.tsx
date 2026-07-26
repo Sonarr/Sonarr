@@ -1,30 +1,13 @@
 import moment from 'moment';
 import React, { useCallback } from 'react';
 import { useQueueDetails } from 'Activity/Queue/Details/QueueDetailsProvider';
-import { useCommands } from 'Commands/useCommands';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import { icons } from 'Helpers/Props';
-import { isCommandExecuting } from 'Utilities/Command';
 import isBefore from 'Utilities/Date/isBefore';
 import translate from 'Utilities/String/translate';
-import useCalendar, {
-  useCalendarRange,
-  useCalendarSearchMissingCommandId,
-} from './useCalendar';
-
-function useIsSearching(searchMissingCommandId: number | undefined) {
-  const { data: commands } = useCommands();
-
-  if (searchMissingCommandId == null) {
-    return false;
-  }
-
-  return isCommandExecuting(
-    commands.find((command) => {
-      return command.id === searchMissingCommandId;
-    })
-  );
-}
+import useCalendar, { useCalendarRange } from './useCalendar';
 
 const useMissingEpisodeIdsSelector = () => {
   const { start, end } = useCalendarRange();
@@ -49,11 +32,21 @@ const useMissingEpisodeIdsSelector = () => {
 };
 
 export default function CalendarMissingEpisodeSearchButton() {
-  const searchMissingCommandId = useCalendarSearchMissingCommandId();
+  const executeCommand = useExecuteCommand();
   const missingEpisodeIds = useMissingEpisodeIdsSelector();
-  const isSearchingForMissing = useIsSearching(searchMissingCommandId);
+  const isSearchingForMissing = useCommandExecuting(
+    CommandNames.EpisodeSearch,
+    {
+      episodeIds: missingEpisodeIds,
+    }
+  );
 
-  const handlePress = useCallback(() => {}, []);
+  const handlePress = useCallback(() => {
+    executeCommand({
+      name: CommandNames.EpisodeSearch,
+      episodeIds: missingEpisodeIds,
+    });
+  }, [executeCommand, missingEpisodeIds]);
 
   return (
     <PageToolbarButton

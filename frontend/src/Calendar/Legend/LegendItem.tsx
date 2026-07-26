@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { CalendarStatus } from 'typings/Calendar';
-import titleCase from 'Utilities/String/titleCase';
+import translate from 'Utilities/String/translate';
 import styles from './LegendItem.css';
 
 interface LegendItemProps {
@@ -22,9 +22,18 @@ function LegendItem(props: LegendItemProps) {
     fullColorEvents,
     colorImpairedMode,
   } = props;
+  const statusTranslationKeys: Record<CalendarStatus, string> = {
+    downloaded: 'Downloaded',
+    downloading: 'Downloading',
+    unmonitored: 'Unmonitored',
+    onAir: 'OnAir',
+    missing: 'Missing',
+    unaired: 'Unaired',
+  };
 
   return (
     <div
+      role="listitem"
       className={classNames(
         styles.legendItem,
         styles[status],
@@ -33,7 +42,7 @@ function LegendItem(props: LegendItemProps) {
       )}
       title={tooltip}
     >
-      {name ? name : titleCase(status)}
+      {name ? name : translate(statusTranslationKeys[status])}
     </div>
   );
 }

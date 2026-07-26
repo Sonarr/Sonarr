@@ -95,7 +95,9 @@ function CalendarOptionsModalContent({
         <FieldSet legend={translate('Local')}>
           <Form>
             <FormGroup>
-              <FormLabel>{translate('CollapseMultipleEpisodes')}</FormLabel>
+              <FormLabel name="collapseMultipleEpisodes">
+                {translate('CollapseMultipleEpisodes')}
+              </FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}
@@ -108,7 +110,9 @@ function CalendarOptionsModalContent({
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>{translate('ShowEpisodeInformation')}</FormLabel>
+              <FormLabel name="showEpisodeInformation">
+                {translate('ShowEpisodeInformation')}
+              </FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}
@@ -121,7 +125,9 @@ function CalendarOptionsModalContent({
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>{translate('IconForFinales')}</FormLabel>
+              <FormLabel name="showFinaleIcon">
+                {translate('IconForFinales')}
+              </FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}
@@ -134,7 +140,9 @@ function CalendarOptionsModalContent({
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>{translate('IconForSpecials')}</FormLabel>
+              <FormLabel name="showSpecialIcon">
+                {translate('IconForSpecials')}
+              </FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}
@@ -147,7 +155,9 @@ function CalendarOptionsModalContent({
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>{translate('IconForCutoffUnmet')}</FormLabel>
+              <FormLabel name="showCutoffUnmetIcon">
+                {translate('IconForCutoffUnmet')}
+              </FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}
@@ -160,7 +170,9 @@ function CalendarOptionsModalContent({
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>{translate('FullColorEvents')}</FormLabel>
+              <FormLabel name="fullColorEvents">
+                {translate('FullColorEvents')}
+              </FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}
@@ -177,7 +189,9 @@ function CalendarOptionsModalContent({
         <FieldSet legend={translate('Global')}>
           <Form>
             <FormGroup>
-              <FormLabel>{translate('FirstDayOfWeek')}</FormLabel>
+              <FormLabel name="firstDayOfWeek">
+                {translate('FirstDayOfWeek')}
+              </FormLabel>
 
               <FormInputGroup
                 type={inputTypes.SELECT}
@@ -189,7 +203,9 @@ function CalendarOptionsModalContent({
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>{translate('WeekColumnHeader')}</FormLabel>
+              <FormLabel name="calendarWeekColumnHeader">
+                {translate('WeekColumnHeader')}
+              </FormLabel>
 
               <FormInputGroup
                 type={inputTypes.SELECT}
@@ -202,7 +218,7 @@ function CalendarOptionsModalContent({
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>{translate('TimeFormat')}</FormLabel>
+              <FormLabel name="timeFormat">{translate('TimeFormat')}</FormLabel>
 
               <FormInputGroup
                 type={inputTypes.SELECT}
@@ -214,7 +230,9 @@ function CalendarOptionsModalContent({
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>{translate('EnableColorImpairedMode')}</FormLabel>
+              <FormLabel name="enableColorImpairedMode">
+                {translate('EnableColorImpairedMode')}
+              </FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}

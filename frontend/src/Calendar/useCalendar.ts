@@ -58,7 +58,6 @@ interface CalendarStore {
   time: moment.Moment;
   dates: string[];
   dayCount: number;
-  searchMissingCommandId?: number;
 }
 
 const calendarStore = create<CalendarStore>(() => ({
@@ -183,10 +182,6 @@ export const useCalendarRange = () => {
     start: dates[0],
     end: dates[dates.length - 1],
   };
-};
-
-export const useCalendarSearchMissingCommandId = () => {
-  return calendarStore((state) => state.searchMissingCommandId);
 };
 
 export const setCalendarDayCount = (dayCount: number) => {

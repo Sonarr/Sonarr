@@ -2,6 +2,9 @@
 // Please do not change this file!
 interface CssExports {
   'agenda': string;
+  'day': string;
+  'dayHeading': string;
+  'eventList': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

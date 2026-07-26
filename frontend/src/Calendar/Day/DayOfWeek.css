@@ -1,7 +1,8 @@
 .dayOfWeek {
-  flex: 1 0 14.28%;
+  padding: 0;
   background-color: var(--calendarBackgroundColor);
   text-align: center;
+  font-weight: normal;
 }
 
 .isSingleDay {
