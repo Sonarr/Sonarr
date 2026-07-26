@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Notifications.Emby
             var path = "/System/Configuration";
             var request = BuildRequest(path, settings);
             request.Headers.Add("X-MediaBrowser-Token", settings.ApiKey);
+            request.Headers.Add("Authorization", $"MediaBrowser Token=\"{settings.ApiKey}\"");
 
             var response = _httpClient.Get(request);
             _logger.Trace("Response: {0}", response.Content);
