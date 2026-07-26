@@ -137,6 +137,7 @@ function AddNewSeriesModalContent({
               className={styles.poster}
               images={images}
               size={250}
+              lazy={false}
               title={title}
             />
           )}

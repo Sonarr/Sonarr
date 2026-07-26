@@ -123,8 +123,8 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
               {isExistingSeries ? (
                 <Icon
                   className={styles.alreadyExistsIcon}
-                  name={icons.CHECK_CIRCLE}
-                  size={36}
+                  name={icons.CHECK}
+                  size={24}
                   title={translate('AlreadyInYourLibrary')}
                 />
               ) : null}
@@ -133,7 +133,7 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
                 <Icon
                   className={styles.excludedIcon}
                   name={icons.DANGER}
-                  size={36}
+                  size={isSmallScreen ? 24 : 36}
                   title={translate('SeriesInImportListExclusions')}
                 />
               ) : null}
@@ -153,7 +153,6 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
             {ratings.votes > 0 ? (
               <span className={styles.chip}>
                 <HeartRating
-                  className={styles.chipRating}
                   rating={ratings.value}
                   votes={ratings.votes}
                   iconSize={11}

@@ -637,7 +637,6 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
 
                   {ratings.value ? (
                     <HeartRating
-                      className={styles.heartRating}
                       rating={ratings.value}
                       votes={ratings.votes}
                       iconSize={14}

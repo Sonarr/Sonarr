@@ -62,7 +62,7 @@
 
 .titleRow {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
@@ -97,7 +97,6 @@
   gap: 6px;
 
   flex-shrink: 0;
-  padding-top: 2px;
 }
 
 .tvdbLink {
@@ -152,10 +151,6 @@
   color: var(--statusMissing);
 }
 
-.chip .chipRating {
-  margin-right: 0;
-}
-
 .chipDot {
   flex-shrink: 0;
   width: 6px;
@@ -193,10 +188,4 @@
   line-height: 1.55;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-}
-
-@media only screen and (max-width: $breakpointMedium) {
-  .titleRow {
-    overflow: hidden;
-  }
 }
