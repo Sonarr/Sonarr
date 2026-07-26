@@ -41,7 +41,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             var missingEpisodeFiles = subject.Episodes
                                              .Where(v => v.EpisodeFileId != 0)
-                                             .Select(v => v.EpisodeFile.Value)
+                                             .Select(v => v.EpisodeFile?.Value)
+                                             .Where(v => v != null)
                                              .DistinctBy(v => v.Id)
                                              .Where(v => IsEpisodeFileMissing(subject.Series, v))
                                              .ToArray();

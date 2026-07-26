@@ -39,8 +39,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 return DownloadSpecDecision.Accept();
             }
 
-            foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
+            foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile?.Value))
             {
+                if (file == null)
+                {
+                    continue;
+                }
+
                 if (_upgradableSpecification.IsRevisionUpgrade(file.Quality, subject.ParsedEpisodeInfo.Quality))
                 {
                     if (downloadPropersAndRepacks == ProperDownloadTypes.DoNotUpgrade)

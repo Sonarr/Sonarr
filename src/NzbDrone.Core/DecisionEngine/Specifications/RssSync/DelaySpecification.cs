@@ -51,8 +51,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             if (isPreferredProtocol)
             {
-                foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
+                foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile?.Value))
                 {
+                    if (file == null)
+                    {
+                        continue;
+                    }
+
                     var currentQuality = file.Quality;
                     var newQuality = subject.ParsedEpisodeInfo.Quality;
                     var qualityCompare = qualityComparer.Compare(newQuality?.Quality, currentQuality.Quality);
