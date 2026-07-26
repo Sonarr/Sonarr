@@ -6,7 +6,7 @@
 
 .quality,
 .languages {
-  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+  composes: cell from '~Components/Table/Cells/TableRowCellButton.css';
 
   text-align: center;
 }

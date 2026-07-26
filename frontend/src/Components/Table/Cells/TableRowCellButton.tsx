@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import React, { ReactNode } from 'react';
 import Link, { LinkProps } from 'Components/Link/Link';
 import TableRowCell from './TableRowCell';
@@ -10,10 +9,10 @@ interface TableRowCellButtonProps extends LinkProps {
 }
 
 function TableRowCellButton(props: TableRowCellButtonProps) {
-  const { className, children, title, ...otherProps } = props;
+  const { className = styles.cell, children, title, ...otherProps } = props;
 
   return (
-    <TableRowCell className={classNames(styles.cell, className)}>
+    <TableRowCell className={className}>
       <Link
         className={styles.button}
         title={title}
