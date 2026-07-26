@@ -1,4 +1,31 @@
 .cell {
   composes: cell from '~./TableRowCell.css';
+
+  position: relative;
+}
+
+.button {
   composes: link from '~Components/Link/Link.css';
+
+  display: block;
+  margin: -8px;
+  padding: 8px;
+  width: calc(100% + 16px);
+  font: inherit;
+  line-height: inherit;
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    content: '';
+  }
+
+  &:focus-visible {
+    outline: none;
+
+    &::before {
+      outline: 2px solid var(--linkColor);
+      outline-offset: -2px;
+    }
+  }
 }
