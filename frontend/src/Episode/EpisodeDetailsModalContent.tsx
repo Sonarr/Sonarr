@@ -14,6 +14,7 @@ import useEpisode, {
   getQueryKey,
   useToggleEpisodesMonitored,
 } from 'Episode/useEpisode';
+import { useClearReleasesOnUnmount } from 'InteractiveSearch/useReleases';
 import Series from 'Series/Series';
 import { useSingleSeries } from 'Series/useSeries';
 import translate from 'Utilities/String/translate';
@@ -69,6 +70,8 @@ function EpisodeDetailsModalContent({
   const { toggleEpisodesMonitored, isToggling } = useToggleEpisodesMonitored(
     getQueryKey(episodeEntity)!
   );
+
+  useClearReleasesOnUnmount({ episodeId });
 
   const handleTabSelect = useCallback(
     (selectedIndex: number) => {
