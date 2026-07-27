@@ -143,6 +143,7 @@ function QueueStatus(props: QueueStatusProps) {
   return (
     <Popover
       anchor={<Icon name={iconName} kind={iconKind} />}
+      accessibleLabel={title}
       title={title}
       body={
         hasWarning || hasError

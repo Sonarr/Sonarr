@@ -4,6 +4,7 @@ interface CssExports {
   'body': string;
   'default': string;
   'inverse': string;
+  'reference': string;
   'tooltip': string;
   'tooltipContainer': string;
 }
