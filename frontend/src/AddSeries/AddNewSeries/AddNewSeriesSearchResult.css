@@ -1,24 +1,33 @@
 .searchResult {
   position: relative;
-  margin: 20px 0;
+  display: flex;
+  overflow: hidden;
+  margin-bottom: 12px;
   padding: 20px;
   width: 100%;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: var(--paperCard);
   color: inherit;
+  transition:
+    box-shadow 200ms cubic-bezier(0.25, 1, 0.5, 1),
+    border-color 200ms cubic-bezier(0.25, 1, 0.5, 1);
+  gap: 20px;
+
+  &:hover {
+    border-color: var(--hairlineStrong);
+    box-shadow:
+      0 6px 20px -8px oklch(0% 0 0 / 0.18),
+      0 2px 4px -2px oklch(0% 0 0 / 0.08);
+  }
+}
+
+.searchResultExcluded {
+  opacity: 0.7;
 }
 
 .underlay {
   @add-mixin cover;
-
-  background-color: var(--addSeriesBackgroundColor);
-  transition: background 500ms;
-
-  &:hover {
-    background-color: var(--pageBackground);
-    box-shadow: 0 0 12px var(--black);
-    color: inherit;
-    text-decoration: none;
-    transition: all 200ms ease-in;
-  }
 }
 
 .overlay {
@@ -26,94 +35,157 @@
 
   position: relative;
   display: flex;
+  flex: 1;
+  gap: 20px;
+
+  min-width: 0;
 }
 
 .poster {
-  flex: 0 0 170px;
-  margin-right: 20px;
-  height: 250px;
+  display: block;
+  align-self: flex-start;
+  flex: 0 0 114px;
+  width: 114px;
+  height: 170px;
+  border-radius: 8px;
+  object-fit: cover;
 }
 
 .content {
   display: flex;
-  flex: 0 1 100%;
+  flex: 1;
   flex-direction: column;
   overflow: hidden;
+  min-width: 0;
+  gap: 9px;
 }
 
 .titleRow {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .titleContainer {
   display: flex;
-  align-items: flex-end;
+  align-items: baseline;
   flex: 0 1 auto;
+  min-width: 0;
 }
 
 .title {
-  font-weight: 300;
-  font-size: 36px;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  font-size: 1.125rem;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.25;
 }
 
 .year {
-  margin-left: 10px;
-  color: var(--disabledColor);
+  margin-left: 7px;
+  color: var(--inkMuted);
+  white-space: nowrap;
+  font-weight: 400;
+  font-size: 14px;
 }
 
 .icons {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex: 1 0 auto;
-  height: 55px;
-}
+  gap: 6px;
 
-.originalLanguageName,
-.network,
-.genres {
-  margin-left: 8px;
-}
-
-.genres {
-  pointer-events: all;
+  flex-shrink: 0;
 }
 
 .tvdbLink {
   composes: link from '~Components/Link/Link.css';
 
-  margin-top: -4px;
-  margin-left: auto;
-  color: var(--textColor);
-}
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 6px;
+  color: var(--inkMuted);
 
-.tvdbLinkIcon {
-  margin-left: 10px;
+  &:hover {
+    background: var(--paperWarm);
+    color: var(--inkSoft);
+  }
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 1px var(--accent), 0 0 0 4px color-mix(in oklch, var(--accent) 16%, transparent);
+  }
 }
 
 .alreadyExistsIcon {
-  margin-left: 10px;
-  color: #37bc9b;
+  color: var(--accent);
   pointer-events: all;
 }
 
 .excludedIcon {
-  margin-left: 10px;
-  color: var(--dangerColor);
+  color: var(--statusMissing);
+  pointer-events: all;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--paperWarm);
+  color: var(--inkMuted);
+  font-weight: 500;
+  font-size: 11px;
+  gap: 5px;
+}
+
+.chipExcluded {
+  color: var(--statusMissing);
+}
+
+.chipDot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.chipDotFinished {
+  background: oklch(60% 0.008 80);
+}
+
+.chipDotAiring {
+  background: var(--statusAiring);
+}
+
+.chipDotUpcoming {
+  background: var(--statusUpcoming);
+}
+
+.chipDotEnded {
+  background: var(--statusMissing);
+}
+
+.genres {
   pointer-events: all;
 }
 
 .overview {
-  margin-top: 20px;
-}
-
-@media only screen and (max-width: $breakpointMedium) {
-  .titleRow {
-    justify-content: space-between;
-    overflow: hidden;
-  }
-
-  .overview {
-    margin-bottom: 20px;
-  }
+  /* stylelint-disable-next-line value-no-vendor-prefix -- required for -webkit-line-clamp */
+  display: -webkit-box;
+  overflow: hidden;
+  max-width: 70ch;
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.55;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }

@@ -13,7 +13,6 @@ interface CssExports {
   'genres': string;
   'header': string;
   'headerContent': string;
-  'heartRating': string;
   'heroFooter': string;
   'info': string;
   'innerContentBody': string;
