@@ -167,10 +167,6 @@
   gap: 6px;
 }
 
-.heartRating {
-  margin-right: 0 !important;
-}
-
 .detailsChips {
   display: flex;
   align-items: flex-start;
