@@ -10,46 +10,65 @@
 .poster {
   flex: 0 0 170px;
   margin-right: 20px;
+  width: 170px;
   height: 250px;
+  border-radius: 8px;
+  object-fit: cover;
 }
 
 .info {
   flex-grow: 1;
 }
 
-.overview {
-  margin-bottom: 30px;
+.intro {
+  margin: 0 0 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.55;
 }
 
 .labelIcon {
   margin-left: 8px;
 }
 
-.searchLabelContainer {
+.searchOptions {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 2px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-right: auto;
+  gap: 8px 14px;
 }
 
 .searchLabel {
-  margin-right: 8px;
-  font-weight: normal;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  font-size: 11px;
 }
 
-.searchInputContainer {
+.searchOption {
   composes: container from '~Components/Form/CheckInput.css';
 
-  flex: 0 1 0;
-}
+  flex: 0 0 auto;
 
-.searchInput {
-  composes: input from '~Components/Form/CheckInput.css';
-
-  margin-top: 0;
+  & > label {
+    min-height: 0;
+  }
 }
 
 .modalFooter {
   composes: modalFooter from '~Components/Modal/ModalFooter.css';
+
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .addButton {
@@ -57,13 +76,8 @@
   composes: button from '~Components/Link/SpinnerButton.css';
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media only screen and (max-width: 768px) {
   .modalFooter {
-    display: block;
-    text-align: center;
-  }
-
-  .addButton {
-    margin-top: 10px;
+    flex-direction: column;
   }
 }
