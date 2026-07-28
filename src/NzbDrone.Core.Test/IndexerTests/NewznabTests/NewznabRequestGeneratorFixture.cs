@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -187,6 +188,39 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             pages[0].Url.FullUri.Should().Contain("rid=10&season=3");
             pages[1].Url.FullUri.Should().Contain("q=Monkey%20Island&season=3");
+        }
+
+        [Test]
+        public void should_search_season_title_alias_with_and_without_season_parameter()
+        {
+            Subject.Settings.AnimeStandardFormatSearch = true;
+            _animeSeasonSearchCriteria.SearchMode = SearchMode.SearchTitle;
+
+            var results = Subject.GetSearchRequests(_animeSeasonSearchCriteria);
+
+            // Same tier, so both run. A fallback tier would only run when the season
+            // qualified search returned nothing at all.
+            results.Tiers.Should().Be(1);
+
+            var pages = results.GetAllTiers().Select(t => t.First().Url.FullUri).ToList();
+
+            pages.Should().Contain(p => p.Contains("q=Monkey%20Island&season=3"));
+            pages.Should().Contain(p => p.Contains("q=Monkey%20Island") && !p.Contains("season="));
+        }
+
+        [Test]
+        public void should_not_search_without_season_parameter_when_search_mode_is_default()
+        {
+            Subject.Settings.AnimeStandardFormatSearch = true;
+            _animeSeasonSearchCriteria.SearchMode = SearchMode.Default;
+
+            var results = Subject.GetSearchRequests(_animeSeasonSearchCriteria);
+
+            results.Tiers.Should().Be(1);
+
+            var pages = results.GetAllTiers().Select(t => t.First().Url.FullUri).ToList();
+
+            pages.Should().NotContain(p => p.Contains("q=") && !p.Contains("season="));
         }
 
         [Test]

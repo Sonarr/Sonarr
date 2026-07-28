@@ -466,6 +466,24 @@ namespace NzbDrone.Core.Indexers.Newznab
                         "tvsearch",
                         $"&q={NewsnabifyTitle(queryTitle)}&season={NewznabifySeasonNumber(searchCriteria.SeasonNumber)}"));
                 }
+
+                // A season title alias already identifies the season, so sending the season
+                // parameter as well excludes the pack on trackers that match it as text.
+                // Dr. Stone: Stone Wars is season 2, but the pack is not named S02.
+                //
+                // Searched in the same tier rather than as a fallback, because the season
+                // qualified search usually does return something, just not the pack. A
+                // fallback tier would only run when it returned nothing at all.
+                if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchTitle))
+                {
+                    foreach (var queryTitle in queryTitles)
+                    {
+                        pageableRequests.Add(GetPagedRequests(MaxPages,
+                            Settings.AnimeCategories,
+                            "tvsearch",
+                            $"&q={NewsnabifyTitle(queryTitle)}"));
+                    }
+                }
             }
 
             return pageableRequests;

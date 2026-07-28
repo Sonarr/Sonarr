@@ -587,6 +587,40 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         }
 
         [Test]
+        public async Task season_search_for_anime_should_pass_search_mode_from_scene_mapping()
+        {
+            WithEpisodes();
+            _xemSeries.SeriesType = SeriesTypes.Anime;
+            _xemEpisodes.ForEach(e => e.EpisodeFileId = 0);
+
+            // Season 1 episodes map to scene season 2 (see WithEpisodes), so the scene
+            // mapping must target scene season 2 to survive the season filter.
+            Mocker.GetMock<ISceneMappingService>()
+                  .Setup(s => s.FindByTvdbId(It.IsAny<int>()))
+                  .Returns(new List<SceneMapping>
+                  {
+                      new SceneMapping
+                      {
+                          TvdbId = _xemSeries.TvdbId,
+                          SearchTerm = "Dr Stone Stone Wars",
+                          ParseTerm = "drstonestonewars",
+                          SeasonNumber = 2,
+                          SceneSeasonNumber = 2,
+                          SearchMode = SearchMode.SearchTitle
+                      }
+                  });
+
+            var allCriteria = WatchForSearchCriteria();
+
+            await Subject.SeasonSearch(_xemSeries.Id, 1, true, false, true, false);
+
+            var criteria = allCriteria.OfType<AnimeSeasonSearchCriteria>().ToList();
+
+            criteria.Should().Contain(c => c.SearchMode == SearchMode.SearchTitle);
+            criteria.Should().Contain(c => c.SceneTitles.Contains("Dr Stone Stone Wars"));
+        }
+
+        [Test]
         public async Task season_search_for_daily_should_search_multiple_years()
         {
             WithEpisode(1, 1, null, null, "2005-12-30");
