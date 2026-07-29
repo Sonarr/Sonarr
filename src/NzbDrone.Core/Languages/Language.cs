@@ -227,5 +227,15 @@ namespace NzbDrone.Core.Languages
 
             return language;
         }
+
+        public bool IsValid(bool throwOnMissing = true)
+        {
+            return Lookup.ContainsKey(Id) switch
+            {
+                false when throwOnMissing => throw new InvalidOperationException("ID does not match a known language"),
+                false => false,
+                _ => true
+            };
+        }
     }
 }
