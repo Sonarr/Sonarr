@@ -843,7 +843,7 @@ namespace NzbDrone.Core.Parser
                     Title = seriesTitle,
                     TitleWithoutYear = seriesTitle
                 },
-                SeasonNumber = 0,
+                SeasonNumber = -1,
                 EpisodeNumbers = [],
                 AbsoluteEpisodeNumbers = [],
                 FullSeason = true,
