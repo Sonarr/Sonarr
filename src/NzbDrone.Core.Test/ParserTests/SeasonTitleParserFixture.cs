@@ -21,8 +21,8 @@ namespace NzbDrone.Core.Test.ParserTests
             result.FullSeason.Should().BeTrue();
 
             // Which season the title refers to is held in the scene mappings, so it is left
-            // unset here and resolved by ParsingService.
-            result.SeasonNumber.Should().Be(0);
+            // unset here and resolved by ParsingService. Not 0, that is the special season.
+            result.SeasonNumber.Should().Be(-1);
             result.EpisodeNumbers.Should().BeEmpty();
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
         }

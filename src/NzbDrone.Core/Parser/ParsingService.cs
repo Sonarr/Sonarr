@@ -196,10 +196,10 @@ namespace NzbDrone.Core.Parser
 
                 // A release named only by a season title carries no season number for the regex
                 // parser to find, so the season it refers to comes from the mapping instead.
-                if (parsedEpisodeInfo.FullSeason && parsedEpisodeInfo.SeasonNumber == 0)
+                if (parsedEpisodeInfo.FullSeason && parsedEpisodeInfo.SeasonNumber == -1)
                 {
-                    // Leaving it unmapped would fall through to season 0 and match specials,
-                    // so an alias with no season resolves to nothing instead.
+                    // An alias with no season of its own leaves it unresolved, which matches no
+                    // episodes. Falling back to 0 would match the specials instead.
                     var mappedSeason = sceneMapping.SceneSeasonNumber ?? sceneMapping.SeasonNumber ?? -1;
 
                     remoteEpisode.MappedSeasonNumber = mappedSeason;
