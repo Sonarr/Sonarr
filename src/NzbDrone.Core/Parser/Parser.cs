@@ -844,8 +844,8 @@ namespace NzbDrone.Core.Parser
                     TitleWithoutYear = seriesTitle
                 },
                 SeasonNumber = 0,
-                EpisodeNumbers = Array.Empty<int>(),
-                AbsoluteEpisodeNumbers = Array.Empty<int>(),
+                EpisodeNumbers = [],
+                AbsoluteEpisodeNumbers = [],
                 FullSeason = true,
 
                 // The decision engine reads these while sorting, so they cannot be left unset.
