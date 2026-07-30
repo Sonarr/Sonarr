@@ -88,6 +88,14 @@ namespace NzbDrone.Core.DecisionEngine
                         }
                     }
 
+                    // Only for searches, where the season being looked for is already known and
+                    // a pack named by its season title is what was being asked for. RSS keeps
+                    // ignoring releases it cannot parse.
+                    if (searchCriteria != null)
+                    {
+                        parsedEpisodeInfo ??= Parser.Parser.ParseSeasonTitle(report.Title);
+                    }
+
                     if (parsedEpisodeInfo != null && !parsedEpisodeInfo.SeriesTitle.IsNullOrWhiteSpace())
                     {
                         var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvdbId, report.TvRageId, report.ImdbId, searchCriteria);

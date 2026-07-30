@@ -516,6 +516,16 @@ namespace NzbDrone.Core.Parser
         // Regex to detect whether the title was reversed.
         private static readonly Regex ReversedTitleRegex = new Regex(@"(?:^|[-._ ])(p027|p0801|\d{2,3}E-?\d{2}S)[-._ ]", RegexOptions.Compiled);
 
+        // Used to recover the series title from a release that carries no season, episode or
+        // date, where the title is all there is to go on.
+        private static readonly Regex ReleaseMetadataRegex = new Regex(@"[\[({][^\[\]{}()]*[\])}]", RegexOptions.Compiled);
+
+        // Groups mark extras inside brackets, which is exactly what stripping metadata removes,
+        // so these have to be checked before the brackets are taken off. Same terms the anime
+        // regexes above treat as specials.
+        private static readonly Regex SpecialMarkerRegex = new Regex(@"\b(special|ova|ovd|ncop|nced)\b",
+                                                                    RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private static readonly RegexReplace NormalizeRegex = new RegexReplace(@"((?:\b|_)(?<!^)([aà](?!$)|an|the|and|or|of)(?!$)(?:\b|_))|\W|_",
                                                                 string.Empty,
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -799,6 +809,54 @@ namespace NzbDrone.Core.Parser
 
             Logger.Debug("Unable to parse {0}", title);
             return null;
+        }
+
+        // Anime season packs are commonly named after the season's own title with no season or
+        // episode number anywhere, so none of the regexes above have anything to match on. The
+        // season title is the only identifier the release carries. Which season it refers to is
+        // held in the scene mappings, so that is resolved later by ParsingService.
+        public static ParsedEpisodeInfo ParseSeasonTitle(string title)
+        {
+            var releaseTitle = FileExtensions.RemoveFileExtension(title);
+
+            if (SpecialMarkerRegex.IsMatch(releaseTitle))
+            {
+                return null;
+            }
+
+            var seriesTitle = DuplicateSpacesRegex.Replace(ReleaseMetadataRegex.Replace(releaseTitle, " "), " ").Trim();
+
+            // Anything left in brackets means the title was not recovered. Either it was itself
+            // bracketed, as in [Group][Title][Source][Codec], or a bracketed group contained
+            // another and could not be removed. Both leave metadata behind rather than a title.
+            if (seriesTitle.IsNullOrWhiteSpace() || seriesTitle.IndexOfAny(new[] { '[', ']', '(', ')', '{', '}' }) >= 0)
+            {
+                return null;
+            }
+
+            var result = new ParsedEpisodeInfo
+            {
+                ReleaseTitle = releaseTitle,
+                SeriesTitle = seriesTitle,
+                SeriesTitleInfo = new SeriesTitleInfo
+                {
+                    Title = seriesTitle,
+                    TitleWithoutYear = seriesTitle
+                },
+                SeasonNumber = 0,
+                EpisodeNumbers = Array.Empty<int>(),
+                AbsoluteEpisodeNumbers = Array.Empty<int>(),
+                FullSeason = true,
+
+                // The decision engine reads these while sorting, so they cannot be left unset.
+                Languages = LanguageParser.ParseLanguages(releaseTitle),
+                Quality = QualityParser.ParseQuality(title),
+                ReleaseGroup = ReleaseGroupParser.ParseReleaseGroup(releaseTitle)
+            };
+
+            Logger.Debug("Title only parse. {0}", result);
+
+            return result;
         }
 
         public static string ParseSeriesName(string title)
