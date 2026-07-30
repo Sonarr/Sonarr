@@ -829,7 +829,7 @@ namespace NzbDrone.Core.Parser
             // Anything left in brackets means the title was not recovered. Either it was itself
             // bracketed, as in [Group][Title][Source][Codec], or a bracketed group contained
             // another and could not be removed. Both leave metadata behind rather than a title.
-            if (seriesTitle.IsNullOrWhiteSpace() || seriesTitle.IndexOfAny(new[] { '[', ']', '(', ')', '{', '}' }) >= 0)
+            if (seriesTitle.IsNullOrWhiteSpace() || seriesTitle.IndexOfAny(['[', ']', '(', ')', '{', '}']) >= 0)
             {
                 return null;
             }
