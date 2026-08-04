@@ -24,10 +24,6 @@ export default function ClipboardButton({
   ...otherProps
 }: ClipboardButtonProps) {
   const [state, setState] = useState<ClipboardState>(null);
-  const statusLabel =
-    state === 'error'
-      ? translate('CopyToClipboardError')
-      : translate('CopiedToClipboard');
 
   useEffect(() => {
     if (!state) {
@@ -72,7 +68,9 @@ export default function ClipboardButton({
         {state ? (
           <StatusIndicator
             className={styles.stateIconContainer}
-            label={statusLabel}
+            label={translate(
+              state === 'error' ? 'CopyToClipboardError' : 'CopiedToClipboard'
+            )}
             role={state === 'error' ? 'alert' : 'status'}
             aria-atomic={true}
           >
