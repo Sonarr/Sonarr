@@ -21,7 +21,7 @@ public static class ReleaseGroupParser
     // groups whose releases end with RlsGroup) or RlsGroup]
     private static readonly Regex ExceptionReleaseGroupRegex = new(@"(?<=[._ \[])(?<releasegroup>(Joy|ImE|UTR|t3nzin|Anime Time|Project Angel|Hakata Ramen|HONE|Vyndros|SEV|Garshasp|Kappa|Natty|RCVR|SAMPA|YOGI|r00t|EDGE2020|Celdra)(?=\]|\)))", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-    private static readonly RegexReplace CleanReleaseGroupRegex = new(@"^(.*?[-._ ](S\d+E\d+)[-._ ])|(-(RP|1|NZBGeek|Obfuscated|Scrambled|sample|Pre|postbot|xpost|Rakuv[a-z0-9]*|WhiteRev|BUYMORE|AsRequested|AlternativeToRequested|GEROV|Z0iDS3N|Chamele0n|4P|4Planet|AlteZachen|RePACKPOST))+$",
+    private static readonly RegexReplace CleanReleaseGroupRegex = new(@"^(.*?[-._ ](S\d+E\d+)[-._ ])|(-(RP|1|NZBGeek|\[N-Z-B\]|Obfuscated|Scrambled|sample|Pre|postbot|xpost|Rakuv[a-z0-9]*|WhiteRev|BUYMORE|AsRequested|AlternativeToRequested|GEROV|Z0iDS3N|Chamele0n|4P|4Planet|AlteZachen|RePACKPOST))+$",
         string.Empty,
         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
