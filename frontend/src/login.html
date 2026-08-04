@@ -54,6 +54,69 @@
     />
     <meta name="msapplication-config" content="/Content/browserconfig.xml" />
 
+    <script>
+      (function applyInitialTheme() {
+        var supportedThemes = ['auto', 'light', 'dark', 'oled'];
+        var storageKey = 'sonarr.ui.theme';
+        var selectedTheme = '__THEME__';
+
+        try {
+          var storedTheme = window.localStorage.getItem(storageKey);
+
+          if (supportedThemes.indexOf(storedTheme) !== -1) {
+            selectedTheme = storedTheme;
+          }
+        } catch (error) {
+          // Storage can be unavailable in private or restricted contexts.
+        }
+
+        if (supportedThemes.indexOf(selectedTheme) === -1) {
+          selectedTheme = 'auto';
+        }
+
+        var prefersDark =
+          window.matchMedia &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var resolvedTheme =
+          selectedTheme === 'oled'
+            ? 'oled'
+            : selectedTheme === 'dark' ||
+                (selectedTheme === 'auto' && prefersDark)
+              ? 'dark'
+              : 'light';
+        var themeColor =
+          resolvedTheme === 'oled'
+            ? '#000000'
+            : resolvedTheme === 'dark'
+              ? '#2a2a2a'
+              : '#3a3f51';
+        var pageBackground =
+          resolvedTheme === 'oled'
+            ? '#000000'
+            : resolvedTheme === 'dark'
+              ? '#202020'
+              : '#f5f7fa';
+
+        document.documentElement.dataset.theme = selectedTheme;
+        document.documentElement.dataset.resolvedTheme = resolvedTheme;
+        document.documentElement.style.colorScheme =
+          resolvedTheme === 'light' ? 'light' : 'dark';
+        document.documentElement.style.backgroundColor = pageBackground;
+        document.documentElement.style.setProperty(
+          '--pageBackground',
+          pageBackground
+        );
+
+        document
+          .querySelectorAll(
+            'meta[name="theme-color"], meta[name="msapplication-navbutton-color"]'
+          )
+          .forEach(function setThemeColor(element) {
+            element.setAttribute('content', themeColor);
+          });
+      })();
+    </script>
+
     <link rel="stylesheet" type="text/css" href="/Content/styles.css" />
     <link rel="stylesheet" type="text/css" href="/Content/Fonts/fonts.css" />
 
@@ -61,138 +124,232 @@
 
     <style>
       html {
+        min-height: 100%;
         background-color: var(--pageBackground);
       }
 
       body {
+        margin: 0;
+        min-height: 100vh;
+        min-height: 100svh;
+        min-height: 100dvh;
         background-color: var(--pageBackground);
         color: var(--textColor);
         font-family: 'Roboto', 'open sans', 'Helvetica Neue', Helvetica, Arial,
           sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
       }
 
       .center {
         display: flex;
+        align-items: flex-start;
         justify-content: center;
+        min-height: 100vh;
+        min-height: 100svh;
+        min-height: 100dvh;
+        padding: max(24px, env(safe-area-inset-top))
+          max(16px, env(safe-area-inset-right))
+          max(20px, env(safe-area-inset-bottom))
+          max(16px, env(safe-area-inset-left));
       }
 
       .content {
-        flex: 0 0 325px;
+        width: min(100%, 360px);
+      }
+
+      .panel {
+        overflow: hidden;
+        margin-top: clamp(10px, 7vh, 50px);
+        border: 1px solid var(--panelBorderColor);
+        border-radius: 6px;
+        background-color: var(--panelBackground);
+        box-shadow: 0 10px 30px var(--panelShadowColor);
+      }
+
+      .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 60px;
+        padding: 10px;
+        background-color: var(--themeDarkColor);
       }
 
       .logo {
         width: 32px;
         height: 32px;
-      }
-
-      .panel {
-        margin-top: 50px;
-        border-radius: 4px;
-      }
-
-      .panel-header {
-        display: flex;
-        justify-content: center;
-        padding: 10px;
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
-        background-color: var(--themeDarkColor);
+        object-fit: contain;
       }
 
       .panel-body {
-        padding: 20px;
-        border-bottom-right-radius: 4px;
-        border-bottom-left-radius: 4px;
+        padding: clamp(18px, 5vw, 24px);
         background-color: var(--panelBackground);
       }
 
       .sign-in {
-        padding: 10px 0;
+        margin-bottom: 20px;
         text-align: center;
+        font-size: 16px;
+        line-height: 1.4;
       }
 
       .form-group {
-        margin: 20px 0;
+        margin: 0 0 16px;
       }
 
-      .form-input {
+      .form-label {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--labelColor);
+        font-weight: 600;
+      }
+
+      .form-input,
+      .theme-select {
         box-sizing: border-box;
-        padding: 6px 16px;
+        padding: 9px 12px;
         width: 100%;
-        height: 35px;
-        background-color: var(--inputBackgroundColor);
+        min-height: 44px;
         border: 1px solid var(--inputBorderColor);
         border-radius: 4px;
+        background-color: var(--inputBackgroundColor);
         box-shadow: inset 0 1px 1px var(--inputBoxShadowColor);
         color: var(--textColor);
+        font-size: 16px;
       }
 
-      .form-input:focus {
-        outline: 0;
+      .form-input::placeholder {
+        color: var(--placeholderColor);
+        opacity: 1;
+      }
+
+      .form-input:focus-visible,
+      .theme-select:focus-visible,
+      .button:focus-visible,
+      .forgot-password:focus-visible,
+      .remember-me:focus-within {
+        outline: 2px solid var(--focusRingColor);
+        outline-offset: 2px;
+      }
+
+      .form-input:focus,
+      .theme-select:focus {
         border-color: var(--inputFocusBorderColor);
         box-shadow: inset 0 1px 1px var(--inputBoxShadowColor),
-          0 0 8px var(--inputFocusBoxShadowColor);
+          0 0 0 3px var(--inputFocusBoxShadowColor);
+      }
+
+      .remember-me-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px 16px;
+        margin-top: 2px;
+      }
+
+      .remember-me {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      .remember-me input {
+        margin: 0 8px 0 0;
+        width: 20px;
+        height: 20px;
+        accent-color: var(--primaryBackgroundColor);
+      }
+
+      .forgot-password {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        color: var(--forgotPasswordColor);
+        text-align: right;
+        text-decoration: none;
+        font-size: 13px;
+      }
+
+      .forgot-password:hover {
+        color: var(--forgotPasswordAltColor);
+        text-decoration: underline;
       }
 
       .button {
         overflow: hidden;
-        margin-top: 20px;
-        padding: 10px 0;
+        margin-top: 16px;
+        padding: 10px 16px;
         width: 100%;
-        border: 1px solid;
-        border-color: var(--primaryBorderColor);
+        min-height: 44px;
+        border: 1px solid var(--primaryBorderColor);
         border-radius: 4px;
         background-color: var(--primaryBackgroundColor);
         color: var(--white);
         vertical-align: middle;
         text-align: center;
         white-space: nowrap;
+        font-weight: 500;
         line-height: normal;
+        cursor: pointer;
       }
 
       .button:hover {
         border-color: var(--primaryHoverBorderColor);
         background-color: var(--primaryHoverBackgroundColor);
         color: var(--white);
-        text-decoration: none;
-      }
-
-      .copy {
-        margin-top: 15px;
-        text-align: center;
-        font-size: 14px;
-      }
-
-      .remember-me-container {
-        display: flex;
-        justify-content: space-between;
-        line-height: 25px;
-      }
-
-      .remember-me {
-        font-size: 14px;
-      }
-
-      .forgot-password {
-        margin-left: auto;
-        color: var(--forgotPasswordColor);
-        text-decoration: none;
-        font-size: 13px;
-      }
-
-      .forgot-password:focus,
-      .forgot-password:hover {
-        color: var(--forgotPasswordAltColor);
-        text-decoration: underline;
-      }
-
-      .forgot-password:visited {
-        color: var(--forgotPasswordAltColor);
       }
 
       .login-failed {
-        margin-top: 20px;
+        margin-top: 16px;
+        padding: 10px 12px;
+        border: 1px solid var(--failedBorderColor);
+        border-radius: 4px;
+        background-color: var(--failedBackgroundColor);
         color: var(--failedColor);
+        font-size: 14px;
+      }
+
+      .appearance {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 10px;
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid var(--panelBorderColor);
+      }
+
+      .appearance .form-label {
+        margin: 0;
+      }
+
+      .theme-select {
+        justify-self: end;
+        width: min(100%, 160px);
+        min-height: 40px;
+        padding: 7px 10px;
+        font-size: 14px;
+      }
+
+      .copy {
+        margin-top: 14px;
+        color: var(--copyColor);
+        text-align: center;
         font-size: 14px;
       }
 
@@ -200,67 +357,222 @@
         display: none;
       }
 
-      @media only screen and (min-device-width: 375px) and (max-device-width: 812px) {
-        .form-input {
-          font-size: 16px;
+      @media only screen and (max-width: 360px) {
+        .center {
+          padding-right: max(10px, env(safe-area-inset-right));
+          padding-left: max(10px, env(safe-area-inset-left));
+        }
+
+        .panel-body {
+          padding: 18px;
+        }
+
+        .remember-me-container {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 0;
+        }
+
+        .forgot-password {
+          min-height: 36px;
+          text-align: left;
+        }
+      }
+
+      @media only screen and (max-width: 360px) and (max-height: 640px) and (orientation: portrait) {
+        .center {
+          padding-top: max(8px, env(safe-area-inset-top));
+          padding-bottom: max(8px, env(safe-area-inset-bottom));
+        }
+
+        .panel {
+          margin-top: 0;
+        }
+
+        .panel-header {
+          min-height: 52px;
+          padding: 8px;
+        }
+
+        .panel-body {
+          padding: 14px;
+        }
+
+        .sign-in {
+          margin-bottom: 12px;
+        }
+
+        .form-group {
+          margin-bottom: 12px;
+        }
+
+        .remember-me-container {
+          align-items: center;
+          flex-direction: row;
+          gap: 8px;
+        }
+
+        .forgot-password {
+          min-height: 44px;
+          text-align: right;
+          font-size: 12px;
+        }
+
+        .button {
+          margin-top: 8px;
+        }
+
+        .appearance {
+          gap: 8px;
+          margin-top: 10px;
+          padding-top: 10px;
+        }
+
+        .theme-select {
+          width: min(100%, 148px);
+        }
+
+        .copy {
+          margin-top: 8px;
+        }
+      }
+
+      @media only screen and (max-height: 500px) and (orientation: landscape) {
+        .center {
+          padding-top: max(8px, env(safe-area-inset-top));
+          padding-bottom: max(8px, env(safe-area-inset-bottom));
+        }
+
+        .content {
+          width: min(100%, 640px);
+        }
+
+        .panel {
+          margin-top: 0;
+        }
+
+        .panel-header {
+          min-height: 48px;
+          padding: 8px;
+        }
+
+        .logo {
+          width: 30px;
+          height: 30px;
+        }
+
+        .panel-body {
+          padding: 12px 18px;
+        }
+
+        .sign-in {
+          margin-bottom: 8px;
+        }
+
+        form {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          gap: 10px 18px;
+        }
+
+        .form-group {
+          margin-bottom: 0;
+        }
+
+        .remember-me-container,
+        .button,
+        .login-failed {
+          grid-column: 1 / -1;
+        }
+
+        .remember-me-container {
+          margin-top: 0;
+        }
+
+        .button,
+        .login-failed {
+          margin-top: 0;
+        }
+
+        .appearance {
+          margin-top: 10px;
+          padding-top: 10px;
+        }
+
+        .copy {
+          margin-top: 6px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition-duration: 0s !important;
+          animation-duration: 0s !important;
+          animation-iteration-count: 1 !important;
         }
       }
     </style>
   </head>
 
   <body>
-    <div class="center">
+    <main class="center">
       <div class="content">
-        <div class="panel">
+        <section class="panel" aria-labelledby="sign-in-heading">
           <div class="panel-header">
-            <img src="/Content/Images/logo.svg" alt="Image" class="logo" />
+            <img src="/Content/Images/logo.svg" alt="Sonarr" class="logo" />
           </div>
 
           <div class="panel-body">
-            <div class="sign-in">SIGN IN TO CONTINUE</div>
+            <div id="sign-in-heading" class="sign-in">SIGN IN TO CONTINUE</div>
 
             <form
-              role="form"
               data-parsley-validate=""
               novalidate=""
               class="mb-lg"
               method="POST"
             >
               <div class="form-group">
+                <label class="form-label" for="username">Username</label>
                 <input
-                  type="email"
+                  id="username"
+                  type="text"
                   name="username"
                   class="form-input"
-                  placeholder="Username"
-                  autocomplete="off"
+                  autocomplete="username"
                   pattern=".{1,}"
                   required
-                  title="User name is required"
-                  autofocus="true"
-                  autocapitalize="false"
+                  aria-required="true"
+                  autocapitalize="none"
+                  spellcheck="false"
                 />
               </div>
 
               <div class="form-group">
+                <label class="form-label" for="password">Password</label>
                 <input
+                  id="password"
                   type="password"
                   name="password"
                   class="form-input"
-                  placeholder="Password"
+                  autocomplete="current-password"
                   required
+                  aria-required="true"
                 />
               </div>
 
               <div class="remember-me-container">
-                <span class="remember-me">
+                <label class="remember-me" for="rememberMe">
                   <input
                     type="checkbox"
                     name="rememberMe"
                     id="rememberMe"
                     checked="checked"
                   />
-                  <label for="rememberMe">Remember Me</label>
-                </span>
+                  <span>Remember Me</span>
+                </label>
 
                 <a
                   href="https://wiki.servarr.com/sonarr/faq#help-i-have-locked-myself-out"
@@ -268,14 +580,30 @@
                   >Forgot your password?</a
                 >
               </div>
+
               <button type="submit" class="button">Login</button>
 
-              <div id="login-failed" class="login-failed hidden">
+              <div
+                id="login-failed"
+                class="login-failed hidden"
+                role="alert"
+                aria-live="polite"
+              >
                 Incorrect Username or Password
               </div>
             </form>
+
+            <div class="appearance">
+              <label class="form-label" for="theme-select">Appearance</label>
+              <select id="theme-select" class="theme-select">
+                <option value="auto">System</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="oled">OLED</option>
+              </select>
+            </div>
           </div>
-        </div>
+        </section>
 
         <div id="copy" class="copy hidden">
           <span>&copy;</span>
@@ -284,19 +612,18 @@
           <span>Sonarr</span>
         </div>
       </div>
-    </div>
+    </main>
   </body>
 
   <script type="text/javascript">
     var yearSpan = document.getElementById('year');
-    yearSpan.innerHTML = '2010-' + new Date().getFullYear();
+    yearSpan.textContent = '2010-' + new Date().getFullYear();
 
     var copyDiv = document.getElementById('copy');
     copyDiv.classList.remove('hidden');
 
     if (window.location.search.indexOf('loginFailed=true') > -1) {
       var loginFailedDiv = document.getElementById('login-failed');
-
       loginFailedDiv.classList.remove('hidden');
     }
 
@@ -304,49 +631,182 @@
       white: '#fff',
       pageBackground: '#f5f7fa',
       textColor: '#515253',
+      labelColor: '#515253',
+      copyColor: '#515253',
+      placeholderColor: '#8b9095',
       themeDarkColor: '#3a3f51',
       panelBackground: '#fff',
+      panelBorderColor: '#dfe3e8',
+      panelShadowColor: 'rgba(36, 43, 51, 0.16)',
       inputBackgroundColor: '#fff',
-      inputBorderColor: '#dde6e9',
+      inputBorderColor: '#cfd6dd',
       inputBoxShadowColor: 'rgba(0, 0, 0, 0.075)',
-      inputFocusBorderColor: '#66afe9',
-      inputFocusBoxShadowColor: 'rgba(102, 175, 233, 0.6)',
+      inputFocusBorderColor: '#5d9cec',
+      inputFocusBoxShadowColor: 'rgba(93, 156, 236, 0.24)',
+      focusRingColor: '#2374d5',
       primaryBackgroundColor: '#5d9cec',
       primaryBorderColor: '#5899eb',
       primaryHoverBackgroundColor: '#4b91ea',
       primaryHoverBorderColor: '#3483e7',
-      failedColor: '#f05050',
-      forgotPasswordColor: '#909fa7',
-      forgotPasswordAltColor: '#748690',
+      failedColor: '#a82131',
+      failedBorderColor: '#d57a85',
+      failedBackgroundColor: '#fff3f4',
+      forgotPasswordColor: '#687985',
+      forgotPasswordAltColor: '#3f5664',
+      themeColor: '#3a3f51',
     };
 
     var dark = {
       white: '#fff',
       pageBackground: '#202020',
-      textColor: '#ccc',
+      textColor: '#d0d2d4',
+      labelColor: '#d0d2d4',
+      copyColor: '#b6b9bc',
+      placeholderColor: '#92979c',
       themeDarkColor: '#494949',
       panelBackground: '#111',
+      panelBorderColor: '#555b60',
+      panelShadowColor: 'rgba(0, 0, 0, 0.45)',
       inputBackgroundColor: '#333',
-      inputBorderColor: '#dde6e9',
-      inputBoxShadowColor: 'rgba(0, 0, 0, 0.075)',
+      inputBorderColor: '#747a80',
+      inputBoxShadowColor: 'rgba(0, 0, 0, 0.25)',
       inputFocusBorderColor: '#66afe9',
-      inputFocusBoxShadowColor: 'rgba(102, 175, 233, 0.6)',
+      inputFocusBoxShadowColor: 'rgba(102, 175, 233, 0.28)',
+      focusRingColor: '#79b8ff',
       primaryBackgroundColor: '#5d9cec',
       primaryBorderColor: '#5899eb',
       primaryHoverBackgroundColor: '#4b91ea',
       primaryHoverBorderColor: '#3483e7',
-      failedColor: '#f05050',
-      forgotPasswordColor: '#737d83',
-      forgotPasswordAltColor: '#546067',
+      failedColor: '#ffb3bb',
+      failedBorderColor: '#9f3e49',
+      failedBackgroundColor: 'rgba(240, 80, 80, 0.14)',
+      forgotPasswordColor: '#9ca5ab',
+      forgotPasswordAltColor: '#c4cbd0',
+      themeColor: '#2a2a2a',
     };
 
-    var theme = '_THEME_';
-    var defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    var finalTheme =
-      theme === 'dark' || (theme === 'auto' && defaultDark) ? dark : light;
+    var oled = {
+      white: '#fff',
+      pageBackground: '#000000',
+      textColor: '#e6e8eb',
+      labelColor: '#d9dde1',
+      copyColor: '#9ba2a9',
+      placeholderColor: '#8e959c',
+      themeDarkColor: '#050505',
+      panelBackground: '#080808',
+      panelBorderColor: '#2d3338',
+      panelShadowColor: 'rgba(0, 0, 0, 0.82)',
+      inputBackgroundColor: '#101214',
+      inputBorderColor: '#454c53',
+      inputBoxShadowColor: 'rgba(0, 0, 0, 0.55)',
+      inputFocusBorderColor: '#66afe9',
+      inputFocusBoxShadowColor: 'rgba(102, 175, 233, 0.3)',
+      focusRingColor: '#80bdff',
+      primaryBackgroundColor: '#5d9cec',
+      primaryBorderColor: '#5899eb',
+      primaryHoverBackgroundColor: '#4b91ea',
+      primaryHoverBorderColor: '#3483e7',
+      failedColor: '#ffc1c7',
+      failedBorderColor: '#a83f49',
+      failedBackgroundColor: 'rgba(240, 80, 80, 0.14)',
+      forgotPasswordColor: '#a1a8ae',
+      forgotPasswordAltColor: '#d4d9dd',
+      themeColor: '#000000',
+    };
 
-    Object.entries(finalTheme).forEach(([key, value]) => {
-      document.documentElement.style.setProperty(`--${key}`, value);
+    var themes = { light: light, dark: dark, oled: oled };
+    var supportedThemes = ['auto', 'light', 'dark', 'oled'];
+    var storageKey = 'sonarr.ui.theme';
+    var configuredTheme = '__THEME__';
+    var themeSelect = document.getElementById('theme-select');
+    var colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    function getStoredTheme() {
+      try {
+        var storedTheme = window.localStorage.getItem(storageKey);
+        return supportedThemes.indexOf(storedTheme) !== -1 ? storedTheme : null;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function getResolvedTheme(selectedTheme) {
+      if (selectedTheme === 'oled') {
+        return 'oled';
+      }
+
+      if (
+        selectedTheme === 'dark' ||
+        (selectedTheme === 'auto' && colorSchemeQuery.matches)
+      ) {
+        return 'dark';
+      }
+
+      return 'light';
+    }
+
+    function applyTheme(selectedTheme, persist) {
+      if (supportedThemes.indexOf(selectedTheme) === -1) {
+        selectedTheme = 'auto';
+      }
+
+      var resolvedTheme = getResolvedTheme(selectedTheme);
+      var finalTheme = themes[resolvedTheme];
+
+      Object.entries(finalTheme).forEach(function setThemeVariable(entry) {
+        document.documentElement.style.setProperty('--' + entry[0], entry[1]);
+      });
+
+      document.documentElement.dataset.theme = selectedTheme;
+      document.documentElement.dataset.resolvedTheme = resolvedTheme;
+      document.documentElement.style.backgroundColor = finalTheme.pageBackground;
+      document.documentElement.style.colorScheme =
+        resolvedTheme === 'light' ? 'light' : 'dark';
+      themeSelect.value = selectedTheme;
+
+      document
+        .querySelectorAll(
+          'meta[name="theme-color"], meta[name="msapplication-navbutton-color"]'
+        )
+        .forEach(function setThemeColor(element) {
+          element.setAttribute('content', finalTheme.themeColor);
+        });
+
+      if (persist) {
+        try {
+          window.localStorage.setItem(storageKey, selectedTheme);
+        } catch (error) {
+          // Storage can be unavailable in private or restricted contexts.
+        }
+      }
+    }
+
+    var initialTheme = getStoredTheme() || configuredTheme;
+    applyTheme(initialTheme, false);
+
+    themeSelect.addEventListener('change', function onThemeChange(event) {
+      applyTheme(event.target.value, true);
+    });
+
+    function onColorSchemeChange() {
+      if (themeSelect.value === 'auto') {
+        applyTheme('auto', false);
+      }
+    }
+
+    if (colorSchemeQuery.addEventListener) {
+      colorSchemeQuery.addEventListener('change', onColorSchemeChange);
+    } else {
+      colorSchemeQuery.addListener(onColorSchemeChange);
+    }
+
+    window.addEventListener('storage', function onStorageChange(event) {
+      if (
+        event.key === storageKey &&
+        supportedThemes.indexOf(event.newValue) !== -1
+      ) {
+        applyTheme(event.newValue, false);
+      }
     });
   </script>
 </html>

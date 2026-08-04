@@ -1,20 +1,56 @@
-import { useCallback, useEffect } from 'react';
-import useTheme from 'Helpers/Hooks/useTheme';
-import themes from 'Styles/Themes';
+import { useEffect } from 'react';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
+import {
+  applyTheme,
+  isThemeName,
+  themeStorageKey,
+} from 'Styles/Themes';
 
 function ApplyTheme() {
-  const theme = useTheme();
+  const configuredTheme =
+    useUiSettingsValues().theme ?? window.Sonarr.theme;
+  const selectedTheme = isThemeName(configuredTheme) ? configuredTheme : 'auto';
 
-  const updateCSSVariables = useCallback(() => {
-    Object.entries(themes[theme]).forEach(([key, value]) => {
-      document.documentElement.style.setProperty(`--${key}`, value);
-    });
-  }, [theme]);
-
-  // On Component Mount and Component Update
   useEffect(() => {
-    updateCSSVariables();
-  }, [updateCSSVariables, theme]);
+    applyTheme(selectedTheme);
+
+    const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const handleColorSchemeChange = () => {
+      if (selectedTheme === 'auto') {
+        applyTheme(selectedTheme, { persist: false });
+      }
+    };
+
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key !== themeStorageKey) {
+        return;
+      }
+
+      const storedTheme = isThemeName(event.newValue) ? event.newValue : 'auto';
+
+      if (storedTheme !== selectedTheme) {
+        window.location.reload();
+      }
+    };
+
+    if (colorSchemeQuery.addEventListener) {
+      colorSchemeQuery.addEventListener('change', handleColorSchemeChange);
+    } else {
+      colorSchemeQuery.addListener(handleColorSchemeChange);
+    }
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      if (colorSchemeQuery.removeEventListener) {
+        colorSchemeQuery.removeEventListener('change', handleColorSchemeChange);
+      } else {
+        colorSchemeQuery.removeListener(handleColorSchemeChange);
+      }
+
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [selectedTheme]);
 
   return null;
 }

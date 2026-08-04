@@ -29,6 +29,10 @@ namespace Sonarr.Api.V3.Config
             SharedValidator.RuleFor(c => c.UILanguage)
                            .GreaterThanOrEqualTo(1)
                            .WithMessage("The UI Language value cannot be less than 1");
+
+            SharedValidator.RuleFor(c => c.Theme)
+                           .Must(UiTheme.IsValid)
+                           .WithMessage("Theme must be one of: auto, light, dark, oled");
         }
 
         [RestPutById]

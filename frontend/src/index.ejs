@@ -50,22 +50,67 @@
       content="/Content/browserconfig.xml"
     />
 
-    <link rel="stylesheet" type="text/css" href="/Content/Fonts/fonts.css">
-
     <script>
-      window.Sonarr = {
-        urlBase: '__URL_BASE__'
-      };
+      (function applyInitialTheme() {
+        var supportedThemes = ['auto', 'light', 'dark', 'oled'];
+        var storageKey = 'sonarr.ui.theme';
+        var selectedTheme = '__THEME__';
 
-      var theme = '_THEME_';
-      var defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      var finalTheme =
-        theme === 'dark' || (theme === 'auto' && defaultDark) ? 'dark' : 'light';
+        try {
+          var storedTheme = window.localStorage.getItem(storageKey);
 
-      document.documentElement.style.setProperty('--pageBackground', finalTheme === 'dark' ? '#202020' : '#f5f7fa');
+          if (supportedThemes.indexOf(storedTheme) !== -1) {
+            selectedTheme = storedTheme;
+          }
+        } catch (error) {
+          // Storage can be unavailable in private or restricted contexts.
+        }
+
+        if (supportedThemes.indexOf(selectedTheme) === -1) {
+          selectedTheme = 'auto';
+        }
+
+        var prefersDark = window.matchMedia &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var resolvedTheme = selectedTheme === 'oled'
+          ? 'oled'
+          : selectedTheme === 'dark' || (selectedTheme === 'auto' && prefersDark)
+            ? 'dark'
+            : 'light';
+        var themeColor = resolvedTheme === 'oled'
+          ? '#000000'
+          : resolvedTheme === 'dark'
+            ? '#2a2a2a'
+            : '#3a3f51';
+        var pageBackground = resolvedTheme === 'oled'
+          ? '#000000'
+          : resolvedTheme === 'dark'
+            ? '#202020'
+            : '#f5f7fa';
+        var documentElement = document.documentElement;
+
+        documentElement.dataset.theme = selectedTheme;
+        documentElement.dataset.resolvedTheme = resolvedTheme;
+        documentElement.style.colorScheme = resolvedTheme === 'light' ? 'light' : 'dark';
+        documentElement.style.backgroundColor = pageBackground;
+        documentElement.style.setProperty('--pageBackground', pageBackground);
+
+        document
+          .querySelectorAll('meta[name="theme-color"], meta[name="msapplication-navbutton-color"]')
+          .forEach(function setThemeColor(element) {
+            element.setAttribute('content', themeColor);
+          });
+
+        window.Sonarr = {
+          urlBase: '__URL_BASE__',
+          theme: selectedTheme
+        };
+      })();
     </script>
 
     __MINI_PROFILER__
+
+    <link rel="stylesheet" type="text/css" href="/Content/Fonts/fonts.css">
 
     <% for (key in htmlWebpackPlugin.files.js) { %><script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[key] %>" data-no-hash></script><% } %>
     <% for (key in htmlWebpackPlugin.files.css) { %><link href="<%= htmlWebpackPlugin.files.css[key] %>" rel="stylesheet"></link><% } %>
@@ -82,8 +127,9 @@
       }
 
       .root {
-        overflow: hidden;
+        min-width: 0;
         height: 100%; /* needed for proper layout */
+        background-color: var(--pageBackground);
       }
 
       @media only screen and (max-width: 768px) {

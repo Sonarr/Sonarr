@@ -255,7 +255,7 @@ namespace NzbDrone.Core.Configuration
                 ? enumValue
                 : GetValueEnum("ConsoleLogFormat", ConsoleLogFormat.Standard, false);
 
-        public string Theme => _appOptions.Theme ?? GetValue("Theme", "auto", persist: false);
+        public string Theme => UiTheme.Normalize(_appOptions.Theme ?? GetValue("Theme", UiTheme.Auto, persist: false));
 
         public string PostgresHost => _postgresOptions?.Host ?? GetValue("PostgresHost", string.Empty, persist: false);
         public string PostgresUser => _postgresOptions?.User ?? GetValue("PostgresUser", string.Empty, persist: false);

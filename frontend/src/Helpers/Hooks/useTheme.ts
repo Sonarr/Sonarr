@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import themes from 'Styles/Themes';
 
-const useTheme = (): 'dark' | 'light' => {
+const useTheme = (): 'dark' | 'light' | 'oled' => {
   const { theme } = useUiSettingsValues();
   const selectedTheme = theme ?? window.Sonarr.theme;
   const [resolvedTheme, setResolvedTheme] = useState(() => {

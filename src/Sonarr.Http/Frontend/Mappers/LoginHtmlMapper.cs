@@ -42,7 +42,7 @@ namespace Sonarr.Http.Frontend.Mappers
             var html = base.GetHtmlText(context);
             var theme = _configFileProvider.Theme;
 
-            html = html.Replace("_THEME_", theme);
+            html = html.Replace("__THEME__", UiTheme.Normalize(theme));
 
             return html;
         }

@@ -34,6 +34,13 @@ namespace Sonarr.Http.Frontend.Mappers
             return HtmlPath;
         }
 
+        protected override string GetHtmlText()
+        {
+            var html = base.GetHtmlText();
+
+            return html.Replace("__THEME__", UiTheme.Normalize(_configFileProvider.Theme));
+        }
+
         public override bool CanHandle(string resourceUrl)
         {
             resourceUrl = resourceUrl.ToLowerInvariant();

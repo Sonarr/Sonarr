@@ -6,7 +6,7 @@ import {
 } from 'Settings/useSettings';
 
 export interface UiSettingsModel {
-  theme: 'auto' | 'dark' | 'light';
+  theme: 'auto' | 'dark' | 'light' | 'oled';
   showRelativeDates: boolean;
   shortDateFormat: string;
   longDateFormat: string;
