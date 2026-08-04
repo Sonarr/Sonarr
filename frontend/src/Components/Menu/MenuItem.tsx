@@ -13,12 +13,15 @@ function MenuItem({
   className = styles.menuItem,
   children,
   isDisabled = false,
+  tabIndex = -1,
   ...otherProps
 }: MenuItemProps) {
   return (
     <Link
       className={classNames(className, isDisabled && styles.isDisabled)}
       isDisabled={isDisabled}
+      role="menuitem"
+      tabIndex={tabIndex}
       {...otherProps}
     >
       {children}

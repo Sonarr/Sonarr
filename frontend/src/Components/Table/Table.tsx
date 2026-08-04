@@ -59,6 +59,9 @@ function Table({
         horizontalScroll ? scrollDirections.HORIZONTAL : scrollDirections.NONE
       }
       autoFocus={false}
+      tabIndex={horizontalScroll ? 0 : -1}
+      role={horizontalScroll ? 'region' : undefined}
+      aria-label={horizontalScroll ? translate('Table') : undefined}
     >
       <table className={className}>
         <TableHeader>

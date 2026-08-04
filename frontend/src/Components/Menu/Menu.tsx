@@ -3,7 +3,6 @@ import {
   flip,
   FloatingPortal,
   shift,
-  useClick,
   useDismiss,
   useFloating,
   useInteractions,
@@ -31,8 +30,34 @@ function Menu({
   enforceMaxHeight = true,
 }: MenuProps) {
   const menuButtonId = useId();
+  const menuContentId = useId();
   const [maxHeight, setMaxHeight] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const getMenuItems = useCallback(() => {
+    const menuContent = document.getElementById(menuContentId);
+
+    if (!menuContent) {
+      return [];
+    }
+
+    return Array.from(
+      menuContent.querySelectorAll<HTMLElement>(
+        '[role="menuitem"]:not([disabled]):not([aria-disabled="true"])'
+      )
+    );
+  }, [menuContentId]);
+
+  const closeMenu = useCallback(
+    (restoreFocus: boolean) => {
+      setIsMenuOpen(false);
+
+      if (restoreFocus) {
+        document.getElementById(menuButtonId)?.focus();
+      }
+    },
+    [menuButtonId]
+  );
 
   const updateMaxHeight = useCallback(() => {
     const menuButton = document.getElementById(menuButtonId);
@@ -52,6 +77,70 @@ function Menu({
   const handleMenuButtonPress = useCallback(() => {
     setIsMenuOpen((isOpen) => !isOpen);
   }, []);
+
+  const handleMenuContentClick = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      const target = event.target as Element;
+
+      if (target.closest?.('[role="menuitem"]')) {
+        closeMenu(false);
+      }
+    },
+    [closeMenu]
+  );
+
+  const handleWindowKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        closeMenu(true);
+        return;
+      }
+
+      if (event.key === 'Tab') {
+        closeMenu(true);
+        return;
+      }
+
+      if (
+        event.key !== 'ArrowUp' &&
+        event.key !== 'ArrowDown' &&
+        event.key !== 'Home' &&
+        event.key !== 'End'
+      ) {
+        return;
+      }
+
+      const menuItems = getMenuItems();
+
+      if (!menuItems.length) {
+        return;
+      }
+
+      event.preventDefault();
+
+      const focusedIndex = menuItems.indexOf(
+        document.activeElement as HTMLElement
+      );
+      let nextIndex: number;
+
+      if (event.key === 'Home') {
+        nextIndex = 0;
+      } else if (event.key === 'End') {
+        nextIndex = menuItems.length - 1;
+      } else if (event.key === 'ArrowUp') {
+        nextIndex =
+          focusedIndex <= 0 ? menuItems.length - 1 : focusedIndex - 1;
+      } else {
+        nextIndex =
+          focusedIndex >= menuItems.length - 1 ? 0 : focusedIndex + 1;
+      }
+
+      menuItems[nextIndex].focus();
+    },
+    [closeMenu, getMenuItems]
+  );
 
   const childrenArray = React.Children.toArray(children);
   const button = React.cloneElement(childrenArray[0] as ReactElement, {
@@ -73,6 +162,31 @@ function Menu({
       updateMaxHeight();
     }
   }, [enforceMaxHeight, updateMaxHeight]);
+  useEffect(() => {
+    if (!isMenuOpen) {
+      return;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      getMenuItems()[0]?.focus();
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [getMenuItems, isMenuOpen]);
+
+  useEffect(() => {
+    if (!isMenuOpen) {
+      return;
+    }
+
+    window.addEventListener('keydown', handleWindowKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleWindowKeyDown);
+    };
+  }, [handleWindowKeyDown, isMenuOpen]);
 
   useEffect(() => {
     // Listen to resize events on the window and scroll events
@@ -108,60 +222,40 @@ function Menu({
     onOpenChange: setIsMenuOpen,
   });
 
-  const handleFloaterPress = useCallback(
-    (event: MouseEvent) => {
-      if (
-        refs.reference &&
-        (refs.reference.current as HTMLElement).contains(
-          event.target as HTMLElement
-        )
-      ) {
-        return false;
-      }
-
-      // TODO: Menu items should handle closing when they are clicked.
-      // This is handled before the menu item click event is handled, so wait 100ms before closing.
-      setTimeout(() => {
-        setIsMenuOpen(false);
-      }, 100);
-
-      return true;
-    },
-    [refs.reference]
-  );
-
-  const click = useClick(context);
   const dismiss = useDismiss(context, {
+    escapeKey: false,
     outsidePressEvent: 'click',
-    outsidePress: handleFloaterPress,
   });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    click,
-    dismiss,
-  ]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([dismiss]);
 
   return (
     <>
       <div
         ref={refs.setReference}
         {...getReferenceProps()}
-        id={menuButtonId}
         className={className}
       >
-        {button}
+        {React.cloneElement(button, {
+          id: menuButtonId,
+          'aria-controls': menuContentId,
+          'aria-expanded': isMenuOpen,
+          'aria-haspopup': 'menu',
+        })}
       </div>
 
       {isMenuOpen ? (
         <FloatingPortal id="portal-root">
           {React.cloneElement(childrenArray[1] as ReactElement, {
             forwardedRef: refs.setFloating,
+            id: menuContentId,
+            'aria-labelledby': menuButtonId,
             style: {
               maxHeight: enforceMaxHeight ? maxHeight : undefined,
               ...floatingStyles,
             },
             isOpen: isMenuOpen,
-            ...getFloatingProps(),
+            ...getFloatingProps({ onClick: handleMenuContentClick }),
           })}
         </FloatingPortal>
       ) : null}

@@ -24,6 +24,7 @@ export default function Link<C extends ElementType = 'button'>({
   to,
   target,
   type,
+  tabIndex,
   isDisabled,
   noRouter,
   onPress,
@@ -34,6 +35,8 @@ export default function Link<C extends ElementType = 'button'>({
   const onClick = useCallback(
     (event: SyntheticEvent) => {
       if (isDisabled) {
+        event.preventDefault();
+        event.stopPropagation();
         return;
       }
 
@@ -59,6 +62,8 @@ export default function Link<C extends ElementType = 'button'>({
           target={target || (toLink ? '_blank' : '_self')}
           rel={toLink ? 'noreferrer' : undefined}
           className={linkClass}
+          aria-disabled={isDisabled || undefined}
+          tabIndex={isDisabled ? -1 : tabIndex}
           onClick={onClick}
           {...otherProps}
         />
@@ -70,6 +75,8 @@ export default function Link<C extends ElementType = 'button'>({
         to={to}
         target={target}
         className={linkClass}
+        aria-disabled={isDisabled || undefined}
+        tabIndex={isDisabled ? -1 : tabIndex}
         onClick={onClick}
         {...otherProps}
       />
@@ -86,6 +93,7 @@ export default function Link<C extends ElementType = 'button'>({
       target={target}
       className={linkClass}
       disabled={isDisabled}
+      tabIndex={tabIndex}
       onClick={onClick}
       {...otherProps}
     />

@@ -1,9 +1,9 @@
-import React, { CSSProperties, LegacyRef, useId } from 'react';
+import React, { CSSProperties, useId } from 'react';
 import Scroller from 'Components/Scroller/Scroller';
 import styles from './MenuContent.css';
 
-interface MenuContentProps {
-  forwardedRef?: LegacyRef<HTMLDivElement> | undefined;
+interface MenuContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  forwardedRef?: React.Ref<HTMLDivElement>;
   className?: string;
   id?: string;
   children: React.ReactNode;
@@ -17,7 +17,8 @@ function MenuContent({
   id,
   children,
   style,
-  isOpen,
+  isOpen = false,
+  ...otherProps
 }: MenuContentProps) {
   const generatedId = useId();
 
@@ -26,7 +27,11 @@ function MenuContent({
       ref={forwardedRef}
       id={id ?? generatedId}
       className={className}
-      style={style}
+      style={isOpen ? style : { ...style, display: 'none' }}
+      role="menu"
+      hidden={!isOpen}
+      aria-hidden={!isOpen}
+      {...otherProps}
     >
       {isOpen ? (
         <Scroller className={styles.scroller}>{children}</Scroller>
