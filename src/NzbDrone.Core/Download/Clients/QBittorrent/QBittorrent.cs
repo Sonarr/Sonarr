@@ -10,6 +10,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
@@ -85,7 +86,14 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             var moveToTop = (isRecentEpisode && Settings.RecentTvPriority == (int)QBittorrentPriority.First) || (!isRecentEpisode && Settings.OlderTvPriority == (int)QBittorrentPriority.First);
             var forceStart = (QBittorrentState)Settings.InitialState == QBittorrentState.ForceStart;
 
-            Proxy.AddTorrentFromUrl(magnetLink, addHasSetShareLimits && setShareLimits ? remoteEpisode.SeedConfiguration : null, Settings);
+            try
+            {
+                Proxy.AddTorrentFromUrl(magnetLink, addHasSetShareLimits && setShareLimits ? remoteEpisode.SeedConfiguration : null, Settings);
+            }
+            catch (DownloadClientException ex) when (ex.InnerException is HttpException httpException && httpException.Response.StatusCode is HttpStatusCode.Conflict)
+            {
+                throw new DownloadClientRejectedReleaseException(remoteEpisode.Release, "QBittorrent rejected the magnet link due to a conflict", ex);
+            }
 
             if ((!addHasSetShareLimits && setShareLimits) || moveToTop || forceStart || (Settings.AddSeriesTags && remoteEpisode.Series.Tags.Count > 0))
             {
@@ -154,7 +162,14 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             var moveToTop = (isRecentEpisode && Settings.RecentTvPriority == (int)QBittorrentPriority.First) || (!isRecentEpisode && Settings.OlderTvPriority == (int)QBittorrentPriority.First);
             var forceStart = (QBittorrentState)Settings.InitialState == QBittorrentState.ForceStart;
 
-            Proxy.AddTorrentFromFile(filename, fileContent, addHasSetShareLimits ? remoteEpisode.SeedConfiguration : null, Settings);
+            try
+            {
+                Proxy.AddTorrentFromFile(filename, fileContent, addHasSetShareLimits ? remoteEpisode.SeedConfiguration : null, Settings);
+            }
+            catch (DownloadClientException ex) when (ex.InnerException is HttpException httpException && httpException.Response.StatusCode is HttpStatusCode.Conflict)
+            {
+                throw new DownloadClientRejectedReleaseException(remoteEpisode.Release, "QBittorrent rejected the torrent file due to a conflict", ex);
+            }
 
             if ((!addHasSetShareLimits && setShareLimits) || moveToTop || forceStart || (Settings.AddSeriesTags && remoteEpisode.Series.Tags.Count > 0))
             {
