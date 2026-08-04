@@ -1,6 +1,12 @@
 .tableContainer {
+  min-width: 0;
+  max-width: 100%;
+
   &.horizontalScroll {
     overflow-x: auto;
+    border-radius: 3px;
+    scrollbar-gutter: stable;
+    overscroll-behavior-inline: contain;
   }
 }
 
@@ -12,12 +18,18 @@
 
 @media only screen and (max-width: $breakpointMedium) {
   .tableContainer {
-    min-width: 100%;
-    width: fit-content;
+    min-width: 0;
+    width: 100%;
 
     &.horizontalScroll {
+      overflow-x: auto;
       overflow-y: hidden;
-      width: 100%;
+      border-right: 1px solid var(--borderColor);
+      border-left: 1px solid var(--borderColor);
     }
+  }
+
+  .horizontalScroll .table {
+    min-width: max-content;
   }
 }

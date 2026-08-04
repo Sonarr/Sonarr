@@ -1,6 +1,6 @@
 .fieldSet {
   margin: 0;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   padding: 0;
   min-width: 0;
   border: 0;
@@ -9,16 +9,28 @@
 .legend {
   display: block;
   margin-bottom: 21px;
-  padding: 0;
+  padding: 0 0 8px;
   width: 100%;
   border: 0;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--borderColor);
   color: var(--textColor);
+  font-weight: 500;
   font-size: 21px;
   line-height: inherit;
 
   &.small {
-    color: #909293;
+    color: var(--helpTextColor);
     font-size: 18px;
+  }
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .fieldSet {
+    margin-bottom: 20px;
+  }
+
+  .legend {
+    margin-bottom: 16px;
+    font-size: 19px;
   }
 }

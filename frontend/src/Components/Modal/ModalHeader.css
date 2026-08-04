@@ -2,7 +2,19 @@
   @add-mixin truncate;
 
   flex-shrink: 0;
-  padding: 15px 50px 15px 30px;
+  padding: 15px 58px 15px 30px;
+  min-width: 0;
   border-bottom: 1px solid var(--borderColor);
+  font-weight: 500;
   font-size: 18px;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .modalHeader {
+    padding: calc(16px + env(safe-area-inset-top))
+      calc(58px + env(safe-area-inset-right)) 14px
+      max(18px, env(safe-area-inset-left));
+    min-height: calc(58px + env(safe-area-inset-top));
+    white-space: normal;
+  }
 }

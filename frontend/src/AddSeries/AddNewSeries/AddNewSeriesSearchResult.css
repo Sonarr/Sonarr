@@ -117,3 +117,78 @@
     margin-bottom: 20px;
   }
 }
+
+@media only screen and (max-width: $breakpointSmall) {
+  .searchResult {
+    margin: 12px 0;
+    padding: 12px;
+  }
+
+  .poster {
+    flex: 0 0 92px;
+    margin-right: 12px;
+    width: 92px;
+    height: 136px;
+  }
+
+  .content,
+  .titleContainer {
+    min-width: 0;
+  }
+
+  .titleRow {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+  }
+
+  .titleContainer {
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+
+  .title {
+    overflow-wrap: anywhere;
+    font-size: clamp(22px, 7vw, 28px);
+    line-height: 1.15;
+  }
+
+  .year {
+    margin-left: 6px;
+  }
+
+  .icons {
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    min-height: 44px;
+    height: auto;
+  }
+
+  .originalLanguageName,
+  .network,
+  .genres {
+    margin-left: 0;
+  }
+
+  .overview {
+    margin-top: 12px;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  .poster {
+    flex-basis: 78px;
+    width: 78px;
+    height: 115px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .underlay,
+  .underlay:hover {
+    transition-duration: 0s;
+  }
+}

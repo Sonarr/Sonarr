@@ -1,11 +1,14 @@
 .menuButton {
-  margin-right: 15px;
-  width: 30px;
-  height: 60px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  width: 44px;
+  height: 44px;
   text-align: center;
 
   &:hover {
-    color: var(--themeDarkColor);
+    color: var(--themeBlue);
   }
 }
 
@@ -15,6 +18,6 @@
 
 @media only screen and (max-width: $breakpointSmall) {
   .menuButton {
-    margin-right: 5px;
+    margin-right: max(2px, env(safe-area-inset-right));
   }
 }

@@ -1,12 +1,26 @@
 .modalBody {
   flex: 1 0 1px;
   padding: $modalBodyPadding;
+  min-width: 0;
+  min-height: 0;
 }
 
 .modalScroller {
   flex-grow: 1;
+  min-width: 0;
+  min-height: 0;
 }
 
 .innerModalBody {
   padding: $modalBodyPadding;
+  min-width: 0;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .modalBody,
+  .innerModalBody {
+    padding: 18px max(16px, env(safe-area-inset-right))
+      max(18px, env(safe-area-inset-bottom))
+      max(16px, env(safe-area-inset-left));
+  }
 }

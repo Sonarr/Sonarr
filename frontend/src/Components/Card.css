@@ -1,10 +1,12 @@
 .card {
   position: relative;
   margin: 10px;
-  padding: 10px;
-  border-radius: 3px;
+  padding: 12px;
+  min-width: 0;
+  border: 1px solid var(--borderColor);
+  border-radius: 4px;
   background-color: var(--cardBackgroundColor);
-  box-shadow: 0 0 10px 1px var(--cardShadowColor);
+  box-shadow: 0 2px 8px var(--cardShadowColor);
   color: var(--defaultColor);
 }
 
@@ -16,4 +18,12 @@
   @add-mixin linkOverlay;
 
   position: relative;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .card {
+    margin: 6px 0;
+    padding: 12px;
+    box-shadow: 0 1px 4px var(--cardShadowColor);
+  }
 }

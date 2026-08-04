@@ -1,7 +1,10 @@
 .header {
+  position: relative;
+  z-index: 3;
   display: flex;
   align-items: center;
   flex: 0 0 auto;
+  min-width: 0;
   height: $headerHeight;
   background-color: var(--pageHeaderBackgroundColor);
   color: var(--white);
@@ -12,37 +15,57 @@
   align-items: center;
   flex: 0 0 $sidebarWidth;
   padding-left: 20px;
+  min-width: 0;
 }
 
 .logoLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   line-height: 0;
 }
 
 .logo {
   width: 32px;
   height: 32px;
+  object-fit: contain;
 }
 
 .sidebarToggleContainer {
   display: none;
+  align-items: center;
   justify-content: center;
-  flex: 0 0 45px;
-  margin-right: 14px;
+  flex: 0 0 44px;
+}
+
+.sidebarToggle {
+  composes: button from '~Components/Link/IconButton.css';
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  width: 44px;
+  height: 44px;
+  color: var(--white);
 }
 
 .right {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
-  flex-grow: 1;
+  flex: 0 0 auto;
+  min-width: 0;
 }
 
 .donate {
   composes: link from '~Components/Link/Link.css';
 
-  width: 30px;
+  width: 44px;
+  height: 44px;
   color: var(--themeRed);
   text-align: center;
-  line-height: 60px;
+  line-height: 44px;
 
   &:hover {
     color: #9c1f30;
@@ -50,15 +73,43 @@
 }
 
 @media only screen and (max-width: $breakpointSmall) {
+  .header {
+    padding-top: env(safe-area-inset-top);
+    min-height: calc($headerHeight + env(safe-area-inset-top));
+    height: auto;
+  }
+
   .logoContainer {
-    flex: 0 0 60px;
+    flex: 0 0 48px;
+    padding-left: 10px;
+  }
+
+  .logoLink {
+    width: 38px;
+    height: 44px;
   }
 
   .sidebarToggleContainer {
     display: flex;
+    margin-right: 2px;
   }
 
   .donate {
     display: none;
+  }
+}
+
+@media only screen and (max-width: $breakpointExtraSmall) {
+  .logoContainer {
+    flex-basis: 44px;
+    padding-left: 6px;
+  }
+
+  .sidebarToggleContainer {
+    flex-basis: 42px;
+  }
+
+  .sidebarToggle {
+    width: 42px;
   }
 }

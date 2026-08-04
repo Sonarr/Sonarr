@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+import elementClass from 'element-class';
 import React, {
   useCallback,
   useEffect,
@@ -5,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import ReactDOM from 'react-dom';
+import FocusLock from 'react-focus-lock';
 import { useLocation } from 'react-router';
 import QueueStatus from 'Activity/Queue/Status/QueueStatus';
 import {
@@ -15,20 +17,42 @@ import {
 } from 'App/appStore';
 import { IconName } from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
-import Link from 'Components/Link/Link';
 import OverlayScroller from 'Components/Scroller/OverlayScroller';
 import Scroller from 'Components/Scroller/Scroller';
-import usePrevious from 'Helpers/Hooks/usePrevious';
 import { icons } from 'Helpers/Props';
 import dimensions from 'Styles/Variables/dimensions';
 import HealthStatus from 'System/Status/Health/HealthStatus';
+import * as keyCodes from 'Utilities/Constants/keyCodes';
+import { setScrollLock } from 'Utilities/scrollLock';
 import translate from 'Utilities/String/translate';
 import Messages from './Messages/Messages';
 import PageSidebarItem from './PageSidebarItem';
 import styles from './PageSidebar.css';
 
-const HEADER_HEIGHT = parseInt(dimensions.headerHeight);
 const SIDEBAR_WIDTH = parseInt(dimensions.sidebarWidth);
+const MAX_MOBILE_SIDEBAR_WIDTH = 320;
+const MIN_MOBILE_SIDEBAR_WIDTH = 260;
+const MOBILE_SIDEBAR_VIEWPORT_RATIO = 0.86;
+const MOBILE_EDGE_SWIPE_WIDTH = 32;
+
+interface SidebarTransform {
+  transition: string;
+  transform: number;
+}
+
+type SidebarContainerStyle = React.CSSProperties & {
+  '--mobileSidebarWidth': string;
+};
+
+function getMobileSidebarWidth() {
+  return Math.min(
+    MAX_MOBILE_SIDEBAR_WIDTH,
+    Math.max(
+      MIN_MOBILE_SIDEBAR_WIDTH,
+      Math.round(window.innerWidth * MOBILE_SIDEBAR_VIEWPORT_RATIO)
+    )
+  );
+}
 
 interface SidebarItem {
   iconName?: IconName;
@@ -222,20 +246,26 @@ function PageSidebar() {
   const isSidebarVisible = useAppValue('isSidebarVisible');
   const isSmallScreen = useAppDimension('isSmallScreen');
   const location = useLocation();
-  const sidebarRef = useRef(null);
+  const { pathname } = location;
+  const sidebarRef = useRef<HTMLElement>(null);
   const touchStartX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>();
-  const wasSidebarVisible = usePrevious(isSidebarVisible);
+  const touchStartY = useRef<number | null>(null);
+  const previousPathname = useRef(pathname);
+  const previousMobileOpen = useRef(isSmallScreen && isSidebarVisible);
+  const focusFrame = useRef<number | null>(null);
+  const initialSidebarWidth = isSmallScreen
+    ? getMobileSidebarWidth()
+    : SIDEBAR_WIDTH;
 
-  const [sidebarTransform, setSidebarTransform] = useState<{
-    transition: string;
-    transform: number;
-  }>({
+  const [sidebarTransform, setSidebarTransform] = useState<SidebarTransform>({
     transition: 'none',
-    transform: isSidebarVisible ? 0 : SIDEBAR_WIDTH * -1,
+    transform:
+      !isSmallScreen || isSidebarVisible ? 0 : initialSidebarWidth * -1,
   });
 
-  const { pathname } = location;
+  const sidebarWidth = isSmallScreen
+    ? getMobileSidebarWidth()
+    : SIDEBAR_WIDTH;
 
   const activeParent = useMemo(() => {
     return (
@@ -268,47 +298,70 @@ function PageSidebar() {
     );
   }, [pathname]);
 
-  const handleWindowClick = useCallback(
-    (event: MouseEvent) => {
-      const sidebar = ReactDOM.findDOMNode(sidebarRef.current);
-      const toggleButton = document.getElementById('sidebar-toggle-button');
-      const target = event.target;
+  const setSidebarVisible = useCallback((isVisible: boolean) => {
+    setIsSidebarVisible({ isSidebarVisible: isVisible });
+  }, []);
 
-      if (!sidebar) {
-        return;
-      }
+  const setSidebarPosition = useCallback(
+    (isVisible: boolean, transition = 'transform 200ms ease-out') => {
+      const width = isSmallScreen
+        ? getMobileSidebarWidth()
+        : SIDEBAR_WIDTH;
 
+      setSidebarTransform({
+        transition,
+        transform: !isSmallScreen || isVisible ? 0 : width * -1,
+      });
+    },
+    [isSmallScreen]
+  );
+
+  const handleClose = useCallback(() => {
+    setSidebarVisible(false);
+  }, [setSidebarVisible]);
+
+  const handleItemPress = useCallback(() => {
+    if (isSmallScreen) {
+      setSidebarVisible(false);
+    }
+  }, [isSmallScreen, setSidebarVisible]);
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
       if (
-        target instanceof Node &&
-        !sidebar.contains(target) &&
-        !toggleButton?.contains(target) &&
+        event.keyCode === keyCodes.ESCAPE &&
+        isSmallScreen &&
         isSidebarVisible
       ) {
         event.preventDefault();
         event.stopPropagation();
-        setIsSidebarVisible({ isSidebarVisible: false });
+        setSidebarVisible(false);
       }
     },
-    [isSidebarVisible]
+    [isSidebarVisible, isSmallScreen, setSidebarVisible]
   );
 
-  const handleItemPress = useCallback(() => {
-    setIsSidebarVisible({ isSidebarVisible: false });
-  }, []);
+  const handleWindowResize = useCallback(() => {
+    setSidebarPosition(isSidebarVisible, 'none');
+  }, [isSidebarVisible, setSidebarPosition]);
 
   const handleTouchStart = useCallback(
     (event: TouchEvent) => {
       const touches = event.touches;
-      const x = touches[0].pageX;
-      const y = touches[0].pageY;
 
       if (touches.length !== 1) {
         return;
       }
 
-      if (isSidebarVisible && (x > 210 || x < 180)) {
+      const x = touches[0].pageX;
+      const y = touches[0].pageY;
+      const width = getMobileSidebarWidth();
+
+      if (isSidebarVisible && x > width) {
         return;
-      } else if (!isSidebarVisible && x > 40) {
+      }
+
+      if (!isSidebarVisible && x > MOBILE_EDGE_SWIPE_WIDTH) {
         return;
       }
 
@@ -318,80 +371,87 @@ function PageSidebar() {
     [isSidebarVisible]
   );
 
-  const handleTouchMove = useCallback((event: TouchEvent) => {
-    const touches = event.touches;
-    const currentTouchX = touches[0].pageX;
-    // const currentTouchY = touches[0].pageY;
-    // const isSidebarVisible = this.props.isSidebarVisible;
-
-    if (!touchStartX.current) {
-      return;
-    }
-
-    if (Math.abs(touchStartX.current - currentTouchX) < 40) {
-      return;
-    }
-
-    const transform = Math.min(currentTouchX - SIDEBAR_WIDTH, 0);
-
-    setSidebarTransform({
-      transition: 'none',
-      transform,
-    });
-  }, []);
-
-  const handleTouchEnd = useCallback(
+  const handleTouchMove = useCallback(
     (event: TouchEvent) => {
-      const touches = event.changedTouches;
-      const currentTouch = touches[0].pageX;
-
-      if (!touchStartX.current) {
+      if (touchStartX.current == null || touchStartY.current == null) {
         return;
       }
 
-      if (currentTouch > touchStartX.current && currentTouch > 50) {
-        setSidebarTransform({
-          transition: 'none',
-          transform: 0,
-        });
-      } else if (currentTouch < touchStartX.current && currentTouch < 80) {
-        setSidebarTransform({
-          transition: 'transform 50ms ease-in-out',
-          transform: SIDEBAR_WIDTH * -1,
-        });
-      } else {
-        setSidebarTransform({
-          transition: 'none',
-          transform: isSidebarVisible ? 0 : SIDEBAR_WIDTH * -1,
-        });
+      const currentTouchX = event.touches[0].pageX;
+      const currentTouchY = event.touches[0].pageY;
+      const horizontalDistance = Math.abs(
+        touchStartX.current - currentTouchX
+      );
+      const verticalDistance = Math.abs(touchStartY.current - currentTouchY);
+
+      if (verticalDistance > horizontalDistance || horizontalDistance < 12) {
+        return;
       }
 
-      touchStartX.current = null;
-      touchStartY.current = null;
+      const width = getMobileSidebarWidth();
+      const transform = isSidebarVisible
+        ? Math.min(
+            Math.max(currentTouchX - touchStartX.current, width * -1),
+            0
+          )
+        : Math.min(currentTouchX - width, 0);
+
+      setSidebarTransform({
+        transition: 'none',
+        transform,
+      });
     },
     [isSidebarVisible]
   );
 
+  const handleTouchEnd = useCallback(
+    (event: TouchEvent) => {
+      if (touchStartX.current == null) {
+        return;
+      }
+
+      const currentTouchX = event.changedTouches[0].pageX;
+      const travel = currentTouchX - touchStartX.current;
+      const width = getMobileSidebarWidth();
+      const threshold = width * 0.28;
+      const shouldOpen = isSidebarVisible
+        ? travel > threshold * -1
+        : travel > threshold;
+
+      setSidebarVisible(shouldOpen);
+      setSidebarTransform({
+        transition: 'transform 200ms ease-out',
+        transform: shouldOpen ? 0 : width * -1,
+      });
+      touchStartX.current = null;
+      touchStartY.current = null;
+    },
+    [isSidebarVisible, setSidebarVisible]
+  );
+
   const handleTouchCancel = useCallback(() => {
+    setSidebarPosition(isSidebarVisible);
     touchStartX.current = null;
     touchStartY.current = null;
-  }, []);
-
-  const handleSidebarClosePress = useCallback(() => {
-    setIsSidebarVisible({ isSidebarVisible: false });
-  }, []);
+  }, [isSidebarVisible, setSidebarPosition]);
 
   useEffect(() => {
     if (isSmallScreen) {
-      window.addEventListener('click', handleWindowClick, { capture: true });
-      window.addEventListener('touchstart', handleTouchStart);
-      window.addEventListener('touchmove', handleTouchMove);
+      window.addEventListener('keydown', handleKeyDown);
+      window.addEventListener('resize', handleWindowResize);
+      window.addEventListener('touchstart', handleTouchStart, {
+        passive: true,
+      });
+      window.addEventListener('touchmove', handleTouchMove, {
+        passive: true,
+      });
       window.addEventListener('touchend', handleTouchEnd);
       window.addEventListener('touchcancel', handleTouchCancel);
     }
 
     return () => {
-      window.removeEventListener('click', handleWindowClick, { capture: true });
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', handleWindowResize);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
@@ -399,7 +459,8 @@ function PageSidebar() {
     };
   }, [
     isSmallScreen,
-    handleWindowClick,
+    handleKeyDown,
+    handleWindowResize,
     handleTouchStart,
     handleTouchMove,
     handleTouchEnd,
@@ -407,59 +468,110 @@ function PageSidebar() {
   ]);
 
   useEffect(() => {
-    if (wasSidebarVisible !== isSidebarVisible) {
-      setSidebarTransform({
-        transition: 'none',
-        transform: isSidebarVisible ? 0 : SIDEBAR_WIDTH * -1,
-      });
-    } else if (sidebarTransform.transform === 0 && !isSidebarVisible) {
-      setIsSidebarVisible({ isSidebarVisible: true });
-    } else if (
-      sidebarTransform.transform === -SIDEBAR_WIDTH &&
-      isSidebarVisible
-    ) {
-      setIsSidebarVisible({ isSidebarVisible: false });
-    }
-  }, [sidebarTransform, isSidebarVisible, wasSidebarVisible]);
+    setSidebarPosition(
+      isSidebarVisible,
+      isSmallScreen ? 'transform 200ms ease-out' : 'none'
+    );
+  }, [isSidebarVisible, isSmallScreen, setSidebarPosition]);
 
-  const containerStyle = useMemo(() => {
+  useEffect(() => {
+    const hasRouteChanged = previousPathname.current !== pathname;
+    previousPathname.current = pathname;
+
+    if (hasRouteChanged && isSmallScreen && isSidebarVisible) {
+      setSidebarVisible(false);
+    }
+  }, [pathname, isSidebarVisible, isSmallScreen, setSidebarVisible]);
+
+  useEffect(() => {
+    const shouldLock = isSmallScreen && isSidebarVisible;
+
+    elementClass(document.body)[shouldLock ? 'add' : 'remove'](
+      styles.sidebarOpen
+    );
+    setScrollLock(shouldLock);
+
+    return () => {
+      elementClass(document.body).remove(styles.sidebarOpen);
+      setScrollLock(false);
+    };
+  }, [isSidebarVisible, isSmallScreen]);
+
+  useEffect(() => {
+    const isMobileOpen = isSmallScreen && isSidebarVisible;
+    const wasMobileOpen = previousMobileOpen.current;
+    previousMobileOpen.current = isMobileOpen;
+
+    if (isMobileOpen === wasMobileOpen) {
+      return;
+    }
+
+    focusFrame.current = window.requestAnimationFrame(() => {
+      const focusTarget = isMobileOpen
+        ? sidebarRef.current?.querySelector<HTMLElement>(
+            '[data-sidebar-close-button]'
+          )
+        : document.getElementById('sidebar-toggle-button');
+
+      focusTarget?.focus({ preventScroll: true });
+      focusFrame.current = null;
+    });
+
+    return () => {
+      if (focusFrame.current != null) {
+        window.cancelAnimationFrame(focusFrame.current);
+        focusFrame.current = null;
+      }
+    };
+  }, [isSidebarVisible, isSmallScreen]);
+
+  const containerStyle = useMemo<SidebarContainerStyle | undefined>(() => {
     if (!isSmallScreen) {
       return undefined;
     }
 
     return {
-      transition: sidebarTransform.transition ?? 'none',
+      '--mobileSidebarWidth': `${sidebarWidth}px`,
+      transition: sidebarTransform.transition,
       transform: `translateX(${sidebarTransform.transform}px)`,
     };
-  }, [isSmallScreen, sidebarTransform]);
+  }, [isSmallScreen, sidebarTransform, sidebarWidth]);
 
   const ScrollerComponent = isSmallScreen ? Scroller : OverlayScroller;
+  const isSidebarFullyClosed =
+    isSmallScreen &&
+    !isSidebarVisible &&
+    sidebarTransform.transform <= sidebarWidth * -1;
 
-  return (
-    <nav
+  const sidebar = (
+    <aside
+      id="primary-navigation"
       ref={sidebarRef}
-      className={styles.sidebarContainer}
+      className={classNames(
+        styles.sidebarContainer,
+        isSmallScreen && styles.mobileSidebarContainer,
+        isSmallScreen &&
+          !isSidebarFullyClosed &&
+          styles.sidebarContainerOpen,
+        isSidebarFullyClosed && styles.sidebarContainerClosed
+      )}
       style={containerStyle}
-      aria-label={translate('MainNavigation')}
+      aria-label={translate('Menu')}
+      aria-hidden={isSidebarFullyClosed ? true : undefined}
+      role={isSmallScreen && isSidebarVisible ? 'dialog' : undefined}
+      aria-modal={isSmallScreen && isSidebarVisible ? true : undefined}
     >
       {isSmallScreen ? (
-        <div className={styles.sidebarHeader}>
-          <div className={styles.logoContainer}>
-            <Link className={styles.logoLink} to="/">
-              <img
-                className={styles.logo}
-                src={`${window.Sonarr.urlBase}/Content/Images/logo.svg`}
-                alt="Sonarr Logo"
-              />
-            </Link>
-          </div>
+        <div className={styles.mobileHeader}>
+          <span className={styles.mobileTitle}>{translate('Menu')}</span>
 
           <IconButton
-            className={styles.sidebarCloseButton}
+            className={styles.closeButton}
+            data-sidebar-close-button={true}
             name={icons.CLOSE}
+            size={18}
             aria-label={translate('Close')}
-            size={20}
-            onPress={handleSidebarClosePress}
+            onPress={handleClose}
           />
         </div>
       ) : null}
@@ -467,11 +579,8 @@ function PageSidebar() {
       <ScrollerComponent
         className={styles.sidebar}
         scrollDirection="vertical"
-        style={{
-          height: `${window.innerHeight - HEADER_HEIGHT}px`,
-        }}
       >
-        <div>
+        <nav aria-label={translate('MainNavigation')}>
           {LINKS.map((link) => {
             const childWithStatusComponent = link.children?.find((child) => {
               return !!child.statusComponent;
@@ -519,11 +628,39 @@ function PageSidebar() {
               </PageSidebarItem>
             );
           })}
-        </div>
+        </nav>
 
         <Messages />
       </ScrollerComponent>
-    </nav>
+    </aside>
+  );
+
+  if (!isSmallScreen) {
+    return sidebar;
+  }
+
+  return (
+    <>
+      <button
+        className={classNames(
+          styles.backdrop,
+          isSidebarVisible && styles.backdropOpen
+        )}
+        type="button"
+        aria-label={translate('Close')}
+        aria-hidden={!isSidebarVisible}
+        tabIndex={-1}
+        onClick={handleClose}
+      />
+
+      <FocusLock
+        className={styles.focusLock}
+        disabled={!isSidebarVisible}
+        returnFocus={false}
+      >
+        {sidebar}
+      </FocusLock>
+    </>
   );
 }
 

@@ -1,9 +1,16 @@
 .toolbarButton {
   composes: link from '~Components/Link/Link.css';
 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   padding-top: 4px;
+  min-width: 44px;
   width: $toolbarButtonWidth;
+  height: $toolbarHeight;
   text-align: center;
+  line-height: normal;
 
   &:hover {
     color: var(--toobarButtonHoverColor);

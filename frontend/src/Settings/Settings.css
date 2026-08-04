@@ -1,12 +1,12 @@
 .link {
   composes: link from '~Components/Link/Link.css';
 
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--borderColor);
   color: var(--textColor);
   font-size: 21px;
 
   &:hover {
-    color: #616573;
+    color: var(--linkHoverColor);
     text-decoration: none;
   }
 }

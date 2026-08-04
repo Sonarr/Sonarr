@@ -1,9 +1,11 @@
 .alert {
   display: block;
-  margin: 5px;
-  padding: 15px;
+  margin: 8px 0;
+  padding: 14px 16px;
+  min-width: 0;
   border: 1px solid transparent;
   border-radius: 4px;
+  overflow-wrap: anywhere;
 }
 
 .danger {
@@ -28,4 +30,10 @@
   border-color: var(--alertWarningBorderColor);
   background-color: var(--alertWarningBackgroundColor);
   color: var(--alertWarningColor);
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .alert {
+    padding: 12px 14px;
+  }
 }

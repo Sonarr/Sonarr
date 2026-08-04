@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  overflow-x: hidden;
+  min-width: 0;
   width: 100%;
+  background-color: var(--pageBackground);
 }

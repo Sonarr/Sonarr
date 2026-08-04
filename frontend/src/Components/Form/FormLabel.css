@@ -3,7 +3,7 @@
   justify-content: flex-end;
   margin-right: $formLabelRightMarginWidth;
   padding-top: 8px;
-  min-height: 35px;
+  min-height: 40px;
   text-align: end;
   font-weight: bold;
 }
@@ -19,6 +19,11 @@
 @media only screen and (max-width: $breakpointLarge) {
   .label {
     justify-content: flex-start;
+    margin-right: 0;
+    padding-top: 0;
+    padding-bottom: 6px;
+    min-height: 0;
+    text-align: start;
   }
 }
 

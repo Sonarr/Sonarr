@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { toggleIsSidebarVisible } from 'App/appStore';
+import { toggleIsSidebarVisible, useAppValue } from 'App/appStore';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import useKeyboardShortcuts from 'Helpers/Hooks/useKeyboardShortcuts';
@@ -11,6 +11,7 @@ import SeriesSearchInput from './SeriesSearchInput';
 import styles from './PageHeader.css';
 
 function PageHeader() {
+  const isSidebarVisible = useAppValue('isSidebarVisible');
   const [isKeyboardShortcutsModalOpen, setIsKeyboardShortcutsModalOpen] =
     useState(false);
 
@@ -54,8 +55,11 @@ function PageHeader() {
       <div className={styles.sidebarToggleContainer}>
         <IconButton
           id="sidebar-toggle-button"
+          className={styles.sidebarToggle}
           name={icons.NAVBAR_COLLAPSE}
           aria-label={translate('Menu')}
+          aria-expanded={isSidebarVisible}
+          aria-controls="primary-navigation"
           onPress={handleSidebarToggle}
         />
       </div>

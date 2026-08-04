@@ -7,6 +7,7 @@
   display: flex;
   flex: 1 1 auto;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .inputContainer {
@@ -19,9 +20,9 @@
   position: absolute;
   top: 0;
   right: 20px;
-  margin-top: 7px;
+  margin-top: 9px;
   width: 75px;
-  color: #c6c6c6;
+  color: var(--helpTextColor);
   text-align: right;
   pointer-events: none;
   user-select: none;
@@ -35,17 +36,28 @@
 
 .pendingChangesContainer {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
-  width: 30px;
+  flex: 0 0 34px;
 }
 
 .pendingChangesIcon {
   color: var(--warningColor);
   font-size: 20px;
-  line-height: 35px;
+  line-height: 40px;
 }
 
 .helpLink {
   margin-top: 5px;
   line-height: 20px;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .inputUnit {
+    margin-top: 11px;
+  }
+
+  .pendingChangesIcon {
+    line-height: 44px;
+  }
 }

@@ -1,15 +1,19 @@
 .modalContainer {
-  position: absolute;
-  top: 0;
+  position: fixed;
+  inset: 0;
   z-index: $modalZIndex;
   width: 100%;
-  height: 100%;
+  height: var(--viewportHeight);
 }
 
 .modalBackdrop {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: max(16px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(16px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
   width: 100%;
   height: 100%;
   background-color: var(--modalBackdropBackgroundColor);
@@ -19,15 +23,25 @@
 .modal {
   position: relative;
   display: flex;
-  max-width: 90%;
-  max-height: 90%;
+  overflow: hidden;
+  max-width: 100%;
+  max-height: 100%;
+  border: 1px solid var(--borderColor);
   border-radius: 6px;
+  background-color: var(--modalBackgroundColor);
+  box-shadow: 0 18px 50px var(--cardShadowColor);
   opacity: 1;
+}
+
+.modal:focus-visible {
+  outline: 2px solid var(--inputFocusBorderColor);
+  outline-offset: 2px;
 }
 
 .modalOpen {
   /* Prevent the body from scrolling when the modal is open */
   overflow: hidden !important;
+  overscroll-behavior: none;
 }
 
 /*
@@ -43,31 +57,31 @@
 .small {
   composes: modal;
 
-  width: 480px;
+  width: min(480px, 100%);
 }
 
 .medium {
   composes: modal;
 
-  width: 720px;
+  width: min(720px, 100%);
 }
 
 .large {
   composes: modal;
 
-  width: 1080px;
+  width: min(1080px, 100%);
 }
 
 .extraLarge {
   composes: modal;
 
-  width: 1280px;
+  width: min(1280px, 100%);
 }
 
 .extraExtraLarge {
   composes: modal;
 
-  width: 1600px;
+  width: min(1600px, 100%);
 }
 
 @media only screen and (max-width: $breakpointExtraLarge) {
@@ -82,6 +96,13 @@
   }
 }
 
+@media only screen and (max-width: $breakpointSmall) {
+  .modalBackdrop {
+    align-items: stretch;
+    padding: 0;
+  }
+}
+
 @media only screen and (max-width: $breakpointMedium) {
   .modalContainer {
     position: fixed;
@@ -92,8 +113,11 @@
   .modal.large,
   .modal.extraLarge,
   .modal.extraExtraLarge {
-    max-height: 100%;
+    max-width: 100%;
+    max-height: var(--viewportHeight);
     width: 100%;
-    height: 100% !important;
+    height: var(--viewportHeight) !important;
+    border: 0;
+    border-radius: 0;
   }
 }

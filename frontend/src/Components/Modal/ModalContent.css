@@ -3,6 +3,8 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  min-width: 0;
+  min-height: 0;
   width: 100%;
   background-color: var(--modalBackgroundColor);
 }
@@ -11,13 +13,24 @@
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 1;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 60px;
   height: 60px;
   text-align: center;
-  line-height: 60px;
 
   &:hover {
     color: var(--modalCloseButtonHoverColor);
+  }
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .closeButton {
+    top: env(safe-area-inset-top);
+    right: env(safe-area-inset-right);
+    width: 48px;
+    height: 48px;
   }
 }

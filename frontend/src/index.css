@@ -1,15 +1,33 @@
-html,
-body {
-  height: 100%; /* needed for proper layout */
+:root {
+  --viewportHeight: 100vh;
+  --viewportHeight60: 60vh;
 }
 
+@supports (height: 100dvh) {
+  :root {
+    --viewportHeight: 100dvh;
+    --viewportHeight60: 60dvh;
+  }
+}
+
+html,
 body {
-  overflow: hidden;
+  min-height: 100%;
+  height: 100%; /* needed for proper layout */
   background-color: var(--pageBackground);
 }
 
+body {
+  margin: 0;
+}
+
 @media only screen and (max-width: $breakpointSmall) {
+  html,
   body {
-    overflow-y: auto;
+    height: auto;
+  }
+
+  body {
+    min-height: var(--viewportHeight);
   }
 }

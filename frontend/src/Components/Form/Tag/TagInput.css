@@ -2,7 +2,7 @@
   composes: input from '~Components/Form/AutoSuggestInput.css';
 
   padding: 0;
-  min-height: 35px;
+  min-height: 40px;
   height: auto;
 
   &.isFocused {
@@ -27,8 +27,19 @@
   min-width: 20%;
   max-width: 100%;
   width: 0%;
-  height: 31px;
+  height: 36px;
   border: none;
   background-color: var(--inputBackground);
   color: var(--textColor);
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .input {
+    min-height: 44px;
+  }
+
+  .internalInput {
+    height: 40px;
+    font-size: 16px;
+  }
 }

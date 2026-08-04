@@ -1,16 +1,18 @@
 .menuItem {
-  @add-mixin truncate;
-  display: block;
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
   padding: 10px 20px;
   min-width: 150px;
-  max-width: 250px;
+  min-height: 44px;
+  max-width: 300px;
   background-color: var(--toolbarMenuItemBackgroundColor);
   color: var(--menuItemColor);
   line-height: 20px;
+  overflow-wrap: anywhere;
 
   &:hover,
-  &:focus {
+  &:focus-visible {
     background-color: var(--toolbarMenuItemHoverBackgroundColor);
     color: var(--menuItemHoverColor);
     text-decoration: none;
@@ -20,4 +22,11 @@
 .isDisabled {
   color: var(--disabledColor);
   pointer-events: none;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .menuItem {
+    min-width: min(220px, calc(100vw - 40px));
+    max-width: calc(100vw - 20px);
+  }
 }

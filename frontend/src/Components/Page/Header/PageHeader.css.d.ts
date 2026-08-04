@@ -7,6 +7,7 @@ interface CssExports {
   'logoContainer': string;
   'logoLink': string;
   'right': string;
+  'sidebarToggle': string;
   'sidebarToggleContainer': string;
 }
 export const cssExports: CssExports;

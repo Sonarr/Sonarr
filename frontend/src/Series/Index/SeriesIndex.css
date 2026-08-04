@@ -40,6 +40,8 @@
 @media only screen and (max-width: $breakpointSmall) {
   .pageContentBodyWrapper {
     flex-basis: auto;
+    overflow: visible;
+    min-width: 0;
   }
 
   .contentBody {

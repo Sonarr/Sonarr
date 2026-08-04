@@ -2,12 +2,14 @@
   composes: input from '~Components/Form/Input.css';
 
   flex-grow: 1;
-  min-height: 200px;
+  min-height: 160px;
+  height: auto;
   resize: vertical;
+  overflow-wrap: anywhere;
 }
 
 .readOnly {
-  background-color: #eee;
+  background-color: var(--inputReadOnlyBackgroundColor);
 }
 
 .hasError {
@@ -16,4 +18,11 @@
 
 .hasWarning {
   composes: hasWarning from '~Components/Form/Input.css';
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .input {
+    min-height: 140px;
+    font-size: 16px;
+  }
 }

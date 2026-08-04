@@ -1,6 +1,9 @@
 .button {
   composes: link from '~./Link.css';
 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
   border: 1px solid;
   border-radius: 4px;
@@ -15,6 +18,10 @@
 
   &:hover {
     text-decoration: none;
+  }
+
+  &:active {
+    transform: translateY(1px);
   }
 }
 
@@ -103,23 +110,26 @@
  */
 
 .small {
-  padding: 1px 5px;
+  padding: 4px 8px;
+  min-height: 30px;
   font-size: $smallFontSize;
 }
 
 .medium {
-  padding: 6px 16px;
+  padding: 7px 16px;
+  min-height: 40px;
   font-size: $defaultFontSize;
 }
 
 .large {
   padding: 10px 20px;
+  min-height: 44px;
   font-size: $largeFontSize;
 }
 
 /*
- * Sizes
-*/
+ * Group positions
+ */
 
 .left {
   margin-left: -1px;
@@ -136,4 +146,18 @@
   margin-left: -1px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+}
+
+@media (pointer: coarse) {
+  .small,
+  .medium,
+  .large {
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button:active {
+    transform: none;
+  }
 }

@@ -7,24 +7,36 @@
 *::after {
   box-sizing: border-box;
 }
-
-*:focus {
-  outline: none;
-}
 /* stylelint-enable */
+
+html {
+  background-color: var(--pageBackground);
+  color-scheme: light dark;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc($headerHeight + 12px);
+}
 
 html,
 body {
+  min-width: 0;
   color: var(--textColor);
   font-family: 'Roboto', 'open sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 }
 
 body {
+  background-color: var(--pageBackground);
   font-size: 14px;
   line-height: 1.528571429; /* 20/14 */
+  overflow-wrap: break-word;
 }
 
-/* Override normalize */
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
 
 button,
 input,
@@ -37,18 +49,68 @@ textarea {
   line-height: 1.528571429; /* 20/14 */
 }
 
-/* Better defaults for unordererd lists */
+button,
+input,
+select,
+textarea {
+  accent-color: var(--primaryColor);
+}
 
+:focus-visible {
+  outline: 2px solid var(--inputFocusBorderColor);
+  outline-offset: 2px;
+}
+
+::selection {
+  background-color: var(--inputSelectedBackgroundColor);
+  color: var(--textColor);
+}
+
+/* Better defaults for unordered lists */
 ul {
   margin: 0;
   padding-left: 20px;
 }
 
-@media only screen and (min-device-width: 375px) and (max-device-width: 812px) {
+pre {
+  overflow-x: auto;
+  max-width: 100%;
+  overscroll-behavior-inline: contain;
+}
+
+code {
+  overflow-wrap: anywhere;
+}
+
+pre code {
+  overflow-wrap: normal;
+  white-space: pre;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  body {
+    font-size: 15px;
+  }
+
   input,
   optgroup,
   select,
   textarea {
     font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
   }
 }

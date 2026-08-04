@@ -1,21 +1,34 @@
 .button {
   composes: link from '~Components/Link/Link.css';
 
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin: 0 2px;
-  width: 22px;
+  min-width: 32px;
+  min-height: 32px;
   border-radius: 4px;
   background-color: transparent;
   text-align: center;
   font-size: inherit;
 
   &:hover {
-    border: none;
-    background-color: inherit;
+    background-color: var(--inputHoverBackgroundColor);
     color: var(--iconButtonHoverColor);
+  }
+
+  &:active {
+    background-color: var(--inputSelectedBackgroundColor);
   }
 
   &.isDisabled {
     color: var(--iconButtonDisabledColor);
+  }
+}
+
+@media (pointer: coarse) {
+  .button {
+    min-width: 44px;
+    min-height: 44px;
   }
 }

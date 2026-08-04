@@ -117,3 +117,25 @@ $hoverScale: 1.05;
     padding: 5px;
   }
 }
+
+@media (hover: none), (pointer: coarse) {
+  .controls {
+    bottom: 6px;
+    left: 6px;
+    opacity: 0.92;
+  }
+
+  .action {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content,
+  .content:hover,
+  .controls,
+  .content:hover .controls {
+    transition-duration: 0s;
+  }
+}

@@ -32,7 +32,7 @@
   right: 0;
   padding-right: 17px;
   width: 30%;
-  height: 35px;
+  height: 40px;
   text-align: right;
 }
 
@@ -91,17 +91,38 @@
 .mobileCloseButtonContainer {
   display: flex;
   justify-content: flex-end;
-  height: 40px;
+  height: 44px;
   border-bottom: 1px solid var(--borderColor);
 }
 
 .mobileCloseButton {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   text-align: center;
-  line-height: 40px;
+  line-height: 44px;
 
   &:hover {
     color: var(--modalCloseButtonHoverColor);
+  }
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .enhancedSelect,
+  .dropdownArrowContainerEditable {
+    min-height: 44px;
+    height: 44px;
+  }
+
+  .mobileCloseButtonContainer {
+    height: 48px;
+  }
+
+  .mobileCloseButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    line-height: normal;
   }
 }

@@ -43,3 +43,21 @@
   flex: 0 1 400px;
   min-width: 300px;
 }
+
+@media only screen and (max-width: $breakpointSmall) {
+  .folder {
+    flex-basis: 180px;
+  }
+
+  .monitor {
+    min-width: 160px;
+  }
+
+  .qualityProfile {
+    min-width: 160px;
+  }
+
+  .series {
+    min-width: 220px;
+  }
+}

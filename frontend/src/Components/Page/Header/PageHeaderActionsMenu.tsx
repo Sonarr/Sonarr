@@ -35,7 +35,7 @@ function PageHeaderActionsMenu(props: PageHeaderActionsMenuProps) {
   return (
     <div>
       <Menu alignMenu={align.RIGHT}>
-        <MenuButton className={styles.menuButton} aria-label="Menu Button">
+        <MenuButton className={styles.menuButton} aria-label={translate('Menu')}>
           <Icon name={icons.INTERACTIVE} title={translate('Menu')} />
         </MenuButton>
 
@@ -43,6 +43,15 @@ function PageHeaderActionsMenu(props: PageHeaderActionsMenuProps) {
           <MenuItem onPress={onKeyboardShortcutsPress}>
             <Icon className={styles.itemIcon} name={icons.KEYBOARD} />
             {translate('KeyboardShortcuts')}
+          </MenuItem>
+
+          <MenuItem to="https://sonarr.tv/donate.html">
+            <Icon
+              className={styles.itemIcon}
+              name={icons.HEART}
+              kind={kinds.DANGER}
+            />
+            {translate('Donate')}
           </MenuItem>
 
           <MenuItemSeparator />

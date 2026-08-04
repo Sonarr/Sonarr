@@ -187,3 +187,93 @@
     display: none;
   }
 }
+
+@media only screen and (max-width: $breakpointSmall) {
+  .header {
+    min-height: 360px;
+    height: auto;
+  }
+
+  .headerContent {
+    padding: 18px max(14px, env(safe-area-inset-right)) 18px
+      max(14px, env(safe-area-inset-left));
+    min-height: 360px;
+    height: auto;
+  }
+
+  .info,
+  .titleRow,
+  .titleContainer {
+    min-width: 0;
+  }
+
+  .titleRow {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .titleContainer {
+    flex-wrap: wrap;
+    padding-right: 76px;
+  }
+
+  .title {
+    width: 100%;
+    overflow-wrap: anywhere;
+    font-size: clamp(28px, 9vw, 38px);
+    line-height: 1.08;
+  }
+
+  .seriesNavigationButtons {
+    top: 0;
+  }
+
+  .seriesNavigationButton,
+  .monitorToggleButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    font-size: 17px;
+  }
+
+  .runtime,
+  .genres {
+    margin-right: 0;
+  }
+
+  .path,
+  .sizeOnDisk,
+  .qualityProfileName,
+  .originalLanguageName,
+  .statusName,
+  .network,
+  .links,
+  .tags {
+    margin-left: 4px;
+    font-size: 15px;
+    overflow-wrap: anywhere;
+  }
+
+  .overview {
+    flex-basis: auto;
+    max-height: none;
+    font-size: 15px;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media only screen and (max-height: 500px) and (orientation: landscape) {
+  .header,
+  .headerContent {
+    min-height: 300px;
+  }
+}

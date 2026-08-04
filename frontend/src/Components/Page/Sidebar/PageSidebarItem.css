@@ -1,7 +1,8 @@
 .item {
+  min-width: 0;
   border-left: 3px solid transparent;
   color: var(--sidebarColor);
-  transition: border-left 0.3s ease-in-out;
+  transition: border-left 0.2s ease-in-out;
 }
 
 .isActiveItem {
@@ -9,12 +10,15 @@
 }
 
 .link {
-  display: block;
-  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  padding: 11px 20px;
+  min-height: 44px;
   color: var(--sidebarColor);
+  overflow-wrap: anywhere;
 
   &:hover,
-  &:focus {
+  &:focus-visible {
     color: var(--themeBlue);
     text-decoration: none;
   }
@@ -29,6 +33,7 @@
 
 .isActiveLink {
   color: var(--themeAlternateBlue);
+  font-weight: 500;
 }
 
 .isActiveParentLink {
@@ -36,12 +41,36 @@
 }
 
 .iconContainer {
-  display: inline-block;
-  margin-right: 7px;
-  width: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 22px;
+  margin-right: 8px;
+  width: 22px;
   text-align: center;
 }
 
 .status {
-  float: right;
+  margin-left: auto;
+  padding-left: 8px;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .link {
+    padding-right: 18px;
+    padding-left: 18px;
+    min-height: 48px;
+  }
+
+  .childLink {
+    padding-right: 18px;
+    padding-left: 48px;
+    min-height: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    transition-duration: 0s;
+  }
 }

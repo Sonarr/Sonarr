@@ -1,6 +1,7 @@
 .group {
   display: flex;
   margin-bottom: 20px;
+  min-width: 0;
 }
 
 /* Sizes */
@@ -24,5 +25,11 @@
 @media only screen and (max-width: $breakpointLarge) {
   .group {
     display: block;
+  }
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .group {
+    margin-bottom: 18px;
   }
 }

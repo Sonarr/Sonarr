@@ -2,12 +2,14 @@
   display: flex;
   flex: 1 1 auto;
   overflow: hidden;
+  min-width: 0;
 }
 
 .section {
   display: flex;
   align-items: stretch;
   flex-grow: 1;
+  min-width: 0;
 }
 
 .left {

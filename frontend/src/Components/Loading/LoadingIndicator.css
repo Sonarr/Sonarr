@@ -47,3 +47,10 @@
     opacity: 0;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .ripple {
+    opacity: 0.72;
+    animation: none;
+  }
+}

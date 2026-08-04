@@ -2,7 +2,7 @@
   composes: input from '~Components/Form/Input.css';
 
   position: relative;
-  min-height: 35px;
+  min-height: 40px;
   height: auto;
 
   &.isFocused {
@@ -18,4 +18,10 @@
 
 .hasWarning {
   composes: hasWarning from '~Components/Form/Input.css';
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .inputContainer {
+    min-height: 44px;
+  }
 }

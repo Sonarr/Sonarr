@@ -42,3 +42,21 @@
 .detailsIcon {
   margin-left: 8px;
 }
+
+@media only screen and (max-width: $breakpointSmall) {
+  .folder {
+    flex-basis: 180px;
+  }
+
+  .monitor {
+    min-width: 160px;
+  }
+
+  .qualityProfile {
+    min-width: 160px;
+  }
+
+  .series {
+    min-width: 220px;
+  }
+}

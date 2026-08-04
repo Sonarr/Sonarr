@@ -1,9 +1,10 @@
 .sidebarContainer {
   flex: 0 0 $sidebarWidth;
   overflow: hidden;
+  min-width: 0;
   width: $sidebarWidth;
   background-color: var(--sidebarBackgroundColor);
-  transition: transform 300ms ease-in-out;
+  transition: transform 200ms ease-out;
   transform: translateX(0);
 }
 
@@ -45,23 +46,140 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
   background-color: var(--sidebarBackgroundColor);
-  color: var(--white);
+  color: var(--sidebarColor);
+}
+
+.focusLock {
+  display: contents;
+}
+
+.backdrop {
+  display: none;
+}
+
+.mobileHeader {
+  display: none;
+}
+
+.closeButton {
+  composes: button from '~Components/Link/IconButton.css';
+}
+
+.sidebarOpen {
+  overflow: hidden !important;
+  overscroll-behavior: none;
 }
 
 @media only screen and (max-width: $breakpointSmall) {
+  .focusLock {
+    position: fixed;
+    inset: 0;
+    z-index: 901;
+    display: block;
+    pointer-events: none;
+  }
+
   .sidebarContainer {
     position: fixed;
     top: 0;
-    z-index: 2;
-    height: 100vh;
+    bottom: 0;
+    left: 0;
+    z-index: 902;
+    display: flex;
+    flex-direction: column;
+    width: var(--mobileSidebarWidth, min(86vw, 320px));
+    height: var(--viewportHeight);
+    border-right: 1px solid var(--borderColor);
+    box-shadow: 8px 0 24px rgba(0, 0, 0, 0.35);
+    pointer-events: auto;
+    will-change: transform;
+  }
+
+  .mobileSidebarContainer {
+    flex-basis: auto;
+  }
+
+  .sidebarContainerOpen {
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .sidebarContainerClosed {
+    visibility: hidden;
+    transition-delay: 0s, 200ms;
+    transition-property: transform, visibility;
+    pointer-events: none;
+  }
+
+  .mobileHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 0 0 auto;
+    padding: env(safe-area-inset-top) 8px 0 18px;
+    min-height: calc($headerHeight + env(safe-area-inset-top));
+    border-bottom: 1px solid var(--borderColor);
+    background-color: var(--pageHeaderBackgroundColor);
+  }
+
+  .mobileTitle {
+    overflow: hidden;
+    color: var(--sidebarColor);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  .closeButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    width: 44px;
+    height: 44px;
+    color: var(--sidebarColor);
   }
 
   .sidebar {
-    position: fixed;
-    z-index: 2;
+    position: relative;
+    flex: 1 1 auto;
+    overflow-x: hidden;
     overflow-y: auto;
+    padding-bottom: env(safe-area-inset-bottom);
+    overscroll-behavior: contain;
+  }
+
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    display: block;
+    visibility: hidden;
+    padding: 0;
     width: 100%;
-    height: 100%;
+    height: var(--viewportHeight);
+    border: 0;
+    background-color: var(--modalBackdropBackgroundColor);
+    opacity: 0;
+    transition: opacity 200ms ease-out, visibility 0s linear 200ms;
+    pointer-events: none;
+  }
+
+  .backdropOpen {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+    pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebarContainer,
+  .backdrop {
+    transition-duration: 0s;
   }
 }

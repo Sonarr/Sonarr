@@ -1,6 +1,9 @@
 .wrapper {
   display: flex;
   align-items: center;
+  flex: 1 1 0;
+  gap: 6px;
+  min-width: 0;
 }
 
 .loading {
@@ -16,7 +19,10 @@
 }
 
 .input {
-  margin-left: 8px;
+  margin-left: 2px;
+  padding-right: 4px;
+  padding-left: 4px;
+  min-width: 0;
   width: 200px;
   border: none;
   border-bottom: solid 1px var(--white);
@@ -24,26 +30,34 @@
   background-color: transparent;
   box-shadow: none;
   color: var(--white);
-  transition: border 0.3s ease-out;
+  transition: border 0.2s ease-out;
 
   &::placeholder {
     color: var(--white);
-    transition: color 0.3s ease-out;
+    opacity: 0.88;
+    transition: color 0.2s ease-out;
   }
 
   &:focus {
-    outline: 0;
-    border-bottom-color: transparent;
+    outline: none;
+    border-bottom-color: var(--themeBlue);
 
     &::placeholder {
       color: transparent;
     }
   }
+
+  &:focus-visible {
+    outline: 2px solid var(--inputFocusBorderColor);
+    outline-offset: 3px;
+  }
 }
 
 .container {
   position: relative;
-  flex-grow: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 280px;
 }
 
 .seriesContainer {
@@ -56,17 +70,18 @@
   .seriesContainer {
     position: absolute;
     top: 42px;
-    z-index: 1;
+    z-index: 4;
     overflow-y: auto;
     min-width: 100%;
-    max-height: 230px;
-    border: 1px solid var(--themeDarkColor);
+    max-height: min(360px, calc(var(--viewportHeight) - $headerHeight - 20px));
+    border: 1px solid var(--borderColor);
     border-radius: 4px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     background-color: var(--themeDarkColor);
-    box-shadow: inset 0 1px 1px var(--inputBoxShadowColor);
+    box-shadow: 0 8px 20px var(--cardShadowColor);
     color: var(--menuItemColor);
+    overscroll-behavior: contain;
   }
 }
 
@@ -77,8 +92,11 @@
 }
 
 .listItem {
-  padding: 0 16px;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  min-height: 44px;
+  overflow-wrap: anywhere;
 }
 
 .highlighted {
@@ -86,7 +104,7 @@
 }
 
 .sectionTitle {
-  padding: 5px 8px;
+  padding: 8px 12px;
   color: var(--disabledColor);
 }
 
@@ -96,13 +114,50 @@
 }
 
 @media only screen and (max-width: $breakpointSmall) {
+  .wrapper {
+    flex-basis: 0;
+    padding: 0 4px;
+  }
+
   .input {
-    min-width: 150px;
-    max-width: 200px;
+    margin-left: 0;
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
   }
 
   .container {
     min-width: 0;
-    max-width: 200px;
+    max-width: none;
+  }
+
+  .containerOpen {
+    .seriesContainer {
+      position: fixed;
+      top: calc($headerHeight + env(safe-area-inset-top));
+      right: 10px;
+      left: 10px;
+      min-width: 0;
+      max-height: min(var(--viewportHeight60), 420px);
+      width: auto;
+      border-radius: 0 0 6px 6px;
+    }
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  .wrapper {
+    gap: 4px;
+    padding-right: 2px;
+    padding-left: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .input,
+  .input::placeholder {
+    transition-duration: 0s;
   }
 }

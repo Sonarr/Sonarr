@@ -136,3 +136,33 @@
     margin: 0 5px;
   }
 }
+
+@media only screen and (max-width: $breakpointSmall) {
+  .event {
+    padding: 8px 4px;
+  }
+
+  .overlay,
+  .eventWrapper {
+    overflow-x: visible;
+    min-width: 0;
+  }
+
+  .date {
+    margin-left: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .time,
+  .seriesTitle,
+  .episodeTitle {
+    margin-right: 0;
+    max-width: 100%;
+  }
+
+  .seriesTitle,
+  .episodeTitle {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}

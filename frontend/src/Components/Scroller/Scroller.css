@@ -3,11 +3,17 @@
   @add-mixin scrollbarTrack;
   @add-mixin scrollbarThumb;
   -webkit-overflow-scrolling: touch;
+  min-width: 0;
+  overscroll-behavior: contain;
+}
+
+.scroller:focus-visible {
+  outline: 2px solid var(--inputFocusBorderColor);
+  outline-offset: -2px;
 }
 
 .none {
-  overflow-x: hidden;
-  overflow-y: hidden;
+  overflow: visible;
 }
 
 .vertical {

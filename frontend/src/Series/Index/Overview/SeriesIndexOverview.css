@@ -109,3 +109,42 @@ $hoverScale: 1.05;
     display: none;
   }
 }
+
+@media only screen and (max-width: $breakpointSmall) {
+  .content,
+  .info,
+  .titleRow,
+  .details {
+    min-width: 0;
+  }
+
+  .titleRow {
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.3;
+  }
+
+  .title {
+    white-space: normal;
+    font-size: 23px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  .actions {
+    display: flex;
+    flex: 0 0 auto;
+  }
+
+  .details {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tags {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 4px;
+    overflow: visible;
+  }
+}

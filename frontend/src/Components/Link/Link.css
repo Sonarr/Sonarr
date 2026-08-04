@@ -1,7 +1,6 @@
 .link {
   margin: 0;
   padding: 0;
-  outline: none;
   border: 0;
   background: none;
   color: inherit;
@@ -11,6 +10,11 @@
 
   &:global(.isDisabled) {
     cursor: default;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--inputFocusBorderColor);
+    outline-offset: 2px;
   }
 }
 
