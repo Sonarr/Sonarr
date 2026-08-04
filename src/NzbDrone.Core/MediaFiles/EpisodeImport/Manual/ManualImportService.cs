@@ -542,9 +542,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 localEpisode.Episodes = episodes;
                 localEpisode.ReleaseGroup = file.ReleaseGroup;
                 localEpisode.Quality = file.Quality;
-                localEpisode.Languages = file.Languages;
                 localEpisode.IndexerFlags = (IndexerFlags)file.IndexerFlags;
                 localEpisode.ReleaseType = file.ReleaseType;
+
+                if (file.Languages is { Count: > 0 } && file.Languages.All(l => l is not null && l.IsValid()))
+                {
+                    localEpisode.Languages = file.Languages;
+                }
 
                 _localEpisodeFormatCalculator.UpdateEpisodeCustomFormats(localEpisode);
 
