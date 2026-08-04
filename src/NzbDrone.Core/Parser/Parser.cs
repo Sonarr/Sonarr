@@ -221,20 +221,32 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)(?<title>.+?)[-_. ]+?(?<absoluteepisode>\d{4}(\.\d{1,2})?(?!\d+))",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Mini-Series, treated as season 1, multi episodes are labelled as E1-E2
+                new Regex(@"^(?<title>.+?)(?:[-._ ][e])(?<episode>\d{2,3}(?!\d+))(?:(?:\-?[e])(?<episode>\d{2,3}(?!\d+)))+",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                // 5 digit episode number with a title
+                new Regex(@"^(?:(?<title>.+?)(?:_|-|\s|\.)+)(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+)))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>(?<!\d+)\d{5}(?!\d+)))",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                // 5 digit multi-episode with a title
+                new Regex(@"^(?:(?<title>.+?)(?:_|-|\s|\.)+)(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+)))(?:(?:[-_. ]{1,3}ep){1,2}(?<episode>(?<!\d+)\d{5}(?!\d+)))+",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                // Episodes with airdate and part (2018.04.28.Part.2)
+                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})[-_. ]+(?<airmonth>[0-1][0-9])[-_. ]+(?<airday>[0-3][0-9])(?![-_. ]+[0-3][0-9])[-_. ]+Part[-_. ]?(?<part>[1-9])",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                // Episodes with airdate (2018.04.28)
+                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})[-_. ]+(?<airmonth>[0-1][0-9])[-_. ]+(?<airday>[0-3][0-9])(?![-_. ]+[0-3][0-9])",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 // Anime - Title 4-digit Absolute Episode Number [SubGroup]
                 new Regex(@"^(?<title>.+?)[-_. ]+(?<absoluteepisode>(?<!\d+)\d{4}(?!\d+))[-_. ]\[(?<subgroup>.+?)\]",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Mini-Series with year in title, treated as season 1, episodes are labelled as Part01, Part 01, Part.1
                 new Regex(@"^(?<title>.+?\d{4})(?:\W+(?:(?:Part\W?|e)(?<episode>\d{1,2}(?!\d+)))+)",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
-                // Mini-Series, treated as season 1, multi episodes are labelled as E1-E2
-                new Regex(@"^(?<title>.+?)(?:[-._ ][e])(?<episode>\d{2,3}(?!\d+))(?:(?:\-?[e])(?<episode>\d{2,3}(?!\d+)))+",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
-                // Episodes with airdate and part (2018.04.28.Part.2)
-                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})[-_. ]+(?<airmonth>[0-1][0-9])[-_. ]+(?<airday>[0-3][0-9])(?![-_. ]+[0-3][0-9])[-_. ]+Part[-_. ]?(?<part>[1-9])",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // 3-digit season number
@@ -283,14 +295,6 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"(?:.*(?:\""|^))(?<title>.*?)(?:\W?|_)S(?<season>(?<!\d+)\d{3}(?!\d+))(?:\W|_)?E(?<episode>(?<!\d+)\d{1,2}(?!\d+))",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                // 5 digit episode number with a title
-                new Regex(@"^(?:(?<title>.+?)(?:_|-|\s|\.)+)(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+)))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>(?<!\d+)\d{5}(?!\d+)))",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
-                // 5 digit multi-episode with a title
-                new Regex(@"^(?:(?<title>.+?)(?:_|-|\s|\.)+)(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+)))(?:(?:[-_. ]{1,3}ep){1,2}(?<episode>(?<!\d+)\d{5}(?!\d+)))+",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
                 // Separated season and episode numbers S01 - E01
                 new Regex(@"^(?<title>.+?)(?:_|-|\s|\.)+S(?<season>\d{2}(?!\d+))(\W-\W)E(?<episode>(?<!\d+)\d{2}(?!\d+))(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -331,10 +335,6 @@ namespace NzbDrone.Core.Parser
 
                 // Spanish tracker releases
                 new Regex(@"^(?<title>.+?)(?:(?:[-_. ]+?Temporada.+?|\[.+?\])\[Cap)(?:[-_. ]+(?<season>(?<!\d+)\d{1,2})(?<episode>(?<!e|x)(?:[1-9][0-9]|[0][1-9])))+(?:\])",
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
-                // Episodes with airdate (2018.04.28)
-                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})[-_. ]+(?<airmonth>[0-1][0-9])[-_. ]+(?<airday>[0-3][0-9])(?![-_. ]+[0-3][0-9])",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Supports 103/113 naming
