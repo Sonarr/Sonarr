@@ -825,7 +825,7 @@ namespace NzbDrone.Core.Parser
             }
 
             var seriesTitle = ReleaseMetadataRegex.Replace(releaseTitle, " ");
-            seriesTiltle = DuplicateSpacesRegex.Replace(seriesTiltle, " ");
+            seriesTitle = DuplicateSpacesRegex.Replace(seriesTitle, " ");
             seriesTitle = seriesTitle.Trim();
 
             // Anything left in brackets means the title was not recovered. Either it was itself
