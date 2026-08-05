@@ -124,6 +124,22 @@ function DownloadClientOptions({
                 />
               </FormGroup>
             ) : null}
+
+            <FormGroup
+              advancedSettings={showAdvancedSettings}
+              isAdvanced={true}
+              size={sizes.MEDIUM}
+            >
+              <FormLabel>{translate('StalledTorrentTimeout')}</FormLabel>
+
+              <FormInputGroup
+                type={inputTypes.NUMBER}
+                name="stalledTorrentTimeout"
+                helpText={translate('StalledTorrentTimeoutHelpText')}
+                onChange={handleInputChange}
+                {...settings.stalledTorrentTimeout}
+              />
+            </FormGroup>
           </Form>
         </FieldSet>
       ) : null}

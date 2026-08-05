@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Configuration
         bool EnableCompletedDownloadHandling { get; set; }
         bool AutoRedownloadFailed { get; set; }
         bool AutoRedownloadFailedFromInteractiveSearch { get; set; }
+        int StalledTorrentTimeout { get; set; }
 
         // Media Management
         bool AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
