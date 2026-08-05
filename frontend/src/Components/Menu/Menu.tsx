@@ -123,18 +123,16 @@ function Menu({
       const focusedIndex = menuItems.indexOf(
         document.activeElement as HTMLElement
       );
-      let nextIndex: number;
+      let nextIndex = focusedIndex;
 
       if (event.key === 'Home') {
         nextIndex = 0;
       } else if (event.key === 'End') {
         nextIndex = menuItems.length - 1;
       } else if (event.key === 'ArrowUp') {
-        nextIndex =
-          focusedIndex <= 0 ? menuItems.length - 1 : focusedIndex - 1;
+        nextIndex = focusedIndex <= 0 ? menuItems.length - 1 : focusedIndex - 1;
       } else {
-        nextIndex =
-          focusedIndex >= menuItems.length - 1 ? 0 : focusedIndex + 1;
+        nextIndex = focusedIndex >= menuItems.length - 1 ? 0 : focusedIndex + 1;
       }
 
       menuItems[nextIndex].focus();
@@ -146,10 +144,6 @@ function Menu({
   const button = React.cloneElement(childrenArray[0] as ReactElement, {
     onPress: handleMenuButtonPress,
   });
-
-  const handleWindowResize = useCallback(() => {
-    updateMaxHeight();
-  }, [updateMaxHeight]);
 
   const handleWindowScroll = useCallback(() => {
     if (isMenuOpen) {
@@ -196,16 +190,16 @@ function Menu({
       return;
     }
 
-    window.addEventListener('resize', handleWindowResize);
+    window.addEventListener('resize', updateMaxHeight);
     window.addEventListener('scroll', handleWindowScroll, { capture: true });
 
     return () => {
-      window.removeEventListener('resize', handleWindowResize);
+      window.removeEventListener('resize', updateMaxHeight);
       window.removeEventListener('scroll', handleWindowScroll, {
         capture: true,
       });
     };
-  }, [isMenuOpen, handleWindowResize, handleWindowScroll]);
+  }, [isMenuOpen, updateMaxHeight, handleWindowScroll]);
 
   const { refs, context, floatingStyles } = useFloating({
     middleware: [

@@ -263,9 +263,7 @@ function PageSidebar() {
       !isSmallScreen || isSidebarVisible ? 0 : initialSidebarWidth * -1,
   });
 
-  const sidebarWidth = isSmallScreen
-    ? getMobileSidebarWidth()
-    : SIDEBAR_WIDTH;
+  const sidebarWidth = isSmallScreen ? getMobileSidebarWidth() : SIDEBAR_WIDTH;
 
   const activeParent = useMemo(() => {
     return (
@@ -304,9 +302,7 @@ function PageSidebar() {
 
   const setSidebarPosition = useCallback(
     (isVisible: boolean, transition = 'transform 200ms ease-out') => {
-      const width = isSmallScreen
-        ? getMobileSidebarWidth()
-        : SIDEBAR_WIDTH;
+      const width = isSmallScreen ? getMobileSidebarWidth() : SIDEBAR_WIDTH;
 
       setSidebarTransform({
         transition,
@@ -379,9 +375,7 @@ function PageSidebar() {
 
       const currentTouchX = event.touches[0].pageX;
       const currentTouchY = event.touches[0].pageY;
-      const horizontalDistance = Math.abs(
-        touchStartX.current - currentTouchX
-      );
+      const horizontalDistance = Math.abs(touchStartX.current - currentTouchX);
       const verticalDistance = Math.abs(touchStartY.current - currentTouchY);
 
       if (verticalDistance > horizontalDistance || horizontalDistance < 12) {
@@ -390,10 +384,7 @@ function PageSidebar() {
 
       const width = getMobileSidebarWidth();
       const transform = isSidebarVisible
-        ? Math.min(
-            Math.max(currentTouchX - touchStartX.current, width * -1),
-            0
-          )
+        ? Math.min(Math.max(currentTouchX - touchStartX.current, width * -1), 0)
         : Math.min(currentTouchX - width, 0);
 
       setSidebarTransform({
@@ -545,14 +536,12 @@ function PageSidebar() {
 
   const sidebar = (
     <aside
-      id="primary-navigation"
       ref={sidebarRef}
+      id="primary-navigation"
       className={classNames(
         styles.sidebarContainer,
         isSmallScreen && styles.mobileSidebarContainer,
-        isSmallScreen &&
-          !isSidebarFullyClosed &&
-          styles.sidebarContainerOpen,
+        isSmallScreen && !isSidebarFullyClosed && styles.sidebarContainerOpen,
         isSidebarFullyClosed && styles.sidebarContainerClosed
       )}
       style={containerStyle}
@@ -576,10 +565,7 @@ function PageSidebar() {
         </div>
       ) : null}
 
-      <ScrollerComponent
-        className={styles.sidebar}
-        scrollDirection="vertical"
-      >
+      <ScrollerComponent className={styles.sidebar} scrollDirection="vertical">
         <nav aria-label={translate('MainNavigation')}>
           {LINKS.map((link) => {
             const childWithStatusComponent = link.children?.find((child) => {

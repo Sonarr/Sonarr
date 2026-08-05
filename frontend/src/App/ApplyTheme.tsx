@@ -3,8 +3,7 @@ import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import { applyTheme, isThemeName, themeStorageKey } from 'Styles/Themes';
 
 function ApplyTheme() {
-  const configuredTheme =
-    useUiSettingsValues().theme ?? window.Sonarr.theme;
+  const configuredTheme = useUiSettingsValues().theme ?? window.Sonarr.theme;
   const selectedTheme = isThemeName(configuredTheme) ? configuredTheme : 'auto';
 
   useEffect(() => {
@@ -35,6 +34,7 @@ function ApplyTheme() {
     } else {
       colorSchemeQuery.addListener(handleColorSchemeChange);
     }
+
     window.addEventListener('storage', handleStorageChange);
 
     return () => {

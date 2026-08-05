@@ -52,7 +52,7 @@ assertIncludes(
   'Theme registry must expose Auto, Light, Dark, and OLED'
 );
 assertIncludes(
-  'frontend/src/typings/Settings/UiSettings.ts',
+  'frontend/src/Settings/UI/useUiSettings.ts',
   "'oled'",
   'UI settings type must include OLED'
 );
@@ -82,22 +82,22 @@ assertIncludes(
   'Backend theme validation must include OLED'
 );
 assertIncludes(
-  'frontend/src/Components/Page/Header/PageHeader.js',
+  'frontend/src/Components/Page/Header/PageHeader.tsx',
   'aria-expanded={isSidebarVisible}',
   'Mobile navigation trigger must expose its expanded state'
 );
 assertIncludes(
-  'frontend/src/Components/Page/Sidebar/PageSidebar.js',
-  'returnFocus={true}',
+  'frontend/src/Components/Page/Sidebar/PageSidebar.tsx',
+  'focusTarget?.focus',
   'Mobile navigation must restore focus'
 );
 assertIncludes(
-  'frontend/src/Components/Modal/Modal.js',
+  'frontend/src/Components/Modal/Modal.tsx',
   'aria-modal="true"',
   'Modals must expose modal dialog semantics'
 );
 assertIncludes(
-  'frontend/src/Components/Table/Table.js',
+  'frontend/src/Components/Table/Table.tsx',
   "aria-label={horizontalScroll ? translate('Table') : undefined}",
   'Scrollable data tables must be keyboard discoverable'
 );
@@ -112,18 +112,18 @@ assertIncludes(
   'Login theme changes must update the root canvas color'
 );
 assertIncludes(
-  'frontend/src/Components/Menu/MenuContent.js',
+  'frontend/src/Components/Menu/MenuContent.tsx',
   "style={isOpen ? style : { ...style, display: 'none' }}",
   'Closed menus must not paint an empty popper shell'
 );
 assertIncludes(
-  'frontend/src/Components/Menu/Menu.js',
-  'event.keyCode === keyCodes.DOWN_ARROW',
+  'frontend/src/Components/Menu/Menu.tsx',
+  "event.key !== 'ArrowDown'",
   'Menus must support arrow-key navigation'
 );
 assertIncludes(
-  'frontend/src/Components/Menu/MenuItem.js',
-  'tabIndex: -1',
+  'frontend/src/Components/Menu/MenuItem.tsx',
+  'tabIndex = -1,',
   'Menu items must use a managed tab stop'
 );
 assertIncludes(

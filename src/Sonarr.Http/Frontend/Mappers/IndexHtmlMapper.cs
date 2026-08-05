@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using StackExchange.Profiling;
 
@@ -34,13 +33,6 @@ namespace Sonarr.Http.Frontend.Mappers
             return HtmlPath;
         }
 
-        protected override string GetHtmlText()
-        {
-            var html = base.GetHtmlText();
-
-            return html.Replace("__THEME__", UiTheme.Normalize(_configFileProvider.Theme));
-        }
-
         public override bool CanHandle(string resourceUrl)
         {
             resourceUrl = resourceUrl.ToLowerInvariant();
@@ -54,27 +46,16 @@ namespace Sonarr.Http.Frontend.Mappers
         protected override string GetHtmlText(HttpContext context)
         {
             var html = base.GetHtmlText(context);
-            var theme = _configFileProvider.Theme;
+            var theme = UiTheme.Normalize(_configFileProvider.Theme);
 
-            html = html.Replace("_THEME_", theme);
+            html = html.Replace("_THEME_", theme)
+                       .Replace("__THEME__", theme);
 
-            if (_configFileProvider.ProfilerEnabled)
-            {
-                var includes = MiniProfiler.Current?.RenderIncludes(context);
+            var profilerHtml = _configFileProvider.ProfilerEnabled
+                ? MiniProfiler.Current?.RenderIncludes(context)?.Value ?? ""
+                : "";
 
-                if (includes == null || includes.Value.IsNullOrWhiteSpace())
-                {
-                    html = html.Replace("__MINI_PROFILER__", "");
-                }
-                else
-                {
-                    html = html.Replace("__MINI_PROFILER__", includes.Value);
-                }
-            }
-            else
-            {
-                html = html.Replace("__MINI_PROFILER__", "");
-            }
+            html = html.Replace("__MINI_PROFILER__", profilerHtml);
 
             return html;
         }
