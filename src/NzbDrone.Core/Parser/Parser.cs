@@ -516,15 +516,10 @@ namespace NzbDrone.Core.Parser
         // Regex to detect whether the title was reversed.
         private static readonly Regex ReversedTitleRegex = new Regex(@"(?:^|[-._ ])(p027|p0801|\d{2,3}E-?\d{2}S)[-._ ]", RegexOptions.Compiled);
 
-        // Used to recover the series title from a release that carries no season, episode or
-        // date, where the title is all there is to go on.
-        private static readonly Regex ReleaseMetadataRegex = new Regex(@"[\[({][^\[\]{}()]*[\])}]", RegexOptions.Compiled);
+        private static readonly Regex AnimeReleaseMetadataRegex = new Regex(@"[\[({][^\[\]{}()]*[\])}]", RegexOptions.Compiled);
 
-        // Groups mark extras inside brackets, which is exactly what stripping metadata removes,
-        // so these have to be checked before the brackets are taken off. Same terms the anime
-        // regexes above treat as specials.
-        private static readonly Regex SpecialMarkerRegex = new Regex(@"\b(special|ova|ovd|ncop|nced)\b",
-                                                                    RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex AnimeSpecialMarkerRegex = new Regex(@"\b(special|ova|ovd|ncop|nced)\b",
+                                                                          RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly RegexReplace NormalizeRegex = new RegexReplace(@"((?:\b|_)(?<!^)([aà](?!$)|an|the|and|or|of)(?!$)(?:\b|_))|\W|_",
                                                                 string.Empty,
@@ -819,12 +814,12 @@ namespace NzbDrone.Core.Parser
         {
             var releaseTitle = FileExtensions.RemoveFileExtension(title);
 
-            if (SpecialMarkerRegex.IsMatch(releaseTitle))
+            if (AnimeSpecialMarkerRegex.IsMatch(releaseTitle))
             {
                 return null;
             }
 
-            var seriesTitle = ReleaseMetadataRegex.Replace(releaseTitle, " ");
+            var seriesTitle = AnimeReleaseMetadataRegex.Replace(releaseTitle, " ");
             seriesTitle = DuplicateSpacesRegex.Replace(seriesTitle, " ");
             seriesTitle = seriesTitle.Trim();
 
@@ -849,8 +844,6 @@ namespace NzbDrone.Core.Parser
                 EpisodeNumbers = [],
                 AbsoluteEpisodeNumbers = [],
                 FullSeason = true,
-
-                // The decision engine reads these while sorting, so they cannot be left unset.
                 Languages = LanguageParser.ParseLanguages(releaseTitle),
                 Quality = QualityParser.ParseQuality(title),
                 ReleaseGroup = ReleaseGroupParser.ParseReleaseGroup(releaseTitle)
