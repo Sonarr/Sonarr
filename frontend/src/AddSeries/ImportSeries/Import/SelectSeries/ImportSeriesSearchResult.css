@@ -1,25 +1,47 @@
 .container {
   display: flex;
-  padding: 10px 20px;
+  align-items: center;
+  padding: 8px 12px;
   width: 100%;
+  border-bottom: 1px solid var(--hairline);
+  transition: background-color 120ms ease-out;
+
+  &:last-child {
+    border-bottom: none;
+  }
 
   &:hover {
     background-color: var(--menuItemHoverBackgroundColor);
   }
+
+  &:hover .tvdbLinkIcon {
+    opacity: 1;
+  }
+}
+
+.highlighted {
+  background-color: var(--menuItemHoverBackgroundColor);
+
+  .tvdbLinkIcon {
+    opacity: 1;
+  }
 }
 
 .series {
-  flex: 1 0 0;
+  flex: 1;
   overflow: hidden;
+  min-width: 0;
 }
 
 .tvdbLink {
   composes: link from '~Components/Link/Link.css';
 
-  margin-left: auto;
-  color: var(--textColor);
+  flex-shrink: 0;
+  margin-left: 8px;
+  color: var(--inkMuted);
 }
 
 .tvdbLinkIcon {
-  margin-left: 10px;
+  opacity: 0;
+  transition: opacity 120ms ease-out;
 }

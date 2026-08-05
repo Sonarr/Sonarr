@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useCallback } from 'react';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
@@ -7,18 +8,22 @@ import ImportSeriesTitle from './ImportSeriesTitle';
 import styles from './ImportSeriesSearchResult.css';
 
 interface ImportSeriesSearchResultProps {
+  id: string;
   tvdbId: number;
   title: string;
   year: number;
   network?: string;
+  isHighlighted: boolean;
   onPress: (tvdbId: number) => void;
 }
 
 function ImportSeriesSearchResult({
+  id,
   tvdbId,
   title,
   year,
   network,
+  isHighlighted,
   onPress,
 }: ImportSeriesSearchResultProps) {
   const isExistingSeries = useExistingSeries(tvdbId);
@@ -28,7 +33,15 @@ function ImportSeriesSearchResult({
   }, [tvdbId, onPress]);
 
   return (
-    <div className={styles.container}>
+    <div
+      className={classNames(
+        styles.container,
+        isHighlighted ? styles.highlighted : undefined
+      )}
+      role="option"
+      id={id}
+      aria-selected={isHighlighted}
+    >
       <Link className={styles.series} onPress={handlePress}>
         <ImportSeriesTitle
           title={title}

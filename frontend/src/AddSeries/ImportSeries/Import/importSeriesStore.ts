@@ -2,8 +2,25 @@ import { useEffect } from 'react';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 import { useAddSeriesOptions } from 'AddSeries/addSeriesOptionsStore';
+import { createOptionsStore } from 'Helpers/Hooks/useOptionsStore';
 import { UnmappedFolder } from 'RootFolder/useRootFolders';
 import Series, { SeriesMonitor, SeriesType } from 'Series/Series';
+
+interface ImportSeriesViewOptions {
+  compactRows: boolean;
+}
+
+const viewOptions = createOptionsStore<ImportSeriesViewOptions>(
+  'import_series_view_options',
+  () => {
+    return {
+      compactRows: false,
+    };
+  }
+);
+
+export const useImportSeriesViewOption = viewOptions.useOption;
+export const setImportSeriesViewOption = viewOptions.setOption;
 
 export interface UnamppedFolderItem extends UnmappedFolder {
   id: string;
@@ -144,7 +161,7 @@ export const useIsCurrentLookupQueueItem = (id: string) => {
   return importSeriesStore((state) => state.lookupQueue[0] === id);
 };
 
-export const useIsCurrentedItemQueued = (id: string) => {
+export const useIsCurrentItemQueued = (id: string) => {
   return importSeriesStore((state) => state.lookupQueue.includes(id));
 };
 

@@ -2,16 +2,24 @@ import {
   autoUpdate,
   flip,
   FloatingPortal,
-  useClick,
+  shift,
+  size,
   useDismiss,
   useFloating,
   useInteractions,
 } from '@floating-ui/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  KeyboardEvent,
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useLookupSeries } from 'AddSeries/AddNewSeries/useAddSeries';
-import FormInputButton from 'Components/Form/FormInputButton';
 import TextInput from 'Components/Form/TextInput';
 import Icon from 'Components/Icon';
+import Button from 'Components/Link/Button';
 import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import useDebounce from 'Helpers/Hooks/useDebounce';
@@ -25,75 +33,151 @@ import {
   removeFromLookupQueue,
   updateImportSeriesItem,
   useImportSeriesItem,
-  useIsCurrentedItemQueued,
+  useIsCurrentItemQueued,
   useIsCurrentLookupQueueItem,
 } from '../importSeriesStore';
 import ImportSeriesSearchResult from './ImportSeriesSearchResult';
-import ImportSeriesTitle from './ImportSeriesTitle';
 import styles from './ImportSeriesSelectSeries.css';
+
+const DROPDOWN_MIN_WIDTH = 360;
+const DROPDOWN_VIEWPORT_MARGIN = 12;
+
+function handleResultsMouseDown(event: MouseEvent<HTMLDivElement>) {
+  event.preventDefault();
+}
 
 interface ImportSeriesSelectSeriesProps {
   id: string;
   onInputChange: (input: InputChanged) => void;
+  onEditingChange: (isEditing: boolean) => void;
 }
 
 function ImportSeriesSelectSeries({
   id,
   onInputChange,
+  onEditingChange,
 }: ImportSeriesSelectSeriesProps) {
   const importSeriesItem = useImportSeriesItem(id);
   const { selectedSeries, name } = importSeriesItem ?? {};
   const isExistingSeries = useExistingSeries(selectedSeries?.tvdbId);
 
   const [term, setTerm] = useState(name);
-  const [isOpen, setIsOpen] = useState(false);
+  const [editText, setEditText] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(0);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const query = useDebounce(term, term ? 300 : 0);
   const isCurrentLookupQueueItem = useIsCurrentLookupQueueItem(id);
-  const isQueued = useIsCurrentedItemQueued(id);
+  const isQueued = useIsCurrentItemQueued(id);
 
-  const { isFetching, isFetched, error, data, refetch } = useLookupSeries(
+  const { isFetching, isFetched, error, data } = useLookupSeries(
     query,
     isCurrentLookupQueueItem
   );
 
   const errorMessage = getErrorMessage(error);
   const isLookingUpSeries = isFetching || isQueued;
+  const isOpen = isEditing && data.length > 0;
 
-  const handlePress = useCallback(() => {
-    setIsOpen((prevIsOpen) => !prevIsOpen);
+  const { refs, context, floatingStyles } = useFloating({
+    middleware: [
+      flip({ crossAxis: false, mainAxis: true }),
+      shift({ padding: DROPDOWN_VIEWPORT_MARGIN }),
+      size({
+        apply({ rects, elements }) {
+          const maxWidth =
+            document.documentElement.clientWidth - DROPDOWN_VIEWPORT_MARGIN * 2;
+
+          elements.floating.style.width = `${Math.min(
+            Math.max(rects.reference.width, DROPDOWN_MIN_WIDTH),
+            maxWidth
+          )}px`;
+        },
+      }),
+    ],
+    open: isOpen,
+    placement: 'bottom-start',
+    whileElementsMounted: autoUpdate,
+    onOpenChange: (open) => {
+      if (!open) {
+        setIsEditing(false);
+      }
+    },
+  });
+
+  const dismiss = useDismiss(context);
+  const { getReferenceProps, getFloatingProps } = useInteractions([dismiss]);
+
+  const handleFocus = useCallback(() => {
+    setEditText(selectedSeries?.title ?? name ?? '');
+    setIsEditing(true);
+
+    if (!selectedSeries) {
+      setTerm(name ?? '');
+      addToLookupQueue(id);
+    }
+  }, [id, name, selectedSeries]);
+
+  const handleFindSeriesPress = useCallback(() => {
+    setIsEditing(true);
   }, []);
 
-  const handleSearchInputChange = useCallback(
+  const handleBlur = useCallback(() => {
+    setIsEditing(false);
+  }, []);
+
+  const handleInputChange = useCallback(
     ({ value }: InputChanged<string>) => {
+      setEditText(value);
       setTerm(value);
+      setHighlightedIndex(0);
       addToLookupQueue(id);
     },
     [id]
   );
 
-  const handleRefreshPress = useCallback(() => {
-    refetch();
-  }, [refetch]);
-
   const handleSeriesSelect = useCallback(
     (tvdbId: number) => {
-      setIsOpen(false);
+      const nextSeries = data.find((item) => item.tvdbId === tvdbId);
 
-      const selectedSeries = data.find((item) => item.tvdbId === tvdbId)!;
+      if (!nextSeries) {
+        return;
+      }
 
-      updateImportSeriesItem({
-        id,
-        selectedSeries,
-      });
+      updateImportSeriesItem({ id, selectedSeries: nextSeries });
+      setIsEditing(false);
+      inputRef.current?.blur();
 
-      if (selectedSeries.seriesType !== 'standard') {
-        onInputChange({
-          name: 'seriesType',
-          value: selectedSeries.seriesType,
-        });
+      if (nextSeries.seriesType !== 'standard') {
+        onInputChange({ name: 'seriesType', value: nextSeries.seriesType });
       }
     },
     [id, data, onInputChange]
+  );
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        setHighlightedIndex((index) => Math.min(index + 1, data.length - 1));
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        setHighlightedIndex((index) => Math.max(index - 1, 0));
+      } else if (event.key === 'Enter') {
+        const item = data[highlightedIndex];
+
+        if (item) {
+          event.preventDefault();
+          handleSeriesSelect(item.tvdbId);
+        }
+      } else if (event.key === 'Escape') {
+        setIsEditing(false);
+        inputRef.current?.blur();
+      }
+    },
+    [data, highlightedIndex, handleSeriesSelect]
   );
 
   useEffect(() => {
@@ -101,93 +185,121 @@ function ImportSeriesSelectSeries({
       updateImportSeriesItem({
         id,
         hasSearched: isFetched,
-        selectedSeries: data[0],
+        selectedSeries: isEditing ? selectedSeries : selectedSeries ?? data[0],
       });
 
       removeFromLookupQueue(id);
     }
-  }, [id, isFetched, data]);
+  }, [id, isFetched, data, selectedSeries, isEditing]);
+
+  useEffect(() => {
+    onEditingChange(isEditing);
+
+    return () => {
+      onEditingChange(false);
+    };
+  }, [isEditing, onEditingChange]);
 
   useEffect(() => {
     setTerm(name);
   }, [name]);
 
-  const { refs, context, floatingStyles } = useFloating({
-    middleware: [
-      flip({
-        crossAxis: false,
-        mainAxis: true,
-      }),
-    ],
-    open: isOpen,
-    placement: 'bottom',
-    whileElementsMounted: autoUpdate,
-    onOpenChange: setIsOpen,
-  });
+  useEffect(() => {
+    setHighlightedIndex(0);
+  }, [data]);
 
-  const click = useClick(context);
-  const dismiss = useDismiss(context);
+  useEffect(() => {
+    if (isEditing) {
+      inputRef.current?.focus();
+      inputRef.current?.select();
+    }
+  }, [isEditing]);
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    click,
-    dismiss,
-  ]);
+  const listboxId = `${id}_series_listbox`;
+  const activeOptionId =
+    isOpen && data.length > 0 ? `${listboxId}_${highlightedIndex}` : undefined;
+
+  const hasWarning =
+    !!error ||
+    (isFetched && !selectedSeries) ||
+    (!!selectedSeries && isExistingSeries);
+
+  let warningTitle = translate('Existing');
+
+  if (error) {
+    warningTitle = errorMessage;
+  } else if (isFetched && !selectedSeries) {
+    warningTitle = translate('NoMatchFound');
+  }
+
+  let seriesControl: React.ReactNode = null;
+
+  if (isEditing) {
+    seriesControl = (
+      <div
+        ref={refs.setReference}
+        className={styles.field}
+        role="combobox"
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+        aria-controls={isOpen ? listboxId : undefined}
+        aria-activedescendant={activeOptionId}
+        onKeyDown={handleKeyDown}
+        {...getReferenceProps()}
+      >
+        <Icon className={styles.searchIcon} name={icons.SEARCH} />
+
+        <TextInput
+          ref={inputRef}
+          className={styles.input}
+          name={`${id}_series`}
+          value={editText}
+          placeholder={translate('SearchForSeries')}
+          onChange={handleInputChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+        />
+
+        <div className={styles.status}>
+          {isLookingUpSeries ? (
+            <LoadingIndicator className={styles.loadingIndicator} size={20} />
+          ) : null}
+
+          {!isLookingUpSeries && hasWarning ? (
+            <Icon
+              name={icons.WARNING}
+              kind={kinds.WARNING}
+              title={warningTitle}
+            />
+          ) : null}
+        </div>
+      </div>
+    );
+  } else if (selectedSeries) {
+    seriesControl = (
+      <Link
+        className={styles.matchedSeries}
+        title={translate('ChangeMatch')}
+        onPress={handleFindSeriesPress}
+      >
+        <span className={styles.matchedTitle}>
+          {selectedSeries.title} ({selectedSeries.year})
+        </span>
+
+        <Icon className={styles.matchedIcon} name={icons.SEARCH} size={13} />
+      </Link>
+    );
+  } else {
+    seriesControl = (
+      <Button kind={kinds.DEFAULT} onPress={handleFindSeriesPress}>
+        {translate('FindSeries')}
+      </Button>
+    );
+  }
 
   return (
     <>
-      <div ref={refs.setReference} {...getReferenceProps()}>
-        <Link className={styles.button} component="div" onPress={handlePress}>
-          {isLookingUpSeries && isQueued && !isFetched ? (
-            <LoadingIndicator className={styles.loading} size={20} />
-          ) : null}
-
-          {isFetched && selectedSeries && isExistingSeries ? (
-            <Icon
-              className={styles.warningIcon}
-              name={icons.WARNING}
-              kind={kinds.WARNING}
-            />
-          ) : null}
-
-          {isFetched && selectedSeries ? (
-            <ImportSeriesTitle
-              title={selectedSeries.title}
-              year={selectedSeries.year}
-              network={selectedSeries.network}
-              isExistingSeries={isExistingSeries}
-            />
-          ) : null}
-
-          {isFetched && !selectedSeries ? (
-            <div>
-              <Icon
-                className={styles.warningIcon}
-                name={icons.WARNING}
-                kind={kinds.WARNING}
-              />
-
-              {translate('NoMatchFound')}
-            </div>
-          ) : null}
-
-          {!isFetching && !!error ? (
-            <div>
-              <Icon
-                className={styles.warningIcon}
-                title={errorMessage}
-                name={icons.WARNING}
-                kind={kinds.WARNING}
-              />
-
-              {translate('SearchFailedError')}
-            </div>
-          ) : null}
-
-          <div className={styles.dropdownArrowContainer}>
-            <Icon name={icons.CARET_DOWN} />
-          </div>
-        </Link>
-      </div>
+      {seriesControl}
 
       {isOpen ? (
         <FloatingPortal id="portal-root">
@@ -197,47 +309,27 @@ function ImportSeriesSelectSeries({
             style={floatingStyles}
             {...getFloatingProps()}
           >
-            {isOpen ? (
-              <div className={styles.content}>
-                <div className={styles.searchContainer}>
-                  <div className={styles.searchIconContainer}>
-                    <Icon name={icons.SEARCH} />
-                  </div>
-
-                  <TextInput
-                    className={styles.searchInput}
-                    name={`${name}_textInput`}
-                    value={term}
-                    onChange={handleSearchInputChange}
+            <div
+              className={styles.results}
+              role="listbox"
+              id={listboxId}
+              onMouseDown={handleResultsMouseDown}
+            >
+              {data.map((item, index) => {
+                return (
+                  <ImportSeriesSearchResult
+                    key={item.tvdbId}
+                    id={`${listboxId}_${index}`}
+                    tvdbId={item.tvdbId}
+                    title={item.title}
+                    year={item.year}
+                    network={item.network}
+                    isHighlighted={index === highlightedIndex}
+                    onPress={handleSeriesSelect}
                   />
-
-                  <FormInputButton
-                    kind={kinds.DEFAULT}
-                    spinnerIcon={icons.REFRESH}
-                    canSpin={true}
-                    isSpinning={isFetching}
-                    onPress={handleRefreshPress}
-                  >
-                    <Icon name={icons.REFRESH} />
-                  </FormInputButton>
-                </div>
-
-                <div className={styles.results}>
-                  {data.map((item) => {
-                    return (
-                      <ImportSeriesSearchResult
-                        key={item.tvdbId}
-                        tvdbId={item.tvdbId}
-                        title={item.title}
-                        year={item.year}
-                        network={item.network}
-                        onPress={handleSeriesSelect}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            ) : null}
+                );
+              })}
+            </div>
           </div>
         </FloatingPortal>
       ) : null}

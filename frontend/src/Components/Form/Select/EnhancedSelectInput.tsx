@@ -2,6 +2,7 @@ import {
   autoUpdate,
   flip,
   FloatingPortal,
+  shift,
   size,
   useClick,
   useDismiss,
@@ -33,6 +34,8 @@ import TextInput from '../TextInput';
 import HintedSelectInputOption from './HintedSelectInputOption';
 import HintedSelectInputSelectedValue from './HintedSelectInputSelectedValue';
 import styles from './EnhancedSelectInput.css';
+
+const DROPDOWN_VIEWPORT_MARGIN = 12;
 
 function isArrowKey(keyCode: number) {
   return keyCode === keyCodes.UP_ARROW || keyCode === keyCodes.DOWN_ARROW;
@@ -134,6 +137,7 @@ export interface EnhancedSelectInputProps<
   isEditable?: boolean;
   hasError?: boolean;
   hasWarning?: boolean;
+  modalTitle?: string;
   valueOptions?: object;
   selectedValueOptions?: object;
   selectedValueComponent?: string | ElementType;
@@ -156,6 +160,7 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
     isFetching,
     hasError,
     hasWarning,
+    modalTitle,
     valueOptions,
     selectedValueOptions,
     selectedValueComponent:
@@ -191,10 +196,15 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
         crossAxis: false,
         mainAxis: true,
       }),
+      shift({ padding: DROPDOWN_VIEWPORT_MARGIN }),
       size({
         apply({ availableHeight, elements, rects }) {
           Object.assign(elements.floating.style, {
             minWidth: `${rects.reference.width}px`,
+            maxWidth: `${
+              document.documentElement.clientWidth -
+              DROPDOWN_VIEWPORT_MARGIN * 2
+            }px`,
             maxHeight: `${Math.max(
               0,
               Math.min(window.innerHeight / 2, availableHeight)
@@ -518,6 +528,10 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
           >
             <Scroller className={styles.optionsModalScroller}>
               <div className={styles.mobileCloseButtonContainer}>
+                {modalTitle ? (
+                  <div className={styles.mobileTitle}>{modalTitle}</div>
+                ) : null}
+
                 <Link
                   className={styles.mobileCloseButton}
                   onPress={handleOptionsModalClose}

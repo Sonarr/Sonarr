@@ -25,7 +25,7 @@ function ImportSeriesTitle({
         <span className={styles.year}>({year})</span>
       ) : null}
 
-      {network ? <Label>{network}</Label> : null}
+      {network ? <Label dot={false}>{network}</Label> : null}
 
       {isExistingSeries ? (
         <Label kind={kinds.WARNING}>{translate('Existing')}</Label>

@@ -1,27 +1,88 @@
-.link {
-  composes: link from '~Components/Link/Link.css';
+.row {
+  position: relative;
+  display: block;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background: var(--paperCard);
+  transition:
+    border-color 200ms cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow 200ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:not(.unavailable):hover {
+    border-color: var(--accent);
+    box-shadow:
+      0 6px 20px -8px rgba(0, 0, 0, 0.18),
+      0 2px 4px -2px rgba(0, 0, 0, 0.08);
+  }
 }
 
-.pathContainer {
+.unavailable {
+  opacity: 0.85;
+}
+
+.underlay {
+  @add-mixin cover;
+
+  border-radius: inherit;
+}
+
+.content {
+  @add-mixin linkOverlay;
+
+  position: relative;
   display: flex;
   align-items: center;
+  padding: 11px 12px 11px 14px;
+  gap: 13px;
 }
 
-.label {
-  composes: label from '~Components/Label.css';
+.folderIcon {
+  flex-shrink: 0;
+  color: var(--inkMuted);
 
-  margin-left: 10px;
+  .unavailable & {
+    color: var(--statusMissing);
+  }
 }
 
-.freeSpace,
-.unmappedFolders {
-  composes: cell from '~Components/Table/Cells/TableRowCell.css';
-
-  width: 150px;
+.info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
 }
 
-.actions {
-  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+.path {
+  overflow: hidden;
+  color: var(--accentDeep);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  font-size: 13.5px;
+  font-family: ui-monospace, monospace;
 
-  width: 45px;
+  .unavailable & {
+    color: var(--statusMissing);
+  }
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  color: var(--inkMuted);
+  font-size: 12.5px;
+  gap: 8px;
+}
+
+.importable {
+  color: var(--inkSoft);
+}
+
+.metaSep {
+  color: var(--inkFaint);
+}
+
+.free {
+  font-variant-numeric: tabular-nums;
 }

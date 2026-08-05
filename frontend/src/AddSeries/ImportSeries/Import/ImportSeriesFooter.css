@@ -1,51 +1,170 @@
-.inputContainer {
-  margin-right: 20px;
-  min-width: 150px;
+.footerShell {
+  composes: contentFooter from '~Components/Page/PageContentFooter.css';
+
+  flex-direction: column;
+  padding: 0;
+  width: 100%;
+}
+
+.footerContent {
+  padding: 14px 24px;
+  background-color: var(--paperWarm);
+}
+
+.footerRow {
+  display: flex;
+  align-items: center;
+  margin-inline: auto;
+
+  max-width: 1440px;
+  gap: 28px;
 }
 
 .label {
-  margin-bottom: 10px;
-  font-weight: bold;
+  margin-bottom: 4px;
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 0.6875rem;
+  line-height: 1;
+}
+
+.buttonGroup {
+  display: flex;
+  align-items: flex-end;
+  margin-left: auto;
 }
 
 .importButtonContainer {
   display: flex;
   align-items: center;
+  gap: 8px;
 }
 
 .importButton {
   composes: button from '~Components/Link/SpinnerButton.css';
-
-  height: 35px;
 }
 
 .loadingButton {
   composes: importButton;
-
-  margin-left: 10px;
 }
 
-.loading {
-  composes: loading from '~Components/Loading/LoadingIndicator.css';
+.stopButton {
+  composes: loadingButton;
 
-  margin: 0 10px 0 12px;
-  text-align: left;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .importError {
-  margin-left: 10px;
+  flex-shrink: 0;
 }
 
-@media only screen and (max-width: $breakpointSmall) {
-  .inputContainer {
-    margin-top: 10px;
+.selectionGroup {
+  display: flex;
+  align-items: center;
+  min-width: 156px;
+  gap: 9px;
+}
 
-    &:first-child {
-      margin-top: 0;
-    }
+.selectAllInput {
+  composes: input from '~Components/Form/CheckInput.css';
+}
+
+.selectAllContainer {
+  flex: 0 0 auto;
+}
+
+.selectionLabel {
+  color: var(--inkSoft);
+  white-space: nowrap;
+  letter-spacing: -0.005em;
+  font-weight: 550;
+  font-size: 0.8125rem;
+}
+
+.queueStatus {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 20px;
+}
+
+.compactToggle {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.statusItem {
+  display: inline-flex;
+  align-items: center;
+  color: var(--inkMuted);
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  gap: 7px;
+}
+
+.readyDot,
+.attentionDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.readyDot {
+  background-color: var(--successColor);
+}
+
+.attentionDot {
+  background-color: var(--warningColor);
+}
+
+@media only screen and (max-width: 768px) {
+  .footerContent {
+    padding: 16px;
+  }
+
+  .footerRow {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footerShell {
+    display: flex;
+  }
+
+  .compactToggle {
+    display: none;
+  }
+
+  .buttonGroup {
+    margin-left: 0;
   }
 
   .importButtonContainer {
-    margin-top: 10px;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .queueStatus {
+    justify-content: space-between;
+    order: -1;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .importButtonContainer {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .importButton,
+  .loadingButton,
+  .stopButton {
+    width: 100%;
   }
 }

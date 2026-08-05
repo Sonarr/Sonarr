@@ -15,6 +15,12 @@ interface ItemStateValue {
   isDisabled?: boolean;
 }
 
+interface ItemStateUpdate<TId extends Id> {
+  id: TId;
+  isSelected?: boolean;
+  isDisabled?: boolean;
+}
+
 export interface SelectStoreModel<TId extends Id> {
   id: TId;
 }
@@ -151,7 +157,7 @@ export default function useSelectStore<T extends SelectStoreModel<Id>>(
     store.current.setState((state) => {
       const currentItemState = state.itemState.get(id);
 
-      if (currentItemState) {
+      if (currentItemState && currentItemState.isDisabled !== isDisabled) {
         const newItemState = new Map(state.itemState);
         newItemState.set(id, {
           ...currentItemState,
@@ -166,6 +172,43 @@ export default function useSelectStore<T extends SelectStoreModel<Id>>(
       return state;
     });
   }, []);
+
+  const setItemStates = useCallback(
+    (updates: Array<ItemStateUpdate<T['id']>>) => {
+      store.current.setState((state) => {
+        let nextItemState: ItemState<T> | null = null;
+
+        updates.forEach(({ id, isSelected, isDisabled }) => {
+          const currentItemState = state.itemState.get(id);
+
+          if (!currentItemState) {
+            return;
+          }
+
+          const nextIsSelected = isSelected ?? currentItemState.isSelected;
+          const nextIsDisabled = isDisabled ?? currentItemState.isDisabled;
+
+          if (
+            currentItemState.isSelected === nextIsSelected &&
+            currentItemState.isDisabled === nextIsDisabled
+          ) {
+            return;
+          }
+
+          nextItemState ??= new Map(state.itemState);
+          nextItemState.set(id, {
+            isSelected: nextIsSelected,
+            isDisabled: nextIsDisabled,
+          });
+        });
+
+        return nextItemState
+          ? { itemState: nextItemState, lastToggled: null }
+          : state;
+      });
+    },
+    []
+  );
 
   const getSelectedIds = useCallback((): Array<T['id']> => {
     const iState = store.current.getState().itemState;
@@ -306,6 +349,7 @@ export default function useSelectStore<T extends SelectStoreModel<Id>>(
     getSelectedIds,
     reset,
     selectAll,
+    setItemStates,
     toggleDisabled,
     toggleSelected,
     unselectAll,

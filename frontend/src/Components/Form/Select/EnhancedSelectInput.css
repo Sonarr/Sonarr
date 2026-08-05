@@ -95,6 +95,13 @@
   border-bottom: 1px solid var(--borderColor);
 }
 
+.mobileTitle {
+  margin-right: auto;
+  padding-left: 16px;
+  font-weight: 500;
+  line-height: 40px;
+}
+
 .mobileCloseButton {
   width: 40px;
   height: 40px;

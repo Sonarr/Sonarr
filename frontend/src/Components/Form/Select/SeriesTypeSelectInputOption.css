@@ -3,13 +3,11 @@
   align-items: center;
   justify-content: space-between;
   flex: 1 0 0;
+  flex-wrap: wrap;
+  gap: 2px 15px;
 
   &.isMobile {
     display: block;
-
-    .format {
-      margin-left: 0;
-    }
   }
 }
 
@@ -18,7 +16,6 @@
 }
 
 .format {
-  margin-left: 15px;
   color: var(--darkGray);
   font-size: $smallFontSize;
 }
