@@ -191,7 +191,7 @@ function SeriesIndex() {
   return (
     <QueueDetailsProvider all={true}>
       <SelectProvider items={data}>
-        <PageContent>
+        <PageContent title={translate('Series')}>
           <PageToolbar>
             <PageToolbarSection>
               <SeriesIndexRefreshSeriesButton
