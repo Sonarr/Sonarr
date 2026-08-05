@@ -20,9 +20,10 @@ export default function IconButton({
   isSpinning,
   ...otherProps
 }: IconButtonProps) {
-  const iconName = typeof name === 'object' && 'iconName' in name
-    ? name.iconName.replace(/-/g, ' ')
-    : translate('TableOptionsButton');
+  const iconName =
+    typeof name === 'object' && 'iconName' in name
+      ? name.iconName.replace(/-/g, ' ')
+      : translate('TableOptionsButton');
   const ariaLabel = otherProps['aria-label'] ?? otherProps.title ?? iconName;
 
   return (

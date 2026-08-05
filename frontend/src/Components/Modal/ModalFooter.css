@@ -5,6 +5,7 @@
   flex-shrink: 0;
   flex-wrap: wrap;
   gap: 10px;
+
   padding: 15px 30px;
   border-top: 1px solid var(--borderColor);
   background-color: var(--modalBackgroundColor);

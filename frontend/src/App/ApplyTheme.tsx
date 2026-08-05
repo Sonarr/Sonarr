@@ -1,10 +1,6 @@
 import { useEffect } from 'react';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
-import {
-  applyTheme,
-  isThemeName,
-  themeStorageKey,
-} from 'Styles/Themes';
+import { applyTheme, isThemeName, themeStorageKey } from 'Styles/Themes';
 
 function ApplyTheme() {
   const configuredTheme =

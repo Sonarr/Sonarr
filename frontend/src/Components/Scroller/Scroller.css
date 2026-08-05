@@ -3,6 +3,7 @@
   @add-mixin scrollbarTrack;
   @add-mixin scrollbarThumb;
   -webkit-overflow-scrolling: touch;
+
   min-width: 0;
   overscroll-behavior: contain;
 }

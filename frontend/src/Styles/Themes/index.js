@@ -48,7 +48,7 @@ export function getResolvedThemeName(theme) {
 }
 
 export function getTheme(theme) {
-  return themes[getResolvedThemeName(theme)];
+  return Themes[getResolvedThemeName(theme)];
 }
 
 export function applyTheme(theme, { persist = true } = {}) {
@@ -58,7 +58,7 @@ export function applyTheme(theme, { persist = true } = {}) {
 
   const selectedTheme = isThemeName(theme) ? theme : 'auto';
   const resolvedTheme = getResolvedThemeName(selectedTheme);
-  const themeVariables = themes[resolvedTheme];
+  const themeVariables = Themes[resolvedTheme];
   const documentElement = document.documentElement;
 
   Object.entries(themeVariables).forEach(([key, value]) => {
@@ -94,7 +94,7 @@ export function applyTheme(theme, { persist = true } = {}) {
   }
 }
 
-const themes = {
+const Themes = {
   get auto() {
     return prefersDarkMode() ? dark : light;
   },
@@ -103,4 +103,4 @@ const themes = {
   oled
 };
 
-export default themes;
+export default Themes;

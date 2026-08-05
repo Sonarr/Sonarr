@@ -121,6 +121,7 @@ $hoverScale: 1.05;
   .titleRow {
     align-items: flex-start;
     gap: 8px;
+
     line-height: 1.3;
   }
 
@@ -145,6 +146,7 @@ $hoverScale: 1.05;
     justify-content: flex-start;
     flex-wrap: wrap;
     gap: 4px;
+
     overflow: visible;
   }
 }

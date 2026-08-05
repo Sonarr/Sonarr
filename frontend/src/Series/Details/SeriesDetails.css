@@ -220,6 +220,7 @@
   .title {
     width: 100%;
     overflow-wrap: anywhere;
+
     font-size: clamp(28px, 9vw, 38px);
     line-height: 1.08;
   }
@@ -241,6 +242,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 4px 10px;
+
     font-size: 17px;
   }
 

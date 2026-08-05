@@ -12,8 +12,8 @@
 html {
   background-color: var(--pageBackground);
   color-scheme: light dark;
+  -webkit-text-size-adjust: 100%; /* stylelint-disable-line property-no-vendor-prefix */
   text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
   scroll-padding-top: calc($headerHeight + 12px);
 }
 
@@ -84,6 +84,7 @@ code {
 
 pre code {
   overflow-wrap: normal;
+
   white-space: pre;
 }
 
@@ -105,12 +106,15 @@ pre code {
     scroll-behavior: auto;
   }
 
+  /* stylelint-disable selector-max-universal */
   *,
   *::before,
   *::after {
     scroll-behavior: auto !important;
+
     transition-duration: 0s !important;
     animation-duration: 0s !important;
     animation-iteration-count: 1 !important;
   }
+  /* stylelint-enable selector-max-universal */
 }
