@@ -824,7 +824,9 @@ namespace NzbDrone.Core.Parser
                 return null;
             }
 
-            var seriesTitle = DuplicateSpacesRegex.Replace(ReleaseMetadataRegex.Replace(releaseTitle, " "), " ").Trim();
+            var seriesTitle = ReleaseMetadataRegex.Replace(releaseTitle, " ");
+            seriesTiltle = DuplicateSpacesRegex.Replace(seriesTiltle, " ");
+            seriesTitle = seriesTitle.Trim();
 
             // Anything left in brackets means the title was not recovered. Either it was itself
             // bracketed, as in [Group][Title][Source][Codec], or a bracketed group contained
