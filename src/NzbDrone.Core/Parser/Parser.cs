@@ -844,6 +844,7 @@ namespace NzbDrone.Core.Parser
                 EpisodeNumbers = [],
                 AbsoluteEpisodeNumbers = [],
                 FullSeason = true,
+                IsSeasonTitleOnly = true,
                 Languages = LanguageParser.ParseLanguages(releaseTitle),
                 Quality = QualityParser.ParseQuality(title),
                 ReleaseGroup = ReleaseGroupParser.ParseReleaseGroup(releaseTitle)

@@ -150,7 +150,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_not_attempt_to_map_episode_if_not_parsable()
         {
             GivenSpecifications(_pass1, _pass2, _pass3);
-            _reports[0].Title = "Not parsable";
+
+            // Stripping the metadata leaves brackets rather than a title, so neither parser
+            // recovers anything to map.
+            _reports[0].Title = "[Not][parsable][1080p][x265(10bit)]";
 
             Subject.GetRssDecision(_reports).ToList();
 
@@ -159,6 +162,19 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), It.IsAny<ReleaseDecisionInformation>()), Times.Never());
             _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), It.IsAny<ReleaseDecisionInformation>()), Times.Never());
             _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), It.IsAny<ReleaseDecisionInformation>()), Times.Never());
+        }
+
+        [Test]
+        public void should_map_a_title_the_regexes_cannot_parse()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+            _reports[0].Title = "Not parsable";
+
+            Subject.GetRssDecision(_reports).ToList();
+
+            // A release carrying nothing but a title is still a title, so it is looked up
+            // rather than dropped. Without a matching series it is rejected as unknown.
+            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<SearchCriteriaBase>()), Times.Once());
         }
 
         [Test]

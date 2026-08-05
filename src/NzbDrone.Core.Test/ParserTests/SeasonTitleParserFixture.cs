@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Should().NotBeNull();
             result.SeriesTitle.Should().Be(expectedTitle);
             result.FullSeason.Should().BeTrue();
+            result.IsSeasonTitleOnly.Should().BeTrue();
 
             // Which season the title refers to is held in the scene mappings, so it is left
             // unset here and resolved by ParsingService. Not 0, that is the special season.
@@ -61,6 +62,15 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_not_return_a_title_for_an_extra(string releaseTitle)
         {
             Parser.Parser.ParseSeasonTitle(releaseTitle).Should().BeNull();
+        }
+
+        // ParsingService resolves the season off the flag, so only this parser may set it.
+        [TestCase("Monkey Island S02E05 1080p WEB-DL")]
+        [TestCase("[Group] Monkey Island - 05 (1080p)")]
+        [TestCase("Monkey Island S02 1080p WEB-DL")]
+        public void should_not_flag_a_release_the_regexes_can_parse(string releaseTitle)
+        {
+            Parser.Parser.ParseTitle(releaseTitle).IsSeasonTitleOnly.Should().BeFalse();
         }
 
         // The helper is not wired into ParseTitle, so anything ParseTitle rejects today it
