@@ -602,8 +602,8 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                       new SceneMapping
                       {
                           TvdbId = _xemSeries.TvdbId,
-                          SearchTerm = "Dr Stone Stone Wars",
-                          ParseTerm = "drstonestonewars",
+                          SearchTerm = "Sonarrs Season Title",
+                          ParseTerm = "sonarrsseasontitle",
                           SeasonNumber = 2,
                           SceneSeasonNumber = 2,
                           SearchMode = SearchMode.SearchTitle
@@ -617,7 +617,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             var criteria = allCriteria.OfType<AnimeSeasonSearchCriteria>().ToList();
 
             criteria.Should().Contain(c => c.SearchMode == SearchMode.SearchTitle);
-            criteria.Should().Contain(c => c.SceneTitles.Contains("Dr Stone Stone Wars"));
+            criteria.Should().Contain(c => c.SceneTitles.Contains("Sonarrs Season Title"));
         }
 
         [Test]

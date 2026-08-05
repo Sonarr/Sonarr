@@ -198,8 +198,6 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             var results = Subject.GetSearchRequests(_animeSeasonSearchCriteria);
 
-            // Same tier, so both run. A fallback tier would only run when the season
-            // qualified search returned nothing at all.
             results.Tiers.Should().Be(1);
 
             var pages = results.GetAllTiers().Select(t => t.First().Url.FullUri).ToList();
