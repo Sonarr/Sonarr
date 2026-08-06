@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Should().NotBeNull();
             result.SeriesTitle.Should().Be(expectedTitle);
             result.FullSeason.Should().BeTrue();
-            result.IsSeasonTitleOnly.Should().BeTrue();
+            result.IsSeasonTitle.Should().BeTrue();
             result.SeasonNumber.Should().Be(-1);
             result.EpisodeNumbers.Should().BeEmpty();
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
@@ -38,6 +38,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("[Group][Monkey Island: Curse][BDRip][1080P_x265(10bit)-FLAC][ALL]")]
         [TestCase("[Group][Monkey Island Curse][1080p][x264]")]
+        [TestCase("[Group] Monkey Island Curse () (1080p)")]
         public void should_not_return_a_title_when_stripping_leaves_metadata(string releaseTitle)
         {
             Parser.Parser.ParseSeasonTitle(releaseTitle).Should().BeNull();
@@ -58,7 +59,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Monkey Island S02 1080p WEB-DL")]
         public void should_not_flag_a_release_the_regexes_can_parse(string releaseTitle)
         {
-            Parser.Parser.ParseTitle(releaseTitle).IsSeasonTitleOnly.Should().BeFalse();
+            Parser.Parser.ParseTitle(releaseTitle).IsSeasonTitle.Should().BeFalse();
         }
 
         [TestCase("THIS SHOULD NEVER PARSE")]
