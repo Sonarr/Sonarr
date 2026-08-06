@@ -191,18 +191,16 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         }
 
         [Test]
-        public void should_search_season_title_alias_with_and_without_season_parameter()
+        public void should_search_season_title_alias_without_the_season_parameter()
         {
             Subject.Settings.AnimeStandardFormatSearch = true;
             _animeSeasonSearchCriteria.SearchMode = SearchMode.SearchTitle;
 
             var results = Subject.GetSearchRequests(_animeSeasonSearchCriteria);
 
-            results.Tiers.Should().Be(1);
-
             var pages = results.GetAllTiers().Select(t => t.First().Url.FullUri).ToList();
 
-            pages.Should().Contain(p => p.Contains("q=Monkey%20Island&season=3"));
+            pages.Should().ContainSingle();
             pages.Should().Contain(p => p.Contains("q=Monkey%20Island") && !p.Contains("season="));
         }
 

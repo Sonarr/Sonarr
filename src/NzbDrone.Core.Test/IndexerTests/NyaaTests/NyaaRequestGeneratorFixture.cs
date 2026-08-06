@@ -105,19 +105,16 @@ namespace NzbDrone.Core.Test.IndexerTests.NyaaTests
         }
 
         [Test]
-        public void should_search_season_title_alias_with_and_without_the_season_number()
+        public void should_search_season_title_alias_without_the_season_number()
         {
             Subject.Settings.AnimeStandardFormatSearch = true;
             _animeSeasonSearchCriteria.SearchMode = SearchMode.SearchTitle;
 
             var results = Subject.GetSearchRequests(_animeSeasonSearchCriteria);
 
-            results.GetTier(0).Should().HaveCount(2);
-
-            var pages = results.GetTier(0).Select(t => t.First().Url.FullUri).ToList();
-
-            pages.Should().Contain(p => p.Contains("term=Naruto+Shippuuden+s03"));
-            pages.Should().Contain(p => p.Contains("term=Naruto+Shippuuden") && !p.Contains("s03"));
+            results.GetTier(0).Should().HaveCount(1);
+            results.GetTier(0).First().First().Url.FullUri.Should().Contain("term=Naruto+Shippuuden");
+            results.GetTier(0).First().First().Url.FullUri.Should().NotContain("s03");
         }
 
         [Test]

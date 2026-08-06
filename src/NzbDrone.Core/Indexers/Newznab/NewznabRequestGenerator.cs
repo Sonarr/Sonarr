@@ -457,7 +457,20 @@ namespace NzbDrone.Core.Indexers.Newznab
 
             var queryTitles = TextSearchEngine == "raw" ? searchCriteria.AllSceneTitles : searchCriteria.CleanSceneTitles;
 
-            if (Settings.AnimeStandardFormatSearch)
+            // A season title alias already identifies the season, so the season number is not
+            // added to it. Doing so excludes the pack the alias names on trackers that match
+            // the season parameter as text.
+            if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchTitle))
+            {
+                foreach (var queryTitle in queryTitles)
+                {
+                    pageableRequests.Add(GetPagedRequests(MaxPages,
+                        Settings.AnimeCategories,
+                        "tvsearch",
+                        $"&q={NewsnabifyTitle(queryTitle)}"));
+                }
+            }
+            else if (Settings.AnimeStandardFormatSearch)
             {
                 AddTvIdPageableRequests(pageableRequests,
                     Settings.AnimeCategories,
@@ -470,20 +483,6 @@ namespace NzbDrone.Core.Indexers.Newznab
                         Settings.AnimeCategories,
                         "tvsearch",
                         $"&q={NewsnabifyTitle(queryTitle)}&season={NewznabifySeasonNumber(searchCriteria.SeasonNumber)}"));
-                }
-            }
-
-            // A season title alias already identifies the season, so trackers that match
-            // the season parameter as text will exclude the pack it names. This is neither
-            // an absolute nor a standard format search, so it is not gated with them.
-            if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchTitle))
-            {
-                foreach (var queryTitle in queryTitles)
-                {
-                    pageableRequests.Add(GetPagedRequests(MaxPages,
-                        Settings.AnimeCategories,
-                        "tvsearch",
-                        $"&q={NewsnabifyTitle(queryTitle)}"));
                 }
             }
 
