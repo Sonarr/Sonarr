@@ -35,7 +35,11 @@ namespace Sonarr.Api.V3.Parse
                 return null;
             }
 
-            var parsedEpisodeInfo = path.IsNotNullOrWhiteSpace() ? Parser.ParsePath(path) : Parser.ParseTitle(title);
+            // Only for a title, so this matches what a release goes through. Importing a file
+            // does not use the season title parser, so parsing a path should not either.
+            var parsedEpisodeInfo = path.IsNotNullOrWhiteSpace()
+                ? Parser.ParsePath(path)
+                : Parser.ParseTitle(title) ?? Parser.ParseSeasonTitle(title);
 
             if (parsedEpisodeInfo == null)
             {
