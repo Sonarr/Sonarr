@@ -207,6 +207,20 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         }
 
         [Test]
+        public void should_search_season_title_alias_when_standard_format_search_is_disabled()
+        {
+            Subject.Settings.AnimeStandardFormatSearch = false;
+            _animeSeasonSearchCriteria.SearchMode = SearchMode.SearchTitle;
+
+            var results = Subject.GetSearchRequests(_animeSeasonSearchCriteria);
+
+            var pages = results.GetAllTiers().Select(t => t.First().Url.FullUri).ToList();
+
+            pages.Should().ContainSingle();
+            pages.Should().Contain(p => p.Contains("q=Monkey%20Island") && !p.Contains("season="));
+        }
+
+        [Test]
         public void should_not_search_without_season_parameter_when_search_mode_is_default()
         {
             Subject.Settings.AnimeStandardFormatSearch = true;

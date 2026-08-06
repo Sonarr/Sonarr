@@ -450,14 +450,19 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            if (SupportsSearch && Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0)
+            if (!SupportsSearch || searchCriteria.SeasonNumber <= 0)
+            {
+                return pageableRequests;
+            }
+
+            var queryTitles = TextSearchEngine == "raw" ? searchCriteria.AllSceneTitles : searchCriteria.CleanSceneTitles;
+
+            if (Settings.AnimeStandardFormatSearch)
             {
                 AddTvIdPageableRequests(pageableRequests,
                     Settings.AnimeCategories,
                     searchCriteria,
                     $"&season={NewznabifySeasonNumber(searchCriteria.SeasonNumber)}");
-
-                var queryTitles = TextSearchEngine == "raw" ? searchCriteria.AllSceneTitles : searchCriteria.CleanSceneTitles;
 
                 foreach (var queryTitle in queryTitles)
                 {
@@ -466,18 +471,19 @@ namespace NzbDrone.Core.Indexers.Newznab
                         "tvsearch",
                         $"&q={NewsnabifyTitle(queryTitle)}&season={NewznabifySeasonNumber(searchCriteria.SeasonNumber)}"));
                 }
+            }
 
-                // A season title alias already identifies the season, so trackers that match
-                // the season parameter as text will exclude the pack it names.
-                if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchTitle))
+            // A season title alias already identifies the season, so trackers that match
+            // the season parameter as text will exclude the pack it names. This is neither
+            // an absolute nor a standard format search, so it is not gated with them.
+            if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchTitle))
+            {
+                foreach (var queryTitle in queryTitles)
                 {
-                    foreach (var queryTitle in queryTitles)
-                    {
-                        pageableRequests.Add(GetPagedRequests(MaxPages,
-                            Settings.AnimeCategories,
-                            "tvsearch",
-                            $"&q={NewsnabifyTitle(queryTitle)}"));
-                    }
+                    pageableRequests.Add(GetPagedRequests(MaxPages,
+                        Settings.AnimeCategories,
+                        "tvsearch",
+                        $"&q={NewsnabifyTitle(queryTitle)}"));
                 }
             }
 
