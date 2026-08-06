@@ -823,9 +823,7 @@ namespace NzbDrone.Core.Parser
             seriesTitle = DuplicateSpacesRegex.Replace(seriesTitle, " ");
             seriesTitle = seriesTitle.Trim();
 
-            // Anything left in brackets means the title was not recovered. Either it was itself
-            // bracketed, as in [Group][Title][Source][Codec], or a bracketed group contained
-            // another and could not be removed. Both leave metadata behind rather than a title.
+            // If any brackets remain we were unable to extract the season title correctly.
             if (seriesTitle.IsNullOrWhiteSpace() || seriesTitle.IndexOfAny(['[', ']', '(', ')', '{', '}']) >= 0)
             {
                 return null;

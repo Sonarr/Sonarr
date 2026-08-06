@@ -88,7 +88,11 @@ namespace NzbDrone.Core.DecisionEngine
                         }
                     }
 
-                    parsedEpisodeInfo ??= Parser.Parser.ParseSeasonTitle(report.Title);
+                    if (parsedEpisodeInfo == null)
+                    {
+                        // Attempt to parse as a release that includes the season title without a season number
+                        parsedEpisodeInfo = Parser.Parser.ParseSeasonTitle(report.Title);
+                    }
 
                     if (parsedEpisodeInfo != null && !parsedEpisodeInfo.SeriesTitle.IsNullOrWhiteSpace())
                     {
