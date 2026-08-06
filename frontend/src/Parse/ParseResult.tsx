@@ -83,7 +83,8 @@ function ParseResult(props: ParseResultProps) {
             <ParseResultItem
               title={translate('SeasonNumber')}
               data={
-                seasonNumber === 0 && absoluteEpisodeNumbers.length
+                seasonNumber < 0 ||
+                (seasonNumber === 0 && absoluteEpisodeNumbers.length)
                   ? '-'
                   : seasonNumber
               }
