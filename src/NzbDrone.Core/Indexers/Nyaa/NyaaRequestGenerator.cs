@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.IndexerSearch.Definitions;
 
 namespace NzbDrone.Core.Indexers.Nyaa
@@ -92,6 +93,13 @@ namespace NzbDrone.Core.Indexers.Nyaa
                 if (Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0)
                 {
                     pageableRequests.Add(GetPagedRequests($"{searchTitle}+s{searchCriteria.SeasonNumber:00}"));
+                }
+
+                // There is no season parameter, so the season number is part of the query text
+                // and excludes a pack that is named only by its season title.
+                if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchTitle))
+                {
+                    pageableRequests.Add(GetPagedRequests(searchTitle));
                 }
             }
 
