@@ -40,12 +40,14 @@ namespace NzbDrone.Core.Tv
             if (!sourcePath.IsPathValid(PathValidationType.CurrentOs))
             {
                 _logger.Warn("Folder '{0}' for '{1}' is invalid, unable to move series. Try moving files manually", sourcePath, series.Title);
+                UpdatePath(series.Id, sourcePath);
                 return;
             }
 
             if (!_diskProvider.FolderExists(sourcePath))
             {
                 _logger.Debug("Folder '{0}' for '{1}' does not exist, not moving.", sourcePath, series.Title);
+                UpdatePath(series.Id, sourcePath);
                 return;
             }
 
@@ -61,6 +63,7 @@ namespace NzbDrone.Core.Tv
             if (sourcePath.PathEquals(destinationPath))
             {
                 _logger.ProgressInfo("{0} is already in the specified location '{1}'.", series, destinationPath);
+                UpdatePath(series.Id, destinationPath);
                 return;
             }
 
@@ -90,6 +93,7 @@ namespace NzbDrone.Core.Tv
             var series = _seriesService.GetSeries(seriesId);
 
             series.Path = path;
+            series.NextPath = null;
             _seriesService.UpdateSeries(series);
         }
 
