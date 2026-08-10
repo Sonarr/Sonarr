@@ -271,12 +271,36 @@ function MediaManagement() {
                   isAdvanced={true}
                   size={sizes.MEDIUM}
                 >
-                  <FormLabel>{translate('SkipFreeSpaceCheck')}</FormLabel>
+                  <FormLabel>
+                    {translate('SkipFreeSpaceCheckWhenGrabbing')}
+                  </FormLabel>
+
+                  <FormInputGroup
+                    type={inputTypes.CHECK}
+                    name="skipFreeSpaceCheckWhenGrabbing"
+                    helpText={translate(
+                      'SkipFreeSpaceCheckWhenGrabbingHelpText'
+                    )}
+                    onChange={handleInputChange}
+                    {...settings.skipFreeSpaceCheckWhenGrabbing}
+                  />
+                </FormGroup>
+
+                <FormGroup
+                  advancedSettings={showAdvancedSettings}
+                  isAdvanced={true}
+                  size={sizes.MEDIUM}
+                >
+                  <FormLabel>
+                    {translate('SkipFreeSpaceCheckWhenImporting')}
+                  </FormLabel>
 
                   <FormInputGroup
                     type={inputTypes.CHECK}
                     name="skipFreeSpaceCheckWhenImporting"
-                    helpText={translate('SkipFreeSpaceCheckHelpText')}
+                    helpText={translate(
+                      'SkipFreeSpaceCheckWhenImportingHelpText'
+                    )}
                     onChange={handleInputChange}
                     {...settings.skipFreeSpaceCheckWhenImporting}
                   />

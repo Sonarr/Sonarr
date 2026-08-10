@@ -1,3 +1,4 @@
+import { hashKey, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { create } from 'zustand';
 import ModelBase from 'App/ModelBase';
@@ -394,7 +395,6 @@ const useReleases = (payload: InteractiveSearchPayload) => {
       // Cache and stale times set to 30 minutes
       staleTime: THIRTY_MINUTES,
       gcTime: THIRTY_MINUTES,
-      refetchOnMount: 'always',
       // Disable refetch on window focus to prevent refetching when the user switch tabs
       refetchOnWindowFocus: false,
       retry: false,
@@ -457,6 +457,24 @@ const useReleases = (payload: InteractiveSearchPayload) => {
 };
 
 export default useReleases;
+
+export const useClearReleasesOnUnmount = (
+  payload: InteractiveSearchPayload
+) => {
+  const queryClient = useQueryClient();
+  const queryKeyHash = hashKey(['/release', payload]);
+
+  useEffect(() => {
+    return () => {
+      const queryCache = queryClient.getQueryCache();
+      const query = queryCache.get(queryKeyHash);
+
+      if (query) {
+        queryCache.remove(query);
+      }
+    };
+  }, [queryKeyHash, queryClient]);
+};
 
 interface OverrideRelease {
   seriesId: number;

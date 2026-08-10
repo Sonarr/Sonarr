@@ -2044,8 +2044,6 @@
     "Size": "Boyut",
     "SizeLimit": "Boyut Limiti",
     "SizeOnDisk": "Diskteki boyut",
-    "SkipFreeSpaceCheck": "Boş Alan Kontrolünü Atla",
-    "SkipFreeSpaceCheckHelpText": "{appName} kök klasörünüzde boş alan tespit edemediğinde bunu kullansın",
     "SkipRedownload": "Yeniden İndirmeyi Atla",
     "SkipRedownloadHelpText": "{appName} uygulamasının bu öğe için alternatif bir yayın indirmeye çalışmasını engeller",
     "Small": "Küçük",

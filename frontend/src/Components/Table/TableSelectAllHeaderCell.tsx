@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CheckInput from 'Components/Form/CheckInput';
 import { CheckInputChanged } from 'typings/inputs';
+import translate from 'Utilities/String/translate';
 import VirtualTableHeaderCell from './TableHeaderCell';
 import styles from './TableSelectAllHeaderCell.css';
 
@@ -33,6 +34,7 @@ function TableSelectAllHeaderCell({
       <CheckInput
         className={styles.input}
         name="selectAll"
+        ariaLabel={translate('SelectAll')}
         value={value}
         onChange={onSelectAllChange}
       />

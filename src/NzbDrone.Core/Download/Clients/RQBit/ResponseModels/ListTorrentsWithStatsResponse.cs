@@ -16,7 +16,10 @@ namespace NzbDrone.Core.Download.Clients.RQBit.ResponseModels
         public string InfoHash { get; set; }
 
         public string Name { get; set; }
+
+        [JsonProperty("output_folder")]
         public string OutputFolder { get; set; }
+
         public TorrentStatsResponse Stats { get; set; }
     }
 

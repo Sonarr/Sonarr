@@ -11,6 +11,7 @@ import EpisodeStatus from 'Episode/EpisodeStatus';
 import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
 import EpisodeFileLanguages from 'EpisodeFile/EpisodeFileLanguages';
+import EpisodeFileQuality from 'EpisodeFile/EpisodeFileQuality';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import { useSingleSeries } from 'Series/useSeries';
 import { SelectStateInputProps } from 'typings/props';
@@ -144,6 +145,14 @@ function CutoffUnmetRow({
           return (
             <TableRowCell key={name} className={styles.languages}>
               <EpisodeFileLanguages episodeFileId={episodeFileId} />
+            </TableRowCell>
+          );
+        }
+
+        if (name === 'quality') {
+          return (
+            <TableRowCell key={name}>
+              <EpisodeFileQuality episodeFileId={episodeFileId} />
             </TableRowCell>
           );
         }

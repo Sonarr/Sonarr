@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import useApiMutation from 'Helpers/Hooks/useApiMutation';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 import {
   SelectedSchema,
   useProviderSchema,
@@ -15,6 +16,7 @@ import {
 import Provider from 'typings/Provider';
 import { sortByProp } from 'Utilities/Array/sortByProp';
 import { ApiError } from 'Utilities/Fetch/fetchJson';
+import clientSideFilterAndSort from 'Utilities/Filter/clientSideFilterAndSort';
 import translate from 'Utilities/String/translate';
 
 export interface DownloadClientModel extends Provider {
@@ -49,12 +51,32 @@ export const useDownloadClientsData = () => {
   return data;
 };
 
-export const useSortedDownloadClients = () => {
+const SORT_PREDICATES = {
+  name: (item: DownloadClientModel) => item.name.toLowerCase(),
+  protocol: (item: DownloadClientModel) =>
+    item.protocol === 'usenet' ? 'nzb' : item.protocol,
+};
+
+export const useSortedDownloadClients = (
+  sortKey: keyof DownloadClientModel = 'name',
+  sortDirection: SortDirection = 'ascending'
+) => {
   const result = useDownloadClients();
 
   const sortedData = useMemo(
-    () => [...result.data].sort(sortByProp('name')),
-    [result.data]
+    () =>
+      clientSideFilterAndSort<
+        DownloadClientModel,
+        never,
+        typeof SORT_PREDICATES
+      >(result.data, {
+        sortKey,
+        sortDirection,
+        secondarySortKey: 'name',
+        secondarySortDirection: 'ascending',
+        sortPredicates: SORT_PREDICATES,
+      }).data,
+    [result.data, sortKey, sortDirection]
   );
 
   return {

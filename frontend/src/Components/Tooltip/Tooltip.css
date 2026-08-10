@@ -1,3 +1,8 @@
+.reference:focus-visible {
+  outline: 2px solid var(--linkColor);
+  outline-offset: 2px;
+}
+
 .tooltipContainer {
   z-index: $popperZIndex;
 }

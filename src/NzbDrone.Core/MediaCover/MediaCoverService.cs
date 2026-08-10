@@ -39,7 +39,7 @@ namespace NzbDrone.Core.MediaCover
 
         // ImageSharp is slow on ARM (no hardware acceleration on mono yet)
         // So limit the number of concurrent resizing tasks
-        private static SemaphoreSlim _semaphore = new SemaphoreSlim((int)Math.Ceiling(Environment.ProcessorCount / 2.0));
+        private static readonly SemaphoreSlim Semaphore = new((int)Math.Ceiling(Environment.ProcessorCount / 2.0));
 
         public MediaCoverService(IMediaCoverProxy mediaCoverProxy,
                                  IImageResizer resizer,
@@ -65,9 +65,9 @@ namespace NzbDrone.Core.MediaCover
 
         public string GetCoverPath(int seriesId, MediaCoverTypes coverType, int? height = null)
         {
-            var heightSuffix = height.HasValue ? "-" + height.ToString() : "";
+            var heightSuffix = height.HasValue ? $"-{height}" : "";
 
-            return Path.Combine(GetSeriesCoverPath(seriesId), coverType.ToString().ToLower() + heightSuffix + GetExtension(coverType));
+            return Path.Combine(GetSeriesCoverPath(seriesId), coverType.ToString().ToLowerInvariant() + heightSuffix + GetExtension(coverType));
         }
 
         public void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers)
@@ -89,14 +89,11 @@ namespace NzbDrone.Core.MediaCover
                         continue;
                     }
 
-                    var filePath = GetCoverPath(seriesId, mediaCover.CoverType);
+                    mediaCover.Url = _configFileProvider.UrlBase + @"/MediaCover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLowerInvariant() + GetExtension(mediaCover.CoverType);
 
-                    mediaCover.Url = _configFileProvider.UrlBase + @"/MediaCover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + GetExtension(mediaCover.CoverType);
-
-                    if (_diskProvider.FileExists(filePath))
+                    if (mediaCover.RemoteUrl.IsNotNullOrWhiteSpace())
                     {
-                        var lastWrite = _diskProvider.FileGetLastWrite(filePath);
-                        mediaCover.Url += "?lastWrite=" + lastWrite.Ticks;
+                        mediaCover.Url += "?h=" + mediaCover.RemoteUrl.SHA256Hash()[..20];
                     }
                 }
             }
@@ -150,7 +147,7 @@ namespace NzbDrone.Core.MediaCover
 
             try
             {
-                _semaphore.Wait();
+                Semaphore.Wait();
 
                 foreach (var tuple in toResize)
                 {
@@ -159,7 +156,7 @@ namespace NzbDrone.Core.MediaCover
             }
             finally
             {
-                _semaphore.Release();
+                Semaphore.Release();
             }
 
             return updated;
@@ -218,16 +215,13 @@ namespace NzbDrone.Core.MediaCover
             }
         }
 
-        private string GetExtension(MediaCoverTypes coverType)
+        private static string GetExtension(MediaCoverTypes coverType)
         {
-            switch (coverType)
+            return coverType switch
             {
-                default:
-                    return ".jpg";
-
-                case MediaCoverTypes.Clearlogo:
-                    return ".png";
-            }
+                MediaCoverTypes.Clearlogo => ".png",
+                _ => ".jpg"
+            };
         }
 
         public void HandleAsync(SeriesUpdatedEvent message)

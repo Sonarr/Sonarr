@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import ModelBase from 'App/ModelBase';
 import useApiMutation, {
   addOrUpdateQueryClientItem,
@@ -86,12 +86,11 @@ export const useProviderSettings = <T extends ModelBase>(
 export const useSaveProviderSettings = <T extends ModelBase>(
   id: number,
   path: string,
-  onSuccess?: (updatedSettings: T) => void,
-  onError?: (error: ApiError) => void
+  onSuccess?: (updatedSettings: T) => void
 ) => {
   const queryClient = useQueryClient();
 
-  const { mutate, isPending, error } = useMutation<
+  const { mutate, isPending, error, submittedAt } = useMutation<
     T,
     ApiError,
     {
@@ -127,7 +126,6 @@ export const useSaveProviderSettings = <T extends ModelBase>(
       );
       onSuccess?.(updatedSettings);
     },
-    onError,
   });
 
   const save = useCallback(
@@ -141,15 +139,12 @@ export const useSaveProviderSettings = <T extends ModelBase>(
     save,
     isSaving: isPending,
     saveError: error,
+    saveSubmittedAt: submittedAt,
   };
 };
 
-export const useTestProvider = <T extends ModelBase>(
-  path: string,
-  onSuccess?: () => void,
-  onError?: (error: ApiError) => void
-) => {
-  const { mutate, isPending, error } = useMutation<
+export const useTestProvider = <T extends ModelBase>(path: string) => {
+  const { mutate, isPending, error, submittedAt } = useMutation<
     void,
     ApiError,
     { data: T } & SaveOptions
@@ -171,8 +166,6 @@ export const useTestProvider = <T extends ModelBase>(
         body: data,
       });
     },
-    onSuccess,
-    onError,
   });
 
   const test = useCallback(
@@ -186,6 +179,7 @@ export const useTestProvider = <T extends ModelBase>(
     test,
     isTesting: isPending,
     testError: error,
+    testSubmittedAt: submittedAt,
   };
 };
 
@@ -195,7 +189,6 @@ export const useManageProviderSettings = <T extends ModelBase>(
   path: string
 ): ManageProviderSettings<T> => {
   const provider = useProviderWithDefault<T>(id, defaultProvider, path);
-  const [mutationError, setMutationError] = useState<ApiError | null>(null);
   const lastSaveData = useRef<string | null>(null);
 
   const {
@@ -214,28 +207,19 @@ export const useManageProviderSettings = <T extends ModelBase>(
   } = usePendingFieldsStore();
 
   const handleSaveSuccess = useCallback(() => {
-    setMutationError(null);
     clearPendingChanges();
     clearPendingFields();
     lastSaveData.current = null;
   }, [clearPendingChanges, clearPendingFields]);
 
-  const handleTestSuccess = useCallback(() => {
-    setMutationError(null);
-  }, []);
+  const { save, isSaving, saveError, saveSubmittedAt } =
+    useSaveProviderSettings<T>(provider.id, path, handleSaveSuccess);
 
-  const { save, isSaving } = useSaveProviderSettings<T>(
-    provider.id,
-    path,
-    handleSaveSuccess,
-    setMutationError
-  );
+  const { test, isTesting, testError, testSubmittedAt } =
+    useTestProvider<T>(path);
 
-  const { test, isTesting } = useTestProvider<T>(
-    path,
-    handleTestSuccess,
-    setMutationError
-  );
+  const mutationError =
+    saveSubmittedAt >= testSubmittedAt ? saveError : testError;
 
   const { settings: item, ...settings } = useMemo(() => {
     // Create a combined pending changes object that includes fields

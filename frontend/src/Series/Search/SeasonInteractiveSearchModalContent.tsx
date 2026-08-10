@@ -6,6 +6,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { scrollDirections } from 'Helpers/Props';
 import InteractiveSearch from 'InteractiveSearch/InteractiveSearch';
+import { useClearReleasesOnUnmount } from 'InteractiveSearch/useReleases';
 import formatSeason from 'Season/formatSeason';
 import translate from 'Utilities/String/translate';
 import styles from './SeasonInteractiveSearchModalContent.css';
@@ -23,6 +24,8 @@ function SeasonInteractiveSearchModalContent({
   seasonNumber,
   onModalClose,
 }: SeasonInteractiveSearchModalContentProps) {
+  useClearReleasesOnUnmount({ seriesId, seasonNumber });
+
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>

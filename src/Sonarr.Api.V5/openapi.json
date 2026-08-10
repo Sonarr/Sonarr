@@ -10011,6 +10011,9 @@
           "minRefreshInterval": {
             "type": "string",
             "format": "date-span"
+          },
+          "tagExisting": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -10832,6 +10835,9 @@
           },
           "episodeTitleRequired": {
             "$ref": "#/components/schemas/EpisodeTitleRequiredType"
+          },
+          "skipFreeSpaceCheckWhenGrabbing": {
+            "type": "boolean"
           },
           "skipFreeSpaceCheckWhenImporting": {
             "type": "boolean"
@@ -12106,6 +12112,9 @@
           "airDateGracePeriod": {
             "type": "integer",
             "format": "int32"
+          },
+          "allowSeasonPackWithoutAllEpisodesAired": {
+            "type": "boolean"
           },
           "indexerIds": {
             "type": "array",

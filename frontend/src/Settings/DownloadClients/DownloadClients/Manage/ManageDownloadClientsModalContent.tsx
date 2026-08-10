@@ -91,7 +91,10 @@ function ManageDownloadClientsModalContentInner({
   onModalClose,
 }: ManageDownloadClientsModalContentProps) {
   const { sortKey, sortDirection } = useManageDownloadClientsOptions();
-  const { data, isFetching, isFetched, error } = useSortedDownloadClients();
+  const { data, isFetching, isFetched, error } = useSortedDownloadClients(
+    sortKey,
+    sortDirection
+  );
 
   const { isDeleting, bulkDeleteDownloadClients } =
     useBulkDeleteDownloadClients();

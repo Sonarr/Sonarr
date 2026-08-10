@@ -15,6 +15,7 @@ interface MessageProps {
 
 function Message({ id, hideAfter, name, message, type }: MessageProps) {
   const dismissTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const isError = type === 'error';
 
   const icon: IconName = useMemo(() => {
     switch (name) {
@@ -60,9 +61,13 @@ function Message({ id, hideAfter, name, message, type }: MessageProps) {
   }, [id, hideAfter, message, type]);
 
   return (
-    <div className={classNames(styles.message, styles[type])}>
+    <div
+      className={classNames(styles.message, styles[type])}
+      role={isError ? 'alert' : 'status'}
+      aria-atomic={true}
+    >
       <div className={styles.iconContainer}>
-        <Icon name={icon} title={name} />
+        <Icon name={icon} aria-hidden={true} />
       </div>
 
       <div className={styles.text}>{message}</div>

@@ -2044,8 +2044,6 @@
     "Size": "Mida",
     "SizeLimit": "Límit de la mida",
     "SizeOnDisk": "Mida en el disc",
-    "SkipFreeSpaceCheck": "Omet la comprovació d'espai lliure",
-    "SkipFreeSpaceCheckHelpText": "Useu quan {appName} no pugui detectar espai lliure del directori arrel",
     "SkipRedownload": "Omet que es torni a descarregar",
     "SkipRedownloadHelpText": "Evita que {appName} intenti baixar una versió alternativa per a aquest element",
     "Small": "Petit",

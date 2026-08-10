@@ -103,7 +103,10 @@ function ManageIndexersModalContentInner(
   const { onModalClose } = props;
 
   const { sortKey, sortDirection } = useManageIndexersOptions();
-  const { data, isFetching, isFetched, error } = useSortedIndexers();
+  const { data, isFetching, isFetched, error } = useSortedIndexers(
+    sortKey,
+    sortDirection
+  );
 
   const { isDeleting, bulkDeleteIndexers } = useBulkDeleteIndexers();
   const { isSaving, bulkEditIndexers } = useBulkEditIndexers();

@@ -48,6 +48,7 @@ const { useOptions, useOption, setOptions, setOption, setSort } =
         {
           name: 'quality',
           label: () => translate('Quality'),
+          isSortable: true,
           isVisible: true,
         },
         {
