@@ -28,6 +28,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                 .With(s => s.SeasonFolder)
                 .With(s => s.Path = @"C:\Test\name".AsOsAgnostic())
                 .With(s => s.RootFolderPath = "")
+                .With(s => s.NextPath = null)
                 .Build().ToList();
 
             Mocker.GetMock<IAutoTaggingService>()
@@ -156,11 +157,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
         public void should_set_next_path_when_deferring()
         {
             var newRoot = @"C:\Test\TV2".AsOsAgnostic();
-            _series.ForEach(s =>
-            {
-                s.RootFolderPath = newRoot;
-                s.NextPath = null;
-            });
+            _series.ForEach(s => s.RootFolderPath = newRoot);
 
             Mocker.GetMock<IBuildSeriesPaths>()
                   .Setup(s => s.BuildPath(It.IsAny<Series>(), false))

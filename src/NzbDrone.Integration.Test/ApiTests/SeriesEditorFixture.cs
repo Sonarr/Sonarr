@@ -48,6 +48,7 @@ namespace NzbDrone.Integration.Test.ApiTests
         }
 
         [Test]
+        [Explicit("Requires source and destination temp directories on separate filesystems to reliably observe the in-flight move window; not reliable on CI runners where they share a volume.")]
         public void should_not_queue_a_second_move_for_a_series_with_a_move_already_pending()
         {
             // Uses its own series (distinct from GivenExistingSeries' "90210"/"Dexter", which

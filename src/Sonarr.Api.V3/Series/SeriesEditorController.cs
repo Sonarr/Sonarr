@@ -98,6 +98,8 @@ namespace Sonarr.Api.V3.Series
                 }
             }
 
+            var updated = _seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles);
+
             if (resource.MoveFiles && seriesToMove.Any())
             {
                 _commandQueueManager.Push(new BulkMoveSeriesCommand
@@ -107,7 +109,7 @@ namespace Sonarr.Api.V3.Series
                 });
             }
 
-            return Accepted(_seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles).ToResource());
+            return Accepted(updated.ToResource());
         }
 
         [HttpDelete]

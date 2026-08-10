@@ -98,6 +98,8 @@ public class SeriesEditorController : Controller
             }
         }
 
+        var updated = _seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles);
+
         if (resource.MoveFiles && seriesToMove.Any())
         {
             _commandQueueManager.Push(new BulkMoveSeriesCommand
@@ -107,7 +109,7 @@ public class SeriesEditorController : Controller
             });
         }
 
-        return TypedResults.Ok(_seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles).ToResource());
+        return TypedResults.Ok(updated.ToResource());
     }
 
     [HttpDelete]
