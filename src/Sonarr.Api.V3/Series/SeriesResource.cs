@@ -39,6 +39,7 @@ namespace Sonarr.Api.V3.Series
 
         // View & Edit
         public string Path { get; set; }
+        public string NextPath { get; set; }
         public int QualityProfileId { get; set; }
 
         // Editing Only
@@ -113,6 +114,7 @@ namespace Sonarr.Api.V3.Series
                        OriginalLanguage = model.OriginalLanguage,
 
                        Path = model.Path,
+                       NextPath = model.NextPath,
                        QualityProfileId = model.QualityProfileId,
 
                        SeasonFolder = model.SeasonFolder,
@@ -178,6 +180,7 @@ namespace Sonarr.Api.V3.Series
                        OriginalLanguage = resource.OriginalLanguage,
 
                        Path = resource.Path,
+                       NextPath = resource.NextPath,
                        QualityProfileId = resource.QualityProfileId,
 
                        SeasonFolder = resource.SeasonFolder,
