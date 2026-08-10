@@ -133,5 +133,42 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
 
             result[0].Tags.Should().BeEquivalentTo(new[] { 2, 3 });
         }
+
+        [Test]
+        public void should_not_overwrite_next_path_when_a_move_is_already_pending()
+        {
+            var newRoot = @"C:\Test\TV2".AsOsAgnostic();
+            var existingNextPath = @"C:\Test\TV3\name".AsOsAgnostic();
+
+            _series.ForEach(s =>
+            {
+                s.RootFolderPath = newRoot;
+                s.NextPath = existingNextPath;
+            });
+
+            var result = Subject.UpdateSeries(_series, false);
+
+            result.Should().OnlyContain(s => s.NextPath == existingNextPath);
+            Mocker.GetMock<IBuildSeriesPaths>().Verify(v => v.BuildPath(It.IsAny<Series>(), It.IsAny<bool>()), Times.Never());
+        }
+
+        [Test]
+        public void should_set_next_path_when_deferring()
+        {
+            var newRoot = @"C:\Test\TV2".AsOsAgnostic();
+            _series.ForEach(s =>
+            {
+                s.RootFolderPath = newRoot;
+                s.NextPath = null;
+            });
+
+            Mocker.GetMock<IBuildSeriesPaths>()
+                  .Setup(s => s.BuildPath(It.IsAny<Series>(), false))
+                  .Returns<Series, bool>((s, u) => Path.Combine(s.RootFolderPath, s.Title));
+
+            var result = Subject.UpdateSeries(_series, false);
+
+            result.Should().OnlyContain(s => s.NextPath != null && s.NextPath.StartsWith(newRoot));
+        }
     }
 }
