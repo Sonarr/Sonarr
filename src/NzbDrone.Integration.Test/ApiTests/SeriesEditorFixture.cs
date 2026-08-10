@@ -105,7 +105,17 @@ namespace NzbDrone.Integration.Test.ApiTests
             // was already in flight for this series instead of recomputing/re-queuing one.
             secondMove.Single().NextPath.Should().Be(firstMove.Single().NextPath);
 
+            // Supplementary signal only - the NextPath assertion above is the decisive,
+            // non-confounded proof the guard worked. This count check is known-confoundable by a
+            // separate bug in CommandEqualityComparer, which compares string properties (e.g.
+            // DestinationRootFolder) as character sets via IEnumerable<char> rather than by value,
+            // so it can under-report the true command count independent of whether the guard ran.
             Commands.All().Count(c => c.Name == "BulkMoveSeries").Should().Be(queuedAfterFirst);
+
+            // Cleanup only: let the in-flight move finish before TearDown deletes the temp dirs it
+            // is writing into. Must stay after all assertions above - the test's signal depends on
+            // the second request racing the still-running first move.
+            Commands.WaitAll();
         }
     }
 }
