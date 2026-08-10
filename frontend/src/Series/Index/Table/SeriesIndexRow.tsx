@@ -125,6 +125,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
     status,
     path,
     titleSlug,
+    nextPath,
     nextAiring,
     previousAiring,
     added,
@@ -181,6 +182,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
               monitored={monitored}
               status={status}
               isSelectMode={isSelectMode}
+              nextPath={nextPath}
               component={VirtualTableRowCell}
             />
           );

@@ -82,6 +82,7 @@ interface Series extends ModelBase {
   monitored: boolean;
   monitorNewItems: MonitorNewItems;
   network: string;
+  nextPath?: string;
   originalCountry: string;
   originalLanguage: Language;
   overview: string;
