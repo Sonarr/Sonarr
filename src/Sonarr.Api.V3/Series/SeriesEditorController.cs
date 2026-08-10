@@ -60,11 +60,15 @@ namespace Sonarr.Api.V3.Series
                 if (resource.RootFolderPath.IsNotNullOrWhiteSpace())
                 {
                     series.RootFolderPath = resource.RootFolderPath;
-                    seriesToMove.Add(new BulkMoveSeries
+
+                    if (series.NextPath.IsNullOrWhiteSpace())
                     {
-                        SeriesId = series.Id,
-                        SourcePath = series.Path
-                    });
+                        seriesToMove.Add(new BulkMoveSeries
+                        {
+                            SeriesId = series.Id,
+                            SourcePath = series.Path
+                        });
+                    }
                 }
 
                 if (resource.Tags != null)
@@ -94,6 +98,8 @@ namespace Sonarr.Api.V3.Series
                 }
             }
 
+            var updated = _seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles);
+
             if (resource.MoveFiles && seriesToMove.Any())
             {
                 _commandQueueManager.Push(new BulkMoveSeriesCommand
@@ -103,7 +109,7 @@ namespace Sonarr.Api.V3.Series
                 });
             }
 
-            return Accepted(_seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles).ToResource());
+            return Accepted(updated.ToResource());
         }
 
         [HttpDelete]

@@ -27,6 +27,7 @@ public class SeriesResource : RestResource
     public List<SeasonResource> Seasons { get; set; } = new();
     public int Year { get; set; }
     public string? Path { get; set; }
+    public string? NextPath { get; set; }
     public int QualityProfileId { get; set; }
     public bool SeasonFolder { get; set; }
     public bool Monitored { get; set; }
@@ -80,6 +81,7 @@ public static class SeriesResourceMapper
             OriginalCountry = model.OriginalCountry,
             OriginalLanguage = model.OriginalLanguage,
             Path = model.Path,
+            NextPath = model.NextPath,
             QualityProfileId = model.QualityProfileId,
             SeasonFolder = model.SeasonFolder,
             Monitored = model.Monitored,
@@ -123,6 +125,7 @@ public static class SeriesResourceMapper
             Year = resource.Year,
             OriginalLanguage = resource.OriginalLanguage,
             Path = resource.Path,
+            NextPath = resource.NextPath,
             QualityProfileId = resource.QualityProfileId,
             SeasonFolder = resource.SeasonFolder,
             Monitored = resource.Monitored,

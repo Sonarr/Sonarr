@@ -62,11 +62,15 @@ public class SeriesEditorController : Controller
             if (resource.RootFolderPath.IsNotNullOrWhiteSpace())
             {
                 series.RootFolderPath = resource.RootFolderPath;
-                seriesToMove.Add(new BulkMoveSeries
+
+                if (series.NextPath.IsNullOrWhiteSpace())
                 {
-                    SeriesId = series.Id,
-                    SourcePath = series.Path
-                });
+                    seriesToMove.Add(new BulkMoveSeries
+                    {
+                        SeriesId = series.Id,
+                        SourcePath = series.Path
+                    });
+                }
             }
 
             if (resource.Tags != null)
@@ -96,6 +100,8 @@ public class SeriesEditorController : Controller
             }
         }
 
+        var updated = _seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles);
+
         if (resource.MoveFiles && seriesToMove.Any())
         {
             _commandQueueManager.Push(new BulkMoveSeriesCommand
@@ -105,7 +111,7 @@ public class SeriesEditorController : Controller
             });
         }
 
-        return TypedResults.Ok(_seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles).ToResource());
+        return TypedResults.Ok(updated.ToResource());
     }
 
     [HttpDelete]
