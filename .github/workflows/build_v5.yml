@@ -104,16 +104,17 @@ jobs:
         uses: volta-cli/action@v5
 
       - name: Yarn Install
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
-      - name: Lint
-        run: yarn lint
+      - parallel:
+        - name: Lint
+          run: yarn lint
 
-      - name: Stylelint
-        run: yarn stylelint -f github
+        - name: Stylelint
+          run: yarn stylelint -f github
 
-      - name: Build
-        run: yarn build --env production
+        - name: Build
+          run: yarn build --env production
 
       - name: Publish UI Artifact
         uses: actions/upload-artifact@v7
