@@ -29,7 +29,7 @@ runs:
   using: 'composite'
   steps:
     - name: Setup .NET
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
 
     - name: Setup Postgres
       if: ${{ inputs.use_postgres }}
