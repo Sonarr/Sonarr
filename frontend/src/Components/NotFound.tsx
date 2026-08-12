@@ -11,7 +11,7 @@ function NotFound(props: NotFoundProps) {
   const { message = translate('DefaultNotFoundMessage') } = props;
 
   return (
-    <PageContent title="MIA">
+    <PageContent title={translate('PageNotFound')}>
       <div className={styles.container}>
         <div className={styles.message}>{message}</div>
 

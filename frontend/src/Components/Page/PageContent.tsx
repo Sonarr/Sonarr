@@ -6,7 +6,7 @@ import styles from './PageContent.css';
 
 interface PageContentProps {
   className?: string;
-  title?: string;
+  title: string;
   children: React.ReactNode;
 }
 
@@ -24,7 +24,9 @@ function PageContent({
             : window.Sonarr.instanceName
         }
       >
-        <div className={className}>{children}</div>
+        <main className={className} aria-label={title}>
+          {children}
+        </main>
       </DocumentTitle>
     </ErrorBoundary>
   );
