@@ -607,6 +607,7 @@
   "DownloadFailedEpisodeTooltip": "Episode download failed",
   "DownloadIgnored": "Download Ignored",
   "DownloadIgnoredEpisodeTooltip": "Episode Download Ignored",
+  "DownloadProgressForTitle": "Download progress for {title}",
   "DownloadPropersAndRepacks": "Propers and Repacks",
   "DownloadPropersAndRepacksHelpText": "Whether or not to automatically upgrade to Propers/Repacks",
   "DownloadPropersAndRepacksHelpTextCustomFormat": "Use 'Do not Prefer' to sort by custom format  score over Propers/Repacks",

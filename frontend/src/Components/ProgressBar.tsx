@@ -7,6 +7,7 @@ import translate from 'Utilities/String/translate';
 import styles from './ProgressBar.css';
 
 interface ProgressBarProps {
+  ariaLabel?: string;
   className?: string;
   containerClassName?: string;
   title?: string;
@@ -20,6 +21,7 @@ interface ProgressBarProps {
 }
 
 function ProgressBar({
+  ariaLabel,
   className = styles.progressBar,
   containerClassName = styles.container,
   title,
@@ -62,9 +64,12 @@ function ProgressBar({
                 enableColorImpairedMode && 'colorImpaired'
               )}
               role="meter"
-              aria-label={translate('ProgressBarProgress', {
-                progress: progress.toFixed(0),
-              })}
+              aria-label={
+                ariaLabel ??
+                translate('ProgressBarProgress', {
+                  progress: progress.toFixed(0),
+                })
+              }
               aria-valuenow={Math.floor(progress)}
               aria-valuemin={0}
               aria-valuemax={100}
