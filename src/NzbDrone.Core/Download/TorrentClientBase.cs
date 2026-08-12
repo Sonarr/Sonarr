@@ -81,6 +81,10 @@ namespace NzbDrone.Core.Download
                     {
                         return await DownloadFromWebUrl(remoteEpisode, indexer, torrentUrl);
                     }
+                    catch (ReleaseBlockedException)
+                    {
+                        throw;
+                    }
                     catch (Exception ex)
                     {
                         if (!magnetUrl.IsNullOrWhiteSpace())

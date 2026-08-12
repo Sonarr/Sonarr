@@ -10,12 +10,15 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Blackhole;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Test.IndexerTests;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
@@ -320,6 +323,30 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             var result = await Subject.Download(remoteEpisode, CreateIndexer());
 
             result.Should().BeNull();
+        }
+
+        [Test]
+        public void Download_should_blocklist_and_throw_when_torrent_contains_dangerous_file_with_magnet_fallback()
+        {
+            var remoteEpisode = CreateRemoteEpisode();
+            var indexer = CreateIndexer();
+
+            indexer.Definition = new IndexerDefinition
+            {
+                Settings = new TestIndexerSettings
+                {
+                    FailDownloads = new List<int> { (int)FailDownloads.Executables }
+                }
+            };
+
+            Mocker.GetMock<ITorrentFileInfoReader>()
+                  .Setup(s => s.GetFileNamesFromTorrentFile(It.IsAny<byte[]>()))
+                  .Returns(new List<string> { "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.exe" });
+
+            Assert.ThrowsAsync<ReleaseBlockedException>(async () => await Subject.Download(remoteEpisode, indexer));
+
+            Mocker.GetMock<IBlocklistService>()
+                  .Verify(s => s.Block(remoteEpisode, It.IsAny<string>(), It.IsAny<string>()), Times.Once());
         }
     }
 }
