@@ -78,6 +78,8 @@
     "AllSeriesAreHiddenByTheAppliedFilter": "Всички резултати са скрити от приложения филтър",
     "AllSeriesInRootFolderHaveBeenImported": "Всички сериали в {path} са импортирани",
     "AllTitles": "Всички заглавия",
+    "AllowSeasonPackWithoutAllEpisodesAired": "Позволи сезонен-пакет преди всички епизоди да са се излъчили",
+    "AllowSeasonPackWithoutAllEpisodesAiredHelpTextWarning": "Разреши това само ако се доверяваш на индексъра да не изпраща фалшифи или непълни сезонни-пакове",
     "AlreadyInYourLibrary": "Вече е във вашата библиотека",
     "AlternateTitles": "Алтернативни заглавия",
     "Always": "Винаги",
