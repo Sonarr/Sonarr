@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace NzbDrone.Core.MediaFiles
@@ -47,6 +48,12 @@ namespace NzbDrone.Core.MediaFiles
             ".exe",
             ".sh"
         };
+
+        public static IReadOnlyList<string> ParseUserRejectedExtensions(string raw) =>
+            raw?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+               .Select(e => e.Trim(' ', '.').Insert(0, "."))
+               .ToList()
+            ?? Array.Empty<string>();
 
         public static string RemoveFileExtension(string title)
         {

@@ -297,12 +297,9 @@ namespace NzbDrone.Core.MediaFiles
 
             if (_configService.UserRejectedExtensions is not null)
             {
-                var userRejectedExtensions = _configService.UserRejectedExtensions.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(e => e.Trim(' ', '.')
-                        .Insert(0, "."))
-                    .ToList();
+                var userRejectedExtensions = FileExtensions.ParseUserRejectedExtensions(_configService.UserRejectedExtensions);
 
-                if (userRejectedExtensions.Contains(extension))
+                if (userRejectedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
                 {
                     return new List<ImportResult>
                     {
