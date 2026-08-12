@@ -251,7 +251,7 @@ namespace NzbDrone.Core.Download
             return actualHash;
         }
 
-        private void EnsureTorrentContainsNoRejectedFiles(RemoteEpisode remoteEpisode, IIndexer indexer, byte[] torrentFile)
+        private void EnsureTorrentDoesNotContainRejectedFiles(RemoteEpisode remoteEpisode, IIndexer indexer, byte[] torrentFile)
         {
             var failDownloads = (indexer?.Definition?.Settings as IIndexerSettings)?.FailDownloads?
                 .Select(f => (FailDownloads)f)
