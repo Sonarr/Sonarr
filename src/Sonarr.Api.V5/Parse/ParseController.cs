@@ -42,7 +42,7 @@ public class ParseController : Controller
 
         var parsedEpisodeInfo = path.IsNotNullOrWhiteSpace() ? Parser.ParsePath(path) : Parser.ParseTitle(title);
 
-        // Only a title falls back to the season title parser, importing a file does not use it.
+        // Try to parse a season title if previous parsing failed and we're not dealing with a path.
         if (parsedEpisodeInfo == null && path.IsNullOrWhiteSpace())
         {
             parsedEpisodeInfo = Parser.ParseSeasonTitle(title);

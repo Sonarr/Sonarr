@@ -806,10 +806,6 @@ namespace NzbDrone.Core.Parser
             return null;
         }
 
-        // Anime season packs are commonly named after the season's own title with no season or
-        // episode number anywhere, so none of the regexes above have anything to match on. The
-        // season title is the only identifier the release carries. Which season it refers to is
-        // held in the scene mappings, so that is resolved later by ParsingService.
         public static ParsedEpisodeInfo ParseSeasonTitle(string title)
         {
             var releaseTitle = FileExtensions.RemoveFileExtension(title);
@@ -819,6 +815,10 @@ namespace NzbDrone.Core.Parser
                 return null;
             }
 
+            // Anime season packs are commonly named after the season's own title with no season or
+            // episode number anywhere, so none of the regexes above have anything to match on. The
+            // season title is the only identifier the release carries. Which season it refers to is
+            // held in the scene mappings, so that is resolved later by ParsingService.
             var seriesTitle = AnimeSeasonReleaseMetadataRegex.Replace(releaseTitle, " ");
             seriesTitle = DuplicateSpacesRegex.Replace(seriesTitle, " ");
             seriesTitle = seriesTitle.Trim();
