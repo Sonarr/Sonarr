@@ -34,7 +34,7 @@ function formatReleaseNumber(
     return absoluteEpisodeNumbers[0];
   }
 
-  if (seasonNumber !== undefined) {
+  if (seasonNumber !== undefined && seasonNumber >= 0) {
     return translate('SeasonNumberToken', { seasonNumber });
   }
 
