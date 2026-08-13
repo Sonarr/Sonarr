@@ -387,5 +387,23 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
             result.Series.Should().Be(_series);
         }
+
+        [Test]
+        public void should_keep_the_parsed_season_number_when_the_scene_mapping_has_no_season()
+        {
+            GivenMatchBySeriesTitle();
+
+            _parsedEpisodeInfo.SeasonNumber = -1;
+            _parsedEpisodeInfo.IsSeasonTitle = true;
+            _parsedEpisodeInfo.EpisodeNumbers = [];
+
+            Mocker.GetMock<ISceneMappingService>()
+                  .Setup(v => v.FindSceneMapping(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                  .Returns(new SceneMapping { TvdbId = _series.TvdbId });
+
+            var result = Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId, _series.ImdbId);
+
+            result.MappedSeasonNumber.Should().Be(-1);
+        }
     }
 }
