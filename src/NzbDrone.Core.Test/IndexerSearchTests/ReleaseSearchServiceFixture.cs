@@ -621,6 +621,47 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         }
 
         [Test]
+        public async Task season_search_for_anime_should_not_group_a_series_wide_alias_with_a_season_title()
+        {
+            WithEpisodes();
+            _xemSeries.SeriesType = SeriesTypes.Anime;
+            _xemEpisodes.ForEach(e => e.EpisodeFileId = 0);
+
+            Mocker.GetMock<ISceneMappingService>()
+                  .Setup(s => s.FindByTvdbId(It.IsAny<int>()))
+                  .Returns(new List<SceneMapping>
+                  {
+                      new SceneMapping
+                      {
+                          TvdbId = _xemSeries.TvdbId,
+                          SearchTerm = "Sonarrs Season Title",
+                          ParseTerm = "sonarrsseasontitle",
+                          SeasonNumber = 2,
+                          SceneSeasonNumber = 2
+                      },
+                      new SceneMapping
+                      {
+                          TvdbId = _xemSeries.TvdbId,
+                          SearchTerm = "Sonarrs Series Alias",
+                          ParseTerm = "sonarrsseriesalias",
+                          SearchMode = SearchMode.SearchTitle
+                      }
+                  });
+
+            var allCriteria = WatchForSearchCriteria();
+
+            await Subject.SeasonSearch(_xemSeries.Id, 1, true, false, true, false);
+
+            var criteria = allCriteria.OfType<AnimeSeasonSearchCriteria>().ToList();
+
+            criteria.Should().Contain(c => c.SceneTitles.Contains("Sonarrs Season Title") &&
+                                           !c.SceneTitles.Contains("Sonarrs Series Alias"));
+
+            criteria.Should().Contain(c => c.SceneTitles.Contains("Sonarrs Series Alias") &&
+                                           !c.SearchMode.HasFlag(SearchMode.SeasonSearchTitle));
+        }
+
+        [Test]
         public async Task season_search_for_daily_should_search_multiple_years()
         {
             WithEpisode(1, 1, null, null, "2005-12-30");

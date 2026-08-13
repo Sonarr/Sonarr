@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
                 // A season title alias already identifies the season, so the season number is
                 // not added to it. There is no season parameter here, so it would become part
                 // of the query text and exclude the pack the alias names.
-                if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchTitle))
+                if (searchCriteria.SearchMode.HasFlag(SearchMode.SeasonSearchTitle))
                 {
                     pageableRequests.Add(GetPagedRequests(searchTitle));
                 }

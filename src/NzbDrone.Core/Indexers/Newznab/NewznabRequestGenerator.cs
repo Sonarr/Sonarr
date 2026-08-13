@@ -460,7 +460,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             // A season title alias already identifies the season, so the season number is not
             // added to it. Doing so excludes the pack the alias names on trackers that match
             // the season parameter as text.
-            if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchTitle))
+            if (searchCriteria.SearchMode.HasFlag(SearchMode.SeasonSearchTitle))
             {
                 foreach (var queryTitle in queryTitles)
                 {
