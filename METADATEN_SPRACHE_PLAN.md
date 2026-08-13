@@ -6,7 +6,7 @@
 
 ---
 
-## 1. UrsprÃ¼ngliche Recherche
+## 1. Ursprüngliche Recherche
 
 - `SonarrCloudRequestBuilder`: SkyHook-URL mit festem `{language}`-Segment (`"en"`).
 - SkyHook liefert nur Englisch (Test: `de`, `de-DE`, `deu`, `ger`, `query lang` -> alle 400).
