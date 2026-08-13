@@ -196,8 +196,13 @@ namespace NzbDrone.Core.Parser
 
                 if (parsedEpisodeInfo.IsSeasonTitle)
                 {
-                    // Assign the season number from the mapping so we have a valid season number
-                    remoteEpisode.MappedSeasonNumber = sceneMapping.SceneSeasonNumber ?? sceneMapping.SeasonNumber ?? -1;
+                    var mappedSeasonNumber = sceneMapping.SceneSeasonNumber ?? sceneMapping.SeasonNumber;
+
+                    if (mappedSeasonNumber.HasValue)
+                    {
+                        // Assign the season number from the mapping so we have a valid season number
+                        remoteEpisode.MappedSeasonNumber = mappedSeasonNumber.Value;
+                    }
                 }
 
                 if (sceneMapping.SceneOrigin == "tvdb")
