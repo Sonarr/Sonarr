@@ -1,44 +1,47 @@
 using NzbDrone.Core.Configuration;
 using Sonarr.Http.REST;
 
-namespace Sonarr.Api.V5.Settings;
-
-public class UiSettingsResource : RestResource
+namespace Sonarr.Api.V5.Settings
 {
-    // Calendar
-    public int FirstDayOfWeek { get; set; }
-    public string? CalendarWeekColumnHeader { get; set; }
-
-    // Dates
-    public string? ShortDateFormat { get; set; }
-    public string? LongDateFormat { get; set; }
-    public string? TimeFormat { get; set; }
-    public string? TimeZone { get; set; }
-    public bool ShowRelativeDates { get; set; }
-
-    public bool EnableColorImpairedMode { get; set; }
-    public string? Theme { get; set; }
-    public int UiLanguage { get; set; }
-}
-
-public static class UiSettingsResourceMapper
-{
-    public static UiSettingsResource ToResource(IConfigFileProvider config, IConfigService model)
+    public class UiSettingsResource : RestResource
     {
-        return new UiSettingsResource
+        // Calendar
+        public int FirstDayOfWeek { get; set; }
+        public string? CalendarWeekColumnHeader { get; set; }
+
+        // Dates
+        public string? ShortDateFormat { get; set; }
+        public string? LongDateFormat { get; set; }
+        public string? TimeFormat { get; set; }
+        public string? TimeZone { get; set; }
+        public bool ShowRelativeDates { get; set; }
+
+        public bool EnableColorImpairedMode { get; set; }
+        public string? Theme { get; set; }
+        public int UiLanguage { get; set; }
+        public int MetadataLanguage { get; set; }
+    }
+
+    public static class UiSettingsResourceMapper
+    {
+        public static UiSettingsResource ToResource(IConfigFileProvider config, IConfigService model)
         {
-            FirstDayOfWeek = model.FirstDayOfWeek,
-            CalendarWeekColumnHeader = model.CalendarWeekColumnHeader,
+            return new UiSettingsResource
+            {
+                FirstDayOfWeek = model.FirstDayOfWeek,
+                CalendarWeekColumnHeader = model.CalendarWeekColumnHeader,
 
-            ShortDateFormat = model.ShortDateFormat,
-            LongDateFormat = model.LongDateFormat,
-            TimeFormat = model.TimeFormat,
-            TimeZone = model.TimeZone,
-            ShowRelativeDates = model.ShowRelativeDates,
+                ShortDateFormat = model.ShortDateFormat,
+                LongDateFormat = model.LongDateFormat,
+                TimeFormat = model.TimeFormat,
+                TimeZone = model.TimeZone,
+                ShowRelativeDates = model.ShowRelativeDates,
 
-            EnableColorImpairedMode = model.EnableColorImpairedMode,
-            Theme = config.Theme,
-            UiLanguage = model.UILanguage
-        };
+                EnableColorImpairedMode = model.EnableColorImpairedMode,
+                Theme = config.Theme,
+                UiLanguage = model.UILanguage,
+                MetadataLanguage = model.MetadataLanguage
+            };
+        }
     }
 }

@@ -228,6 +228,7 @@ function UISettings() {
             <FieldSet legend={translate('Style')}>
               <FormGroup>
                 <FormLabel>{translate('Theme')}</FormLabel>
+
                 <FormInputGroup
                   type={inputTypes.SELECT}
                   name="theme"
@@ -270,6 +271,30 @@ function UISettings() {
                       : [
                           ...settings.uiLanguage.errors,
                           { message: translate('InvalidUILanguage') },
+                        ]
+                  }
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>{translate('MetadataLanguage')}</FormLabel>
+                <FormInputGroup
+                  type={inputTypes.LANGUAGE_SELECT}
+                  name="metadataLanguage"
+                  helpText={translate('MetadataLanguageHelpText')}
+                  includeOriginal={false}
+                  includeUnknown={false}
+                  onChange={handleInputChange}
+                  {...settings.metadataLanguage}
+                  errors={
+                    languages.some(
+                      (language) =>
+                        language.key === settings.metadataLanguage.value
+                    )
+                      ? settings.metadataLanguage.errors
+                      : [
+                          ...settings.metadataLanguage.errors,
+                          { message: translate('InvalidMetadataLanguage') },
                         ]
                   }
                 />

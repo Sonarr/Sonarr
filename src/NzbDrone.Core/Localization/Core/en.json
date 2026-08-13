@@ -1273,6 +1273,7 @@
   "MetadataSettingsSeriesSummary": "Create metadata files when episodes are imported or series are refreshed",
   "MetadataSource": "Metadata Source",
   "MetadataSourceSettings": "Metadata Source Settings",
+  "MetadataSourceSettingsLoadError": "Unable to load Metadata Source settings",
   "MetadataSourceSettingsSeriesSummary": "Information on where {appName} gets series and episode information",
   "MetadataXmbcSettingsEpisodeMetadataImageThumbsHelpText": "Include image thumb tags in <filename>.nfo (Requires 'Episode Metadata')",
   "MetadataXmbcSettingsSeriesMetadataEpisodeGuideHelpText": "Include JSON formatted episode guide element in tvshow.nfo (Requires 'Series Metadata')",
@@ -2151,6 +2152,10 @@
   "TestParsing": "Test Parsing",
   "TheLogLevelDefault": "The log level defaults to 'Debug' and can be changed in [General Settings](/settings/general)",
   "TheTvdb": "TheTVDB",
+  "TmdbApiKey": "TMDB API Key",
+  "TmdbApiKeyHelpText": "TheMovieDB API-Key used to fetch localized metadata (series and episode information)",
+  "TmdbEnabled": "Enable TMDB",
+  "TmdbEnabledHelpText": "Use TheMovieDB directly to fetch metadata in the configured metadata language. Disable to use SkyHook only.",
   "Theme": "Theme",
   "ThemeHelpText": "Change Application UI Theme, 'Auto' Theme will use your OS Theme to set Light or Dark mode. Inspired by Theme.Park",
   "Threshold": "Threshold",
@@ -2304,5 +2309,8 @@
   "Yes": "Yes",
   "YesCancel": "Yes, Cancel",
   "Yesterday": "Yesterday",
-  "YesterdayAt": "Yesterday at {time}"
+  "YesterdayAt": "Yesterday at {time}",
+  "MetadataLanguage": "Metadata Language",
+  "MetadataLanguageHelpText": "Language that {appName} will use when fetching series, episode and people information. Changes apply to new additions and refreshes.",
+  "InvalidMetadataLanguage": "Your metadata language is set to an invalid value, correct it and save your settings"
 }

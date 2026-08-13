@@ -8,11 +8,13 @@ using NzbDrone.Common.Cloud;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.DailySeries;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.SkyHook.Resource;
+using NzbDrone.Core.MetadataSource.Tmdb;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 
@@ -22,28 +24,52 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
     {
         private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
+        private readonly IConfigService _configService;
         private readonly ISeriesService _seriesService;
         private readonly IDailySeriesService _dailySeriesService;
+        private readonly ITmdbSearchService _tmdbSearchService;
         private readonly IHttpRequestBuilderFactory _requestBuilder;
 
         public SkyHookProxy(IHttpClient httpClient,
                             ISonarrCloudRequestBuilder requestBuilder,
+                            IConfigService configService,
                             ISeriesService seriesService,
                             IDailySeriesService dailySeriesService,
+                            ITmdbSearchService tmdbSearchService,
                             Logger logger)
         {
             _httpClient = httpClient;
             _requestBuilder = requestBuilder.SkyHookTvdb;
             _logger = logger;
+            _configService = configService;
             _seriesService = seriesService;
             _dailySeriesService = dailySeriesService;
-            _requestBuilder = requestBuilder.SkyHookTvdb;
+            _tmdbSearchService = tmdbSearchService;
+        }
+
+        private string GetMetadataLanguageCode()
+        {
+            try
+            {
+                var language = Language.FindById(_configService.MetadataLanguage);
+                var isoLanguage = IsoLanguages.Get(language);
+
+                return isoLanguage?.TwoLetterCode ?? "en";
+            }
+            catch
+            {
+                return "en";
+            }
         }
 
         public Tuple<Series, List<Episode>> GetSeriesInfo(int tvdbSeriesId)
         {
+            // SkyHook only supports English ("en") for the language segment.
+            // The configured metadata language is applied later via TMDB translations
+            // (RefreshSeriesService → ITmdbTranslationService.ApplyTranslations).
             var httpRequest = _requestBuilder.Create()
                                              .SetSegment("route", "shows")
+                                             .SetSegment("language", "en", true)
                                              .Resource(tvdbSeriesId.ToString())
                                              .Build();
 
@@ -139,6 +165,12 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
                     {
                         return new List<Series>();
                     }
+                }
+
+                if (_tmdbSearchService?.IsEnabled() == true)
+                {
+                    _logger.Debug("Using TMDB search for '{0}'", title);
+                    return _tmdbSearchService.Search(title).GetAwaiter().GetResult();
                 }
 
                 var httpRequest = _requestBuilder.Create()

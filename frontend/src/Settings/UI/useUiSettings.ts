@@ -16,6 +16,7 @@ export interface UiSettingsModel {
   enableColorImpairedMode: boolean;
   calendarWeekColumnHeader: string;
   uiLanguage: number;
+  metadataLanguage: number;
 }
 
 const PATH = '/settings/ui';

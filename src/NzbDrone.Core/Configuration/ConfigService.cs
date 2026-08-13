@@ -382,6 +382,27 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("UILanguage", value); }
         }
 
+        public int MetadataLanguage
+        {
+            get { return GetValueInt("MetadataLanguage", (int)Language.English); }
+
+            set { SetValue("MetadataLanguage", value); }
+        }
+
+        public string TmdbApiKey
+        {
+            get { return GetValue("TmdbApiKey", string.Empty); }
+
+            set { SetValue("TmdbApiKey", value); }
+        }
+
+        public bool TmdbEnabled
+        {
+            get { return GetValueBoolean("TmdbEnabled", false); }
+
+            set { SetValue("TmdbEnabled", value); }
+        }
+
         public bool CleanupMetadataImages
         {
             get { return GetValueBoolean("CleanupMetadataImages", true); }

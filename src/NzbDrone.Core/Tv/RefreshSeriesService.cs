@@ -12,6 +12,7 @@ using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.MetadataSource;
+using NzbDrone.Core.MetadataSource.Tmdb;
 using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Core.Tv.Events;
 
@@ -26,6 +27,7 @@ namespace NzbDrone.Core.Tv
         private readonly IDiskScanService _diskScanService;
         private readonly ICheckIfSeriesShouldBeRefreshed _checkIfSeriesShouldBeRefreshed;
         private readonly IConfigService _configService;
+        private readonly ITmdbTranslationService _tmdbTranslationService;
         private readonly ICommandResultReporter _commandResultReporter;
         private readonly Logger _logger;
 
@@ -36,6 +38,7 @@ namespace NzbDrone.Core.Tv
                                     IDiskScanService diskScanService,
                                     ICheckIfSeriesShouldBeRefreshed checkIfSeriesShouldBeRefreshed,
                                     IConfigService configService,
+                                    ITmdbTranslationService tmdbTranslationService,
                                     ICommandResultReporter commandResultReporter,
                                     Logger logger)
         {
@@ -46,6 +49,7 @@ namespace NzbDrone.Core.Tv
             _diskScanService = diskScanService;
             _checkIfSeriesShouldBeRefreshed = checkIfSeriesShouldBeRefreshed;
             _configService = configService;
+            _tmdbTranslationService = tmdbTranslationService;
             _commandResultReporter = commandResultReporter;
             _logger = logger;
         }
@@ -124,6 +128,8 @@ namespace NzbDrone.Core.Tv
             }
 
             series.Seasons = UpdateSeasons(series, seriesInfo);
+
+            _tmdbTranslationService.ApplyTranslations(series, episodes);
 
             _seriesService.UpdateSeries(series, publishUpdatedEvent: false);
             _refreshEpisodeService.RefreshEpisodeInfo(series, episodes);
