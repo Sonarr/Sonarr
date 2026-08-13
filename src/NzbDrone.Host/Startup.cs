@@ -358,7 +358,11 @@ namespace NzbDrone.Host
             app.UseMiddleware<BufferingMiddleware>(new List<string> { "/api/v3/command", "/api/v5/command" });
 
             app.UseWebSockets();
-            app.UseMiniProfiler();
+
+            if (configFileProvider.ProfilerEnabled)
+            {
+                app.UseMiniProfiler();
+            }
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             if (BuildInfo.IsDebug)
@@ -372,7 +376,12 @@ namespace NzbDrone.Host
             app.UseEndpoints(x =>
             {
                 x.MapHub<MessageHub>("/signalr/messages").RequireAuthorization("SignalR");
-                x.MapPost("/profiler/results", context => Task.CompletedTask).RequireAuthorization("UI");
+
+                if (configFileProvider.ProfilerEnabled)
+                {
+                    x.MapPost("/profiler/results", context => Task.CompletedTask).RequireAuthorization("UI");
+                }
+
                 x.MapControllers();
             });
         }
