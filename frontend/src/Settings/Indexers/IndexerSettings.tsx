@@ -3,6 +3,7 @@ import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import StatusIndicator from 'Components/StatusIndicator';
 import { icons } from 'Helpers/Props';
 import SettingsToolbar from 'Settings/SettingsToolbar';
 import {
@@ -16,7 +17,12 @@ import IndexerOptions from './Options/IndexerOptions';
 import { useTestAllIndexers } from './useIndexers';
 
 function IndexerSettings() {
-  const { isTestingAllIndexers, testAllIndexers } = useTestAllIndexers();
+  const {
+    isTestingAllIndexers,
+    testAllIndexers,
+    testAllResults,
+    testAllError,
+  } = useTestAllIndexers();
 
   const saveOptions = useRef<() => void>();
 
@@ -69,6 +75,16 @@ function IndexerSettings() {
               onPress={handleTestAllIndexersPress}
             />
 
+            {isTestingAllIndexers ? (
+              <StatusIndicator
+                label={translate('TestingAllIndexers')}
+                role="status"
+                aria-atomic={true}
+              >
+                <span />
+              </StatusIndicator>
+            ) : null}
+
             <PageToolbarButton
               label={translate('ManageIndexers')}
               iconName={icons.MANAGE}
@@ -80,7 +96,7 @@ function IndexerSettings() {
       />
 
       <PageContentBody>
-        <Indexers />
+        <Indexers testResults={testAllResults} testError={testAllError} />
 
         <IndexerOptions
           setChildSave={handleSetChildSave}

@@ -4,6 +4,10 @@ import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import useApiMutation from 'Helpers/Hooks/useApiMutation';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import {
+  getProviderTestAllResults,
+  ProviderTestAllResult,
+} from 'Settings/ProviderTestAllResult';
+import {
   SelectedSchema,
   useProviderSchema,
   useSelectedSchema,
@@ -198,10 +202,13 @@ export const useTestIndexer = (
 };
 
 export const useTestAllIndexers = (
-  onSuccess?: () => void,
+  onSuccess?: (results: ProviderTestAllResult[]) => void,
   onError?: (error: ApiError) => void
 ) => {
-  const { mutate, isPending, error } = useApiMutation<void, void>({
+  const { mutate, isPending, data, error } = useApiMutation<
+    ProviderTestAllResult[],
+    void
+  >({
     path: `${PATH}/testall`,
     method: 'POST',
     mutationOptions: {
@@ -210,10 +217,13 @@ export const useTestAllIndexers = (
     },
   });
 
+  const errorResults = getProviderTestAllResults(error);
+
   return {
     testAllIndexers: mutate,
     isTestingAllIndexers: isPending,
-    testAllError: error,
+    testAllResults: data ?? errorResults,
+    testAllError: errorResults ? null : error,
   };
 };
 
