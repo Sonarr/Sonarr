@@ -124,6 +124,24 @@ function DownloadClientOptions({
                 />
               </FormGroup>
             ) : null}
+
+            {settings.autoRedownloadFailed.value ? (
+              <FormGroup
+                advancedSettings={showAdvancedSettings}
+                isAdvanced={true}
+                size={sizes.MEDIUM}
+              >
+                <FormLabel>{translate('RetryUsenetReleasesByGuid')}</FormLabel>
+
+                <FormInputGroup
+                  type={inputTypes.CHECK}
+                  name="retryUsenetReleasesByGuid"
+                  helpText={translate('RetryUsenetReleasesByGuidHelpText')}
+                  onChange={handleInputChange}
+                  {...settings.retryUsenetReleasesByGuid}
+                />
+              </FormGroup>
+            ) : null}
           </Form>
         </FieldSet>
       ) : null}

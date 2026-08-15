@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Blocklisting
         public long? Size { get; set; }
         public DownloadProtocol Protocol { get; set; }
         public string Indexer { get; set; }
+        public string IndexerGuid { get; set; }
         public IndexerFlags IndexerFlags { get; set; }
         public ReleaseType ReleaseType { get; set; }
         public string Message { get; set; }

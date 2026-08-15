@@ -1900,6 +1900,8 @@
   "Retention": "Retention",
   "RetentionHelpText": "Usenet only: Set to zero to set for unlimited retention",
   "RetryingDownloadOn": "Retrying download on {date} at {time}",
+  "RetryUsenetReleasesByGuid": "Retry Distinct Usenet NZBs",
+  "RetryUsenetReleasesByGuidHelpText": "When a Usenet download fails, block only the exact indexer and NZB GUID combination so other NZB entries with the same title may be tried. Standard matching is used only when both entries lack GUID data",
   "RootFolder": "Root Folder",
   "RootFolderEmptyHealthCheckMessage": "Empty root folder: {rootFolderPath}",
   "RootFolderMissingHealthCheckMessage": "Missing root folder: {rootFolderPath}",

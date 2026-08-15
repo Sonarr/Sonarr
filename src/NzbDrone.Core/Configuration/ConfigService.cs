@@ -157,6 +157,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("AutoRedownloadFailedFromInteractiveSearch", value); }
         }
 
+        public bool RetryUsenetReleasesByGuid
+        {
+            get { return GetValueBoolean("RetryUsenetReleasesByGuid", false); }
+
+            set { SetValue("RetryUsenetReleasesByGuid", value); }
+        }
+
         public bool CreateEmptySeriesFolders
         {
             get { return GetValueBoolean("CreateEmptySeriesFolders", false); }

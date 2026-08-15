@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
@@ -29,10 +30,13 @@ namespace NzbDrone.Core.Blocklisting
                                     IHandleAsync<SeriesDeletedEvent>
     {
         private readonly IBlocklistRepository _blocklistRepository;
+        private readonly IConfigService _configService;
 
-        public BlocklistService(IBlocklistRepository blocklistRepository)
+        public BlocklistService(IBlocklistRepository blocklistRepository,
+                                IConfigService configService)
         {
             _blocklistRepository = blocklistRepository;
+            _configService = configService;
         }
 
         public bool Blocklisted(int seriesId, ReleaseInfo release)
@@ -84,6 +88,7 @@ namespace NzbDrone.Core.Blocklisting
                                 PublishedDate = remoteEpisode.Release.PublishDate,
                                 Size = remoteEpisode.Release.Size,
                                 Indexer = remoteEpisode.Release.Indexer,
+                                IndexerGuid = remoteEpisode.Release.Guid,
                                 Protocol = remoteEpisode.Release.DownloadProtocol,
                                 Message = message,
                                 Source = source,
@@ -110,6 +115,28 @@ namespace NzbDrone.Core.Blocklisting
 
         private bool SameNzb(Blocklist item, ReleaseInfo release)
         {
+            if (_configService.RetryUsenetReleasesByGuid)
+            {
+                var blocklistHasGuid = item.IndexerGuid.IsNotNullOrWhiteSpace();
+                var releaseHasGuid = release.Guid.IsNotNullOrWhiteSpace();
+
+                if (blocklistHasGuid != releaseHasGuid)
+                {
+                    return false;
+                }
+
+                if (blocklistHasGuid)
+                {
+                    if (item.Indexer.IsNullOrWhiteSpace() || release.Indexer.IsNullOrWhiteSpace())
+                    {
+                        return item.IndexerGuid.Equals(release.Guid, StringComparison.InvariantCultureIgnoreCase);
+                    }
+
+                    return item.Indexer.Equals(release.Indexer, StringComparison.InvariantCultureIgnoreCase) &&
+                           item.IndexerGuid.Equals(release.Guid, StringComparison.InvariantCultureIgnoreCase);
+                }
+            }
+
             return ReleaseComparer.SameNzb(new ReleaseComparerModel(item), release);
         }
 
@@ -135,6 +162,7 @@ namespace NzbDrone.Core.Blocklisting
                 PublishedDate = DateTime.Parse(message.Data.GetValueOrDefault("publishedDate")),
                 Size = long.Parse(message.Data.GetValueOrDefault("size", "0")),
                 Indexer = message.Data.GetValueOrDefault("indexer"),
+                IndexerGuid = message.Data.GetValueOrDefault("guid"),
                 Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
                 Message = message.Message,
                 Source = message.Source,
