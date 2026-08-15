@@ -6,6 +6,7 @@ import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import { icons, kinds } from 'Helpers/Props';
+import { ProviderTestStatus } from 'Settings/ProviderTestAllResult';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import { IndexerModel, useDeleteIndexer } from '../useIndexers';
@@ -13,8 +14,35 @@ import EditIndexerModal from './EditIndexerModal';
 import styles from './Indexer.css';
 
 interface IndexerProps extends IndexerModel {
+  testStatus?: ProviderTestStatus;
   showPriority: boolean;
   onCloneIndexerPress: (id: number) => void;
+}
+
+function getTestStatusLabel(status: ProviderTestStatus) {
+  switch (status) {
+    case 'passed':
+      return translate('ProviderTestPassed');
+    case 'warning':
+      return translate('ProviderTestWarningStatus');
+    case 'failed':
+      return translate('ProviderTestFailedStatus');
+    default:
+      return translate('ProviderNotTested');
+  }
+}
+
+function getTestStatusKind(status: ProviderTestStatus) {
+  switch (status) {
+    case 'passed':
+      return kinds.SUCCESS;
+    case 'warning':
+      return kinds.WARNING;
+    case 'failed':
+      return kinds.DANGER;
+    default:
+      return kinds.DISABLED;
+  }
 }
 
 function Indexer({
@@ -28,6 +56,7 @@ function Indexer({
   supportsRss,
   supportsSearch,
   priority,
+  testStatus,
   showPriority,
   onCloneIndexerPress,
 }: IndexerProps) {
@@ -62,12 +91,22 @@ function Indexer({
   const handleCloneIndexerPress = useCallback(() => {
     onCloneIndexerPress(id);
   }, [id, onCloneIndexerPress]);
+  const testStatusLabel = testStatus
+    ? getTestStatusLabel(testStatus)
+    : undefined;
 
   return (
     <Card
       className={styles.indexer}
       overlayContent={true}
-      aria-label={translate('EditIndexerName', { name })}
+      aria-label={
+        testStatusLabel
+          ? translate('EditIndexerNameWithTestStatus', {
+              name,
+              testStatus: testStatusLabel,
+            })
+          : translate('EditIndexerName', { name })
+      }
       onPress={handleEditIndexerPress}
     >
       <div className={styles.nameContainer}>
@@ -101,6 +140,10 @@ function Indexer({
           <Label kind={kinds.DEFAULT}>
             {translate('Priority')}: {priority}
           </Label>
+        ) : null}
+
+        {testStatus && testStatusLabel ? (
+          <Label kind={getTestStatusKind(testStatus)}>{testStatusLabel}</Label>
         ) : null}
 
         {!enableRss && !enableAutomaticSearch && !enableInteractiveSearch ? (
