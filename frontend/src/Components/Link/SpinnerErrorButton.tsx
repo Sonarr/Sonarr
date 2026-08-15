@@ -177,11 +177,11 @@ function SpinnerErrorButton({
     <>
       <SpinnerButton kind={kind} isSpinning={isSpinning} {...otherProps}>
         <span className={showIcon ? styles.showIcon : undefined}>
-          {showIcon && (
+          {showIcon ? (
             <span className={styles.iconContainer}>
               <Icon name={iconName} kind={iconKind} aria-hidden={true} />
             </span>
-          )}
+          ) : null}
 
           <span className={styles.label}>{children}</span>
         </span>
