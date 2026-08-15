@@ -287,7 +287,9 @@ namespace NzbDrone.Core.Download
                 ? FileExtensions.ParseExtensions(_configService.UserRejectedExtensions)
                 : [];
 
-            var rejections = new List<string>();
+            var dangerousExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var executableExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var userRejected = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (var fileName in fileNames)
             {
@@ -301,17 +303,34 @@ namespace NzbDrone.Core.Download
                 if (failDownloads.Contains(FailDownloads.PotentiallyDangerous) &&
                     FileExtensions.DangerousExtensions.Contains(extension))
                 {
-                    rejections.Add($"Caution: Found potentially dangerous file with extension: {extension}");
+                    dangerousExtensions.Add(extension);
                 }
                 else if (failDownloads.Contains(FailDownloads.Executables) &&
                     FileExtensions.ExecutableExtensions.Contains(extension))
                 {
-                    rejections.Add($"Caution: Found executable file with extension: '{extension}'");
+                    executableExtensions.Add(extension);
                 }
                 else if (userRejectedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
                 {
-                    rejections.Add($"Caution: Found file with user defined rejected extension: '{extension}'");
+                    userRejected.Add(extension);
                 }
+            }
+
+            var rejections = new List<string>();
+
+            if (dangerousExtensions.Any())
+            {
+                rejections.Add($"Found potentially dangerous files with extensions: {string.Join(", ", dangerousExtensions)}");
+            }
+
+            if (executableExtensions.Any())
+            {
+                rejections.Add($"Found executables with extensions: {string.Join(", ", executableExtensions)}");
+            }
+
+            if (userRejected.Any())
+            {
+                rejections.Add($"Found files with user defined rejected extensions: {string.Join(", ", userRejected)}");
             }
 
             if (rejections.Count == 0)
@@ -319,9 +338,9 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
-            var rejection = string.Join("; ", rejections);
+            var rejection = $"Caution:{Environment.NewLine}{string.Join(Environment.NewLine, rejections)}";
 
-            _logger.Debug("Torrent for '{0}' rejected: {1}. Blocklisting release.", remoteEpisode.Release.Title, rejection);
+            _logger.Warn("Torrent for '{0}' rejected: {1}. Blocklisting release.", remoteEpisode.Release.Title, rejection);
             _blocklistService.Block(remoteEpisode, rejection, "TorrentFileValidation");
 
             throw new ReleaseBlockedException(remoteEpisode.Release, rejection);
