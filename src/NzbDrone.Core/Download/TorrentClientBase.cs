@@ -284,8 +284,8 @@ namespace NzbDrone.Core.Download
         private void ValidateFileNames(RemoteEpisode remoteEpisode, List<string> fileNames, HashSet<FailDownloads> failDownloads)
         {
             var userRejectedExtensions = failDownloads.Contains(FailDownloads.UserDefinedExtensions)
-                ? FileExtensions.ParseUserRejectedExtensions(_configService.UserRejectedExtensions)
-                : Array.Empty<string>();
+                ? FileExtensions.ParseExtensions(_configService.UserRejectedExtensions)
+                : [];
 
             var rejections = new List<string>();
 

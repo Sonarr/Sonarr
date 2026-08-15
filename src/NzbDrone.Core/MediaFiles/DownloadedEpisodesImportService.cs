@@ -297,7 +297,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (_configService.UserRejectedExtensions is not null)
             {
-                var userRejectedExtensions = FileExtensions.ParseUserRejectedExtensions(_configService.UserRejectedExtensions);
+                var userRejectedExtensions = FileExtensions.ParseExtensions(_configService.UserRejectedExtensions);
 
                 if (userRejectedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
                 {

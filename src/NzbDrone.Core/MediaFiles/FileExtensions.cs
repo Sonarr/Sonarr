@@ -49,11 +49,17 @@ namespace NzbDrone.Core.MediaFiles
             ".sh"
         };
 
-        public static IReadOnlyList<string> ParseUserRejectedExtensions(string raw) =>
-            raw?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+        public static List<string> ParseExtensions(string input)
+        {
+            if (input.IsNullOrWhiteSpace())
+            {
+                return [];
+            }
+
+            return input.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                .Select(e => e.Trim(' ', '.').Insert(0, "."))
-               .ToList()
-            ?? Array.Empty<string>();
+               .ToList();
+        }
 
         public static string RemoveFileExtension(string title)
         {
