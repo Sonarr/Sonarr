@@ -8,19 +8,12 @@ public static class ReleaseComparer
 {
     public static bool SameNzb(ReleaseComparerModel item, ReleaseInfo release)
     {
-        if (item.PublishedDate == release.PublishDate)
+        if (!HasSameIndexer(item, release.Indexer))
         {
-            return true;
+            return false;
         }
 
-        if (!HasSameIndexer(item, release.Indexer) &&
-            HasSamePublishedDate(item, release.PublishDate) &&
-            HasSameSize(item, release.Size))
-        {
-            return true;
-        }
-
-        return false;
+        return item.PublishedDate == release.PublishDate;
     }
 
     public static bool SameTorrent(ReleaseComparerModel item, TorrentInfo release)
@@ -41,28 +34,5 @@ public static class ReleaseComparer
         }
 
         return item.Indexer.Equals(indexer, StringComparison.InvariantCultureIgnoreCase);
-    }
-
-    private static bool HasSamePublishedDate(ReleaseComparerModel item, DateTime publishedDate)
-    {
-        if (!item.PublishedDate.HasValue)
-        {
-            return true;
-        }
-
-        return item.PublishedDate.Value.AddMinutes(-2) <= publishedDate &&
-               item.PublishedDate.Value.AddMinutes(2) >= publishedDate;
-    }
-
-    private static bool HasSameSize(ReleaseComparerModel item, long size)
-    {
-        if (item.Size == 0)
-        {
-            return true;
-        }
-
-        var difference = Math.Abs(item.Size - size);
-
-        return difference <= 2.Megabytes();
     }
 }
