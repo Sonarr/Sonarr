@@ -381,6 +381,43 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         }
 
         [Test]
+        public void should_return_files_from_torrent_including_files_that_were_not_downloaded()
+        {
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = _title,
+                Size = 1000,
+                Progress = 1.0,
+                Eta = 0,
+                State = "uploading",
+                Label = "",
+                SavePath = @"C:\Torrents".AsOsAgnostic()
+            };
+
+            var files = new List<QBittorrentTorrentFile>
+            {
+                new QBittorrentTorrentFile
+                {
+                    Name = "Droned.S01E01/Droned.S01E01.bat"
+                }
+            };
+
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+            GivenTorrentFiles(torrent.Hash, files);
+
+            var item = new DownloadClientItem
+            {
+                DownloadId = torrent.Hash
+            };
+
+            var result = Subject.GetFiles(item).ToList();
+
+            result.Should().HaveCount(1);
+            result.First().RelativePath.Should().Be("Droned.S01E01/Droned.S01E01.bat");
+        }
+
+        [Test]
         public void multi_file_torrent_outputpath_should_have_sanitised_name()
         {
             var torrent = new QBittorrentTorrent
