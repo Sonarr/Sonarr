@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Download
         DownloadProtocol Protocol { get; }
         Task<string> Download(RemoteEpisode remoteEpisode, IIndexer indexer);
         IEnumerable<DownloadClientItem> GetItems();
+        IEnumerable<DownloadClientFile> GetFiles(DownloadClientItem item);
         DownloadClientItem GetImportItem(DownloadClientItem item, DownloadClientItem previousImportAttempt);
         void RemoveItem(DownloadClientItem item, bool deleteData);
         DownloadClientInfo GetStatus();
