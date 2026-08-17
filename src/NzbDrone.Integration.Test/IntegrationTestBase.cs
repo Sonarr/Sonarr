@@ -54,6 +54,7 @@ namespace NzbDrone.Integration.Test
         public ReleasePushClient ReleasePush;
         public ClientBase<RootFolderResource> RootFolders;
         public SeriesClient Series;
+        public SeriesClientV5 SeriesV5;
         public ClientBase<TagResource> Tags;
         public ClientBase<EpisodeResource> WantedMissing;
         public ClientBase<EpisodeResource> WantedCutoffUnmet;
@@ -119,6 +120,10 @@ namespace NzbDrone.Integration.Test
             ReleasePush = new ReleasePushClient(RestClient, ApiKey);
             RootFolders = new ClientBase<RootFolderResource>(RestClient, ApiKey);
             Series = new SeriesClient(RestClient, ApiKey);
+            var restClientV5 = new RestClient(RootUrl + "api/v5/");
+            restClientV5.AddDefaultHeader("Authentication", ApiKey);
+            restClientV5.AddDefaultHeader("X-Api-Key", ApiKey);
+            SeriesV5 = new SeriesClientV5(restClientV5, ApiKey);
             Tags = new ClientBase<TagResource>(RestClient, ApiKey);
             WantedMissing = new ClientBase<EpisodeResource>(RestClient, ApiKey, "wanted/missing");
             WantedCutoffUnmet = new ClientBase<EpisodeResource>(RestClient, ApiKey, "wanted/cutoff");
