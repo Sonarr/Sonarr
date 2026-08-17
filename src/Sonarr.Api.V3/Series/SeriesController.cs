@@ -182,12 +182,26 @@ namespace Sonarr.Api.V3.Series
         public ActionResult<SeriesResource> UpdateSeries([FromBody] SeriesResource seriesResource, [FromQuery] bool moveFiles = false)
         {
             var series = _seriesService.GetSeries(seriesResource.Id);
+            var sourcePath = series.Path;
+            var destinationPath = seriesResource.Path;
+            var moveAlreadyPending = series.NextPath.IsNotNullOrWhiteSpace();
+
+            var model = seriesResource.ToModel(series);
 
             if (moveFiles)
             {
-                var sourcePath = series.Path;
-                var destinationPath = seriesResource.Path;
+                model.Path = sourcePath;
 
+                if (!moveAlreadyPending)
+                {
+                    model.NextPath = destinationPath;
+                }
+            }
+
+            _seriesService.UpdateSeries(model);
+
+            if (moveFiles && !moveAlreadyPending)
+            {
                 _commandQueueManager.Push(new MoveSeriesCommand
                 {
                     SeriesId = series.Id,
@@ -197,11 +211,7 @@ namespace Sonarr.Api.V3.Series
                     trigger: CommandTrigger.Manual);
             }
 
-            var model = seriesResource.ToModel(series);
-
-            _seriesService.UpdateSeries(model);
-
-            BroadcastResourceChange(ModelAction.Updated, seriesResource);
+            BroadcastResourceChange(ModelAction.Updated, GetSeriesResource(model, false));
 
             return Accepted(seriesResource.Id);
         }
