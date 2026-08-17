@@ -82,7 +82,7 @@ module.exports = {
   inputErrorBoxShadowColor: 'rgba(240, 80, 80, 0.6)',
   inputWarningBorderColor: '#ffa500',
   inputWarningBoxShadowColor: 'rgba(255, 165, 0, 0.6)',
-  colorImpairedGradient: '#707070',
+  colorImpairedGradient: '#202020',
   colorImpairedGradientDark: '#424242',
   colorImpairedDangerGradient: '#d84848',
   colorImpairedWarningGradient: '#e59400',
