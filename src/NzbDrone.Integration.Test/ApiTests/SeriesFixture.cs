@@ -266,15 +266,13 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             var afterSecondPut = Series.Get(series.Id);
 
-            // NextPath unchanged - second request recognized a move was already pending,
-            // didn't re-queue one.
+            afterSecondPut.Path.Should().Be(afterFirstPut.Path);
             afterSecondPut.NextPath.Should().Be(afterFirstPut.NextPath);
 
             // Supplementary only - CommandEqualityComparer compares strings as char sets,
             // can under-report this count regardless of whether the guard ran.
             Commands.All().Count(c => c.Name == "MoveSeries").Should().Be(queuedAfterFirst);
 
-            // Other fields continue to be applied normally.
             afterSecondPut.QualityProfileId.Should().Be(2);
 
             // Let the in-flight move finish before TearDown wipes the temp dirs.
@@ -298,7 +296,6 @@ namespace NzbDrone.Integration.Test.ApiTests
         }
 
         [Test]
-        [Ignore("SignalR on CI seems unstable")]
         public void update_series_with_movefiles_should_broadcast_persisted_state_not_requested_path()
         {
             var series = EnsureSeries(266189, "The Blacklist");

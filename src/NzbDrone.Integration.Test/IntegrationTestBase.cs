@@ -104,6 +104,10 @@ namespace NzbDrone.Integration.Test
             RestClient.AddDefaultHeader("Authentication", ApiKey);
             RestClient.AddDefaultHeader("X-Api-Key", ApiKey);
 
+            var restClientV5 = new RestClient(RootUrl + "api/v5/");
+            restClientV5.AddDefaultHeader("Authentication", ApiKey);
+            restClientV5.AddDefaultHeader("X-Api-Key", ApiKey);
+
             Blocklist = new ClientBase<BlocklistResource>(RestClient, ApiKey);
             Commands = new CommandClient(RestClient, ApiKey);
             Tasks = new ClientBase<TaskResource>(RestClient, ApiKey, "system/task");
@@ -120,9 +124,6 @@ namespace NzbDrone.Integration.Test
             ReleasePush = new ReleasePushClient(RestClient, ApiKey);
             RootFolders = new ClientBase<RootFolderResource>(RestClient, ApiKey);
             Series = new SeriesClient(RestClient, ApiKey);
-            var restClientV5 = new RestClient(RootUrl + "api/v5/");
-            restClientV5.AddDefaultHeader("Authentication", ApiKey);
-            restClientV5.AddDefaultHeader("X-Api-Key", ApiKey);
             SeriesV5 = new SeriesClientV5(restClientV5, ApiKey);
             Tags = new ClientBase<TagResource>(RestClient, ApiKey);
             WantedMissing = new ClientBase<EpisodeResource>(RestClient, ApiKey, "wanted/missing");
@@ -180,7 +181,7 @@ namespace NzbDrone.Integration.Test
         protected async Task ConnectSignalR()
         {
             _signalRReceived = new List<SignalRMessage>();
-            _signalrConnection = new HubConnectionBuilder().WithUrl("http://localhost:8989/signalr/messages").Build();
+            _signalrConnection = new HubConnectionBuilder().WithUrl(RootUrl + "signalr/messages?access_token=" + ApiKey).Build();
 
             var cts = new CancellationTokenSource();
 
