@@ -1665,6 +1665,7 @@
     "OverviewOptions": "Opciones de vista general",
     "PackageVersion": "Versión del paquete",
     "PackageVersionInfo": "{packageVersion} por {packageAuthor}",
+    "PageNotFound": "Página no encontrada",
     "PagerGoToFirstPage": "Ir a la primera página",
     "PagerGoToLastPage": "Ir a la última página",
     "PagerGoToNextPage": "Ir a la siguiente página",
