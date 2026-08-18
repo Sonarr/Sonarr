@@ -22,6 +22,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TorrentClientBaseTests
             Mocker.GetMock<ITorrentFileInfoReader>()
                   .Setup(s => s.GetHashFromTorrentFile(It.IsAny<byte[]>()))
                   .Returns("HASH");
+
+            InitLogging();
         }
 
         private IIndexer CreateIndexerWithFailDownloads(params FailDownloads[] failDownloads)
@@ -153,6 +155,33 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TorrentClientBaseTests
 
             Mocker.GetMock<IBlocklistService>()
                   .Verify(s => s.Block(remoteEpisode, It.IsAny<string>(), It.IsAny<string>()), Times.Once());
+
+            ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
+        public void should_include_all_rejection_groups_in_blocklist_message()
+        {
+            Mocker.GetMock<IConfigService>()
+                  .SetupGet(s => s.UserRejectedExtensions)
+                  .Returns("nfo");
+
+            var remoteEpisode = CreateRemoteEpisode();
+            var indexer = CreateIndexerWithFailDownloads(FailDownloads.Executables, FailDownloads.PotentiallyDangerous, FailDownloads.UserDefinedExtensions);
+
+            GivenTorrentFiles(
+                "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.mkv",
+                "setup.exe",
+                "payload.lnk",
+                "info.nfo");
+
+            Assert.ThrowsAsync<ReleaseBlockedException>(async () => await Subject.Download(remoteEpisode, indexer));
+
+            Mocker.GetMock<IBlocklistService>()
+                  .Verify(s => s.Block(remoteEpisode, It.Is<string>(msg =>
+                      msg.Contains("potentially dangerous") &&
+                      msg.Contains("executables") &&
+                      msg.Contains("user defined")), It.IsAny<string>()), Times.Once());
 
             ExceptionVerification.ExpectedWarns(1);
         }
