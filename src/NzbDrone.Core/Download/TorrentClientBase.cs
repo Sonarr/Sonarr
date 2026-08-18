@@ -281,7 +281,7 @@ namespace NzbDrone.Core.Download
             }
             catch (Exception ex)
             {
-                _logger.Debug(ex, "Unable to parse file list from torrent for '{0}', skipping file extension check", remoteEpisode.Release.Title);
+                _logger.Warn(ex, "Unable to parse file list from torrent for '{0}', skipping file extension check", remoteEpisode.Release.Title);
                 return;
             }
 
@@ -290,12 +290,9 @@ namespace NzbDrone.Core.Download
 
         private void ValidateFileNames(RemoteEpisode remoteEpisode, List<string> fileNames, HashSet<FailDownloads> failDownloads)
         {
-            var userRejectedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-            if (failDownloads.Contains(FailDownloads.UserDefinedExtensions))
-            {
-                userRejectedExtensions.UnionWith(FileExtensions.ParseExtensions(_configService.UserRejectedExtensions));
-            }
+            var userRejectedExtensions = failDownloads.Contains(FailDownloads.UserDefinedExtensions)
+                ? FileExtensions.ParseUserRejectedExtensions(_configService.UserRejectedExtensions)
+                : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             var dangerousExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             var executableExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
