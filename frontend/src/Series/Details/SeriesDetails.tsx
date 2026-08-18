@@ -38,6 +38,7 @@ import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import MonitoringOptionsModal from 'Series/MonitoringOptions/MonitoringOptionsModal';
 import { Image, SeriesStatus, Statistics } from 'Series/Series';
 import SeriesGenres from 'Series/SeriesGenres';
+import SeriesMovePendingIcon from 'Series/SeriesMovePendingIcon';
 import SeriesPoster from 'Series/SeriesPoster';
 import { getSeriesStatusDetails } from 'Series/SeriesStatus';
 import useSeries, {
@@ -394,6 +395,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     runtime,
     ratings,
     path,
+    nextPath,
     statistics = {} as Statistics,
     qualityProfileId,
     monitored,
@@ -632,6 +634,13 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                     <div>
                       <Icon name={icons.FOLDER} size={17} />
                       <span className={styles.path}>{path}</span>
+
+                      {nextPath ? (
+                        <SeriesMovePendingIcon
+                          className={styles.movePendingIcon}
+                          nextPath={nextPath}
+                        />
+                      ) : null}
                     </div>
                   </Label>
 

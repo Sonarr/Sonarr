@@ -24,6 +24,7 @@ import {
 } from 'Helpers/Props';
 import MoveSeriesModal from 'Series/MoveSeries/MoveSeriesModal';
 import Series from 'Series/Series';
+import SeriesMovePendingIcon from 'Series/SeriesMovePendingIcon';
 import { useSaveSeries, useSingleSeries } from 'Series/useSeries';
 import { InputChanged } from 'typings/inputs';
 import selectSettings from 'Utilities/selectSettings';
@@ -53,6 +54,7 @@ function EditSeriesModalContent({
     qualityProfileId,
     seriesType,
     path,
+    nextPath,
     tags,
     rootFolderPath: initialRootFolderPath,
   } = series;
@@ -237,7 +239,16 @@ function EditSeriesModalContent({
           </FormGroup>
 
           <FormGroup size={sizes.MEDIUM}>
-            <FormLabel>{translate('Path')}</FormLabel>
+            <FormLabel>
+              {translate('Path')}
+
+              {nextPath ? (
+                <SeriesMovePendingIcon
+                  className={styles.labelIcon}
+                  nextPath={nextPath}
+                />
+              ) : null}
+            </FormLabel>
 
             <FormInputGroup
               type={inputTypes.PATH}

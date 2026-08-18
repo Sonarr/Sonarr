@@ -20,6 +20,7 @@ import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
 import { Statistics } from 'Series/Series';
 import SeriesBanner from 'Series/SeriesBanner';
+import SeriesMovePendingIcon from 'Series/SeriesMovePendingIcon';
 import { useSeriesTableOptions } from 'Series/seriesOptionsStore';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import { SelectStateInputProps } from 'typings/props';
@@ -182,7 +183,6 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
               monitored={monitored}
               status={status}
               isSelectMode={isSelectMode}
-              nextPath={nextPath}
               component={VirtualTableRowCell}
             />
           );
@@ -389,6 +389,13 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
           return (
             <VirtualTableRowCell key={name} className={styles[name]}>
               {path}
+
+              {nextPath ? (
+                <SeriesMovePendingIcon
+                  className={styles.movePendingIcon}
+                  nextPath={nextPath}
+                />
+              ) : null}
             </VirtualTableRowCell>
           );
         }

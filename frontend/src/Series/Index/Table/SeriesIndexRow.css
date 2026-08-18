@@ -132,6 +132,10 @@
   flex: 1 0 150px;
 }
 
+.movePendingIcon {
+  margin-left: 8px;
+}
+
 .sizeOnDisk {
   composes: cell;
 

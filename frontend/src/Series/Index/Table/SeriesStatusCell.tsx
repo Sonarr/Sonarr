@@ -16,7 +16,6 @@ interface SeriesStatusCellProps {
   monitored: boolean;
   status: SeriesStatus;
   isSelectMode: boolean;
-  nextPath?: string;
   component?: React.ElementType;
 }
 
@@ -26,7 +25,6 @@ function SeriesStatusCell({
   monitored,
   status,
   isSelectMode,
-  nextPath,
   component: Component = VirtualTableRowCell,
   ...otherProps
 }: SeriesStatusCellProps) {
@@ -72,16 +70,6 @@ function SeriesStatusCell({
       >
         <Icon name={statusDetails.icon} />
       </StatusIndicator>
-
-      {nextPath ? (
-        <StatusIndicator
-          className={styles.statusIcon}
-          label={translate('SeriesMovePending', { path: nextPath })}
-          title={translate('SeriesMovePending', { path: nextPath })}
-        >
-          <Icon name={icons.PENDING} />
-        </StatusIndicator>
-      ) : null}
     </Component>
   );
 }
