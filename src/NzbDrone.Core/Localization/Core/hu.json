@@ -1665,6 +1665,7 @@
     "OverviewOptions": "Opciók áttekintése",
     "PackageVersion": "Csomagverzió",
     "PackageVersionInfo": "{packageVersion} {packageAuthor}-tól/től",
+    "PageNotFound": "Oldal nem található",
     "PagerGoToFirstPage": "Ugrás az első oldalra",
     "PagerGoToLastPage": "Ugrás az utolsó oldalra",
     "PagerGoToNextPage": "Ugrás a következő oldalra",

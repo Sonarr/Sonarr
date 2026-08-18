@@ -1,1 +1,13 @@
-{}
+{
+    "About": "Teave",
+    "Absolute": "Absoluutne",
+    "AbsoluteEpisodeNumber": "Absoluutne episoodinumber",
+    "AbsoluteEpisodeNumbers": "Absoluutsed episoodinumbrid",
+    "Actions": "Toimingud",
+    "Activity": "Tegevused",
+    "Add": "Lisa",
+    "AddANewPath": "Lisa uus kaustatee",
+    "AddAutoTag": "Lisa automaatne silt",
+    "AddAutoTagError": "Uue automaatse sildi lisamine nurjus, proovi uuesti.",
+    "AddCondition": "Lisa tingimus"
+}
