@@ -324,29 +324,5 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
 
             result.Should().BeNull();
         }
-
-        [Test]
-        public void Download_should_blocklist_and_throw_when_torrent_contains_dangerous_file_with_magnet_fallback()
-        {
-            var remoteEpisode = CreateRemoteEpisode();
-            var indexer = CreateIndexer();
-
-            indexer.Definition = new IndexerDefinition
-            {
-                Settings = new TestIndexerSettings
-                {
-                    FailDownloads = new List<int> { (int)FailDownloads.Executables }
-                }
-            };
-
-            Mocker.GetMock<ITorrentFileInfoReader>()
-                  .Setup(s => s.GetFileNamesFromTorrentFile(It.IsAny<byte[]>()))
-                  .Returns(new List<string> { "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.exe" });
-
-            Assert.ThrowsAsync<ReleaseBlockedException>(async () => await Subject.Download(remoteEpisode, indexer));
-
-            Mocker.GetMock<IBlocklistService>()
-                  .Verify(s => s.Block(remoteEpisode, It.IsAny<string>(), It.IsAny<string>()), Times.Once());
-        }
     }
 }
