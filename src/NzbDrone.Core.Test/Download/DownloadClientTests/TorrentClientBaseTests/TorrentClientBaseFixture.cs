@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Blocklisting;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
@@ -63,7 +64,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TorrentClientBaseTests
         }
 
         [Test]
-        public void should_blocklist_and_throw_when_torrent_contains_dangerous_file_with_magnet_fallback()
+        public void should_blocklist_and_throw_when_torrent_contains_dangerous_file_when_preferring_torrent_files()
         {
             Subject.SetPreferTorrentFile(true);
 
@@ -81,11 +82,35 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TorrentClientBaseTests
         }
 
         [Test]
-        public async Task should_not_check_torrent_files_when_fail_downloads_is_not_enabled()
+        public async Task should_not_check_torrent_files_when_downloading_magnet_link()
         {
             var remoteEpisode = CreateRemoteEpisode();
+            remoteEpisode.Release.DownloadUrl = "magnet:?xt=urn:btih:c12fe1c06bba254a9dc9f519b335aa7c1367a88a";
 
-            await Subject.Download(remoteEpisode, CreateIndexer());
+            await Subject.Download(remoteEpisode, CreateIndexerWithFailDownloads(FailDownloads.Executables));
+
+            Mocker.GetMock<ITorrentFileInfoReader>()
+                  .Verify(s => s.GetFileNamesFromTorrentFile(It.IsAny<byte[]>()), Times.Never());
+            Mocker.GetMock<IBlocklistService>()
+                  .Verify(s => s.Block(It.IsAny<RemoteEpisode>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public async Task should_not_check_torrent_files_when_fail_downloads_is_empty()
+        {
+            var remoteEpisode = CreateRemoteEpisode();
+            var indexer = CreateIndexer();
+
+            indexer.Definition = new IndexerDefinition
+            {
+                Settings = new TestTorrentIndexerSettings
+                {
+                    RejectTorrentFilesWithBlockedExtensionsWhileGrabbing = true,
+                    FailDownloads = new List<int>()
+                }
+            };
+
+            await Subject.Download(remoteEpisode, indexer);
 
             Mocker.GetMock<ITorrentFileInfoReader>()
                   .Verify(s => s.GetFileNamesFromTorrentFile(It.IsAny<byte[]>()), Times.Never());
@@ -110,6 +135,26 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TorrentClientBaseTests
 
             Mocker.GetMock<ITorrentFileInfoReader>()
                   .Verify(s => s.GetFileNamesFromTorrentFile(It.IsAny<byte[]>()), Times.Never());
+        }
+
+        [Test]
+        public void should_blocklist_and_throw_when_user_defined_extension_matched_case_insensitively()
+        {
+            Mocker.GetMock<IConfigService>()
+                  .SetupGet(s => s.UserRejectedExtensions)
+                  .Returns("nfo");
+
+            var remoteEpisode = CreateRemoteEpisode();
+            var indexer = CreateIndexerWithFailDownloads(FailDownloads.UserDefinedExtensions);
+
+            GivenTorrentFiles("Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.NFO");
+
+            Assert.ThrowsAsync<ReleaseBlockedException>(async () => await Subject.Download(remoteEpisode, indexer));
+
+            Mocker.GetMock<IBlocklistService>()
+                  .Verify(s => s.Block(remoteEpisode, It.IsAny<string>(), It.IsAny<string>()), Times.Once());
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
