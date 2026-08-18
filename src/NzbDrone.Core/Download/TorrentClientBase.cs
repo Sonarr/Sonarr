@@ -257,7 +257,14 @@ namespace NzbDrone.Core.Download
 
         private void EnsureTorrentDoesNotContainRejectedFiles(RemoteEpisode remoteEpisode, IIndexer indexer, byte[] torrentFile)
         {
-            var failDownloads = (indexer?.Definition?.Settings as IIndexerSettings)?.FailDownloads?
+            var indexerSettings = indexer?.Definition?.Settings as ITorrentIndexerSettings;
+
+            if (indexerSettings?.RejectTorrentFilesWithBlockedExtensionsWhileGrabbing != true)
+            {
+                return;
+            }
+
+            var failDownloads = indexerSettings.FailDownloads?
                 .Select(f => (FailDownloads)f)
                 .ToHashSet();
 
@@ -283,9 +290,12 @@ namespace NzbDrone.Core.Download
 
         private void ValidateFileNames(RemoteEpisode remoteEpisode, List<string> fileNames, HashSet<FailDownloads> failDownloads)
         {
-            var userRejectedExtensions = failDownloads.Contains(FailDownloads.UserDefinedExtensions)
-                ? FileExtensions.ParseExtensions(_configService.UserRejectedExtensions)
-                : [];
+            var userRejectedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            if (failDownloads.Contains(FailDownloads.UserDefinedExtensions))
+            {
+                userRejectedExtensions.UnionWith(FileExtensions.ParseExtensions(_configService.UserRejectedExtensions));
+            }
 
             var dangerousExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             var executableExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -310,7 +320,7 @@ namespace NzbDrone.Core.Download
                 {
                     executableExtensions.Add(extension);
                 }
-                else if (userRejectedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
+                else if (userRejectedExtensions.Contains(extension))
                 {
                     userRejected.Add(extension);
                 }
