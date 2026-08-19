@@ -278,7 +278,7 @@ namespace NzbDrone.Core.IndexerSearch
                 }
 
                 // By default we do a alt title search in case indexers don't have the release properly indexed.  Services can override this behavior.
-                var searchMode = sceneMapping.SearchMode ?? ((mappingSceneSeasonNumber.HasValue && series.CleanTitle != sceneMapping.SearchTerm.CleanSeriesTitle()) ? SearchMode.SearchSeasonTitle : SearchMode.Default);
+                var searchMode = sceneMapping.SearchMode ?? ((mappingSceneSeasonNumber.HasValue && series.CleanTitle != sceneMapping.SearchTerm.CleanSeriesTitle()) ? SearchMode.SearchTitle | SearchMode.SearchSeasonTitle : SearchMode.Default);
 
                 if (ignoreSceneNumbering)
                 {
