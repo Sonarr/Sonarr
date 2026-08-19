@@ -172,8 +172,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Subject.GetRssDecision(_reports).ToList();
 
-            // A release carrying nothing but a title is still a title, so it is looked up
-            // rather than dropped. Without a matching series it is rejected as unknown.
             Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<SearchCriteriaBase>()), Times.Once());
         }
 

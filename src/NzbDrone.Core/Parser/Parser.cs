@@ -816,9 +816,8 @@ namespace NzbDrone.Core.Parser
             }
 
             // Anime season packs are commonly named after the season's own title with no season or
-            // episode number anywhere, so none of the regexes above have anything to match on. The
-            // season title is the only identifier the release carries. Which season it refers to is
-            // held in the scene mappings, so that is resolved later by ParsingService.
+            // episode numbers. ParsingService will determine the correct series and season number
+            // from scene mappings.
             var seriesTitle = AnimeSeasonReleaseMetadataRegex.Replace(releaseTitle, " ");
             seriesTitle = DuplicateSpacesRegex.Replace(seriesTitle, " ");
             seriesTitle = seriesTitle.Trim();
