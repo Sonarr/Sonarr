@@ -658,7 +658,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                                            !c.SceneTitles.Contains("Sonarrs Series Alias"));
 
             criteria.Should().Contain(c => c.SceneTitles.Contains("Sonarrs Series Alias") &&
-                                           !c.SearchMode.HasFlag(SearchMode.SeasonSearchTitle));
+                                           !c.SearchMode.HasFlag(SearchMode.SearchSeasonTitle));
         }
 
         [Test]

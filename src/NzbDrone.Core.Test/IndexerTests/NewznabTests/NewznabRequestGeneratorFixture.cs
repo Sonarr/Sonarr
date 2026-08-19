@@ -194,7 +194,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         public void should_search_season_title_alias_without_the_season_parameter()
         {
             Subject.Settings.AnimeStandardFormatSearch = true;
-            _animeSeasonSearchCriteria.SearchMode = SearchMode.SeasonSearchTitle;
+            _animeSeasonSearchCriteria.SearchMode = SearchMode.SearchSeasonTitle;
 
             var results = Subject.GetSearchRequests(_animeSeasonSearchCriteria);
 
@@ -208,7 +208,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         public void should_search_season_title_alias_when_standard_format_search_is_disabled()
         {
             Subject.Settings.AnimeStandardFormatSearch = false;
-            _animeSeasonSearchCriteria.SearchMode = SearchMode.SeasonSearchTitle;
+            _animeSeasonSearchCriteria.SearchMode = SearchMode.SearchSeasonTitle;
 
             var results = Subject.GetSearchRequests(_animeSeasonSearchCriteria);
 

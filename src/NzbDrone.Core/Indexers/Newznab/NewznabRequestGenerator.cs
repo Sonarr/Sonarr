@@ -457,11 +457,9 @@ namespace NzbDrone.Core.Indexers.Newznab
 
             var queryTitles = TextSearchEngine == "raw" ? searchCriteria.AllSceneTitles : searchCriteria.CleanSceneTitles;
 
-            // A season title alias already identifies the season, so the season number is not
-            // added to it. Doing so excludes the pack the alias names on trackers that match
-            // the season parameter as text.
-            if (searchCriteria.SearchMode.HasFlag(SearchMode.SeasonSearchTitle))
+            if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchSeasonTitle))
             {
+                // A season title alias already identifies the season, no need to add a season number.
                 foreach (var queryTitle in queryTitles)
                 {
                     pageableRequests.Add(GetPagedRequests(MaxPages,

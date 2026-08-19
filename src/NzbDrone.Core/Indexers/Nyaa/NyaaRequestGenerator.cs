@@ -90,11 +90,9 @@ namespace NzbDrone.Core.Indexers.Nyaa
 
             foreach (var searchTitle in searchCriteria.SceneTitles.Select(PrepareQuery))
             {
-                // A season title alias already identifies the season, so the season number is
-                // not added to it. There is no season parameter here, so it would become part
-                // of the query text and exclude the pack the alias names.
-                if (searchCriteria.SearchMode.HasFlag(SearchMode.SeasonSearchTitle))
+                if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchSeasonTitle))
                 {
+                    // A season title alias already identifies the season, no need to add a season number.
                     pageableRequests.Add(GetPagedRequests(searchTitle));
                 }
                 else if (Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0)

@@ -10,8 +10,8 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         SearchTitle = 2,
         SeasonTitle = 4,
 
-        // Carries the SearchTitle bit so the generators that only care about a title search
-        // are unaffected, the season searches check for this one to drop the season number.
-        SeasonSearchTitle = SearchTitle | SeasonTitle
+        // Includes SearchTitle so a season title is still a title search everywhere that only
+        // looks for one, the season searches check for this to drop the season number.
+        SearchSeasonTitle = SearchTitle | SeasonTitle
     }
 }
