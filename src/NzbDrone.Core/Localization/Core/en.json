@@ -2017,7 +2017,7 @@
   "SeriesLoadError": "Unable to load Series",
   "SeriesMatchType": "Series Match Type",
   "SeriesMonitoring": "Series Monitoring",
-  "SeriesMovePending": "A move to '{path}' is pending",
+  "SeriesMovePending": "Waiting for {appName} to move files to '{path}'",
   "SeriesPremiere": "Series Premiere",
   "SeriesProgressBarText": "{episodeFileCount} / {episodeCount} (Total: {totalEpisodeCount}, Downloading: {downloadingCount})",
   "SeriesTags": "Series Tags",

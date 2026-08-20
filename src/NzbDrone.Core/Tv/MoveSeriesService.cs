@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Tv
             var series = _seriesService.GetSeries(seriesId);
 
             series.Path = path;
-            series.NextPath = null;
+            series.PendingPath = null;
             _seriesService.UpdateSeries(series);
         }
 

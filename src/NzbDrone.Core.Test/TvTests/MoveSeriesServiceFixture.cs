@@ -145,32 +145,32 @@ namespace NzbDrone.Core.Test.TvTests
         [Test]
         public void should_clear_next_path_after_successful_move()
         {
-            _series.NextPath = _command.DestinationPath;
+            _series.PendingPath = _command.DestinationPath;
 
             Subject.Execute(_command);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.NextPath == null), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.PendingPath == null), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
         }
 
         [Test]
         public void should_clear_next_path_after_failed_move()
         {
             GivenFailedMove();
-            _series.NextPath = _command.DestinationPath;
+            _series.PendingPath = _command.DestinationPath;
 
             Subject.Execute(_command);
 
             ExceptionVerification.ExpectedErrors(1);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.NextPath == null), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.PendingPath == null), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
         }
 
         [Test]
         public void should_clear_next_path_when_already_at_destination()
         {
-            _series.NextPath = _command.DestinationPath;
+            _series.PendingPath = _command.DestinationPath;
 
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.FolderExists(It.IsAny<string>()))
@@ -184,7 +184,7 @@ namespace NzbDrone.Core.Test.TvTests
             });
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.NextPath == null), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.PendingPath == null), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
         }
     }
 }

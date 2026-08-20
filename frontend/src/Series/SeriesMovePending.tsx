@@ -3,22 +3,19 @@ import Icon from 'Components/Icon';
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 
-interface SeriesMovePendingIconProps {
+interface SeriesMovePendingProps {
   className?: string;
-  nextPath: string;
+  pendingPath: string;
 }
 
-function SeriesMovePendingIcon({
-  className,
-  nextPath,
-}: SeriesMovePendingIconProps) {
+function SeriesMovePending({ className, pendingPath }: SeriesMovePendingProps) {
   return (
     <Icon
       className={className}
       name={icons.PENDING}
-      title={translate('SeriesMovePending', { path: nextPath })}
+      title={translate('SeriesMovePending', { path: pendingPath })}
     />
   );
 }
 
-export default SeriesMovePendingIcon;
+export default SeriesMovePending;
