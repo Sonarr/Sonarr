@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 import React, { useCallback, useMemo } from 'react';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
@@ -19,6 +20,14 @@ import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
 import { useManageUiSettings } from './useUiSettings';
 
+const createDateFormatOption = (format: string) => ({
+  key: format,
+  get value() {
+    return moment('2014-03-25').format(format);
+  },
+  hint: format,
+});
+
 export const firstDayOfWeekOptions: EnhancedSelectInputValue<number>[] = [
   {
     key: 0,
@@ -35,24 +44,24 @@ export const firstDayOfWeekOptions: EnhancedSelectInputValue<number>[] = [
 ];
 
 export const weekColumnOptions: EnhancedSelectInputValue<string>[] = [
-  { key: 'ddd M/D', value: 'Tue 3/25', hint: 'ddd M/D' },
-  { key: 'ddd MM/DD', value: 'Tue 03/25', hint: 'ddd MM/DD' },
-  { key: 'ddd D/M', value: 'Tue 25/3', hint: 'ddd D/M' },
-  { key: 'ddd DD/MM', value: 'Tue 25/03', hint: 'ddd DD/MM' },
+  createDateFormatOption('ddd M/D'),
+  createDateFormatOption('ddd MM/DD'),
+  createDateFormatOption('ddd D/M'),
+  createDateFormatOption('ddd DD/MM'),
 ];
 
 const shortDateFormatOptions: EnhancedSelectInputValue<string>[] = [
-  { key: 'MMM D YYYY', value: 'Mar 25 2014', hint: 'MMM D YYYY' },
-  { key: 'DD MMM YYYY', value: '25 Mar 2014', hint: 'DD MMM YYYY' },
-  { key: 'MM/D/YYYY', value: '03/25/2014', hint: 'MM/D/YYYY' },
-  { key: 'MM/DD/YYYY', value: '03/25/2014', hint: 'MM/DD/YYYY' },
-  { key: 'DD/MM/YYYY', value: '25/03/2014', hint: 'DD/MM/YYYY' },
-  { key: 'YYYY-MM-DD', value: '2014-03-25', hint: 'YYYY-MM-DD' },
+  createDateFormatOption('MMM D YYYY'),
+  createDateFormatOption('DD MMM YYYY'),
+  createDateFormatOption('MM/D/YYYY'),
+  createDateFormatOption('MM/DD/YYYY'),
+  createDateFormatOption('DD/MM/YYYY'),
+  createDateFormatOption('YYYY-MM-DD'),
 ];
 
 const longDateFormatOptions: EnhancedSelectInputValue<string>[] = [
-  { key: 'dddd, MMMM D YYYY', value: 'Tuesday, March 25, 2014' },
-  { key: 'dddd, D MMMM YYYY', value: 'Tuesday, 25 March, 2014' },
+  createDateFormatOption('dddd, MMMM D YYYY'),
+  createDateFormatOption('dddd, D MMMM YYYY'),
 ];
 
 export const timeFormatOptions: EnhancedSelectInputValue<string>[] = [
