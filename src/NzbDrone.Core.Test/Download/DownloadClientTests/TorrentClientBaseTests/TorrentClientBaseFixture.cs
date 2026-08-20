@@ -178,10 +178,15 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TorrentClientBaseTests
             Assert.ThrowsAsync<ReleaseBlockedException>(async () => await Subject.Download(remoteEpisode, indexer));
 
             Mocker.GetMock<IBlocklistService>()
-                  .Verify(s => s.Block(remoteEpisode, It.Is<string>(msg =>
-                      msg.Contains("potentially dangerous") &&
-                      msg.Contains("executables") &&
-                      msg.Contains("user defined")), It.IsAny<string>()), Times.Once());
+                  .Verify(
+                      s => s.Block(
+                          remoteEpisode,
+                          It.Is<string>(msg =>
+                              msg.Contains("potentially dangerous") &&
+                              msg.Contains("executables") &&
+                              msg.Contains("user defined")),
+                          It.IsAny<string>()),
+                      Times.Once());
 
             ExceptionVerification.ExpectedWarns(1);
         }
