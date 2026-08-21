@@ -1,4 +1,4 @@
-import moment, { DurationInputArg1 } from 'moment';
+import moment, { DurationInputArg1 } from 'moment-timezone';
 import translate from 'Utilities/String/translate';
 
 function formatShortTimeSpan(timeSpan: DurationInputArg1) {

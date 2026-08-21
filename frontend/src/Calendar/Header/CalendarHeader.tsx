@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { useCallback, useMemo } from 'react';
 import { useAppDimensions } from 'App/appStore';
 import {

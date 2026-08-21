@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useCommand, useExecuteCommand } from 'Commands/useCommands';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';

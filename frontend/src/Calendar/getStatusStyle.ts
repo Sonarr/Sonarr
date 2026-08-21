@@ -1,11 +1,11 @@
-import moment from 'moment';
+import moment, { Moment } from 'moment-timezone';
 import { CalendarStatus } from 'typings/Calendar';
 
 function getStatusStyle(
   hasFile: boolean,
   downloading: boolean,
-  startTime: moment.Moment,
-  endTime: moment.Moment,
+  startTime: Moment,
+  endTime: Moment,
   isMonitored: boolean
 ): CalendarStatus {
   const currentTime = moment();

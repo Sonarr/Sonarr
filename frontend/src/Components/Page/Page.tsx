@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 import React, { useCallback, useEffect, useState } from 'react';
 import { saveDimensions, useAppValue } from 'App/appStore';
 import AppUpdatedModal from 'App/AppUpdatedModal';
@@ -28,7 +29,7 @@ function Page({ children }: PageProps) {
   const [isConnectionLostModalOpen, setIsConnectionLostModalOpen] =
     useState(false);
 
-  const { enableColorImpairedMode } = useUiSettingsValues();
+  const { enableColorImpairedMode, timeZone } = useUiSettingsValues();
   const { authentication } = useSystemStatusData();
 
   const authenticationEnabled = authentication !== 'none';
@@ -63,6 +64,17 @@ function Page({ children }: PageProps) {
       setIsUpdatedModalOpen(true);
     }
   }, [isUpdated]);
+
+  useEffect(() => {
+    try {
+      moment.tz.setDefault(timeZone);
+    } catch (error) {
+      console.error(
+        `Error converting to timezone ${timeZone}. Using system timezone.`,
+        error
+      );
+    }
+  }, [timeZone]);
 
   if (hasError || !isLocalStorageSupported) {
     return (

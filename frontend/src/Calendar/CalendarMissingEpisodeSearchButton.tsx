@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { useCallback } from 'react';
 import { useQueueDetails } from 'Activity/Queue/Details/QueueDetailsProvider';
 import { useCommands } from 'Commands/useCommands';

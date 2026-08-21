@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useCallback, useMemo } from 'react';
 import { FilterBuilderTag } from 'Components/Filter/Builder/FilterBuilderRowValue';
 import { Filter, FilterBuilderProp } from 'Filters/Filter';

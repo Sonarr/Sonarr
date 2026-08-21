@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import moment from 'moment-timezone';
 import React, { useCallback, useState } from 'react';
 import { useQueueItemForEpisode } from 'Activity/Queue/Details/QueueDetailsProvider';
 import { useCalendarOptions } from 'Calendar/calendarOptionsStore';
@@ -13,7 +14,6 @@ import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
 import { icons, kinds } from 'Helpers/Props';
 import { useSingleSeries } from 'Series/useSeries';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
-import { convertToTimezone } from 'Utilities/Date/convertToTimezone';
 import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
@@ -57,7 +57,7 @@ function AgendaEvent(props: AgendaEventProps) {
   const series = useSingleSeries(seriesId)!;
   const episodeFile = useEpisodeFile(episodeFileId);
   const queueItem = useQueueItemForEpisode(id);
-  const { timeFormat, longDateFormat, enableColorImpairedMode, timeZone } =
+  const { timeFormat, longDateFormat, enableColorImpairedMode } =
     useUiSettingsValues();
 
   const {
@@ -69,11 +69,8 @@ function AgendaEvent(props: AgendaEventProps) {
 
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
-  const startTime = convertToTimezone(airDateUtc, timeZone);
-  const endTime = convertToTimezone(airDateUtc, timeZone).add(
-    series.runtime,
-    'minutes'
-  );
+  const startTime = moment(airDateUtc);
+  const endTime = moment(airDateUtc).add(series.runtime, 'minutes');
   const downloading = !!(queueItem || grabbed);
   const isMonitored = series.monitored && monitored;
   const statusStyle = getStatusStyle(
@@ -111,10 +108,9 @@ function AgendaEvent(props: AgendaEventProps) {
           )}
         >
           <div className={styles.time}>
-            {formatTime(airDateUtc, timeFormat, { timeZone })} -{' '}
+            {formatTime(airDateUtc, timeFormat)} -{' '}
             {formatTime(endTime.toISOString(), timeFormat, {
               includeMinuteZero: true,
-              timeZone,
             })}
           </div>
 

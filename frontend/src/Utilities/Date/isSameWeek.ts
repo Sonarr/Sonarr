@@ -1,4 +1,4 @@
-import moment, { MomentInput } from 'moment';
+import moment, { MomentInput } from 'moment-timezone';
 
 function isSameWeek(date: MomentInput) {
   if (!date) {
