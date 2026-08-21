@@ -1,16 +1,15 @@
-import moment from 'moment-timezone';
-import { convertToTimezone } from './convertToTimezone';
+import moment, { MomentInput } from 'moment-timezone';
 
 function formatTime(
-  date: moment.MomentInput,
+  date: MomentInput,
   timeFormat: string,
-  { includeMinuteZero = false, includeSeconds = false, timeZone = '' } = {}
+  { includeMinuteZero = false, includeSeconds = false } = {}
 ) {
   if (!date) {
     return '';
   }
 
-  const time = convertToTimezone(date, timeZone);
+  const time = moment(date);
 
   if (includeSeconds) {
     timeFormat = timeFormat.replace(/\(?:mm\)?/, ':mm:ss');

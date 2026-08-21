@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { CommandBody } from 'Commands/Command';
 import { useCancelCommand } from 'Commands/useCommands';

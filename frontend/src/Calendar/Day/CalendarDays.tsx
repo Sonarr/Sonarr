@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppValue } from 'App/appStore';
 import { useCalendarOption } from 'Calendar/calendarOptionsStore';

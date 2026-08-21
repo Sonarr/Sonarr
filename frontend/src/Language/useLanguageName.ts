@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useCallback, useEffect } from 'react';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 

@@ -1,4 +1,4 @@
-import moment, { MomentInput } from 'moment';
+import moment, { MomentInput } from 'moment-timezone';
 
 function isYesterday(date: MomentInput) {
   if (!date) {

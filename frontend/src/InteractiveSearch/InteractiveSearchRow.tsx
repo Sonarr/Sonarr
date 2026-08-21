@@ -121,7 +121,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     indexerFlags = 0,
   } = release;
 
-  const { longDateFormat, timeFormat, timeZone } = useUiSettingsValues();
+  const { longDateFormat, timeFormat } = useUiSettingsValues();
 
   const [isConfirmGrabModalOpen, setIsConfirmGrabModalOpen] = useState(false);
   const [isOverrideModalOpen, setIsOverrideModalOpen] = useState(false);
@@ -184,7 +184,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
         className={styles.age}
         title={formatDateTime(publishDate, longDateFormat, timeFormat, {
           includeSeconds: true,
-          timeZone,
         })}
       >
         {formatAge(age, ageHours, ageMinutes)}

@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React from 'react';
 import Label from 'Components/Label';
 import { kinds, sizes } from 'Helpers/Props';
