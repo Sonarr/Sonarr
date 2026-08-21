@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                 .With(s => s.SeasonFolder)
                 .With(s => s.Path = @"C:\Test\name".AsOsAgnostic())
                 .With(s => s.RootFolderPath = "")
-                .With(s => s.NextPath = null)
+                .With(s => s.PendingPath = null)
                 .Build().ToList();
 
             Mocker.GetMock<IAutoTaggingService>()
@@ -136,25 +136,25 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
         }
 
         [Test]
-        public void should_not_overwrite_next_path_when_a_move_is_already_pending()
+        public void should_not_overwrite_pending_path_when_a_move_is_already_pending()
         {
             var newRoot = @"C:\Test\TV2".AsOsAgnostic();
-            var existingNextPath = @"C:\Test\TV3\name".AsOsAgnostic();
+            var existingPendingPath = @"C:\Test\TV3\name".AsOsAgnostic();
 
             _series.ForEach(s =>
             {
                 s.RootFolderPath = newRoot;
-                s.NextPath = existingNextPath;
+                s.PendingPath = existingPendingPath;
             });
 
             var result = Subject.UpdateSeries(_series, false);
 
-            result.Should().OnlyContain(s => s.NextPath == existingNextPath);
+            result.Should().OnlyContain(s => s.PendingPath == existingPendingPath);
             Mocker.GetMock<IBuildSeriesPaths>().Verify(v => v.BuildPath(It.IsAny<Series>(), It.IsAny<bool>()), Times.Never());
         }
 
         [Test]
-        public void should_set_next_path_when_deferring()
+        public void should_set_pending_path_when_deferring()
         {
             var newRoot = @"C:\Test\TV2".AsOsAgnostic();
             _series.ForEach(s => s.RootFolderPath = newRoot);
@@ -165,7 +165,52 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
 
             var result = Subject.UpdateSeries(_series, false);
 
-            result.Should().OnlyContain(s => s.NextPath != null && s.NextPath.StartsWith(newRoot));
+            result.Should().OnlyContain(s => s.PendingPath != null && s.PendingPath.StartsWith(newRoot));
+        }
+
+        [Test]
+        public void should_return_series_to_move_when_deferring()
+        {
+            var newRoot = @"C:\Test\TV2".AsOsAgnostic();
+            _series.ForEach(s => s.RootFolderPath = newRoot);
+
+            Mocker.GetMock<IBuildSeriesPaths>()
+                  .Setup(s => s.BuildPath(It.IsAny<Series>(), false))
+                  .Returns<Series, bool>((s, u) => Path.Combine(s.RootFolderPath, s.Title));
+
+            Subject.UpdateSeries(_series, false, out var seriesToMove);
+
+            seriesToMove.Select(m => m.SeriesId).Should().BeEquivalentTo(_series.Select(s => s.Id));
+        }
+
+        [Test]
+        public void should_not_return_series_to_move_when_a_move_is_already_pending()
+        {
+            var newRoot = @"C:\Test\TV2".AsOsAgnostic();
+            _series.ForEach(s =>
+            {
+                s.RootFolderPath = newRoot;
+                s.PendingPath = @"C:\Test\TV3\name".AsOsAgnostic();
+            });
+
+            Subject.UpdateSeries(_series, false, out var seriesToMove);
+
+            seriesToMove.Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_not_return_series_to_move_when_not_deferring()
+        {
+            var newRoot = @"C:\Test\TV2".AsOsAgnostic();
+            _series.ForEach(s => s.RootFolderPath = newRoot);
+
+            Mocker.GetMock<IBuildSeriesPaths>()
+                  .Setup(s => s.BuildPath(It.IsAny<Series>(), true))
+                  .Returns<Series, bool>((s, u) => Path.Combine(s.RootFolderPath, s.Title));
+
+            Subject.UpdateSeries(_series, true, out var seriesToMove);
+
+            seriesToMove.Should().BeEmpty();
         }
     }
 }

@@ -30,7 +30,6 @@ public class SeriesEditorController : Controller
     public Results<Ok<List<SeriesResource>>, BadRequest> SaveAll([FromBody] SeriesEditorResource resource)
     {
         var seriesToUpdate = _seriesService.GetSeries(resource.SeriesIds);
-        var seriesToMove = new List<BulkMoveSeries>();
 
         foreach (var series in seriesToUpdate)
         {
@@ -62,15 +61,6 @@ public class SeriesEditorController : Controller
             if (resource.RootFolderPath.IsNotNullOrWhiteSpace())
             {
                 series.RootFolderPath = resource.RootFolderPath;
-
-                if (series.NextPath.IsNullOrWhiteSpace())
-                {
-                    seriesToMove.Add(new BulkMoveSeries
-                    {
-                        SeriesId = series.Id,
-                        SourcePath = series.Path
-                    });
-                }
             }
 
             if (resource.Tags != null)
@@ -100,7 +90,7 @@ public class SeriesEditorController : Controller
             }
         }
 
-        var updated = _seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles);
+        var updated = _seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles, out var seriesToMove);
 
         if (resource.MoveFiles && seriesToMove.Any())
         {

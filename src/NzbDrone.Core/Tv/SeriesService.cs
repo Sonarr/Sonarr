@@ -5,6 +5,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.AutoTagging;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -31,6 +32,8 @@ namespace NzbDrone.Core.Tv
         Dictionary<int, int> GetAllSeriesQualityProfiles();
         Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true, bool publishUpdatedEvent = true);
         List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder);
+        List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder, out List<BulkMoveSeries> seriesToMove);
+        Series UpdateSeries(Series series, string sourcePath, string destinationPath, bool moveFiles, out bool queueMove);
         bool SeriesPathExists(string folder);
         void RemoveAddOptions(Series series);
         bool UpdateAutoTaggingTags(Series series);
@@ -236,9 +239,15 @@ namespace NzbDrone.Core.Tv
 
         public List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder)
         {
+            return UpdateSeries(series, useExistingRelativeFolder, out _);
+        }
+
+        public List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder, out List<BulkMoveSeries> seriesToMove)
+        {
             _logger.Debug("Updating {0} series", series.Count);
 
             var deferPathUpdate = !useExistingRelativeFolder;
+            var moveQueue = new List<BulkMoveSeries>();
 
             foreach (var s in series)
             {
@@ -246,9 +255,9 @@ namespace NzbDrone.Core.Tv
 
                 if (!s.RootFolderPath.IsNullOrWhiteSpace())
                 {
-                    if (deferPathUpdate && s.NextPath.IsNotNullOrWhiteSpace())
+                    if (deferPathUpdate && HasPendingMove(s))
                     {
-                        _logger.Trace("Not queuing another path update for '{0}', a move to {1} is already pending", s.Title, s.NextPath);
+                        _logger.Trace("Series '{0}' is already being moved from {1} to {2}, skipping path update.", s.Title, s.Path, s.PendingPath);
                     }
                     else
                     {
@@ -256,14 +265,15 @@ namespace NzbDrone.Core.Tv
 
                         if (deferPathUpdate)
                         {
-                            s.NextPath = updatedPath;
+                            s.PendingPath = updatedPath;
+                            moveQueue.Add(new BulkMoveSeries { SeriesId = s.Id, SourcePath = s.Path });
 
                             _logger.Trace("Path for '{0}' will be updated from {1} to {2} after files are moved successfully", s.Title, s.Path, updatedPath);
                         }
                         else
                         {
                             s.Path = updatedPath;
-                            s.NextPath = null;
+                            s.PendingPath = null;
 
                             _logger.Trace("Changing path for {0} to {1}", s.Title, s.Path);
                         }
@@ -281,7 +291,43 @@ namespace NzbDrone.Core.Tv
             _logger.Debug("{0} series updated", series.Count);
             _eventAggregator.PublishEvent(new SeriesBulkEditedEvent(series));
 
+            seriesToMove = moveQueue;
             return series;
+        }
+
+        public Series UpdateSeries(Series series, string sourcePath, string destinationPath, bool moveFiles, out bool queueMove)
+        {
+            queueMove = false;
+
+            if (moveFiles)
+            {
+                series.Path = sourcePath;
+
+                if (HasPendingMove(series))
+                {
+                    _logger.Trace("Series '{0}' is already being moved from {1} to {2}, skipping path update.", series.Title, series.Path, series.PendingPath);
+                }
+                else
+                {
+                    series.PendingPath = destinationPath;
+                    queueMove = true;
+
+                    _logger.Trace("Path for '{0}' will be updated from {1} to {2} after files are moved successfully", series.Title, series.Path, destinationPath);
+                }
+            }
+            else
+            {
+                series.Path = destinationPath;
+
+                _logger.Trace("Changing path for {0} to {1}", series.Title, series.Path);
+            }
+
+            return UpdateSeries(series, true, true);
+        }
+
+        private static bool HasPendingMove(Series series)
+        {
+            return series.PendingPath.IsNotNullOrWhiteSpace();
         }
 
         public bool SeriesPathExists(string folder)

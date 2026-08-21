@@ -8,6 +8,6 @@ public class add_next_path_to_series : NzbDroneMigrationBase
 {
     protected override void MainDbUpgrade()
     {
-        Alter.Table("Series").AddColumn("NextPath").AsString().Nullable();
+        Alter.Table("Series").AddColumn("PendingPath").AsString().Nullable();
     }
 }

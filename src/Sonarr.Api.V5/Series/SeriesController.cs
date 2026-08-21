@@ -198,23 +198,12 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
         var series = _seriesService.GetSeries(seriesResource.Id);
         var sourcePath = series.Path;
         var destinationPath = seriesResource.Path;
-        var moveAlreadyPending = series.NextPath.IsNotNullOrWhiteSpace();
 
         var model = seriesResource.ToModel(series);
 
-        if (moveFiles)
-        {
-            model.Path = sourcePath;
+        _seriesService.UpdateSeries(model, sourcePath, destinationPath, moveFiles, out var queueMove);
 
-            if (!moveAlreadyPending)
-            {
-                model.NextPath = destinationPath;
-            }
-        }
-
-        _seriesService.UpdateSeries(model);
-
-        if (moveFiles && !moveAlreadyPending)
+        if (queueMove)
         {
             _commandQueueManager.Push(new MoveSeriesCommand
             {
@@ -224,8 +213,6 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
             },
                 trigger: CommandTrigger.Manual);
         }
-
-        BroadcastResourceChange(ModelAction.Updated, GetSeriesResource(model, false)!);
 
         return TypedAccepted(seriesResource.Id);
     }
