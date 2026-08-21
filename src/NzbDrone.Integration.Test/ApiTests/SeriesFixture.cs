@@ -209,10 +209,10 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             Series.Put(series, moveFiles: true);
 
-            SignalRMessages.Should().Contain(m =>
+            WaitForCompletion(() => SignalRMessages.Any(m =>
                 m.Name == "series" &&
                 ((System.Text.Json.JsonElement)m.Body).GetProperty("resource").GetProperty("path").GetString() == oldPath &&
-                ((System.Text.Json.JsonElement)m.Body).GetProperty("resource").GetProperty("pendingPath").GetString() == destinationPath);
+                ((System.Text.Json.JsonElement)m.Body).GetProperty("resource").GetProperty("pendingPath").GetString() == destinationPath));
 
             Commands.WaitAll();
         }
