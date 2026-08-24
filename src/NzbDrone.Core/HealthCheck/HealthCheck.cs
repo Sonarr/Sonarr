@@ -55,6 +55,7 @@ namespace NzbDrone.Core.HealthCheck
 
     public enum HealthCheckReason
     {
+        AllowedHostsNotConfigured,
         AppDataLocation,
         DownloadClientCheckNoneAvailable,
         DownloadClientCheckUnableToCommunicate,
