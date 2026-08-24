@@ -88,6 +88,13 @@ namespace NzbDrone.Common
                     // Manipulate the output filename here as desired.
                     var fullZipToPath = Path.Combine(destination, entryFileName);
                     var directoryName = Path.GetDirectoryName(fullZipToPath);
+
+                    // Ensure the destination path is within the target directory
+                    if (!Path.GetFullPath(fullZipToPath).StartsWith(Path.GetFullPath(destination).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar))
+                    {
+                        throw new IOException($"Entry is outside the target dir: {entryFileName}");
+                    }
+
                     if (directoryName.Length > 0)
                     {
                         Directory.CreateDirectory(directoryName);
