@@ -3,7 +3,7 @@ import Alert from 'Components/Alert';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
-import SpinnerButton from 'Components/Link/SpinnerButton';
+import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -28,8 +28,15 @@ function onModalClose() {
 export default function AuthenticationRequiredModalContent() {
   const { refetch: refetchStatus } = useSystemStatus();
 
-  const { settings, isFetched, error, isSaving, saveSettings, updateSetting } =
-    useManageGeneralSettings();
+  const {
+    settings,
+    isFetched,
+    error,
+    isSaving,
+    saveError,
+    saveSettings,
+    updateSetting,
+  } = useManageGeneralSettings();
 
   const {
     authenticationMethod,
@@ -37,6 +44,7 @@ export default function AuthenticationRequiredModalContent() {
     username,
     password,
     passwordConfirmation,
+    allowedHosts,
   } = settings;
 
   const wasSaving = usePrevious(isSaving);
@@ -53,12 +61,12 @@ export default function AuthenticationRequiredModalContent() {
     authenticationMethod && authenticationMethod.value !== 'none';
 
   useEffect(() => {
-    if (isSaving || !wasSaving) {
+    if (isSaving || !wasSaving || saveError) {
       return;
     }
 
     refetchStatus();
-  }, [isSaving, wasSaving, refetchStatus]);
+  }, [isSaving, wasSaving, saveError, refetchStatus]);
 
   const onPress = useCallback(() => {
     saveSettings();
@@ -156,6 +164,20 @@ export default function AuthenticationRequiredModalContent() {
                 {...passwordConfirmation}
               />
             </FormGroup>
+
+            <FormGroup>
+              <FormLabel>{translate('AllowedHosts')}</FormLabel>
+
+              <FormInputGroup
+                type={inputTypes.TEXT}
+                name="allowedHosts"
+                helpText={translate('AllowedHostsHelpText')}
+                helpTextWarning={translate('RestartRequiredHelpTextWarning')}
+                helpLink="https://wiki.servarr.com/sonarr/settings#host"
+                onChange={onInputChange}
+                {...allowedHosts}
+              />
+            </FormGroup>
           </div>
         ) : null}
 
@@ -163,14 +185,15 @@ export default function AuthenticationRequiredModalContent() {
       </ModalBody>
 
       <ModalFooter>
-        <SpinnerButton
+        <SpinnerErrorButton
           kind={kinds.PRIMARY}
           isSpinning={isSaving}
           isDisabled={!authenticationEnabled}
+          error={saveError}
           onPress={onPress}
         >
           {translate('Save')}
-        </SpinnerButton>
+        </SpinnerErrorButton>
       </ModalFooter>
     </ModalContent>
   );

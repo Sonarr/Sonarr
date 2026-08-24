@@ -17,6 +17,7 @@ interface HostSettingsProps {
   urlBase: PendingSection<GeneralSettingsModel>['urlBase'];
   instanceName: PendingSection<GeneralSettingsModel>['instanceName'];
   applicationUrl: PendingSection<GeneralSettingsModel>['applicationUrl'];
+  allowedHosts: PendingSection<GeneralSettingsModel>['allowedHosts'];
   enableSsl: PendingSection<GeneralSettingsModel>['enableSsl'];
   sslPort: PendingSection<GeneralSettingsModel>['sslPort'];
   sslKeyPath: PendingSection<GeneralSettingsModel>['sslKeyPath'];
@@ -32,6 +33,7 @@ function HostSettings({
   urlBase,
   instanceName,
   applicationUrl,
+  allowedHosts,
   enableSsl,
   sslPort,
   sslCertPath,
@@ -83,6 +85,20 @@ function HostSettings({
           helpTextWarning={translate('RestartRequiredHelpTextWarning')}
           onChange={onInputChange}
           {...urlBase}
+        />
+      </FormGroup>
+
+      <FormGroup>
+        <FormLabel>{translate('AllowedHosts')}</FormLabel>
+
+        <FormInputGroup
+          type={inputTypes.TEXT}
+          name="allowedHosts"
+          helpText={translate('AllowedHostsHelpText')}
+          helpTextWarning={translate('RestartRequiredHelpTextWarning')}
+          helpLink="https://wiki.servarr.com/sonarr/settings#host"
+          onChange={onInputChange}
+          {...allowedHosts}
         />
       </FormGroup>
 
