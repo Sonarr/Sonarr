@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Network;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update;
@@ -43,6 +44,7 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
                        .When(c => c.AllowedHosts.IsNotNullOrWhiteSpace());
 
         SharedValidator.RuleFor(c => c.UrlBase).ValidUrlBase();
+        SharedValidator.RuleFor(c => c.TrustedNetworks).ValidIpNetworks();
         SharedValidator.RuleFor(c => c.InstanceName).StartsOrEndsWithSonarr();
 
         SharedValidator.RuleFor(c => c.Username).NotEmpty().When(c => c.AuthenticationMethod == AuthenticationType.Forms);
@@ -116,6 +118,8 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
 
     public override Results<Accepted<GeneralSettingsResource>, NotFound> SaveSettings(GeneralSettingsResource resource)
     {
+        resource.TrustedNetworks = IPNetworkParser.NormalizeList(resource.TrustedNetworks);
+
         if (resource.Username.IsNotNullOrWhiteSpace() && resource.Password.IsNotNullOrWhiteSpace())
         {
             _userService.Upsert(resource.Username, resource.Password);

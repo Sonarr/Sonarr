@@ -5,6 +5,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.HealthCheck.Checks;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {
@@ -48,6 +49,8 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             GivenAuthenticationRequired(AuthenticationRequiredType.DisabledForLocalAddresses);
 
             Subject.Check().ShouldBeWarning();
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -66,6 +69,8 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             GivenAuthenticationRequired(AuthenticationRequiredType.DisabledForLocalAddresses);
 
             Subject.Check().ShouldBeWarning();
+
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }
