@@ -11,4 +11,5 @@ public class ServerOptions
     public string SslCertPath { get; set; }
     public string SslKeyPath { get; set; }
     public string SslCertPassword { get; set; }
+    public string TrustedNetworks { get; set; }
 }
