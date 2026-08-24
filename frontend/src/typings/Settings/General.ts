@@ -13,6 +13,7 @@ export default interface General {
   launchBrowser: boolean;
   authenticationMethod: string;
   authenticationRequired: string;
+  allowedHosts: string;
   analyticsEnabled: boolean;
   username: string;
   password: string;

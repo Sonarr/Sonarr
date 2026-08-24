@@ -22,6 +22,7 @@ function HostSettings(props) {
     urlBase,
     instanceName,
     applicationUrl,
+    allowedHosts,
     enableSsl,
     sslPort,
     sslCertPath,
@@ -72,6 +73,19 @@ function HostSettings(props) {
           helpTextWarning={translate('RestartRequiredHelpTextWarning')}
           onChange={onInputChange}
           {...urlBase}
+        />
+      </FormGroup>
+
+      <FormGroup>
+        <FormLabel>{translate('AllowedHosts')}</FormLabel>
+
+        <FormInputGroup
+          type={inputTypes.TEXT}
+          name="allowedHosts"
+          helpText={translate('AllowedHostsHelpText')}
+          helpTextWarning={translate('RestartRequiredHelpTextWarning')}
+          onChange={onInputChange}
+          {...allowedHosts}
         />
       </FormGroup>
 

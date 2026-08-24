@@ -16,6 +16,7 @@ namespace Sonarr.Api.V3.Config
         public bool LaunchBrowser { get; set; }
         public AuthenticationType AuthenticationMethod { get; set; }
         public AuthenticationRequiredType AuthenticationRequired { get; set; }
+        public string AllowedHosts { get; set; }
         public bool AnalyticsEnabled { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
@@ -62,6 +63,7 @@ namespace Sonarr.Api.V3.Config
                 LaunchBrowser = model.LaunchBrowser,
                 AuthenticationMethod = model.AuthenticationMethod,
                 AuthenticationRequired = model.AuthenticationRequired,
+                AllowedHosts = model.AllowedHosts,
                 AnalyticsEnabled = model.AnalyticsEnabled,
 
                 // Username

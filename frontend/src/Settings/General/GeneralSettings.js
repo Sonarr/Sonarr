@@ -22,6 +22,7 @@ const requiresRestartKeys = [
   'bindAddress',
   'port',
   'urlBase',
+  'allowedHosts',
   'instanceName',
   'enableSsl',
   'sslPort',

@@ -6,11 +6,13 @@ using DryIoc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HostFiltering;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
 using NzbDrone.Common.EnvironmentInfo;
@@ -70,6 +72,8 @@ namespace NzbDrone.Host
             services.AddRouting(options => options.LowercaseUrls = true);
 
             services.AddResponseCompression();
+
+            services.AddSingleton<IConfigureOptions<HostFilteringOptions>, ConfigureHostFilteringOptions>();
 
             services.AddCors(options =>
             {
@@ -249,6 +253,7 @@ namespace NzbDrone.Host
             }
 
             app.UseForwardedHeaders();
+            app.UseHostFiltering();
             app.UseMiddleware<LoggingMiddleware>();
             app.UsePathBase(new PathString(configFileProvider.UrlBase));
             app.UseExceptionHandler(new ExceptionHandlerOptions
