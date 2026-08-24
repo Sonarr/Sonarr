@@ -2,6 +2,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
@@ -27,7 +28,8 @@ namespace NzbDrone.Http.Authentication
             if (_authenticationRequired == AuthenticationRequiredType.DisabledForLocalAddresses)
             {
                 if (context.Resource is HttpContext httpContext &&
-                    IPAddress.TryParse(httpContext.GetRemoteIP(), out var ipAddress))
+                    IPAddress.TryParse(httpContext.GetRemoteIP(), out var ipAddress) &&
+                    IsClientAddressKnown(httpContext))
                 {
                     if (ipAddress.IsLocalAddress() ||
                         (_configService.TrustCgnatIpAddresses && ipAddress.IsCgnatIpAddress()))
@@ -38,6 +40,11 @@ namespace NzbDrone.Http.Authentication
             }
 
             return Task.CompletedTask;
+        }
+
+        private static bool IsClientAddressKnown(HttpContext httpContext)
+        {
+            return !httpContext.Request.Headers.ContainsKey(ForwardedHeadersDefaults.XForwardedForHeaderName);
         }
 
         public void Handle(ConfigSavedEvent message)

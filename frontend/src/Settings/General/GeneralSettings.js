@@ -23,6 +23,7 @@ const requiresRestartKeys = [
   'port',
   'urlBase',
   'allowedHosts',
+  'trustedNetworks',
   'instanceName',
   'enableSsl',
   'sslPort',

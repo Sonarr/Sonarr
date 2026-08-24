@@ -25,6 +25,7 @@ export default interface General {
   sslCertPath: string;
   sslCertPassword: string;
   urlBase: string;
+  trustedNetworks: string;
   instanceName: string;
   applicationUrl: string;
   updateAutomatically: boolean;
