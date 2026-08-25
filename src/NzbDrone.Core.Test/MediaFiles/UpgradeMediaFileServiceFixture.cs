@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
@@ -5,9 +7,11 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -91,6 +95,32 @@ namespace NzbDrone.Core.Test.MediaFiles
                                                                                 })
                                                      .Build()
                                                      .ToList();
+        }
+
+        [Test]
+        public void should_not_delete_the_existing_file_when_the_new_file_name_cannot_be_built()
+        {
+            GivenSingleEpisodeWithSingleEpisodeFile();
+
+            // The real MoveEpisodeFile builds the file name as its first statement, so a name that
+            // can't be built surfaces from either of these two, depending on where the build happens.
+            Mocker.GetMock<IBuildFileNames>()
+                  .Setup(s => s.BuildFilePath(It.IsAny<List<Episode>>(),
+                                              It.IsAny<Series>(),
+                                              It.IsAny<EpisodeFile>(),
+                                              It.IsAny<string>(),
+                                              It.IsAny<NamingConfig>(),
+                                              It.IsAny<List<CustomFormat>>()))
+                  .Throws(new NullReferenceException());
+
+            Mocker.GetMock<IMoveEpisodeFiles>()
+                  .Setup(s => s.MoveEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<LocalEpisode>()))
+                  .Throws(new NullReferenceException());
+
+            Assert.Throws<NullReferenceException>(() => Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode));
+
+            Mocker.GetMock<IRecycleBinProvider>().Verify(v => v.DeleteFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(It.IsAny<EpisodeFile>(), DeleteMediaFileReason.Upgrade), Times.Never());
         }
 
         [Test]

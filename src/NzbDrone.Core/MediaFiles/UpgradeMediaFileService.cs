@@ -4,6 +4,7 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles
@@ -18,18 +19,21 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IRecycleBinProvider _recycleBinProvider;
         private readonly IMediaFileService _mediaFileService;
         private readonly IMoveEpisodeFiles _episodeFileMover;
+        private readonly IBuildFileNames _buildFileNames;
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
         public UpgradeMediaFileService(IRecycleBinProvider recycleBinProvider,
                                        IMediaFileService mediaFileService,
                                        IMoveEpisodeFiles episodeFileMover,
+                                       IBuildFileNames buildFileNames,
                                        IDiskProvider diskProvider,
                                        Logger logger)
         {
             _recycleBinProvider = recycleBinProvider;
             _mediaFileService = mediaFileService;
             _episodeFileMover = episodeFileMover;
+            _buildFileNames = buildFileNames;
             _diskProvider = diskProvider;
             _logger = logger;
         }
@@ -50,6 +54,19 @@ namespace NzbDrone.Core.MediaFiles
             if (existingFiles.Any() && !_diskProvider.FolderExists(rootFolder))
             {
                 throw new RootFolderNotFoundException($"Root folder '{rootFolder}' was not found.");
+            }
+
+            // Build the destination path before deleting anything, for the same reason: if the name can't be
+            // built the existing file must stay where it is instead of ending up in the recycle bin with no
+            // replacement imported.
+            if (existingFiles.Any())
+            {
+                _buildFileNames.BuildFilePath(localEpisode.Episodes,
+                                              localEpisode.Series,
+                                              episodeFile,
+                                              Path.GetExtension(localEpisode.Path),
+                                              null,
+                                              localEpisode.CustomFormats);
             }
 
             foreach (var existingFile in existingFiles)
