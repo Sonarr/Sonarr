@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Http;
-using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.IndexerSearch.Definitions;
 
 namespace NzbDrone.Core.Indexers.Nyaa
@@ -88,9 +88,11 @@ namespace NzbDrone.Core.Indexers.Nyaa
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            foreach (var searchTitle in searchCriteria.SceneTitles.Select(PrepareQuery))
+            foreach (var sceneTitle in searchCriteria.SceneTitles)
             {
-                if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchSeasonTitle))
+                var searchTitle = PrepareQuery(sceneTitle);
+
+                if (searchCriteria.SeasonSceneTitles.Contains(sceneTitle, StringComparer.InvariantCultureIgnoreCase))
                 {
                     // A season title alias already identifies the season, no need to add a season number.
                     pageableRequests.Add(GetPagedRequests(searchTitle));

@@ -9,6 +9,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
         public Episode Episode { get; set; }
         public SearchMode SearchMode { get; set; }
         public List<string> SceneTitles { get; set; }
+        public List<string> SeasonSceneTitles { get; set; }
         public int SeasonNumber { get; set; }
         public int EpisodeNumber { get; set; }
         public int? AbsoluteEpisodeNumber { get; set; }

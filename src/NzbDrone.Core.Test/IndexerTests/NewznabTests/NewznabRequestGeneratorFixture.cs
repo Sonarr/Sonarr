@@ -3,7 +3,6 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -194,13 +193,13 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         public void should_search_season_title_alias_without_the_season_parameter()
         {
             Subject.Settings.AnimeStandardFormatSearch = true;
-            _animeSeasonSearchCriteria.SearchMode = SearchMode.SearchSeasonTitle;
+            _animeSeasonSearchCriteria.SeasonSceneTitles = new List<string> { "Monkey Island" };
 
             var results = Subject.GetSearchRequests(_animeSeasonSearchCriteria);
 
             var pages = results.GetAllTiers().Select(t => t.First().Url.FullUri).ToList();
 
-            pages.Should().ContainSingle();
+            pages.Should().ContainSingle(p => p.Contains("q="));
             pages.Should().Contain(p => p.Contains("q=Monkey%20Island") && !p.Contains("season="));
         }
 
@@ -208,7 +207,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         public void should_search_season_title_alias_when_standard_format_search_is_disabled()
         {
             Subject.Settings.AnimeStandardFormatSearch = false;
-            _animeSeasonSearchCriteria.SearchMode = SearchMode.SearchSeasonTitle;
+            _animeSeasonSearchCriteria.SeasonSceneTitles = new List<string> { "Monkey Island" };
 
             var results = Subject.GetSearchRequests(_animeSeasonSearchCriteria);
 
@@ -219,31 +218,18 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         }
 
         [Test]
-        public void should_search_series_wide_alias_with_the_season_parameter()
+        public void should_only_search_the_season_title_without_the_season_parameter()
         {
             Subject.Settings.AnimeStandardFormatSearch = true;
-            _animeSeasonSearchCriteria.SearchMode = SearchMode.SearchTitle;
+            _animeSeasonSearchCriteria.SceneTitles = new List<string> { "Monkey Island", "Monkey Island Revenge" };
+            _animeSeasonSearchCriteria.SeasonSceneTitles = new List<string> { "Monkey Island Revenge" };
 
             var results = Subject.GetSearchRequests(_animeSeasonSearchCriteria);
 
             var pages = results.GetAllTiers().Select(t => t.First().Url.FullUri).ToList();
 
             pages.Should().Contain(p => p.Contains("q=Monkey%20Island&season=3"));
-        }
-
-        [Test]
-        public void should_not_search_without_season_parameter_when_search_mode_is_default()
-        {
-            Subject.Settings.AnimeStandardFormatSearch = true;
-            _animeSeasonSearchCriteria.SearchMode = SearchMode.Default;
-
-            var results = Subject.GetSearchRequests(_animeSeasonSearchCriteria);
-
-            results.Tiers.Should().Be(1);
-
-            var pages = results.GetAllTiers().Select(t => t.First().Url.FullUri).ToList();
-
-            pages.Should().NotContain(p => p.Contains("q=") && !p.Contains("season="));
+            pages.Should().Contain(p => p.Contains("q=Monkey%20Island%20Revenge") && !p.Contains("season="));
         }
 
         [Test]

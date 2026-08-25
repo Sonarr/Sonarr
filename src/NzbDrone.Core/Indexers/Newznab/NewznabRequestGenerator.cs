@@ -456,26 +456,27 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
 
             var queryTitles = TextSearchEngine == "raw" ? searchCriteria.AllSceneTitles : searchCriteria.CleanSceneTitles;
+            var seasonQueryTitles = TextSearchEngine == "raw" ? searchCriteria.AllSeasonSceneTitles : searchCriteria.CleanSeasonSceneTitles;
 
-            if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchSeasonTitle))
-            {
-                // A season title alias already identifies the season, no need to add a season number.
-                foreach (var queryTitle in queryTitles)
-                {
-                    pageableRequests.Add(GetPagedRequests(MaxPages,
-                        Settings.AnimeCategories,
-                        "tvsearch",
-                        $"&q={NewsnabifyTitle(queryTitle)}"));
-                }
-            }
-            else if (Settings.AnimeStandardFormatSearch)
+            if (Settings.AnimeStandardFormatSearch)
             {
                 AddTvIdPageableRequests(pageableRequests,
                     Settings.AnimeCategories,
                     searchCriteria,
                     $"&season={NewznabifySeasonNumber(searchCriteria.SeasonNumber)}");
+            }
 
-                foreach (var queryTitle in queryTitles)
+            foreach (var queryTitle in queryTitles)
+            {
+                if (seasonQueryTitles.Contains(queryTitle, StringComparer.InvariantCultureIgnoreCase))
+                {
+                    // A season title alias already identifies the season, no need to add a season number.
+                    pageableRequests.Add(GetPagedRequests(MaxPages,
+                        Settings.AnimeCategories,
+                        "tvsearch",
+                        $"&q={NewsnabifyTitle(queryTitle)}"));
+                }
+                else if (Settings.AnimeStandardFormatSearch)
                 {
                     pageableRequests.Add(GetPagedRequests(MaxPages,
                         Settings.AnimeCategories,

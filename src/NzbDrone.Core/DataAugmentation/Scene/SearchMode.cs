@@ -7,7 +7,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
     {
         Default = 0,
         SearchID = 1,
-        SearchTitle = 2,
-        SearchSeasonTitle = 4
+        SearchTitle = 2
     }
 }

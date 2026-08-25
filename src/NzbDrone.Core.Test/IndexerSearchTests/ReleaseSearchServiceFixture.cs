@@ -621,7 +621,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         }
 
         [Test]
-        public async Task season_search_for_anime_should_not_group_a_series_wide_alias_with_a_season_title()
+        public async Task season_search_for_anime_should_search_a_series_wide_alias_and_a_season_title_together()
         {
             WithEpisodes();
             _xemSeries.SeriesType = SeriesTypes.Anime;
@@ -654,11 +654,10 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var criteria = allCriteria.OfType<AnimeSeasonSearchCriteria>().ToList();
 
-            criteria.Should().Contain(c => c.SceneTitles.Contains("Sonarrs Season Title") &&
-                                           !c.SceneTitles.Contains("Sonarrs Series Alias"));
-
-            criteria.Should().Contain(c => c.SceneTitles.Contains("Sonarrs Series Alias") &&
-                                           !c.SearchMode.HasFlag(SearchMode.SearchSeasonTitle));
+            criteria.Should().ContainSingle();
+            criteria.First().SceneTitles.Should().Contain("Sonarrs Season Title");
+            criteria.First().SceneTitles.Should().Contain("Sonarrs Series Alias");
+            criteria.First().SeasonSceneTitles.Should().BeEquivalentTo(new[] { "Sonarrs Season Title" });
         }
 
         [Test]
