@@ -389,7 +389,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         }
 
         [Test]
-        public void should_keep_the_parsed_season_number_when_the_scene_mapping_has_no_season()
+        public void should_not_have_a_mapped_season_number_when_the_scene_mapping_has_no_season()
         {
             GivenMatchBySeriesTitle();
 
@@ -403,7 +403,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
             var result = Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId, _series.ImdbId);
 
-            result.MappedSeasonNumber.Should().Be(-1);
+            result.MappedSeasonNumber.Should().BeNull();
         }
     }
 }

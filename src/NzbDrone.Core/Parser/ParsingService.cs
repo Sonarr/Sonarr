@@ -181,7 +181,7 @@ namespace NzbDrone.Core.Parser
             {
                 ParsedEpisodeInfo = parsedEpisodeInfo,
                 SceneMapping = sceneMapping,
-                MappedSeasonNumber = parsedEpisodeInfo.SeasonNumber
+                MappedSeasonNumber = parsedEpisodeInfo.SeasonNumber.NonNegative()
             };
 
             // For now we just detect tvdb vs scene, but we can do multiple 'origins' in the future.
@@ -233,9 +233,10 @@ namespace NzbDrone.Core.Parser
             {
                 remoteEpisode.Series = series;
 
-                if (ValidateParsedEpisodeInfo.ValidateForSeriesType(parsedEpisodeInfo, series))
+                if (remoteEpisode.MappedSeasonNumber.HasValue &&
+                    ValidateParsedEpisodeInfo.ValidateForSeriesType(parsedEpisodeInfo, series))
                 {
-                    remoteEpisode.Episodes = GetEpisodes(parsedEpisodeInfo, series, remoteEpisode.MappedSeasonNumber, sceneSource, searchCriteria);
+                    remoteEpisode.Episodes = GetEpisodes(parsedEpisodeInfo, series, remoteEpisode.MappedSeasonNumber.Value, sceneSource, searchCriteria);
                 }
             }
 
