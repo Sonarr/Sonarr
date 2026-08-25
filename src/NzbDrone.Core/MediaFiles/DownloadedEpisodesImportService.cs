@@ -295,25 +295,17 @@ namespace NzbDrone.Core.MediaFiles
                 };
             }
 
-            if (_configService.UserRejectedExtensions is not null)
+            if (FileExtensions.ParseUserRejectedExtensions(_configService.UserRejectedExtensions).Contains(extension))
             {
-                var userRejectedExtensions = _configService.UserRejectedExtensions.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(e => e.Trim(' ', '.')
-                        .Insert(0, "."))
-                    .ToList();
-
-                if (userRejectedExtensions.Contains(extension))
+                return new List<ImportResult>
                 {
-                    return new List<ImportResult>
-                    {
-                        new ImportResult(new ImportDecision(new LocalEpisode
-                                {
-                                    Path = fileInfo.FullName
-                                },
-                                new ImportRejection(ImportRejectionReason.UserRejectedExtension, $"Caution: Found file with user defined rejected extension: '{extension}'")),
-                            $"Caution: Found executable file with user defined rejected extension: '{extension}'")
-                    };
-                }
+                    new ImportResult(new ImportDecision(new LocalEpisode
+                            {
+                                Path = fileInfo.FullName
+                            },
+                            new ImportRejection(ImportRejectionReason.UserRejectedExtension, $"Caution: Found file with user defined rejected extension: '{extension}'")),
+                        $"Caution: Found executable file with user defined rejected extension: '{extension}'")
+                };
             }
 
             if (extension.IsNullOrWhiteSpace() || !MediaFileExtensions.Extensions.Contains(extension))
