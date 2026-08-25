@@ -573,10 +573,21 @@ namespace NzbDrone.Core.Parser
         public static ParsedEpisodeInfo ParsePath(string path)
         {
             var fileInfo = new FileInfo(path);
-            var result = ParseTitle(fileInfo.Name);
+            var fileName = fileInfo.Name;
+
+            foreach (var replace in ParserCommon.PathPreSubstitutionRegex)
+            {
+                if (replace.TryReplace(ref fileName))
+                {
+                    Logger.Trace($"Replace regex: {replace}");
+                    Logger.Debug("Substituted with " + fileName);
+                }
+            }
+
+            var result = ParseTitle(fileName);
 
             // Parse using the folder and file separately, but combine if they both parse correctly.
-            var episodeNumberMatch = SimpleEpisodeNumberRegex.Match(fileInfo.Name);
+            var episodeNumberMatch = SimpleEpisodeNumberRegex.Match(fileName);
 
             if (episodeNumberMatch.Success && fileInfo.Directory?.Name != null && (result == null || result.IsMiniSeries || result.AbsoluteEpisodeNumbers.Any()))
             {
@@ -607,7 +618,7 @@ namespace NzbDrone.Core.Parser
                 }
             }
 
-            if (result == null && int.TryParse(Path.GetFileNameWithoutExtension(fileInfo.Name), out var number))
+            if (result == null && int.TryParse(Path.GetFileNameWithoutExtension(fileName), out var number))
             {
                 Logger.Debug("Attempting to parse episode info using directory and file names. {0}", fileInfo.Directory.Name);
                 result = ParseTitle(fileInfo.Directory.Name);
@@ -631,7 +642,7 @@ namespace NzbDrone.Core.Parser
             if (result == null)
             {
                 Logger.Debug("Attempting to parse episode info using combined directory and file names. {0}", fileInfo.Directory.Name);
-                result = ParseTitle(fileInfo.Directory.Name + " " + fileInfo.Name);
+                result = ParseTitle(fileInfo.Directory.Name + " " + fileName);
             }
 
             if (result == null)
