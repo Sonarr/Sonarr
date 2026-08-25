@@ -1967,7 +1967,7 @@
   "RescanSeriesFolderAfterRefresh": "Rescan Series Folder after Refresh",
   "Reset": "Reset",
   "ResetAPIKey": "Reset API Key",
-  "ResetAPIKeyMessageText": "Are you sure you want to reset your API Key?",
+  "ResetAPIKeyMessageText": "Are you sure you want to reset your API Key? The UI will be reloaded once the API Key has been reset.",
   "ResetDefinitionTitlesHelpText": "Reset definition titles as well as values",
   "ResetDefinitions": "Reset Definitions",
   "ResetQualityDefinitions": "Reset Quality Definitions",

@@ -216,7 +216,7 @@ function SecuritySettings({
       <FormRow>
         <FormLabel>{translate('ApiKey')}</FormLabel>
         <FormInputHelpText
-          text={translate('RestartRequiredHelpTextWarning')}
+          text={translate('BrowserReloadRequired')}
           isWarning={true}
         />
         <FormInput
