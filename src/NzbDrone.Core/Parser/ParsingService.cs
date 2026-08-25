@@ -196,7 +196,7 @@ namespace NzbDrone.Core.Parser
 
                 if (parsedEpisodeInfo.IsSeasonTitle)
                 {
-                    var mappedSeasonNumber = sceneMapping.SceneSeasonNumber ?? sceneMapping.SeasonNumber;
+                    var mappedSeasonNumber = sceneMapping.SceneSeasonNumber.NonNegative() ?? sceneMapping.SeasonNumber.NonNegative();
 
                     if (mappedSeasonNumber.HasValue)
                     {
