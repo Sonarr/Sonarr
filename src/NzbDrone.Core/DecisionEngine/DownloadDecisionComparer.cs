@@ -209,7 +209,7 @@ namespace NzbDrone.Core.DecisionEngine
 
         private static int GetRuntime(RemoteEpisode remoteEpisode)
         {
-            if (remoteEpisode.Episodes is not { Count: not 0 })
+            if (remoteEpisode.Episodes.Count == 0)
             {
                 return remoteEpisode.Series.Runtime;
             }
