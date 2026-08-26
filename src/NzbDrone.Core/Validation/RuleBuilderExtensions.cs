@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Validation
 
                                   return hosts.Any() && hosts.All(AllowedHostsParser.IsValidHost);
                               })
-                              .WithMessage("must be a comma separated list of host names or IP addresses only, without a protocol or port");
+                              .WithMessage("Must be a comma separated list of host names or IP addresses only, without a protocol or port");
         }
 
         public static IRuleBuilderOptions<T, string> ValidRootUrl<T>(this IRuleBuilder<T, string> ruleBuilder)

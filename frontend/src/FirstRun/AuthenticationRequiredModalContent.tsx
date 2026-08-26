@@ -184,6 +184,7 @@ export default function AuthenticationRequiredModalContent() {
                 name="allowedHosts"
                 helpText={translate('AllowedHostsHelpText')}
                 helpTextWarning={translate('RestartRequiredHelpTextWarning')}
+                helpLink="https://wiki.servarr.com/sonarr/settings#host"
                 onChange={onInputChange}
                 {...allowedHosts}
               />
