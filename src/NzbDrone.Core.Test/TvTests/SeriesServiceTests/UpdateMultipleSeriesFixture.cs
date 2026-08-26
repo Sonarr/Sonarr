@@ -6,9 +6,11 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.AutoTagging;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
@@ -34,12 +36,33 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
             Mocker.GetMock<IAutoTaggingService>()
                 .Setup(s => s.GetTagChanges(It.IsAny<Series>()))
                 .Returns(new AutoTaggingChanges());
+
+            Mocker.GetMock<IManageCommandQueue>()
+                .Setup(s => s.All())
+                .Returns(new List<CommandModel>());
+        }
+
+        private void GivenPendingMove(IEnumerable<int> seriesIds)
+        {
+            Mocker.GetMock<IManageCommandQueue>()
+                .Setup(s => s.All())
+                .Returns(new List<CommandModel>
+                {
+                    new CommandModel
+                    {
+                        Status = CommandStatus.Queued,
+                        Body = new BulkMoveSeriesCommand
+                        {
+                            Series = seriesIds.Select(id => new BulkMoveSeries { SeriesId = id }).ToList()
+                        }
+                    }
+                });
         }
 
         [Test]
         public void should_call_repo_updateMany()
         {
-            Subject.UpdateSeries(_series, false);
+            Subject.UpdateSeries(_series, true);
 
             Mocker.GetMock<ISeriesRepository>().Verify(v => v.UpdateMany(_series), Times.Once());
         }
@@ -54,7 +77,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                   .Setup(s => s.BuildPath(It.IsAny<Series>(), true))
                   .Returns<Series, bool>((s, u) => Path.Combine(s.RootFolderPath, s.Title));
 
-            Subject.UpdateSeries(_series, true).ForEach(s => s.Path.Should().StartWith(newRoot));
+            Subject.UpdateSeries(_series, false).ForEach(s => s.Path.Should().StartWith(newRoot));
         }
 
         [Test]
@@ -69,7 +92,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
 
             var originalPaths = _series.ToDictionary(s => s.Id, s => s.Path);
 
-            var result = Subject.UpdateSeries(_series, false);
+            var result = Subject.UpdateSeries(_series, true);
 
             result.Should().OnlyContain(s => s.Path == originalPaths[s.Id]);
         }
@@ -77,7 +100,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
         [Test]
         public void should_not_update_path_when_rootFolderPath_is_empty()
         {
-            Subject.UpdateSeries(_series, false).ForEach(s =>
+            Subject.UpdateSeries(_series, true).ForEach(s =>
             {
                 var expectedPath = _series.Single(ser => ser.Id == s.Id).Path;
                 s.Path.Should().Be(expectedPath);
@@ -87,7 +110,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
         [Test]
         public void should_not_update_path_when_deferred_and_rootFolderPath_is_empty()
         {
-            var result = Subject.UpdateSeries(_series, false);
+            var result = Subject.UpdateSeries(_series, true);
 
             result.ForEach(s =>
             {
@@ -114,7 +137,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                   .Setup(s => s.GetSeriesFolder(It.IsAny<Series>(), (NamingConfig)null))
                   .Returns<Series, NamingConfig>((s, n) => s.Title);
 
-            Subject.UpdateSeries(series, false);
+            Subject.UpdateSeries(series, true);
         }
 
         [Test]
@@ -130,7 +153,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                     TagsToRemove = new HashSet<int> { 1 }
                 });
 
-            var result = Subject.UpdateSeries(_series, false);
+            var result = Subject.UpdateSeries(_series, true);
 
             result[0].Tags.Should().BeEquivalentTo(new[] { 2, 3 });
         }
@@ -147,7 +170,11 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                 s.PendingPath = existingPendingPath;
             });
 
-            var result = Subject.UpdateSeries(_series, false);
+            GivenPendingMove(_series.Select(s => s.Id));
+
+            var result = Subject.UpdateSeries(_series, true);
+
+            ExceptionVerification.ExpectedWarns(_series.Count);
 
             result.Should().OnlyContain(s => s.PendingPath == existingPendingPath);
             Mocker.GetMock<IBuildSeriesPaths>().Verify(v => v.BuildPath(It.IsAny<Series>(), It.IsAny<bool>()), Times.Never());
@@ -163,13 +190,13 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                   .Setup(s => s.BuildPath(It.IsAny<Series>(), false))
                   .Returns<Series, bool>((s, u) => Path.Combine(s.RootFolderPath, s.Title));
 
-            var result = Subject.UpdateSeries(_series, false);
+            var result = Subject.UpdateSeries(_series, true);
 
             result.Should().OnlyContain(s => s.PendingPath != null && s.PendingPath.StartsWith(newRoot));
         }
 
         [Test]
-        public void should_return_series_to_move_when_deferring()
+        public void should_push_bulk_move_command_when_deferring()
         {
             var newRoot = @"C:\Test\TV2".AsOsAgnostic();
             _series.ForEach(s => s.RootFolderPath = newRoot);
@@ -178,13 +205,14 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                   .Setup(s => s.BuildPath(It.IsAny<Series>(), false))
                   .Returns<Series, bool>((s, u) => Path.Combine(s.RootFolderPath, s.Title));
 
-            Subject.UpdateSeries(_series, false, out var seriesToMove);
+            Subject.UpdateSeries(_series, true);
 
-            seriesToMove.Select(m => m.SeriesId).Should().BeEquivalentTo(_series.Select(s => s.Id));
+            Mocker.GetMock<IManageCommandQueue>()
+                .Verify(v => v.Push(It.Is<BulkMoveSeriesCommand>(c => c.Series.Select(m => m.SeriesId).ToList().SequenceEqual(_series.Select(s => s.Id).ToList())), It.IsAny<CommandPriority>(), It.IsAny<CommandTrigger>()), Times.Once());
         }
 
         [Test]
-        public void should_not_return_series_to_move_when_a_move_is_already_pending()
+        public void should_not_push_bulk_move_command_when_a_move_is_already_pending()
         {
             var newRoot = @"C:\Test\TV2".AsOsAgnostic();
             _series.ForEach(s =>
@@ -193,13 +221,18 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                 s.PendingPath = @"C:\Test\TV3\name".AsOsAgnostic();
             });
 
-            Subject.UpdateSeries(_series, false, out var seriesToMove);
+            GivenPendingMove(_series.Select(s => s.Id));
 
-            seriesToMove.Should().BeEmpty();
+            Subject.UpdateSeries(_series, true);
+
+            ExceptionVerification.ExpectedWarns(_series.Count);
+
+            Mocker.GetMock<IManageCommandQueue>()
+                .Verify(v => v.Push(It.IsAny<BulkMoveSeriesCommand>(), It.IsAny<CommandPriority>(), It.IsAny<CommandTrigger>()), Times.Never());
         }
 
         [Test]
-        public void should_not_return_series_to_move_when_not_deferring()
+        public void should_not_push_bulk_move_command_when_not_deferring()
         {
             var newRoot = @"C:\Test\TV2".AsOsAgnostic();
             _series.ForEach(s => s.RootFolderPath = newRoot);
@@ -208,9 +241,30 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                   .Setup(s => s.BuildPath(It.IsAny<Series>(), true))
                   .Returns<Series, bool>((s, u) => Path.Combine(s.RootFolderPath, s.Title));
 
-            Subject.UpdateSeries(_series, true, out var seriesToMove);
+            Subject.UpdateSeries(_series, false);
 
-            seriesToMove.Should().BeEmpty();
+            Mocker.GetMock<IManageCommandQueue>()
+                .Verify(v => v.Push(It.IsAny<BulkMoveSeriesCommand>(), It.IsAny<CommandPriority>(), It.IsAny<CommandTrigger>()), Times.Never());
+        }
+
+        [Test]
+        public void should_not_touch_path_or_pending_path_for_series_with_genuine_pending_move_when_not_moving_files()
+        {
+            var pendingPath = @"C:\Test\TV3\name".AsOsAgnostic();
+            _series.ForEach(s => s.PendingPath = pendingPath);
+            GivenPendingMove(_series.Select(s => s.Id));
+
+            var originalPaths = _series.ToDictionary(s => s.Id, s => s.Path);
+
+            _series[0].Tags = new HashSet<int> { 1 };
+            Mocker.GetMock<IAutoTaggingService>()
+                .Setup(s => s.GetTagChanges(_series[0]))
+                .Returns(new AutoTaggingChanges { TagsToAdd = new HashSet<int> { 2 } });
+
+            var result = Subject.UpdateSeries(_series, false);
+
+            result.Should().OnlyContain(s => s.Path == originalPaths[s.Id] && s.PendingPath == pendingPath);
+            result[0].Tags.Should().Contain(2);
         }
     }
 }

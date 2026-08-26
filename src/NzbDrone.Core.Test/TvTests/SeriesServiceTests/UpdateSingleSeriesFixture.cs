@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.AutoTagging;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
@@ -33,6 +36,10 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
             Mocker.GetMock<ISeriesRepository>()
                 .Setup(s => s.Update(It.IsAny<Series>()))
                 .Returns<Series>(r => r);
+
+            Mocker.GetMock<IManageCommandQueue>()
+                .Setup(s => s.All())
+                .Returns(new List<CommandModel>());
         }
 
         [Test]
@@ -40,9 +47,11 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
         {
             var destinationPath = @"C:\Test\destination".AsOsAgnostic();
 
-            var result = Subject.UpdateSeries(_series, _series.Path, destinationPath, true, out var queueMove);
+            var result = Subject.UpdateSeries(_series, _series.Path, destinationPath, true);
 
-            queueMove.Should().BeTrue();
+            Mocker.GetMock<IManageCommandQueue>()
+                .Verify(v => v.Push(It.Is<MoveSeriesCommand>(c => c.SeriesId == _series.Id && c.SourcePath == _series.Path && c.DestinationPath == destinationPath), It.IsAny<CommandPriority>(), CommandTrigger.Manual), Times.Once());
+
             result.Path.Should().Be(@"C:\Test\source".AsOsAgnostic());
             result.PendingPath.Should().Be(destinationPath);
         }
@@ -53,11 +62,43 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
             var existingPendingPath = @"C:\Test\pending".AsOsAgnostic();
             _series.PendingPath = existingPendingPath;
 
-            var result = Subject.UpdateSeries(_series, _series.Path, @"C:\Test\new-destination".AsOsAgnostic(), true, out var queueMove);
+            Mocker.GetMock<IManageCommandQueue>()
+                .Setup(s => s.All())
+                .Returns(new List<CommandModel>
+                {
+                    new CommandModel
+                    {
+                        Status = CommandStatus.Started,
+                        Body = new MoveSeriesCommand { SeriesId = _series.Id }
+                    }
+                });
 
-            queueMove.Should().BeFalse();
+            var result = Subject.UpdateSeries(_series, _series.Path, @"C:\Test\new-destination".AsOsAgnostic(), true);
+
+            Mocker.GetMock<IManageCommandQueue>()
+                .Verify(v => v.Push(It.IsAny<MoveSeriesCommand>(), It.IsAny<CommandPriority>(), It.IsAny<CommandTrigger>()), Times.Never());
+
             result.Path.Should().Be(@"C:\Test\source".AsOsAgnostic());
             result.PendingPath.Should().Be(existingPendingPath);
+        }
+
+        [Test]
+        public void should_queue_move_when_pending_path_is_stale()
+        {
+            var staleExistingPendingPath = @"C:\Test\pending".AsOsAgnostic();
+            _series.PendingPath = staleExistingPendingPath;
+
+            Mocker.GetMock<IManageCommandQueue>()
+                .Setup(s => s.All())
+                .Returns(new List<CommandModel>());
+
+            var newDestinationPath = @"C:\Test\new-destination".AsOsAgnostic();
+            var result = Subject.UpdateSeries(_series, _series.Path, newDestinationPath, true);
+
+            result.PendingPath.Should().Be(newDestinationPath);
+
+            Mocker.GetMock<IManageCommandQueue>()
+                .Verify(v => v.Push(It.Is<MoveSeriesCommand>(c => c.SeriesId == _series.Id), It.IsAny<CommandPriority>(), CommandTrigger.Manual), Times.Once());
         }
 
         [Test]
@@ -65,9 +106,11 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
         {
             var destinationPath = @"C:\Test\destination".AsOsAgnostic();
 
-            var result = Subject.UpdateSeries(_series, _series.Path, destinationPath, false, out var queueMove);
+            var result = Subject.UpdateSeries(_series, _series.Path, destinationPath, false);
 
-            queueMove.Should().BeFalse();
+            Mocker.GetMock<IManageCommandQueue>()
+                .Verify(v => v.Push(It.IsAny<MoveSeriesCommand>(), It.IsAny<CommandPriority>(), It.IsAny<CommandTrigger>()), Times.Never());
+
             result.Path.Should().Be(destinationPath);
         }
 
@@ -77,9 +120,8 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
             var existingPendingPath = @"C:\Test\pending".AsOsAgnostic();
             _series.PendingPath = existingPendingPath;
 
-            var result = Subject.UpdateSeries(_series, _series.Path, @"C:\Test\destination".AsOsAgnostic(), false, out var queueMove);
+            var result = Subject.UpdateSeries(_series, _series.Path, @"C:\Test\destination".AsOsAgnostic(), false);
 
-            queueMove.Should().BeFalse();
             result.PendingPath.Should().Be(existingPendingPath);
         }
     }

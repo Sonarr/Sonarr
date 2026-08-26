@@ -40,14 +40,14 @@ namespace NzbDrone.Core.Tv
             if (!sourcePath.IsPathValid(PathValidationType.CurrentOs))
             {
                 _logger.Warn("Folder '{0}' for '{1}' is invalid, unable to move series. Try moving files manually", sourcePath, series.Title);
-                UpdatePath(series.Id, sourcePath);
+                UpdatePath(series.Id, destinationPath);
                 return;
             }
 
             if (!_diskProvider.FolderExists(sourcePath))
             {
                 _logger.Debug("Folder '{0}' for '{1}' does not exist, not moving.", sourcePath, series.Title);
-                UpdatePath(series.Id, sourcePath);
+                UpdatePath(series.Id, destinationPath);
                 return;
             }
 

@@ -140,6 +140,22 @@ namespace NzbDrone.Core.Test.TvTests
 
             Mocker.GetMock<IBuildFileNames>()
                   .Verify(v => v.GetSeriesFolder(It.IsAny<Series>(), null), Times.Never());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Path == _command.DestinationPath), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
+        }
+
+        [Test]
+        public void should_update_path_to_destination_when_source_path_is_invalid()
+        {
+            _command.SourcePath = string.Empty;
+
+            Subject.Execute(_command);
+
+            ExceptionVerification.ExpectedWarns(1);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Path == _command.DestinationPath), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
         }
 
         [Test]
