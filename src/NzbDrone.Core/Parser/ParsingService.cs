@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Parser
                 return _seriesService.FindByTitle(title);
             }
 
-            var tvdbId = _sceneMappingService.FindTvdbId(parsedEpisodeInfo.SeriesTitle, parsedEpisodeInfo.ReleaseTitle, parsedEpisodeInfo.SeasonNumber);
+            var tvdbId = _sceneMappingService.FindTvdbId(parsedEpisodeInfo.SeriesTitle, parsedEpisodeInfo.ReleaseTitle, parsedEpisodeInfo.SeasonNumber ?? -1);
 
             if (tvdbId.HasValue)
             {
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Parser
 
                 if (series == null)
                 {
-                    tvdbId = _sceneMappingService.FindTvdbId(title, parsedEpisodeInfo.ReleaseTitle, parsedEpisodeInfo.SeasonNumber);
+                    tvdbId = _sceneMappingService.FindTvdbId(title, parsedEpisodeInfo.ReleaseTitle, parsedEpisodeInfo.SeasonNumber ?? -1);
                 }
 
                 if (!tvdbId.HasValue)
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Parser
         {
             var year = parsedEpisodeInfo.SeriesTitleInfo.Year;
             var titleWithoutyear = parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear;
-            var tvdbId = _sceneMappingService.FindTvdbId(titleWithoutyear, parsedEpisodeInfo.ReleaseTitle, parsedEpisodeInfo.SeasonNumber);
+            var tvdbId = _sceneMappingService.FindTvdbId(titleWithoutyear, parsedEpisodeInfo.ReleaseTitle, parsedEpisodeInfo.SeasonNumber ?? -1);
 
             if (tvdbId.HasValue)
             {
@@ -175,13 +175,13 @@ namespace NzbDrone.Core.Parser
 
         private RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvdbId, int tvRageId, string imdbId, Series series, SearchCriteriaBase searchCriteria)
         {
-            var sceneMapping = _sceneMappingService.FindSceneMapping(parsedEpisodeInfo.SeriesTitle, parsedEpisodeInfo.ReleaseTitle, parsedEpisodeInfo.SeasonNumber);
+            var sceneMapping = _sceneMappingService.FindSceneMapping(parsedEpisodeInfo.SeriesTitle, parsedEpisodeInfo.ReleaseTitle, parsedEpisodeInfo.SeasonNumber ?? -1);
 
             var remoteEpisode = new RemoteEpisode
             {
                 ParsedEpisodeInfo = parsedEpisodeInfo,
                 SceneMapping = sceneMapping,
-                MappedSeasonNumber = parsedEpisodeInfo.SeasonNumber.NonNegative()
+                MappedSeasonNumber = parsedEpisodeInfo.SeasonNumber
             };
 
             // For now we just detect tvdb vs scene, but we can do multiple 'origins' in the future.
@@ -265,7 +265,12 @@ namespace NzbDrone.Core.Parser
                 return remoteEpisode.Episodes;
             }
 
-            return GetEpisodes(parsedEpisodeInfo, series, parsedEpisodeInfo.SeasonNumber, sceneSource, searchCriteria);
+            if (!parsedEpisodeInfo.SeasonNumber.HasValue)
+            {
+                return new List<Episode>();
+            }
+
+            return GetEpisodes(parsedEpisodeInfo, series, parsedEpisodeInfo.SeasonNumber.Value, sceneSource, searchCriteria);
         }
 
         private List<Episode> GetEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, Series series, int mappedSeasonNumber, bool sceneSource, SearchCriteriaBase searchCriteria)
@@ -310,7 +315,7 @@ namespace NzbDrone.Core.Parser
                 if (parsedSpecialEpisodeInfo != null)
                 {
                     // Use the season number and disable scene source since the season/episode numbers that were returned are not scene numbers
-                    return GetStandardEpisodes(series, parsedSpecialEpisodeInfo, parsedSpecialEpisodeInfo.SeasonNumber, false, searchCriteria);
+                    return GetStandardEpisodes(series, parsedSpecialEpisodeInfo, parsedSpecialEpisodeInfo.SeasonNumber.Value, false, searchCriteria);
                 }
             }
 
@@ -378,7 +383,7 @@ namespace NzbDrone.Core.Parser
             // SxxE00 episodes are sometimes mapped via TheXEM, don't use episode title parsing in that case.
             if (parsedEpisodeInfo != null && parsedEpisodeInfo.IsPossibleSceneSeasonSpecial && series.UseSceneNumbering)
             {
-                if (_episodeService.FindEpisodesBySceneNumbering(series.Id, parsedEpisodeInfo.SeasonNumber, 0).Any())
+                if (_episodeService.FindEpisodesBySceneNumbering(series.Id, parsedEpisodeInfo.SeasonNumber.Value, 0).Any())
                 {
                     return parsedEpisodeInfo;
                 }
@@ -616,11 +621,11 @@ namespace NzbDrone.Core.Parser
                     }
                     else if (parsedEpisodeInfo.SeasonNumber > 1 && parsedEpisodeInfo.EpisodeNumbers.Empty())
                     {
-                        episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, parsedEpisodeInfo.SeasonNumber, absoluteEpisodeNumber);
+                        episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, parsedEpisodeInfo.SeasonNumber.Value, absoluteEpisodeNumber);
 
                         if (episodes.Empty())
                         {
-                            var episode = _episodeService.FindEpisode(series.Id, parsedEpisodeInfo.SeasonNumber, absoluteEpisodeNumber);
+                            var episode = _episodeService.FindEpisode(series.Id, parsedEpisodeInfo.SeasonNumber.Value, absoluteEpisodeNumber);
                             episodes.AddIfNotNull(episode);
                         }
                     }

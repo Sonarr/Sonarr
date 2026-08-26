@@ -20,7 +20,7 @@ public class SeasonTitleParserFixture : CoreTest
         result.SeriesTitle.Should().Be(expectedTitle);
         result.FullSeason.Should().BeTrue();
         result.IsSeasonTitle.Should().BeTrue();
-        result.SeasonNumber.Should().Be(-1);
+        result.SeasonNumber.Should().BeNull();
         result.EpisodeNumbers.Should().BeEmpty();
         result.AbsoluteEpisodeNumbers.Should().BeEmpty();
     }
