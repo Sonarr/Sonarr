@@ -8,7 +8,7 @@ using NzbDrone.Core.Localization;
 namespace NzbDrone.Core.HealthCheck.Checks
 {
     [CheckOn(typeof(ApplicationStartedEvent))]
-    [CheckOn(typeof(ConfigSavedEvent))]
+    [CheckOn(typeof(ConfigFileSavedEvent))]
     public class AllowedHostsCheck : HealthCheckBase
     {
         private readonly IConfigFileProvider _configFileProvider;
