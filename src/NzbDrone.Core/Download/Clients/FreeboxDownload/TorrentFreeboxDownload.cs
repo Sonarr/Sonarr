@@ -11,6 +11,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients.FreeboxDownload.Responses;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 
@@ -130,7 +131,7 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
             return _proxy.AddTaskFromUrl(magnetLink,
-                                         GetDownloadDirectory().EncodeBase64(),
+                                         GetDownloadDirectory(remoteEpisode).EncodeBase64(),
                                          ToBePaused(),
                                          ToBeQueuedFirst(remoteEpisode),
                                          GetSeedRatio(remoteEpisode),
@@ -141,7 +142,7 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
         {
             return _proxy.AddTaskFromFile(filename,
                                           fileContent,
-                                          GetDownloadDirectory().EncodeBase64(),
+                                          GetDownloadDirectory(remoteEpisode).EncodeBase64(),
                                           ToBePaused(),
                                           ToBeQueuedFirst(remoteEpisode),
                                           GetSeedRatio(remoteEpisode),
@@ -186,18 +187,28 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
             }
         }
 
-        private string GetDownloadDirectory()
+        private string GetDownloadDirectory(RemoteEpisode remoteEpisode = null)
         {
+            string destDir;
+
             if (Settings.DestinationDirectory.IsNotNullOrWhiteSpace())
             {
-                return Settings.DestinationDirectory.TrimEnd('/');
+                destDir = Settings.DestinationDirectory.TrimEnd('/');
+            }
+            else
+            {
+                destDir = _proxy.GetDownloadConfiguration(Settings).DecodedDownloadDirectory.TrimEnd('/');
+
+                if (Settings.Category.IsNotNullOrWhiteSpace())
+                {
+                    destDir = $"{destDir}/{Settings.Category}";
+                }
             }
 
-            var destDir = _proxy.GetDownloadConfiguration(Settings).DecodedDownloadDirectory.TrimEnd('/');
-
-            if (Settings.Category.IsNotNullOrWhiteSpace())
+            if (remoteEpisode?.Release?.Title.IsNotNullOrWhiteSpace() ?? false)
             {
-                destDir = $"{destDir}/{Settings.Category}";
+                var folderName = FileNameBuilder.CleanFileName(remoteEpisode.Release.Title);
+                destDir = $"{destDir}/{folderName}";
             }
 
             return destDir;
