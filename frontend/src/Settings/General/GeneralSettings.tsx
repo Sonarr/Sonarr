@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import CommandNames from 'Commands/CommandNames';
 import { useCommandExecuting } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
@@ -58,7 +58,7 @@ function GeneralSettings() {
 
   const wasResettingApiKey = usePrevious(isResettingApiKey);
   const wasSaving = usePrevious(isSaving);
-  const previousPendingChanges = usePrevious(pendingChanges);
+  const isRestartRequired = useRef(false);
 
   const [isRestartRequiredModalOpen, setIsRestartRequiredModalOpen] =
     useState(false);
@@ -72,8 +72,14 @@ function GeneralSettings() {
   );
 
   const handleSavePress = useCallback(() => {
+    isRestartRequired.current = Object.keys(pendingChanges ?? {}).some(
+      (key) => {
+        return requiresRestartKeys.includes(key);
+      }
+    );
+
     saveSettings();
-  }, [saveSettings]);
+  }, [pendingChanges, saveSettings]);
 
   const handleConfirmRestart = useCallback(() => {
     setIsRestartRequiredModalOpen(false);
@@ -85,16 +91,11 @@ function GeneralSettings() {
   }, []);
 
   useEffect(() => {
-    const isRestartedRequired =
-      previousPendingChanges &&
-      Object.keys(previousPendingChanges).some((key) => {
-        return requiresRestartKeys.includes(key);
-      });
-
-    if (!isSaving && wasSaving && !saveError && isRestartedRequired) {
+    if (!isSaving && wasSaving && !saveError && isRestartRequired.current) {
+      isRestartRequired.current = false;
       setIsRestartRequiredModalOpen(true);
     }
-  }, [isSaving, wasSaving, saveError, previousPendingChanges]);
+  }, [isSaving, wasSaving, saveError]);
 
   useEffect(() => {
     if (!isResettingApiKey && wasResettingApiKey) {
