@@ -1,7 +1,14 @@
 using System;
+using System.Security.Cryptography;
+using System.Text;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Options;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using Sonarr.Http.Extensions;
@@ -14,23 +21,37 @@ namespace Sonarr.Http.Authentication
         User Login(HttpRequest request, string username, string password);
         DateTime? GetLockoutEndTime(HttpRequest request);
         void Logout(HttpContext context);
+        string RequestPasswordReset(HttpRequest request);
+        bool ResetPassword(HttpRequest request, string token, string username, string password);
     }
 
     public class AuthenticationService : IAuthenticationService
     {
         private const int MaxFailedAttempts = 5;
+        private const int ResetTokenLength = 20;
+        private const int MinimumConfiguredResetTokenLength = 20;
+        private const string ResetTokenKey = "passwordResetToken";
+
         private static readonly TimeSpan LockoutDuration = TimeSpan.FromMinutes(5);
+        private static readonly TimeSpan ResetTokenLifetime = TimeSpan.FromMinutes(15);
+        private static readonly TimeSpan ResetRequestThrottle = TimeSpan.FromMinutes(1);
 
         private static readonly Logger _authLogger = LogManager.GetLogger("Auth");
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IUserService _userService;
         private readonly ICached<FailedLoginAttempts> _failedAttempts;
+        private readonly ICached<string> _resetToken;
+        private readonly ICached<string> _resetRequests;
+        private string _configuredResetTokenHash;
 
-        public AuthenticationService(IConfigFileProvider configFileProvider, IUserService userService, ICacheManager cacheManager)
+        public AuthenticationService(IConfigFileProvider configFileProvider, IUserService userService, ICacheManager cacheManager, IOptions<AuthOptions> authOptions)
         {
             _configFileProvider = configFileProvider;
             _userService = userService;
             _failedAttempts = cacheManager.GetCache<FailedLoginAttempts>(GetType(), "failedLoginAttempts");
+            _resetToken = cacheManager.GetCache<string>(GetType(), "passwordResetToken");
+            _resetRequests = cacheManager.GetCache<string>(GetType(), "passwordResetRequests");
+            _configuredResetTokenHash = GetConfiguredResetTokenHash(authOptions.Value.ResetToken);
         }
 
         public User Login(HttpRequest request, string username, string password)
@@ -86,6 +107,131 @@ namespace Sonarr.Http.Authentication
             {
                 LogLogout(context.Request, context.User.FindFirst("user")?.Value ?? context.User.Identity?.Name);
             }
+        }
+
+        public string RequestPasswordReset(HttpRequest request)
+        {
+            if (_configFileProvider.EffectiveAuthenticationMethod() != AuthenticationType.Forms)
+            {
+                return null;
+            }
+
+            _resetRequests.ClearExpired();
+
+            var remoteIP = request.GetRemoteIP();
+
+            if (_resetRequests.Find(remoteIP) != null)
+            {
+                _authLogger.Debug("Auth-ResetThrottled ip {0}", remoteIP);
+
+                return null;
+            }
+
+            _resetRequests.Set(remoteIP, remoteIP, ResetRequestThrottle);
+
+            if (_resetToken.Find(ResetTokenKey) != null)
+            {
+                _authLogger.Info("Auth-ResetTokenActive ip {0} a password reset token has already been issued, restart {1} to issue another", remoteIP, BuildInfo.AppName);
+
+                return null;
+            }
+
+            var token = SecretGenerator.Generate(ResetTokenLength);
+
+            _resetToken.Set(ResetTokenKey, HashToken(token), ResetTokenLifetime);
+
+            _authLogger.Warn("Auth-ResetRequested ip {0} token: {1} valid for {2} minutes", remoteIP, token, ResetTokenLifetime.TotalMinutes);
+
+            return token;
+        }
+
+        public bool ResetPassword(HttpRequest request, string token, string username, string password)
+        {
+            if (_configFileProvider.EffectiveAuthenticationMethod() != AuthenticationType.Forms)
+            {
+                return false;
+            }
+
+            var remoteIP = request.GetRemoteIP();
+
+            if (IsLockedOut(remoteIP))
+            {
+                LogLockout(remoteIP, username);
+
+                return false;
+            }
+
+            if (username.IsNullOrWhiteSpace())
+            {
+                RecordFailedAttempt(remoteIP, username);
+
+                return false;
+            }
+
+            var expected = _resetToken.Find(ResetTokenKey);
+            var isMatchingToken = expected != null && IsMatchingToken(expected, token);
+            var isMatchingConfiguredToken = _configuredResetTokenHash != null && IsMatchingToken(_configuredResetTokenHash, token);
+
+            if (!isMatchingToken && !isMatchingConfiguredToken)
+            {
+                RecordFailedAttempt(remoteIP, username);
+
+                return false;
+            }
+
+            if (isMatchingToken)
+            {
+                _resetToken.Remove(ResetTokenKey);
+            }
+
+            if (isMatchingConfiguredToken)
+            {
+                _configuredResetTokenHash = null;
+
+                _authLogger.Info("Auth-ResetTokenDisabled ip {0} the configured password reset token has been used and is now disabled, remove the SONARR__AUTH__RESETTOKEN environment variable", remoteIP);
+            }
+
+            _userService.Upsert(username, password);
+
+            _failedAttempts.Remove(remoteIP);
+
+            _authLogger.Warn("Auth-PasswordReset ip {0} username '{1}'", remoteIP, username);
+
+            return true;
+        }
+
+        private static string GetConfiguredResetTokenHash(string configuredResetToken)
+        {
+            if (configuredResetToken.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
+            if (configuredResetToken.Length < MinimumConfiguredResetTokenLength)
+            {
+                _authLogger.Error("Configured password reset token is shorter than {0} characters and will be ignored", MinimumConfiguredResetTokenLength);
+
+                return null;
+            }
+
+            return HashToken(configuredResetToken);
+        }
+
+        private static string HashToken(string token)
+        {
+            return Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(token)));
+        }
+
+        private static bool IsMatchingToken(string expectedHash, string token)
+        {
+            if (token.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            return CryptographicOperations.FixedTimeEquals(
+                Encoding.UTF8.GetBytes(expectedHash),
+                Encoding.UTF8.GetBytes(HashToken(token)));
         }
 
         private bool IsLockedOut(string remoteIP)

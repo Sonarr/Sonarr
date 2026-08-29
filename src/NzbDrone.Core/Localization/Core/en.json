@@ -1753,6 +1753,8 @@
   "PartialSeason": "Partial Season",
   "Password": "Password",
   "PasswordConfirmation": "Password Confirmation",
+  "PasswordResetTokenConfiguredHealthCheckMessage": "A password reset token is configured. Remove the SONARR__AUTH__RESETTOKEN environment variable once you no longer need it",
+  "PasswordResetTokenTooShortHealthCheckMessage": "The configured password reset token is shorter than {length} characters and is being ignored",
   "Path": "Path",
   "Paused": "Paused",
   "Peers": "Peers",
