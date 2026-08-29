@@ -188,14 +188,15 @@ namespace NzbDrone.Core.DecisionEngine
                 var qualityOrGroup = qualityProfile.Items[qualityIndex.Index];
                 var item = qualityOrGroup.Quality == null ? qualityOrGroup.Items[qualityIndex.GroupIndex] : qualityOrGroup;
                 var preferredSize = item.PreferredSize;
+                var runtime = GetRuntime(remoteEpisode);
 
                 // If no value for preferred it means unlimited so fallback to sort largest is best
-                if (preferredSize.HasValue && remoteEpisode.Series.Runtime > 0)
+                if (preferredSize.HasValue && runtime > 0)
                 {
-                    var preferredEpisodeSize = remoteEpisode.Series.Runtime * preferredSize.Value.Megabytes();
+                    var preferredReleaseSize = runtime * preferredSize.Value.Megabytes();
 
                     // Calculate closest to the preferred size
-                    return Math.Abs((remoteEpisode.Release.Size - preferredEpisodeSize).Round(200.Megabytes())) * (-1);
+                    return Math.Abs((remoteEpisode.Release.Size - preferredReleaseSize).Round(200.Megabytes())) * (-1);
                 }
                 else
                 {
@@ -204,6 +205,16 @@ namespace NzbDrone.Core.DecisionEngine
             });
 
             return sizeCompare;
+        }
+
+        private static int GetRuntime(RemoteEpisode remoteEpisode)
+        {
+            if (remoteEpisode.Episodes.Count == 0)
+            {
+                return remoteEpisode.Series.Runtime;
+            }
+
+            return remoteEpisode.Episodes.Sum(episode => episode.Runtime > 0 ? episode.Runtime : remoteEpisode.Series.Runtime);
         }
     }
 }
