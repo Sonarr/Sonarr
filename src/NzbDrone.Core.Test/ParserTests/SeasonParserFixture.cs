@@ -44,6 +44,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series S01 1080p HMAX WEB-DL DD+ 5.1 H.265", "Series", 1)]
         [TestCase("Series S01 1440p HMAX WEB-DL DD+ 5.1 H.265", "Series", 1)]
         [TestCase("[Judas] Series E (Series J) (Season 04) [1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs] (Batch)", "Series E (Series J)", 4)]
+        [TestCase("1234 [Sezon 3] [1080p] [NF] [WEB-DL] [H264] [DDP5.1.Atmos-K83] [Serial Polski]", "1234", 3)]
+        [TestCase("1234 [Season 3] [1080p] [NF] [WEB-DL] [H264] [DDP5.1.Atmos-K83] [Serial Polski]", "1234", 3)]
+        [TestCase("1234 (2026) (S03) [MULTi] [1080p] [NF] [WEB-DL] [H.264] [DD5.1-RX] [Serial polski]", "1234 (2026)", 3)]
         public void should_parse_full_season_release(string postTitle, string title, int season)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
