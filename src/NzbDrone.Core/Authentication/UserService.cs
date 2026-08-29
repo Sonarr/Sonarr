@@ -1,13 +1,7 @@
 using System;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Xml.Linq;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Authentication
 {
@@ -21,21 +15,17 @@ namespace NzbDrone.Core.Authentication
         User FindUser(Guid identifier);
     }
 
-    public class UserService : IUserService, IHandle<ApplicationStartedEvent>
+    public class UserService : IUserService
     {
         private const int ITERATIONS = 220000;
         private const int SALT_SIZE = 128 / 8;
         private const int NUMBER_OF_BYTES = 256 / 8;
 
         private readonly IUserRepository _repo;
-        private readonly IAppFolderInfo _appFolderInfo;
-        private readonly IDiskProvider _diskProvider;
 
-        public UserService(IUserRepository repo, IAppFolderInfo appFolderInfo, IDiskProvider diskProvider)
+        public UserService(IUserRepository repo)
         {
             _repo = repo;
-            _appFolderInfo = appFolderInfo;
-            _diskProvider = diskProvider;
         }
 
         public User Add(string username, string password)
@@ -165,36 +155,6 @@ namespace NzbDrone.Core.Authentication
             var hashedPassword = GetHashedPassword(password, salt, user.Iterations);
 
             return user.Password == hashedPassword;
-        }
-
-        public void Handle(ApplicationStartedEvent message)
-        {
-            if (_repo.All().Any())
-            {
-                return;
-            }
-
-            var configFile = _appFolderInfo.GetConfigPath();
-
-            if (!_diskProvider.FileExists(configFile))
-            {
-                return;
-            }
-
-            var xDoc = XDocument.Load(configFile);
-            var config = xDoc.Descendants("Config").Single();
-            var usernameElement = config.Descendants("Username").FirstOrDefault();
-            var passwordElement = config.Descendants("Password").FirstOrDefault();
-
-            if (usernameElement == null || passwordElement == null)
-            {
-                return;
-            }
-
-            var username = usernameElement.Value;
-            var password = passwordElement.Value;
-
-            Add(username, password);
         }
     }
 }

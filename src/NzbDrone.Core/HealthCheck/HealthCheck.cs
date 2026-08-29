@@ -90,6 +90,7 @@ namespace NzbDrone.Core.HealthCheck
         OidcDiscoveryFailed,
         OidcNotConfigured,
         Package,
+        PasswordResetTokenConfigured,
         ProxyBadRequest,
         ProxyFailed,
         ProxyResolveIp,

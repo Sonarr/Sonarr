@@ -222,15 +222,21 @@ namespace NzbDrone.Core.Configuration
                 if (enabled)
                 {
                     SetValue("AuthenticationMethod", AuthenticationType.Forms);
+
                     return AuthenticationType.Forms;
                 }
 
-                var value = Enum.TryParse<AuthenticationType>(_authOptions.Method, out var enumValue)
-                    ? enumValue
-                    : GetValueEnum("AuthenticationMethod", AuthenticationType.None);
+                if (Enum.TryParse<AuthenticationType>(_authOptions.Method, out var enumValue))
+                {
+#pragma warning disable CS0618 // Type or member is obsolete
+                    return enumValue == AuthenticationType.Basic ? AuthenticationType.Forms : enumValue;
+#pragma warning restore CS0618 // Type or member is obsolete
+                }
+
+                var value = GetValueEnum("AuthenticationMethod", AuthenticationType.Forms);
 
 #pragma warning disable CS0618 // Type or member is obsolete
-                if (value == AuthenticationType.Basic)
+                if (value is AuthenticationType.Basic or AuthenticationType.None)
 #pragma warning restore CS0618 // Type or member is obsolete
                 {
                     SetValue("AuthenticationMethod", AuthenticationType.Forms);

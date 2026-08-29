@@ -163,6 +163,7 @@
       }
 
       .button {
+        box-sizing: border-box;
         display: block;
         overflow: hidden;
         margin-top: 20px;
@@ -188,6 +189,18 @@
         background-color: var(--primaryHoverBackgroundColor);
         color: var(--primaryButtonColor);
         text-decoration: none;
+      }
+
+      .button-default {
+        border-color: var(--defaultBorderColor);
+        background-color: var(--defaultBackgroundColor);
+        color: var(--defaultColor);
+      }
+
+      .button-default:hover {
+        border-color: var(--defaultHoverBorderColor);
+        background-color: var(--defaultHoverBackgroundColor);
+        color: var(--defaultColor);
       }
 
       .copy {
@@ -223,6 +236,35 @@
 
       .forgot-password:visited {
         color: var(--inkMuted);
+      }
+
+      .reset-note {
+        margin-top: 15px;
+        color: var(--textColor);
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .reset-note code {
+        color: var(--accent);
+        white-space: nowrap;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12px;
+      }
+
+      .back-to-login {
+        display: block;
+        margin-top: 15px;
+        color: var(--forgotPasswordColor);
+        text-decoration: none;
+        text-align: center;
+        font-size: 13px;
+      }
+
+      .reset-succeeded {
+        margin-top: 20px;
+        color: var(--textColor);
+        font-size: 14px;
       }
 
       .login-failed {
@@ -280,7 +322,7 @@
             <img src="/Content/Images/logo.svg" alt="Image" class="logo" />
           </div>
 
-          <div class="panel-body">
+          <div id="sign-in-panel" class="panel-body">
             <div class="sign-in">SIGN IN TO CONTINUE</div>
 
             <form
@@ -326,9 +368,7 @@
                   <label for="rememberMe">Remember Me</label>
                 </span>
 
-                <a
-                  href="https://wiki.servarr.com/sonarr/faq#help-i-have-locked-myself-out"
-                  class="forgot-password"
+                <a href="login?resetPassword=true" class="forgot-password"
                   >Forgot your password?</a
                 >
               </div>
@@ -336,6 +376,10 @@
 
               <div id="login-failed" class="login-failed hidden">
                 Incorrect Username or Password
+              </div>
+
+              <div id="password-reset" class="reset-succeeded hidden">
+                Your password has been reset, sign in with your new password.
               </div>
             </form>
 
@@ -353,6 +397,104 @@
                 Unable to sign in with your identity provider
               </div>
             </div>
+          </div>
+
+          <div id="reset-request-panel" class="panel-body hidden">
+            <div class="sign-in">RESET YOUR PASSWORD</div>
+
+            <form role="form" method="POST" action="reset-password/request">
+              <div class="reset-note">
+                Sonarr will write a single-use reset token to its log file. Copy
+                it from the <code>Auth-ResetRequested</code> line in the latest
+                log.
+              </div>
+
+              <button type="submit" class="button">Write a reset token to the log</button>
+            </form>
+
+            <a
+              href="login?resetPassword=true&amp;tokenSent=true"
+              class="button button-default"
+              >I already have a reset token</a
+            >
+
+            <a href="login" class="back-to-login">Back to sign in</a>
+          </div>
+
+          <div id="reset-panel" class="panel-body hidden">
+            <div class="sign-in">RESET YOUR PASSWORD</div>
+
+            <form role="form" method="POST" action="reset-password">
+              <div class="reset-note">
+                Enter the token from the <code>Auth-ResetRequested</code> line in
+                the log. It's valid for 15 minutes and can only be used once.
+                If you set <code>SONARR__AUTH__RESETTOKEN</code>, enter its value
+                instead.
+              </div>
+
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="token"
+                  class="form-input"
+                  placeholder="Reset token"
+                  autocomplete="off"
+                  autocapitalize="false"
+                  required
+                  autofocus="true"
+                />
+              </div>
+
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="username"
+                  class="form-input"
+                  placeholder="Username"
+                  autocomplete="off"
+                  autocapitalize="false"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <input
+                  type="password"
+                  name="password"
+                  class="form-input"
+                  placeholder="New password"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <input
+                  type="password"
+                  name="passwordConfirmation"
+                  class="form-input"
+                  placeholder="Confirm new password"
+                  required
+                />
+              </div>
+
+              <button type="submit" class="button">Reset password</button>
+
+              <div id="reset-failed" class="login-failed hidden">
+                Invalid or expired reset token
+              </div>
+
+              <div id="reset-invalid" class="login-failed hidden">
+                Username and password are required, and the passwords must match
+              </div>
+
+              <div id="token-unavailable" class="reset-note hidden">
+                A new reset token wasn't written to the log. One may already be
+                active, so check the log first. Restarting Sonarr clears it and
+                lets you request another.
+              </div>
+            </form>
+
+            <a href="login" class="back-to-login">Back to sign in</a>
           </div>
         </div>
 
@@ -374,6 +516,32 @@
     copyDiv.classList.remove('hidden');
 
     var searchParams = new URLSearchParams(window.location.search);
+
+    if (searchParams.get('resetPassword') === 'true') {
+      document.getElementById('sign-in-panel').classList.add('hidden');
+
+      if (searchParams.get('tokenSent') === 'true') {
+        document.getElementById('reset-panel').classList.remove('hidden');
+
+        if (searchParams.get('resetFailed') === 'true') {
+          document.getElementById('reset-failed').classList.remove('hidden');
+        }
+
+        if (searchParams.get('resetInvalid') === 'true') {
+          document.getElementById('reset-invalid').classList.remove('hidden');
+        }
+
+        if (searchParams.get('tokenUnavailable') === 'true') {
+          document.getElementById('token-unavailable').classList.remove('hidden');
+        }
+      } else {
+        document.getElementById('reset-request-panel').classList.remove('hidden');
+      }
+    }
+
+    if (searchParams.get('passwordReset') === 'true') {
+      document.getElementById('password-reset').classList.remove('hidden');
+    }
 
     if (searchParams.get('loginFailed') === 'true') {
       var loginFailedDiv = document.getElementById('login-failed');
