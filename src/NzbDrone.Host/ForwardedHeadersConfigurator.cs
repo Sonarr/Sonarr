@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using NLog;
@@ -25,13 +26,8 @@ namespace NzbDrone.Host
                 return;
             }
 
-            foreach (var entry in trustedNetworks.Split(','))
+            foreach (var entry in trustedNetworks.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
             {
-                if (entry.IsNullOrWhiteSpace())
-                {
-                    continue;
-                }
-
                 if (IPNetworkParser.TryParse(entry, out var address, out var prefixLength))
                 {
                     options.KnownIPNetworks.Add(new IPNetwork(address, prefixLength));
@@ -40,7 +36,7 @@ namespace NzbDrone.Host
                 }
                 else
                 {
-                    Logger.Warn("Invalid trusted network '{0}', forwarded headers from it will not be trusted", entry.Trim());
+                    Logger.Warn("Invalid trusted network '{0}', forwarded headers from it will not be trusted", entry);
                 }
             }
         }
