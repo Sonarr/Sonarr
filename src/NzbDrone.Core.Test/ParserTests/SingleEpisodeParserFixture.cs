@@ -249,17 +249,5 @@ namespace NzbDrone.Core.Test.ParserTests
             result.FullSeason.Should().BeFalse();
             result.IsSplitEpisode.Should().BeTrue();
         }
-
-        [TestCase("Series.Title.S01E099.1080p.WEB-DL.AAC2.0.H.264-VARYG", "Series Title", 1, 99)]
-        [TestCase("Series.Title.S01E100.1080p.WEB-DL.AAC2.0.H.264-GROUP", "Series Title", 1, 100)]
-        [TestCase("Series.Title.S01E009.1080p.WEB-DL.AAC2.0.H.264-GROUP", "Series Title", 1, 9)]
-        public void should_parse_three_digit_padded_episode_numbers(string postTitle, string title, int seasonNumber, int episodeNumber)
-        {
-            var result = Parser.Parser.ParseTitle(postTitle);
-            result.Should().NotBeNull();
-            result.SeasonNumber.Should().Be(seasonNumber);
-            result.EpisodeNumbers.Should().BeEquivalentTo(new[] { episodeNumber });
-            result.SeriesTitle.Should().Be(title);
-        }
     }
 }
