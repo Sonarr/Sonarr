@@ -215,6 +215,8 @@ namespace NzbDrone.Common.Instrumentation
             {
                 c.ForLogger("System.*").WriteToNil(LogLevel.Warn);
                 c.ForLogger("Microsoft.*").WriteToNil(LogLevel.Warn);
+                c.ForLogger("Microsoft.AspNetCore.HostFiltering*").WriteToNil(LogLevel.Info);
+                c.ForLogger("Microsoft.AspNetCore.HttpOverrides*").WriteToNil(LogLevel.Debug);
                 c.ForLogger("Microsoft.Hosting.Lifetime*").WriteToNil(LogLevel.Info);
                 c.ForLogger("Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware").WriteToNil(LogLevel.Fatal);
                 c.ForLogger("Sonarr.Http.Authentication.ApiKeyAuthenticationHandler").WriteToNil(LogLevel.Info);
