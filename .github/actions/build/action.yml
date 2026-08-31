@@ -20,6 +20,14 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Cache nuget packages
+      uses: actions/cache@v6
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/Directory.*.props') }}
+        restore-keys:
+          ${{ runner.os }}-nuget-
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v6
 
@@ -38,10 +46,6 @@ runs:
         echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
         echo "SONARR_VERSION=${{ inputs.version }}" >> "$GITHUB_ENV"
         echo "BRANCH=${{ inputs.branch }}" >> "$GITHUB_ENV"
-
-        if [ "$RUNNER_OS" == "Windows" ]; then
-          echo "NUGET_PACKAGES=D:\nuget\packages" >> "$GITHUB_ENV"
-        fi
 
     - name: Enable Extra Platforms In SDK
       if: ${{ inputs.runtime == 'freebsd-x64' }}
