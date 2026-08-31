@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -17,14 +18,14 @@ namespace NzbDrone.Common.Network
                 return false;
             }
 
-            var parts = value.Split('/');
+            var parts = value.Split('/', StringSplitOptions.TrimEntries);
 
             if (parts.Length > 2)
             {
                 return false;
             }
 
-            var addressPart = parts[0].Trim();
+            var addressPart = parts[0];
 
             if (!IPAddress.TryParse(addressPart, out var parsedAddress))
             {
@@ -46,7 +47,7 @@ namespace NzbDrone.Common.Network
                 return true;
             }
 
-            if (!int.TryParse(parts[1].Trim(), out var parsedPrefixLength) ||
+            if (!int.TryParse(parts[1], out var parsedPrefixLength) ||
                 parsedPrefixLength < 1 ||
                 parsedPrefixLength > maxPrefixLength)
             {
@@ -71,13 +72,8 @@ namespace NzbDrone.Common.Network
                 return true;
             }
 
-            foreach (var entry in value.Split(','))
+            foreach (var entry in value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
-                if (entry.IsNullOrWhiteSpace())
-                {
-                    continue;
-                }
-
                 if (!TryParse(entry, out _, out _))
                 {
                     return false;
@@ -94,9 +90,7 @@ namespace NzbDrone.Common.Network
                 return string.Empty;
             }
 
-            return string.Join(", ", value.Split(',')
-                                          .Select(e => e.Trim())
-                                          .Where(e => e.IsNotNullOrWhiteSpace()));
+            return string.Join(", ", value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
         }
 
         private static bool HasHostBitsSet(IPAddress address, int prefixLength)

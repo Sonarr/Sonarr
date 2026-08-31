@@ -16,9 +16,8 @@ namespace NzbDrone.Core.Configuration
                 return new List<string>();
             }
 
-            return value.Split(Separators)
-                        .Select(h => Normalize(h.Trim()))
-                        .Where(h => h.IsNotNullOrWhiteSpace())
+            return value.Split(Separators, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+                        .Select(Normalize)
                         .Distinct()
                         .ToList();
         }
