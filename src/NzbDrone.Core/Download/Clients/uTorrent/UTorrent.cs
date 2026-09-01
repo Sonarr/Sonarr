@@ -242,7 +242,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
             var status = new DownloadClientInfo
             {
-                IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost"
+                IsLocalhost = Settings.Host.IsLocalhostAddress()
             };
 
             if (!destDir.IsEmpty)
