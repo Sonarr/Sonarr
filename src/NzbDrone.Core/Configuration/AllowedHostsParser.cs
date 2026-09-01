@@ -40,17 +40,7 @@ namespace NzbDrone.Core.Configuration
 
         private static string Normalize(string host)
         {
-            if (!IsBracketed(host) && host.Contains(':') && host.IsValidIpAddress())
-            {
-                return $"[{host}]";
-            }
-
-            return host;
-        }
-
-        private static bool IsBracketed(string host)
-        {
-            return host.StartsWith("[") && host.EndsWith("]");
+            return host.IsValidIpAddress() ? host.ToUrlHost() : host;
         }
     }
 }

@@ -62,7 +62,7 @@ namespace NzbDrone.Common.Http
                 urlBase = "/" + urlBase;
             }
 
-            return string.Format("{0}://{1}:{2}{3}", protocol, host, port, urlBase);
+            return string.Format("{0}://{1}:{2}{3}", protocol, host.ToUrlHost(), port, urlBase);
         }
 
         public virtual HttpRequestBuilder Clone()
