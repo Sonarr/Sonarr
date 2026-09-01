@@ -427,8 +427,8 @@ namespace NzbDrone.Core.IndexerSearch
             var seasonMappings = GetSceneSeasonMappings(series, episodesToSearch);
 
             var seasonsToSearch = seasonMappings
-                .GroupBy(m => m.SeasonNumber)
-                .Select(g => g.First())
+                .GroupBy(ep => ep.SeasonNumber)
+                .Select(epList => epList.First())
                 .ToList();
 
             foreach (var season in seasonsToSearch)

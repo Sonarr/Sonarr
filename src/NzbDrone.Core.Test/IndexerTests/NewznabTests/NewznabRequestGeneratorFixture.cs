@@ -200,7 +200,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             var pages = results.GetAllTiers().Select(t => t.First().Url.FullUri).ToList();
 
             pages.Should().ContainSingle(p => p.Contains("q="));
-            pages.Should().Contain(p => p.Contains("q=Monkey%20Island") && !p.Contains("season="));
+            pages.Should().Contain(p => p.Contains("?t=search&") && p.Contains("q=Monkey%20Island") && !p.Contains("season="));
         }
 
         [Test]

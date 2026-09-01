@@ -473,7 +473,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                     // A season title alias already identifies the season, no need to add a season number.
                     pageableRequests.Add(GetPagedRequests(MaxPages,
                         Settings.AnimeCategories,
-                        "tvsearch",
+                        "search",
                         $"&q={NewsnabifyTitle(queryTitle)}"));
                 }
                 else if (Settings.AnimeStandardFormatSearch)
