@@ -47,20 +47,6 @@ export const usePendingFieldsStore = () => {
     [store]
   );
 
-  const unsetPendingField = useCallback(
-    (name: string) => {
-      store.setState((state) => {
-        const newPendingFields = new Map(state.pendingFields);
-        newPendingFields.delete(name);
-        return {
-          ...state,
-          pendingFields: newPendingFields,
-        };
-      });
-    },
-    [store]
-  );
-
   const clearPendingFields = useCallback(() => {
     store.setState((state) => ({
       ...state,
@@ -84,7 +70,6 @@ export const usePendingFieldsStore = () => {
     pendingFields,
     setPendingField,
     setPendingFields,
-    unsetPendingField,
     clearPendingFields,
     hasPendingFields,
   };
