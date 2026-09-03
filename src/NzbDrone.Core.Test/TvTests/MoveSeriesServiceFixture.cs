@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
-        public void should_update_series_path_only_after_successful_move()
+        public void should_update_series_path_after_successful_move()
         {
             Subject.Execute(_command);
 
@@ -159,7 +159,7 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
-        public void should_clear_next_path_after_successful_move()
+        public void should_clear_pending_path_after_successful_move()
         {
             _series.PendingPath = _command.DestinationPath;
 
@@ -170,7 +170,7 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
-        public void should_clear_next_path_after_failed_move()
+        public void should_clear_pending_path_after_failed_move()
         {
             GivenFailedMove();
             _series.PendingPath = _command.DestinationPath;
@@ -184,7 +184,7 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
-        public void should_clear_next_path_when_already_at_destination()
+        public void should_clear_pending_path_when_already_at_destination()
         {
             _series.PendingPath = _command.DestinationPath;
 

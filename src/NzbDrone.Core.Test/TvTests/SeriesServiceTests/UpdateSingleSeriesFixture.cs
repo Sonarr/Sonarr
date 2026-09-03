@@ -80,6 +80,8 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
 
             result.Path.Should().Be(@"C:\Test\source".AsOsAgnostic());
             result.PendingPath.Should().Be(existingPendingPath);
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -115,14 +117,40 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
         }
 
         [Test]
-        public void should_not_clear_pending_path_when_updating_immediately()
+        public void should_clear_stale_pending_path_when_updating_immediately()
         {
             var existingPendingPath = @"C:\Test\pending".AsOsAgnostic();
             _series.PendingPath = existingPendingPath;
 
             var result = Subject.UpdateSeries(_series, _series.Path, @"C:\Test\destination".AsOsAgnostic(), false);
 
+            result.PendingPath.Should().BeNull();
+        }
+
+        [Test]
+        public void should_not_overwrite_pending_path_when_a_move_is_already_pending_and_not_moving_files()
+        {
+            var existingPendingPath = @"C:\Test\pending".AsOsAgnostic();
+            var originalPath = _series.Path;
+            _series.PendingPath = existingPendingPath;
+
+            Mocker.GetMock<IManageCommandQueue>()
+                .Setup(s => s.All())
+                .Returns(new List<CommandModel>
+                {
+                    new CommandModel
+                    {
+                        Status = CommandStatus.Started,
+                        Body = new MoveSeriesCommand { SeriesId = _series.Id }
+                    }
+                });
+
+            var result = Subject.UpdateSeries(_series, _series.Path, @"C:\Test\destination".AsOsAgnostic(), false);
+
+            result.Path.Should().Be(originalPath);
             result.PendingPath.Should().Be(existingPendingPath);
+
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }

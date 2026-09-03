@@ -82,11 +82,11 @@ interface Series extends ModelBase {
   monitored: boolean;
   monitorNewItems: MonitorNewItems;
   network: string;
-  pendingPath?: string;
   originalCountry: string;
   originalLanguage: Language;
   overview: string;
   path: string;
+  pendingPath?: string;
   previousAiring?: string;
   nextAiring?: string;
   qualityProfileId: number;

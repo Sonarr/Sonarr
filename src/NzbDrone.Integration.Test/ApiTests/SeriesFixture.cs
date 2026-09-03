@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -211,8 +212,9 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             WaitForCompletion(() => SignalRMessages.Any(m =>
                 m.Name == "series" &&
-                ((System.Text.Json.JsonElement)m.Body).GetProperty("resource").GetProperty("path").GetString() == oldPath &&
-                ((System.Text.Json.JsonElement)m.Body).GetProperty("resource").GetProperty("pendingPath").GetString() == destinationPath));
+                m.Body is JsonElement body &&
+                body.GetProperty("resource").GetProperty("path").GetString() == oldPath &&
+                body.GetProperty("resource").GetProperty("pendingPath").GetString() == destinationPath));
 
             Commands.WaitAll();
         }

@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
         }
 
         [Test]
-        public void should_not_update_path_for_series_pending_a_file_move()
+        public void should_not_update_path_directly_when_deferring()
         {
             var newRoot = @"C:\Test\TV2".AsOsAgnostic();
             _series.ForEach(s => s.RootFolderPath = newRoot);
@@ -95,16 +95,6 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
             var result = Subject.UpdateSeries(_series, true);
 
             result.Should().OnlyContain(s => s.Path == originalPaths[s.Id]);
-        }
-
-        [Test]
-        public void should_not_update_path_when_rootFolderPath_is_empty()
-        {
-            Subject.UpdateSeries(_series, true).ForEach(s =>
-            {
-                var expectedPath = _series.Single(ser => ser.Id == s.Id).Path;
-                s.Path.Should().Be(expectedPath);
-            });
         }
 
         [Test]
@@ -137,7 +127,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                   .Setup(s => s.GetSeriesFolder(It.IsAny<Series>(), (NamingConfig)null))
                   .Returns<Series, NamingConfig>((s, n) => s.Title);
 
-            Subject.UpdateSeries(series, true);
+            Subject.UpdateSeries(series, false);
         }
 
         [Test]
@@ -153,7 +143,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                     TagsToRemove = new HashSet<int> { 1 }
                 });
 
-            var result = Subject.UpdateSeries(_series, true);
+            var result = Subject.UpdateSeries(_series, false);
 
             result[0].Tags.Should().BeEquivalentTo(new[] { 2, 3 });
         }
