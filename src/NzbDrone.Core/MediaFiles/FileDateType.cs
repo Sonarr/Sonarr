@@ -4,6 +4,7 @@
     {
         None = 0,
         LocalAirDate = 1,
-        UtcAirDate = 2
+        UtcAirDate = 2,
+        PreserveOriginal = 3
     }
 }

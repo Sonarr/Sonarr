@@ -209,5 +209,22 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(_localEpisode.Episodes.Single().EpisodeFile, It.IsAny<DeleteMediaFileReason>()), Times.Never());
         }
+
+        [Test]
+        public void should_capture_original_file_date_before_deletion()
+        {
+            GivenSingleEpisodeWithSingleEpisodeFile();
+
+            var originalDate = System.DateTime.UtcNow.AddDays(-5);
+            var episodeFilePath = System.IO.Path.Combine(_localEpisode.Series.Path, _localEpisode.Episodes.First().EpisodeFile.RelativePath);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(x => x.FileGetLastWrite(episodeFilePath))
+                .Returns(originalDate);
+
+            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
+
+            _localEpisode.PreservedFileDate.Should().Be(originalDate);
+        }
     }
 }
