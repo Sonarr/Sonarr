@@ -9,9 +9,9 @@ namespace NzbDrone.Core.ImportLists.Trakt
     public abstract class TraktRequestGeneratorBase<TSettings> : IImportListRequestGenerator
         where TSettings : TraktSettingsBase<TSettings>
     {
-        private readonly string _clientId;
-        private readonly int _pageSize;
-        private readonly int _maxNumResults;
+        protected readonly string _clientId;
+        protected readonly int _pageSize;
+        protected readonly int _maxNumResults;
 
         protected TraktRequestGeneratorBase(TSettings settings, string clientId, int pageSize, int maxNumResults)
         {
@@ -22,8 +22,6 @@ namespace NzbDrone.Core.ImportLists.Trakt
         }
 
         protected TSettings Settings { get; }
-
-        protected abstract string Years { get; }
 
         public virtual ImportListPageableRequestChain GetListItems()
         {
@@ -36,9 +34,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
 
         protected abstract void SetResource(HttpRequestBuilder requestBuilder);
 
-        protected virtual void SetFilterParameters(Dictionary<string, string> filterParams)
-        {
-        }
+        protected abstract Dictionary<string, string> GetFilterParameters();
 
         private IEnumerable<ImportListRequest> GetSeriesRequest()
         {
@@ -56,13 +52,9 @@ namespace NzbDrone.Core.ImportLists.Trakt
 
             SetResource(requestBuilder);
 
-            var filterParams = TraktQueryHelper.BuildFilterParameters(Settings.Rating, Settings.Genres, Years, _pageSize, Settings.TraktAdditionalParameters);
-
-            SetFilterParameters(filterParams);
-
-            foreach (var param in filterParams)
+            foreach (var param in GetFilterParameters())
             {
-                requestBuilder.AddQueryParam(param.Key, param.Value);
+                requestBuilder.AddQueryParam(param.Key, param.Value, true);
             }
 
             var limit = Math.Clamp(Settings.Limit, 0, _maxNumResults);

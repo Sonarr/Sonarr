@@ -11,8 +11,6 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
         {
         }
 
-        protected override string Years => Settings.Years;
-
         protected override void SetResource(HttpRequestBuilder requestBuilder)
         {
             var userName = Settings.Username.IsNotNullOrWhiteSpace() ? Settings.Username.Trim() : Settings.AuthUser.Trim();
@@ -46,12 +44,16 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
             }
         }
 
-        protected override void SetFilterParameters(Dictionary<string, string> filterParams)
+        protected override Dictionary<string, string> GetFilterParameters()
         {
+            var filterParams = TraktQueryHelper.BuildFilterParameters(Settings.Rating, Settings.Genres, Settings.Years, _pageSize, Settings.TraktAdditionalParameters);
+
             if (Settings.TraktListType == (int)TraktUserListType.UserWatchedList)
             {
                 filterParams["extended"] = "full";
             }
+
+            return filterParams;
         }
     }
 }
