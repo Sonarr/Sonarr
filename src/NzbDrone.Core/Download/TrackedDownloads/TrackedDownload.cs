@@ -18,6 +18,8 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         public DateTime? Added { get; set; }
         public bool IsTrackable { get; set; }
         public bool HasNotifiedManualInteractionRequired { get; set; }
+        public DateTime? LastProgressDate { get; set; }
+        public bool IsStalled { get; set; }
 
         public TrackedDownload()
         {
