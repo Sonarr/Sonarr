@@ -10,7 +10,7 @@ import translate from 'Utilities/String/translate';
 import styles from './ReleaseSceneIndicator.css';
 
 function formatReleaseNumber(
-  seasonNumber: number | undefined,
+  seasonNumber: number | null | undefined,
   episodeNumbers: number[] | undefined,
   absoluteEpisodeNumbers: number[] | undefined
 ) {
@@ -34,7 +34,7 @@ function formatReleaseNumber(
     return absoluteEpisodeNumbers[0];
   }
 
-  if (seasonNumber !== undefined) {
+  if (seasonNumber != null) {
     return translate('SeasonNumberToken', { seasonNumber });
   }
 
@@ -46,7 +46,7 @@ interface ReleaseSceneIndicatorProps {
   seasonNumber?: number;
   episodeNumbers?: number[];
   absoluteEpisodeNumbers?: number[];
-  sceneSeasonNumber?: number;
+  sceneSeasonNumber?: number | null;
   sceneEpisodeNumbers?: number[];
   sceneAbsoluteEpisodeNumbers?: number[];
   sceneMapping?: {

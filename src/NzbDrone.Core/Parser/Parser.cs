@@ -516,6 +516,11 @@ namespace NzbDrone.Core.Parser
         // Regex to detect whether the title was reversed.
         private static readonly Regex ReversedTitleRegex = new Regex(@"(?:^|[-._ ])(p027|p0801|\d{2,3}E-?\d{2}S)[-._ ]", RegexOptions.Compiled);
 
+        private static readonly Regex AnimeSeasonReleaseMetadataRegex = new Regex(@"[\[({][^\[\]{}()]+[\])}]", RegexOptions.Compiled);
+
+        private static readonly Regex AnimeSpecialMarkerRegex = new Regex(@"\b(special|ova|ovd|ncop|nced)\b",
+                                                                          RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private static readonly RegexReplace NormalizeRegex = new RegexReplace(@"((?:\b|_)(?<!^)([aà](?!$)|an|the|and|or|of)(?!$)(?:\b|_))|\W|_",
                                                                 string.Empty,
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -812,6 +817,52 @@ namespace NzbDrone.Core.Parser
             return null;
         }
 
+        public static ParsedEpisodeInfo ParseSeasonTitle(string title)
+        {
+            var releaseTitle = FileExtensions.RemoveFileExtension(title);
+
+            if (AnimeSpecialMarkerRegex.IsMatch(releaseTitle))
+            {
+                return null;
+            }
+
+            // Anime season packs are commonly named after the season's own title with no season or
+            // episode numbers. ParsingService will determine the correct series and season number
+            // from scene mappings.
+            var seriesTitle = AnimeSeasonReleaseMetadataRegex.Replace(releaseTitle, " ");
+            seriesTitle = DuplicateSpacesRegex.Replace(seriesTitle, " ");
+            seriesTitle = seriesTitle.Trim();
+
+            // If any brackets remain we were unable to extract the season title correctly.
+            if (seriesTitle.IsNullOrWhiteSpace() || seriesTitle.IndexOfAny(['[', ']', '(', ')', '{', '}']) >= 0)
+            {
+                return null;
+            }
+
+            var result = new ParsedEpisodeInfo
+            {
+                ReleaseTitle = releaseTitle,
+                SeriesTitle = seriesTitle,
+                SeriesTitleInfo = new SeriesTitleInfo
+                {
+                    Title = seriesTitle,
+                    TitleWithoutYear = seriesTitle
+                },
+                SeasonNumber = null,
+                EpisodeNumbers = [],
+                AbsoluteEpisodeNumbers = [],
+                FullSeason = true,
+                IsSeasonTitle = true,
+                Languages = LanguageParser.ParseLanguages(releaseTitle),
+                Quality = QualityParser.ParseQuality(title),
+                ReleaseGroup = ReleaseGroupParser.ParseReleaseGroup(releaseTitle)
+            };
+
+            Logger.Debug("Title only parse. {0}", result);
+
+            return result;
+        }
+
         public static string ParseSeriesName(string title)
         {
             Logger.Debug("Parsing string '{0}'", title);
@@ -950,6 +1001,7 @@ namespace NzbDrone.Core.Parser
                 result = new ParsedEpisodeInfo
                 {
                     ReleaseTitle = releaseTitle,
+                    SeasonNumber = 0,
                     EpisodeNumbers = Array.Empty<int>(),
                     AbsoluteEpisodeNumbers = Array.Empty<int>()
                 };
@@ -1164,6 +1216,7 @@ namespace NzbDrone.Core.Parser
                 result = new ParsedEpisodeInfo
                 {
                     ReleaseTitle = releaseTitle,
+                    SeasonNumber = 0,
                     AirDate = airDate.ToString(Episode.AIR_DATE_FORMAT),
                 };
 
