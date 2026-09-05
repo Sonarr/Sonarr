@@ -28,7 +28,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
 
         public override IImportListRequestGenerator GetRequestGenerator()
         {
-            return new TraktUserRequestGenerator(Settings, ClientId);
+            return new TraktUserRequestGenerator(Settings, ClientId, PageSize, MaxNumResultsPerQuery);
         }
     }
 }
