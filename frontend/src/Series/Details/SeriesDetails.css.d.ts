@@ -15,6 +15,7 @@ interface CssExports {
   'innerContentBody': string;
   'links': string;
   'monitorToggleButton': string;
+  'movePendingIcon': string;
   'network': string;
   'originalCountry': string;
   'originalLanguageName': string;

@@ -17,6 +17,7 @@ interface CssExports {
   'latestSeason': string;
   'link': string;
   'monitorNewItems': string;
+  'movePendingIcon': string;
   'network': string;
   'nextAiring': string;
   'originalCountry': string;

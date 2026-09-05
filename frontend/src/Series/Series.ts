@@ -86,6 +86,7 @@ interface Series extends ModelBase {
   originalLanguage: Language;
   overview: string;
   path: string;
+  pendingPath?: string;
   previousAiring?: string;
   nextAiring?: string;
   qualityProfileId: number;

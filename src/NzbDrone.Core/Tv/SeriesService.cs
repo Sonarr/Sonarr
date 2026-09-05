@@ -3,8 +3,11 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.AutoTagging;
+using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -30,20 +33,22 @@ namespace NzbDrone.Core.Tv
         List<Series> AllForTag(int tagId);
         Dictionary<int, int> GetAllSeriesQualityProfiles();
         Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true, bool publishUpdatedEvent = true);
-        List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder);
+        List<Series> UpdateSeries(List<Series> series, bool moveFiles);
+        Series UpdateSeries(Series series, string sourcePath, string destinationPath, bool moveFiles);
         bool SeriesPathExists(string folder);
         void RemoveAddOptions(Series series);
         bool UpdateAutoTaggingTags(Series series);
         void UpdateTags(List<Series> series);
     }
 
-    public class SeriesService : ISeriesService
+    public class SeriesService : ISeriesService, IHandle<ApplicationStartedEvent>
     {
         private readonly ISeriesRepository _seriesRepository;
         private readonly IEventAggregator _eventAggregator;
         private readonly IEpisodeService _episodeService;
         private readonly IBuildSeriesPaths _seriesPathBuilder;
         private readonly IAutoTaggingService _autoTaggingService;
+        private readonly IManageCommandQueue _commandQueueManager;
         private readonly Logger _logger;
 
         public SeriesService(ISeriesRepository seriesRepository,
@@ -51,6 +56,7 @@ namespace NzbDrone.Core.Tv
                              IEpisodeService episodeService,
                              IBuildSeriesPaths seriesPathBuilder,
                              IAutoTaggingService autoTaggingService,
+                             IManageCommandQueue commandQueueManager,
                              Logger logger)
         {
             _seriesRepository = seriesRepository;
@@ -58,6 +64,7 @@ namespace NzbDrone.Core.Tv
             _episodeService = episodeService;
             _seriesPathBuilder = seriesPathBuilder;
             _autoTaggingService = autoTaggingService;
+            _commandQueueManager = commandQueueManager;
             _logger = logger;
         }
 
@@ -234,9 +241,13 @@ namespace NzbDrone.Core.Tv
             return updatedSeries;
         }
 
-        public List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder)
+        public List<Series> UpdateSeries(List<Series> series, bool moveFiles)
         {
             _logger.Debug("Updating {0} series", series.Count);
+
+            var pendingMoveSeriesIds = GetSeriesIdsWithPendingMove();
+            var moveQueue = new List<BulkMoveSeries>();
+            string destinationRootFolder = null;
 
             foreach (var s in series)
             {
@@ -244,9 +255,30 @@ namespace NzbDrone.Core.Tv
 
                 if (!s.RootFolderPath.IsNullOrWhiteSpace())
                 {
-                    s.Path = _seriesPathBuilder.BuildPath(s, useExistingRelativeFolder);
+                    if (pendingMoveSeriesIds.Contains(s.Id))
+                    {
+                        _logger.Warn("Series '{0}' is already being moved from {1} to {2}, skipping path update.", s.Title, s.Path, s.PendingPath);
+                    }
+                    else
+                    {
+                        var updatedPath = _seriesPathBuilder.BuildPath(s, !moveFiles);
 
-                    _logger.Trace("Changing path for {0} to {1}", s.Title, s.Path);
+                        if (moveFiles)
+                        {
+                            s.PendingPath = updatedPath;
+                            moveQueue.Add(new BulkMoveSeries { SeriesId = s.Id, SourcePath = s.Path });
+                            destinationRootFolder = s.RootFolderPath;
+
+                            _logger.Trace("Path for '{0}' will be updated from {1} to {2} after files are moved successfully", s.Title, s.Path, updatedPath);
+                        }
+                        else
+                        {
+                            s.Path = updatedPath;
+                            s.PendingPath = null;
+
+                            _logger.Trace("Changing path for {0} to {1}", s.Title, s.Path);
+                        }
+                    }
                 }
                 else
                 {
@@ -260,7 +292,131 @@ namespace NzbDrone.Core.Tv
             _logger.Debug("{0} series updated", series.Count);
             _eventAggregator.PublishEvent(new SeriesBulkEditedEvent(series));
 
+            if (moveQueue.Any())
+            {
+                _commandQueueManager.Push(new BulkMoveSeriesCommand
+                {
+                    DestinationRootFolder = destinationRootFolder,
+                    Series = moveQueue
+                });
+            }
+
             return series;
+        }
+
+        public Series UpdateSeries(Series series, string sourcePath, string destinationPath, bool moveFiles)
+        {
+            var queueMove = false;
+
+            if (HasPendingMove(series))
+            {
+                series.Path = sourcePath;
+
+                _logger.Warn("Series '{0}' is already being moved from {1} to {2}, skipping path update.", series.Title, series.Path, series.PendingPath);
+            }
+            else if (moveFiles)
+            {
+                series.Path = sourcePath;
+                series.PendingPath = destinationPath;
+                queueMove = true;
+
+                _logger.Trace("Path for '{0}' will be updated from {1} to {2} after files are moved successfully", series.Title, series.Path, destinationPath);
+            }
+            else
+            {
+                series.Path = destinationPath;
+                series.PendingPath = null;
+
+                _logger.Trace("Changing path for {0} to {1}", series.Title, series.Path);
+            }
+
+            var updatedSeries = UpdateSeries(series, true, true);
+
+            if (queueMove)
+            {
+                _commandQueueManager.Push(new MoveSeriesCommand
+                {
+                    SeriesId = series.Id,
+                    SourcePath = sourcePath,
+                    DestinationPath = destinationPath
+                },
+                    trigger: CommandTrigger.Manual);
+            }
+
+            return updatedSeries;
+        }
+
+        private bool HasPendingMove(Series series)
+        {
+            if (series.PendingPath.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            return _commandQueueManager.All().Any(c =>
+                c.Status is CommandStatus.Queued or CommandStatus.Started &&
+                ((c.Body is MoveSeriesCommand moveCommand && moveCommand.SeriesId == series.Id) ||
+                 (c.Body is BulkMoveSeriesCommand bulkCommand && bulkCommand.Series.Any(m => m.SeriesId == series.Id))));
+        }
+
+        private HashSet<int> GetSeriesIdsWithPendingMove()
+        {
+            var seriesIds = new HashSet<int>();
+
+            foreach (var command in _commandQueueManager.All())
+            {
+                if (command.Status is not (CommandStatus.Queued or CommandStatus.Started))
+                {
+                    continue;
+                }
+
+                if (command.Body is MoveSeriesCommand moveCommand)
+                {
+                    seriesIds.Add(moveCommand.SeriesId);
+                }
+                else if (command.Body is BulkMoveSeriesCommand bulkCommand)
+                {
+                    foreach (var m in bulkCommand.Series)
+                    {
+                        seriesIds.Add(m.SeriesId);
+                    }
+                }
+            }
+
+            return seriesIds;
+        }
+
+        public void Handle(ApplicationStartedEvent message)
+        {
+            ClearStalePendingPaths();
+        }
+
+        private void ClearStalePendingPaths()
+        {
+            var seriesWithPendingPath = _seriesRepository.All()
+                .Where(s => s.PendingPath.IsNotNullOrWhiteSpace())
+                .ToList();
+
+            if (seriesWithPendingPath.Empty())
+            {
+                return;
+            }
+
+            var pendingMoveSeriesIds = GetSeriesIdsWithPendingMove();
+            var staleSeries = seriesWithPendingPath.Where(s => !pendingMoveSeriesIds.Contains(s.Id)).ToList();
+
+            if (staleSeries.Empty())
+            {
+                return;
+            }
+
+            foreach (var series in staleSeries)
+            {
+                _logger.Warn("Series '{0}' has a stale PendingPath ({1}) left over from an interrupted move, clearing it.", series.Title, series.PendingPath);
+                series.PendingPath = null;
+            }
+
+            _seriesRepository.SetFields(staleSeries, s => s.PendingPath);
         }
 
         public bool SeriesPathExists(string folder)
