@@ -28,11 +28,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
 
         public override IImportListRequestGenerator GetRequestGenerator()
         {
-            return new TraktPopularRequestGenerator()
-            {
-                Settings = Settings,
-                ClientId = ClientId
-            };
+            return new TraktPopularRequestGenerator(Settings, ClientId, PageSize, MaxNumResultsPerQuery);
         }
     }
 }

@@ -16,9 +16,8 @@ namespace NzbDrone.Core.Configuration
                 return new List<string>();
             }
 
-            return value.Split(Separators)
-                        .Select(h => Normalize(h.Trim()))
-                        .Where(h => h.IsNotNullOrWhiteSpace())
+            return value.Split(Separators, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+                        .Select(Normalize)
                         .Distinct()
                         .ToList();
         }
@@ -40,17 +39,7 @@ namespace NzbDrone.Core.Configuration
 
         private static string Normalize(string host)
         {
-            if (!IsBracketed(host) && host.Contains(':') && host.IsValidIpAddress())
-            {
-                return $"[{host}]";
-            }
-
-            return host;
-        }
-
-        private static bool IsBracketed(string host)
-        {
-            return host.StartsWith("[") && host.EndsWith("]");
+            return host.IsValidIpAddress() ? host.ToUrlHost() : host;
         }
     }
 }

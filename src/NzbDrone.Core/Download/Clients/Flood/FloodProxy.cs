@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download.Clients.Flood.Types;
@@ -37,7 +38,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
 
         private string BuildUrl(FloodSettings settings)
         {
-            return $"{(settings.UseSsl ? "https://" : "http://")}{settings.Host}:{settings.Port}/{settings.UrlBase}";
+            return $"{(settings.UseSsl ? "https://" : "http://")}{settings.Host.ToUrlHost()}:{settings.Port}/{settings.UrlBase}";
         }
 
         private string BuildCachedCookieKey(FloodSettings settings)

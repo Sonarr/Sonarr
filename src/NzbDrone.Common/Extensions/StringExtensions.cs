@@ -235,9 +235,46 @@ namespace NzbDrone.Common.Extensions
             return parsedAddress.AddressFamily == AddressFamily.InterNetwork || parsedAddress.AddressFamily == AddressFamily.InterNetworkV6;
         }
 
+        public static bool IsLocalhostAddress(this string input)
+        {
+            if (input.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            var host = input.FromUrlHost();
+
+            if (host.Equals("localhost", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return true;
+            }
+
+            return IPAddress.TryParse(host, out var parsedAddress) && IPAddress.IsLoopback(parsedAddress);
+        }
+
         public static string ToUrlHost(this string input)
         {
-            return input.Contains(':') ? $"[{input}]" : input;
+            if (input.IsNullOrWhiteSpace() || !input.Contains(':') || IsBracketed(input))
+            {
+                return input;
+            }
+
+            return $"[{input}]";
+        }
+
+        public static string FromUrlHost(this string input)
+        {
+            if (input.IsNullOrWhiteSpace() || !IsBracketed(input))
+            {
+                return input;
+            }
+
+            return input[1..^1];
+        }
+
+        private static bool IsBracketed(string input)
+        {
+            return input.StartsWith('[') && input.EndsWith(']');
         }
 
         public static string Reverse(this string text)

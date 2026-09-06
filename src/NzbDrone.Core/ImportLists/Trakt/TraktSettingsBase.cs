@@ -28,7 +28,6 @@ namespace NzbDrone.Core.ImportLists.Trakt
                                    .WithMessage("Must authenticate with Trakt")
                                    .When(c => c.AccessToken.IsNotNullOrWhiteSpace() && c.RefreshToken.IsNotNullOrWhiteSpace());
 
-            // Limit not smaller than 1 and not larger than 100
             RuleFor(c => c.Limit)
                 .GreaterThan(0)
                 .WithMessage("Must be integer greater than 0");

@@ -23,7 +23,9 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
-            if (AllowedHostsParser.Parse(_configFileProvider.AllowedHosts).Count > 0)
+            var allowedHosts = AllowedHostsParser.Parse(_configFileProvider.AllowedHosts);
+
+            if (allowedHosts.Count > 0 && !allowedHosts.Contains("*"))
             {
                 return new HealthCheck(GetType());
             }

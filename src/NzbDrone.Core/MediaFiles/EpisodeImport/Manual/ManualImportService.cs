@@ -307,7 +307,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
                 if (series == null)
                 {
-                    _parsingService.GetSeries(relativeFile.Split('\\', '/')[0]);
+                    series = _parsingService.GetSeries(relativeFile.Split('\\', '/')[0]);
                 }
 
                 if (series == null)

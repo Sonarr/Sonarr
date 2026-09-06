@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.ImportLists.Trakt
@@ -15,6 +17,9 @@ namespace NzbDrone.Core.ImportLists.Trakt
     {
         public override ImportListType ListType => ImportListType.Trakt;
         public override TimeSpan MinRefreshInterval => TimeSpan.FromHours(12);
+
+        public override int PageSize => 250;
+        public override TimeSpan RateLimit => TimeSpan.FromSeconds(5);
 
         public const string OAuthUrl = "https://trakt.tv/oauth/authorize";
         public const string RedirectUri = "https://auth.servarr.com/v1/trakt_sonarr/auth";
@@ -45,14 +50,19 @@ namespace NzbDrone.Core.ImportLists.Trakt
                 RefreshToken();
             }
 
-            var generator = GetRequestGenerator();
-
             return FetchItems(g => g.GetListItems(), true);
         }
 
         public override IParseImportListResponse GetParser()
         {
             return new TraktParser();
+        }
+
+        protected override IList<ImportListItemInfo> CleanupListItems(IEnumerable<ImportListItemInfo> releases)
+        {
+            return base.CleanupListItems(releases)
+                .Take(Settings.Limit)
+                .ToList();
         }
 
         public override object RequestAction(string action, IDictionary<string, string> query)

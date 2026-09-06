@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.ImportLists.Trakt
@@ -9,10 +9,12 @@ namespace NzbDrone.Core.ImportLists.Trakt
     {
         private static readonly HashSet<string> ReservedFilterParameters = new(StringComparer.OrdinalIgnoreCase)
         {
+            "extended",
             "genres",
             "ratings",
             "years",
-            "limit"
+            "limit",
+            "page",
         };
 
         public static Dictionary<string, string> BuildFilterParameters(string rating, string genres, string years, int limit, string additionalParameters)
@@ -43,7 +45,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
 
             if (genres.IsNotNullOrWhiteSpace())
             {
-                parameters["genres"] = genres.ToLower();
+                parameters["genres"] = genres.ToLowerInvariant();
             }
 
             if (rating.IsNotNullOrWhiteSpace())
@@ -56,7 +58,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
                 parameters["years"] = years;
             }
 
-            parameters["limit"] = limit.ToString();
+            parameters["limit"] = limit.ToString(CultureInfo.InvariantCulture);
 
             return parameters;
         }
@@ -81,11 +83,6 @@ namespace NzbDrone.Core.ImportLists.Trakt
             }
 
             return false;
-        }
-
-        public static string ToQueryString(this Dictionary<string, string> parameters)
-        {
-            return string.Join("&", parameters.Where(p => p.Value.IsNotNullOrWhiteSpace()).Select(p => $"{p.Key}={p.Value}"));
         }
     }
 }

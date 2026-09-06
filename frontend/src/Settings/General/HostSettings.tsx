@@ -5,7 +5,7 @@ import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import { inputTypes, sizes } from 'Helpers/Props';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
-import { useIsWindowsService } from 'System/Status/useSystemStatus';
+import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
 import translate from 'Utilities/String/translate';
@@ -43,7 +43,7 @@ function HostSettings({
   onInputChange,
 }: HostSettingsProps) {
   const showAdvancedSettings = useShowAdvancedSettings();
-  const isWindowsService = useIsWindowsService();
+  const { isWindows, mode } = useSystemStatusData();
 
   return (
     <FieldSet legend={translate('Host')}>
@@ -202,7 +202,7 @@ function HostSettings({
         </>
       ) : null}
 
-      {isWindowsService ? null : (
+      {isWindows && mode !== 'service' ? (
         <FormGroup size={sizes.MEDIUM}>
           <FormLabel>{translate('OpenBrowserOnStart')}</FormLabel>
 
@@ -214,7 +214,7 @@ function HostSettings({
             {...launchBrowser}
           />
         </FormGroup>
-      )}
+      ) : null}
     </FieldSet>
   );
 }

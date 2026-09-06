@@ -1,28 +1,17 @@
 using System.Collections.Generic;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.ImportLists.Trakt.Popular
 {
-    public class TraktPopularRequestGenerator : IImportListRequestGenerator
+    public class TraktPopularRequestGenerator : TraktRequestGeneratorBase<TraktPopularSettings>
     {
-        public TraktPopularSettings Settings { get; set; }
-
-        public string ClientId { get; set; }
-
-        public virtual ImportListPageableRequestChain GetListItems()
+        public TraktPopularRequestGenerator(TraktPopularSettings settings, string clientId, int pageSize, int maxNumResults)
+            : base(settings, clientId, pageSize, maxNumResults)
         {
-            var pageableRequests = new ImportListPageableRequestChain();
-
-            pageableRequests.Add(GetSeriesRequest());
-
-            return pageableRequests;
         }
 
-        private IEnumerable<ImportListRequest> GetSeriesRequest()
+        protected override void SetResource(HttpRequestBuilder requestBuilder)
         {
-            var requestBuilder = new HttpRequestBuilder(Settings.BaseUrl.Trim());
-
             var resource = "/shows";
 
             switch (Settings.TraktListType)
@@ -66,27 +55,12 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
                     break;
             }
 
-            requestBuilder
-                .Resource(resource)
-                .Accept(HttpAccept.Json);
+            requestBuilder.Resource(resource);
+        }
 
-            var filterParams = TraktQueryHelper.BuildFilterParameters(Settings.Rating, Settings.Genres, Settings.Years, Settings.Limit, Settings.TraktAdditionalParameters);
-
-            foreach (var param in filterParams)
-            {
-                requestBuilder.AddQueryParam(param.Key, param.Value);
-            }
-
-            requestBuilder
-                .SetHeader("trakt-api-version", "2")
-                .SetHeader("trakt-api-key", ClientId);
-
-            if (Settings.AccessToken.IsNotNullOrWhiteSpace())
-            {
-                requestBuilder.SetHeader("Authorization", $"Bearer {Settings.AccessToken}");
-            }
-
-            yield return new ImportListRequest(requestBuilder.Build());
+        protected override Dictionary<string, string> GetFilterParameters()
+        {
+            return TraktQueryHelper.BuildFilterParameters(Settings.Rating, Settings.Genres, Settings.Years, _pageSize, Settings.TraktAdditionalParameters);
         }
     }
 }

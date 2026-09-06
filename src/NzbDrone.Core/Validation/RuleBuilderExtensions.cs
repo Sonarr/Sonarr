@@ -31,7 +31,29 @@ namespace NzbDrone.Core.Validation
         {
             ruleBuilder.SetValidator(new NotEmptyValidator(null));
 
-            return ruleBuilder.Must(x => HostRegex.IsMatch(x) || x.IsValidIpAddress()).WithMessage("must be valid Host without http://");
+            return ruleBuilder.Must(IsValidHost).WithMessage("must be valid Host without http://");
+        }
+
+        private static bool IsValidHost(string host)
+        {
+            if (host.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            if (HostRegex.IsMatch(host))
+            {
+                return true;
+            }
+
+            var address = host.FromUrlHost();
+
+            if (!address.IsValidIpAddress())
+            {
+                return false;
+            }
+
+            return address == host || address.Contains(':');
         }
 
         public static IRuleBuilderOptions<T, string> ValidHosts<T>(this IRuleBuilder<T, string> ruleBuilder)

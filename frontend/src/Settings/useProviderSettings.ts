@@ -191,20 +191,11 @@ export const useManageProviderSettings = <T extends ModelBase>(
   const provider = useProviderWithDefault<T>(id, defaultProvider, path);
   const lastSaveData = useRef<string | null>(null);
 
-  const {
-    pendingChanges,
-    setPendingChange,
-    unsetPendingChange,
-    clearPendingChanges,
-    hasPendingChanges,
-  } = usePendingChangesStore<T>({});
+  const { pendingChanges, setPendingChange, clearPendingChanges } =
+    usePendingChangesStore<T>({});
 
-  const {
-    pendingFields,
-    setPendingFields,
-    clearPendingFields,
-    hasPendingFields,
-  } = usePendingFieldsStore();
+  const { pendingFields, setPendingFields, clearPendingFields } =
+    usePendingFieldsStore();
 
   const handleSaveSuccess = useCallback(() => {
     clearPendingChanges();
@@ -221,37 +212,62 @@ export const useManageProviderSettings = <T extends ModelBase>(
   const mutationError =
     saveSubmittedAt >= testSubmittedAt ? saveError : testError;
 
+  const changedValues = useMemo(() => {
+    const changed: Partial<T> = {};
+
+    (Object.keys(pendingChanges) as (keyof T)[]).forEach((key) => {
+      if (provider[key] !== pendingChanges[key]) {
+        changed[key] = pendingChanges[key];
+      }
+    });
+
+    return changed;
+  }, [provider, pendingChanges]);
+
+  const changedFields = useMemo(() => {
+    const changed = new Map<string, unknown>();
+
+    if (!isProviderWithFields(provider)) {
+      return changed;
+    }
+
+    pendingFields.forEach((value, name) => {
+      if (provider.fields.find((f) => f.name === name)?.value !== value) {
+        changed.set(name, value);
+      }
+    });
+
+    return changed;
+  }, [provider, pendingFields]);
+
+  const hasChangedValues = Object.keys(changedValues).length > 0;
+  const hasChangedFields = changedFields.size > 0;
+
   const { settings: item, ...settings } = useMemo(() => {
     // Create a combined pending changes object that includes fields
-    const combinedPendingChanges = hasPendingFields
+    const combinedPendingChanges = hasChangedFields
       ? {
-          ...pendingChanges,
-          fields: Object.fromEntries(pendingFields),
+          ...changedValues,
+          fields: Object.fromEntries(changedFields),
         }
-      : pendingChanges;
+      : changedValues;
 
     return selectSettings<T>(provider, combinedPendingChanges, mutationError);
-  }, [
-    provider,
-    pendingChanges,
-    pendingFields,
-    hasPendingFields,
-    mutationError,
-  ]);
+  }, [provider, changedValues, changedFields, hasChangedFields, mutationError]);
 
   const saveProvider = useCallback(() => {
     let updatedSettings: T = {
       ...provider,
-      ...pendingChanges,
+      ...changedValues,
     };
 
     // If there are pending field changes and the provider has fields
     if (isProviderWithFields(provider)) {
       const fields = provider.fields.map((field) => {
-        if (pendingFields.has(field.name)) {
+        if (changedFields.has(field.name)) {
           return {
             name: field.name,
-            value: pendingFields.get(field.name),
+            value: changedFields.get(field.name),
           };
         }
 
@@ -274,7 +290,7 @@ export const useManageProviderSettings = <T extends ModelBase>(
     const saveOptions: SaveOptions = {};
 
     // For existing providers with no pending changes, skip testing and all validation.
-    if (provider.id > 0 && !hasPendingChanges && !hasPendingFields) {
+    if (provider.id > 0 && !hasChangedValues && !hasChangedFields) {
       saveOptions.skipTesting = true;
       saveOptions.skipValidation = 'all';
     } else {
@@ -294,10 +310,10 @@ export const useManageProviderSettings = <T extends ModelBase>(
     save(updatedSettings, saveOptions);
   }, [
     provider,
-    pendingChanges,
-    pendingFields,
-    hasPendingChanges,
-    hasPendingFields,
+    changedValues,
+    changedFields,
+    hasChangedValues,
+    hasChangedFields,
     mutationError,
     save,
   ]);
@@ -305,16 +321,16 @@ export const useManageProviderSettings = <T extends ModelBase>(
   const testProvider = useCallback(() => {
     let updatedSettings: T = {
       ...provider,
-      ...pendingChanges,
+      ...changedValues,
     };
 
     // If there are pending field changes and the provider has fields
     if (isProviderWithFields(provider)) {
       const fields = provider.fields.map((field) => {
-        if (pendingFields.has(field.name)) {
+        if (changedFields.has(field.name)) {
           return {
             ...field,
-            value: pendingFields.get(field.name),
+            value: changedFields.get(field.name),
           };
         }
 
@@ -337,17 +353,13 @@ export const useManageProviderSettings = <T extends ModelBase>(
     }
 
     test(updatedSettings, testOptions);
-  }, [provider, pendingChanges, pendingFields, mutationError, test]);
+  }, [provider, changedValues, changedFields, mutationError, test]);
 
   const updateValue = useCallback(
     <K extends keyof T>(key: K, value: T[K]) => {
-      if (provider[key] === value) {
-        unsetPendingChange(key);
-      } else {
-        setPendingChange(key, value);
-      }
+      setPendingChange(key, value);
     },
-    [provider, setPendingChange, unsetPendingChange]
+    [setPendingChange]
   );
 
   const hasFields = useMemo(() => {
@@ -356,27 +368,9 @@ export const useManageProviderSettings = <T extends ModelBase>(
 
   const updateFieldValue = useCallback(
     (fieldProperties: Record<string, unknown>) => {
-      if (!isProviderWithFields(provider)) {
-        throw new Error('updateFieldValue called on provider without fields');
-      }
-
-      const providerFields = provider.fields;
-      const currentFields = pendingFields;
-      const newFields = { ...currentFields, ...fieldProperties };
-
-      // Check if the new fields are different from the provider's current fields
-      const hasChanges = Object.entries(newFields).some(([key, value]) => {
-        const currentField = providerFields.find((f) => f.name === key);
-        return currentField?.value !== value;
-      });
-
-      if (hasChanges) {
-        setPendingFields(newFields);
-      } else {
-        clearPendingFields();
-      }
+      setPendingFields(fieldProperties);
     },
-    [pendingFields, provider, setPendingFields, clearPendingFields]
+    [setPendingFields]
   );
 
   const baseReturn = {
