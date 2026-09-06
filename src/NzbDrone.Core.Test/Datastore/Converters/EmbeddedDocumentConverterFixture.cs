@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Test.Datastore.Converters
             var parsedEpisodeInfo = new ParsedEpisodeInfo
             {
                 SeriesTitle = "Series Title",
-                SeasonNumbers = new[] { 1, 2, 3 },
+                SeasonNumbers = [1, 2, 3],
                 FullSeason = true
             };
 

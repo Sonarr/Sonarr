@@ -14,15 +14,15 @@ namespace NzbDrone.Core.Parser.Model
         public string SeriesTitle { get; set; }
         public SeriesTitleInfo SeriesTitleInfo { get; set; }
         public QualityModel Quality { get; set; }
+        public int[] SeasonNumbers { get; set; } = [];
 
         [JsonPropertyOrder(-1)]
         public int SeasonNumber
         {
-            get => SeasonNumbers.Length > 0 ? SeasonNumbers[0] : 0;
-            set => SeasonNumbers = new[] { value };
+            get => SeasonNumbers.FirstOrDefault(0);
+            set => SeasonNumbers = [value];
         }
 
-        public int[] SeasonNumbers { get; set; } = Array.Empty<int>();
         public int[] EpisodeNumbers { get; set; }
         public int[] AbsoluteEpisodeNumbers { get; set; }
         public decimal[] SpecialAbsoluteEpisodeNumbers { get; set; }

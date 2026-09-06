@@ -1069,13 +1069,13 @@ namespace NzbDrone.Core.Parser
                     }
                 }
 
-                var distinctSeasons = seasons.Distinct().OrderBy(s => s).ToList();
+                var distinctSeasons = seasons.Distinct().OrderBy(s => s).ToArray();
 
-                if (distinctSeasons.Count == 1 || distinctSeasons.Count > 2)
+                if (distinctSeasons.Length is 1 or > 2)
                 {
-                    result.SeasonNumbers = distinctSeasons.ToArray();
+                    result.SeasonNumbers = distinctSeasons;
                 }
-                else if (distinctSeasons.Count == 2)
+                else if (distinctSeasons.Length == 2)
                 {
                     result.SeasonNumbers = Enumerable.Range(distinctSeasons.First(), distinctSeasons.Last() - distinctSeasons.First() + 1).ToArray();
                 }
