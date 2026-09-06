@@ -1071,7 +1071,7 @@ namespace NzbDrone.Core.Parser
 
                 var distinctSeasons = seasons.Distinct().OrderBy(s => s).ToList();
 
-                if (distinctSeasons.Count > 2)
+                if (distinctSeasons.Count == 1 || distinctSeasons.Count > 2)
                 {
                     result.SeasonNumbers = distinctSeasons.ToArray();
                 }
@@ -1079,14 +1079,10 @@ namespace NzbDrone.Core.Parser
                 {
                     result.SeasonNumbers = Enumerable.Range(distinctSeasons.First(), distinctSeasons.Last() - distinctSeasons.First() + 1).ToArray();
                 }
-                else if (distinctSeasons.Count == 1)
-                {
-                    result.SeasonNumbers = new[] { distinctSeasons[0] };
-                }
                 else if (!result.AbsoluteEpisodeNumbers.Any() && result.EpisodeNumbers.Any())
                 {
                     // If no season was found and it's not an absolute only release it should be treated as a mini series and season 1
-                    result.SeasonNumbers = new[] { 1 };
+                    result.SeasonNumbers = [1];
                     result.IsMiniSeries = true;
                 }
             }
