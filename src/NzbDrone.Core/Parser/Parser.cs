@@ -206,7 +206,7 @@ namespace NzbDrone.Core.Parser
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Multi-season pack
-                new Regex(@"^(?<title>.+?)(Complete Series)?[-_. ]+(?:S|(?:Season|Saison|Series|Stagione)[_. ])(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:[-_. ]{1}|[-_. ]{3})(?:S|(?:Season|Saison|Series|Stagione)[_. ])?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))",
+                new Regex(@"^(?<title>.+?)(Complete Series)?[-_. ]+(?:S|(?:Season|Saison|Series|Stagione)[_. ])(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:(?:[-_. ]{1}|[-_. ]{3})(?:S|(?:Season|Saison|Series|Stagione)[_. ])?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))){1,}",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Partial season pack
@@ -1069,21 +1069,24 @@ namespace NzbDrone.Core.Parser
                     }
                 }
 
-                // If more than 1 season was parsed set IsMultiSeason to true so it can be rejected later
-                if (seasons.Distinct().Count() > 1)
-                {
-                    result.IsMultiSeason = true;
-                }
+                var distinctSeasons = seasons.Distinct().OrderBy(s => s).ToList();
 
-                if (seasons.Any())
+                if (distinctSeasons.Count > 2)
                 {
-                    // If at least one season was parsed use the first season as the season
-                    result.SeasonNumber = seasons.First();
+                    result.SeasonNumbers = distinctSeasons.ToArray();
+                }
+                else if (distinctSeasons.Count == 2)
+                {
+                    result.SeasonNumbers = Enumerable.Range(distinctSeasons.First(), distinctSeasons.Last() - distinctSeasons.First() + 1).ToArray();
+                }
+                else if (distinctSeasons.Count == 1)
+                {
+                    result.SeasonNumbers = new[] { distinctSeasons[0] };
                 }
                 else if (!result.AbsoluteEpisodeNumbers.Any() && result.EpisodeNumbers.Any())
                 {
                     // If no season was found and it's not an absolute only release it should be treated as a mini series and season 1
-                    result.SeasonNumber = 1;
+                    result.SeasonNumbers = new[] { 1 };
                     result.IsMiniSeries = true;
                 }
             }
