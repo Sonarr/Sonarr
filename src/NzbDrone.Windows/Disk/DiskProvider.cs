@@ -7,6 +7,7 @@ using System.Security.Principal;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Windows.Disk
@@ -66,42 +67,54 @@ namespace NzbDrone.Windows.Disk
             fileInfo.SetAccessControl(fs);
         }
 
-        public override void SetEveryonePermissions(string filename)
+        public override void SetCurrentUserPermissions(string filename)
         {
-            var accountSid = WellKnownSidType.WorldSid;
-            var rights = FileSystemRights.Modify;
-            var controlType = AccessControlType.Allow;
+            using var identity = WindowsIdentity.GetCurrent();
 
+            var sid = identity.User;
+
+            if (sid == null)
+            {
+                throw new InvalidOperationException($"Unable to determine the current user to set permissions for {filename}");
+            }
+
+            GrantFolderPermissions(filename, sid);
+        }
+
+        public override void SetServiceAccountPermissions(string filename)
+        {
+            GrantFolderPermissions(filename, new SecurityIdentifier(WellKnownSidType.LocalServiceSid, null));
+        }
+
+        public override void RemoveEveryonePermissions(string filename)
+        {
             try
             {
-                var sid = new SecurityIdentifier(accountSid, null);
+                var everyoneSid = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
 
                 var directoryInfo = new DirectoryInfo(filename);
                 var directorySecurity = directoryInfo.GetAccessControl(AccessControlSections.Access);
 
-                var rules = directorySecurity.GetAccessRules(true, false, typeof(SecurityIdentifier));
+                var everyoneRules = directorySecurity.GetAccessRules(true, false, typeof(SecurityIdentifier))
+                                                     .OfType<FileSystemAccessRule>()
+                                                     .Where(acl => acl.AccessControlType == AccessControlType.Allow && acl.IdentityReference.Equals(everyoneSid))
+                                                     .ToList();
 
-                if (rules.OfType<FileSystemAccessRule>().Any(acl => acl.AccessControlType == controlType && (acl.FileSystemRights & rights) == rights && acl.IdentityReference.Equals(sid)))
+                if (everyoneRules.Empty())
                 {
                     return;
                 }
 
-                var accessRule = new FileSystemAccessRule(sid,
-                                                          rights,
-                                                          InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
-                                                          PropagationFlags.InheritOnly,
-                                                          controlType);
-
-                directorySecurity.ModifyAccessRule(AccessControlModification.Add, accessRule, out var modified);
-
-                if (modified)
+                foreach (var everyoneRule in everyoneRules)
                 {
-                    directoryInfo.SetAccessControl(directorySecurity);
+                    directorySecurity.RemoveAccessRuleSpecific(everyoneRule);
                 }
+
+                directoryInfo.SetAccessControl(directorySecurity);
             }
             catch (Exception e)
             {
-                Logger.Warn(e, "Couldn't set permission for {0}. account:{1} rights:{2} accessControlType:{3}", filename, accountSid, rights, controlType);
+                Logger.Warn(e, "Couldn't remove everyone permissions for {0}", filename);
                 throw;
             }
         }
@@ -205,6 +218,46 @@ namespace NzbDrone.Windows.Disk
             }
 
             return null;
+        }
+
+        private static void GrantFolderPermissions(string filename, SecurityIdentifier sid)
+        {
+            var rights = FileSystemRights.Modify;
+            var controlType = AccessControlType.Allow;
+
+            try
+            {
+                var directoryInfo = new DirectoryInfo(filename);
+                var directorySecurity = directoryInfo.GetAccessControl(AccessControlSections.Access);
+
+                var accessRule = new FileSystemAccessRule(sid,
+                                                          rights,
+                                                          InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
+                                                          PropagationFlags.None,
+                                                          controlType);
+
+                var hasSidRule = directorySecurity.GetAccessRules(true, false, typeof(SecurityIdentifier))
+                                                  .OfType<FileSystemAccessRule>()
+                                                  .Any(acl => acl.AccessControlType == controlType &&
+                                                              (acl.FileSystemRights & rights) == rights &&
+                                                              acl.InheritanceFlags == accessRule.InheritanceFlags &&
+                                                              acl.PropagationFlags == accessRule.PropagationFlags &&
+                                                              acl.IdentityReference.Equals(sid));
+
+                if (hasSidRule)
+                {
+                    return;
+                }
+
+                directorySecurity.ModifyAccessRule(AccessControlModification.Add, accessRule, out _);
+
+                directoryInfo.SetAccessControl(directorySecurity);
+            }
+            catch (Exception e)
+            {
+                Logger.Warn(e, "Couldn't set permission for {0}. rights:{1} accessControlType:{2}", filename, rights, controlType);
+                throw;
+            }
         }
     }
 }

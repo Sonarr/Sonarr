@@ -53,7 +53,15 @@ namespace NzbDrone.Mono.Disk
         {
         }
 
-        public override void SetEveryonePermissions(string filename)
+        public override void SetCurrentUserPermissions(string filename)
+        {
+        }
+
+        public override void SetServiceAccountPermissions(string filename)
+        {
+        }
+
+        public override void RemoveEveryonePermissions(string filename)
         {
         }
 
