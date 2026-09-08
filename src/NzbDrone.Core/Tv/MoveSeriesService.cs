@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -85,6 +86,11 @@ namespace NzbDrone.Core.Tv
                 _logger.Error(ex, "Unable to move series from '{0}' to '{1}'. Try moving files manually", sourcePath, destinationPath);
 
                 UpdatePath(series.Id, sourcePath);
+            }
+            catch (Exception)
+            {
+                UpdatePath(series.Id, sourcePath);
+                throw;
             }
         }
 

@@ -4,6 +4,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.AutoTagging;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
@@ -386,6 +387,7 @@ namespace NzbDrone.Core.Tv
             return seriesIds;
         }
 
+        [EventHandleOrder(EventHandleOrder.Last)]
         public void Handle(ApplicationStartedEvent message)
         {
             ClearStalePendingPaths();
