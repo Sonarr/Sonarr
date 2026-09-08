@@ -31,6 +31,8 @@ public class QualityDefinitionController :
     }
 
     [RestPutById]
+    [Consumes("application/json")]
+    [Produces("application/json")]
     public Results<Accepted<QualityDefinitionResource>, NotFound> Update([FromBody] QualityDefinitionResource resource)
     {
         var model = resource.ToModel();
@@ -58,6 +60,7 @@ public class QualityDefinitionController :
 
     [HttpPut]
     [Consumes("application/json")]
+    [Produces("application/json")]
     public Ok<List<QualityDefinitionResource>> UpdateMany([FromBody] List<QualityDefinitionResource> resource)
     {
         // Read from request

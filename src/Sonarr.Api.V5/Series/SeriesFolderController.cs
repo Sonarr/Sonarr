@@ -19,16 +19,16 @@ public class SeriesFolderController : Controller
         _fileNameBuilder = fileNameBuilder;
     }
 
-    [HttpGet("{id}/folder")]
+    [HttpGet("{id:int}/folder")]
     [Produces("application/json")]
-    public Ok<object> GetFolder([FromRoute] int id)
+    public Ok<SeriesFolderResource> GetFolder([FromRoute] int id)
     {
         var series = _seriesService.GetSeries(id);
         var folder = _fileNameBuilder.GetSeriesFolder(series);
 
-        return TypedResults.Ok<object>(new
+        return TypedResults.Ok(new SeriesFolderResource
         {
-            folder
+            Folder = folder
         });
     }
 }

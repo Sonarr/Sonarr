@@ -33,27 +33,27 @@ public class FileSystemController : Controller
 
     [HttpGet("type")]
     [Produces("application/json")]
-    public Ok<object> GetEntityType(string path)
+    public Ok<FileSystemTypeResource> GetEntityType(string path)
     {
         if (_diskProvider.FileExists(path))
         {
-            return TypedResults.Ok<object>(new { type = "file" });
+            return TypedResults.Ok(new FileSystemTypeResource { Type = FileSystemEntityType.File });
         }
 
         // Return folder even if it doesn't exist on disk to avoid leaking anything from the UI about the underlying system
-        return TypedResults.Ok<object>(new { type = "folder" });
+        return TypedResults.Ok(new FileSystemTypeResource { Type = FileSystemEntityType.Folder });
     }
 
     [HttpGet("mediafiles")]
     [Produces("application/json")]
-    public Ok<IEnumerable<object>> GetMediaFiles(string path)
+    public Ok<IEnumerable<FileSystemMediaFileResource>> GetMediaFiles(string path)
     {
         if (!_diskProvider.FolderExists(path))
         {
-            return TypedResults.Ok(Enumerable.Empty<object>());
+            return TypedResults.Ok(Enumerable.Empty<FileSystemMediaFileResource>());
         }
 
-        return TypedResults.Ok(_diskScanService.GetVideoFiles(path).Select(object (f) => new
+        return TypedResults.Ok(_diskScanService.GetVideoFiles(path).Select(f => new FileSystemMediaFileResource
         {
             Path = f,
             RelativePath = path.GetRelativePath(f),

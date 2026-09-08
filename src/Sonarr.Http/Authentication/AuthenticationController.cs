@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
@@ -33,13 +35,15 @@ namespace Sonarr.Http.Authentication
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromForm] LoginResource resource, [FromQuery] string returnUrl = null)
+        [ProducesResponseType(StatusCodes.Status302Found)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized, "application/json")]
+        public async Task<Results<RedirectHttpResult, UnauthorizedHttpResult>> Login([FromForm] LoginResource resource, [FromQuery] string returnUrl = null)
         {
             var user = _authService.Login(HttpContext.Request, resource.Username, resource.Password);
 
             if (user == null)
             {
-                return Redirect($"~/login?returnUrl={returnUrl}&loginFailed=true");
+                return TypedResults.Redirect($"~/login?returnUrl={returnUrl}&loginFailed=true");
             }
 
             var claims = new List<Claim>
@@ -69,28 +73,29 @@ namespace Sonarr.Http.Authentication
                     _logger.Error(e, "Failed to authenticate user. {0}", e.Message);
                 }
 
-                return Unauthorized();
+                return TypedResults.Unauthorized();
             }
 
             if (returnUrl.IsNullOrWhiteSpace() || !Url.IsLocalUrl(returnUrl))
             {
-                return Redirect(_configFileProvider.UrlBase + "/");
+                return TypedResults.Redirect(_configFileProvider.UrlBase + "/");
             }
 
             if (_configFileProvider.UrlBase.IsNullOrWhiteSpace() || returnUrl.StartsWith(_configFileProvider.UrlBase))
             {
-                return Redirect(returnUrl);
+                return TypedResults.Redirect(returnUrl);
             }
 
-            return Redirect(_configFileProvider.UrlBase + returnUrl);
+            return TypedResults.Redirect(_configFileProvider.UrlBase + returnUrl);
         }
 
         [HttpGet("logout")]
-        public async Task<IActionResult> Logout()
+        [ProducesResponseType(StatusCodes.Status302Found)]
+        public async Task<RedirectHttpResult> Logout()
         {
             _authService.Logout(HttpContext);
             await HttpContext.SignOutAsync(AuthenticationType.Forms.ToString());
-            return Redirect(_configFileProvider.UrlBase + "/");
+            return TypedResults.Redirect(_configFileProvider.UrlBase + "/");
         }
     }
 }

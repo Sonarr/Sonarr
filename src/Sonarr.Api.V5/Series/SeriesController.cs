@@ -220,7 +220,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
         return TypedAccepted(seriesResource.Id);
     }
 
-    [HttpPut("{id}/season")]
+    [HttpPut("{id:int}/season")]
     [Consumes("application/json")]
     [Produces("application/json")]
     public Results<Ok<SeasonResource>, NotFound> UpdateSeasonMonitored([FromRoute] int id, [FromBody] SeasonResource seasonResource)

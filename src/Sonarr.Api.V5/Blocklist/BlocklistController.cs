@@ -63,6 +63,7 @@ public class BlocklistController : Controller
     }
 
     [HttpDelete("bulk")]
+    [Consumes("application/json")]
     [Produces("application/json")]
     public NoContent Remove([FromBody] BlocklistBulkResource resource)
     {
