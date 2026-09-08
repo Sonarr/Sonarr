@@ -129,6 +129,17 @@ namespace NzbDrone.Common.Test.InstrumentationTests
             cleansedMessage.Should().NotContain(".2.3.");
         }
 
+        [TestCase(@"User 'mySecret@example.com' is not authorized to access this application")]
+        [TestCase(@"Auth-Logout ip 127.0.0.1 username 'mySecret@example.com'")]
+        [TestCase(@"Sending email to mySecret@sub.example.co.uk failed")]
+        public void should_clean_email(string message)
+        {
+            var cleansedMessage = CleanseLogMessage.Cleanse(message);
+
+            cleansedMessage.Should().NotContain("mySecret");
+            cleansedMessage.Should().Contain("(removed)@");
+        }
+
         [TestCase(@"Some message (from 10.2.3.2 user agent)")]
         [TestCase(@"Auth-Unauthorized ip 32.2.3.5")]
         [TestCase(@"Auth-Failure ip 32.2.3.5")]
