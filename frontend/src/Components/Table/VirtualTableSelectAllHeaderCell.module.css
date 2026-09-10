@@ -1,7 +1,15 @@
 .selectAllHeaderCell {
-  composes: headerCell from 'Components/Table/TableHeaderCell.module.css';
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.module.css';
 
   flex: 0 0 36px;
+}
+
+.container {
+  composes: container from 'Components/Form/CheckInput.module.css';
+}
+
+.container > label {
+  min-height: 0;
 }
 
 .input {

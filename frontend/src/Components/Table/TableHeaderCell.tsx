@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useCallback, useMemo } from 'react';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
@@ -68,18 +69,29 @@ function TableHeaderCell({
     <Link
       {...otherProps}
       component="th"
-      className={className}
+      className={classNames(
+        className,
+        styles.sortable,
+        isSorting && styles.sorted
+      )}
       // label={typeof label === 'function' ? label() : label}
       title={typeof columnLabel === 'function' ? columnLabel() : columnLabel}
       scope="col"
       aria-sort={ariaSortValue}
       onPress={handlePress}
     >
-      {children}
+      <span className={styles.content}>
+        {children}
 
-      {isSorting ? (
-        <Icon name={sortIcon} className={styles.sortIcon} aria-hidden={true} />
-      ) : null}
+        {isSorting ? (
+          <Icon
+            name={sortIcon}
+            className={styles.sortIcon}
+            size={12}
+            aria-hidden={true}
+          />
+        ) : null}
+      </span>
     </Link>
   ) : (
     <th className={className} scope="col">

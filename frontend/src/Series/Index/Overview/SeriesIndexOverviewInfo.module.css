@@ -10,7 +10,7 @@
   align-items: center;
   padding: 3px 9px;
   border-radius: 999px;
-  background: var(--paperWarm);
+  background: color-mix(in oklch, var(--ink) 7%, transparent);
   color: var(--inkMuted);
   white-space: nowrap;
   font-weight: 400;
@@ -46,5 +46,5 @@
 
 .dateLabel {
   margin-right: 4px;
-  color: var(--inkFaint);
+  color: color-mix(in oklch, var(--inkMuted) 30%, var(--inkFaint));
 }

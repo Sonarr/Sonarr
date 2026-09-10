@@ -33,6 +33,7 @@ function VirtualTableSelectAllHeaderCell({
     >
       <CheckInput
         className={styles.input}
+        containerClassName={styles.container}
         name="selectAll"
         ariaLabel={translate('SelectAll')}
         value={value}

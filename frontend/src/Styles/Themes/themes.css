@@ -1,16 +1,17 @@
 :root {
   /* Surfaces */
-  --paper: oklch(98% 0.006 80);
-  --paperWarm: oklch(96% 0.008 80);
-  --paperCard: oklch(100% 0 0);
-  --hairline: oklch(90% 0.006 80);
-  --hairlineStrong: oklch(82% 0.008 80);
+  --paper: oklch(92% 0.012 260);
+  --pageBackground: var(--paper);
+  --paperWarm: oklch(88% 0.014 260);
+  --paperCard: oklch(97% 0.010 260);
+  --hairline: oklch(84% 0.012 260);
+  --hairlineStrong: oklch(76% 0.014 260);
 
   /* Text */
-  --ink: oklch(18% 0.012 80);
-  --inkSoft: oklch(32% 0.010 80);
-  --inkMuted: oklch(52% 0.008 80);
-  --inkFaint: oklch(72% 0.006 80);
+  --ink: oklch(18% 0.014 260);
+  --inkSoft: oklch(32% 0.012 260);
+  --inkMuted: oklch(44% 0.012 260);
+  --inkFaint: oklch(72% 0.007 260);
 
   /* Accent */
   --accent: oklch(78% 0.130 215);
@@ -20,20 +21,20 @@
   /* Status */
   --statusAiring: oklch(62% 0.105 195);
   --statusUpcoming: oklch(72% 0.130 65);
-  --statusFinished: oklch(60% 0.008 80);
-  --statusHiatus: oklch(58% 0.008 80);
+  --statusFinished: oklch(60% 0.008 260);
+  --statusHiatus: oklch(58% 0.008 260);
   --statusMissing: oklch(58% 0.165 28);
   --statusGrabbing: oklch(60% 0.130 305);
   --statusUnaired: oklch(70% 0.035 245);
 
   /* Semantic & brand aliases */
-  --textColor: oklch(32% 0.010 80);
-  --defaultColor: oklch(18% 0.012 80);
-  --disabledColor: oklch(72% 0.006 80);
-  --dimColor: oklch(52% 0.008 80);
-  --black: oklch(18% 0.012 80);
+  --textColor: oklch(32% 0.012 260);
+  --defaultColor: oklch(18% 0.014 260);
+  --disabledColor: oklch(56% 0.010 260);
+  --dimColor: oklch(52% 0.010 260);
+  --black: oklch(18% 0.014 260);
   --white: oklch(100% 0 0);
-  --offWhite: oklch(98% 0.006 80);
+  --offWhite: var(--paper);
   --primaryColor: oklch(100% 0 0);
   --selectedColor: oklch(78% 0.130 215);
   --successColor: oklch(62% 0.115 148);
@@ -43,43 +44,43 @@
   --purple: oklch(44% 0.180 305);
   --pink: oklch(74% 0.180 0);
   --sonarrBlue: oklch(78% 0.130 215);
-  --helpTextColor: oklch(52% 0.008 80);
-  --darkGray: oklch(52% 0.008 80);
-  --gray: oklch(72% 0.006 80);
-  --lightGray: oklch(90% 0.006 80);
-  --mediumGray: oklch(52% 0.008 80);
+  --helpTextColor: oklch(52% 0.010 260);
+  --darkGray: oklch(52% 0.010 260);
+  --gray: oklch(72% 0.007 260);
+  --lightGray: var(--hairline);
+  --mediumGray: oklch(52% 0.010 260);
   --themeBlue: oklch(78% 0.130 215);
   --themeAlternateBlue: oklch(50% 0.130 215);
   --themeRed: oklch(58% 0.165 28);
-  --themeDarkColor: oklch(18% 0.012 80);
-  --themeLightColor: oklch(32% 0.010 80);
-  --pageFooterBackground: oklch(96% 0.008 80);
+  --themeDarkColor: oklch(18% 0.014 260);
+  --themeLightColor: oklch(32% 0.012 260);
+  --pageFooterBackground: var(--paperWarm);
   --torrentColor: oklch(62% 0.115 148);
   --usenetColor: oklch(85% 0.100 215);
-  --inverseLabelColor: oklch(90% 0.006 80);
-  --inverseLabelTextColor: oklch(32% 0.010 80);
-  --disabledLabelColor: oklch(72% 0.006 80);
+  --inverseLabelColor: oklch(90% 0.007 260);
+  --inverseLabelTextColor: oklch(32% 0.012 260);
+  --disabledLabelColor: oklch(72% 0.007 260);
   --infoTextColor: oklch(100% 0 0);
 
   /* Links */
-  --defaultLinkHoverColor: oklch(18% 0.012 80);
-  --linkColor: oklch(50% 0.130 215);
-  --linkHoverColor: oklch(78% 0.130 215);
+  --defaultLinkHoverColor: oklch(18% 0.014 260);
+  --linkColor: oklch(44% 0.130 215);
+  --linkHoverColor: oklch(36% 0.130 215);
 
   /* Page header & sidebar */
-  --pageHeaderBackgroundColor: oklch(98% 0.006 80);
-  --sidebarColor: oklch(32% 0.010 80);
-  --sidebarBackgroundColor: oklch(96% 0.008 80);
-  --sidebarActiveBackgroundColor: oklch(100% 0 0);
-  --toolbarColor: oklch(32% 0.010 80);
-  --toolbarBackgroundColor: oklch(96% 0.008 80);
-  --toolbarMenuItemBackgroundColor: oklch(96% 0.008 80);
-  --toolbarMenuItemHoverBackgroundColor: oklch(100% 0 0);
-  --toolbarLabelColor: oklch(52% 0.008 80);
-  --borderColor: oklch(90% 0.006 80);
+  --pageHeaderBackgroundColor: oklch(86% 0.013 260);
+  --sidebarColor: var(--ink);
+  --sidebarBackgroundColor: var(--pageHeaderBackgroundColor);
+  --sidebarActiveBackgroundColor: var(--paper);
+  --toolbarColor: oklch(32% 0.012 260);
+  --toolbarBackgroundColor: var(--paperWarm);
+  --toolbarMenuItemBackgroundColor: var(--paperWarm);
+  --toolbarMenuItemHoverBackgroundColor: var(--paperCard);
+  --toolbarLabelColor: oklch(52% 0.010 260);
+  --borderColor: var(--hairline);
 
   /* Forms, buttons, modals, popovers, alerts */
-  --inputBorderColor: oklch(82% 0.008 80);
+  --inputBorderColor: var(--hairlineStrong);
   --inputBoxShadowColor: oklch(0% 0 0 / 0.04);
   --inputFocusBorderColor: oklch(78% 0.130 215);
   --inputFocusBoxShadowColor: color-mix(in oklch, var(--accent) 16%, transparent);
@@ -87,16 +88,16 @@
   --inputErrorBoxShadowColor: oklch(58% 0.165 28 / 0.16);
   --inputWarningBorderColor: oklch(72% 0.130 65);
   --inputWarningBoxShadowColor: oklch(72% 0.130 65 / 0.16);
-  --defaultButtonTextColor: oklch(18% 0.012 80);
-  --defaultBackgroundColor: oklch(100% 0 0);
-  --defaultBorderColor: oklch(82% 0.008 80);
-  --defaultHoverBackgroundColor: oklch(96% 0.008 80);
+  --defaultButtonTextColor: oklch(18% 0.014 260);
+  --defaultBackgroundColor: var(--paperCard);
+  --defaultBorderColor: var(--hairlineStrong);
+  --defaultHoverBackgroundColor: var(--paperWarm);
   --defaultHoverBorderColor: oklch(78% 0.130 215);
-  --primaryBackgroundColor: oklch(18% 0.012 80);
-  --primaryBorderColor: oklch(18% 0.012 80);
-  --primaryButtonColor: oklch(100% 0 0);
-  --primaryHoverBackgroundColor: oklch(50% 0.130 215);
-  --primaryHoverBorderColor: oklch(50% 0.130 215);
+  --primaryBackgroundColor: oklch(80% 0.055 245);
+  --primaryBorderColor: oklch(80% 0.055 245);
+  --primaryButtonColor: oklch(18% 0 0);
+  --primaryHoverBackgroundColor: oklch(74% 0.055 245);
+  --primaryHoverBorderColor: oklch(74% 0.055 245);
   --successBackgroundColor: oklch(62% 0.115 148);
   --successBorderColor: oklch(62% 0.115 148);
   --successHoverBackgroundColor: oklch(55% 0.100 148);
@@ -109,22 +110,22 @@
   --dangerBorderColor: oklch(58% 0.165 28);
   --dangerHoverBackgroundColor: oklch(52% 0.150 28);
   --dangerHoverBorderColor: oklch(48% 0.135 28);
-  --iconButtonDisabledColor: oklch(72% 0.006 80);
-  --iconButtonHoverColor: oklch(32% 0.010 80);
-  --iconButtonHoverLightColor: oklch(18% 0.012 80);
+  --iconButtonDisabledColor: oklch(72% 0.007 260);
+  --iconButtonHoverColor: oklch(32% 0.012 260);
+  --iconButtonHoverLightColor: oklch(18% 0.014 260);
   --modalBackdropBackgroundColor: oklch(0% 0 0 / 0.45);
-  --modalBackgroundColor: oklch(100% 0 0);
-  --modalCloseButtonHoverColor: oklch(32% 0.010 80);
-  --menuItemColor: oklch(32% 0.010 80);
-  --menuItemHoverColor: oklch(18% 0.012 80);
-  --menuItemHoverBackgroundColor: oklch(96% 0.008 80);
+  --modalBackgroundColor: var(--paperCard);
+  --modalCloseButtonHoverColor: oklch(32% 0.012 260);
+  --menuItemColor: oklch(32% 0.012 260);
+  --menuItemHoverColor: oklch(18% 0.014 260);
+  --menuItemHoverBackgroundColor: var(--paperWarm);
   --toolbarButtonHoverColor: oklch(78% 0.130 215);
-  --scrollbarBackgroundColor: oklch(82% 0.008 80);
-  --scrollbarHoverBackgroundColor: oklch(52% 0.008 80);
-  --cardBackgroundColor: oklch(100% 0 0);
+  --scrollbarBackgroundColor: var(--hairlineStrong);
+  --scrollbarHoverBackgroundColor: oklch(52% 0.010 260);
+  --cardBackgroundColor: var(--paperCard);
   --cardShadowColor: oklch(0% 0 0 / 0.08);
-  --cardAlternateBackgroundColor: oklch(96% 0.008 80);
-  --cardCenterBackgroundColor: oklch(100% 0 0);
+  --cardAlternateBackgroundColor: var(--paperWarm);
+  --cardCenterBackgroundColor: var(--paperCard);
   --alertDangerBorderColor: oklch(58% 0.165 28);
   --alertDangerBackgroundColor: oklch(58% 0.165 28 / 0.08);
   --alertDangerColor: oklch(44% 0.130 28);
@@ -138,46 +139,48 @@
   --alertWarningBackgroundColor: oklch(72% 0.130 65 / 0.08);
   --alertWarningColor: oklch(52% 0.095 65);
   --sliderAccentColor: oklch(52% 0.125 220);
-  --inputBackgroundColor: oklch(98% 0.006 80);
-  --inputReadOnlyBackgroundColor: oklch(96% 0.008 80);
-  --inputHoverBackgroundColor: oklch(100% 0 0);
+  --inputBackgroundColor: var(--paper);
+  --inputReadOnlyBackgroundColor: var(--paperWarm);
+  --inputHoverBackgroundColor: var(--paperCard);
+  --searchInputBackgroundColor: oklch(84% 0.013 260);
+  --searchInputFocusBackgroundColor: oklch(92% 0.012 260);
   --inputSelectedBackgroundColor: color-mix(in oklch, var(--accent) 6%, transparent);
   --advancedFormLabelColor: oklch(72% 0.130 65);
-  --disabledCheckInputColor: oklch(90% 0.006 80);
-  --disabledInputColor: oklch(72% 0.006 80);
-  --popoverTitleBackgroundColor: oklch(96% 0.008 80);
-  --popoverTitleBorderColor: oklch(90% 0.006 80);
-  --popoverBodyBackgroundColor: oklch(100% 0 0);
+  --disabledCheckInputColor: var(--hairline);
+  --disabledInputColor: oklch(72% 0.007 260);
+  --popoverTitleBackgroundColor: var(--paperWarm);
+  --popoverTitleBorderColor: var(--hairline);
+  --popoverBodyBackgroundColor: var(--paperCard);
   --popoverShadowColor: oklch(0% 0 0 / 0.18);
-  --popoverArrowBorderColor: oklch(100% 0 0);
-  --popoverTitleBackgroundInverseColor: oklch(18% 0.012 80);
-  --popoverTitleBorderInverseColor: oklch(32% 0.010 80);
+  --popoverArrowBorderColor: var(--paperCard);
+  --popoverTitleBackgroundInverseColor: oklch(18% 0.014 260);
+  --popoverTitleBorderInverseColor: oklch(32% 0.012 260);
   --popoverShadowInverseColor: oklch(0% 0 0 / 0.32);
-  --popoverArrowBorderInverseColor: oklch(18% 0.012 80 / 0.92);
+  --popoverArrowBorderInverseColor: oklch(18% 0.014 260 / 0.92);
 
   /* Calendar, series, progress */
-  --calendarTodayBackgroundColor: oklch(96% 0.008 80);
-  --calendarBackgroundColor: oklch(98% 0.006 80);
-  --calendarBorderColor: oklch(90% 0.006 80);
-  --calendarTextDim: oklch(52% 0.008 80);
-  --calendarTextDimAlternate: oklch(32% 0.010 80);
+  --calendarTodayBackgroundColor: var(--paperWarm);
+  --calendarBackgroundColor: var(--paper);
+  --calendarBorderColor: var(--hairline);
+  --calendarTextDim: oklch(52% 0.010 260);
+  --calendarTextDimAlternate: oklch(32% 0.012 260);
   --calendarFullColorFilter: saturate(0.9) contrast(0.95);
-  --tableRowHoverBackgroundColor: oklch(96% 0.008 80);
-  --addSeriesBackgroundColor: oklch(96% 0.008 80);
-  --seriesBackgroundColor: oklch(96% 0.008 80);
+  --tableRowHoverBackgroundColor: oklch(0% 0 0 / 0.04);
+  --addSeriesBackgroundColor: var(--paperWarm);
+  --seriesBackgroundColor: var(--paperWarm);
 
   /* Sit on artwork, so theme-independent: no dark-block override */
-  --seriesOverlayBackdrop: oklch(15% 0.008 80 / 0.82);
-  --seriesOverlayInk: oklch(90% 0.006 80);
+  --seriesOverlayBackdrop: oklch(15% 0.008 260 / 0.82);
+  --seriesOverlayInk: oklch(90% 0.007 260);
 
-  --searchIconContainerBackgroundColor: oklch(98% 0.006 80);
-  --collapseButtonBackgroundColor: oklch(98% 0.006 80);
-  --seasonBackgroundColor: oklch(100% 0 0);
-  --episodesBackgroundColor: oklch(98% 0.006 80);
+  --searchIconContainerBackgroundColor: var(--paper);
+  --collapseButtonBackgroundColor: var(--paper);
+  --seasonBackgroundColor: var(--paperCard);
+  --episodesBackgroundColor: var(--paper);
   --progressBarFrontTextColor: oklch(100% 0 0);
-  --progressBarBackTextColor: oklch(32% 0.010 80);
-  --progressBarBackgroundColor: oklch(90% 0.006 80);
-  --logEventsBackgroundColor: oklch(100% 0 0);
+  --progressBarBackTextColor: oklch(32% 0.012 260);
+  --progressBarBackgroundColor: var(--hairline);
+  --logEventsBackgroundColor: var(--paperCard);
 
   --shadowChip: 0 1px 4px oklch(0% 0 0 / 0.06);
   --shadowDropdown:
@@ -186,21 +189,23 @@
   --shadowSidebar: 0 24px 60px -16px oklch(0% 0 0 / 0.32);
   --chipSize: 34px;
   --transitionSmooth: 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  color-scheme: light;
 }
 
 [data-theme=dark] {
   /* Surfaces */
-  --paper: oklch(15% 0.008 80);
-  --paperWarm: oklch(19% 0.008 80);
-  --paperCard: oklch(23% 0.010 80);
-  --hairline: oklch(30% 0.010 80);
-  --hairlineStrong: oklch(38% 0.012 80);
+  --paper: oklch(24% 0.014 260);
+  --paperWarm: oklch(27% 0.014 260);
+  --paperCard: oklch(29% 0.015 260);
+  --hairline: oklch(36% 0.016 260);
+  --hairlineStrong: oklch(45% 0.017 260);
 
   /* Text */
-  --ink: oklch(95% 0.006 80);
-  --inkSoft: oklch(82% 0.006 80);
-  --inkMuted: oklch(68% 0.008 80);
-  --inkFaint: oklch(50% 0.008 80);
+  --ink: oklch(90% 0.007 260);
+  --inkSoft: oklch(82% 0.009 260);
+  --inkMuted: oklch(68% 0.011 260);
+  --inkFaint: oklch(53% 0.011 260);
 
   /* Accent */
   --accent: oklch(82% 0.115 215);
@@ -210,20 +215,20 @@
   /* Status */
   --statusAiring: oklch(66% 0.105 195);
   --statusUpcoming: oklch(76% 0.120 65);
-  --statusFinished: oklch(60% 0.008 80);
-  --statusHiatus: oklch(58% 0.008 80);
+  --statusFinished: oklch(60% 0.008 260);
+  --statusHiatus: oklch(58% 0.008 260);
   --statusMissing: oklch(62% 0.150 28);
   --statusGrabbing: oklch(65% 0.130 305);
   --statusUnaired: oklch(58% 0.040 245);
 
   /* Semantic & brand aliases */
-  --textColor: oklch(95% 0.006 80);
-  --defaultColor: oklch(95% 0.006 80);
-  --disabledColor: oklch(50% 0.008 80);
-  --dimColor: oklch(68% 0.008 80);
-  --black: oklch(18% 0.012 80);
-  --white: oklch(95% 0.006 80);
-  --offWhite: oklch(15% 0.008 80);
+  --textColor: oklch(90% 0.007 260);
+  --defaultColor: oklch(90% 0.007 260);
+  --disabledColor: oklch(53% 0.011 260);
+  --dimColor: oklch(66% 0.011 260);
+  --black: oklch(18% 0.014 260);
+  --white: oklch(90% 0.007 260);
+  --offWhite: oklch(24% 0.014 260);
   --primaryColor: oklch(82% 0.115 215);
   --selectedColor: oklch(82% 0.115 215);
   --successColor: oklch(66% 0.115 148);
@@ -233,43 +238,43 @@
   --purple: oklch(44% 0.180 305);
   --pink: oklch(74% 0.180 0);
   --sonarrBlue: oklch(82% 0.115 215);
-  --helpTextColor: oklch(68% 0.008 80);
-  --darkGray: oklch(50% 0.008 80);
-  --gray: oklch(68% 0.008 80);
-  --lightGray: oklch(30% 0.010 80);
-  --mediumGray: oklch(68% 0.008 80);
+  --helpTextColor: oklch(66% 0.011 260);
+  --darkGray: oklch(53% 0.011 260);
+  --gray: oklch(66% 0.011 260);
+  --lightGray: oklch(36% 0.016 260);
+  --mediumGray: oklch(66% 0.011 260);
   --themeBlue: oklch(82% 0.115 215);
   --themeAlternateBlue: oklch(70% 0.130 215);
   --themeRed: oklch(62% 0.150 28);
-  --themeDarkColor: oklch(19% 0.008 80);
-  --themeLightColor: oklch(23% 0.010 80);
+  --themeDarkColor: oklch(27% 0.014 260);
+  --themeLightColor: oklch(29% 0.015 260);
   --pageFooterBackground: oklch(0% 0 0 / 0.25);
   --torrentColor: oklch(72% 0.165 148);
   --usenetColor: oklch(82% 0.140 215);
-  --inverseLabelColor: oklch(30% 0.010 80);
-  --inverseLabelTextColor: oklch(95% 0.006 80);
-  --disabledLabelColor: oklch(50% 0.008 80);
-  --infoTextColor: oklch(95% 0.006 80);
+  --inverseLabelColor: oklch(36% 0.016 260);
+  --inverseLabelTextColor: oklch(90% 0.007 260);
+  --disabledLabelColor: oklch(53% 0.011 260);
+  --infoTextColor: oklch(90% 0.007 260);
 
   /* Links */
-  --defaultLinkHoverColor: oklch(95% 0.006 80);
-  --linkColor: oklch(82% 0.115 215);
-  --linkHoverColor: oklch(85% 0.100 215);
+  --defaultLinkHoverColor: oklch(90% 0.007 260);
+  --linkColor: oklch(74% 0.125 215);
+  --linkHoverColor: oklch(88% 0.095 215);
 
   /* Page header & sidebar */
-  --pageHeaderBackgroundColor: oklch(15% 0.008 80);
-  --sidebarColor: oklch(95% 0.006 80);
-  --sidebarBackgroundColor: oklch(19% 0.008 80);
-  --sidebarActiveBackgroundColor: oklch(23% 0.010 80);
-  --toolbarColor: oklch(95% 0.006 80);
-  --toolbarBackgroundColor: oklch(19% 0.008 80);
-  --toolbarMenuItemBackgroundColor: oklch(23% 0.010 80);
-  --toolbarMenuItemHoverBackgroundColor: oklch(27% 0.012 80);
-  --toolbarLabelColor: oklch(68% 0.008 80);
-  --borderColor: oklch(30% 0.010 80);
+  --pageHeaderBackgroundColor: oklch(20% 0.015 260);
+  --sidebarColor: oklch(90% 0.007 260);
+  --sidebarBackgroundColor: var(--pageHeaderBackgroundColor);
+  --sidebarActiveBackgroundColor: oklch(29% 0.015 260);
+  --toolbarColor: oklch(90% 0.007 260);
+  --toolbarBackgroundColor: oklch(27% 0.014 260);
+  --toolbarMenuItemBackgroundColor: oklch(29% 0.015 260);
+  --toolbarMenuItemHoverBackgroundColor: oklch(33% 0.015 260);
+  --toolbarLabelColor: oklch(76% 0.011 260);
+  --borderColor: oklch(36% 0.016 260);
 
   /* Forms, buttons, modals, popovers, alerts */
-  --inputBorderColor: oklch(38% 0.012 80);
+  --inputBorderColor: oklch(45% 0.017 260);
   --inputBoxShadowColor: oklch(0% 0 0 / 0.18);
   --inputFocusBorderColor: oklch(82% 0.115 215);
   --inputFocusBoxShadowColor: color-mix(in oklch, var(--accent) 18%, transparent);
@@ -277,16 +282,16 @@
   --inputErrorBoxShadowColor: oklch(62% 0.150 28 / 0.18);
   --inputWarningBorderColor: oklch(76% 0.120 65);
   --inputWarningBoxShadowColor: oklch(76% 0.120 65 / 0.18);
-  --defaultButtonTextColor: oklch(95% 0.006 80);
-  --defaultBackgroundColor: oklch(23% 0.010 80);
-  --defaultBorderColor: oklch(38% 0.012 80);
-  --defaultHoverBackgroundColor: oklch(27% 0.012 80);
+  --defaultButtonTextColor: oklch(90% 0.007 260);
+  --defaultBackgroundColor: oklch(29% 0.015 260);
+  --defaultBorderColor: oklch(45% 0.017 260);
+  --defaultHoverBackgroundColor: oklch(33% 0.015 260);
   --defaultHoverBorderColor: oklch(82% 0.115 215);
-  --primaryBackgroundColor: oklch(95% 0.006 80);
-  --primaryBorderColor: oklch(95% 0.006 80);
-  --primaryButtonColor: oklch(20% 0.012 80);
-  --primaryHoverBackgroundColor: oklch(82% 0.115 215);
-  --primaryHoverBorderColor: oklch(82% 0.115 215);
+  --primaryBackgroundColor: oklch(40% 0.022 260);
+  --primaryBorderColor: oklch(40% 0.022 260);
+  --primaryButtonColor: oklch(96% 0.006 260);
+  --primaryHoverBackgroundColor: oklch(46% 0.022 260);
+  --primaryHoverBorderColor: oklch(46% 0.022 260);
   --successBackgroundColor: oklch(66% 0.115 148);
   --successBorderColor: oklch(66% 0.115 148);
   --successHoverBackgroundColor: oklch(59% 0.100 148);
@@ -299,76 +304,80 @@
   --dangerBorderColor: oklch(62% 0.150 28);
   --dangerHoverBackgroundColor: oklch(56% 0.135 28);
   --dangerHoverBorderColor: oklch(52% 0.120 28);
-  --iconButtonDisabledColor: oklch(50% 0.008 80);
-  --iconButtonHoverColor: oklch(68% 0.008 80);
-  --iconButtonHoverLightColor: oklch(95% 0.006 80);
+  --iconButtonDisabledColor: oklch(53% 0.011 260);
+  --iconButtonHoverColor: oklch(66% 0.011 260);
+  --iconButtonHoverLightColor: oklch(90% 0.007 260);
   --modalBackdropBackgroundColor: oklch(0% 0 0 / 0.65);
-  --modalBackgroundColor: oklch(23% 0.010 80);
-  --modalCloseButtonHoverColor: oklch(68% 0.008 80);
-  --menuItemColor: oklch(95% 0.006 80);
+  --modalBackgroundColor: oklch(29% 0.015 260);
+  --modalCloseButtonHoverColor: oklch(66% 0.011 260);
+  --menuItemColor: oklch(90% 0.007 260);
   --menuItemHoverColor: oklch(82% 0.115 215);
-  --menuItemHoverBackgroundColor: oklch(27% 0.012 80);
+  --menuItemHoverBackgroundColor: oklch(33% 0.015 260);
   --toolbarButtonHoverColor: oklch(82% 0.115 215);
-  --scrollbarBackgroundColor: oklch(38% 0.012 80);
-  --scrollbarHoverBackgroundColor: oklch(50% 0.008 80);
-  --cardBackgroundColor: oklch(23% 0.010 80);
+  --scrollbarBackgroundColor: oklch(45% 0.017 260);
+  --scrollbarHoverBackgroundColor: oklch(53% 0.011 260);
+  --cardBackgroundColor: oklch(29% 0.015 260);
   --cardShadowColor: oklch(0% 0 0 / 0.45);
-  --cardAlternateBackgroundColor: oklch(23% 0.010 80);
-  --cardCenterBackgroundColor: oklch(19% 0.008 80);
+  --cardAlternateBackgroundColor: oklch(29% 0.015 260);
+  --cardCenterBackgroundColor: oklch(27% 0.014 260);
   --alertDangerBorderColor: oklch(62% 0.150 28);
   --alertDangerBackgroundColor: oklch(62% 0.150 28 / 0.10);
-  --alertDangerColor: oklch(95% 0.006 80);
+  --alertDangerColor: oklch(90% 0.007 260);
   --alertInfoBorderColor: oklch(82% 0.115 215);
   --alertInfoBackgroundColor: color-mix(in oklch, var(--accent) 10%, transparent);
-  --alertInfoColor: oklch(95% 0.006 80);
+  --alertInfoColor: oklch(90% 0.007 260);
   --alertSuccessBorderColor: oklch(66% 0.115 148);
   --alertSuccessBackgroundColor: oklch(66% 0.115 148 / 0.10);
-  --alertSuccessColor: oklch(95% 0.006 80);
+  --alertSuccessColor: oklch(90% 0.007 260);
   --alertWarningBorderColor: oklch(76% 0.120 65);
   --alertWarningBackgroundColor: oklch(76% 0.120 65 / 0.10);
-  --alertWarningColor: oklch(95% 0.006 80);
+  --alertWarningColor: oklch(90% 0.007 260);
   --sliderAccentColor: oklch(58% 0.105 218);
-  --inputBackgroundColor: oklch(19% 0.008 80);
-  --inputReadOnlyBackgroundColor: oklch(15% 0.008 80);
-  --inputHoverBackgroundColor: oklch(23% 0.010 80);
+  --inputBackgroundColor: oklch(27% 0.014 260);
+  --inputReadOnlyBackgroundColor: oklch(24% 0.014 260);
+  --inputHoverBackgroundColor: oklch(29% 0.015 260);
+  --searchInputBackgroundColor: oklch(27% 0.014 260);
+  --searchInputFocusBackgroundColor: oklch(32% 0.015 260);
   --inputSelectedBackgroundColor: color-mix(in oklch, var(--accent) 6%, transparent);
   --advancedFormLabelColor: oklch(76% 0.120 65);
-  --disabledCheckInputColor: oklch(38% 0.012 80);
-  --disabledInputColor: oklch(50% 0.008 80);
-  --popoverTitleBackgroundColor: oklch(27% 0.012 80);
-  --popoverTitleBorderColor: oklch(30% 0.010 80);
-  --popoverBodyBackgroundColor: oklch(23% 0.010 80);
+  --disabledCheckInputColor: oklch(45% 0.017 260);
+  --disabledInputColor: oklch(53% 0.011 260);
+  --popoverTitleBackgroundColor: oklch(33% 0.015 260);
+  --popoverTitleBorderColor: oklch(36% 0.016 260);
+  --popoverBodyBackgroundColor: oklch(29% 0.015 260);
   --popoverShadowColor: oklch(0% 0 0 / 0.32);
-  --popoverArrowBorderColor: oklch(23% 0.010 80);
-  --popoverTitleBackgroundInverseColor: oklch(95% 0.006 80);
-  --popoverTitleBorderInverseColor: oklch(68% 0.008 80);
+  --popoverArrowBorderColor: oklch(29% 0.015 260);
+  --popoverTitleBackgroundInverseColor: oklch(90% 0.007 260);
+  --popoverTitleBorderInverseColor: oklch(66% 0.011 260);
   --popoverShadowInverseColor: oklch(0% 0 0 / 0.32);
-  --popoverArrowBorderInverseColor: oklch(95% 0.006 80 / 0.92);
+  --popoverArrowBorderInverseColor: oklch(90% 0.007 260 / 0.92);
 
   /* Calendar, series, progress */
-  --calendarTodayBackgroundColor: oklch(23% 0.010 80);
-  --calendarBackgroundColor: oklch(19% 0.008 80);
-  --calendarBorderColor: oklch(30% 0.010 80);
-  --calendarTextDim: oklch(68% 0.008 80);
-  --calendarTextDimAlternate: oklch(95% 0.006 80);
+  --calendarTodayBackgroundColor: oklch(29% 0.015 260);
+  --calendarBackgroundColor: oklch(27% 0.014 260);
+  --calendarBorderColor: oklch(36% 0.016 260);
+  --calendarTextDim: oklch(66% 0.011 260);
+  --calendarTextDimAlternate: oklch(90% 0.007 260);
   --calendarFullColorFilter: saturate(0.9) contrast(1.05) brightness(0.92);
   --tableRowHoverBackgroundColor: oklch(100% 0 0 / 0.04);
-  --addSeriesBackgroundColor: oklch(19% 0.008 80);
-  --seriesBackgroundColor: oklch(19% 0.008 80);
-  --searchIconContainerBackgroundColor: oklch(19% 0.008 80);
-  --collapseButtonBackgroundColor: oklch(19% 0.008 80);
-  --seasonBackgroundColor: oklch(23% 0.010 80);
-  --episodesBackgroundColor: oklch(19% 0.008 80);
-  --progressBarFrontTextColor: oklch(95% 0.006 80);
-  --progressBarBackTextColor: oklch(95% 0.006 80);
-  --progressBarBackgroundColor: oklch(30% 0.010 80);
-  --logEventsBackgroundColor: oklch(19% 0.008 80);
+  --addSeriesBackgroundColor: oklch(27% 0.014 260);
+  --seriesBackgroundColor: oklch(27% 0.014 260);
+  --searchIconContainerBackgroundColor: oklch(27% 0.014 260);
+  --collapseButtonBackgroundColor: oklch(27% 0.014 260);
+  --seasonBackgroundColor: oklch(29% 0.015 260);
+  --episodesBackgroundColor: oklch(27% 0.014 260);
+  --progressBarFrontTextColor: oklch(90% 0.007 260);
+  --progressBarBackTextColor: oklch(90% 0.007 260);
+  --progressBarBackgroundColor: oklch(36% 0.016 260);
+  --logEventsBackgroundColor: oklch(27% 0.014 260);
 
   --shadowChip: 0 1px 4px oklch(0% 0 0 / 0.45);
   --shadowDropdown:
     0 12px 32px -12px oklch(0% 0 0 / 0.65),
     0 2px 8px -2px oklch(0% 0 0 / 0.35);
   --shadowSidebar: 0 24px 60px -16px oklch(0% 0 0 / 0.65);
+
+  color-scheme: dark;
 }
 
 [data-color-impaired] {

@@ -27,10 +27,14 @@
   width: 0%;
   height: 31px;
   border: none;
-  background-color: var(--inputBackground);
-  color: var(--textColor);
+  background-color: transparent;
+  color: var(--ink);
+  font-size: 13px;
 
   &:focus-visible {
     box-shadow: none;
+  }
+  @media (pointer: coarse) {
+    font-size: 16px;
   }
 }

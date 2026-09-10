@@ -1,7 +1,13 @@
 .info {
-  background-color: var(--seriesBackgroundColor);
-  text-align: center;
-  font-size: var(--smallFontSize);
+  @add-mixin truncate;
+
+  background-color: transparent;
+  color: var(--inkMuted);
+  text-align: left;
+  font-weight: 400;
+  font-size: 11.5px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.5;
 }
 
 .tags {

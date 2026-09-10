@@ -9,6 +9,7 @@ const src = path.resolve(__dirname, 'frontend/src');
 const outDir = path.resolve(__dirname, '_output/UI');
 
 const contentDir = path.join(src, 'Content');
+const themeCss = path.join(src, 'Styles/Themes/themes.css');
 
 function htmlFiles() {
   return readdirSync(src).filter((name) => name.endsWith('.html'));
@@ -19,6 +20,7 @@ function copyStaticContent(): Plugin {
     mkdirSync(outDir, { recursive: true });
 
     cpSync(contentDir, path.join(outDir, 'Content'), { recursive: true });
+    cpSync(themeCss, path.join(outDir, 'Content', 'theme.css'));
 
     for (const file of htmlFiles()) {
       cpSync(path.join(src, file), path.join(outDir, file));
@@ -28,6 +30,7 @@ function copyStaticContent(): Plugin {
   function owns(file: string) {
     return (
       file.startsWith(contentDir) ||
+      file === themeCss ||
       (path.dirname(file) === src && file.endsWith('.html'))
     );
   }
@@ -41,6 +44,7 @@ function copyStaticContent(): Plugin {
       }
 
       this.addWatchFile(contentDir);
+      this.addWatchFile(themeCss);
     },
 
     closeBundle() {
@@ -50,7 +54,7 @@ function copyStaticContent(): Plugin {
     configureServer(server) {
       copyAll();
 
-      server.watcher.add([contentDir, path.join(src, '*.html')]);
+      server.watcher.add([contentDir, themeCss, path.join(src, '*.html')]);
 
       server.watcher.on('add', (file) => owns(file) && copyAll());
       server.watcher.on('change', (file) => owns(file) && copyAll());
