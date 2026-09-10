@@ -107,4 +107,8 @@
   .donate {
     display: none;
   }
+
+  .right {
+    flex-grow: 0;
+  }
 }

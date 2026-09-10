@@ -49,12 +49,14 @@ import {
   Flag,
   FlaskConical,
   Folder,
+  FolderInput,
   FolderOpen,
   FolderPen,
   FolderTree,
   Globe,
   GripVertical,
   Group,
+  Hammer,
   HardDrive,
   Heart,
   HeartPulse,
@@ -168,6 +170,7 @@ export const HOUSEKEEPING = House;
 export const IGNORE = CircleX;
 export const INFO = Info;
 export const INTERACTIVE = User;
+export const INTERACTIVE_IMPORT = FolderInput;
 export const KEYBOARD = Keyboard;
 export const LANGUAGE = Languages;
 export const LOGOUT = LogOut;
@@ -225,6 +228,7 @@ export const TABLE = Table;
 export const TAGS = Tags;
 export const TBA = CircleHelp;
 export const TEST = FlaskConical;
+export const TOOLS = Hammer;
 export const UNGROUP = Ungroup;
 export const UNKNOWN = CircleHelp;
 export const UNMONITORED = BookmarkX;

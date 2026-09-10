@@ -6,7 +6,6 @@ import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import SectionHeading from 'Components/SectionHeading';
 import { icons } from 'Helpers/Props';
-import ParseModal from 'Parse/ParseModal';
 import settingsStyles from 'Settings/Settings.module.css';
 import SettingsPage from 'Settings/SettingsPage';
 import translate from 'Utilities/String/translate';
@@ -14,17 +13,8 @@ import CustomFormats from './CustomFormats/CustomFormats';
 import ManageCustomFormatsModal from './CustomFormats/Manage/ManageCustomFormatsModal';
 
 function CustomFormatSettingsPage() {
-  const [isParseModalOpen, setIsParseModalOpen] = useState(false);
   const [isManageCustomFormatsOpen, setIsManageCustomFormatsOpen] =
     useState(false);
-
-  const handleParseModalPress = useCallback(() => {
-    setIsParseModalOpen(true);
-  }, []);
-
-  const handleParseModalClose = useCallback(() => {
-    setIsParseModalOpen(false);
-  }, []);
 
   const handleManageCustomFormatsPress = useCallback(() => {
     setIsManageCustomFormatsOpen(true);
@@ -43,15 +33,6 @@ function CustomFormatSettingsPage() {
           <OverflowDivider groupId="extras">
             <PageToolbarSeparator />
           </OverflowDivider>
-
-          <ToolbarItem
-            id="test-parsing"
-            priority={1}
-            groupId="extras"
-            label={translate('TestParsing')}
-            iconName={icons.PARSE}
-            onPress={handleParseModalPress}
-          />
 
           <ToolbarItem
             id="manage-custom-formats"
@@ -81,11 +62,6 @@ function CustomFormatSettingsPage() {
           </div>
         </div>
       </PageContentBody>
-
-      <ParseModal
-        isOpen={isParseModalOpen}
-        onModalClose={handleParseModalClose}
-      />
 
       <ManageCustomFormatsModal
         isOpen={isManageCustomFormatsOpen}

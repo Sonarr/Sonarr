@@ -146,11 +146,22 @@
 @media (--breakpointSmall) {
   .input {
     min-width: 0;
-    max-width: 200px;
+    max-width: none;
+    width: 100%;
   }
 
   .container {
+    flex-grow: 1;
     min-width: 0;
-    max-width: 200px;
+    max-width: none;
+  }
+
+  .containerOpen .seriesContainer {
+    position: fixed;
+    top: calc($headerHeight + 4px);
+    right: 12px;
+    left: 12px;
+    min-width: 0;
+    max-width: none;
   }
 }
