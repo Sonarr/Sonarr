@@ -29,7 +29,7 @@
 }
 
 .isToday {
-  color: var(--accent);
+  color: var(--accentDeep);
   font-weight: 600;
 }
 

@@ -102,7 +102,7 @@ function Settings() {
   const sections = buildSections();
 
   return (
-    <SettingsPage title={translate('Settings')}>
+    <SettingsPage title={translate('Settings')} showSave={false}>
       <PageContentBody className={styles.body}>
         <div className={styles.section}>
           <PageHeading title={translate('Settings')} />

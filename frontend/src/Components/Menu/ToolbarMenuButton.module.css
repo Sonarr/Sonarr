@@ -11,8 +11,7 @@
   transition:
     color var(--transitionSmooth),
     background-color var(--transitionSmooth),
-    box-shadow var(--transitionSmooth),
-    transform var(--transitionSmooth);
+    box-shadow var(--transitionSmooth);
   gap: 7px;
 
   /* Suppress the base MenuButton caret — not appropriate on a pill button */
@@ -25,7 +24,6 @@
     box-shadow: var(--shadowChip);
     color: var(--ink);
     text-decoration: none;
-    transform: translateY(-1px);
   }
 }
 

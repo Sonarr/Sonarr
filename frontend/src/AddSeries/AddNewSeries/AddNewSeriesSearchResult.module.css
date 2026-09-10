@@ -159,7 +159,7 @@
 }
 
 .chipDotFinished {
-  background: oklch(60% 0.008 80);
+  background: var(--statusFinished);
 }
 
 .chipDotAiring {

@@ -34,7 +34,7 @@
   color: var(--inkSoft);
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 13px;
+  font-size: 14px;
   font-family: var(--defaultFontFamily);
 }
 
@@ -43,7 +43,7 @@
   color: var(--accentDeep);
   letter-spacing: 0.12em;
   font-weight: 500;
-  font-size: 10px;
+  font-size: 12px;
   font-family: var(--monoSpaceFontFamily);
 }
 

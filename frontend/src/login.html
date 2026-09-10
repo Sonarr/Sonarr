@@ -5,9 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Chrome, Opera, and Firefox OS -->
-    <meta name="theme-color" content="#3a3f51" />
+    <meta
+      name="theme-color"
+      content="#e8ebf1"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#1b1f26"
+      media="(prefers-color-scheme: dark)"
+    />
     <!-- Windows Phone -->
-    <meta name="msapplication-navbutton-color" content="#3a3f51" />
+    <meta name="msapplication-navbutton-color" content="#1b1f26" />
     <!-- Android/Apple Phone -->
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -54,20 +63,33 @@
     />
     <meta name="msapplication-config" content="/Content/browserconfig.xml" />
 
+    <link rel="stylesheet" type="text/css" href="/Content/theme.css" />
     <link rel="stylesheet" type="text/css" href="/Content/Fonts/fonts.css" />
 
     <title>Login - Sonarr</title>
 
+    <script type="text/javascript">
+      var theme = '_THEME_';
+      var defaultDark = window.matchMedia(
+        '(prefers-color-scheme: dark)'
+      ).matches;
+
+      document.documentElement.dataset.theme =
+        theme === 'dark' || (theme === 'auto' && defaultDark) ? 'dark' : 'light';
+    </script>
+
     <style>
       html {
-        background-color: var(--pageBackground);
+        background-color: var(--paper);
       }
 
       body {
-        background-color: var(--pageBackground);
+        background-color: var(--paper);
         color: var(--textColor);
-        font-family: 'Roboto', 'open sans', 'Helvetica Neue', Helvetica, Arial,
-          sans-serif;
+        font-family: 'Inter', ui-sans-serif, system-ui, 'Helvetica Neue',
+          'Helvetica', 'Arial', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
 
       .center {
@@ -80,121 +102,134 @@
       }
 
       .logo {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
       }
 
       .panel {
         margin-top: 50px;
-        border-radius: 4px;
+        border: 1px solid var(--hairline);
+        border-radius: 12px;
+        background-color: var(--paperCard);
       }
 
       .panel-header {
         display: flex;
         justify-content: center;
-        padding: 10px;
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
-        background-color: var(--themeDarkColor);
+        padding: 24px 24px 0;
       }
 
       .panel-body {
-        padding: 20px;
-        border-bottom-right-radius: 4px;
-        border-bottom-left-radius: 4px;
-        background-color: var(--panelBackground);
+        padding: 20px 24px 24px;
       }
 
       .sign-in {
-        padding: 10px 0;
+        padding: 10px 0 16px;
+        color: var(--inkMuted);
         text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 600;
+        font-size: 11px;
       }
 
       .form-group {
-        margin: 20px 0;
+        margin: 16px 0;
       }
 
       .form-input {
         box-sizing: border-box;
-        padding: 6px 16px;
+        padding: 10px 14px;
         width: 100%;
-        height: 35px;
-        background-color: var(--inputBackgroundColor);
+        height: 38px;
         border: 1px solid var(--inputBorderColor);
-        border-radius: 4px;
-        box-shadow: inset 0 1px 1px var(--inputBoxShadowColor);
-        color: var(--textColor);
+        border-radius: 8px;
+        background-color: var(--inputBackgroundColor);
+        color: var(--ink);
+        font-size: 14px;
+        font-family: inherit;
+        line-height: 1.4;
+      }
+
+      .form-input::placeholder {
+        color: var(--inkFaint);
       }
 
       .form-input:focus {
         outline: 0;
-        border-color: var(--inputFocusBorderColor);
-        box-shadow: inset 0 1px 1px var(--inputBoxShadowColor),
-          0 0 8px var(--inputFocusBoxShadowColor);
+        border-color: var(--accent);
+        background-color: var(--paperCard);
+        box-shadow: none;
       }
 
       .button {
         display: block;
         overflow: hidden;
         margin-top: 20px;
-        padding: 10px 0;
+        padding: 11px 20px;
         width: 100%;
-        border: 1px solid;
-        border-color: var(--primaryBorderColor);
-        border-radius: 4px;
+        border: 1px solid var(--primaryBorderColor);
+        border-radius: 8px;
         background-color: var(--primaryBackgroundColor);
-        color: var(--white);
+        color: var(--primaryButtonColor);
+        vertical-align: middle;
         text-align: center;
         text-decoration: none;
         white-space: nowrap;
-        line-height: normal;
-        font-size: 13px;
+        font-weight: 500;
+        font-size: 14px;
+        font-family: inherit;
+        line-height: 1.2;
+        cursor: pointer;
       }
 
       .button:hover {
         border-color: var(--primaryHoverBorderColor);
         background-color: var(--primaryHoverBackgroundColor);
-        color: var(--white);
+        color: var(--primaryButtonColor);
         text-decoration: none;
       }
 
       .copy {
         margin-top: 15px;
+        color: var(--inkMuted);
         text-align: center;
-        font-size: 14px;
+        font-size: 13px;
       }
 
       .remember-me-container {
         display: flex;
         justify-content: space-between;
-        line-height: 25px;
+        align-items: center;
       }
 
       .remember-me {
-        font-size: 14px;
+        color: var(--inkSoft);
+        font-size: 13px;
       }
 
       .forgot-password {
         margin-left: auto;
-        color: var(--forgotPasswordColor);
+        color: var(--inkMuted);
         text-decoration: none;
         font-size: 13px;
       }
 
       .forgot-password:focus,
       .forgot-password:hover {
-        color: var(--forgotPasswordAltColor);
+        color: var(--ink);
         text-decoration: underline;
       }
 
       .forgot-password:visited {
-        color: var(--forgotPasswordAltColor);
+        color: var(--inkMuted);
       }
 
       .login-failed {
         margin-top: 20px;
-        color: var(--failedColor);
-        font-size: 14px;
+        color: var(--dangerColor);
+        text-align: center;
+        font-size: 13px;
       }
 
       .hidden {
@@ -229,7 +264,7 @@
         pointer-events: none;
       }
 
-      @media only screen and (min-device-width: 375px) and (max-device-width: 812px) {
+      @media (pointer: coarse) {
         .form-input {
           font-size: 16px;
         }
@@ -359,54 +394,5 @@
         ssoButton.href = ssoButton.href + '?returnUrl=' + encodeURIComponent(returnUrl);
       }
     }
-
-    var light = {
-      white: '#fff',
-      pageBackground: '#f5f7fa',
-      textColor: '#515253',
-      themeDarkColor: '#3a3f51',
-      panelBackground: '#fff',
-      inputBackgroundColor: '#fff',
-      inputBorderColor: '#dde6e9',
-      inputBoxShadowColor: 'rgba(0, 0, 0, 0.075)',
-      inputFocusBorderColor: '#66afe9',
-      inputFocusBoxShadowColor: 'rgba(102, 175, 233, 0.6)',
-      primaryBackgroundColor: '#5d9cec',
-      primaryBorderColor: '#5899eb',
-      primaryHoverBackgroundColor: '#4b91ea',
-      primaryHoverBorderColor: '#3483e7',
-      failedColor: '#f05050',
-      forgotPasswordColor: '#909fa7',
-      forgotPasswordAltColor: '#748690',
-    };
-
-    var dark = {
-      white: '#fff',
-      pageBackground: '#202020',
-      textColor: '#ccc',
-      themeDarkColor: '#494949',
-      panelBackground: '#111',
-      inputBackgroundColor: '#333',
-      inputBorderColor: '#dde6e9',
-      inputBoxShadowColor: 'rgba(0, 0, 0, 0.075)',
-      inputFocusBorderColor: '#66afe9',
-      inputFocusBoxShadowColor: 'rgba(102, 175, 233, 0.6)',
-      primaryBackgroundColor: '#5d9cec',
-      primaryBorderColor: '#5899eb',
-      primaryHoverBackgroundColor: '#4b91ea',
-      primaryHoverBorderColor: '#3483e7',
-      failedColor: '#f05050',
-      forgotPasswordColor: '#737d83',
-      forgotPasswordAltColor: '#546067',
-    };
-
-    var theme = '_THEME_';
-    var defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    var finalTheme =
-      theme === 'dark' || (theme === 'auto' && defaultDark) ? dark : light;
-
-    Object.entries(finalTheme).forEach(([key, value]) => {
-      document.documentElement.style.setProperty(`--${key}`, value);
-    });
   </script>
 </html>

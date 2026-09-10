@@ -18,10 +18,8 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-
-  
   padding: calc(var(--pageContentBodyPadding) - 5px);
-  padding-top: unset;
+  padding-top: 12px;
 }
 
 .tableInnerContentBody {
@@ -41,6 +39,10 @@
 
   padding: calc(var(--pageContentBodyPadding) - 5px);
   padding-top: unset;
+}
+
+.hasJumpBar {
+  padding-right: 12px;
 }
 
 .contentBodyContainer {

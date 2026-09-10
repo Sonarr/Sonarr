@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import CheckInput from 'Components/Form/CheckInput';
 import { CheckInputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import VirtualTableHeaderCell from './TableHeaderCell';
+import TableHeaderCell from './TableHeaderCell';
 import styles from './TableSelectAllHeaderCell.module.css';
 
 interface TableSelectAllHeaderCellProps {
@@ -27,18 +27,16 @@ function TableSelectAllHeaderCell({
   }, [allSelected, allUnselected]);
 
   return (
-    <VirtualTableHeaderCell
-      className={styles.selectAllHeaderCell}
-      name="selectAll"
-    >
+    <TableHeaderCell className={styles.selectAllHeaderCell} name="selectAll">
       <CheckInput
         className={styles.input}
+        containerClassName={styles.container}
         name="selectAll"
         ariaLabel={translate('SelectAll')}
         value={value}
         onChange={onSelectAllChange}
       />
-    </VirtualTableHeaderCell>
+    </TableHeaderCell>
   );
 }
 
