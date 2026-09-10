@@ -7,6 +7,7 @@ import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import KeyboardShortcutsModal from './KeyboardShortcutsModal';
 import PageHeaderActionsMenu from './PageHeaderActionsMenu';
+import PageHeaderToolsMenu from './PageHeaderToolsMenu';
 import SeriesSearchInput from './SeriesSearchInput';
 import styles from './PageHeader.module.css';
 
@@ -73,6 +74,8 @@ function PageHeader() {
           size={14}
           title={translate('Donate')}
         />
+
+        <PageHeaderToolsMenu />
 
         <PageHeaderActionsMenu
           onKeyboardShortcutsPress={handleOpenKeyboardShortcutsModal}

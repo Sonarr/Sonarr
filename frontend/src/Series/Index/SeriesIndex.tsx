@@ -20,7 +20,6 @@ import TableOptionsModal from 'Components/Table/TableOptions/TableOptionsModal';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { icons, kinds } from 'Helpers/Props';
 import { DESCENDING } from 'Helpers/Props/sortDirections';
-import ParseModal from 'Parse/ParseModal';
 import NoSeries from 'Series/NoSeries';
 import Series from 'Series/Series';
 import {
@@ -100,7 +99,6 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
   const isSmallScreen = useAppDimension('isSmallScreen');
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
-  const [isParseModalOpen, setIsParseModalOpen] = useState(false);
   const [jumpToCharacter, setJumpToCharacter] = useState<string | undefined>(
     undefined
   );
@@ -199,16 +197,6 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
 
   const handleTableOptionsModalClose = useCallback(
     () => setTableOptionsModalOpen(false),
-    []
-  );
-
-  const handleParseModalPress = useCallback(
-    () => setIsParseModalOpen(true),
-    []
-  );
-
-  const handleParseModalClose = useCallback(
-    () => setIsParseModalOpen(false),
     []
   );
 
@@ -360,15 +348,6 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
           <PageToolbarSeparator />
         </OverflowDivider>
 
-        <ToolbarItem
-          id="parse"
-          priority={1}
-          groupId="left-c"
-          label={translate('TestParsing')}
-          iconName={icons.PARSE}
-          onPress={handleParseModalPress}
-        />
-
         <PageToolbarSpacer />
 
         <ToolbarItem
@@ -477,11 +456,6 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
         optionsComponent={SeriesIndexTableOptions}
         onTableOptionChange={onTableOptionChange}
         onModalClose={handleTableOptionsModalClose}
-      />
-
-      <ParseModal
-        isOpen={isParseModalOpen}
-        onModalClose={handleParseModalClose}
       />
     </PageContent>
   );
