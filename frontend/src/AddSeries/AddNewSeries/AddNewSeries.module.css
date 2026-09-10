@@ -4,7 +4,7 @@
   z-index: 2;
   padding-top: 16px;
   padding-bottom: 24px;
-  background: var(--paper);
+  background: var(--pageBackground);
 }
 
 .searchWrap {
@@ -38,6 +38,9 @@
     outline: 0;
     border-color: var(--accent);
     background: var(--paperCard);
+  }
+  @media (pointer: coarse) {
+    font-size: 16px;
   }
 }
 

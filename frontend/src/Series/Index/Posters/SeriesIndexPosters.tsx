@@ -9,7 +9,6 @@ import { useSeriesPosterOptions } from 'Series/seriesOptionsStore';
 import dimensions from 'Styles/Variables/dimensions';
 import getIndexOfFirstCharacter from 'Utilities/Array/getIndexOfFirstCharacter';
 
-const bodyPadding = parseInt(dimensions.pageContentBodyPadding);
 const bodyPaddingSmallScreen = parseInt(
   dimensions.pageContentBodyPaddingSmallScreen
 );
@@ -209,11 +208,9 @@ export default function SeriesIndexPosters({
     }
 
     if (current) {
-      const width = current.clientWidth;
-      const padding = bodyPadding - 5;
-      const finalWidth = width - padding * 2;
+      const finalWidth = bounds.width;
 
-      if (Math.abs(size.width - finalWidth) < 20 || size.width === finalWidth) {
+      if (!finalWidth || Math.abs(size.width - finalWidth) < 12) {
         return;
       }
 

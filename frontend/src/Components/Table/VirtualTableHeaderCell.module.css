@@ -1,16 +1,19 @@
 .headerCell {
-  padding: 8px;
-  border: none !important;
-  text-align: left;
-  font-weight: 600;
+  composes: headerCell from 'Components/Table/TableHeaderCell.module.css';
+}
+
+.content {
+  composes: content from 'Components/Table/TableHeaderCell.module.css';
+}
+
+.sortable {
+  composes: sortable from 'Components/Table/TableHeaderCell.module.css';
+}
+
+.sorted {
+  composes: sorted from 'Components/Table/TableHeaderCell.module.css';
 }
 
 .sortIcon {
-  margin-left: 10px;
-}
-
-@media (--breakpointMedium) {
-  .headerCell {
-    white-space: nowrap;
-  }
+  composes: sortIcon from 'Components/Table/TableHeaderCell.module.css';
 }

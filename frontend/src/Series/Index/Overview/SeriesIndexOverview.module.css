@@ -20,7 +20,7 @@
   }
 
   &:hover {
-    background: var(--paperWarm);
+    background: var(--tableRowHoverBackgroundColor);
   }
 }
 

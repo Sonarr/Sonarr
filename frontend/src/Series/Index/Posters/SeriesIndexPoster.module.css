@@ -149,8 +149,8 @@
     background-color 120ms cubic-bezier(0.25, 1, 0.5, 1);
 
   &:hover {
-    background-color: oklch(96% 0.008 80 / 0.13);
-    color: oklch(98% 0.006 80);
+    background-color: oklch(96% 0.008 260 / 0.13);
+    color: oklch(98% 0.006 260);
   }
 }
 

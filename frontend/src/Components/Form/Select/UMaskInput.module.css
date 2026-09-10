@@ -25,9 +25,11 @@
 }
 
 .details {
-  margin-top: 5px;
-  margin-left: 17px;
-  line-height: 20px;
+  margin-top: 6px;
+  margin-left: 8px;
+  color: var(--inkSoft);
+  font-size: 13px;
+  line-height: 1.5;
 
   > div {
     display: flex;

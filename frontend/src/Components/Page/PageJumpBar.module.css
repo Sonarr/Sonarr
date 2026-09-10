@@ -10,7 +10,7 @@
 
 .jumpBarItems {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   flex: 0 0 100%;
   flex-direction: column;
   overflow: hidden;

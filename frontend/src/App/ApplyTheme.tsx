@@ -8,6 +8,7 @@ function ApplyTheme() {
 
   useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme;
+    document.documentElement.style.removeProperty('--pageBackground');
   }, [theme]);
 
   useLayoutEffect(() => {

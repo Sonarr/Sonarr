@@ -73,6 +73,7 @@
 
   /* Z-indexes */
   --pageJumpBarZIndex: 10;
+  --sidebarZIndex: 100;
   --modalZIndex: 1000;
   --popperZIndex: 2000;
 }

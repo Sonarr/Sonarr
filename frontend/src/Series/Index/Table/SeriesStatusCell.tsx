@@ -59,7 +59,7 @@ function SeriesStatusCell({
               : translate('SeriesIsUnmonitored')
           }
         >
-          <Icon name={monitored ? icons.MONITORED : icons.UNMONITORED} />
+          <Icon name={icons.MONITORED} filled={monitored} />
         </StatusIndicator>
       )}
 

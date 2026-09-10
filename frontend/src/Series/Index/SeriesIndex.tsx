@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import QueueDetailsProvider from 'Activity/Queue/Details/QueueDetailsProvider';
 import { useAppDimension } from 'App/appStore';
@@ -295,6 +296,8 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
       order,
     };
   }, [data, sortKey, sortDirection]);
+  const showJumpBar = isLoaded && !!jumpBarItems.order.length;
+
   const ViewComponent = useMemo(() => getViewComponent(view), [view]);
 
   return (
@@ -413,11 +416,12 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
         <PageContentBody
           ref={scrollerRef}
           className={styles.contentBody}
-          innerClassName={
+          innerClassName={classNames(
             (styles as unknown as Record<string, string>)[
               `${view}InnerContentBody`
-            ]
-          }
+            ],
+            showJumpBar && styles.hasJumpBar
+          )}
           scrollPositionKey="seriesIndex"
           onScroll={onScroll}
         >
@@ -447,7 +451,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
             <NoSeries totalItems={totalItems} />
           ) : null}
         </PageContentBody>
-        {isLoaded && !!jumpBarItems.order.length ? (
+        {showJumpBar ? (
           <PageJumpBar items={jumpBarItems} onItemPress={onJumpBarItemPress} />
         ) : null}
       </div>

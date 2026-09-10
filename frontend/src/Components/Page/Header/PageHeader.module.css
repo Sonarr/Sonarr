@@ -71,7 +71,7 @@
   width: var(--chipSize);
   height: var(--chipSize);
   border-radius: 6px;
-  color: var(--inkMuted);
+  color: var(--statusMissing);
   text-align: center;
   transition:
     color var(--transitionSmooth),
@@ -79,8 +79,15 @@
 
   &:hover {
     background-color: var(--menuItemHoverBackgroundColor);
-    color: var(--statusMissing);
   }
+}
+
+.donateIcon {
+  transition: fill var(--transitionSmooth);
+}
+
+.donate:hover .donateIcon {
+  fill: currentColor;
 }
 
 @media (--breakpointSmall) {

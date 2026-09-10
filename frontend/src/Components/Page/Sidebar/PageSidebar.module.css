@@ -53,11 +53,14 @@
 .sidebarCloseButton {
   composes: button from 'Components/Link/IconButton.module.css';
 
-  padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 32px;
+  height: 32px;
   border-radius: 6px;
-
   color: var(--inkSoft);
-  text-align: center;
 
   &:hover {
     background-color: var(--menuItemHoverBackgroundColor);
@@ -95,14 +98,14 @@
   .sidebarContainer {
     position: fixed;
     top: 0;
-    z-index: 2;
+    z-index: var(--sidebarZIndex);
     height: 100vh;
     box-shadow: var(--shadowSidebar);
   }
 
   .sidebar {
     position: fixed;
-    z-index: 2;
+    z-index: var(--sidebarZIndex);
     overflow-y: auto;
     width: 100%;
     height: 100%;

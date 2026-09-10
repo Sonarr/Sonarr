@@ -66,6 +66,7 @@ function PageHeader() {
       <div className={styles.right}>
         <IconButton
           className={styles.donate}
+          iconClassName={styles.donateIcon}
           name={icons.HEART}
           aria-label={translate('Donate')}
           to="https://sonarr.tv/donate.html"
