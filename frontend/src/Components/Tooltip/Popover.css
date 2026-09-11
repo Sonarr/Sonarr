@@ -6,7 +6,7 @@
   letter-spacing: -0.005em;
   font-weight: 550;
   font-size: 13px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1.3;
 }
 
@@ -16,7 +16,7 @@
   background-color: var(--paperCard);
   color: var(--inkSoft);
   font-size: 13px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1.5;
 }
 

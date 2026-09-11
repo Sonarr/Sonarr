@@ -4,7 +4,7 @@
 }
 
 .tooltipContainer {
-  z-index: $popperZIndex;
+  z-index: var(--popperZIndex);
 }
 
 .tooltip {
@@ -34,24 +34,24 @@
 .body {
   padding: 8px 12px;
   font-size: 12px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1.5;
 }
 
-@media only screen and (min-width: $breakpointExtraSmall) {
+@media (--breakpointExtraSmallUp) {
   .tooltip {
-    max-width: calc($breakpointSmall * 0.8);
+    max-width: calc(var(--breakpointSmall) * 0.8);
   }
 }
 
-@media only screen and (min-width: $breakpointSmall) {
+@media (--breakpointSmallUp) {
   .tooltip {
-    max-width: calc($breakpointMedium * 0.8);
+    max-width: calc(var(--breakpointMedium) * 0.8);
   }
 }
 
-@media only screen and (min-width: $breakpointMedium) {
+@media (--breakpointMediumUp) {
   .tooltip {
-    max-width: calc($breakpointLarge * 0.8);
+    max-width: calc(var(--breakpointLarge) * 0.8);
   }
 }

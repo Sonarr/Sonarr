@@ -1,6 +1,6 @@
 .modalBody {
   flex: 1 0 1px;
-  padding: $modalBodyPadding;
+  padding: var(--modalBodyPadding);
 }
 
 .modalScroller {
@@ -8,5 +8,5 @@
 }
 
 .innerModalBody {
-  padding: $modalBodyPadding;
+  padding: var(--modalBodyPadding);
 }

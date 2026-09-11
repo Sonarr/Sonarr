@@ -1,6 +1,6 @@
 .description {
   margin-left: 0;
-  line-height: $lineHeight;
+  line-height: var(--lineHeight);
   overflow-wrap: break-word;
 }
 

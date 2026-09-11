@@ -1,7 +1,7 @@
 .modalContainer {
   position: absolute;
   top: 0;
-  z-index: $modalZIndex;
+  z-index: var(--modalZIndex);
   width: 100%;
   height: 100%;
 }
@@ -72,7 +72,7 @@
   width: 1600px;
 }
 
-@media only screen and (max-width: $breakpointExtraLarge) {
+@media (--breakpointExtraLarge) {
   .modal {
     &.extraLarge {
       width: 90%;
@@ -80,7 +80,7 @@
   }
 }
 
-@media only screen and (max-width: $breakpointLarge) {
+@media (--breakpointLarge) {
   .modal {
     &.large {
       width: 90%;
@@ -88,7 +88,7 @@
   }
 }
 
-@media only screen and (max-width: $breakpointMedium) {
+@media (--breakpointMedium) {
   .modalContainer {
     position: fixed;
   }

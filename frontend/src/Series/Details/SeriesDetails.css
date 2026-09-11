@@ -88,7 +88,7 @@
   letter-spacing: -0.025em;
   font-weight: 600;
   font-size: clamp(2.25rem, 5cqi, 3.25rem);
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1.2;
 }
 
@@ -150,7 +150,7 @@
   letter-spacing: 0.01em;
   font-weight: 400;
   font-size: 14px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   row-gap: 6px;
 }
 
@@ -324,7 +324,7 @@
   letter-spacing: 0.1em;
   font-weight: 600;
   font-size: 12px;
-  font-family: $monoSpaceFontFamily;
+  font-family: var(--monoSpaceFontFamily);
 }
 
 .overview {
@@ -333,7 +333,7 @@
   text-wrap: pretty;
   font-style: italic;
   font-size: 16px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1.6;
 }
 
@@ -371,7 +371,7 @@
   backdrop-filter: blur(8px);
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .header {
     min-height: 240px;
   }

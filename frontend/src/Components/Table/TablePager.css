@@ -47,7 +47,7 @@
   color: var(--inkSoft);
   letter-spacing: 0.04em;
   font-size: 12px;
-  font-family: $monoSpaceFontFamily;
+  font-family: var(--monoSpaceFontFamily);
 }
 
 .pageLink {
@@ -84,7 +84,7 @@
   height: 25px;
 }
 
-@media only screen and (max-width: $breakpointMedium) {
+@media (--breakpointMedium) {
   .pager {
     flex-wrap: wrap;
   }

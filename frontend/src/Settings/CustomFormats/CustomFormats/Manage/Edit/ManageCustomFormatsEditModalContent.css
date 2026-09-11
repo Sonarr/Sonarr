@@ -8,7 +8,7 @@
   font-weight: 600;
 }
 
-@media only screen and (max-width: $breakpointExtraSmall) {
+@media (--breakpointExtraSmall) {
   .modalFooter {
     flex-direction: column;
     gap: 10px;
