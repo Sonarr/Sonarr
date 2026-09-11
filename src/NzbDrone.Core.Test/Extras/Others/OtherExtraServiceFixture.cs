@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.Extras.Others
                                                  .With(l => l.FileEpisodeInfo = new ParsedEpisodeInfo
                                                  {
                                                      SeasonNumbers = [1],
-                                                     EpisodeNumbers = new[] { 1 }
+                                                     EpisodeNumbers = [1]
                                                  })
                                                  .Build();
         }
