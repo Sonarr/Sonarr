@@ -57,7 +57,7 @@ import TagSelectInput, { TagSelectInputProps } from './Tag/TagSelectInput';
 import TextTagInput, { TextTagInputProps } from './Tag/TextTagInput';
 import TextArea, { TextAreaProps } from './TextArea';
 import TextInput, { TextInputProps } from './TextInput';
-import styles from './FormInputGroup.css';
+import styles from './FormInputGroup.module.css';
 
 const componentMap: Record<InputType, ElementType> = {
   autoComplete: AutoCompleteInput,

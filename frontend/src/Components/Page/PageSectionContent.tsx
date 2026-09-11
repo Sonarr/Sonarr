@@ -4,7 +4,7 @@ import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import { kinds } from 'Helpers/Props';
 import { ApiError } from 'Utilities/Fetch/fetchJson';
-import styles from './PageSectionContent.css';
+import styles from './PageSectionContent.module.css';
 
 interface PageSectionContentProps {
   isFetching: boolean;

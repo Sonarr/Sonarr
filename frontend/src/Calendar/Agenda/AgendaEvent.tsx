@@ -18,7 +18,7 @@ import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
-import styles from './AgendaEvent.css';
+import styles from './AgendaEvent.module.css';
 
 interface AgendaEventProps {
   id: number;

@@ -29,7 +29,7 @@ import translate from 'Utilities/String/translate';
 import ManageIndexersEditModal from './Edit/ManageIndexersEditModal';
 import ManageIndexersModalRow from './ManageIndexersModalRow';
 import TagsModal from './Tags/TagsModal';
-import styles from './ManageIndexersModalContent.css';
+import styles from './ManageIndexersModalContent.module.css';
 
 const COLUMNS: Column[] = [
   {

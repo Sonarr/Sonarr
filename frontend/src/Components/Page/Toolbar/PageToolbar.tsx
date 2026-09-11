@@ -23,7 +23,7 @@ import {
 import { PageToolbarButtonProps } from './PageToolbarButton';
 import PageToolbarOverflowMenuItem from './PageToolbarOverflowMenuItem';
 import PageToolbarSpacer from './PageToolbarSpacer';
-import styles from './PageToolbar.css';
+import styles from './PageToolbar.module.css';
 
 type MoreMenuItem = PageToolbarButtonProps & {
   id: string;

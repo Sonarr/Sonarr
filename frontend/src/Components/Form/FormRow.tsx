@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { Size } from 'Helpers/Props/sizes';
-import styles from './FormRow.css';
+import styles from './FormRow.module.css';
 
 export type FormRowLayout = 'right' | 'stacked';
 

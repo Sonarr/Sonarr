@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import useCalendar from 'Calendar/useCalendar';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import AgendaEvent from './AgendaEvent';
-import styles from './Agenda.css';
+import styles from './Agenda.module.css';
 
 function Agenda() {
   const { data } = useCalendar();

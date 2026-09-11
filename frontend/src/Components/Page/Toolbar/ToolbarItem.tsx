@@ -4,7 +4,7 @@ import { useToolbarRegistry } from './PageToolbar';
 import PageToolbarButton, {
   type PageToolbarButtonProps,
 } from './PageToolbarButton';
-import styles from './ToolbarItem.css';
+import styles from './ToolbarItem.module.css';
 
 type ToolbarItemLayoutProps = {
   id: string;

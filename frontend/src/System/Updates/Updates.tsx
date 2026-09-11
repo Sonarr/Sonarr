@@ -25,7 +25,7 @@ import formatDateTime from 'Utilities/Date/formatDateTime';
 import translate from 'Utilities/String/translate';
 import UpdateChanges from './UpdateChanges';
 import useUpdates from './useUpdates';
-import styles from './Updates.css';
+import styles from './Updates.module.css';
 
 const VERSION_REGEX = /\d+\.\d+\.\d+\.\d+/i;
 

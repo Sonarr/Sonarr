@@ -17,7 +17,7 @@ import translate from 'Utilities/String/translate';
 import ImportSeriesFooter from './ImportSeriesFooter';
 import ImportSeriesList from './ImportSeriesList';
 import { clearImportSeries } from './importSeriesStore';
-import styles from './ImportSeries.css';
+import styles from './ImportSeries.module.css';
 
 function ImportSeries() {
   const { rootFolderId: rootFolderIdString = '' } = useParams<{

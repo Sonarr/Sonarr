@@ -20,7 +20,7 @@ import {
 import translate from 'Utilities/String/translate';
 import FavoriteFolderRow from './FavoriteFolderRow';
 import RecentFolderRow from './RecentFolderRow';
-import styles from './InteractiveImportSelectFolderModalContent.css';
+import styles from './InteractiveImportSelectFolderModalContent.module.css';
 
 const favoriteFoldersColumns: Column[] = [
   {

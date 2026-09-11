@@ -2,7 +2,7 @@ import React from 'react';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageHeading from 'Components/Page/PageHeading';
 import SectionHeading from 'Components/SectionHeading';
-import settingsStyles from 'Settings/Settings.css';
+import settingsStyles from 'Settings/Settings.module.css';
 import SettingsPage from 'Settings/SettingsPage';
 import translate from 'Utilities/String/translate';
 import AutoTaggings from './AutoTagging/AutoTaggings';

@@ -13,7 +13,7 @@ import {
   useAutoTaggingSchema,
 } from '../useAutoTaggings';
 import AddSpecificationItem from './AddSpecificationItem';
-import styles from './AddSpecificationModalContent.css';
+import styles from './AddSpecificationModalContent.module.css';
 
 type SchemaItem = AutoTaggingSpecification & {
   infoLink?: string;

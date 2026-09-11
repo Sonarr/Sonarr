@@ -1,0 +1,5 @@
+.message {
+  composes: alert from 'Components/Alert.module.css';
+
+  margin-bottom: 24px;
+}

@@ -14,7 +14,7 @@ import SectionHeading from 'Components/SectionHeading';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import RootFolders from 'RootFolder/RootFolders';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
-import settingsStyles from 'Settings/Settings.css';
+import settingsStyles from 'Settings/Settings.module.css';
 import SettingsPage from 'Settings/SettingsPage';
 import { useIsWindows } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';

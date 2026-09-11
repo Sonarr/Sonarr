@@ -18,7 +18,7 @@ import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
 import HealthItemLink from './HealthItemLink';
 import useHealth from './useHealth';
-import styles from './Health.css';
+import styles from './Health.module.css';
 
 const columns: Column[] = [
   {

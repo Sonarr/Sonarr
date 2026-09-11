@@ -8,7 +8,7 @@ import Field from 'typings/Field';
 import translate from 'Utilities/String/translate';
 import { CustomFormatSpecification } from '../useCustomFormats';
 import EditSpecificationModal from './EditSpecificationModal';
-import styles from './Specification.css';
+import styles from './Specification.module.css';
 
 interface SpecificationProps {
   id: number;

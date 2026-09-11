@@ -14,7 +14,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
 import { icons, inputTypes, tooltipPositions } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import styles from './ChangeMonitoringModalContent.css';
+import styles from './ChangeMonitoringModalContent.module.css';
 
 const NO_CHANGE = 'noChange';
 

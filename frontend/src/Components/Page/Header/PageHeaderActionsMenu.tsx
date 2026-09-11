@@ -9,7 +9,7 @@ import { align, icons, kinds } from 'Helpers/Props';
 import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import { useRestart, useShutdown } from 'System/useSystem';
 import translate from 'Utilities/String/translate';
-import styles from './PageHeaderActionsMenu.css';
+import styles from './PageHeaderActionsMenu.module.css';
 
 interface PageHeaderActionsMenuProps {
   onKeyboardShortcutsPress(): void;

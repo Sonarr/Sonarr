@@ -10,7 +10,7 @@ import { icons, kinds, sizes } from 'Helpers/Props';
 import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
 import { RootFolder, useDeleteRootFolder } from './useRootFolders';
-import styles from './RootFolderRow.css';
+import styles from './RootFolderRow.module.css';
 
 interface RootFolderRowProps extends RootFolder {
   isSelectable: boolean;

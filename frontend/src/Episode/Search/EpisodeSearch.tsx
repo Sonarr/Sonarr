@@ -7,7 +7,7 @@ import { icons, kinds, sizes } from 'Helpers/Props';
 import InteractiveSearch from 'InteractiveSearch/InteractiveSearch';
 import useReleases from 'InteractiveSearch/useReleases';
 import translate from 'Utilities/String/translate';
-import styles from './EpisodeSearch.css';
+import styles from './EpisodeSearch.module.css';
 
 interface EpisodeSearchProps {
   episodeId: number;

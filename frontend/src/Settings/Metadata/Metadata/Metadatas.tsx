@@ -1,6 +1,6 @@
 import React from 'react';
 import PageSectionContent from 'Components/Page/PageSectionContent';
-import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.module.css';
 import translate from 'Utilities/String/translate';
 import { useSortedMetadata } from '../useMetadata';
 import Metadata from './Metadata';

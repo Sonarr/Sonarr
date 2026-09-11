@@ -13,7 +13,7 @@ import ModalSection from 'Components/ModalSection';
 import { inputTypes } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import styles from './ManageIndexersEditModalContent.css';
+import styles from './ManageIndexersEditModalContent.module.css';
 
 interface SavePayload {
   enableRss?: boolean;

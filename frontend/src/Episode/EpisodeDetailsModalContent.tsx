@@ -22,7 +22,7 @@ import EpisodeHistory from './History/EpisodeHistory';
 import EpisodeSearch from './Search/EpisodeSearch';
 import SeasonEpisodeNumber from './SeasonEpisodeNumber';
 import EpisodeSummary from './Summary/EpisodeSummary';
-import styles from './EpisodeDetailsModalContent.css';
+import styles from './EpisodeDetailsModalContent.module.css';
 
 const TABS: EpisodeDetailsTab[] = ['details', 'history', 'search'];
 

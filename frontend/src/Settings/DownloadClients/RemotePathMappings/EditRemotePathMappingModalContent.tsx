@@ -16,7 +16,7 @@ import { inputTypes, kinds } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import { useManageRemotePathMappings } from './useRemotePathMappings';
-import styles from './EditRemotePathMappingModalContent.css';
+import styles from './EditRemotePathMappingModalContent.module.css';
 
 export interface EditRemotePathMappingModalContentProps {
   id?: number;

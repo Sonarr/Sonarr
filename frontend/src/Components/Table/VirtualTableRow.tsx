@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './VirtualTableRow.css';
+import styles from './VirtualTableRow.module.css';
 
 interface VirtualTableRowProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;

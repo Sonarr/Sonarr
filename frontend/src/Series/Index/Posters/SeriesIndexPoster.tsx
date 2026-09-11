@@ -23,7 +23,7 @@ import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import translate from 'Utilities/String/translate';
 import useSeriesIndexItem from '../useSeriesIndexItem';
 import SeriesIndexPosterInfo from './SeriesIndexPosterInfo';
-import styles from './SeriesIndexPoster.css';
+import styles from './SeriesIndexPoster.module.css';
 
 interface SeriesIndexPosterProps {
   seriesId: number;

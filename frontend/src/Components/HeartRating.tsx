@@ -4,7 +4,7 @@ import Icon, { IconProps } from 'Components/Icon';
 import Tooltip from 'Components/Tooltip/Tooltip';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import styles from './HeartRating.css';
+import styles from './HeartRating.module.css';
 
 interface HeartRatingProps {
   className?: string;

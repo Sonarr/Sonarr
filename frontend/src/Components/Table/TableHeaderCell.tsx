@@ -4,7 +4,7 @@ import Link from 'Components/Link/Link';
 import { icons, sortDirections } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import { IsModifiable } from './Column';
-import styles from './TableHeaderCell.css';
+import styles from './TableHeaderCell.module.css';
 
 interface TableHeaderCellProps {
   className?: string;

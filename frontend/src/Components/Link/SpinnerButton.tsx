@@ -3,7 +3,7 @@ import React from 'react';
 import Icon, { IconName } from 'Components/Icon';
 import { icons } from 'Helpers/Props';
 import Button, { ButtonProps } from './Button';
-import styles from './SpinnerButton.css';
+import styles from './SpinnerButton.module.css';
 
 export interface SpinnerButtonProps extends ButtonProps {
   isSpinning: boolean;

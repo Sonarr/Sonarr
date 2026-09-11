@@ -62,7 +62,7 @@ import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import translate from 'Utilities/String/translate';
 import InteractiveImportRow from './InteractiveImportRow';
-import styles from './InteractiveImportModalContent.css';
+import styles from './InteractiveImportModalContent.module.css';
 
 type SelectType =
   | 'select'

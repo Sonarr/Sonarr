@@ -26,7 +26,7 @@ import { align, icons } from 'Helpers/Props';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import translate from 'Utilities/String/translate';
 import CalendarHeaderViewButton from './CalendarHeaderViewButton';
-import styles from './CalendarHeader.css';
+import styles from './CalendarHeader.module.css';
 
 function CalendarHeader() {
   const { isFetching } = useCalendar();

@@ -5,7 +5,7 @@ import translate from 'Utilities/String/translate';
 import FilterMenuContent from './FilterMenuContent';
 import Menu from './Menu';
 import ToolbarMenuButton from './ToolbarMenuButton';
-import styles from './FilterMenu.css';
+import styles from './FilterMenu.module.css';
 
 interface FilterMenuProps {
   className?: string;

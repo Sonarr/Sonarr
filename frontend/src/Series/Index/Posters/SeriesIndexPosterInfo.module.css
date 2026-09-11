@@ -1,0 +1,13 @@
+.info {
+  background-color: var(--seriesBackgroundColor);
+  text-align: center;
+  font-size: var(--smallFontSize);
+}
+
+.tags {
+  composes: tags from './SeriesIndexPoster.module.css';
+}
+
+.tagsList {
+  composes: tagsList from './SeriesIndexPoster.module.css';
+}

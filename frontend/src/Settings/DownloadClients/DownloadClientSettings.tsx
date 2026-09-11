@@ -6,7 +6,7 @@ import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import SectionHeading from 'Components/SectionHeading';
 import { icons } from 'Helpers/Props';
-import settingsStyles from 'Settings/Settings.css';
+import settingsStyles from 'Settings/Settings.module.css';
 import SettingsPage from 'Settings/SettingsPage';
 import {
   SaveCallback,

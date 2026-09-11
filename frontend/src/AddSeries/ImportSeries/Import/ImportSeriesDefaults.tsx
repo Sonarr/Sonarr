@@ -14,7 +14,7 @@ import Button from 'Components/Link/Button';
 import { kinds } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import styles from './ImportSeriesDefaults.css';
+import styles from './ImportSeriesDefaults.module.css';
 
 const HIDE_HINT = { includeHint: false };
 

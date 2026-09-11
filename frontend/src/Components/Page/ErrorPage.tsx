@@ -2,7 +2,7 @@ import React from 'react';
 import { ApiError } from 'Utilities/Fetch/fetchJson';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
-import styles from './ErrorPage.css';
+import styles from './ErrorPage.module.css';
 
 interface ErrorPageProps {
   version: string;

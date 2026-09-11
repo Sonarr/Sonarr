@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 import useCombinedRefs from 'Helpers/Hooks/useCombinedRefs';
 import { FileInputChanged, InputChanged } from 'typings/inputs';
-import styles from './TextInput.css';
+import styles from './TextInput.module.css';
 
 export interface CommonTextInputProps {
   className?: string;

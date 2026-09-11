@@ -8,7 +8,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalSection from 'Components/ModalSection';
-import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.module.css';
 import { kinds } from 'Helpers/Props';
 import useSeries from 'Series/useSeries';
 import { useDownloadClientsWithIds } from 'Settings/DownloadClients/DownloadClients/useDownloadClients';
@@ -20,7 +20,7 @@ import { useReleaseProfilesWithIds } from 'Settings/Profiles/Release/useReleaseP
 import { useAutoTaggingsWithIds } from 'Settings/Tags/AutoTagging/useAutoTaggings';
 import translate from 'Utilities/String/translate';
 import TagDetailsDelayProfile from './TagDetailsDelayProfile';
-import styles from './TagDetailsModalContent.css';
+import styles from './TagDetailsModalContent.module.css';
 
 function findMatchingItems<T extends ModelBase>(
   ids: number[],

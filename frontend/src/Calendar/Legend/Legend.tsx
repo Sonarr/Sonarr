@@ -3,7 +3,7 @@ import { useCalendarOptions } from 'Calendar/calendarOptionsStore';
 import { icons, kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import LegendItem from './LegendItem';
-import styles from './Legend.css';
+import styles from './Legend.module.css';
 
 function Legend() {
   const {

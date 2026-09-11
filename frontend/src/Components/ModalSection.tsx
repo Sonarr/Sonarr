@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import styles from './ModalSection.css';
+import styles from './ModalSection.module.css';
 
 interface ModalSectionProps {
   title: ReactNode;
