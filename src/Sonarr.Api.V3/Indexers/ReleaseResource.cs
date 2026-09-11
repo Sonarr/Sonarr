@@ -32,6 +32,7 @@ namespace Sonarr.Api.V3.Indexers
         public bool FullSeason { get; set; }
         public bool SceneSource { get; set; }
         public int SeasonNumber { get; set; }
+        public int[] SeasonNumbers { get; set; }
         public List<Language> Languages { get; set; }
         public int LanguageWeight { get; set; }
         public string AirDate { get; set; }
@@ -120,7 +121,8 @@ namespace Sonarr.Api.V3.Indexers
                 ReleaseHash = parsedEpisodeInfo.ReleaseHash,
                 Title = releaseInfo.Title,
                 FullSeason = parsedEpisodeInfo.FullSeason,
-                SeasonNumber = parsedEpisodeInfo.SeasonNumber,
+                SeasonNumber = parsedEpisodeInfo.SeasonNumbers.FirstOrDefault(),
+                SeasonNumbers = parsedEpisodeInfo.SeasonNumbers,
                 Languages = remoteEpisode.Languages,
                 AirDate = parsedEpisodeInfo.AirDate,
                 SeriesTitle = parsedEpisodeInfo.SeriesTitle,

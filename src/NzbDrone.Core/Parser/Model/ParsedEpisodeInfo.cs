@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Parser.Model
             {
                 return ((AirDate.IsNullOrWhiteSpace() &&
                        SeriesTitle.IsNullOrWhiteSpace() &&
-                       (EpisodeNumbers.Length == 0 || SeasonNumber == 0)) || (!SeriesTitle.IsNullOrWhiteSpace() && Special)) ||
+                       (EpisodeNumbers.Length == 0 || SeasonNumbers.FirstOrDefault() == 0)) || (!SeriesTitle.IsNullOrWhiteSpace() && Special)) ||
                        (EpisodeNumbers.Length == 1 && EpisodeNumbers[0] == 0);
             }
 
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Parser.Model
         {
             get
             {
-                return SeasonNumber != 0 && EpisodeNumbers.Length == 1 && EpisodeNumbers[0] == 0;
+                return SeasonNumbers.FirstOrDefault() != 0 && EpisodeNumbers.Length == 1 && EpisodeNumbers[0] == 0;
             }
 
             private set
@@ -136,11 +136,11 @@ namespace NzbDrone.Core.Parser.Model
             {
                 episodeString = IsMultiSeason
                     ? string.Format("Season {0:00}-{1:00}", SeasonNumbers.First(), SeasonNumbers.Last())
-                    : string.Format("Season {0:00}", SeasonNumber);
+                    : string.Format("Season {0:00}", SeasonNumbers.FirstOrDefault());
             }
             else if (EpisodeNumbers != null && EpisodeNumbers.Any())
             {
-                episodeString = string.Format("S{0:00}E{1}", SeasonNumber, string.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))));
+                episodeString = string.Format("S{0:00}E{1}", SeasonNumbers.FirstOrDefault(), string.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))));
             }
             else if (AbsoluteEpisodeNumbers != null && AbsoluteEpisodeNumbers.Any())
             {
@@ -148,9 +148,9 @@ namespace NzbDrone.Core.Parser.Model
             }
             else if (Special)
             {
-                if (SeasonNumber != 0)
+                if (SeasonNumbers.FirstOrDefault() != 0)
                 {
-                    episodeString = string.Format("[Unknown Season {0:00} Special]", SeasonNumber);
+                    episodeString = string.Format("[Unknown Season {0:00} Special]", SeasonNumbers.FirstOrDefault());
                 }
                 else
                 {

@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Organizer
 
         private bool ValidateSeasonAndEpisodeNumbers(List<Episode> episodes, ParsedEpisodeInfo parsedEpisodeInfo)
         {
-            if (parsedEpisodeInfo.SeasonNumber != episodes.First().SeasonNumber ||
+            if (!parsedEpisodeInfo.SeasonNumbers.Contains(episodes.First().SeasonNumber) ||
                 !parsedEpisodeInfo.EpisodeNumbers.OrderBy(e => e).SequenceEqual(episodes.Select(e => e.EpisodeNumber).OrderBy(e => e)))
             {
                 return false;

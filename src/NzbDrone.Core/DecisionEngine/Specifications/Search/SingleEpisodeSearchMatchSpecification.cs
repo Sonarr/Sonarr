@@ -44,7 +44,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 
         private DownloadSpecDecision IsSatisfiedBy(RemoteEpisode remoteEpisode, SingleEpisodeSearchCriteria singleEpisodeSpec)
         {
-            if (singleEpisodeSpec.SeasonNumber != remoteEpisode.ParsedEpisodeInfo.SeasonNumber)
+            if (!remoteEpisode.ParsedEpisodeInfo.SeasonNumbers.Contains(singleEpisodeSpec.SeasonNumber))
             {
                 _logger.Debug("Season number does not match searched season number, skipping.");
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.WrongSeason, "Wrong season");
