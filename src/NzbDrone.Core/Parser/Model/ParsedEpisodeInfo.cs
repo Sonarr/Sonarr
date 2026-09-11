@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Parser.Model
         public QualityModel Quality { get; set; }
         public int[] SeasonNumbers { get; set; } = [];
 
+        // TODO: Remove this once `SeasonNumbers` replaces `SeasonNumber`
         [JsonPropertyOrder(-1)]
         public int SeasonNumber
         {
