@@ -5,6 +5,7 @@ export interface DownloadClientSettingsModel {
   enableCompletedDownloadHandling: boolean;
   autoRedownloadFailed: boolean;
   autoRedownloadFailedFromInteractiveSearch: boolean;
+  stalledTorrentTimeout: number;
 }
 
 const PATH = '/settings/downloadclient';
