@@ -40,7 +40,7 @@ import QueueStatusCell from './QueueStatusCell';
 import RemoveQueueItemModal from './RemoveQueueItemModal';
 import TimeLeftCell from './TimeLeftCell';
 import { useGrabQueueItem, useRemoveQueueItem } from './useQueue';
-import styles from './QueueRow.css';
+import styles from './QueueRow.module.css';
 
 interface QueueRowProps {
   id: number;

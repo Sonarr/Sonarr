@@ -25,7 +25,7 @@ import {
   AutoTaggingSpecification,
   useManageAutoTagging,
 } from './useAutoTaggings';
-import styles from './EditAutoTaggingModalContent.css';
+import styles from './EditAutoTaggingModalContent.module.css';
 
 export interface EditAutoTaggingModalContentProps {
   id?: number;

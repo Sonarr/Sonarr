@@ -3,7 +3,7 @@ import Label from 'Components/Label';
 import MiddleTruncate from 'Components/MiddleTruncate';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import SettingsCard from 'Components/SettingsCard/SettingsCard';
-import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.module.css';
 import SettingsCardAction from 'Components/SettingsCard/SettingsCardAction';
 import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
 import TagList from 'Components/TagList';
@@ -17,7 +17,7 @@ import {
   ReleaseProfileModel,
   useDeleteReleaseProfile,
 } from './useReleaseProfiles';
-import styles from './ReleaseProfileItem.css';
+import styles from './ReleaseProfileItem.module.css';
 
 interface ReleaseProfileProps extends ReleaseProfileModel {
   tagList: ReadonlyArray<Tag>;

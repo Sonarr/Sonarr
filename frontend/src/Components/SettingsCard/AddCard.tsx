@@ -2,7 +2,7 @@ import React from 'react';
 import Card from 'Components/Card';
 import Icon from 'Components/Icon';
 import { icons } from 'Helpers/Props';
-import styles from './SettingsCard.css';
+import styles from './SettingsCard.module.css';
 
 interface AddCardProps {
   label: string;

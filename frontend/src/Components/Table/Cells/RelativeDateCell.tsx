@@ -3,7 +3,7 @@ import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import TableRowCell from './TableRowCell';
-import styles from './RelativeDateCell.css';
+import styles from './RelativeDateCell.module.css';
 
 interface RelativeDateCellProps {
   className?: string;

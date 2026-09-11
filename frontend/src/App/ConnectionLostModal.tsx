@@ -7,7 +7,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import styles from './ConnectionLostModal.css';
+import styles from './ConnectionLostModal.module.css';
 
 interface ConnectionLostModalProps {
   isOpen: boolean;

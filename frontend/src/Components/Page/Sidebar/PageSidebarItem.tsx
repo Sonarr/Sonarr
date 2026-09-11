@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { Children, useCallback } from 'react';
 import Icon, { IconName } from 'Components/Icon';
 import Link from 'Components/Link/Link';
-import styles from './PageSidebarItem.css';
+import styles from './PageSidebarItem.module.css';
 
 export interface PageSidebarItemProps {
   iconName?: IconName;

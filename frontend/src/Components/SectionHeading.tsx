@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import styles from './SectionHeading.css';
+import styles from './SectionHeading.module.css';
 
 interface SectionHeadingProps {
   title: ReactNode;

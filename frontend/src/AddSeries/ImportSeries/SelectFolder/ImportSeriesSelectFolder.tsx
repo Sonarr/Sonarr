@@ -17,7 +17,7 @@ import useRootFolders, { useAddRootFolder } from 'RootFolder/useRootFolders';
 import { useIsWindows } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import styles from './ImportSeriesSelectFolder.css';
+import styles from './ImportSeriesSelectFolder.module.css';
 
 function ImportSeriesSelectFolder() {
   const { isFetching, isFetched, error, data } = useRootFolders();

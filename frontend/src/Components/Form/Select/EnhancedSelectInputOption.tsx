@@ -4,7 +4,7 @@ import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
 import CheckInput from '../CheckInput';
-import styles from './EnhancedSelectInputOption.css';
+import styles from './EnhancedSelectInputOption.module.css';
 
 function handleCheckPress() {
   // CheckInput requires a handler. Swallow the change event because onPress will already handle it via event propagation.

@@ -9,7 +9,7 @@ import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import EpisodeDetailsModal from './EpisodeDetailsModal';
-import styles from './EpisodeSearchCell.css';
+import styles from './EpisodeSearchCell.module.css';
 
 interface EpisodeSearchCellProps {
   episodeId: number;

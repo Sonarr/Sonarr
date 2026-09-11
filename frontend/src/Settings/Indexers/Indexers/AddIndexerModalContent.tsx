@@ -11,7 +11,7 @@ import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import { IndexerModel, useIndexerSchema } from '../useIndexers';
 import AddIndexerItem from './AddIndexerItem';
-import styles from './AddIndexerModalContent.css';
+import styles from './AddIndexerModalContent.module.css';
 
 export interface AddIndexerModalContentProps {
   onIndexerSelect: (selectedSchema: SelectedSchema) => void;

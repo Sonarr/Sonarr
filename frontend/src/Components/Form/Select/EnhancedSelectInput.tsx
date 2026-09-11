@@ -33,7 +33,7 @@ import * as keyCodes from 'Utilities/Constants/keyCodes';
 import TextInput from '../TextInput';
 import HintedSelectInputOption from './HintedSelectInputOption';
 import HintedSelectInputSelectedValue from './HintedSelectInputSelectedValue';
-import styles from './EnhancedSelectInput.css';
+import styles from './EnhancedSelectInput.module.css';
 
 const DROPDOWN_VIEWPORT_MARGIN = 12;
 

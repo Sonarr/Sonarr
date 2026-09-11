@@ -62,7 +62,7 @@ import SeriesDetailsProvider from './SeriesDetailsProvider';
 import SeriesDetailsSeason from './SeriesDetailsSeason';
 import SeriesProgressLabel from './SeriesProgressLabel';
 import SeriesTags from './SeriesTags';
-import styles from './SeriesDetails.css';
+import styles from './SeriesDetails.module.css';
 
 function getFanartUrl(images: Image[]) {
   return images.find((image) => image.coverType === 'fanart')?.url;

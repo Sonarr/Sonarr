@@ -1,0 +1,59 @@
+.links {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  gap: 2px;
+}
+
+.linkBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background-color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    background-color: var(--menuItemHoverBackgroundColor);
+
+    .link {
+      color: var(--accent);
+    }
+  }
+}
+
+.copyButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  color: var(--inkMuted);
+  font-size: 12px;
+  font-family: var(--monoSpaceFontFamily);
+  cursor: pointer;
+  transition: color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    color: var(--accent);
+  }
+}
+
+.link {
+  composes: link from 'Components/Link/Link.module.css';
+
+  color: var(--ink);
+
+  white-space: nowrap;
+  font-weight: 500;
+  font-size: 13px;
+  transition: color 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    text-decoration: none;
+  }
+}

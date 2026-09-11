@@ -1,0 +1,252 @@
+.cell {
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.module.css';
+
+  display: flex;
+  align-items: center;
+}
+
+.status {
+  composes: cell;
+
+  flex: 0 0 60px;
+}
+
+.sortTitle {
+  composes: cell;
+
+  flex: 4 0 110px;
+}
+
+.seriesType {
+  composes: cell;
+
+  flex: 0 0 100px;
+}
+
+.banner {
+  flex: 0 0 379px;
+}
+
+.bannerGrow {
+  flex-grow: 1;
+}
+
+.link {
+  composes: link from 'Components/Link/Link.module.css';
+
+  position: relative;
+  display: block;
+  overflow: hidden;
+  margin: 8px 12px 8px 0;
+  height: 56px;
+  border-radius: 8px;
+  background-color: var(--seriesBackgroundColor);
+  transition: box-shadow 200ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:hover {
+    box-shadow: 0 4px 12px -6px oklch(0% 0 0 / 0.4);
+    text-decoration: none;
+  }
+}
+
+.bannerImage {
+  width: 100%;
+  height: 56px;
+  object-fit: cover;
+}
+
+.overlayTitle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  width: 100%;
+  height: 100%;
+  color: var(--inkFaint);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.network {
+  composes: cell;
+
+  flex: 2 0 90px;
+  color: var(--inkMuted);
+}
+
+.originalCountry,
+.originalLanguage,
+.qualityProfileId {
+  composes: cell;
+
+  flex: 1 0 125px;
+}
+
+.releaseGroups,
+.releaseTypes,
+.nextAiring,
+.previousAiring,
+.added,
+.genres {
+  composes: cell;
+
+  flex: 0 0 180px;
+}
+
+.episodeFileQualities {
+  composes: cell;
+
+  flex: 0 0 220px;
+}
+
+.seasonCount,
+.certification {
+  composes: cell;
+
+  flex: 0 0 100px;
+}
+
+.seasonFolder {
+  composes: cell;
+
+  flex: 0 0 150px;
+}
+
+.episodeProgress,
+.latestSeason {
+  composes: cell;
+
+  display: flex;
+  justify-content: center;
+  flex: 0 0 150px;
+  flex-direction: column;
+}
+
+.episodeCount {
+  composes: cell;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex: 0 0 130px;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.episodeBar {
+  overflow: hidden;
+  width: 72px;
+  height: 3px;
+  border-radius: 4px;
+  background-color: var(--progressBarBackgroundColor);
+}
+
+.episodeBarFill {
+  height: 100%;
+  border-radius: 4px;
+  background-color: var(--accent);
+  transition: width 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.episodeBarFillComplete {
+  background-color: var(--successColor);
+}
+
+.year {
+  composes: cell;
+
+  flex: 0 0 80px;
+}
+
+.path {
+  composes: cell;
+
+  flex: 1 0 150px;
+}
+
+.sizeOnDisk {
+  composes: cell;
+
+  flex: 0 0 120px;
+}
+
+.averageSizePerEpisode {
+  composes: cell;
+
+  flex: 0 0 160px;
+}
+
+.ratings {
+  composes: cell;
+
+  flex: 0 0 80px;
+}
+
+.tags {
+  composes: cell;
+
+  flex: 1 0 60px;
+}
+
+.useSceneNumbering {
+  composes: cell;
+
+  flex: 0 0 145px;
+}
+
+.monitorNewItems {
+  composes: cell;
+
+  flex: 0 0 175px;
+}
+
+.actions {
+  composes: cell;
+
+  flex: 0 1 90px;
+  min-width: 60px;
+}
+
+.checkInput {
+  composes: input from 'Components/Form/CheckInput.module.css';
+
+  margin-top: 0;
+}
+
+.qualityChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background-color: var(--paperWarm);
+  color: var(--inkSoft);
+  text-transform: uppercase;
+  white-space: nowrap;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.nextAiringMono {
+  color: var(--inkMuted);
+  letter-spacing: 0.02em;
+  font-size: 11px;
+  font-family: var(--monoSpaceFontFamily);
+}
+
+.nextAiringEmpty {
+  color: var(--inkFaint);
+}
+
+.titleLink {
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 14px;
+}

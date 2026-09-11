@@ -26,7 +26,7 @@ import {
   CustomFormatSpecification,
   useManageCustomFormat,
 } from './useCustomFormats';
-import styles from './EditCustomFormatModalContent.css';
+import styles from './EditCustomFormatModalContent.module.css';
 
 export interface EditCustomFormatModalContentProps {
   id?: number;

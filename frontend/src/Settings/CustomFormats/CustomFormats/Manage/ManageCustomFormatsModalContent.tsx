@@ -24,7 +24,7 @@ import {
 } from '../useCustomFormats';
 import ManageCustomFormatsEditModal from './Edit/ManageCustomFormatsEditModal';
 import ManageCustomFormatsModalRow from './ManageCustomFormatsModalRow';
-import styles from './ManageCustomFormatsModalContent.css';
+import styles from './ManageCustomFormatsModalContent.module.css';
 
 const COLUMNS: Column[] = [
   {

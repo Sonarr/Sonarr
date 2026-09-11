@@ -4,7 +4,7 @@ import Episode from 'Episode/Episode';
 import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import Series from 'Series/Series';
 import translate from 'Utilities/String/translate';
-import styles from './EpisodeTitleCellContent.css';
+import styles from './EpisodeTitleCellContent.module.css';
 
 interface EpisodeTitleCellContentProps {
   episodes: Episode[];

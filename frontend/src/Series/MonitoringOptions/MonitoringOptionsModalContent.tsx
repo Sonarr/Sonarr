@@ -18,7 +18,7 @@ import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import { useUpdateSeriesMonitor } from 'Series/useSeries';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import styles from './MonitoringOptionsModalContent.css';
+import styles from './MonitoringOptionsModalContent.module.css';
 
 const NO_CHANGE = 'noChange';
 

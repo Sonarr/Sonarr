@@ -13,7 +13,7 @@ import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
 import EditDelayProfileModal from './EditDelayProfileModal';
 import { useDeleteDelayProfile } from './useDelayProfiles';
-import styles from './DelayProfile.css';
+import styles from './DelayProfile.module.css';
 
 function getDelay(enabled: boolean, delay: number) {
   if (!enabled) {

@@ -23,7 +23,7 @@ import { CustomFormat } from 'Settings/CustomFormats/CustomFormats/useCustomForm
 import { HistoryData, HistoryEventType } from 'typings/History';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import translate from 'Utilities/String/translate';
-import styles from './SeriesHistoryRow.css';
+import styles from './SeriesHistoryRow.module.css';
 
 interface SeriesHistoryRowProps {
   id: number;

@@ -10,7 +10,7 @@ import { kinds } from 'Helpers/Props';
 import Field from 'typings/Field';
 import translate from 'Utilities/String/translate';
 import { useCustomFormat, useCustomFormats } from './useCustomFormats';
-import styles from './ExportCustomFormatModalContent.css';
+import styles from './ExportCustomFormatModalContent.module.css';
 
 const omittedProperties = ['id', 'implementationName', 'infoLink'];
 

@@ -9,7 +9,7 @@ import { ItemFailures } from './qualityProfileItemFailures';
 import QualityProfileItemGroup from './QualityProfileItemGroup';
 import { SizeChanged } from './QualityProfileItemSize';
 import { DisplayItem, ROOT_CONTAINER } from './useQualityProfileDnd';
-import styles from './QualityProfileItems.css';
+import styles from './QualityProfileItems.module.css';
 
 export type EditQualityProfileMode = 'default' | 'editGroups' | 'editSizes';
 

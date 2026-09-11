@@ -14,7 +14,7 @@ import {
   DownloadClientModel,
   useDownloadClientSchema,
 } from './useDownloadClients';
-import styles from './AddDownloadClientModalContent.css';
+import styles from './AddDownloadClientModalContent.module.css';
 
 export interface AddDownloadClientModalContentProps {
   onDownloadClientSelect: (selectedSchema: SelectedSchema) => void;

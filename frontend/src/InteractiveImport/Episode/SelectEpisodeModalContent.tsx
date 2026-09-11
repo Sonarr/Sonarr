@@ -23,7 +23,7 @@ import clientSideFilterAndSort from 'Utilities/Filter/clientSideFilterAndSort';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
 import SelectEpisodeRow from './SelectEpisodeRow';
-import styles from './SelectEpisodeModalContent.css';
+import styles from './SelectEpisodeModalContent.module.css';
 
 const columns = [
   {

@@ -8,7 +8,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import Scroller from 'Components/Scroller/Scroller';
 import { scrollDirections } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import styles from './LogsTableDetailsModal.css';
+import styles from './LogsTableDetailsModal.module.css';
 
 interface LogsTableDetailsModalProps {
   isOpen: boolean;

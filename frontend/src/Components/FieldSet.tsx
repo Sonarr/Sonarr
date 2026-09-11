@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import SectionHeading from './SectionHeading';
-import styles from './FieldSet.css';
+import styles from './FieldSet.module.css';
 
 interface FieldSetProps {
   legend?: ReactNode;

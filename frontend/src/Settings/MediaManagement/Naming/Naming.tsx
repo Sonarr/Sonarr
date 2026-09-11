@@ -21,7 +21,7 @@ import {
   useManageNamingSettings,
   useNamingExamples,
 } from './useNamingSettings';
-import styles from './Naming.css';
+import styles from './Naming.module.css';
 
 interface NamingModalOptions {
   name: keyof Pick<

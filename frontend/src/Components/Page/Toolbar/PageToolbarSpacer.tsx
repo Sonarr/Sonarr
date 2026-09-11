@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './PageToolbarSpacer.css';
+import styles from './PageToolbarSpacer.module.css';
 
 // Marker for PageToolbar: items before render left-aligned, items after
 // right-aligned, and the ⋮ overflow button sits at this position.

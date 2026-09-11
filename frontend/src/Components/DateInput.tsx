@@ -3,7 +3,7 @@ import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
 import { isCrossOriginFrame } from 'Utilities/browser';
-import styles from './DateInput.css';
+import styles from './DateInput.module.css';
 
 const hasDatePicker =
   window.matchMedia('(pointer: coarse)').matches ||

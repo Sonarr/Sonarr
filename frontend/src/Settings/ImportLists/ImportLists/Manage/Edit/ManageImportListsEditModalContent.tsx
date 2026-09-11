@@ -12,7 +12,7 @@ import ModalSection from 'Components/ModalSection';
 import { inputTypes } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import styles from './ManageImportListsEditModalContent.css';
+import styles from './ManageImportListsEditModalContent.module.css';
 
 interface SavePayload {
   enableAutomaticAdd?: boolean;

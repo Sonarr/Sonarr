@@ -15,7 +15,7 @@ import {
   QualityProfileItems,
   useDeleteQualityProfile,
 } from './useQualityProfiles';
-import styles from './QualityProfile.css';
+import styles from './QualityProfile.module.css';
 
 const CHIP_CAP_THRESHOLD = 6;
 

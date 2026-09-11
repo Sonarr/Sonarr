@@ -1,5 +1,5 @@
 import React, { ComponentPropsWithoutRef } from 'react';
-import styles from './TableRowCell.css';
+import styles from './TableRowCell.module.css';
 
 export type TableRowCellProps = ComponentPropsWithoutRef<'td'>;
 

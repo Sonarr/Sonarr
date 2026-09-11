@@ -21,7 +21,7 @@ import { InputChanged } from 'typings/inputs';
 import selectSettings from 'Utilities/selectSettings';
 import translate from 'Utilities/String/translate';
 import { AutoTaggingSpecification } from '../useAutoTaggings';
-import styles from './EditSpecificationModalContent.css';
+import styles from './EditSpecificationModalContent.module.css';
 
 interface EditSpecificationModalContentProps {
   specification: AutoTaggingSpecification;

@@ -21,7 +21,7 @@ import useSeries from 'Series/useSeries';
 import { Tag, useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import SeriesSearchResult from './SeriesSearchResult';
-import styles from './SeriesSearchInput.css';
+import styles from './SeriesSearchInput.module.css';
 
 const ADD_NEW_TYPE = 'addNew';
 

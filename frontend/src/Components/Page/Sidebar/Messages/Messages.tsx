@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Message as MessageModel, useMessages } from 'App/messagesStore';
 import Message from './Message';
-import styles from './Messages.css';
+import styles from './Messages.module.css';
 
 function Messages() {
   const items = useMessages();
