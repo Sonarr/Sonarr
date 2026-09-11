@@ -1,6 +1,6 @@
-/* Runtime mirror of Styles/Variables/{dimensions,fonts}.js.
- * Legacy CSS resolves $foo via postcss-simple-vars at build time; new CSS reads
- * var(--foo) at runtime. Keep both in sync. */
+/* Design tokens. Breakpoints live in breakpoints.css as @custom-media, since
+ * @media cannot consume var(). Styles/Variables/dimensions.js mirrors the
+ * subset of these values that TypeScript reads. */
 
 :root {
   /* Page */
@@ -19,11 +19,9 @@
   --toolbarSeparatorMargin: 12px;
 
   /* Break Points */
-  --breakpointExtraSmall: 480px;
   --breakpointSmall: 768px;
   --breakpointMedium: 992px;
   --breakpointLarge: 1200px;
-  --breakpointExtraLarge: 1450px;
 
   /* Form */
   --formGroupExtraSmallWidth: 550px;

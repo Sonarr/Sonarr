@@ -17,11 +17,11 @@
   composes: inputUnit from '~Components/Form/FormInputGroup.css';
 
   right: 40px !important;
-  font-family: $monoSpaceFontFamily;
+  font-family: var(--monoSpaceFontFamily);
 }
 
 .unit {
-  font-family: $monoSpaceFontFamily;
+  font-family: var(--monoSpaceFontFamily);
 }
 
 .details {

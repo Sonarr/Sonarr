@@ -22,7 +22,7 @@
   color: var(--ink);
   font-weight: 500;
   font-size: 13px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1.4;
 }
 
@@ -36,7 +36,7 @@
   color: var(--inkMuted);
   font-style: italic;
   font-size: 15px;
-  font-family: $editorialFontFamily;
+  font-family: var(--editorialFontFamily);
   line-height: 1.5;
 }
 
@@ -47,7 +47,7 @@
   white-space: nowrap;
   letter-spacing: 0.04em;
   font-size: 13px;
-  font-family: $monoSpaceFontFamily;
+  font-family: var(--monoSpaceFontFamily);
   gap: 6px;
 }
 

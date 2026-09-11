@@ -7,7 +7,7 @@
   background-color: var(--inputBackgroundColor);
   color: var(--ink);
   font-size: 14px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1.4;
   transition:
     border-color 160ms cubic-bezier(0.25, 1, 0.5, 1),

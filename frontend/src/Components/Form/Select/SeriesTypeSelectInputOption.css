@@ -17,5 +17,5 @@
 
 .format {
   color: var(--darkGray);
-  font-size: $smallFontSize;
+  font-size: var(--smallFontSize);
 }

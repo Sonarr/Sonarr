@@ -10,7 +10,7 @@
   flex: 1 1 auto;
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .page {
     flex-grow: 1;
     height: initial;

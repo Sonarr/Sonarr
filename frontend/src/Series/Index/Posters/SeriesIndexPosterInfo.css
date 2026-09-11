@@ -1,7 +1,7 @@
 .info {
   background-color: var(--seriesBackgroundColor);
   text-align: center;
-  font-size: $smallFontSize;
+  font-size: var(--smallFontSize);
 }
 
 .tags {

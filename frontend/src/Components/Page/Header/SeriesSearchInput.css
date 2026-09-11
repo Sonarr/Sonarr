@@ -141,7 +141,7 @@
   }
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .input {
     min-width: 0;
     max-width: 200px;

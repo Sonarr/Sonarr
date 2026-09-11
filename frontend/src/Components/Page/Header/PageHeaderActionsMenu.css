@@ -23,7 +23,7 @@
   color: var(--inkMuted);
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .menuButton {
     margin-right: 0;
   }

@@ -28,7 +28,7 @@
   margin-left: 15px;
   color: var(--gray);
   text-align: right;
-  font-size: $smallFontSize;
+  font-size: var(--smallFontSize);
 }
 
 .isMissing {
@@ -36,5 +36,5 @@
   margin-left: 15px;
   color: var(--dangerColor);
   text-align: right;
-  font-size: $smallFontSize;
+  font-size: var(--smallFontSize);
 }

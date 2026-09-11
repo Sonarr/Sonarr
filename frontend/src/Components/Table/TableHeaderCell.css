@@ -7,7 +7,7 @@
   letter-spacing: 0.06em;
   font-weight: 500;
   font-size: 11px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
 }
 
 .sortIcon {
@@ -15,7 +15,7 @@
   color: var(--inkFaint);
 }
 
-@media only screen and (max-width: $breakpointMedium) {
+@media (--breakpointMedium) {
   .headerCell {
     white-space: nowrap;
   }

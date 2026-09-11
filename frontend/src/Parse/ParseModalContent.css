@@ -36,7 +36,7 @@
   margin-top: 30px;
   text-align: center;
   font-weight: 300;
-  font-size: $largeFontSize;
+  font-size: var(--largeFontSize);
 }
 
 .helpText {

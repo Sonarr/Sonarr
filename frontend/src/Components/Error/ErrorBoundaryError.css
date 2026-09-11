@@ -29,13 +29,13 @@
   margin-top: 20px;
 }
 
-@media only screen and (max-width: $breakpointMedium) {
+@media (--breakpointMedium) {
   .image {
     height: 250px;
   }
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .image {
     height: 150px;
   }

@@ -25,7 +25,7 @@
   font-weight: 600;
 }
 
-@media only screen and (max-width: $breakpointMedium) {
+@media (--breakpointMedium) {
   .buttons {
     justify-content: center;
     width: 100%;
@@ -39,7 +39,7 @@
   }
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .footer {
     display: flex;
     flex-direction: column;

@@ -9,7 +9,7 @@
   justify-content: flex-end;
   margin-top: auto;
   color: var(--mediumGray);
-  font-size: $defaultFontSize;
+  font-size: var(--defaultFontSize);
 
   &:hover {
     color: var(--darkGray);

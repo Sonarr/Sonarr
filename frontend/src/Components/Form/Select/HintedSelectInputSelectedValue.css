@@ -20,5 +20,5 @@
   margin-left: 15px;
   color: var(--gray);
   text-align: right;
-  font-size: $smallFontSize;
+  font-size: var(--smallFontSize);
 }
