@@ -1,0 +1,11 @@
+.selectAllHeaderCell {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.module.css';
+
+  width: 30px;
+}
+
+.input {
+  composes: input from 'Components/Form/CheckInput.module.css';
+
+  margin: 0;
+}

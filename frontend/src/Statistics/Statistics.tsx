@@ -22,7 +22,7 @@ import {
 import StatisticsSummary, { SummaryItem } from './StatisticsSummary';
 import useChartColors from './useChartColors';
 import useStatistics, { FILTERS } from './useStatistics';
-import styles from './Statistics.css';
+import styles from './Statistics.module.css';
 
 function Statistics() {
   const selectedFilterKey = useStatisticsOption('selectedFilterKey');

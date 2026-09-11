@@ -25,7 +25,7 @@ import {
   useImportSeriesItems,
   useImportSeriesViewOption,
 } from './importSeriesStore';
-import styles from './ImportSeriesList.css';
+import styles from './ImportSeriesList.module.css';
 
 const ITEM_HEIGHT = 112;
 const ITEM_HEIGHT_COMPACT = 64;

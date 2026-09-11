@@ -7,7 +7,7 @@ import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import SectionHeading from 'Components/SectionHeading';
 import { icons } from 'Helpers/Props';
 import ParseModal from 'Parse/ParseModal';
-import settingsStyles from 'Settings/Settings.css';
+import settingsStyles from 'Settings/Settings.module.css';
 import SettingsPage from 'Settings/SettingsPage';
 import translate from 'Utilities/String/translate';
 import CustomFormats from './CustomFormats/CustomFormats';

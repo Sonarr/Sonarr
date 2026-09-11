@@ -7,7 +7,7 @@ import React, {
   useRef,
 } from 'react';
 import { InputChanged } from 'typings/inputs';
-import styles from './TextArea.css';
+import styles from './TextArea.module.css';
 
 export interface TextAreaProps {
   className?: string;

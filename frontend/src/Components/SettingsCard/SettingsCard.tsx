@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import Card from 'Components/Card';
-import styles from './SettingsCard.css';
+import styles from './SettingsCard.module.css';
 
 interface SettingsCardProps {
   name: ReactNode;

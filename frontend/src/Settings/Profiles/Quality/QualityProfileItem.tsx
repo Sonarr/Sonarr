@@ -10,7 +10,7 @@ import translate from 'Utilities/String/translate';
 import { ItemFailures } from './qualityProfileItemFailures';
 import QualityProfileItemSize, { SizeChanged } from './QualityProfileItemSize';
 import { qualityKey, ROOT_CONTAINER } from './useQualityProfileDnd';
-import styles from './QualityProfileItem.css';
+import styles from './QualityProfileItem.module.css';
 
 interface QualityProfileItemProps {
   mode: string;

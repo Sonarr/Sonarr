@@ -14,7 +14,7 @@ import {
   useCustomFormatSchema,
 } from '../useCustomFormats';
 import AddSpecificationItem from './AddSpecificationItem';
-import styles from './AddSpecificationModalContent.css';
+import styles from './AddSpecificationModalContent.module.css';
 
 type SchemaItem = CustomFormatSpecification & {
   presets?: CustomFormatSpecification[];

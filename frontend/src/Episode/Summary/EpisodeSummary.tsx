@@ -16,7 +16,7 @@ import QualityProfileName from 'Settings/Profiles/Quality/QualityProfileName';
 import translate from 'Utilities/String/translate';
 import EpisodeAiring from './EpisodeAiring';
 import EpisodeFileRow from './EpisodeFileRow';
-import styles from './EpisodeSummary.css';
+import styles from './EpisodeSummary.module.css';
 
 const COLUMNS: Column[] = [
   {

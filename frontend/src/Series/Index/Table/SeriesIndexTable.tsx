@@ -11,7 +11,7 @@ import {
 import getIndexOfFirstCharacter from 'Utilities/Array/getIndexOfFirstCharacter';
 import SeriesIndexRow from './SeriesIndexRow';
 import SeriesIndexTableHeader from './SeriesIndexTableHeader';
-import styles from './SeriesIndexTable.css';
+import styles from './SeriesIndexTable.module.css';
 
 interface RowItemData {
   items: Series[];

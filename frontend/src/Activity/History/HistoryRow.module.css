@@ -1,0 +1,29 @@
+.downloadClient {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 120px;
+}
+
+.indexer {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 80px;
+}
+
+.customFormatScore {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 55px;
+}
+
+.releaseGroup {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 110px;
+}
+
+.details {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 30px;
+}

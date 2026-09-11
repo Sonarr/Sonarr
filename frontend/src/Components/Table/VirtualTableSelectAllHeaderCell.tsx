@@ -3,7 +3,7 @@ import CheckInput from 'Components/Form/CheckInput';
 import { CheckInputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import VirtualTableHeaderCell from './VirtualTableHeaderCell';
-import styles from './VirtualTableSelectAllHeaderCell.css';
+import styles from './VirtualTableSelectAllHeaderCell.module.css';
 
 interface VirtualTableSelectAllHeaderCellProps {
   allSelected: boolean;

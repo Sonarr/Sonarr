@@ -6,7 +6,7 @@ import PageHeading from 'Components/Page/PageHeading';
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import SettingsPage from './SettingsPage';
-import styles from './Settings.css';
+import styles from './Settings.module.css';
 
 interface SectionEntry {
   to: string;

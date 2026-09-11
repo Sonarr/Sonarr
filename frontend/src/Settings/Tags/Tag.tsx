@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import SettingsCard from 'Components/SettingsCard/SettingsCard';
-import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.module.css';
 import { kinds } from 'Helpers/Props';
 import { useTagDetail } from 'Tags/useTagDetails';
 import { useDeleteTag } from 'Tags/useTags';

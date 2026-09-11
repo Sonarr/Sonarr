@@ -7,7 +7,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import { CustomFilter as CustomFilterModel } from 'Filters/Filter';
 import translate from 'Utilities/String/translate';
 import CustomFilter from './CustomFilter';
-import styles from './CustomFiltersModalContent.css';
+import styles from './CustomFiltersModalContent.module.css';
 
 interface CustomFiltersModalContentProps {
   customFilters: CustomFilterModel[];

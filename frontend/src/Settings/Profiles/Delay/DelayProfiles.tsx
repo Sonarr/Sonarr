@@ -12,7 +12,7 @@ import {
   useReorderDelayProfile,
   useSortedDelayProfiles,
 } from './useDelayProfiles';
-import styles from './DelayProfiles.css';
+import styles from './DelayProfiles.module.css';
 
 function DelayProfiles() {
   const {

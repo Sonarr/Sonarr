@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import Label from 'Components/Label';
 import SettingsCard from 'Components/SettingsCard/SettingsCard';
-import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.module.css';
 import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
 import { kinds, sizes } from 'Helpers/Props';
 import Field from 'typings/Field';
 import translate from 'Utilities/String/translate';
 import EditMetadataModal from './EditMetadataModal';
-import styles from './Metadata.css';
+import styles from './Metadata.module.css';
 
 interface MetadataProps {
   id: number;

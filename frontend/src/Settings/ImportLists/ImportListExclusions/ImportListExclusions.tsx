@@ -32,7 +32,7 @@ import useImportListExclusions, {
   ImportListExclusion,
   useDeleteImportListExclusions,
 } from './useImportListExclusions';
-import styles from './ImportListExclusions.css';
+import styles from './ImportListExclusions.module.css';
 
 const COLUMNS: Column[] = [
   {

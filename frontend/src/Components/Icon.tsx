@@ -3,7 +3,7 @@ import { LucideIcon, LucideProps } from 'lucide-react';
 import React from 'react';
 import { kinds } from 'Helpers/Props';
 import { Kind } from 'Helpers/Props/kinds';
-import styles from './Icon.css';
+import styles from './Icon.module.css';
 
 export type IconName = LucideIcon;
 export type IconKind = Extract<Kind, keyof typeof styles>;

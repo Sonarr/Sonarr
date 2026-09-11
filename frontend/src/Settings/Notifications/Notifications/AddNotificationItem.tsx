@@ -10,7 +10,7 @@ import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import { NotificationModel } from '../useConnections';
 import AddNotificationPresetMenuItem from './AddNotificationPresetMenuItem';
-import styles from './AddNotificationItem.css';
+import styles from './AddNotificationItem.module.css';
 
 interface AddNotificationItemProps {
   implementation: string;

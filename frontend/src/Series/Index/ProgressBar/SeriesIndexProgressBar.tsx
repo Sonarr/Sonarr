@@ -5,7 +5,7 @@ import { sizes } from 'Helpers/Props';
 import { SeriesStatus } from 'Series/Series';
 import getProgressBarKind from 'Utilities/Series/getProgressBarKind';
 import translate from 'Utilities/String/translate';
-import styles from './SeriesIndexProgressBar.css';
+import styles from './SeriesIndexProgressBar.module.css';
 
 interface SeriesIndexProgressBarProps {
   seriesId: number;

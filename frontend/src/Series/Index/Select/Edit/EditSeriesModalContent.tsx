@@ -14,7 +14,7 @@ import { inputTypes } from 'Helpers/Props';
 import MoveSeriesModal from 'Series/MoveSeries/MoveSeriesModal';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import styles from './EditSeriesModalContent.css';
+import styles from './EditSeriesModalContent.module.css';
 
 interface SavePayload {
   monitored?: boolean;

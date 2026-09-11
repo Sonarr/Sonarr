@@ -20,7 +20,7 @@ import { useDeleteSeries, useSingleSeries } from 'Series/useSeries';
 import { CheckInputChanged } from 'typings/inputs';
 import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
-import styles from './DeleteSeriesModalContent.css';
+import styles from './DeleteSeriesModalContent.module.css';
 
 export interface DeleteSeriesModalContentProps {
   seriesId: number;

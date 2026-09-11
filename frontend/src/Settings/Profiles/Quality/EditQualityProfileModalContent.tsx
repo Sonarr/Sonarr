@@ -37,7 +37,7 @@ import {
   QualityProfileQualityItem,
   useManageQualityProfile,
 } from './useQualityProfiles';
-import styles from './EditQualityProfileModalContent.css';
+import styles from './EditQualityProfileModalContent.module.css';
 
 interface EditQualityProfileModalContentProps {
   id?: number;

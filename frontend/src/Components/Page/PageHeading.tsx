@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './PageHeading.css';
+import styles from './PageHeading.module.css';
 
 interface PageHeadingProps {
   scope?: string;

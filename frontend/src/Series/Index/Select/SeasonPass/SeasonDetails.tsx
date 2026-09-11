@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Season } from 'Series/Series';
 import translate from 'Utilities/String/translate';
 import SeasonPassSeason from './SeasonPassSeason';
-import styles from './SeasonDetails.css';
+import styles from './SeasonDetails.module.css';
 
 interface SeasonDetailsProps {
   seriesId: number;

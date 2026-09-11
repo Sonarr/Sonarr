@@ -11,7 +11,7 @@ import formatBytes from 'Utilities/Number/formatBytes';
 import roundNumber from 'Utilities/Number/roundNumber';
 import translate from 'Utilities/String/translate';
 import { emptyItemFailures, ItemFailures } from './qualityProfileItemFailures';
-import styles from './QualityProfileItemSize.css';
+import styles from './QualityProfileItemSize.module.css';
 
 const MIN = 0;
 const MAX = 400;

@@ -3,7 +3,7 @@ import React from 'react';
 import Icon, { IconName } from 'Components/Icon';
 import Link, { LinkProps } from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
-import styles from './PageToolbarButton.css';
+import styles from './PageToolbarButton.module.css';
 
 export interface PageToolbarButtonProps extends LinkProps {
   label: string;

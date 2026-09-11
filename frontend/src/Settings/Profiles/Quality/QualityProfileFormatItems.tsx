@@ -5,7 +5,7 @@ import { QualityProfileFormatItem as QualityProfileFormatItemModel } from 'Setti
 import { Failure } from 'typings/pending';
 import translate from 'Utilities/String/translate';
 import QualityProfileFormatItem from './QualityProfileFormatItem';
-import styles from './QualityProfileFormatItems.css';
+import styles from './QualityProfileFormatItems.module.css';
 
 interface QualityProfileFormatItemsProps {
   profileFormatItems: QualityProfileFormatItemModel[];

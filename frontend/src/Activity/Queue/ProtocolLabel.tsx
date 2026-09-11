@@ -1,7 +1,7 @@
 import React from 'react';
 import Label, { LabelProps } from 'Components/Label';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
-import styles from './ProtocolLabel.css';
+import styles from './ProtocolLabel.module.css';
 
 interface ProtocolLabelProps
   extends Omit<LabelProps, 'children' | 'className'> {

@@ -27,7 +27,7 @@ import { EnhancedSelectInputChanged, InputChanged } from 'typings/inputs';
 import formatShortTimeSpan from 'Utilities/Date/formatShortTimeSpan';
 import translate from 'Utilities/String/translate';
 import { useManageImportList } from './useImportLists';
-import styles from './EditImportListModalContent.css';
+import styles from './EditImportListModalContent.module.css';
 
 export interface EditImportListModalContentProps {
   id?: number;

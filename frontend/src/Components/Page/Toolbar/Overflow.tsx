@@ -15,7 +15,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import slotStyles from './ToolbarItem.css';
+import slotStyles from './ToolbarItem.module.css';
 
 interface OverflowCtx {
   manager: OverflowManager;

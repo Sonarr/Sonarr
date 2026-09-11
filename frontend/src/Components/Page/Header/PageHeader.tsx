@@ -8,7 +8,7 @@ import translate from 'Utilities/String/translate';
 import KeyboardShortcutsModal from './KeyboardShortcutsModal';
 import PageHeaderActionsMenu from './PageHeaderActionsMenu';
 import SeriesSearchInput from './SeriesSearchInput';
-import styles from './PageHeader.css';
+import styles from './PageHeader.module.css';
 
 function PageHeader() {
   const [isKeyboardShortcutsModalOpen, setIsKeyboardShortcutsModalOpen] =

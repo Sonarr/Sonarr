@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import styles from './PageMessage.css';
+import styles from './PageMessage.module.css';
 
 interface PageMessageProps {
   children: ReactNode;

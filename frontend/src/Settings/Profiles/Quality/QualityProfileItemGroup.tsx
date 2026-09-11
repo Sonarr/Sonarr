@@ -16,7 +16,7 @@ import { ItemFailures } from './qualityProfileItemFailures';
 import { SizeChanged } from './QualityProfileItemSize';
 import { groupContainerKey, ROOT_CONTAINER } from './useQualityProfileDnd';
 import { QualityProfileQualityItem } from './useQualityProfiles';
-import styles from './QualityProfileItemGroup.css';
+import styles from './QualityProfileItemGroup.module.css';
 
 interface QualityProfileItemGroupProps {
   mode?: string;

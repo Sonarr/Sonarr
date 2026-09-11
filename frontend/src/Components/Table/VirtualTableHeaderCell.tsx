@@ -3,7 +3,7 @@ import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons, sortDirections } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
-import styles from './VirtualTableHeaderCell.css';
+import styles from './VirtualTableHeaderCell.module.css';
 
 interface VirtualTableHeaderCellProps {
   className?: string;
