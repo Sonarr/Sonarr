@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
         public void Setup()
         {
             _remoteEpisode.ParsedEpisodeInfo = new ParsedEpisodeInfo();
-            _remoteEpisode.ParsedEpisodeInfo.SeasonNumber = 5;
+            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = [5];
             _remoteEpisode.ParsedEpisodeInfo.EpisodeNumbers = new[] { 1 };
             _remoteEpisode.MappedSeasonNumber = 5;
 
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
         [Test]
         public void should_return_false_if_season_does_not_match()
         {
-            _remoteEpisode.ParsedEpisodeInfo.SeasonNumber = 10;
+            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = [10];
             _remoteEpisode.MappedSeasonNumber = 10;
 
             Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeFalse();
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
         [Test]
         public void should_return_true_if_season_matches_after_scenemapping()
         {
-            _remoteEpisode.ParsedEpisodeInfo.SeasonNumber = 10;
+            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = [10];
             _remoteEpisode.MappedSeasonNumber = 5; // 10 -> 5 mapping
             _searchCriteria.SeasonNumber = 10; // searching by tvdb 5 = 10 scene
 
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
         [Test]
         public void should_return_false_if_season_does_not_match_after_scenemapping()
         {
-            _remoteEpisode.ParsedEpisodeInfo.SeasonNumber = 10;
+            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = [10];
             _remoteEpisode.MappedSeasonNumber = 6; // 9 -> 5 mapping
             _searchCriteria.SeasonNumber = 9; // searching by tvdb 5 = 9 scene
 
@@ -78,6 +78,29 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
         public void should_return_true_if_full_season_result_for_full_season_search()
         {
             Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_if_searched_season_is_within_multi_season_pack_range()
+        {
+            // e.g. "Show.S05E24.S06E01" - a season finale bundled with the next season's premiere.
+            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = new[] { 5, 6 };
+            _remoteEpisode.ParsedEpisodeInfo.EpisodeNumbers = new[] { 24, 1 };
+            _searchCriteria.SeasonNumber = 6;
+            _searchCriteria.EpisodeNumber = 1;
+
+            Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_false_if_searched_season_is_outside_multi_season_pack_range()
+        {
+            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = new[] { 5, 6 };
+            _remoteEpisode.ParsedEpisodeInfo.EpisodeNumbers = new[] { 24, 1 };
+            _searchCriteria.SeasonNumber = 7;
+            _searchCriteria.EpisodeNumber = 1;
+
+            Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeFalse();
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Linq;
 using NLog;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -33,9 +34,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
                 return DownloadSpecDecision.Accept();
             }
 
-            var seasonNumber = remoteEpisode.ParsedEpisodeInfo.SeasonNumber ?? remoteEpisode.MappedSeasonNumber;
+            var seasonNumbers = remoteEpisode.ParsedEpisodeInfo.SeasonNumbers;
 
-            if (singleEpisodeSpec.SeasonNumber != seasonNumber)
+            var matches = seasonNumbers.Length > 0
+                ? seasonNumbers.Contains(singleEpisodeSpec.SeasonNumber)
+                : singleEpisodeSpec.SeasonNumber == remoteEpisode.MappedSeasonNumber;
+
+            if (!matches)
             {
                 _logger.Debug("Season number does not match searched season number, skipping.");
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.WrongSeason, "Wrong season");

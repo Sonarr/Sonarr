@@ -44,7 +44,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 
         private DownloadSpecDecision IsSatisfiedBy(RemoteEpisode remoteEpisode, SingleEpisodeSearchCriteria singleEpisodeSpec)
         {
-            if (singleEpisodeSpec.SeasonNumber != remoteEpisode.ParsedEpisodeInfo.SeasonNumber)
+            var seasonNumbers = remoteEpisode.ParsedEpisodeInfo.SeasonNumbers;
+
+            var seasonMatches = seasonNumbers.Length > 0
+                ? seasonNumbers.Contains(singleEpisodeSpec.SeasonNumber)
+                : singleEpisodeSpec.SeasonNumber == remoteEpisode.MappedSeasonNumber;
+
+            if (!seasonMatches)
             {
                 _logger.Debug("Season number does not match searched season number, skipping.");
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.WrongSeason, "Wrong season");

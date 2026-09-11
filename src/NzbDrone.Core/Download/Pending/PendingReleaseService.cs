@@ -283,7 +283,7 @@ namespace NzbDrone.Core.Download.Pending
             var seriesReleases = _repository.AllBySeriesId(targetItem.SeriesId);
 
             var releasesToRemove = seriesReleases.Where(
-                c => c.ParsedEpisodeInfo.SeasonNumber == targetItem.ParsedEpisodeInfo.SeasonNumber &&
+                c => c.ParsedEpisodeInfo.SeasonNumbers.SequenceEqual(targetItem.ParsedEpisodeInfo.SeasonNumbers) &&
                      c.ParsedEpisodeInfo.EpisodeNumbers.SequenceEqual(targetItem.ParsedEpisodeInfo.EpisodeNumbers));
 
             _repository.DeleteMany(releasesToRemove.Select(c => c.Id));
@@ -295,7 +295,7 @@ namespace NzbDrone.Core.Download.Pending
             var seriesReleases = _repository.AllBySeriesId(targetItem.SeriesId);
 
             var releasesToRemove = seriesReleases.Where(
-                c => c.ParsedEpisodeInfo.SeasonNumber == targetItem.ParsedEpisodeInfo.SeasonNumber &&
+                c => c.ParsedEpisodeInfo.SeasonNumbers.SequenceEqual(targetItem.ParsedEpisodeInfo.SeasonNumbers) &&
                      c.ParsedEpisodeInfo.EpisodeNumbers.SequenceEqual(targetItem.ParsedEpisodeInfo.EpisodeNumbers));
 
             _repository.DeleteMany(releasesToRemove.Select(c => c.Id));
@@ -396,13 +396,13 @@ namespace NzbDrone.Core.Download.Pending
                     {
                         _logger.Debug(ex, ex.Message);
 
-                        release.RemoteEpisode.MappedSeasonNumber = release.ParsedEpisodeInfo.SeasonNumber;
+                        release.RemoteEpisode.MappedSeasonNumber = release.ParsedEpisodeInfo.SeasonNumbers.FirstOrDefault();
                         release.RemoteEpisode.Episodes = new List<Episode>();
                     }
                 }
                 else
                 {
-                    release.RemoteEpisode.MappedSeasonNumber = release.ParsedEpisodeInfo.SeasonNumber;
+                    release.RemoteEpisode.MappedSeasonNumber = release.ParsedEpisodeInfo.SeasonNumbers.FirstOrDefault();
                     release.RemoteEpisode.Episodes = new List<Episode>();
                 }
 

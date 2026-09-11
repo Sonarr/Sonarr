@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Parser.Model
             {
                 return ((AirDate.IsNullOrWhiteSpace() &&
                        SeriesTitle.IsNullOrWhiteSpace() &&
-                       (EpisodeNumbers.Length == 0 || SeasonNumber == 0)) || (!SeriesTitle.IsNullOrWhiteSpace() && Special)) ||
+                       (EpisodeNumbers.Length == 0 || SeasonNumbers.FirstOrDefault() == 0)) || (!SeriesTitle.IsNullOrWhiteSpace() && Special)) ||
                        (EpisodeNumbers.Length == 1 && EpisodeNumbers[0] == 0);
             }
 
@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Parser.Model
             }
             else if (EpisodeNumbers != null && EpisodeNumbers.Any())
             {
-                episodeString = string.Format("S{0:00}E{1}", SeasonNumber, string.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))));
+                episodeString = string.Format("S{0:00}E{1}", SeasonNumbers.FirstOrDefault(), string.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))));
             }
             else if (AbsoluteEpisodeNumbers != null && AbsoluteEpisodeNumbers.Any())
             {
@@ -156,7 +156,7 @@ namespace NzbDrone.Core.Parser.Model
             {
                 if (SeasonNumber.HasValue && SeasonNumber != 0)
                 {
-                    episodeString = string.Format("[Unknown Season {0:00} Special]", SeasonNumber);
+                    episodeString = string.Format("[Unknown Season {0:00} Special]", SeasonNumbers.FirstOrDefault());
                 }
                 else
                 {

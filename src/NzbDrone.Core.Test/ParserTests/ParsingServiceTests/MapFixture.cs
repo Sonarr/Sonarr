@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             {
                 SeriesTitle = _series.Title,
                 SeriesTitleInfo = new SeriesTitleInfo(),
-                SeasonNumber = 1,
+                SeasonNumbers = [1],
                 EpisodeNumbers = new[] { 1 },
                 Languages = new List<Language> { Language.English }
             };
@@ -257,7 +257,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         [Test]
         public void should_use_scene_season_number_from_xem_mapping_if_alias_matches_a_specific_season_number()
         {
-            _parsedEpisodeInfo.SeasonNumber = 1;
+            _parsedEpisodeInfo.SeasonNumbers = [1];
 
             var sceneMapping = new SceneMapping
             {
@@ -277,7 +277,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         [Test]
         public void should_not_use_scene_season_number_from_xem_mapping_if_alias_matches_a_specific_season_number_but_did_not_parse_season_1()
         {
-            _parsedEpisodeInfo.SeasonNumber = 2;
+            _parsedEpisodeInfo.SeasonNumbers = [2];
 
             var sceneMapping = new SceneMapping
             {
