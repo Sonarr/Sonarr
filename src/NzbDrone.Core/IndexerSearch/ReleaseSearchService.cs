@@ -180,6 +180,7 @@ namespace NzbDrone.Core.IndexerSearch
                         Episodes = groupedEpisode.ToList(),
                         EpisodeMapping = episodeMapping,
                         SceneTitles = episodeMapping.SceneTitles,
+                        SeasonSceneTitles = episodeMapping.SeasonSceneTitles,
                         SearchMode = episodeMapping.SearchMode,
                         SeasonNumber = episodeMapping.SeasonNumber
                     };
@@ -188,6 +189,7 @@ namespace NzbDrone.Core.IndexerSearch
                     {
                         existing.Episodes.AddRange(seasonMapping.Episodes);
                         existing.SceneTitles.AddRange(seasonMapping.SceneTitles);
+                        existing.SeasonSceneTitles.AddRange(seasonMapping.SeasonSceneTitles);
                     }
                     else
                     {
@@ -200,6 +202,7 @@ namespace NzbDrone.Core.IndexerSearch
             {
                 item.Value.Episodes = item.Value.Episodes.Distinct().ToList();
                 item.Value.SceneTitles = item.Value.SceneTitles.Distinct(StringComparer.InvariantCultureIgnoreCase).ToList();
+                item.Value.SeasonSceneTitles = item.Value.SeasonSceneTitles.Distinct(StringComparer.InvariantCultureIgnoreCase).ToList();
             }
 
             return dict.Values.ToList();
@@ -218,6 +221,7 @@ namespace NzbDrone.Core.IndexerSearch
                 if (dict.TryGetValue(episodeMapping, out var existing))
                 {
                     existing.SceneTitles.AddRange(episodeMapping.SceneTitles);
+                    existing.SeasonSceneTitles.AddRange(episodeMapping.SeasonSceneTitles);
                 }
                 else
                 {
@@ -228,6 +232,7 @@ namespace NzbDrone.Core.IndexerSearch
             foreach (var item in dict)
             {
                 item.Value.SceneTitles = item.Value.SceneTitles.Distinct(StringComparer.InvariantCultureIgnoreCase).ToList();
+                item.Value.SeasonSceneTitles = item.Value.SeasonSceneTitles.Distinct(StringComparer.InvariantCultureIgnoreCase).ToList();
             }
 
             return dict.Values.ToList();
@@ -277,8 +282,12 @@ namespace NzbDrone.Core.IndexerSearch
                     includeGlobal = false;
                 }
 
+                var isSeasonTitle = mappingSceneSeasonNumber.HasValue && series.CleanTitle != sceneMapping.SearchTerm.CleanSeriesTitle();
+
                 // By default we do a alt title search in case indexers don't have the release properly indexed.  Services can override this behavior.
-                var searchMode = sceneMapping.SearchMode ?? ((mappingSceneSeasonNumber.HasValue && series.CleanTitle != sceneMapping.SearchTerm.CleanSeriesTitle()) ? SearchMode.SearchTitle : SearchMode.Default);
+                var searchMode = sceneMapping.SearchMode ?? (isSeasonTitle ? SearchMode.SearchTitle : SearchMode.Default);
+
+                var seasonSceneTitles = isSeasonTitle ? new List<string> { sceneMapping.SearchTerm } : new List<string>();
 
                 if (ignoreSceneNumbering)
                 {
@@ -287,6 +296,7 @@ namespace NzbDrone.Core.IndexerSearch
                         Episode = episode,
                         SearchMode = searchMode,
                         SceneTitles = new List<string> { sceneMapping.SearchTerm },
+                        SeasonSceneTitles = seasonSceneTitles,
                         SeasonNumber = releaseSeasonNumber,
                         EpisodeNumber = episode.EpisodeNumber,
                         AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber
@@ -299,6 +309,7 @@ namespace NzbDrone.Core.IndexerSearch
                         Episode = episode,
                         SearchMode = searchMode,
                         SceneTitles = new List<string> { sceneMapping.SearchTerm },
+                        SeasonSceneTitles = seasonSceneTitles,
                         SeasonNumber = releaseSeasonNumber,
                         EpisodeNumber = episode.SceneEpisodeNumber ?? episode.EpisodeNumber,
                         AbsoluteEpisodeNumber = episode.SceneAbsoluteEpisodeNumber ?? episode.AbsoluteEpisodeNumber
@@ -313,6 +324,7 @@ namespace NzbDrone.Core.IndexerSearch
                     Episode = episode,
                     SearchMode = SearchMode.Default,
                     SceneTitles = new List<string> { series.Title },
+                    SeasonSceneTitles = new List<string>(),
                     SeasonNumber = episode.SceneSeasonNumber ?? episode.SeasonNumber,
                     EpisodeNumber = episode.SceneEpisodeNumber ?? episode.EpisodeNumber,
                     AbsoluteEpisodeNumber = episode.SceneSeasonNumber ?? episode.AbsoluteEpisodeNumber
@@ -399,8 +411,6 @@ namespace NzbDrone.Core.IndexerSearch
         {
             var downloadDecisions = new List<DownloadDecision>();
 
-            var searchSpec = Get<AnimeSeasonSearchCriteria>(series, episodes, monitoredOnly, userInvokedSearch, interactiveSearch);
-
             // Episode needs to be monitored if it's not an interactive search
             // and Ensure episode has an airdate and has already aired
             var episodesToSearch = episodes
@@ -414,14 +424,29 @@ namespace NzbDrone.Core.IndexerSearch
 
             var allEpisodesAiredOrAiringSoon = seasonEpisodes.All(ep => ep.AirDateUtc.HasValue && !ep.AirDateUtc.Value.After(DateTime.UtcNow.AddHours(24)));
 
-            var seasonsToSearch = GetSceneSeasonMappings(series, episodesToSearch)
+            var seasonMappings = GetSceneSeasonMappings(series, episodesToSearch);
+
+            var seasonsToSearch = seasonMappings
                 .GroupBy(ep => ep.SeasonNumber)
                 .Select(epList => epList.First())
                 .ToList();
 
             foreach (var season in seasonsToSearch)
             {
+                var searchSpec = Get<AnimeSeasonSearchCriteria>(series, season, monitoredOnly, userInvokedSearch, interactiveSearch);
                 searchSpec.SeasonNumber = season.SeasonNumber;
+
+                searchSpec.SceneTitles = seasonMappings
+                    .Where(m => m.SeasonNumber == season.SeasonNumber)
+                    .SelectMany(m => m.SceneTitles)
+                    .Distinct(StringComparer.InvariantCultureIgnoreCase)
+                    .ToList();
+
+                searchSpec.SeasonSceneTitles = seasonMappings
+                    .Where(m => m.SeasonNumber == season.SeasonNumber)
+                    .SelectMany(m => m.SeasonSceneTitles)
+                    .Distinct(StringComparer.InvariantCultureIgnoreCase)
+                    .ToList();
 
                 var decisions = await Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
                 downloadDecisions.AddRange(decisions);

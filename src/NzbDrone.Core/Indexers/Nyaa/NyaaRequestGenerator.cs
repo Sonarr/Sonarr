@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Http;
@@ -87,9 +88,16 @@ namespace NzbDrone.Core.Indexers.Nyaa
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            foreach (var searchTitle in searchCriteria.SceneTitles.Select(PrepareQuery))
+            foreach (var sceneTitle in searchCriteria.SceneTitles)
             {
-                if (Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0)
+                var searchTitle = PrepareQuery(sceneTitle);
+
+                if (searchCriteria.SeasonSceneTitles.Contains(sceneTitle, StringComparer.InvariantCultureIgnoreCase))
+                {
+                    // A season title alias already identifies the season, no need to add a season number.
+                    pageableRequests.Add(GetPagedRequests(searchTitle));
+                }
+                else if (Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0)
                 {
                     pageableRequests.Add(GetPagedRequests($"{searchTitle}+s{searchCriteria.SeasonNumber:00}"));
                 }
