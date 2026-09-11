@@ -151,7 +151,7 @@ namespace NzbDrone.Core.MediaFiles
                 _diskTransferService.TransferFile(episodeFilePath, destinationFilePath, mode);
             }
 
-            _updateEpisodeFileService.ChangeFileDateForFile(episodeFile, series, episodes);
+            _updateEpisodeFileService.ChangeFileDateForFile(episodeFile, series, episodes, localEpisode?.PreservedFileDate);
 
             try
             {

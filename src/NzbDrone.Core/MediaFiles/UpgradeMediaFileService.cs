@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -61,6 +62,17 @@ namespace NzbDrone.Core.MediaFiles
 
                 if (_diskProvider.FileExists(episodeFilePath))
                 {
+                    // Capture original file date before deletion for potential preservation
+                    try
+                    {
+                        localEpisode.PreservedFileDate = _diskProvider.FileGetLastWrite(episodeFilePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Debug(ex, "Failed to read file date for preservation: {0}", episodeFilePath);
+                        localEpisode.PreservedFileDate = null;
+                    }
+
                     _logger.Debug("Removing existing episode file: {0}", file);
                     recycleBinPath = _recycleBinProvider.DeleteFile(episodeFilePath, subfolder);
                 }
