@@ -21,7 +21,7 @@
 }
 
 .suggestionsContainerOpen {
-  z-index: $popperZIndex;
+  z-index: var(--popperZIndex);
 
   .suggestionsContainer {
     overflow-y: auto;

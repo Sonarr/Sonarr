@@ -3,7 +3,7 @@
   max-width: 70ch;
   color: var(--inkMuted);
   font-size: 13px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1.55;
 }
 
@@ -21,7 +21,7 @@
   margin-left: 8px;
 }
 
-@media only screen and (max-width: $breakpointExtraSmall) {
+@media (--breakpointExtraSmall) {
   .modalFooter {
     flex-direction: column;
     gap: 10px;

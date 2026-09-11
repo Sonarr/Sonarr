@@ -7,7 +7,7 @@
   padding: var(--pageContentBodyPadding);
   padding-top: 24px;
 }
-@media only screen and (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .contentBody {
     flex-basis: auto;
     overflow-y: hidden !important;

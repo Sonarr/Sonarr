@@ -5,7 +5,7 @@
   max-width: 65ch;
   color: var(--inkMuted);
   font-size: 13px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1.5;
   gap: 8px;
 }

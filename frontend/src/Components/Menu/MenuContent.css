@@ -1,5 +1,5 @@
 .menuContent {
-  z-index: $popperZIndex;
+  z-index: var(--popperZIndex);
   display: flex;
   flex-direction: column;
   overflow: hidden;

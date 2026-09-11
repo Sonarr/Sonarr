@@ -6,22 +6,22 @@
 /* Sizes */
 
 .extraSmall {
-  max-width: $formGroupExtraSmallWidth;
+  max-width: var(--formGroupExtraSmallWidth);
 }
 
 .small {
-  max-width: $formGroupSmallWidth;
+  max-width: var(--formGroupSmallWidth);
 }
 
 .medium {
-  max-width: $formGroupMediumWidth;
+  max-width: var(--formGroupMediumWidth);
 }
 
 .large {
-  max-width: $formGroupLargeWidth;
+  max-width: var(--formGroupLargeWidth);
 }
 
-@media only screen and (max-width: $breakpointLarge) {
+@media (--breakpointLarge) {
   .group {
     display: block;
   }

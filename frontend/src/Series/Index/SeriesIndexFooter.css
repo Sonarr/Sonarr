@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   margin-top: 20px;
-  font-size: $smallFontSize;
+  font-size: var(--smallFontSize);
 }
 
 .legendItem {
@@ -54,13 +54,13 @@
   flex-wrap: wrap;
 }
 
-@media (max-width: $breakpointLarge) {
+@media (--breakpointLarge) {
   .statistics {
     display: block;
   }
 }
 
-@media (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .footer {
     display: block;
   }

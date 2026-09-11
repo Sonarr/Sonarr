@@ -4,7 +4,7 @@
   padding-top: 20px;
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .messages {
     margin-bottom: 0;
   }
