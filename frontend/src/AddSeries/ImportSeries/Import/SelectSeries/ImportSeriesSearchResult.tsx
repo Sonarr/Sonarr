@@ -5,7 +5,7 @@ import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
 import useExistingSeries from 'Series/useExistingSeries';
 import ImportSeriesTitle from './ImportSeriesTitle';
-import styles from './ImportSeriesSearchResult.css';
+import styles from './ImportSeriesSearchResult.module.css';
 
 interface ImportSeriesSearchResultProps {
   id: string;

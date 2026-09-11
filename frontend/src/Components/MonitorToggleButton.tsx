@@ -3,7 +3,7 @@ import React, { SyntheticEvent, useCallback, useMemo } from 'react';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import styles from './MonitorToggleButton.css';
+import styles from './MonitorToggleButton.module.css';
 
 interface MonitorToggleButtonProps {
   className?: string;

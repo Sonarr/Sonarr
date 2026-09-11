@@ -43,7 +43,7 @@ import getToggledRange from 'Utilities/Table/getToggledRange';
 import EpisodeRow from './EpisodeRow';
 import SeasonInfo from './SeasonInfo';
 import SeasonProgressLabel from './SeasonProgressLabel';
-import styles from './SeriesDetailsSeason.css';
+import styles from './SeriesDetailsSeason.module.css';
 
 function getSeasonStatistics(episodes: Episode[]) {
   let episodeCount = 0;

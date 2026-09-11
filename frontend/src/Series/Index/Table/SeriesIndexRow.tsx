@@ -31,7 +31,7 @@ import useSeriesIndexItem from '../useSeriesIndexItem';
 import hasGrowableColumns from './hasGrowableColumns';
 import SeasonsCell from './SeasonsCell';
 import SeriesStatusCell from './SeriesStatusCell';
-import styles from './SeriesIndexRow.css';
+import styles from './SeriesIndexRow.module.css';
 
 interface SeriesIndexRowProps {
   seriesId: number;

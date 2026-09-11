@@ -17,7 +17,7 @@ import { inputTypes, kinds } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import { DelayProfile, useManageDelayProfile } from './useDelayProfiles';
-import styles from './EditDelayProfileModalContent.css';
+import styles from './EditDelayProfileModalContent.module.css';
 
 const protocolOptions: EnhancedSelectInputValue<string>[] = [
   {

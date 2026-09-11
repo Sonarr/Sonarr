@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import styles from './ParseResultItem.css';
+import styles from './ParseResultItem.module.css';
 
 interface ParseResultItemProps {
   title: string;

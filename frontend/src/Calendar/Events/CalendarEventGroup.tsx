@@ -15,7 +15,7 @@ import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
 import CalendarEvent from './CalendarEvent';
-import styles from './CalendarEventGroup.css';
+import styles from './CalendarEventGroup.module.css';
 
 interface CalendarEventGroupProps {
   episodeIds: number[];

@@ -27,7 +27,7 @@ import {
   useLookupQueueHasItems,
 } from './importSeriesStore';
 import { useImportSeries } from './useImportSeries';
-import styles from './ImportSeriesFooter.css';
+import styles from './ImportSeriesFooter.module.css';
 
 function ImportSeriesFooter() {
   const defaults = useAddSeriesOptions();

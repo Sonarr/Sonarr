@@ -9,7 +9,7 @@ import translate from 'Utilities/String/translate';
 import EditRemotePathMappingModal from './EditRemotePathMappingModal';
 import RemotePathMapping from './RemotePathMapping';
 import { useRemotePathMappings } from './useRemotePathMappings';
-import styles from './RemotePathMappings.css';
+import styles from './RemotePathMappings.module.css';
 
 function RemotePathMappings() {
   const { isFetching, isFetched, error, data } = useRemotePathMappings();

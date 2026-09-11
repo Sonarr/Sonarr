@@ -14,7 +14,7 @@ import { icons } from 'Helpers/Props';
 import formatSeason from 'Season/formatSeason';
 import translate from 'Utilities/String/translate';
 import SeriesHistoryRow from './SeriesHistoryRow';
-import styles from './SeriesHistoryModalContent.css';
+import styles from './SeriesHistoryModalContent.module.css';
 
 const columns: Column[] = [
   {

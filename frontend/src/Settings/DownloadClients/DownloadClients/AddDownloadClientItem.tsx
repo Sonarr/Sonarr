@@ -9,7 +9,7 @@ import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import AddDownloadClientPresetMenuItem from './AddDownloadClientPresetMenuItem';
 import { DownloadClientModel } from './useDownloadClients';
-import styles from './AddDownloadClientItem.css';
+import styles from './AddDownloadClientItem.module.css';
 
 interface AddDownloadClientItemProps {
   implementation: string;

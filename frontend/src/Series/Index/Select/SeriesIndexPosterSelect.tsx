@@ -3,7 +3,7 @@ import { useSelect } from 'App/Select/SelectContext';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
-import styles from './SeriesIndexPosterSelect.css';
+import styles from './SeriesIndexPosterSelect.module.css';
 
 interface SeriesIndexPosterSelectProps {
   seriesId: number;

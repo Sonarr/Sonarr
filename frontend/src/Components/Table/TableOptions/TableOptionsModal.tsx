@@ -18,7 +18,7 @@ import { TableOptionsChangePayload } from 'typings/Table';
 import translate from 'Utilities/String/translate';
 import Column from '../Column';
 import TableOptionsColumn from './TableOptionsColumn';
-import styles from './TableOptionsModal.css';
+import styles from './TableOptionsModal.module.css';
 
 export interface TableOptionsModalProps {
   isOpen: boolean;

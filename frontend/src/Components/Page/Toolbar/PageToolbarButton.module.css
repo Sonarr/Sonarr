@@ -1,0 +1,53 @@
+.toolbarButton {
+  composes: link from 'Components/Link/Link.module.css';
+
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+  height: var(--chipSize);
+  border-radius: 999px;
+  color: var(--toolbarColor);
+  white-space: nowrap;
+  transition:
+    color var(--transitionSmooth),
+    background-color var(--transitionSmooth),
+    box-shadow var(--transitionSmooth),
+    transform var(--transitionSmooth);
+  gap: 7px;
+
+  &:hover {
+    background-color: var(--paperCard);
+    box-shadow: var(--shadowChip);
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  &.isDisabled {
+    color: var(--disabledColor);
+    pointer-events: none;
+  }
+}
+
+.label {
+  letter-spacing: -0.01em;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1;
+}
+
+@media (--breakpointSmall) {
+  .toolbarButton {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 6px 10px;
+    min-height: 48px;
+    height: auto;
+    border-radius: 12px;
+    gap: 4px;
+  }
+
+  .label {
+    font-size: 12px;
+  }
+}

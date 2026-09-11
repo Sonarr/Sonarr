@@ -8,7 +8,7 @@ import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
-import styles from './SeriesIndexOverviewInfo.css';
+import styles from './SeriesIndexOverviewInfo.module.css';
 
 interface SeriesIndexOverviewInfoProps {
   showNetwork: boolean;

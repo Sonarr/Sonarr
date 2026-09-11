@@ -18,7 +18,7 @@ import { InputChanged } from 'typings/inputs';
 import Metadata from 'typings/Metadata';
 import translate from 'Utilities/String/translate';
 import { useManageMetadata } from '../useMetadata';
-import styles from './EditMetadataModalContent.css';
+import styles from './EditMetadataModalContent.module.css';
 
 export interface EditMetadataModalContentProps {
   id: number;

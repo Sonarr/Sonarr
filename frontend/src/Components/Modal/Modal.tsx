@@ -17,7 +17,7 @@ import * as keyCodes from 'Utilities/Constants/keyCodes';
 import { setScrollLock } from 'Utilities/scrollLock';
 import { ModalContext } from './ModalContext';
 import ModalError from './ModalError';
-import styles from './Modal.css';
+import styles from './Modal.module.css';
 
 const openModals: string[] = [];
 const node = document.getElementById('portal-root');

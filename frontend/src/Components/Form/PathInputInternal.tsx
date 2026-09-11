@@ -19,7 +19,7 @@ import { InputChanged } from 'typings/inputs';
 import AutoSuggestInput from './AutoSuggestInput';
 import FormInputButton from './FormInputButton';
 import type { PathInputProps } from './PathInput';
-import styles from './PathInput.css';
+import styles from './PathInput.module.css';
 
 export interface PathInputInternalProps extends PathInputProps {
   paths: Path[];

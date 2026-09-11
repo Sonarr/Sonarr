@@ -12,7 +12,7 @@ import ErrorPage from './ErrorPage';
 import PageHeader from './Header/PageHeader';
 import LoadingPage from './LoadingPage';
 import PageSidebar from './Sidebar/PageSidebar';
-import styles from './Page.css';
+import styles from './Page.module.css';
 
 interface PageProps {
   children: React.ReactNode;

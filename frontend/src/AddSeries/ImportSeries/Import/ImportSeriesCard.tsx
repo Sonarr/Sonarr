@@ -21,7 +21,7 @@ import {
   useImportSeriesItem,
 } from './importSeriesStore';
 import ImportSeriesSelectSeries from './SelectSeries/ImportSeriesSelectSeries';
-import styles from './ImportSeriesCard.css';
+import styles from './ImportSeriesCard.module.css';
 
 const HIDE_HINT = { includeHint: false };
 

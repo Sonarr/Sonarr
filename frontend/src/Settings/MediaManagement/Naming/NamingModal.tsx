@@ -16,7 +16,7 @@ import NamingOption from './NamingOption';
 import TokenCase from './TokenCase';
 import TokenSeparator from './TokenSeparator';
 import { NamingSettingsModel } from './useNamingSettings';
-import styles from './NamingModal.css';
+import styles from './NamingModal.module.css';
 
 interface Token {
   token: string;

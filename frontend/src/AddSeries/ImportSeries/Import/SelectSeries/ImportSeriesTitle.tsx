@@ -2,7 +2,7 @@ import React from 'react';
 import Label from 'Components/Label';
 import { kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import styles from './ImportSeriesTitle.css';
+import styles from './ImportSeriesTitle.module.css';
 
 interface ImportSeriesTitleProps {
   title: string;

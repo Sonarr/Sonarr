@@ -6,7 +6,7 @@ import Button from 'Components/Link/Button';
 import { icons, kinds } from 'Helpers/Props';
 import { useAddRootFolder } from 'RootFolder/useRootFolders';
 import translate from 'Utilities/String/translate';
-import styles from './AddRootFolder.css';
+import styles from './AddRootFolder.module.css';
 
 function AddRootFolder() {
   const { addRootFolder, isAdding, addError } = useAddRootFolder();

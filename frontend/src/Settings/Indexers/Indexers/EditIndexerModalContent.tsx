@@ -20,7 +20,7 @@ import { SelectedSchema } from 'Settings/useProviderSchema';
 import { EnhancedSelectInputChanged, InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import { useManageIndexer } from '../useIndexers';
-import styles from './EditIndexerModalContent.css';
+import styles from './EditIndexerModalContent.module.css';
 
 export interface EditIndexerModalContentProps {
   id?: number;

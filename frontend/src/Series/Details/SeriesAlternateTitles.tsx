@@ -1,6 +1,6 @@
 import React from 'react';
 import { AlternateTitle } from 'Series/Series';
-import styles from './SeriesAlternateTitles.css';
+import styles from './SeriesAlternateTitles.module.css';
 
 interface SeriesAlternateTitlesProps {
   alternateTitles: AlternateTitle[];

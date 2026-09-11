@@ -10,7 +10,7 @@ import usePrevious from 'Helpers/Hooks/usePrevious';
 import { icons } from 'Helpers/Props';
 import { ValidationFailure } from 'typings/pending';
 import { ApiError } from 'Utilities/Fetch/fetchJson';
-import styles from './SpinnerErrorButton.css';
+import styles from './SpinnerErrorButton.module.css';
 
 function getTestResult(error: ApiError | Error | string | undefined | null) {
   if (!error) {

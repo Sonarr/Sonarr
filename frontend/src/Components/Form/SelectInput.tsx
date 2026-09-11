@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from 'react';
 import { InputChanged } from 'typings/inputs';
-import styles from './SelectInput.css';
+import styles from './SelectInput.module.css';
 
 export interface SelectInputOption
   extends Pick<ComponentProps<'option'>, 'disabled'> {

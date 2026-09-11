@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import Link from 'Components/Link/Link';
-import styles from './PageJumpBarItem.css';
+import styles from './PageJumpBarItem.module.css';
 
 export interface PageJumpBarItemProps {
   label: string;

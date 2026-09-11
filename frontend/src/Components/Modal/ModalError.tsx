@@ -8,7 +8,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import translate from 'Utilities/String/translate';
-import styles from './ModalError.css';
+import styles from './ModalError.module.css';
 
 interface ModalErrorProps extends ErrorBoundaryErrorProps {
   onModalClose: () => void;

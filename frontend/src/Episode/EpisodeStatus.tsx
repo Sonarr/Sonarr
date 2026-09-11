@@ -10,7 +10,7 @@ import { icons, kinds, sizes } from 'Helpers/Props';
 import isBefore from 'Utilities/Date/isBefore';
 import translate from 'Utilities/String/translate';
 import EpisodeQuality from './EpisodeQuality';
-import styles from './EpisodeStatus.css';
+import styles from './EpisodeStatus.module.css';
 
 interface EpisodeStatusProps {
   episodeId: number;

@@ -21,7 +21,7 @@ import { SelectedSchema } from 'Settings/useProviderSchema';
 import { EnhancedSelectInputChanged, InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import { useManageDownloadClient } from './useDownloadClients';
-import styles from './EditDownloadClientModalContent.css';
+import styles from './EditDownloadClientModalContent.module.css';
 
 export interface EditDownloadClientModalContentProps {
   id?: number;

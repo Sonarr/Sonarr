@@ -1,7 +1,7 @@
 import React from 'react';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import AddCard from 'Components/SettingsCard/AddCard';
-import settingsCardStyles from 'Components/SettingsCard/SettingsCard.css';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.module.css';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { useIndexersData } from 'Settings/Indexers/useIndexers';
 import { useTagList } from 'Tags/useTags';

@@ -16,7 +16,7 @@ import { inputTypes, kinds } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import { useManageReleaseProfile } from './useReleaseProfiles';
-import styles from './EditReleaseProfileModalContent.css';
+import styles from './EditReleaseProfileModalContent.module.css';
 
 const tagInputDelimiters = ['Tab', 'Enter'];
 

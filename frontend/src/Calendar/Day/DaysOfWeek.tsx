@@ -5,7 +5,7 @@ import * as calendarViews from 'Calendar/calendarViews';
 import { useCalendarDates } from 'Calendar/useCalendar';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import DayOfWeek from './DayOfWeek';
-import styles from './DaysOfWeek.css';
+import styles from './DaysOfWeek.module.css';
 
 function DaysOfWeek() {
   const view = useCalendarOption('view');

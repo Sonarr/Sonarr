@@ -9,7 +9,7 @@ import {
 } from 'typings/Queue';
 import translate from 'Utilities/String/translate';
 import QueueStatus from './QueueStatus';
-import styles from './QueueDetails.css';
+import styles from './QueueDetails.module.css';
 
 interface QueueDetailsProps {
   title: string;

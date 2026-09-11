@@ -16,7 +16,7 @@ import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import { useIndexersData } from 'Settings/Indexers/useIndexers';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
-import styles from './TagsModalContent.css';
+import styles from './TagsModalContent.module.css';
 
 interface TagsModalContentProps {
   ids: number[];
