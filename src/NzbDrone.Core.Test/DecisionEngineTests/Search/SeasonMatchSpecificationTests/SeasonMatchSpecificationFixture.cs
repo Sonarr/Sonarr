@@ -11,15 +11,17 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SeasonMatchSpecification
     [TestFixture]
     public class SeasonMatchSpecificationFixture : TestBase<SeasonMatchSpecification>
     {
-        private RemoteEpisode _remoteEpisode = new();
-        private SeasonSearchCriteria _searchCriteria = new();
+        private readonly RemoteEpisode _remoteEpisode = new();
+        private readonly SeasonSearchCriteria _searchCriteria = new();
         private ReleaseDecisionInformation _information;
 
         [SetUp]
         public void Setup()
         {
-            _remoteEpisode.ParsedEpisodeInfo = new ParsedEpisodeInfo();
-            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = [5];
+            _remoteEpisode.ParsedEpisodeInfo = new ParsedEpisodeInfo
+            {
+                SeasonNumbers = [5]
+            };
 
             _searchCriteria.SeasonNumber = 5;
             _information = new ReleaseDecisionInformation(false, _searchCriteria);
@@ -42,7 +44,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SeasonMatchSpecification
         [Test]
         public void should_return_true_if_searched_season_is_within_multi_season_pack_range()
         {
-            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = new[] { 1, 2, 3, 4, 5 };
+            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = [1, 2, 3, 4, 5];
             _searchCriteria.SeasonNumber = 3;
 
             Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeTrue();
@@ -51,7 +53,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SeasonMatchSpecification
         [Test]
         public void should_return_false_if_searched_season_is_outside_multi_season_pack_range()
         {
-            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = new[] { 1, 2, 3, 4, 5 };
+            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = [1, 2, 3, 4, 5];
             _searchCriteria.SeasonNumber = 7;
 
             Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeFalse();
