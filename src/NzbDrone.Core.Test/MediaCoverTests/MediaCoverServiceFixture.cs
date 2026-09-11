@@ -38,9 +38,75 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                 new() { CoverType = MediaCoverTypes.Banner, RemoteUrl = "https://artworks.examples.com/banners/1.jpg" }
             };
 
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.FileExists(It.IsAny<string>()))
+                  .Returns(true);
+
             Subject.ConvertToLocalUrls(12, covers);
 
             covers.Single().Url.Should().Be("/MediaCover/12/banner.jpg?h=a6210a45e2b93963ad9e");
+        }
+
+        [Test]
+        public void should_convert_cover_urls_to_local_without_hash_if_cover_has_not_been_downloaded()
+        {
+            var covers = new List<MediaCover.MediaCover>
+            {
+                new() { CoverType = MediaCoverTypes.Banner, RemoteUrl = "https://artworks.examples.com/banners/1.jpg" }
+            };
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.FileExists(It.IsAny<string>()))
+                  .Returns(false);
+
+            Subject.ConvertToLocalUrls(12, covers);
+
+            covers.Single().Url.Should().Be("/MediaCover/12/banner.jpg");
+        }
+
+        [Test]
+        public void should_only_check_if_cover_exists_on_disk_once()
+        {
+            var covers = new List<MediaCover.MediaCover>
+            {
+                new() { CoverType = MediaCoverTypes.Banner, RemoteUrl = "https://artworks.examples.com/banners/1.jpg" }
+            };
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.FileExists(It.IsAny<string>()))
+                  .Returns(true);
+
+            Subject.ConvertToLocalUrls(12, covers);
+            Subject.ConvertToLocalUrls(12, covers);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.FileExists(It.IsAny<string>()), Times.Once());
+        }
+
+        [Test]
+        public void should_add_hash_to_cover_url_once_cover_exists()
+        {
+            var covers = new List<MediaCover.MediaCover>
+            {
+                new() { CoverType = MediaCoverTypes.Poster, RemoteUrl = "https://artworks.examples.com/posters/1.jpg" }
+            };
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.FileExists(It.IsAny<string>()))
+                  .Returns(false);
+
+            Subject.ConvertToLocalUrls(_series.Id, covers);
+
+            covers.Single().Url.Should().Be($"/MediaCover/{_series.Id}/poster.jpg");
+
+            Mocker.GetMock<ICoverExistsSpecification>()
+                  .Setup(v => v.AlreadyExists(It.IsAny<string>(), It.IsAny<string>()))
+                  .Returns(true);
+
+            Subject.HandleAsync(new SeriesUpdatedEvent(_series));
+            Subject.ConvertToLocalUrls(_series.Id, covers);
+
+            covers.Single().Url.Should().Be($"/MediaCover/{_series.Id}/poster.jpg?h=2a57c239a7baaae159e7");
         }
 
         [Test]
