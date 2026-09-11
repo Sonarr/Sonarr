@@ -192,16 +192,14 @@ namespace NzbDrone.Test.Common
 
         public static void EnsureUiContent()
         {
-            // Writes a dummy CSS file for testing static resources. Only needed for release
-            // builds because debug builds include the proper UI files. Called once per test
-            // assembly via a SetUpFixture so parallel fixtures don't race on the shared file.
+            // Writes a dummy CSS file for testing static resources, since neither debug nor
+            // release builds ship one as part of running the integration tests. Called once
+            // per test assembly via a SetUpFixture so parallel fixtures don't race on the
+            // shared file.
 
-            if (BuildInfo.IsDebug)
-            {
-                return;
-            }
-
-            var contentDirectory = Path.Combine(TestContext.CurrentContext.TestDirectory, "bin", "UI", "Content");
+            var contentDirectory = BuildInfo.IsDebug
+                ? Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "..", "_output", "UI", "Content")
+                : Path.Combine(TestContext.CurrentContext.TestDirectory, "bin", "UI", "Content");
             var stylesPath = Path.Combine(contentDirectory, "styles.css");
 
             Directory.CreateDirectory(contentDirectory);
