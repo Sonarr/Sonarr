@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -177,6 +178,45 @@ namespace NzbDrone.Integration.Test.ApiTests
             Series.Delete(series.Id);
 
             Series.All().Should().NotContain(v => v.TvdbId == 266189);
+        }
+
+        [Test]
+        public void update_series_without_movefiles_should_update_path_immediately()
+        {
+            var series = EnsureSeries(266189, "The Blacklist");
+
+            var newPath = GetTempDirectory("NewSeriesPath");
+            series.Path = newPath;
+
+            Series.Put(series, moveFiles: false);
+
+            var result = Series.Get(series.Id);
+
+            result.Path.Should().Be(newPath);
+            result.PendingPath.Should().BeNullOrEmpty();
+        }
+
+        [Test]
+        public void update_series_with_movefiles_should_broadcast_persisted_state_not_requested_path()
+        {
+            var series = EnsureSeries(266189, "The Blacklist");
+
+            var oldPath = series.Path;
+            var destinationPath = GetTempDirectory("Moved");
+
+            series.Path = destinationPath;
+
+            ConnectSignalR().Wait();
+
+            Series.Put(series, moveFiles: true);
+
+            WaitForCompletion(() => SignalRMessages.Any(m =>
+                m.Name == "series" &&
+                m.Body is JsonElement body &&
+                body.GetProperty("resource").GetProperty("path").GetString() == oldPath &&
+                body.GetProperty("resource").GetProperty("pendingPath").GetString() == destinationPath));
+
+            Commands.WaitAll();
         }
     }
 }
