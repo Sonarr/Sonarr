@@ -27,13 +27,13 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                  .With(l => l.FileEpisodeInfo =
                                                      Builder<ParsedEpisodeInfo>.CreateNew()
                                                                                .With(p => p.EpisodeNumbers = new[] { 5 })
-                                                                               .With(p => p.SeasonNumber == 1)
+                                                                               .With(p => p.SeasonNumbers = [1])
                                                                                .With(p => p.FullSeason = false)
                                                                                .Build())
                                                  .With(l => l.FolderEpisodeInfo =
                                                      Builder<ParsedEpisodeInfo>.CreateNew()
                                                                                .With(p => p.EpisodeNumbers = new[] { 1 })
-                                                                               .With(p => p.SeasonNumber == 1)
+                                                                               .With(p => p.SeasonNumbers = [1])
                                                                                .With(p => p.FullSeason = false)
                                                                                .Build())
                                                  .Build();
@@ -161,11 +161,11 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_be_rejected_if_file_and_folder_do_not_have_episodes_from_the_same_season()
         {
-            _localEpisode.FileEpisodeInfo.SeasonNumber = 2;
+            _localEpisode.FileEpisodeInfo.SeasonNumbers = [2];
             _localEpisode.FileEpisodeInfo.EpisodeNumbers = new[] { 1 };
 
             _localEpisode.FolderEpisodeInfo.FullSeason = true;
-            _localEpisode.FolderEpisodeInfo.SeasonNumber = 1;
+            _localEpisode.FolderEpisodeInfo.SeasonNumbers = [1];
             _localEpisode.FolderEpisodeInfo.EpisodeNumbers = new[] { 1, 2 };
 
             GivenEpisodes(_localEpisode.FileEpisodeInfo, _localEpisode.FileEpisodeInfo.EpisodeNumbers);
@@ -179,10 +179,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_be_rejected_if_file_and_folder_do_not_have_episodes_from_the_same_partial_season()
         {
-            _localEpisode.FileEpisodeInfo.SeasonNumber = 2;
+            _localEpisode.FileEpisodeInfo.SeasonNumbers = [2];
             _localEpisode.FileEpisodeInfo.EpisodeNumbers = new[] { 1 };
 
-            _localEpisode.FolderEpisodeInfo.SeasonNumber = 1;
+            _localEpisode.FolderEpisodeInfo.SeasonNumbers = [1];
             _localEpisode.FolderEpisodeInfo.EpisodeNumbers = new[] { 1, 2 };
 
             GivenEpisodes(_localEpisode.FileEpisodeInfo, _localEpisode.FileEpisodeInfo.EpisodeNumbers);
@@ -196,11 +196,11 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_be_accepted_if_file_and_folder_have_episodes_from_the_same_season()
         {
-            _localEpisode.FileEpisodeInfo.SeasonNumber = 1;
+            _localEpisode.FileEpisodeInfo.SeasonNumbers = [1];
             _localEpisode.FileEpisodeInfo.EpisodeNumbers = new[] { 1 };
 
             _localEpisode.FolderEpisodeInfo.FullSeason = true;
-            _localEpisode.FolderEpisodeInfo.SeasonNumber = 1;
+            _localEpisode.FolderEpisodeInfo.SeasonNumbers = [1];
             _localEpisode.FolderEpisodeInfo.EpisodeNumbers = new[] { 1, 2 };
 
             GivenEpisodes(_localEpisode.FileEpisodeInfo, _localEpisode.FileEpisodeInfo.EpisodeNumbers);
@@ -246,10 +246,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_be_accepted_if_file_has_absolute_episode_number_and_folder_uses_standard()
         {
-            _localEpisode.FileEpisodeInfo.SeasonNumber = 1;
+            _localEpisode.FileEpisodeInfo.SeasonNumbers = [1];
             _localEpisode.FileEpisodeInfo.AbsoluteEpisodeNumbers = new[] { 1 };
 
-            _localEpisode.FolderEpisodeInfo.SeasonNumber = 1;
+            _localEpisode.FolderEpisodeInfo.SeasonNumbers = [1];
             _localEpisode.FolderEpisodeInfo.EpisodeNumbers = new[] { 1, 2 };
 
             GivenEpisodes(_localEpisode.FileEpisodeInfo, new[] { 1 });

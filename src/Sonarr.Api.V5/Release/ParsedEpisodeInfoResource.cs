@@ -10,6 +10,7 @@ public class ParsedEpisodeInfoResource
     public string? ReleaseHash { get; set; }
     public bool FullSeason { get; set; }
     public int? SeasonNumber { get; set; }
+    public int[] SeasonNumbers { get; set; } = [];
     public string? AirDate { get; set; }
     public string? SeriesTitle { get; set; }
     public int[] EpisodeNumbers { get; set; } = [];
@@ -31,6 +32,7 @@ public static class ParsedEpisodeInfoResourceMapper
             ReleaseHash = parsedEpisodeInfo.ReleaseHash,
             FullSeason = parsedEpisodeInfo.FullSeason,
             SeasonNumber = parsedEpisodeInfo.SeasonNumber,
+            SeasonNumbers = parsedEpisodeInfo.SeasonNumbers,
             AirDate = parsedEpisodeInfo.AirDate,
             SeriesTitle = parsedEpisodeInfo.SeriesTitle,
             EpisodeNumbers = parsedEpisodeInfo.EpisodeNumbers,

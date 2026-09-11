@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.Extras.Others
                                                  .With(l => l.Path = Path.Combine(_episodeFolder, "Series.Title.S01E01.mkv").AsOsAgnostic())
                                                  .With(l => l.FileEpisodeInfo = new ParsedEpisodeInfo
                                                  {
-                                                     SeasonNumber = 1,
+                                                     SeasonNumbers = [1],
                                                      EpisodeNumbers = new[] { 1 }
                                                  })
                                                  .Build();
