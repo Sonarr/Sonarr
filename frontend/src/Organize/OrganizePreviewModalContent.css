@@ -5,7 +5,7 @@
 
 .episodeFormat {
   margin-left: 5px;
-  font-family: $monoSpaceFontFamily;
+  font-family: var(--monoSpaceFontFamily);
 }
 
 .previews {

@@ -3,7 +3,7 @@
   align-items: center;
   flex: 0 0 auto;
   padding: 0 20px 0 0;
-  height: $headerHeight;
+  height: var(--headerHeight);
   border-bottom: 1px solid var(--borderColor);
   background-color: var(--pageHeaderBackgroundColor);
   color: var(--ink);
@@ -12,7 +12,7 @@
 .logoContainer {
   display: flex;
   align-items: center;
-  flex: 0 0 $sidebarWidth;
+  flex: 0 0 var(--sidebarWidth);
   padding-left: 20px;
 }
 
@@ -23,7 +23,7 @@
   letter-spacing: -0.01em;
   font-weight: 600;
   font-size: 15px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 0;
   gap: 10px;
 
@@ -83,7 +83,7 @@
   }
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .logoContainer {
     flex: 0 0 auto;
     padding-left: 16px;

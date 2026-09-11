@@ -34,7 +34,7 @@
   background-color: transparent;
   color: var(--inkMuted);
   font-size: 12px;
-  font-family: $monoSpaceFontFamily;
+  font-family: var(--monoSpaceFontFamily);
   cursor: pointer;
   transition: color 160ms cubic-bezier(0.25, 1, 0.5, 1);
 

@@ -14,14 +14,14 @@
   left: -100%;
   display: inline-flex;
   visibility: hidden;
-  transition: left $defaultSpeed;
+  transition: left var(--defaultSpeed);
   transform: translateX(-50%) translateY(-50%);
 }
 
 .clipboardIconContainer {
   position: relative;
   left: 0;
-  transition: left $defaultSpeed, opacity $defaultSpeed;
+  transition: left var(--defaultSpeed), opacity var(--defaultSpeed);
 }
 
 .showStateIcon {

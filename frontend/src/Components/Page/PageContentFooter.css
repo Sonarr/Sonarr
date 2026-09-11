@@ -5,13 +5,13 @@
   background-color: var(--pageFooterBackground);
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .contentFooter {
     display: block;
   }
 }
 
-@media only screen and (max-width: $breakpointExtraLarge) {
+@media (--breakpointExtraLarge) {
   .contentFooter {
     flex-wrap: wrap;
   }

@@ -8,6 +8,6 @@
   letter-spacing: -0.018em;
   font-weight: 600;
   font-size: 20px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1.25;
 }

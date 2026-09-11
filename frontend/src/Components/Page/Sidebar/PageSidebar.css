@@ -1,7 +1,7 @@
 .sidebarContainer {
-  flex: 0 0 $sidebarWidth;
+  flex: 0 0 var(--sidebarWidth);
   overflow: hidden;
-  width: $sidebarWidth;
+  width: var(--sidebarWidth);
   background-color: var(--sidebarBackgroundColor);
   transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
   transform: translateX(0);
@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  height: $headerHeight;
+  height: var(--headerHeight);
 }
 
 .logoContainer {
@@ -27,7 +27,7 @@
   letter-spacing: -0.01em;
   font-weight: 600;
   font-size: 15px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 0;
   gap: 10px;
 
@@ -82,7 +82,7 @@
   letter-spacing: 0.06em;
   font-weight: 500;
   font-size: 11px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
 }
 
 .divider {
@@ -91,7 +91,7 @@
   background-color: var(--borderColor);
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .sidebarContainer {
     position: fixed;
     top: 0;

@@ -238,7 +238,7 @@
   color: var(--inkMuted);
   letter-spacing: 0.02em;
   font-size: 11px;
-  font-family: $monoSpaceFontFamily;
+  font-family: var(--monoSpaceFontFamily);
 }
 
 .nextAiringEmpty {

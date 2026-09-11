@@ -9,7 +9,7 @@
   font-weight: bold;
 }
 
-@media (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .item {
     display: block;
     margin-bottom: 10px;

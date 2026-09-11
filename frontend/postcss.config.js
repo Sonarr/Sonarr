@@ -1,11 +1,4 @@
-const reload = require('require-nocache')(module);
-
-const cssVarsFiles = [
-  './src/Styles/Variables/dimensions',
-  './src/Styles/Variables/fonts',
-  './src/Styles/Variables/animations',
-  './src/Styles/Variables/zIndexes'
-].map(require.resolve);
+const path = require('path');
 
 const mixinsFiles = [
   'frontend/src/Styles/Mixins/cover.css',
@@ -20,13 +13,10 @@ module.exports = {
     ['postcss-mixins', {
       mixinsFiles
     }],
-    ['postcss-simple-vars', {
-      variables: () =>
-        cssVarsFiles.reduce((acc, vars) => {
-          return Object.assign(acc, reload(vars));
-        }, {})
+    ['@csstools/postcss-global-data', {
+      files: [path.join(__dirname, 'src/Styles/Variables/breakpoints.css')]
     }],
-    'postcss-color-function',
+    'postcss-custom-media',
     'postcss-nested'
   ]
 };

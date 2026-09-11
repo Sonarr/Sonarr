@@ -74,7 +74,7 @@
   display: none;
 }
 
-@media only screen and (max-width: calc($breakpointLarge + 100px)) {
+@media only screen and (max-width: calc(1200px + 100px)) {
   .formGroupsContainer {
     display: block;
   }

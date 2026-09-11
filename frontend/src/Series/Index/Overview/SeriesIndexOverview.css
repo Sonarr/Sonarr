@@ -71,7 +71,7 @@
   letter-spacing: 0.055em;
   font-weight: 600;
   font-size: 9.5px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1;
   pointer-events: none;
   gap: 5px;
@@ -138,7 +138,7 @@
   letter-spacing: -0.018em;
   font-weight: 600;
   font-size: 20px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1.2;
 
   &:hover {
@@ -187,7 +187,7 @@
   color: var(--inkSoft);
   font-style: italic;
   font-size: 13.5px;
-  font-family: $defaultFontFamily;
+  font-family: var(--defaultFontFamily);
   line-height: 1.6;
   -webkit-box-orient: vertical;
 
@@ -197,7 +197,7 @@
   }
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .synopsis {
     display: none;
   }

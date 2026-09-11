@@ -22,14 +22,14 @@
   composes: title;
 
   color: var(--disabledColor);
-  font-size: $smallFontSize;
+  font-size: var(--smallFontSize);
 }
 
 .tagContainer {
   composes: title;
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   .titles,
   .title,
   .alternateTitle {
