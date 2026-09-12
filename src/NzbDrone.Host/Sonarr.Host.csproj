@@ -4,6 +4,7 @@
 		<OutputType>Library</OutputType>
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.1" />
 		<PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.5.4" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="5.5.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.2.3" />
