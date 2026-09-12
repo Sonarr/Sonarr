@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using FluentValidation;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
 
@@ -17,10 +16,6 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             RuleFor(c => c.UrlBase).ValidUrlBase();
 
             RuleFor(c => c.TvCategory).Matches(@"^\.?[-a-z]*$", RegexOptions.IgnoreCase).WithMessage("Allowed characters a-z and -");
-
-            RuleFor(c => c.TvCategory).Empty()
-                .When(c => c.TvDirectory.IsNotNullOrWhiteSpace())
-                .WithMessage("Cannot use Category and Directory");
         }
     }
 
@@ -71,7 +66,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         [FieldDefinition(5, Label = "Password", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]
         public string Password { get; set; }
 
-        [FieldDefinition(6, Label = "Category", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsCategorySubFolderHelpText")]
+        [FieldDefinition(6, Label = "Category", Type = FieldType.Textbox, HelpText = "DownloadClientTransmissionSettingsCategoryHelpText")]
         public string TvCategory { get; set; }
 
         [FieldDefinition(7, Label = "PostImportCategory", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientSettingsPostImportCategoryHelpText")]
