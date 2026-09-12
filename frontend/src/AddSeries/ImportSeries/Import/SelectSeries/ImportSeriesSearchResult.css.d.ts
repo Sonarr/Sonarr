@@ -2,8 +2,11 @@
 // Please do not change this file!
 interface CssExports {
   'container': string;
+  'highlighted': string;
   'series': string;
+  'seriesCell': string;
   'tvdbLink': string;
+  'tvdbLinkCell': string;
   'tvdbLinkIcon': string;
 }
 export const cssExports: CssExports;
