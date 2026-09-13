@@ -26,6 +26,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
 
             _series = Builder<Series>.CreateNew()
                 .With(v => v.Id = 2)
+                .With(v => v.Added = DateTime.UtcNow)
                 .With(v => v.Images = new List<MediaCover.MediaCover> { new(MediaCoverTypes.Poster, "") })
                 .Build();
         }
@@ -42,7 +43,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                   .Setup(v => v.FileExists(It.IsAny<string>()))
                   .Returns(true);
 
-            Subject.ConvertToLocalUrls(12, covers);
+            Subject.ConvertToLocalUrls(12, DateTime.UtcNow, covers);
 
             covers.Single().Url.Should().Be("/MediaCover/12/banner.jpg?h=a6210a45e2b93963ad9e");
         }
@@ -59,7 +60,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                   .Setup(v => v.FileExists(It.IsAny<string>()))
                   .Returns(false);
 
-            Subject.ConvertToLocalUrls(12, covers);
+            Subject.ConvertToLocalUrls(12, DateTime.UtcNow, covers);
 
             covers.Single().Url.Should().Be("/MediaCover/12/banner.jpg");
         }
@@ -76,8 +77,8 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                   .Setup(v => v.FileExists(It.IsAny<string>()))
                   .Returns(true);
 
-            Subject.ConvertToLocalUrls(12, covers);
-            Subject.ConvertToLocalUrls(12, covers);
+            Subject.ConvertToLocalUrls(12, DateTime.UtcNow, covers);
+            Subject.ConvertToLocalUrls(12, DateTime.UtcNow, covers);
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(v => v.FileExists(It.IsAny<string>()), Times.Once());
@@ -95,7 +96,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                   .Setup(v => v.FileExists(It.IsAny<string>()))
                   .Returns(false);
 
-            Subject.ConvertToLocalUrls(_series.Id, covers);
+            Subject.ConvertToLocalUrls(_series.Id, _series.Added, covers);
 
             covers.Single().Url.Should().Be($"/MediaCover/{_series.Id}/poster.jpg");
 
@@ -104,7 +105,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                   .Returns(true);
 
             Subject.HandleAsync(new SeriesUpdatedEvent(_series));
-            Subject.ConvertToLocalUrls(_series.Id, covers);
+            Subject.ConvertToLocalUrls(_series.Id, _series.Added, covers);
 
             covers.Single().Url.Should().Be($"/MediaCover/{_series.Id}/poster.jpg?h=2a57c239a7baaae159e7");
         }
@@ -117,9 +118,29 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                     new() { CoverType = MediaCoverTypes.Banner }
                 };
 
-            Subject.ConvertToLocalUrls(12, covers);
+            Subject.ConvertToLocalUrls(12, DateTime.UtcNow, covers);
 
             covers.Single().Url.Should().Be("/MediaCover/12/banner.jpg");
+        }
+
+        [Test]
+        public void should_not_check_if_cover_exists_for_series_added_more_than_a_day_ago()
+        {
+            var covers = new List<MediaCover.MediaCover>
+            {
+                new() { CoverType = MediaCoverTypes.Banner, RemoteUrl = "https://artworks.examples.com/banners/1.jpg" }
+            };
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.FileExists(It.IsAny<string>()))
+                  .Returns(false);
+
+            Subject.ConvertToLocalUrls(12, DateTime.UtcNow.AddDays(-2), covers);
+
+            covers.Single().Url.Should().Be("/MediaCover/12/banner.jpg?h=a6210a45e2b93963ad9e");
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.FileExists(It.IsAny<string>()), Times.Never());
         }
 
         [Test]

@@ -36,7 +36,7 @@ namespace Sonarr.Api.V3.Series
             {
                 var resource = currentSeries.ToResource();
 
-                _coverMapper.ConvertToLocalUrls(resource.Id, resource.Images);
+                _coverMapper.ConvertToLocalUrls(resource.Id, resource.Added, resource.Images);
 
                 var poster = currentSeries.Images.FirstOrDefault(c => c.CoverType == MediaCoverTypes.Poster);
 

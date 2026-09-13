@@ -273,7 +273,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
     {
         foreach (var seriesResource in series)
         {
-            _coverMapper.ConvertToLocalUrls(seriesResource.Id, seriesResource.Images);
+            _coverMapper.ConvertToLocalUrls(seriesResource.Id, seriesResource.Added, seriesResource.Images);
         }
     }
 
