@@ -39,7 +39,7 @@ public class SeriesLookupController : Controller
         {
             var resource = currentSeries.ToResource();
 
-            _coverMapper.ConvertToLocalUrls(resource.Id, resource.Added, resource.Images);
+            _coverMapper.ConvertToLocalUrls(resource.Id, resource.Images, resource.Added);
 
             var poster = currentSeries.Images.FirstOrDefault(c => c.CoverType == MediaCoverTypes.Poster);
 

@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                   .Setup(v => v.FileExists(It.IsAny<string>()))
                   .Returns(true);
 
-            Subject.ConvertToLocalUrls(12, DateTime.UtcNow, covers);
+            Subject.ConvertToLocalUrls(12, covers, DateTime.UtcNow);
 
             covers.Single().Url.Should().Be("/MediaCover/12/banner.jpg?h=a6210a45e2b93963ad9e");
         }
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                   .Setup(v => v.FileExists(It.IsAny<string>()))
                   .Returns(false);
 
-            Subject.ConvertToLocalUrls(12, DateTime.UtcNow, covers);
+            Subject.ConvertToLocalUrls(12, covers, DateTime.UtcNow);
 
             covers.Single().Url.Should().Be("/MediaCover/12/banner.jpg");
         }
@@ -77,8 +77,8 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                   .Setup(v => v.FileExists(It.IsAny<string>()))
                   .Returns(true);
 
-            Subject.ConvertToLocalUrls(12, DateTime.UtcNow, covers);
-            Subject.ConvertToLocalUrls(12, DateTime.UtcNow, covers);
+            Subject.ConvertToLocalUrls(12, covers, DateTime.UtcNow);
+            Subject.ConvertToLocalUrls(12, covers, DateTime.UtcNow);
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(v => v.FileExists(It.IsAny<string>()), Times.Once());
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                   .Setup(v => v.FileExists(It.IsAny<string>()))
                   .Returns(false);
 
-            Subject.ConvertToLocalUrls(_series.Id, _series.Added, covers);
+            Subject.ConvertToLocalUrls(_series.Id, covers, _series.Added);
 
             covers.Single().Url.Should().Be($"/MediaCover/{_series.Id}/poster.jpg");
 
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                   .Returns(true);
 
             Subject.HandleAsync(new SeriesUpdatedEvent(_series));
-            Subject.ConvertToLocalUrls(_series.Id, _series.Added, covers);
+            Subject.ConvertToLocalUrls(_series.Id, covers, _series.Added);
 
             covers.Single().Url.Should().Be($"/MediaCover/{_series.Id}/poster.jpg?h=2a57c239a7baaae159e7");
         }
@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                     new() { CoverType = MediaCoverTypes.Banner }
                 };
 
-            Subject.ConvertToLocalUrls(12, DateTime.UtcNow, covers);
+            Subject.ConvertToLocalUrls(12, covers, DateTime.UtcNow);
 
             covers.Single().Url.Should().Be("/MediaCover/12/banner.jpg");
         }
@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                   .Setup(v => v.FileExists(It.IsAny<string>()))
                   .Returns(false);
 
-            Subject.ConvertToLocalUrls(12, DateTime.UtcNow.AddDays(-2), covers);
+            Subject.ConvertToLocalUrls(12, covers, DateTime.UtcNow.AddDays(-2));
 
             covers.Single().Url.Should().Be("/MediaCover/12/banner.jpg?h=a6210a45e2b93963ad9e");
 
