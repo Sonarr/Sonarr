@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Cache;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.History;
 using NzbDrone.Core.Download.TrackedDownloads;
@@ -528,6 +530,54 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
             trackedDownload.RemoteEpisode.Episodes.First().Id.Should().Be(4);
             trackedDownload.RemoteEpisode.ParsedEpisodeInfo.SeasonNumber.Should().Be(1);
             trackedDownload.RemoteEpisode.MappedSeasonNumber.Should().Be(1);
+        }
+
+        [Test]
+        public void should_only_reset_last_progress_date_when_download_progresses()
+        {
+            Mocker.GetMock<ICacheManager>()
+                  .Setup(s => s.GetCache<TrackedDownload>(It.IsAny<Type>()))
+                  .Returns(new Cached<TrackedDownload>());
+
+            GivenDownloadHistory();
+
+            var client = new DownloadClientDefinition()
+            {
+                Id = 1,
+                Protocol = DownloadProtocol.Torrent
+            };
+
+            DownloadClientItem BuildItem(long remainingSize)
+            {
+                return new DownloadClientItem()
+                {
+                    Title = "The Series Title!: Season 01",
+                    DownloadId = "35238",
+                    Status = DownloadItemStatus.Downloading,
+                    RemainingSize = remainingSize,
+                    DownloadClientInfo = new DownloadClientItemClientInfo
+                    {
+                        Protocol = client.Protocol,
+                        Id = client.Id,
+                        Name = client.Name
+                    }
+                };
+            }
+
+            var trackedDownload = Subject.TrackDownload(client, BuildItem(100));
+
+            trackedDownload.LastProgressDate.Should().HaveValue();
+
+            var lastProgressDate = DateTime.UtcNow.AddHours(-1);
+            trackedDownload.LastProgressDate = lastProgressDate;
+
+            var stalledDownload = Subject.TrackDownload(client, BuildItem(100));
+
+            stalledDownload.LastProgressDate.Should().Be(lastProgressDate);
+
+            var progressedDownload = Subject.TrackDownload(client, BuildItem(50));
+
+            progressedDownload.LastProgressDate.Should().NotBe(lastProgressDate);
         }
     }
 }
