@@ -120,7 +120,7 @@ namespace Sonarr.Api.V3.Indexers
                 ReleaseHash = parsedEpisodeInfo.ReleaseHash,
                 Title = releaseInfo.Title,
                 FullSeason = parsedEpisodeInfo.FullSeason,
-                SeasonNumber = parsedEpisodeInfo.SeasonNumber,
+                SeasonNumber = parsedEpisodeInfo.SeasonNumber ?? -1,
                 Languages = remoteEpisode.Languages,
                 AirDate = parsedEpisodeInfo.AirDate,
                 SeriesTitle = parsedEpisodeInfo.SeriesTitle,

@@ -88,6 +88,12 @@ namespace NzbDrone.Core.DecisionEngine
                         }
                     }
 
+                    if (parsedEpisodeInfo == null)
+                    {
+                        // Attempt to parse as a release that includes the season title without a season number
+                        parsedEpisodeInfo = Parser.Parser.ParseSeasonTitle(report.Title);
+                    }
+
                     if (parsedEpisodeInfo != null && !parsedEpisodeInfo.SeriesTitle.IsNullOrWhiteSpace())
                     {
                         var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvdbId, report.TvRageId, report.ImdbId, searchCriteria);
@@ -96,7 +102,7 @@ namespace NzbDrone.Core.DecisionEngine
 
                         if (remoteEpisode.Series == null)
                         {
-                            var matchingTvdbId = _sceneMappingService.FindTvdbId(parsedEpisodeInfo.SeriesTitle, parsedEpisodeInfo.ReleaseTitle, parsedEpisodeInfo.SeasonNumber);
+                            var matchingTvdbId = _sceneMappingService.FindTvdbId(parsedEpisodeInfo.SeriesTitle, parsedEpisodeInfo.ReleaseTitle, parsedEpisodeInfo.SeasonNumber ?? -1);
 
                             if (matchingTvdbId.HasValue)
                             {
