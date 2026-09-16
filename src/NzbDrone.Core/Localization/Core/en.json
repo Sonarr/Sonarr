@@ -576,6 +576,7 @@
   "DownloadClientSortingHealthCheckMessage": "Download client {downloadClientName} has {sortingMode} sorting enabled for {appName}'s category. You should disable sorting in your download client to avoid import issues.",
   "DownloadClientStatusAllClientHealthCheckMessage": "All download clients are unavailable due to failures",
   "DownloadClientStatusSingleClientHealthCheckMessage": "Download clients unavailable due to failures: {downloadClientNames}",
+  "DownloadClientTransmissionSettingsCategoryHelpText": "Adding a category specific to {appName} avoids conflicts with unrelated non-{appName} downloads. Using a category is optional, but strongly recommended. Transmission 4.0 and newer applies the category as a label; earlier versions create a [category] subdirectory in the output directory.",
   "DownloadClientTransmissionSettingsDirectoryHelpText": "Optional location to put downloads in, leave blank to use the default Transmission location",
   "DownloadClientTransmissionSettingsUrlBaseHelpText": "Adds a prefix to the {clientName} rpc url, eg {url}, defaults to '{defaultUrl}'",
   "DownloadClientTriblerProviderMessage": "The tribler integration is highly experimental. Tested against {clientName} version {clientVersionRange}.",
