@@ -18,7 +18,7 @@ import translate from 'Utilities/String/translate';
 import useSeriesIndexItem from '../useSeriesIndexItem';
 import { ROW_BORDER, ROW_VERTICAL_PADDING } from './overviewLayout';
 import SeriesIndexOverviewInfo from './SeriesIndexOverviewInfo';
-import styles from './SeriesIndexOverview.css';
+import styles from './SeriesIndexOverview.module.css';
 
 // Mirrors .synopsis font-size/line-height in SeriesIndexOverview.css.
 const SYNOPSIS_FONT_SIZE = 13.5;

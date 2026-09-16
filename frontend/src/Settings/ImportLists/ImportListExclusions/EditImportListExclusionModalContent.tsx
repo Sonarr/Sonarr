@@ -15,7 +15,7 @@ import { inputTypes, kinds } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import { useManageImportListExclusion } from './useImportListExclusions';
-import styles from './EditImportListExclusionModalContent.css';
+import styles from './EditImportListExclusionModalContent.module.css';
 
 interface EditImportListExclusionModalContentProps {
   id?: number;

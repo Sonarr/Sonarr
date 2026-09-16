@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { ForwardedRef, forwardRef, ReactNode } from 'react';
 import { useModalContext } from './ModalContext';
-import styles from './ModalHeader.css';
+import styles from './ModalHeader.module.css';
 
 interface ModalHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode;

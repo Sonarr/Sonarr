@@ -1,0 +1,22 @@
+.tag {
+  display: flex;
+
+  &.isLastTag {
+    .or {
+      display: none;
+    }
+  }
+}
+
+.label {
+  composes: label from 'Components/Label.module.css';
+
+  border-style: none;
+  font-size: 13px;
+}
+
+.or {
+  margin: 0 3px;
+  color: var(--themeDarkColor);
+  line-height: 31px;
+}

@@ -1,9 +1,0 @@
-.info {
-  composes: alert from '~Components/Alert.css';
-
-  margin-bottom: 20px;
-}
-
-.labelIcon {
-  margin-left: 8px;
-}

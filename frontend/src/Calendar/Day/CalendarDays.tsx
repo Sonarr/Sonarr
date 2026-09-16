@@ -10,7 +10,7 @@ import {
   useCalendarDates,
 } from 'Calendar/useCalendar';
 import CalendarDay from './CalendarDay';
-import styles from './CalendarDays.css';
+import styles from './CalendarDays.module.css';
 
 function CalendarDays() {
   const view = useCalendarOption('view');

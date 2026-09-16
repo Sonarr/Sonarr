@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import Link from 'Components/Link/Link';
-import styles from './MenuButton.css';
+import styles from './MenuButton.module.css';
 
 export interface MenuButtonProps {
   className?: string;

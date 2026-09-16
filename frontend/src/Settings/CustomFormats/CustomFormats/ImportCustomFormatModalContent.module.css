@@ -1,0 +1,11 @@
+.error {
+  color: var(--dangerColor);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.input {
+  composes: input from 'Components/Form/TextArea.module.css';
+
+  font-family: var(--monoSpaceFontFamily);
+}

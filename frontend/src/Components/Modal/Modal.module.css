@@ -1,0 +1,107 @@
+.modalContainer {
+  position: absolute;
+  top: 0;
+  z-index: var(--modalZIndex);
+  width: 100%;
+  height: 100%;
+}
+
+.modalBackdrop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--modalBackdropBackgroundColor);
+  opacity: 1;
+}
+
+.modal {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px -16px rgba(0, 0, 0, 0.40);
+  opacity: 1;
+}
+
+.modalOpen {
+  /* Prevent the body from scrolling when the modal is open */
+  overflow: hidden !important;
+}
+
+/*
+ * Sizes
+ */
+
+.extraSmall {
+  composes: modal;
+
+  width: 320px;
+}
+
+.small {
+  composes: modal;
+
+  width: 480px;
+}
+
+.medium {
+  composes: modal;
+
+  width: 720px;
+}
+
+.large {
+  composes: modal;
+
+  width: 1080px;
+}
+
+.extraLarge {
+  composes: modal;
+
+  width: 1280px;
+}
+
+.extraExtraLarge {
+  composes: modal;
+
+  width: 1600px;
+}
+
+@media (--breakpointExtraLarge) {
+  .modal {
+    &.extraLarge {
+      width: 90%;
+    }
+  }
+}
+
+@media (--breakpointLarge) {
+  .modal {
+    &.large {
+      width: 90%;
+    }
+  }
+}
+
+@media (--breakpointMedium) {
+  .modalContainer {
+    position: fixed;
+  }
+
+  .modal {
+    &.small,
+    &.medium,
+    &.large,
+    &.extraLarge,
+    &.extraExtraLarge {
+      max-height: 100%;
+      width: 100%;
+      height: 100% !important;
+    }
+  }
+}

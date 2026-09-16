@@ -29,7 +29,7 @@ import translate from 'Utilities/String/translate';
 import ManageDownloadClientsEditModal from './Edit/ManageDownloadClientsEditModal';
 import ManageDownloadClientsModalRow from './ManageDownloadClientsModalRow';
 import TagsModal from './Tags/TagsModal';
-import styles from './ManageDownloadClientsModalContent.css';
+import styles from './ManageDownloadClientsModalContent.module.css';
 
 const COLUMNS: Column[] = [
   {

@@ -16,7 +16,7 @@ import InteractiveSearchRow from './InteractiveSearchRow';
 import InteractiveSearchType from './InteractiveSearchType';
 import { setReleaseOption, useReleaseOptions } from './releaseOptionsStore';
 import useReleases, { FILTERS, setReleaseSort } from './useReleases';
-import styles from './InteractiveSearch.css';
+import styles from './InteractiveSearch.module.css';
 
 interface InteractiveSearchProps {
   type: InteractiveSearchType;

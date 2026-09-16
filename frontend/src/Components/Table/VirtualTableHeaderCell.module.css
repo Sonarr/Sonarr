@@ -1,0 +1,16 @@
+.headerCell {
+  padding: 8px;
+  border: none !important;
+  text-align: left;
+  font-weight: 600;
+}
+
+.sortIcon {
+  margin-left: 10px;
+}
+
+@media (--breakpointMedium) {
+  .headerCell {
+    white-space: nowrap;
+  }
+}

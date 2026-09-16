@@ -3,7 +3,7 @@ import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import SectionHeading from 'Components/SectionHeading';
 import useTheme from 'Helpers/Hooks/useTheme';
 import translate from 'Utilities/String/translate';
-import styles from './TheTvdb.css';
+import styles from './TheTvdb.module.css';
 
 function TheTvdb() {
   const theme = useTheme();

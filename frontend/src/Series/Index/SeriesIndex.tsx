@@ -46,7 +46,7 @@ import SeriesIndexSelectModeMenuItem from './Select/SeriesIndexSelectModeMenuIte
 import SeriesIndexFooter from './SeriesIndexFooter';
 import SeriesIndexTable from './Table/SeriesIndexTable';
 import SeriesIndexTableOptions from './Table/SeriesIndexTableOptions';
-import styles from './SeriesIndex.css';
+import styles from './SeriesIndex.module.css';
 
 function getViewComponent(view: string) {
   if (view === 'posters') return SeriesIndexPosters;

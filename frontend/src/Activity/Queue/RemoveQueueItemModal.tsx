@@ -18,7 +18,7 @@ import {
   setQueueOption,
   useQueueOption,
 } from './queueOptionsStore';
-import styles from './RemoveQueueItemModal.css';
+import styles from './RemoveQueueItemModal.module.css';
 
 interface RemoveQueueItemModalProps {
   isOpen: boolean;

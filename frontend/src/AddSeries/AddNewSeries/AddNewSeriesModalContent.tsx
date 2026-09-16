@@ -31,7 +31,7 @@ import { InputChanged } from 'typings/inputs';
 import selectSettings from 'Utilities/selectSettings';
 import translate from 'Utilities/String/translate';
 import { useAddSeries } from './useAddSeries';
-import styles from './AddNewSeriesModalContent.css';
+import styles from './AddNewSeriesModalContent.module.css';
 
 export interface AddNewSeriesModalContentProps {
   series: AddSeries;

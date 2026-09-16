@@ -7,7 +7,7 @@ import padNumber from 'Utilities/Number/padNumber';
 import filterAlternateTitles from 'Utilities/Series/filterAlternateTitles';
 import translate from 'Utilities/String/translate';
 import SceneInfo from './SceneInfo';
-import styles from './EpisodeNumber.css';
+import styles from './EpisodeNumber.module.css';
 
 function getWarningMessage(
   unverifiedSceneNumbering: boolean,

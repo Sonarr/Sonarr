@@ -3,7 +3,7 @@ import Label from 'Components/Label';
 import ArrayElement from 'typings/Helpers/ArrayElement';
 import { EnhancedSelectInputValue } from './EnhancedSelectInput';
 import EnhancedSelectInputSelectedValue from './EnhancedSelectInputSelectedValue';
-import styles from './HintedSelectInputSelectedValue.css';
+import styles from './HintedSelectInputSelectedValue.module.css';
 
 interface HintedSelectInputSelectedValueProps<T, V> {
   selectedValue: V;

@@ -1,6 +1,6 @@
 import React from 'react';
 import Tooltip, { TooltipProps } from './Tooltip';
-import styles from './Popover.css';
+import styles from './Popover.module.css';
 
 interface PopoverProps extends Omit<TooltipProps, 'tooltip' | 'bodyClassName'> {
   title: string;

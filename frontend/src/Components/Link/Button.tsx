@@ -5,7 +5,7 @@ import { Align } from 'Helpers/Props/align';
 import { Kind } from 'Helpers/Props/kinds';
 import { Size } from 'Helpers/Props/sizes';
 import Link, { LinkProps } from './Link';
-import styles from './Button.css';
+import styles from './Button.module.css';
 
 export interface ButtonProps extends Omit<LinkProps, 'children' | 'size'> {
   buttonGroupPosition?: Extract<Align, keyof typeof styles>;

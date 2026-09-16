@@ -8,7 +8,7 @@ import {
   toggleShowAdvancedSettings,
   useShowAdvancedSettings,
 } from './advancedSettingsStore';
-import styles from './AdvancedSettingsButton.css';
+import styles from './AdvancedSettingsButton.module.css';
 
 interface AdvancedSettingsButtonProps {
   showLabel: boolean;

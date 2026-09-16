@@ -1,5 +1,5 @@
 import React, { Fragment, ReactNode } from 'react';
-import styles from './SettingsCard.css';
+import styles from './SettingsCard.module.css';
 
 interface SettingsCardStatusProps {
   dot?: 'active' | 'muted';

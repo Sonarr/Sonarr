@@ -38,7 +38,7 @@ import {
   useIsCurrentLookupQueueItem,
 } from '../importSeriesStore';
 import ImportSeriesSearchResult from './ImportSeriesSearchResult';
-import styles from './ImportSeriesSelectSeries.css';
+import styles from './ImportSeriesSelectSeries.module.css';
 
 const DROPDOWN_MIN_WIDTH = 360;
 const DROPDOWN_VIEWPORT_MARGIN = 12;

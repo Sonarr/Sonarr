@@ -13,7 +13,7 @@ import { icons, kinds } from 'Helpers/Props';
 import Series from 'Series/Series';
 import useSeries from 'Series/useSeries';
 import translate from 'Utilities/String/translate';
-import styles from './OrganizeSeriesModalContent.css';
+import styles from './OrganizeSeriesModalContent.module.css';
 
 export interface OrganizeSeriesModalContentProps {
   onModalClose: () => void;

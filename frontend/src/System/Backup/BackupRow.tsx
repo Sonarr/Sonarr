@@ -12,7 +12,7 @@ import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
 import RestoreBackupModal from './RestoreBackupModal';
 import { useDeleteBackup } from './useBackups';
-import styles from './BackupRow.css';
+import styles from './BackupRow.module.css';
 
 interface BackupRowProps {
   id: number;

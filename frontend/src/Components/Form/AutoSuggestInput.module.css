@@ -1,0 +1,49 @@
+.input {
+  composes: input from 'Components/Form/Input.module.css';
+}
+
+.hasError {
+  composes: hasError from 'Components/Form/Input.module.css';
+}
+
+.hasWarning {
+  composes: hasWarning from 'Components/Form/Input.module.css';
+}
+
+.inputContainer {
+  flex-grow: 1;
+}
+
+.suggestionsContainer {
+  @add-mixin scrollbar;
+  @add-mixin scrollbarTrack;
+  @add-mixin scrollbarThumb;
+}
+
+.suggestionsContainerOpen {
+  z-index: var(--popperZIndex);
+
+  .suggestionsContainer {
+    overflow-y: auto;
+    max-height: 200px;
+    width: 100%;
+    border: 1px solid var(--inputBorderColor);
+    border-radius: 8px;
+    background-color: var(--inputBackgroundColor);
+  }
+}
+
+.suggestionsList {
+  margin: 5px 0;
+  padding-left: 0;
+  max-height: 200px;
+  list-style-type: none;
+}
+
+.suggestion {
+  padding: 0 16px;
+}
+
+.suggestionHighlighted {
+  background-color: var(--menuItemHoverBackgroundColor);
+}

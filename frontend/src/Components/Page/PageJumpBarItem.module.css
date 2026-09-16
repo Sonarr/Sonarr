@@ -1,0 +1,14 @@
+.jumpBarItem {
+  flex: 1 1 var(--jumpBarItemHeight);
+  border-bottom: 1px solid var(--borderColor);
+  text-align: center;
+  font-weight: 600;
+
+  &:hover {
+    color: var(--inkMuted);
+  }
+
+  &:last-child {
+    border: none;
+  }
+}

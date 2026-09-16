@@ -18,7 +18,7 @@ import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import SeriesDeleteList from './SeriesDeleteList';
 import useSelectedSeriesStats from './useSelectedSeriesStats';
-import styles from './DeleteSeriesModalContent.css';
+import styles from './DeleteSeriesModalContent.module.css';
 
 export interface DeleteSeriesModalContentProps {
   onModalClose(): void;

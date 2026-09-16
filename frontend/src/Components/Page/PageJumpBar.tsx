@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import useMeasure from 'Helpers/Hooks/useMeasure';
 import dimensions from 'Styles/Variables/dimensions';
 import PageJumpBarItem, { PageJumpBarItemProps } from './PageJumpBarItem';
-import styles from './PageJumpBar.css';
+import styles from './PageJumpBar.module.css';
 
 const ITEM_HEIGHT = parseInt(dimensions.jumpBarItemHeight);
 

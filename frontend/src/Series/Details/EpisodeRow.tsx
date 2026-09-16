@@ -23,7 +23,7 @@ import formatBytes from 'Utilities/Number/formatBytes';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import formatRuntime from 'Utilities/Number/formatRuntime';
 import translate from 'Utilities/String/translate';
-import styles from './EpisodeRow.css';
+import styles from './EpisodeRow.module.css';
 
 interface EpisodeRowProps {
   id: number;

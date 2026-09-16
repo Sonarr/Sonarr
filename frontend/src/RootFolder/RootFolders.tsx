@@ -5,7 +5,7 @@ import { kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import RootFolderRow from './RootFolderRow';
 import useRootFolders from './useRootFolders';
-import styles from './RootFolders.css';
+import styles from './RootFolders.module.css';
 
 interface RootFoldersProps {
   isSelectable?: boolean;

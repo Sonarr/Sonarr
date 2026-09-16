@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import Link from 'Components/Link/Link';
-import styles from './OverrideMatchData.css';
+import styles from './OverrideMatchData.module.css';
 
 interface OverrideMatchDataProps {
   value?: string | number | JSX.Element | JSX.Element[];

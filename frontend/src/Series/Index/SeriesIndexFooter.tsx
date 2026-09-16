@@ -4,7 +4,7 @@ import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem'
 import useSeries from 'Series/useSeries';
 import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
-import styles from './SeriesIndexFooter.css';
+import styles from './SeriesIndexFooter.module.css';
 
 export default function SeriesIndexFooter() {
   const { data: series } = useSeries();

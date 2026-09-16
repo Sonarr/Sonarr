@@ -21,7 +21,7 @@ import { SelectedSchema } from 'Settings/useProviderSchema';
 import { EnhancedSelectInputChanged, InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import NotificationEventItems from './NotificationEventItems';
-import styles from './EditNotificationModalContent.css';
+import styles from './EditNotificationModalContent.module.css';
 
 export interface EditNotificationModalContentProps {
   id?: number;

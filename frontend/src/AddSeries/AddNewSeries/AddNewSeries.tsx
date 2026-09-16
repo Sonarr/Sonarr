@@ -16,7 +16,7 @@ import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
 import AddNewSeriesSearchResult from './AddNewSeriesSearchResult';
 import { useLookupSeries } from './useAddSeries';
-import styles from './AddNewSeries.css';
+import styles from './AddNewSeries.module.css';
 
 function AddNewSeries() {
   const { term: initialTerm = '' } = useQueryParams<{ term: string }>();
