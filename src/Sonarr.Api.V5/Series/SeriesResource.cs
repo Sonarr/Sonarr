@@ -125,7 +125,6 @@ public static class SeriesResourceMapper
             Year = resource.Year,
             OriginalLanguage = resource.OriginalLanguage,
             Path = resource.Path,
-            PendingPath = resource.PendingPath,
             QualityProfileId = resource.QualityProfileId,
             SeasonFolder = resource.SeasonFolder,
             Monitored = resource.Monitored,

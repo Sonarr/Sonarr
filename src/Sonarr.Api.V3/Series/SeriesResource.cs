@@ -180,7 +180,6 @@ namespace Sonarr.Api.V3.Series
                        OriginalLanguage = resource.OriginalLanguage,
 
                        Path = resource.Path,
-                       PendingPath = resource.PendingPath,
                        QualityProfileId = resource.QualityProfileId,
 
                        SeasonFolder = resource.SeasonFolder,

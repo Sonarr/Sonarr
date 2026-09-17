@@ -3,8 +3,8 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration;
 
-[Migration(233)]
-public class add_next_path_to_series : NzbDroneMigrationBase
+[Migration(234)]
+public class add_pending_path_to_series : NzbDroneMigrationBase
 {
     protected override void MainDbUpgrade()
     {
