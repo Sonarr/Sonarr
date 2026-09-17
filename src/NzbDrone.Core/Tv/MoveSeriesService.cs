@@ -47,8 +47,16 @@ namespace NzbDrone.Core.Tv
 
             if (!_diskProvider.FolderExists(sourcePath))
             {
-                _logger.Debug("Folder '{0}' for '{1}' does not exist, not moving.", sourcePath, series.Title);
-                UpdatePath(series.Id, destinationPath);
+                if (_diskProvider.FolderExists(destinationPath))
+                {
+                    _logger.Debug("Folder '{0}' for '{1}' does not exist, but '{2}' does, assuming the move already completed.", sourcePath, series.Title, destinationPath);
+                    UpdatePath(series.Id, destinationPath);
+                }
+                else
+                {
+                    _logger.Warn("Folder '{0}' for '{1}' does not exist and '{2}' was not found either, unable to confirm the move completed, leaving path unchanged.", sourcePath, series.Title, destinationPath);
+                }
+
                 return;
             }
 
