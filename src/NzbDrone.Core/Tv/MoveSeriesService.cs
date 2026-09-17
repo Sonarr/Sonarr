@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -40,12 +41,22 @@ namespace NzbDrone.Core.Tv
             if (!sourcePath.IsPathValid(PathValidationType.CurrentOs))
             {
                 _logger.Warn("Folder '{0}' for '{1}' is invalid, unable to move series. Try moving files manually", sourcePath, series.Title);
+                UpdatePath(series.Id, destinationPath);
                 return;
             }
 
             if (!_diskProvider.FolderExists(sourcePath))
             {
-                _logger.Debug("Folder '{0}' for '{1}' does not exist, not moving.", sourcePath, series.Title);
+                if (_diskProvider.FolderExists(destinationPath))
+                {
+                    _logger.Debug("Folder '{0}' for '{1}' does not exist, but '{2}' does, assuming the move already completed.", sourcePath, series.Title, destinationPath);
+                    UpdatePath(series.Id, destinationPath);
+                }
+                else
+                {
+                    _logger.Warn("Folder '{0}' for '{1}' does not exist and '{2}' was not found either, unable to confirm the move completed, leaving path unchanged.", sourcePath, series.Title, destinationPath);
+                }
+
                 return;
             }
 
@@ -61,6 +72,7 @@ namespace NzbDrone.Core.Tv
             if (sourcePath.PathEquals(destinationPath))
             {
                 _logger.ProgressInfo("{0} is already in the specified location '{1}'.", series, destinationPath);
+                UpdatePath(series.Id, destinationPath);
                 return;
             }
 
@@ -73,21 +85,29 @@ namespace NzbDrone.Core.Tv
 
                 _logger.ProgressInfo("{0} moved successfully to {1}", series.Title, destinationPath);
 
+                UpdatePath(series.Id, destinationPath);
+
                 _eventAggregator.PublishEvent(new SeriesMovedEvent(series, sourcePath, destinationPath));
             }
             catch (IOException ex)
             {
                 _logger.Error(ex, "Unable to move series from '{0}' to '{1}'. Try moving files manually", sourcePath, destinationPath);
 
-                RevertPath(series.Id, sourcePath);
+                UpdatePath(series.Id, sourcePath);
+            }
+            catch (Exception)
+            {
+                UpdatePath(series.Id, sourcePath);
+                throw;
             }
         }
 
-        private void RevertPath(int seriesId, string path)
+        private void UpdatePath(int seriesId, string path)
         {
             var series = _seriesService.GetSeries(seriesId);
 
             series.Path = path;
+            series.PendingPath = null;
             _seriesService.UpdateSeries(series);
         }
 
