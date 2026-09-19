@@ -310,13 +310,17 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var environmentVariables = new StringDictionary();
 
             AddInstanceVariables(environmentVariables, "ManualInteractionRequired");
-            AddSeriesVariables(environmentVariables, series);
+
+            if (series != null)
+            {
+                AddSeriesVariables(environmentVariables, series);
+            }
 
             environmentVariables.Add("Sonarr_Download_Client", message.DownloadClientInfo?.Name ?? string.Empty);
             environmentVariables.Add("Sonarr_Download_Client_Type", message.DownloadClientInfo?.Type ?? string.Empty);
             environmentVariables.Add("Sonarr_Download_Id", message.DownloadId ?? string.Empty);
-            environmentVariables.Add("Sonarr_Download_Size", message.TrackedDownload.DownloadItem.TotalSize.ToString());
-            environmentVariables.Add("Sonarr_Download_Title", message.TrackedDownload.DownloadItem.Title);
+            environmentVariables.Add("Sonarr_Download_Size", message.TrackedDownload.DownloadItem?.TotalSize.ToString() ?? string.Empty);
+            environmentVariables.Add("Sonarr_Download_Title", message.TrackedDownload.DownloadItem?.Title ?? string.Empty);
 
             ExecuteScript(environmentVariables);
         }
