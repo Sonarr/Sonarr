@@ -311,10 +311,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
 
             AddInstanceVariables(environmentVariables, "ManualInteractionRequired");
 
-            if (series != null)
-            {
-                AddSeriesVariables(environmentVariables, series);
-            }
+            AddSeriesVariables(environmentVariables, series);
 
             environmentVariables.Add("Sonarr_Download_Client", message.DownloadClientInfo?.Name ?? string.Empty);
             environmentVariables.Add("Sonarr_Download_Client_Type", message.DownloadClientInfo?.Type ?? string.Empty);
@@ -400,6 +397,11 @@ namespace NzbDrone.Core.Notifications.CustomScript
 
         private void AddSeriesVariables(StringDictionary environmentVariables, Series series)
         {
+            if (series == null)
+            {
+                return;
+            }
+
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
             environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug);
