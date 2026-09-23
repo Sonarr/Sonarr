@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Subject.Execute(new ApplicationUpdateCommand());
 
             Mocker.GetMock<IProcessProvider>()
-                .Verify(c => c.Start(It.IsAny<string>(), It.Is<string[]>(s => s[0].StartsWith("12")), null, null, null), Times.Once());
+                .Verify(c => c.Start(It.IsAny<string>(), It.Is<IEnumerable<string>>(s => s != null && System.Linq.Enumerable.Any(s) && System.Linq.Enumerable.First(s).StartsWith("12")), null, null, null), Times.Once());
         }
 
         [Test]
@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Subject.Execute(new ApplicationUpdateCommand());
 
             Mocker.GetMock<IProcessProvider>()
-                .Verify(c => c.Start(It.IsAny<string>(), It.IsAny<string[]>(), null, null, null), Times.Never());
+                .Verify(c => c.Start(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), null, null, null), Times.Never());
 
             ExceptionVerification.ExpectedWarns(1);
         }

@@ -227,7 +227,7 @@ namespace NzbDrone.Core.Update
             };
 
             var preservedArgs = _processProvider.ParseCommandLineArguments(_startupContext.PreservedArguments);
-            baseArgs.AddRange(preservedArgs);
+            baseArgs.AddRange(preservedArgs ?? new List<string>());
 
             return baseArgs;
         }
