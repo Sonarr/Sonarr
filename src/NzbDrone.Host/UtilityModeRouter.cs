@@ -57,7 +57,7 @@ namespace NzbDrone.Host
 
                             // Start the service and exit.
                             // Ensures that there isn't an instance of Sonarr already running that the service account cannot stop.
-                            _processProvider.SpawnNewProcess("sc.exe", $"start {ServiceProvider.SERVICE_NAME}", null, true);
+                            _processProvider.SpawnNewProcess("sc.exe", new[] { "start", ServiceProvider.SERVICE_NAME }, null, true);
                         }
 
                         break;

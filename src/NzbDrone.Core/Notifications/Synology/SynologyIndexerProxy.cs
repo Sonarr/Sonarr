@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.Processes;
 
@@ -32,7 +33,7 @@ namespace NzbDrone.Core.Notifications.Synology
         {
             try
             {
-                ExecuteCommand("--help", false);
+                ExecuteCommand(new[] { "--help" }, false);
                 return true;
             }
             catch (Exception ex)
@@ -44,35 +45,35 @@ namespace NzbDrone.Core.Notifications.Synology
 
         public void AddFile(string filePath)
         {
-            ExecuteCommand("-a " + Escape(filePath));
+            ExecuteCommand(new[] { "-a", Escape(filePath) });
         }
 
         public void DeleteFile(string filePath)
         {
-            ExecuteCommand("-d " + Escape(filePath));
+            ExecuteCommand(new[] { "-d", Escape(filePath) });
         }
 
         public void AddFolder(string folderPath)
         {
-            ExecuteCommand("-A " + Escape(folderPath));
+            ExecuteCommand(new[] { "-A", Escape(folderPath) });
         }
 
         public void DeleteFolder(string folderPath)
         {
-            ExecuteCommand("-D " + Escape(folderPath));
+            ExecuteCommand(new[] { "-D", Escape(folderPath) });
         }
 
         public void UpdateFolder(string folderPath)
         {
-            ExecuteCommand("-R " + Escape(folderPath));
+            ExecuteCommand(new[] { "-R", Escape(folderPath) });
         }
 
         public void UpdateLibrary()
         {
-            ExecuteCommand("-R video");
+            ExecuteCommand(new[] { "-R", "video" });
         }
 
-        private void ExecuteCommand(string args, bool throwOnStdOut = true)
+        private void ExecuteCommand(IEnumerable<string> args, bool throwOnStdOut = true)
         {
             var output = _processProvider.StartAndCapture(SynoIndexPath, args);
 

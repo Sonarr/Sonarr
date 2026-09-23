@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Subject.Execute(new ApplicationUpdateCommand());
 
             Mocker.GetMock<IProcessProvider>()
-                .Verify(c => c.Start(It.IsAny<string>(), It.Is<string>(s => s.StartsWith("12")), null, null, null), Times.Once());
+                .Verify(c => c.Start(It.IsAny<string>(), It.Is<string[]>(s => s[0].StartsWith("12")), null, null, null), Times.Once());
         }
 
         [Test]
@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Subject.Execute(new ApplicationUpdateCommand());
 
             Mocker.GetMock<IProcessProvider>()
-                .Verify(c => c.Start(It.IsAny<string>(), It.IsAny<string>(), null, null, null), Times.Never());
+                .Verify(c => c.Start(It.IsAny<string>(), It.IsAny<string[]>(), null, null, null), Times.Never());
 
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -195,7 +195,7 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             Subject.Execute(new ApplicationUpdateCommand());
 
-            Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<string>(), null, null, null), Times.Once());
+            Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<string[]>(), null, null, null), Times.Once());
         }
 
         [Test]
@@ -209,7 +209,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Assert.Throws<CommandFailedException>(() => Subject.Execute(new ApplicationUpdateCommand()));
 
             ExceptionVerification.ExpectedErrors(1);
-            Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<string>(), null, null, null), Times.Never());
+            Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<string[]>(), null, null, null), Times.Never());
         }
 
         [Test]
@@ -223,7 +223,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Assert.Throws<CommandFailedException>(() => Subject.Execute(new ApplicationUpdateCommand()));
 
             ExceptionVerification.ExpectedErrors(1);
-            Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<string>(), null, null, null), Times.Never());
+            Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<string[]>(), null, null, null), Times.Never());
         }
 
         [Test]
@@ -241,7 +241,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Assert.Throws<CommandFailedException>(() => Subject.Execute(new ApplicationUpdateCommand()));
 
             ExceptionVerification.ExpectedErrors(1);
-            Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<string>(), null, null, null), Times.Never());
+            Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<string[]>(), null, null, null), Times.Never());
         }
 
         [Ignore("TODO fix")]
@@ -336,7 +336,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Subject.Execute(new ApplicationUpdateCommand());
 
             Mocker.GetMock<IProcessProvider>()
-                .Verify(c => c.Start(It.IsAny<string>(), It.Is<string>(s => s.StartsWith("12")), null, null, null), Times.Never());
+                .Verify(c => c.Start(It.IsAny<string>(), It.Is<string[]>(s => s[0].StartsWith("12")), null, null, null), Times.Never());
         }
 
         [Test]
@@ -347,7 +347,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Subject.Execute(new ApplicationUpdateCommand());
 
             Mocker.GetMock<IProcessProvider>()
-                .Verify(c => c.Start(It.IsAny<string>(), It.Is<string>(s => s.StartsWith("12")), null, null, null), Times.Never());
+                .Verify(c => c.Start(It.IsAny<string>(), It.Is<string[]>(s => s[0].StartsWith("12")), null, null, null), Times.Never());
         }
 
         [TearDown]
