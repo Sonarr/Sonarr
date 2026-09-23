@@ -45,27 +45,27 @@ namespace NzbDrone.Core.Notifications.Synology
 
         public void AddFile(string filePath)
         {
-            ExecuteCommand(new[] { "-a", Escape(filePath) });
+            ExecuteCommand(new[] { "-a", filePath });
         }
 
         public void DeleteFile(string filePath)
         {
-            ExecuteCommand(new[] { "-d", Escape(filePath) });
+            ExecuteCommand(new[] { "-d", filePath });
         }
 
         public void AddFolder(string folderPath)
         {
-            ExecuteCommand(new[] { "-A", Escape(folderPath) });
+            ExecuteCommand(new[] { "-A", folderPath });
         }
 
         public void DeleteFolder(string folderPath)
         {
-            ExecuteCommand(new[] { "-D", Escape(folderPath) });
+            ExecuteCommand(new[] { "-D", folderPath });
         }
 
         public void UpdateFolder(string folderPath)
         {
-            ExecuteCommand(new[] { "-R", Escape(folderPath) });
+            ExecuteCommand(new[] { "-R", folderPath });
         }
 
         public void UpdateLibrary()
@@ -86,11 +86,6 @@ namespace NzbDrone.Core.Notifications.Synology
             {
                 throw new SynologyException("synoindex returned an error: {0}", string.Join("\n", output.Error));
             }
-        }
-
-        private string Escape(string arg)
-        {
-            return string.Format("\"{0}\"", arg.Replace("\"", "\\\""));
         }
     }
 }
