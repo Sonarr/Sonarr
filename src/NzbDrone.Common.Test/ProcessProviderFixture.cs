@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -184,6 +184,131 @@ namespace NzbDrone.Common.Test
         {
             Console.WriteLine(new ProcessInfo().ToString());
             ExceptionVerification.MarkInconclusive(typeof(Win32Exception));
+        }
+
+        [Test]
+        public void should_return_empty_string_on_null()
+        {
+            Subject.ParseCommandLineArguments(null).Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_return_empty_string_on_empty()
+        {
+            Subject.ParseCommandLineArguments("").Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_return_empty_string_on_whitespace()
+        {
+            Subject.ParseCommandLineArguments("   ").Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_return_empty_string_on_empty_quotes()
+        {
+            Subject.ParseCommandLineArguments("\"\"").Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_return_spaces_on_quoted_spaces()
+        {
+            var arguments = "\"   \"";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+            parsedArgs.Should().HaveCount(1);
+            parsedArgs.First().Should().Be("   ");
+        }
+
+        [Test]
+        public void should_return_single_argument()
+        {
+            var arguments = "arg1";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+            parsedArgs.Should().HaveCount(1);
+            parsedArgs.First().Should().Be("arg1");
+        }
+
+        [Test]
+        public void should_return_two_arguments()
+        {
+            var arguments = "arg1 arg2";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+            parsedArgs.Should().HaveCount(2);
+            parsedArgs[0].Should().Be("arg1");
+            parsedArgs[1].Should().Be("arg2");
+        }
+
+        [Test]
+        public void should_return_three_arguments()
+        {
+            var arguments = "arg1 arg2 arg3";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+            parsedArgs.Should().HaveCount(3);
+            parsedArgs[0].Should().Be("arg1");
+            parsedArgs[1].Should().Be("arg2");
+            parsedArgs[2].Should().Be("arg3");
+        }
+
+        [Test]
+        public void should_strip_quoted_arguments()
+        {
+            var arguments = "\"arg1\"";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+            parsedArgs.Should().HaveCount(1);
+            parsedArgs.First().Should().Be("arg1");
+        }
+
+        [Test]
+        public void should_strip_quoted_arguments_with_two_args()
+        {
+            var arguments = "\"arg1\" arg2";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+            parsedArgs.Should().HaveCount(2);
+            parsedArgs[0].Should().Be("arg1");
+            parsedArgs[1].Should().Be("arg2");
+        }
+
+        [Test]
+        public void should_strip_quoted_arguments_with_three_args_and_space()
+        {
+            var arguments = "arg1 arg2 \"arg 3\"";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+            parsedArgs.Should().HaveCount(3);
+            parsedArgs[0].Should().Be("arg1");
+            parsedArgs[1].Should().Be("arg2");
+            parsedArgs[2].Should().Be("arg 3");
+        }
+
+        [Test]
+        public void should_map_single_arg_with_unclosed_quotes()
+        {
+            var arguments = "\"arg 1";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+            parsedArgs.Should().HaveCount(1);
+            parsedArgs.First().Should().Be("arg 1");
+        }
+
+        [Test]
+        public void should_map_unclosed_quotes()
+        {
+            var arguments = "arg1 arg2 \"arg 3";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+            parsedArgs.Should().HaveCount(3);
+            parsedArgs[0].Should().Be("arg1");
+            parsedArgs[1].Should().Be("arg2");
+            parsedArgs[2].Should().Be("arg 3");
+        }
+
+        [Test]
+        public void should_be_able_to_parse_command_line_arguments()
+        {
+            var arguments = "-data=\"c:\\users\\test\\\" -nobrowser -port=8989";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            // Note the expected removed the quotes from "C:\users\test\", which is expected since it is
+            // treated as a single argument and the quotes are not part of the argument value.
+            var expected = new[] { "-data=c:\\users\\test\\", "-nobrowser", "-port=8989" };
+            parsedArgs.Should().BeEquivalentTo(expected);
         }
     }
 }
