@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +13,7 @@ namespace NzbDrone.Common
             where T : class;
         object Build(Type contract);
         IEnumerable<Type> GetImplementations(Type contract);
+        bool IsDisposed { get; }
     }
 
     public class ServiceFactory : IServiceFactory
@@ -45,5 +46,7 @@ namespace NzbDrone.Common
         {
             return _container.GetServices(contract).Select(x => x.GetType());
         }
+
+        public bool IsDisposed => _container is DryIoc.IResolverContext { IsDisposed: true };
     }
 }
