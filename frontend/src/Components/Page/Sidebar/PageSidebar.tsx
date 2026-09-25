@@ -40,6 +40,7 @@ interface SidebarItem {
   isActiveParent?: boolean;
   isParentItem?: boolean;
   isChildItem?: boolean;
+  isHidden?: boolean;
   statusComponent?: React.ElementType;
   children?: {
     title: string | (() => string);
@@ -61,6 +62,7 @@ const GROUPS: SidebarGroup[] = [
         iconName: icons.HOME,
         title: () => translate('Home'),
         to: '/',
+        isHidden: true,
       },
       {
         iconName: icons.SERIES_CONTINUING,
@@ -184,7 +186,9 @@ const GROUPS: SidebarGroup[] = [
   },
 ];
 
-const FLAT_LINKS: SidebarItem[] = GROUPS.flatMap((g) => g.items);
+const FLAT_LINKS: SidebarItem[] = GROUPS.flatMap((g) => g.items).filter(
+  (link) => !link.isHidden
+);
 
 function hasActiveChildLink(link: SidebarItem, pathname: string) {
   const children = link.children;
@@ -465,6 +469,10 @@ function PageSidebar() {
                 ) : null}
 
                 {group.items.map((link) => {
+                  if (link.isHidden) {
+                    return null;
+                  }
+
                   const childWithStatusComponent = link.children?.find(
                     (child) => {
                       return !!child.statusComponent;
