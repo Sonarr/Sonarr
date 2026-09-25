@@ -215,8 +215,9 @@ namespace NzbDrone.Common.Test
         {
             var arguments = "\"   \"";
             var parsedArgs = Subject.ParseCommandLineArguments(arguments);
-            parsedArgs.Should().HaveCount(1);
-            parsedArgs.First().Should().Be("   ");
+
+            var expected = new[] { "   " };
+            parsedArgs.Should().BeEquivalentTo(expected);
         }
 
         [Test]
@@ -224,8 +225,9 @@ namespace NzbDrone.Common.Test
         {
             var arguments = "arg1";
             var parsedArgs = Subject.ParseCommandLineArguments(arguments);
-            parsedArgs.Should().HaveCount(1);
-            parsedArgs.First().Should().Be("arg1");
+
+            var expected = new[] { "arg1" };
+            parsedArgs.Should().BeEquivalentTo(expected);
         }
 
         [Test]
@@ -233,9 +235,9 @@ namespace NzbDrone.Common.Test
         {
             var arguments = "arg1 arg2";
             var parsedArgs = Subject.ParseCommandLineArguments(arguments);
-            parsedArgs.Should().HaveCount(2);
-            parsedArgs[0].Should().Be("arg1");
-            parsedArgs[1].Should().Be("arg2");
+
+            var expected = new[] { "arg1", "arg2" };
+            parsedArgs.Should().BeEquivalentTo(expected);
         }
 
         [Test]
@@ -243,10 +245,9 @@ namespace NzbDrone.Common.Test
         {
             var arguments = "arg1 arg2 arg3";
             var parsedArgs = Subject.ParseCommandLineArguments(arguments);
-            parsedArgs.Should().HaveCount(3);
-            parsedArgs[0].Should().Be("arg1");
-            parsedArgs[1].Should().Be("arg2");
-            parsedArgs[2].Should().Be("arg3");
+
+            var expected = new[] { "arg1", "arg2", "arg3" };
+            parsedArgs.Should().BeEquivalentTo(expected);
         }
 
         [Test]
@@ -254,8 +255,9 @@ namespace NzbDrone.Common.Test
         {
             var arguments = "\"arg1\"";
             var parsedArgs = Subject.ParseCommandLineArguments(arguments);
-            parsedArgs.Should().HaveCount(1);
-            parsedArgs.First().Should().Be("arg1");
+
+            var expected = new[] { "arg1" };
+            parsedArgs.Should().BeEquivalentTo(expected);
         }
 
         [Test]
@@ -263,9 +265,9 @@ namespace NzbDrone.Common.Test
         {
             var arguments = "\"arg1\" arg2";
             var parsedArgs = Subject.ParseCommandLineArguments(arguments);
-            parsedArgs.Should().HaveCount(2);
-            parsedArgs[0].Should().Be("arg1");
-            parsedArgs[1].Should().Be("arg2");
+
+            var expected = new[] { "arg1", "arg2" };
+            parsedArgs.Should().BeEquivalentTo(expected);
         }
 
         [Test]
@@ -273,10 +275,9 @@ namespace NzbDrone.Common.Test
         {
             var arguments = "arg1 arg2 \"arg 3\"";
             var parsedArgs = Subject.ParseCommandLineArguments(arguments);
-            parsedArgs.Should().HaveCount(3);
-            parsedArgs[0].Should().Be("arg1");
-            parsedArgs[1].Should().Be("arg2");
-            parsedArgs[2].Should().Be("arg 3");
+
+            var expected = new[] { "arg1", "arg2", "arg 3" };
+            parsedArgs.Should().BeEquivalentTo(expected);
         }
 
         [Test]
@@ -284,8 +285,9 @@ namespace NzbDrone.Common.Test
         {
             var arguments = "\"arg 1";
             var parsedArgs = Subject.ParseCommandLineArguments(arguments);
-            parsedArgs.Should().HaveCount(1);
-            parsedArgs.First().Should().Be("arg 1");
+
+            var expected = new[] { "arg 1" };
+            parsedArgs.Should().BeEquivalentTo(expected);
         }
 
         [Test]
@@ -293,10 +295,9 @@ namespace NzbDrone.Common.Test
         {
             var arguments = "arg1 arg2 \"arg 3";
             var parsedArgs = Subject.ParseCommandLineArguments(arguments);
-            parsedArgs.Should().HaveCount(3);
-            parsedArgs[0].Should().Be("arg1");
-            parsedArgs[1].Should().Be("arg2");
-            parsedArgs[2].Should().Be("arg 3");
+
+            var expected = new[] { "arg1", "arg2", "arg 3" };
+            parsedArgs.Should().BeEquivalentTo(expected);
         }
 
         [Test]
@@ -308,6 +309,56 @@ namespace NzbDrone.Common.Test
             // Note the expected removed the quotes from "C:\users\test\", which is expected since it is
             // treated as a single argument and the quotes are not part of the argument value.
             var expected = new[] { "-data=c:\\users\\test\\", "-nobrowser", "-port=8989" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_be_able_to_parse_command_with_path_and_quotes()
+        {
+            var arguments = "-data \"c:\\users\\test\\\" -nobrowser -port 8989";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "-data", "c:\\users\\test\\", "-nobrowser", "-port", "8989" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_be_able_to_parse_quoted_path()
+        {
+            var arguments = "\"c:\\path with spaces\"";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "c:\\path with spaces" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_drop_empty_arguments()
+        {
+            var arguments = "arg1 \"\" arg2 \"\" arg3 \"\"";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "arg1", "arg2", "arg3" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_trim_spaces()
+        {
+            var arguments = "  arg1   arg2    arg3  ";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "arg1", "arg2", "arg3" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_handle_non_whitespace()
+        {
+            var arguments = "arg1\targ2\narg3\rarg4";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "arg1", "arg2", "arg3", "arg4" };
             parsedArgs.Should().BeEquivalentTo(expected);
         }
     }
