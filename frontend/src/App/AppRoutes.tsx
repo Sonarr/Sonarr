@@ -40,10 +40,10 @@ export function appRouteElements() {
     <>
       {/*
         Home (v5) — TODO: swap to <HomePage /> when the homepage redesign lands.
-        Until then, "/" aliases to SeriesIndex so the sidebar's "Home" nav resolves.
+        Until then, "/" redirects to SeriesIndex and the sidebar's "Home" nav is hidden.
       */}
 
-      <Route path="/" element={<SeriesIndex />} />
+      <Route path="/" element={<Navigate to="/series" replace={true} />} />
 
       {/*
         Series
