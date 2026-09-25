@@ -46,6 +46,7 @@ namespace NzbDrone.Core.Tv
         public bool UseSceneNumbering { get; set; }
         public string TitleSlug { get; set; }
         public string Path { get; set; }
+        public string PendingPath { get; set; }
         public int Year { get; set; }
         public Ratings Ratings { get; set; }
         public List<string> Genres { get; set; }

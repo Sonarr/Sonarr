@@ -26,6 +26,14 @@ namespace NzbDrone.Integration.Test.Client
             return Put<List<SeriesResource>>(request);
         }
 
+        public SeriesResource Put(SeriesResource series, bool moveFiles)
+        {
+            var request = BuildRequest();
+            request.AddQueryParameter("moveFiles", moveFiles.ToString());
+            request.AddJsonBody(series);
+            return Put<SeriesResource>(request);
+        }
+
         public SeriesResource Get(string slug, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
             var request = BuildRequest(slug);

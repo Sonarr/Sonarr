@@ -20,6 +20,7 @@ import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
 import { Statistics } from 'Series/Series';
 import SeriesBanner from 'Series/SeriesBanner';
+import SeriesMovePending from 'Series/SeriesMovePending';
 import { useSeriesTableOptions } from 'Series/seriesOptionsStore';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import { SelectStateInputProps } from 'typings/props';
@@ -125,6 +126,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
     status,
     path,
     titleSlug,
+    pendingPath,
     nextAiring,
     previousAiring,
     added,
@@ -387,6 +389,13 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
           return (
             <VirtualTableRowCell key={name} className={styles[name]}>
               {path}
+
+              {pendingPath ? (
+                <SeriesMovePending
+                  className={styles.movePendingIcon}
+                  pendingPath={pendingPath}
+                />
+              ) : null}
             </VirtualTableRowCell>
           );
         }

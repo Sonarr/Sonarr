@@ -87,6 +87,18 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
+        public void should_update_series_path_after_successful_move()
+        {
+            Subject.Execute(_command);
+
+            Mocker.GetMock<IDiskTransferService>()
+                  .Verify(v => v.TransferFolder(_command.SourcePath, _command.DestinationPath, TransferMode.Move), Times.Once());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Path == _command.DestinationPath), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
+        }
+
+        [Test]
         public void should_use_destination_path()
         {
             Subject.Execute(_command);
@@ -115,11 +127,15 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
-        public void should_skip_series_folder_if_it_does_not_exist()
+        public void should_skip_series_folder_if_it_does_not_exist_and_update_path_when_destination_exists()
         {
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.FolderExists(It.IsAny<string>()))
+                  .Setup(s => s.FolderExists(_command.SourcePath))
                   .Returns(false);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FolderExists(_command.DestinationPath))
+                  .Returns(true);
 
             Subject.Execute(_command);
 
@@ -128,6 +144,85 @@ namespace NzbDrone.Core.Test.TvTests
 
             Mocker.GetMock<IBuildFileNames>()
                   .Verify(v => v.GetSeriesFolder(It.IsAny<Series>(), null), Times.Never());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Path == _command.DestinationPath), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
+        }
+
+        [Test]
+        public void should_not_update_path_if_neither_source_nor_destination_folder_exists()
+        {
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FolderExists(It.IsAny<string>()))
+                  .Returns(false);
+
+            Subject.Execute(_command);
+
+            ExceptionVerification.ExpectedWarns(1);
+
+            Mocker.GetMock<IDiskTransferService>()
+                  .Verify(v => v.TransferFolder(_command.SourcePath, _command.DestinationPath, TransferMode.Move), Times.Never());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.IsAny<Series>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Never());
+        }
+
+        [Test]
+        public void should_update_path_to_destination_when_source_path_is_invalid()
+        {
+            _command.SourcePath = string.Empty;
+
+            Subject.Execute(_command);
+
+            ExceptionVerification.ExpectedWarns(1);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Path == _command.DestinationPath), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
+        }
+
+        [Test]
+        public void should_clear_pending_path_after_successful_move()
+        {
+            _series.PendingPath = _command.DestinationPath;
+
+            Subject.Execute(_command);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.PendingPath == null), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
+        }
+
+        [Test]
+        public void should_clear_pending_path_after_failed_move()
+        {
+            GivenFailedMove();
+            _series.PendingPath = _command.DestinationPath;
+
+            Subject.Execute(_command);
+
+            ExceptionVerification.ExpectedErrors(1);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.PendingPath == null), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
+        }
+
+        [Test]
+        public void should_clear_pending_path_when_already_at_destination()
+        {
+            _series.PendingPath = _command.DestinationPath;
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FolderExists(It.IsAny<string>()))
+                  .Returns(true);
+
+            Subject.Execute(new MoveSeriesCommand
+            {
+                SeriesId = 1,
+                SourcePath = _command.SourcePath,
+                DestinationPath = _command.SourcePath
+            });
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.PendingPath == null), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
         }
     }
 }
