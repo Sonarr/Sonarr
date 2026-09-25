@@ -114,5 +114,57 @@ namespace NzbDrone.Core.Test.MediaFiles.UpdateEpisodeFileServiceTests
             var actualWriteTime = Mocker.GetMock<IDiskProvider>().Object.FileGetLastWrite(_episodeFile.Path).ToLocalTime();
             actualWriteTime.Should().Be(_episodes[0].AirDateUtc.Value.ToLocalTime().WithTicksFrom(previousWrite));
         }
+
+        [Test]
+        public void should_preserve_original_file_date_when_mode_is_preserve_original()
+        {
+            var originalFileDate = new DateTime(2020, 01, 01, 12, 0, 0, 512, 512, DateTimeKind.Utc);
+            var previousWrite = new DateTime(_lastWrite.Ticks, _lastWrite.Kind);
+
+            Mocker.GetMock<IConfigService>()
+                .Setup(x => x.FileDate)
+                .Returns(FileDateType.PreserveOriginal);
+
+            Subject.ChangeFileDateForFile(_episodeFile, _series, _episodes, originalFileDate);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.FileSetLastWriteTime(_episodeFile.Path, It.IsAny<DateTime>()), Times.Once());
+
+            var actualWriteTime = Mocker.GetMock<IDiskProvider>().Object.FileGetLastWrite(_episodeFile.Path).ToLocalTime();
+            actualWriteTime.Should().Be(originalFileDate.ToLocalTime().WithTicksFrom(previousWrite));
+        }
+
+        [Test]
+        public void should_return_false_when_preserve_original_mode_but_no_preserved_date()
+        {
+            Mocker.GetMock<IConfigService>()
+                .Setup(x => x.FileDate)
+                .Returns(FileDateType.PreserveOriginal);
+
+            var result = Subject.ChangeFileDateForFile(_episodeFile, _series, _episodes, preservedFileDate: null);
+
+            result.Should().BeFalse();
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.FileSetLastWriteTime(_episodeFile.Path, It.IsAny<DateTime>()), Times.Never());
+        }
+
+        [Test]
+        public void should_not_change_behavior_for_existing_modes()
+        {
+            var previousWrite = new DateTime(_lastWrite.Ticks, _lastWrite.Kind);
+
+            // Test LocalAirDate mode
+            Mocker.GetMock<IConfigService>()
+                .Setup(x => x.FileDate)
+                .Returns(FileDateType.LocalAirDate);
+
+            Subject.ChangeFileDateForFile(_episodeFile, _series, _episodes, preservedFileDate: null);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.FileSetLastWriteTime(_episodeFile.Path, It.IsAny<DateTime>()), Times.Once());
+
+            var actualWriteTime = Mocker.GetMock<IDiskProvider>().Object.FileGetLastWrite(_episodeFile.Path).ToLocalTime();
+            actualWriteTime.Should().Be(_episodes[0].AirDateUtc.Value.ToLocalTime().WithTicksFrom(previousWrite));
+        }
     }
 }

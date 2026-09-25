@@ -16,7 +16,7 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IUpdateEpisodeFileService
     {
-        void ChangeFileDateForFile(EpisodeFile episodeFile, Series series, List<Episode> episodes);
+        void ChangeFileDateForFile(EpisodeFile episodeFile, Series series, List<Episode> episodes, DateTime? preservedFileDate = null);
     }
 
     public class UpdateEpisodeFileService : IUpdateEpisodeFileService,
@@ -38,12 +38,12 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        public void ChangeFileDateForFile(EpisodeFile episodeFile, Series series, List<Episode> episodes)
+        public void ChangeFileDateForFile(EpisodeFile episodeFile, Series series, List<Episode> episodes, DateTime? preservedFileDate = null)
         {
-            ChangeFileDate(episodeFile, series, episodes);
+            ChangeFileDate(episodeFile, series, episodes, preservedFileDate);
         }
 
-        private bool ChangeFileDate(EpisodeFile episodeFile, Series series, List<Episode> episodes)
+        private bool ChangeFileDate(EpisodeFile episodeFile, Series series, List<Episode> episodes, DateTime? preservedFileDate = null)
         {
             var episodeFilePath = Path.Combine(series.Path, episodeFile.RelativePath);
             var airDateUtc = episodes.First().AirDateUtc;
@@ -63,6 +63,10 @@ namespace NzbDrone.Core.MediaFiles
                     ChangeFileDateToLocalDate(
                         episodeFilePath,
                         DateTime.SpecifyKind(airDateUtc.Value, DateTimeKind.Local)),
+                        
+                FileDateType.PreserveOriginal when preservedFileDate.HasValue =>
+                    ChangeFileDateToLocalDate(episodeFilePath, preservedFileDate.Value.ToLocalTime()),
+
 
                 _ => false,
             };
