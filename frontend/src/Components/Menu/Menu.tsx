@@ -13,8 +13,10 @@ import React, {
   useCallback,
   useEffect,
   useId,
+  useMemo,
   useState,
 } from 'react';
+import MenuContext from './MenuContext';
 import styles from './Menu.module.css';
 
 interface MenuProps {
@@ -108,38 +110,21 @@ function Menu({
     onOpenChange: setIsMenuOpen,
   });
 
-  const handleFloaterPress = useCallback(
-    (event: MouseEvent) => {
-      if (
-        refs.reference &&
-        (refs.reference.current as HTMLElement).contains(
-          event.target as HTMLElement
-        )
-      ) {
-        return false;
-      }
-
-      // TODO: Menu items should handle closing when they are clicked.
-      // This is handled before the menu item click event is handled, so wait 100ms before closing.
-      setTimeout(() => {
-        setIsMenuOpen(false);
-      }, 100);
-
-      return true;
-    },
-    [refs.reference]
-  );
-
   const click = useClick(context);
   const dismiss = useDismiss(context, {
     outsidePressEvent: 'click',
-    outsidePress: handleFloaterPress,
   });
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     click,
     dismiss,
   ]);
+
+  const closeMenu = useCallback(() => {
+    setIsMenuOpen(false);
+  }, []);
+
+  const menuContext = useMemo(() => ({ closeMenu }), [closeMenu]);
 
   return (
     <>
@@ -154,15 +139,17 @@ function Menu({
 
       {isMenuOpen ? (
         <FloatingPortal id="portal-root">
-          {React.cloneElement(childrenArray[1] as ReactElement, {
-            forwardedRef: refs.setFloating,
-            style: {
-              maxHeight: enforceMaxHeight ? maxHeight : undefined,
-              ...floatingStyles,
-            },
-            isOpen: isMenuOpen,
-            ...getFloatingProps(),
-          })}
+          <MenuContext.Provider value={menuContext}>
+            {React.cloneElement(childrenArray[1] as ReactElement, {
+              forwardedRef: refs.setFloating,
+              style: {
+                maxHeight: enforceMaxHeight ? maxHeight : undefined,
+                ...floatingStyles,
+              },
+              isOpen: isMenuOpen,
+              ...getFloatingProps(),
+            })}
+          </MenuContext.Provider>
         </FloatingPortal>
       ) : null}
     </>
