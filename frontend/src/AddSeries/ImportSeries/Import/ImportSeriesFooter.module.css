@@ -127,7 +127,7 @@
   background-color: var(--inkFaint);
 }
 
-@media only screen and (max-width: 768px) {
+@media (--breakpointSmall) {
   .footerContent {
     padding: 16px;
   }
@@ -161,7 +161,7 @@
   }
 }
 
-@media only screen and (max-width: 480px) {
+@media (--breakpointExtraSmall) {
   .importButtonContainer {
     align-items: stretch;
     flex-direction: column-reverse;

@@ -72,7 +72,7 @@
   row-gap: 2px;
 }
 
-@media only screen and (max-width: 768px) {
+@media (--breakpointSmall) {
   .groups {
     grid-template-columns: 1fr;
   }
