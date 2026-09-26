@@ -1,6 +1,5 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
-import DocumentTitle from 'react-document-title';
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -33,11 +32,9 @@ const router = createBrowserRouter(
 
 function App() {
   return (
-    <DocumentTitle title={window.Sonarr.instanceName}>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </DocumentTitle>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   );
 }
 
