@@ -1,5 +1,4 @@
-import React from 'react';
-import DocumentTitle from 'react-document-title';
+import React, { useEffect } from 'react';
 import ErrorBoundary from 'Components/Error/ErrorBoundary';
 import PageContentError from './PageContentError';
 import styles from './PageContent.module.css';
@@ -15,19 +14,21 @@ function PageContent({
   title,
   children,
 }: PageContentProps) {
+  useEffect(() => {
+    document.title = title
+      ? `${title} - ${window.Sonarr.instanceName}`
+      : window.Sonarr.instanceName;
+
+    return () => {
+      document.title = window.Sonarr.instanceName;
+    };
+  }, [title]);
+
   return (
     <ErrorBoundary errorComponent={PageContentError}>
-      <DocumentTitle
-        title={
-          title
-            ? `${title} - ${window.Sonarr.instanceName}`
-            : window.Sonarr.instanceName
-        }
-      >
-        <main className={className} aria-label={title}>
-          {children}
-        </main>
-      </DocumentTitle>
+      <main className={className} aria-label={title}>
+        {children}
+      </main>
     </ErrorBoundary>
   );
 }
