@@ -80,7 +80,7 @@ namespace NzbDrone.Update.UpdateEngine
                 _startupContext.Flags.Add(StartupContext.NO_BROWSER);
             }
 
-            _processProvider.SpawnNewProcess(path, _startupContext.PreservedArguments);
+            _processProvider.SpawnNewProcess(path, _processProvider.ParseCommandLineArguments(_startupContext.PreservedArguments));
         }
     }
 }

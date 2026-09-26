@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -184,6 +184,182 @@ namespace NzbDrone.Common.Test
         {
             Console.WriteLine(new ProcessInfo().ToString());
             ExceptionVerification.MarkInconclusive(typeof(Win32Exception));
+        }
+
+        [Test]
+        public void should_return_empty_string_on_null()
+        {
+            Subject.ParseCommandLineArguments(null).Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_return_empty_string_on_empty()
+        {
+            Subject.ParseCommandLineArguments("").Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_return_empty_string_on_whitespace()
+        {
+            Subject.ParseCommandLineArguments("   ").Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_return_empty_string_on_empty_quotes()
+        {
+            Subject.ParseCommandLineArguments("\"\"").Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_return_spaces_on_quoted_spaces()
+        {
+            var arguments = "\"   \"";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "   " };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_return_single_argument()
+        {
+            var arguments = "arg1";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "arg1" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_return_two_arguments()
+        {
+            var arguments = "arg1 arg2";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "arg1", "arg2" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_return_three_arguments()
+        {
+            var arguments = "arg1 arg2 arg3";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "arg1", "arg2", "arg3" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_strip_quoted_arguments()
+        {
+            var arguments = "\"arg1\"";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "arg1" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_strip_quoted_arguments_with_two_args()
+        {
+            var arguments = "\"arg1\" arg2";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "arg1", "arg2" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_strip_quoted_arguments_with_three_args_and_space()
+        {
+            var arguments = "arg1 arg2 \"arg 3\"";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "arg1", "arg2", "arg 3" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_map_single_arg_with_unclosed_quotes()
+        {
+            var arguments = "\"arg 1";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "arg 1" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_map_unclosed_quotes()
+        {
+            var arguments = "arg1 arg2 \"arg 3";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "arg1", "arg2", "arg 3" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_be_able_to_parse_command_line_arguments()
+        {
+            var arguments = "-data=\"c:\\users\\test\\\" -nobrowser -port=8989";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            // Note the expected removed the quotes from "C:\users\test\", which is expected since it is
+            // treated as a single argument and the quotes are not part of the argument value.
+            var expected = new[] { "-data=c:\\users\\test\\", "-nobrowser", "-port=8989" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_be_able_to_parse_command_with_path_and_quotes()
+        {
+            var arguments = "-data \"c:\\users\\test\\\" -nobrowser -port 8989";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "-data", "c:\\users\\test\\", "-nobrowser", "-port", "8989" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_be_able_to_parse_quoted_path()
+        {
+            var arguments = "\"c:\\path with spaces\"";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "c:\\path with spaces" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_drop_empty_arguments()
+        {
+            var arguments = "arg1 \"\" arg2 \"\" arg3 \"\"";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "arg1", "arg2", "arg3" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_trim_spaces()
+        {
+            var arguments = "  arg1   arg2    arg3  ";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "arg1", "arg2", "arg3" };
+            parsedArgs.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void should_handle_non_whitespace()
+        {
+            var arguments = "arg1\targ2\narg3\rarg4";
+            var parsedArgs = Subject.ParseCommandLineArguments(arguments);
+
+            var expected = new[] { "arg1", "arg2", "arg3", "arg4" };
+            parsedArgs.Should().BeEquivalentTo(expected);
         }
     }
 }

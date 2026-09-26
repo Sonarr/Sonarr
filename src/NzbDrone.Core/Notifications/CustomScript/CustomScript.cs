@@ -361,7 +361,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
         {
             _logger.Debug("Executing external script: {0}", Settings.Path);
 
-            var processOutput = _processProvider.StartAndCapture(Settings.Path, Settings.Arguments, environmentVariables);
+            var processOutput = _processProvider.StartAndCapture(Settings.Path, _processProvider.ParseCommandLineArguments(Settings.Arguments), environmentVariables);
 
             _logger.Debug("Executed external script: {0} - Status: {1}", Settings.Path, processOutput.ExitCode);
             _logger.Debug("Script Output: \r\n{0}", string.Join("\r\n", processOutput.Lines));
