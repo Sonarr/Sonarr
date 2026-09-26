@@ -166,7 +166,7 @@ function SeriesSearchInput() {
         setRequestLoading(true);
 
         const payload = {
-          value: requestValue,
+          value: requestValue.current,
           series,
         };
 
@@ -374,7 +374,9 @@ function SeriesSearchInput() {
   };
 
   useEffect(() => {
-    worker.current = new Worker(new URL('./fuse.worker.ts', import.meta.url));
+    worker.current = new Worker(new URL('./fuse.worker.ts', import.meta.url), {
+      type: 'module',
+    });
 
     return () => {
       if (worker.current) {
