@@ -1,7 +1,7 @@
 // Mirror values in Styles/Variables/variables.css so var(--foo) at runtime
 // matches $foo at build time.
 
-module.exports = {
+export default {
   // Page
   pageContentBodyPadding: '32px',
   pageContentBodyPaddingSmallScreen: '16px',

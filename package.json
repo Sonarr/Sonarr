@@ -2,6 +2,7 @@
   "name": "sonarr",
   "version": "4.0.0",
   "description": "Sonarr is a PVR for Usenet and BitTorrent users",
+  "type": "module",
   "scripts": {
     "build": "vite build",
     "prebuild": "yarn clean",
@@ -10,7 +11,7 @@
     "watch": "vite build --watch",
     "types:css": "tcm frontend/src --camelCase --pattern \"**/*.module.css\"",
     "typecheck": "yarn types:css && tsc --noEmit -p frontend/tsconfig.json",
-    "lint": "eslint --config frontend/.eslintrc.js --ignore-path frontend/.eslintignore frontend/",
+    "lint": "eslint --config frontend/.eslintrc.cjs --ignore-path frontend/.eslintignore frontend/",
     "lint-fix": "yarn lint --fix",
     "stylelint": "stylelint \"frontend/**/*.css\" --config frontend/.stylelintrc"
   },
