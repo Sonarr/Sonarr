@@ -4,7 +4,7 @@
   overflow-wrap: break-word;
 }
 
-@media (min-width: 768px) {
+@media (--breakpointSmallUp) {
   .description {
     margin-left: 180px;
   }

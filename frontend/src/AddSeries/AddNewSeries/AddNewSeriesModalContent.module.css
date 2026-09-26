@@ -76,7 +76,7 @@
   composes: button from 'Components/Link/SpinnerButton.module.css';
 }
 
-@media only screen and (max-width: 768px) {
+@media (--breakpointSmall) {
   .modalFooter {
     flex-direction: column;
   }
