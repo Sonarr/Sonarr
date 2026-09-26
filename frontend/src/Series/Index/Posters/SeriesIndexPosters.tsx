@@ -9,15 +9,11 @@ import { useSeriesPosterOptions } from 'Series/seriesOptionsStore';
 import dimensions from 'Styles/Variables/dimensions';
 import getIndexOfFirstCharacter from 'Utilities/Array/getIndexOfFirstCharacter';
 
-const bodyPaddingSmallScreen = parseInt(
-  dimensions.pageContentBodyPaddingSmallScreen
-);
-const columnPadding = parseInt(dimensions.seriesIndexColumnPadding);
-const columnPaddingSmallScreen = parseInt(
-  dimensions.seriesIndexColumnPaddingSmallScreen
-);
-const progressBarHeight = parseInt(dimensions.progressBarSmallHeight);
-const detailedProgressBarHeight = parseInt(dimensions.progressBarMediumHeight);
+const bodyPaddingSmallScreen = dimensions.pageContentBodyPaddingSmallScreen;
+const columnPadding = dimensions.seriesIndexColumnPadding;
+const columnPaddingSmallScreen = dimensions.seriesIndexColumnPaddingSmallScreen;
+const progressBarHeight = dimensions.progressBarSmallHeight;
+const detailedProgressBarHeight = dimensions.progressBarMediumHeight;
 
 const ADDITIONAL_COLUMN_COUNT: Record<string, number> = {
   small: 3,
