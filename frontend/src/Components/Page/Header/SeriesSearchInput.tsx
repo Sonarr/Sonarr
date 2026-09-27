@@ -9,7 +9,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import Autosuggest from 'react-autosuggest';
+import Autosuggest, {
+  RenderSuggestionsContainerParams,
+} from 'react-autosuggest';
 import { useNavigate } from 'react-router-dom';
 import { useDebouncedCallback } from 'use-debounce';
 import Icon from 'Components/Icon';
@@ -225,6 +227,21 @@ function SeriesSearchInput() {
     );
   }, []);
 
+  const renderSuggestionsContainer = useCallback(
+    ({ containerProps, children }: RenderSuggestionsContainerParams) => {
+      const { key, ...otherContainerProps } = containerProps;
+
+      return (
+        <div className={children ? styles.dropdown : undefined}>
+          <div key={key} {...otherContainerProps}>
+            {children}
+          </div>
+        </div>
+      );
+    },
+    []
+  );
+
   const getSuggestionValue = useCallback(({ title }: { title: string }) => {
     return title;
   }, []);
@@ -366,7 +383,6 @@ function SeriesSearchInput() {
 
   const theme = {
     container: styles.container,
-    containerOpen: styles.containerOpen,
     suggestionsContainer: styles.seriesContainer,
     suggestionsList: styles.list,
     suggestion: styles.listItem,
@@ -426,6 +442,7 @@ function SeriesSearchInput() {
           suggestions={suggestionGroups}
           getSectionSuggestions={getSectionSuggestions}
           renderSectionTitle={renderSectionTitle}
+          renderSuggestionsContainer={renderSuggestionsContainer}
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}
           onSuggestionSelected={handleSuggestionSelected}
