@@ -342,5 +342,38 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
             result.OutputRootFolders.Should().NotBeNull();
             result.OutputRootFolders.First().Should().Be(@"D:\Downloads\Finished\deluge".AsOsAgnostic());
         }
+
+        [Test]
+        public void GetItems_should_reconnect_to_daemon_once_when_torrents_are_ignored()
+        {
+            // Setup an invalid torrent with a missing hash to trigger the reconnect
+            _downloading.Hash = null;
+            GivenTorrents(new List<DelugeTorrent> { _downloading });
+
+            // Expect that ReconnectToDaemon() is called after the failure
+            Subject.GetItems();
+            Mocker.GetMock<IDelugeProxy>()
+                  .Verify(v => v.ReconnectToDaemon(It.IsAny<DelugeSettings>()), Times.Once());
+
+            // Second execution should not trigger a reconnect and instead should
+            // show the warning.
+            Subject.GetItems();
+            Mocker.GetMock<IDelugeProxy>()
+                  .Verify(v => v.ReconnectToDaemon(It.IsAny<DelugeSettings>()), Times.Once());
+
+            // Set a valid torrent
+            _queued.Hash = "VALID_HASH";
+            _queued.Name = "Valid Title";
+            GivenTorrents(new List<DelugeTorrent> { _queued });
+
+            // Successful execution, should reset the reconnect state
+            Subject.GetItems();
+
+            // Invalid torrent, should trigger reconnect again.
+            GivenTorrents(new List<DelugeTorrent> { _downloading });
+            Subject.GetItems();
+            Mocker.GetMock<IDelugeProxy>()
+                  .Verify(v => v.ReconnectToDaemon(It.IsAny<DelugeSettings>()), Times.Exactly(2));
+        }
     }
 }
