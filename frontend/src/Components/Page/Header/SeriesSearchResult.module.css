@@ -1,6 +1,6 @@
 .result {
   display: flex;
-  padding: 3px;
+  padding: 4px 10px;
   cursor: pointer;
 }
 
