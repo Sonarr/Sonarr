@@ -2,10 +2,11 @@ import React, { FocusEvent, useCallback, useState } from 'react';
 import CommandNames from 'Commands/CommandNames';
 import { useExecuteCommand } from 'Commands/useCommands';
 import FieldSet from 'Components/FieldSet';
-import FormGroup from 'Components/Form/FormGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormInputButton from 'Components/Form/FormInputButton';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Icon from 'Components/Icon';
 import ClipboardButton from 'Components/Link/ClipboardButton';
@@ -14,6 +15,7 @@ import { icons, inputTypes, kinds } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
 import translate from 'Utilities/String/translate';
+import AuthenticationMethodSettings from './AuthenticationMethodSettings';
 import { GeneralSettingsModel } from './useGeneralSettings';
 
 export const authenticationMethodOptions: EnhancedSelectInputValue<string>[] = [
@@ -30,6 +32,12 @@ export const authenticationMethodOptions: EnhancedSelectInputValue<string>[] = [
       return translate('External');
     },
     isHidden: true,
+  },
+  {
+    key: 'oidc',
+    get value() {
+      return translate('Oidc');
+    },
   },
   {
     key: 'basic',
@@ -96,8 +104,14 @@ interface SecuritySettingsProps {
   username: PendingSection<GeneralSettingsModel>['username'];
   password: PendingSection<GeneralSettingsModel>['password'];
   passwordConfirmation: PendingSection<GeneralSettingsModel>['passwordConfirmation'];
+  oidcAuthority: PendingSection<GeneralSettingsModel>['oidcAuthority'];
+  oidcClientId: PendingSection<GeneralSettingsModel>['oidcClientId'];
+  oidcClientSecret: PendingSection<GeneralSettingsModel>['oidcClientSecret'];
+  oidcUserIdentifier: PendingSection<GeneralSettingsModel>['oidcUserIdentifier'];
+  oidcScopes: PendingSection<GeneralSettingsModel>['oidcScopes'];
   apiKey: PendingSection<GeneralSettingsModel>['apiKey'];
   certificateValidation: PendingSection<GeneralSettingsModel>['certificateValidation'];
+  trustedNetworks: PendingSection<GeneralSettingsModel>['trustedNetworks'];
   isResettingApiKey: boolean;
   onInputChange: (change: InputChanged) => void;
 }
@@ -108,8 +122,14 @@ function SecuritySettings({
   username,
   password,
   passwordConfirmation,
+  oidcAuthority,
+  oidcClientId,
+  oidcClientSecret,
+  oidcUserIdentifier,
+  oidcScopes,
   apiKey,
   certificateValidation,
+  trustedNetworks,
   isResettingApiKey,
   onInputChange,
 }: SecuritySettingsProps) {
@@ -145,83 +165,64 @@ function SecuritySettings({
     authenticationMethod && authenticationMethod.value !== 'none';
 
   return (
-    <FieldSet legend={translate('Security')}>
-      <FormGroup>
+    <FieldSet
+      legend={translate('Security')}
+      caption={translate('SecurityCaption')}
+    >
+      <FormRow>
         <FormLabel>{translate('Authentication')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('AuthenticationMethodHelpText')} />
+        <FormInputHelpText
+          text={translate('AuthenticationRequiredWarning')}
+          isWarning={true}
+        />
+        <FormInput
           type={inputTypes.SELECT}
           name="authenticationMethod"
           values={authenticationMethodOptions}
-          helpText={translate('AuthenticationMethodHelpText')}
-          helpTextWarning={translate('AuthenticationRequiredWarning')}
           onChange={onInputChange}
           {...authenticationMethod}
         />
-      </FormGroup>
-
+      </FormRow>
       {authenticationEnabled ? (
-        <FormGroup>
+        <FormRow>
           <FormLabel>{translate('AuthenticationRequired')}</FormLabel>
-
-          <FormInputGroup
+          <FormInputHelpText
+            text={translate('AuthenticationRequiredHelpText')}
+          />
+          <FormInput
             type={inputTypes.SELECT}
             name="authenticationRequired"
             values={authenticationRequiredOptions}
-            helpText={translate('AuthenticationRequiredHelpText')}
             onChange={onInputChange}
             {...authenticationRequired}
           />
-        </FormGroup>
+        </FormRow>
       ) : null}
 
-      {authenticationEnabled ? (
-        <FormGroup>
-          <FormLabel>{translate('Username')}</FormLabel>
+      <AuthenticationMethodSettings
+        authenticationMethod={authenticationMethod}
+        username={username}
+        password={password}
+        passwordConfirmation={passwordConfirmation}
+        oidcAuthority={oidcAuthority}
+        oidcClientId={oidcClientId}
+        oidcClientSecret={oidcClientSecret}
+        oidcUserIdentifier={oidcUserIdentifier}
+        oidcScopes={oidcScopes}
+        onInputChange={onInputChange}
+      />
 
-          <FormInputGroup
-            type={inputTypes.TEXT}
-            name="username"
-            onChange={onInputChange}
-            {...username}
-          />
-        </FormGroup>
-      ) : null}
-
-      {authenticationEnabled ? (
-        <FormGroup>
-          <FormLabel>{translate('Password')}</FormLabel>
-
-          <FormInputGroup
-            type={inputTypes.PASSWORD}
-            name="password"
-            onChange={onInputChange}
-            {...password}
-          />
-        </FormGroup>
-      ) : null}
-
-      {authenticationEnabled ? (
-        <FormGroup>
-          <FormLabel>{translate('PasswordConfirmation')}</FormLabel>
-
-          <FormInputGroup
-            type={inputTypes.PASSWORD}
-            name="passwordConfirmation"
-            onChange={onInputChange}
-            {...passwordConfirmation}
-          />
-        </FormGroup>
-      ) : null}
-
-      <FormGroup>
+      <FormRow>
         <FormLabel>{translate('ApiKey')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText
+          text={translate('RestartRequiredHelpTextWarning')}
+          isWarning={true}
+        />
+        <FormInput
           type={inputTypes.TEXT}
           name="apiKey"
           readOnly={true}
-          helpTextWarning={translate('RestartRequiredHelpTextWarning')}
           buttons={[
             <ClipboardButton
               key="copy"
@@ -241,21 +242,35 @@ function SecuritySettings({
           onFocus={handleApikeyFocus}
           {...apiKey}
         />
-      </FormGroup>
-
-      <FormGroup>
+      </FormRow>
+      <FormRow>
         <FormLabel>{translate('CertificateValidation')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('CertificateValidationHelpText')} />
+        <FormInput
           type={inputTypes.SELECT}
           name="certificateValidation"
           values={certificateValidationOptions}
-          helpText={translate('CertificateValidationHelpText')}
           onChange={onInputChange}
           {...certificateValidation}
         />
-      </FormGroup>
-
+      </FormRow>
+      <FormRow>
+        <FormLabel>{translate('TrustedNetworks')}</FormLabel>
+        <FormInputHelpText
+          text={translate('TrustedNetworksHelpText')}
+          link="https://wiki.servarr.com/sonarr/settings#security"
+        />
+        <FormInputHelpText
+          text={translate('RestartRequiredHelpTextWarning')}
+          isWarning={true}
+        />
+        <FormInput
+          type={inputTypes.TEXT}
+          name="trustedNetworks"
+          onChange={onInputChange}
+          {...trustedNetworks}
+        />
+      </FormRow>
       <ConfirmModal
         isOpen={isConfirmApiKeyResetModalOpen}
         kind={kinds.DANGER}

@@ -44,6 +44,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                               .With(s => s.Monitored = true)
                                               .With(s => s.TitleSlug = "Title3")
                                               .With(s => s.QualityProfileId = profile.Id)
+                                              .With(s => s.Tags = new HashSet<int> { 10, 20 })
                                               .BuildNew();
 
             _unmonitoredSeries = Builder<Series>.CreateNew()
@@ -52,6 +53,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                                 .With(s => s.Monitored = false)
                                                 .With(s => s.TitleSlug = "Title2")
                                                 .With(s => s.QualityProfileId = profile.Id)
+                                                .With(s => s.Tags = new HashSet<int> { 30 })
                                                 .BuildNew();
 
             _monitoredSeries.Id = Db.Insert(_monitoredSeries).Id;
@@ -190,6 +192,48 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
 
             spec.Records.Should().HaveCount(2);
             spec.Records.Should().OnlyContain(e => e.Series.Monitored);
+        }
+
+        [Test]
+        public void should_filter_cutoff_unmet_by_series_tags()
+        {
+            GivenMonitoredFilterExpression();
+
+            var result = Subject.EpisodesWhereCutoffUnmet(_pagingSpec, _qualitiesBelowCutoff, false, new HashSet<int> { 10 });
+
+            result.Records.Should().NotBeEmpty();
+            result.Records.Should().OnlyContain(e => e.SeriesId == _monitoredSeries.Id);
+        }
+
+        [Test]
+        public void should_filter_cutoff_unmet_by_quality()
+        {
+            GivenMonitoredFilterExpression();
+
+            var result = Subject.EpisodesWhereCutoffUnmet(_pagingSpec, _qualitiesBelowCutoff, false, null, new List<int> { Quality.SDTV.Id });
+
+            result.Records.Should().NotBeEmpty();
+            result.Records.Should().OnlyContain(e => e.EpisodeFile.Value.Quality.Quality == Quality.SDTV);
+        }
+
+        [Test]
+        public void should_ignore_empty_filter_arrays()
+        {
+            GivenMonitoredFilterExpression();
+
+            var withEmpty = Subject.EpisodesWhereCutoffUnmet(_pagingSpec, _qualitiesBelowCutoff, false, new HashSet<int>(), new List<int>());
+
+            var freshSpec = new PagingSpec<Episode>
+            {
+                Page = 1,
+                PageSize = 10,
+                SortKey = "AirDate",
+                SortDirection = SortDirection.Ascending
+            };
+            freshSpec.FilterExpressions.Add(e => e.Monitored == true && e.Series.Monitored == true);
+            var withNull = Subject.EpisodesWhereCutoffUnmet(freshSpec, _qualitiesBelowCutoff, false, null, null);
+
+            withEmpty.TotalRecords.Should().Be(withNull.TotalRecords);
         }
     }
 }

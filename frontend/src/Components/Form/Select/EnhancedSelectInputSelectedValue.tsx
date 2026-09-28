@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { ReactNode } from 'react';
-import styles from './EnhancedSelectInputSelectedValue.css';
+import styles from './EnhancedSelectInputSelectedValue.module.css';
 
 interface EnhancedSelectInputSelectedValueProps {
   className?: string;

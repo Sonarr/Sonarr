@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Dapper;
 using NLog;
@@ -21,14 +22,15 @@ namespace NzbDrone.Core.Tv
         List<Episode> GetEpisodesBySceneSeason(int seriesId, int sceneSeasonNumber);
         List<Episode> GetEpisodeByFileId(int fileId);
         List<Episode> EpisodesWithFiles(int seriesId);
-        PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials);
-        PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, bool includeSpecials);
+        PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials, HashSet<int> seriesTags = null);
+        PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, bool includeSpecials, HashSet<int> seriesTags = null, List<int> quality = null);
         List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
         List<Episode> FindEpisodesBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber);
         List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate, bool includeUnmonitored, bool includeSpecials);
         void SetMonitoredFlat(Episode episode, bool monitored);
         void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
         void SetMonitored(IEnumerable<int> ids, bool monitored);
+        List<int> SetMonitored(int seriesId, MonitorTypes monitor, int firstSeason, int lastSeason);
         void SetFileId(Episode episode, int fileId);
         void ClearFileId(Episode episode, bool unmonitor);
     }
@@ -107,7 +109,7 @@ namespace NzbDrone.Core.Tv
                 }).ToList();
         }
 
-        public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials)
+        public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials, HashSet<int> seriesTags = null)
         {
             var currentTime = DateTime.UtcNow;
             var startingSeasonNumber = 1;
@@ -117,25 +119,22 @@ namespace NzbDrone.Core.Tv
                 startingSeasonNumber = 0;
             }
 
-            pagingSpec.Records = GetPagedRecords(EpisodesWithoutFilesBuilder(currentTime, startingSeasonNumber), pagingSpec, PagedQuery);
-            pagingSpec.TotalRecords = GetPagedRecordCount(EpisodesWithoutFilesBuilder(currentTime, startingSeasonNumber).SelectCountDistinct<Episode>(x => x.Id), pagingSpec);
+            pagingSpec.Records = GetPagedRecords(EpisodesWithoutFilesBuilder(currentTime, startingSeasonNumber, seriesTags), pagingSpec, PagedQuery);
+            pagingSpec.TotalRecords = GetPagedRecordCount(EpisodesWithoutFilesBuilder(currentTime, startingSeasonNumber, seriesTags).SelectCountDistinct<Episode>(x => x.Id), pagingSpec);
 
             return pagingSpec;
         }
 
-        public PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, bool includeSpecials)
+        public PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, bool includeSpecials, HashSet<int> seriesTags = null, List<int> quality = null)
         {
-            var startingSeasonNumber = 1;
+            var startingSeasonNumber = includeSpecials ? 0 : 1;
+            var sortingByQuality = string.Equals(pagingSpec.SortKey, "quality", StringComparison.OrdinalIgnoreCase);
+            var customSortExpression = sortingByQuality ? "MAX(COALESCE(\"r\".\"Score\", -1))" : null;
 
-            if (includeSpecials)
-            {
-                startingSeasonNumber = 0;
-            }
-
-            pagingSpec.Records = GetPagedRecords(EpisodesWhereCutoffUnmetBuilder(qualitiesBelowCutoff, startingSeasonNumber), pagingSpec, PagedQuery);
+            pagingSpec.Records = GetPagedRecords(EpisodesWhereCutoffUnmetBuilder(qualitiesBelowCutoff, startingSeasonNumber, seriesTags, quality, sortingByQuality), pagingSpec, PagedQuery, customSortExpression);
 
             var countTemplate = $"SELECT COUNT(*) FROM (SELECT /**select**/ FROM \"{TableMapping.Mapper.TableNameMapping(typeof(Episode))}\" /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/ /**groupby**/ /**having**/) AS \"Inner\"";
-            pagingSpec.TotalRecords = GetPagedRecordCount(EpisodesWhereCutoffUnmetBuilder(qualitiesBelowCutoff, startingSeasonNumber).Select(typeof(Episode)), pagingSpec, countTemplate);
+            pagingSpec.TotalRecords = GetPagedRecordCount(EpisodesWhereCutoffUnmetBuilder(qualitiesBelowCutoff, startingSeasonNumber, seriesTags, quality, sortingByQuality).Select(typeof(Episode)), pagingSpec, countTemplate);
 
             return pagingSpec;
         }
@@ -192,6 +191,83 @@ namespace NzbDrone.Core.Tv
             SetFields(episodes, p => p.Monitored);
         }
 
+        public List<int> SetMonitored(int seriesId, MonitorTypes monitor, int firstSeason, int lastSeason)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("seriesId", seriesId);
+
+            using var conn = _database.OpenConnection();
+
+            if (monitor is MonitorTypes.MonitorSpecials or MonitorTypes.UnmonitorSpecials)
+            {
+                SetMonitoredWhere(conn, null, "\"SeriesId\" = @seriesId AND \"SeasonNumber\" = 0", monitor == MonitorTypes.MonitorSpecials, parameters);
+
+                return GetSeasonNumbersWithMonitoredEpisodes(conn, seriesId);
+            }
+
+            if (monitor == MonitorTypes.None)
+            {
+                SetMonitoredWhere(conn, null, "\"SeriesId\" = @seriesId", false, parameters);
+
+                return new List<int>();
+            }
+
+            string predicate;
+
+            if (monitor == MonitorTypes.All)
+            {
+                predicate = "\"SeasonNumber\" > 0";
+            }
+            else if (monitor == MonitorTypes.Future)
+            {
+                predicate = "\"SeasonNumber\" > 0 AND (\"AirDateUtc\" IS NULL OR \"AirDateUtc\" >= @now)";
+                parameters.Add("now", DateTime.UtcNow);
+            }
+            else if (monitor == MonitorTypes.Missing)
+            {
+                predicate = "\"SeasonNumber\" > 0 AND \"EpisodeFileId\" = 0";
+            }
+            else if (monitor == MonitorTypes.Existing)
+            {
+                predicate = "\"SeasonNumber\" > 0 AND \"EpisodeFileId\" <> 0";
+            }
+            else if (monitor == MonitorTypes.Pilot)
+            {
+                predicate = "\"SeasonNumber\" > 0 AND \"SeasonNumber\" = @firstSeason AND \"EpisodeNumber\" = 1";
+                parameters.Add("firstSeason", firstSeason);
+            }
+            else if (monitor == MonitorTypes.FirstSeason)
+            {
+                predicate = "\"SeasonNumber\" > 0 AND \"SeasonNumber\" = @firstSeason";
+                parameters.Add("firstSeason", firstSeason);
+            }
+#pragma warning disable CS0612
+            else if (monitor is MonitorTypes.LastSeason or MonitorTypes.LatestSeason)
+#pragma warning restore CS0612
+            {
+                predicate = "\"SeasonNumber\" > 0 AND \"SeasonNumber\" = @lastSeason";
+                parameters.Add("lastSeason", lastSeason);
+            }
+            else if (monitor == MonitorTypes.Recent)
+            {
+                predicate = "\"SeasonNumber\" > 0 AND (\"AirDateUtc\" IS NULL OR \"AirDateUtc\" >= @cutoff)";
+                parameters.Add("cutoff", DateTime.UtcNow.AddDays(-90));
+            }
+            else
+            {
+                return GetSeasonNumbersWithMonitoredEpisodes(conn, seriesId);
+            }
+
+            using (var tran = conn.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                SetMonitoredWhere(conn, tran, $"\"SeriesId\" = @seriesId AND ({predicate})", true, parameters);
+                SetMonitoredWhere(conn, tran, $"\"SeriesId\" = @seriesId AND NOT ({predicate})", false, parameters);
+                tran.Commit();
+            }
+
+            return GetSeasonNumbersWithMonitoredEpisodes(conn, seriesId);
+        }
+
         public void SetFileId(Episode episode, int fileId)
         {
             episode.EpisodeFileId = fileId;
@@ -211,11 +287,21 @@ namespace NzbDrone.Core.Tv
             ModelUpdated(episode, true);
         }
 
-        private SqlBuilder EpisodesWithoutFilesBuilder(DateTime currentTime, int startingSeasonNumber) => Builder()
-            .Join<Episode, Series>((l, r) => l.SeriesId == r.Id)
-            .Where<Episode>(f => f.EpisodeFileId == 0)
-            .Where<Episode>(f => f.SeasonNumber >= startingSeasonNumber)
-            .Where(BuildAirDateUtcCutoffWhereClause(currentTime));
+        private SqlBuilder EpisodesWithoutFilesBuilder(DateTime currentTime, int startingSeasonNumber, HashSet<int> seriesTags)
+        {
+            var builder = Builder()
+                .Join<Episode, Series>((l, r) => l.SeriesId == r.Id)
+                .Where<Episode>(f => f.EpisodeFileId == 0)
+                .Where<Episode>(f => f.SeasonNumber >= startingSeasonNumber)
+                .Where(BuildAirDateUtcCutoffWhereClause(currentTime));
+
+            if (seriesTags is { Count: > 0 })
+            {
+                builder = builder.Where(BuildSeriesTagsWhereClause(seriesTags));
+            }
+
+            return builder;
+        }
 
         private string BuildAirDateUtcCutoffWhereClause(DateTime currentTime)
         {
@@ -229,16 +315,45 @@ namespace NzbDrone.Core.Tv
                                  currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
-        private SqlBuilder EpisodesWhereCutoffUnmetBuilder(List<QualitiesBelowCutoff> qualitiesBelowCutoff, int startingSeasonNumber) => Builder()
-            .Join<Episode, Series>((e, s) => e.SeriesId == s.Id)
-            .LeftJoin<Episode, EpisodeFile>((e, ef) => e.EpisodeFileId == ef.Id)
-            .Where<Episode>(e => e.EpisodeFileId != 0)
-            .Where<Episode>(e => e.SeasonNumber >= startingSeasonNumber)
-            .Where(
-                string.Format("({0})",
-                    BuildQualityCutoffWhereClause(qualitiesBelowCutoff)))
-            .GroupBy<Episode>(e => e.Id)
-            .GroupBy<Series>(s => s.Id);
+        private SqlBuilder EpisodesWhereCutoffUnmetBuilder(List<QualitiesBelowCutoff> qualitiesBelowCutoff, int startingSeasonNumber, HashSet<int> seriesTags, List<int> qualities, bool joinQualityRanks)
+        {
+            var builder = Builder()
+                .Join<Episode, Series>((e, s) => e.SeriesId == s.Id)
+                .LeftJoin<Episode, EpisodeFile>((e, ef) => e.EpisodeFileId == ef.Id)
+                .Where<Episode>(e => e.EpisodeFileId != 0)
+                .Where<Episode>(e => e.SeasonNumber >= startingSeasonNumber)
+                .Where(
+                    string.Format("({0})",
+                        BuildQualityCutoffWhereClause(qualitiesBelowCutoff)));
+
+            if (seriesTags is { Count: > 0 })
+            {
+                builder = builder.Where(BuildSeriesTagsWhereClause(seriesTags));
+            }
+
+            if (qualities is { Count: > 0 })
+            {
+                builder = builder.Where(BuildQualityFilterWhereClause(qualities));
+            }
+
+            builder = builder
+                .GroupBy<Episode>(e => e.Id)
+                .GroupBy<Series>(s => s.Id);
+
+            if (joinQualityRanks)
+            {
+                var qualityIdExpr = _database.DatabaseType == DatabaseType.PostgreSQL
+                    ? "(\"EpisodeFiles\".\"Quality\"::jsonb ->> 'quality')::int"
+                    : "json_extract(\"EpisodeFiles\".\"Quality\", '$.quality')";
+
+                builder.LeftJoin(
+                    $"\"QualityProfileQualityRanks\" AS \"r\" " +
+                    $"ON \"r\".\"ProfileId\" = \"Series\".\"QualityProfileId\" " +
+                    $"AND \"r\".\"QualityId\" = {qualityIdExpr}");
+            }
+
+            return builder;
+        }
 
         private string BuildQualityCutoffWhereClause(List<QualitiesBelowCutoff> qualitiesBelowCutoff)
         {
@@ -253,6 +368,45 @@ namespace NzbDrone.Core.Tv
             }
 
             return string.Format("({0})", string.Join(" OR ", clauses));
+        }
+
+        private string BuildSeriesTagsWhereClause(HashSet<int> tagIds)
+        {
+            var ids = string.Join(",", tagIds);
+
+            if (_database.DatabaseType == DatabaseType.PostgreSQL)
+            {
+                return string.Format(
+                    "EXISTS (SELECT 1 FROM jsonb_array_elements_text(\"Series\".\"Tags\"::jsonb) AS elem WHERE elem::int IN ({0}))",
+                    ids);
+            }
+
+            return string.Format(
+                "EXISTS (SELECT 1 FROM json_each(\"Series\".\"Tags\") WHERE json_each.value IN ({0}))",
+                ids);
+        }
+
+        private string BuildQualityFilterWhereClause(List<int> qualityIds)
+        {
+            var clauses = qualityIds
+                .Select(id => string.Format("\"EpisodeFiles\".\"Quality\" LIKE '%_quality_: {0},%'", id))
+                .ToList();
+
+            return string.Format("({0})", string.Join(" OR ", clauses));
+        }
+
+        private List<int> GetSeasonNumbersWithMonitoredEpisodes(IDbConnection conn, int seriesId)
+        {
+            return conn.Query<int>("SELECT DISTINCT \"SeasonNumber\" FROM \"Episodes\" WHERE \"SeriesId\" = @seriesId AND \"Monitored\" = @monitored",
+                new { seriesId, monitored = true }).ToList();
+        }
+
+        private void SetMonitoredWhere(IDbConnection conn, IDbTransaction tran, string whereClause, bool monitored, DynamicParameters parameters)
+        {
+            var p = new DynamicParameters(parameters);
+            p.Add("monitored", monitored);
+
+            conn.Execute($"UPDATE \"Episodes\" SET \"Monitored\" = @monitored WHERE {whereClause} AND \"Monitored\" <> @monitored", p, tran);
         }
 
         private Episode FindOneByAirDate(int seriesId, string date)

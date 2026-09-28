@@ -1,6 +1,8 @@
 /* stylelint-disable */
 
-@import '~normalize.css/normalize.css';
+@import './Variables/variables.css';
+@import './Themes/themes.css';
+@import 'normalize.css/normalize.css';
 
 @import 'scaffolding.css';
 

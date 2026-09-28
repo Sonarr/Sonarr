@@ -27,6 +27,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
     }
 
     public class TrackedDownloadService : ITrackedDownloadService,
+                                          IHandle<EpisodeGrabbedEvent>,
                                           IHandle<EpisodeInfoRefreshedEvent>,
                                           IHandle<SeriesAddedEvent>,
                                           IHandle<SeriesEditedEvent>,
@@ -35,30 +36,35 @@ namespace NzbDrone.Core.Download.TrackedDownloads
     {
         private readonly IParsingService _parsingService;
         private readonly IHistoryService _historyService;
-        private readonly IEventAggregator _eventAggregator;
+        private readonly ISeriesService _seriesService;
         private readonly IDownloadHistoryService _downloadHistoryService;
         private readonly IRemoteEpisodeAggregationService _aggregationService;
         private readonly ICustomFormatCalculationService _formatCalculator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
+
         private readonly ICached<TrackedDownload> _cache;
 
         public TrackedDownloadService(IParsingService parsingService,
-                                      ICacheManager cacheManager,
                                       IHistoryService historyService,
-                                      ICustomFormatCalculationService formatCalculator,
-                                      IEventAggregator eventAggregator,
+                                      ISeriesService seriesService,
                                       IDownloadHistoryService downloadHistoryService,
                                       IRemoteEpisodeAggregationService aggregationService,
+                                      ICustomFormatCalculationService formatCalculator,
+                                      IEventAggregator eventAggregator,
+                                      ICacheManager cacheManager,
                                       Logger logger)
         {
             _parsingService = parsingService;
             _historyService = historyService;
-            _formatCalculator = formatCalculator;
-            _eventAggregator = eventAggregator;
+            _seriesService = seriesService;
             _downloadHistoryService = downloadHistoryService;
             _aggregationService = aggregationService;
-            _cache = cacheManager.GetCache<TrackedDownload>(GetType());
+            _formatCalculator = formatCalculator;
+            _eventAggregator = eventAggregator;
             _logger = logger;
+
+            _cache = cacheManager.GetCache<TrackedDownload>(GetType());
         }
 
         public TrackedDownload Find(string downloadId)
@@ -113,17 +119,6 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
             try
             {
-                var historyItems = _historyService.FindByDownloadId(downloadItem.DownloadId)
-                    .OrderByDescending(h => h.Date)
-                    .ToList();
-
-                var parsedEpisodeInfo = Parser.Parser.ParseTitle(trackedDownload.DownloadItem.Title);
-
-                if (parsedEpisodeInfo != null)
-                {
-                    trackedDownload.RemoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0, 0, null);
-                }
-
                 var downloadHistory = _downloadHistoryService.GetLatestDownloadHistoryItem(downloadItem.DownloadId);
 
                 if (downloadHistory != null)
@@ -131,6 +126,19 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                     var state = GetStateFromHistory(downloadHistory.EventType);
                     trackedDownload.State = state;
                 }
+
+                var parsedEpisodeInfo = Parser.Parser.ParseTitle(trackedDownload.DownloadItem.Title);
+
+                if (parsedEpisodeInfo != null)
+                {
+                    trackedDownload.RemoteEpisode = downloadHistory is { EventType: DownloadHistoryEventType.DownloadImported }
+                        ? _parsingService.Map(parsedEpisodeInfo, _seriesService.GetSeries(downloadHistory.SeriesId))
+                        : _parsingService.Map(parsedEpisodeInfo, 0, 0, null);
+                }
+
+                var historyItems = _historyService.FindByDownloadId(downloadItem.DownloadId)
+                    .OrderByDescending(h => h.Date)
+                    .ToList();
 
                 if (historyItems.Any())
                 {
@@ -263,6 +271,23 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                     return TrackedDownloadState.Ignored;
                 default:
                     return TrackedDownloadState.Downloading;
+            }
+        }
+
+        public void Handle(EpisodeGrabbedEvent message)
+        {
+            if (message.DownloadId.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
+            var trackedDownload = _cache.Find(message.DownloadId);
+
+            if (trackedDownload is { State: TrackedDownloadState.Imported or
+                                            TrackedDownloadState.Failed or
+                                            TrackedDownloadState.Ignored })
+            {
+                _cache.Remove(message.DownloadId);
             }
         }
 

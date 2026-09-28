@@ -1,0 +1,14 @@
+.page {
+  composes: page from './Page.module.css';
+
+  background-color: var(--pageBackground);
+}
+
+.logoFull {
+  margin-top: 50px;
+  margin-right: auto;
+  margin-left: auto;
+  width: 48px;
+  height: 48px;
+  opacity: 0.65;
+}

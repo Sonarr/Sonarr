@@ -1,10 +1,13 @@
 import React, { useCallback, useRef, useState } from 'react';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageHeading from 'Components/Page/PageHeading';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
+import SectionHeading from 'Components/SectionHeading';
 import { icons } from 'Helpers/Props';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import settingsStyles from 'Settings/Settings.module.css';
+import SettingsPage from 'Settings/SettingsPage';
 import {
   SaveCallback,
   SettingsStateChange,
@@ -54,45 +57,66 @@ function IndexerSettings() {
   }, [testAllIndexers]);
 
   return (
-    <PageContent title={translate('IndexerSettings')}>
-      <SettingsToolbar
-        isSaving={isSaving}
-        hasPendingChanges={hasPendingChanges}
-        additionalButtons={
-          <>
+    <SettingsPage
+      title={translate('IndexerSettings')}
+      isSaving={isSaving}
+      hasPendingChanges={hasPendingChanges}
+      toolbarChildren={
+        <>
+          <OverflowDivider groupId="extras">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
-            <PageToolbarButton
-              label={translate('TestAllIndexers')}
-              iconName={icons.TEST}
-              isSpinning={isTestingAllIndexers}
-              onPress={handleTestAllIndexersPress}
-            />
+          <ToolbarItem
+            id="test-all"
+            priority={1}
+            groupId="extras"
+            label={translate('TestAllIndexers')}
+            iconName={icons.TEST}
+            isSpinning={isTestingAllIndexers}
+            onPress={handleTestAllIndexersPress}
+          />
 
-            <PageToolbarButton
-              label={translate('ManageIndexers')}
-              iconName={icons.MANAGE}
-              onPress={handleManageIndexersPress}
-            />
-          </>
-        }
-        onSavePress={handleSavePress}
-      />
-
+          <ToolbarItem
+            id="manage"
+            priority={1}
+            groupId="extras"
+            label={translate('ManageIndexers')}
+            iconName={icons.MANAGE}
+            onPress={handleManageIndexersPress}
+          />
+        </>
+      }
+      onSavePress={handleSavePress}
+    >
       <PageContentBody>
-        <Indexers />
+        <div className={settingsStyles.section}>
+          <PageHeading
+            scope={translate('Settings')}
+            title={translate('Indexers')}
+          />
 
-        <IndexerOptions
-          setChildSave={handleSetChildSave}
-          onChildStateChange={handleChildStateChange}
-        />
+          <div className={settingsStyles.pageSection}>
+            <SectionHeading
+              title={translate('Indexers')}
+              description={translate('IndexersSectionDescription')}
+            />
 
-        <ManageIndexersModal
-          isOpen={isManageIndexersModalOpen}
-          onModalClose={handleManageIndexersModalClose}
-        />
+            <Indexers />
+          </div>
+
+          <IndexerOptions
+            setChildSave={handleSetChildSave}
+            onChildStateChange={handleChildStateChange}
+          />
+
+          <ManageIndexersModal
+            isOpen={isManageIndexersModalOpen}
+            onModalClose={handleManageIndexersModalClose}
+          />
+        </div>
       </PageContentBody>
-    </PageContent>
+    </SettingsPage>
   );
 }
 

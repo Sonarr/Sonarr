@@ -1,0 +1,20 @@
+.container {
+  flex: 1 1 360px;
+  padding: 15px;
+  min-width: 0;
+  border-radius: 3px;
+  background-color: var(--cardBackgroundColor);
+  box-shadow: 0 0 10px 1px var(--cardShadowColor);
+}
+
+.title {
+  margin-bottom: 10px;
+  color: var(--textColor);
+  font-weight: 300;
+  font-size: 18px;
+}
+
+.chart {
+  position: relative;
+  height: 300px;
+}

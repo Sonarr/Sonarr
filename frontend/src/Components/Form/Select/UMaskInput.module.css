@@ -1,0 +1,55 @@
+.inputWrapper {
+  display: flex;
+}
+
+.inputFolder {
+  composes: input from 'Components/Form/Input.module.css';
+
+  max-width: 100px;
+}
+
+.inputUnitWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.inputUnit {
+  composes: inputUnit from 'Components/Form/FormInputGroup.module.css';
+
+  right: 40px !important;
+  font-family: var(--monoSpaceFontFamily);
+}
+
+.unit {
+  font-family: var(--monoSpaceFontFamily);
+}
+
+.details {
+  margin-top: 6px;
+  margin-left: 8px;
+  color: var(--inkSoft);
+  font-size: 13px;
+  line-height: 1.5;
+
+  > div {
+    display: flex;
+
+    label {
+      flex: 0 0 50px;
+    }
+
+    .value {
+      width: 50px;
+      text-align: right;
+    }
+
+    .unit {
+      width: 90px;
+      text-align: right;
+    }
+  }
+}
+
+.readOnly {
+  background-color: var(--inputReadOnlyBackgroundColor);
+}

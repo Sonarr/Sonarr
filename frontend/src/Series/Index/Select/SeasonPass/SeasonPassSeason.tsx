@@ -5,7 +5,7 @@ import formatSeason from 'Season/formatSeason';
 import { Statistics } from 'Series/Series';
 import { useToggleSeasonMonitored } from 'Series/useSeries';
 import translate from 'Utilities/String/translate';
-import styles from './SeasonPassSeason.css';
+import styles from './SeasonPassSeason.module.css';
 
 interface SeasonPassSeasonProps {
   seriesId: number;

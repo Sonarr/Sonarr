@@ -1,4 +1,4 @@
-import moment, { MomentInput } from 'moment';
+import moment, { MomentInput } from 'moment-timezone';
 import { FilterDateType } from 'Helpers/Props/filterTypes';
 
 function isAfter(

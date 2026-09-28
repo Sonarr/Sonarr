@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Profiles.Releases
         public List<string> Ignored { get; set; }
         public bool AirDateRestriction { get; set; }
         public int AirDateGracePeriod { get; set; }
+        public bool AllowSeasonPackWithoutAllEpisodesAired { get; set; }
         public List<int> IndexerIds { get; set; }
         public HashSet<int> Tags { get; set; }
         public HashSet<int> ExcludedTags { get; set; }

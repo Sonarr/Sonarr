@@ -1,3 +1,0 @@
-.input {
-  composes: input from '~Components/Form/CheckInput.css';
-}

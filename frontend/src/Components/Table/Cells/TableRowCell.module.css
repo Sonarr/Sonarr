@@ -1,0 +1,14 @@
+.cell {
+  padding: 12px 10px;
+  border-top: 1px solid var(--borderColor);
+  color: var(--ink);
+  font-size: 13px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.4;
+}
+
+@media (--breakpointMedium) {
+  .cell {
+    white-space: nowrap;
+  }
+}

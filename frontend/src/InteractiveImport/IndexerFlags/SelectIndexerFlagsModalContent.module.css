@@ -1,0 +1,7 @@
+.modalBody {
+  composes: modalBody from 'Components/Modal/ModalBody.module.css';
+
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}

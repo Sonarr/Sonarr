@@ -1,8 +1,8 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { ModelBaseSetting } from 'Store/Selectors/selectSettings';
 import Field, { FieldSelectOption } from 'typings/Field';
 import fetchJson, { ApiError, urlBase } from 'Utilities/Fetch/fetchJson';
+import { ModelBaseSetting } from 'Utilities/selectSettings';
 
 export interface ProviderOptions extends ModelBaseSetting {
   fields?: Field[];

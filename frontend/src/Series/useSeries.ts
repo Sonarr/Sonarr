@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useCallback, useMemo } from 'react';
 import { FilterBuilderTag } from 'Components/Filter/Builder/FilterBuilderRowValue';
 import { Filter, FilterBuilderProp } from 'Filters/Filter';
@@ -918,7 +918,11 @@ export const useUpdateSeriesMonitor = (
     mutationOptions: {
       onSuccess: (_, variables) => {
         if (shouldFetchEpisodesAfterUpdate) {
-          queryClient.invalidateQueries({ queryKey: ['/episode'] });
+          variables.series.forEach((s) => {
+            queryClient.invalidateQueries({
+              queryKey: ['/episode', { seriesId: s.id }],
+            });
+          });
         }
 
         queryClient.setQueryData<Series[]>(['/series'], (oldSeries) => {

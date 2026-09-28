@@ -19,10 +19,16 @@ export interface GeneralSettingsModel {
   launchBrowser: boolean;
   authenticationMethod: string;
   authenticationRequired: string;
+  allowedHosts: string;
   analyticsEnabled: boolean;
   username: string;
   password: string;
   passwordConfirmation: string;
+  oidcAuthority: string;
+  oidcClientId: string;
+  oidcClientSecret: string;
+  oidcUserIdentifier: string;
+  oidcScopes: string;
   logLevel: string;
   logSizeLimit: number;
   consoleLogLevel: string;
@@ -32,6 +38,7 @@ export interface GeneralSettingsModel {
   sslKeyPath: string;
   sslCertPassword: string;
   urlBase: string;
+  trustedNetworks: string;
   instanceName: string;
   applicationUrl: string;
   updateAutomatically: boolean;

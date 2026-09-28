@@ -51,7 +51,9 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     parameters = parameters.Clone();
 
                     parameters.Category = "Episode";
-                    parameters.Name = $"S{episode.SeasonNumber:00}%E{episode.EpisodeNumber:00}%";
+                    parameters.Name = episode.EpisodeNumber is > 0 and < 100
+                        ? $"S{episode.SeasonNumber:00}%E%{episode.EpisodeNumber:00}%"
+                        : $"S{episode.SeasonNumber:00}%E{episode.EpisodeNumber:00}%";
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
@@ -154,7 +156,9 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     parameters = parameters.Clone();
 
                     parameters.Category = "Episode";
-                    parameters.Name = $"S{episode.SeasonNumber:00}E{episode.EpisodeNumber:00}";
+                    parameters.Name = episode.EpisodeNumber is > 0 and < 100
+                        ? $"S{episode.SeasonNumber:00}E%{episode.EpisodeNumber:00}"
+                        : $"S{episode.SeasonNumber:00}E{episode.EpisodeNumber:00}";
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }

@@ -1,5 +1,4 @@
-import { useEffect, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useMemo } from 'react';
 import { useTranslations } from 'App/useTranslations';
 import useCommands from 'Commands/useCommands';
 import useCustomFilters from 'Filters/useCustomFilters';
@@ -9,13 +8,10 @@ import useSeries from 'Series/useSeries';
 import useIndexerFlags from 'Settings/Indexers/useIndexerFlags';
 import { useQualityProfiles } from 'Settings/Profiles/Quality/useQualityProfiles';
 import { useUiSettings } from 'Settings/UI/useUiSettings';
-import { fetchCustomFilters } from 'Store/Actions/customFilterActions';
 import useSystemStatus from 'System/Status/useSystemStatus';
 import useTags from 'Tags/useTags';
 
 const useAppPage = () => {
-  const dispatch = useDispatch();
-
   useCommands();
   useInitializeLanguage();
 
@@ -104,10 +100,6 @@ const useAppPage = () => {
       return false;
     }
   }, []);
-
-  useEffect(() => {
-    dispatch(fetchCustomFilters());
-  }, [dispatch]);
 
   return useMemo(() => {
     return { errors, hasError, isLocalStorageSupported, isPopulated };

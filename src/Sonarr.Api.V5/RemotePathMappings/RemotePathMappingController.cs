@@ -49,6 +49,7 @@ public class RemotePathMappingController : RestController<RemotePathMappingResou
 
     [RestPostById]
     [Consumes("application/json")]
+    [Produces("application/json")]
     public Results<Created<RemotePathMappingResource>, NotFound> CreateMapping([FromBody] RemotePathMappingResource resource)
     {
         var model = resource.ToModel();
@@ -72,6 +73,8 @@ public class RemotePathMappingController : RestController<RemotePathMappingResou
     }
 
     [RestPutById]
+    [Consumes("application/json")]
+    [Produces("application/json")]
     public Results<Ok<RemotePathMappingResource>, NotFound> UpdateMapping([FromBody] RemotePathMappingResource resource)
     {
         var mapping = resource.ToModel();

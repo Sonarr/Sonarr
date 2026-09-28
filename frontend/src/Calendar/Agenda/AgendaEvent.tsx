@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import moment from 'moment-timezone';
 import React, { useCallback, useState } from 'react';
 import { useQueueItemForEpisode } from 'Activity/Queue/Details/QueueDetailsProvider';
 import { useCalendarOptions } from 'Calendar/calendarOptionsStore';
@@ -11,13 +12,13 @@ import episodeEntities from 'Episode/episodeEntities';
 import getFinaleTypeName from 'Episode/getFinaleTypeName';
 import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
 import { icons, kinds } from 'Helpers/Props';
+import SeriesPoster from 'Series/SeriesPoster';
 import { useSingleSeries } from 'Series/useSeries';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
-import { convertToTimezone } from 'Utilities/Date/convertToTimezone';
 import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
-import styles from './AgendaEvent.css';
+import styles from './AgendaEvent.module.css';
 
 interface AgendaEventProps {
   id: number;
@@ -33,7 +34,6 @@ interface AgendaEventProps {
   finaleType?: string;
   hasFile: boolean;
   grabbed?: boolean;
-  showDate: boolean;
 }
 
 function AgendaEvent(props: AgendaEventProps) {
@@ -51,16 +51,15 @@ function AgendaEvent(props: AgendaEventProps) {
     finaleType,
     hasFile,
     grabbed,
-    showDate,
   } = props;
 
   const series = useSingleSeries(seriesId)!;
   const episodeFile = useEpisodeFile(episodeFileId);
   const queueItem = useQueueItemForEpisode(id);
-  const { timeFormat, longDateFormat, enableColorImpairedMode, timeZone } =
-    useUiSettingsValues();
+  const { timeFormat } = useUiSettingsValues();
 
   const {
+    showCoverArt,
     showEpisodeInformation,
     showFinaleIcon,
     showSpecialIcon,
@@ -69,11 +68,8 @@ function AgendaEvent(props: AgendaEventProps) {
 
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
-  const startTime = convertToTimezone(airDateUtc, timeZone);
-  const endTime = convertToTimezone(airDateUtc, timeZone).add(
-    series.runtime,
-    'minutes'
-  );
+  const startTime = moment(airDateUtc);
+  const endTime = moment(airDateUtc).add(series.runtime, 'minutes');
   const downloading = !!(queueItem || grabbed);
   const isMonitored = series.monitored && monitored;
   const statusStyle = getStatusStyle(
@@ -98,23 +94,22 @@ function AgendaEvent(props: AgendaEventProps) {
     <div className={styles.event}>
       <Link className={styles.underlay} onPress={handlePress} />
 
-      <div className={styles.overlay}>
-        <div className={styles.date}>
-          {showDate && startTime.format(longDateFormat)}
-        </div>
+      {showCoverArt ? (
+        <SeriesPoster
+          className={styles.cover}
+          images={series.images}
+          title={series.title}
+          size={250}
+          lazy={false}
+        />
+      ) : null}
 
-        <div
-          className={classNames(
-            styles.eventWrapper,
-            styles[statusStyle],
-            enableColorImpairedMode && 'colorImpaired'
-          )}
-        >
+      <div className={styles.overlay}>
+        <div className={classNames(styles.eventWrapper, styles[statusStyle])}>
           <div className={styles.time}>
-            {formatTime(airDateUtc, timeFormat, { timeZone })} -{' '}
+            {formatTime(airDateUtc, timeFormat)} -{' '}
             {formatTime(endTime.toISOString(), timeFormat, {
               includeMinuteZero: true,
-              timeZone,
             })}
           </div>
 
@@ -140,6 +135,7 @@ function AgendaEvent(props: AgendaEventProps) {
             <Icon
               className={styles.statusIcon}
               name={icons.WARNING}
+              kind={kinds.WARNING}
               title={translate('EpisodeMissingAbsoluteNumber')}
             />
           ) : null}
@@ -148,6 +144,7 @@ function AgendaEvent(props: AgendaEventProps) {
             <Icon
               className={styles.statusIcon}
               name={icons.WARNING}
+              kind={kinds.WARNING}
               title={translate('SceneNumberNotVerified')}
             />
           ) : null}
@@ -171,7 +168,7 @@ function AgendaEvent(props: AgendaEventProps) {
           episodeFile.qualityCutoffNotMet ? (
             <Icon
               className={styles.statusIcon}
-              name={icons.EPISODE_FILE}
+              name={icons.CUTOFF_NOT_MET}
               kind={kinds.WARNING}
               title={translate('QualityCutoffNotMet')}
             />
@@ -180,7 +177,7 @@ function AgendaEvent(props: AgendaEventProps) {
           {episodeNumber === 1 && seasonNumber > 0 && (
             <Icon
               className={styles.statusIcon}
-              name={icons.INFO}
+              name={icons.PREMIERE}
               kind={kinds.INFO}
               title={
                 seasonNumber === 1
@@ -193,8 +190,12 @@ function AgendaEvent(props: AgendaEventProps) {
           {showFinaleIcon && finaleType ? (
             <Icon
               className={styles.statusIcon}
-              name={icons.INFO}
-              kind={kinds.WARNING}
+              name={
+                finaleType === 'series'
+                  ? icons.FINALE_SERIES
+                  : icons.FINALE_SEASON
+              }
+              kind={finaleType === 'series' ? kinds.DANGER : kinds.WARNING}
               title={getFinaleTypeName(finaleType)}
             />
           ) : null}
@@ -202,7 +203,7 @@ function AgendaEvent(props: AgendaEventProps) {
           {showSpecialIcon && (episodeNumber === 0 || seasonNumber === 0) ? (
             <Icon
               className={styles.statusIcon}
-              name={icons.INFO}
+              name={icons.SPECIAL}
               kind={kinds.PINK}
               title={translate('Special')}
             />

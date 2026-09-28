@@ -51,6 +51,12 @@ internal static class ParserCommon
         new RegexReplace(@"^(?<title>.+?(?=[ ._-]\()).+?\((?<year>\d{4})\/(?<info>S[^\/]+)", "${title} (${year}) - ${info} ", RegexOptions.Compiled),
     };
 
+    internal static readonly RegexReplace[] PathPreSubstitutionRegex = new[]
+    {
+        // Season and episode number separated by a space (S02 01)
+        new RegexReplace(@"(?<separator>^|[-_. ])S(?<season>(?<!\d+)\d{1,2}(?!\d+)) (?<episode>(?<!\d+)\d{1,2}(?!\d+))(?!\d+)", "${separator}S${season}E${episode}", RegexOptions.IgnoreCase | RegexOptions.Compiled),
+    };
+
     internal static readonly RegexReplace WebsitePrefixRegex = new(@"^(?:(?:\[|\()\s*)?(?:www\.)?[-a-z0-9-]{1,256}\.(?<!Naruto-Kun\.)(?:[a-z]{2,6}\.[a-z]{2,6}|xn--[a-z0-9-]{4,}|[a-z]{2,})\b(?:\s*(?:\]|\))|[ -]{2,})[ -]*",
         string.Empty,
         RegexOptions.IgnoreCase | RegexOptions.Compiled);

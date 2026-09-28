@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MonoTorrent;
@@ -11,6 +14,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Localization;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
@@ -76,6 +80,10 @@ namespace NzbDrone.Core.Download
                     try
                     {
                         return await DownloadFromWebUrl(remoteEpisode, indexer, torrentUrl);
+                    }
+                    catch (ReleaseBlockedException)
+                    {
+                        throw;
                     }
                     catch (Exception ex)
                     {
@@ -200,6 +208,7 @@ namespace NzbDrone.Core.Download
             var hash = _torrentFileInfoReader.GetHashFromTorrentFile(torrentFile);
 
             EnsureReleaseIsNotBlocklisted(remoteEpisode, indexer, hash);
+            EnsureTorrentDoesNotContainRejectedFiles(remoteEpisode, indexer, torrentFile);
 
             var actualHash = AddFromTorrentFile(remoteEpisode, hash, filename, torrentFile);
 
@@ -244,6 +253,104 @@ namespace NzbDrone.Core.Download
             }
 
             return actualHash;
+        }
+
+        private void EnsureTorrentDoesNotContainRejectedFiles(RemoteEpisode remoteEpisode, IIndexer indexer, byte[] torrentFile)
+        {
+            var indexerSettings = indexer?.Definition?.Settings as ITorrentIndexerSettings;
+
+            if (indexerSettings?.RejectTorrentFilesWithBlockedExtensionsWhileGrabbing != true)
+            {
+                return;
+            }
+
+            var failDownloads = indexerSettings.FailDownloads?
+                .Select(f => (FailDownloads)f)
+                .ToHashSet();
+
+            if (failDownloads == null || failDownloads.Count == 0)
+            {
+                return;
+            }
+
+            List<string> fileNames;
+
+            try
+            {
+                fileNames = _torrentFileInfoReader.GetFileNamesFromTorrentFile(torrentFile);
+            }
+            catch (Exception ex)
+            {
+                _logger.Warn(ex, "Unable to parse file list from torrent for '{0}', skipping file extension check", remoteEpisode.Release.Title);
+                return;
+            }
+
+            ValidateFileNames(remoteEpisode, fileNames, failDownloads);
+        }
+
+        private void ValidateFileNames(RemoteEpisode remoteEpisode, List<string> fileNames, HashSet<FailDownloads> failDownloads)
+        {
+            var userRejectedExtensions = failDownloads.Contains(FailDownloads.UserDefinedExtensions)
+                ? FileExtensions.ParseUserRejectedExtensions(_configService.UserRejectedExtensions)
+                : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            var dangerousExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var executableExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var userRejected = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var fileName in fileNames)
+            {
+                var extension = Path.GetExtension(fileName);
+
+                if (extension.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
+                if (failDownloads.Contains(FailDownloads.PotentiallyDangerous) &&
+                    FileExtensions.DangerousExtensions.Contains(extension))
+                {
+                    dangerousExtensions.Add(extension);
+                }
+                else if (failDownloads.Contains(FailDownloads.Executables) &&
+                    FileExtensions.ExecutableExtensions.Contains(extension))
+                {
+                    executableExtensions.Add(extension);
+                }
+                else if (userRejectedExtensions.Contains(extension))
+                {
+                    userRejected.Add(extension);
+                }
+            }
+
+            var rejections = new List<string>();
+
+            if (dangerousExtensions.Any())
+            {
+                rejections.Add($"Found potentially dangerous files with extensions: {string.Join(", ", dangerousExtensions)}");
+            }
+
+            if (executableExtensions.Any())
+            {
+                rejections.Add($"Found executables with extensions: {string.Join(", ", executableExtensions)}");
+            }
+
+            if (userRejected.Any())
+            {
+                rejections.Add($"Found files with user defined rejected extensions: {string.Join(", ", userRejected)}");
+            }
+
+            if (rejections.Count == 0)
+            {
+                return;
+            }
+
+            var rejection = $"Caution:{Environment.NewLine}{string.Join(Environment.NewLine, rejections)}";
+
+            _logger.Warn("Torrent for '{0}' rejected: {1}. Blocklisting release.", remoteEpisode.Release.Title, rejection);
+            _blocklistService.Block(remoteEpisode, rejection, "TorrentFileValidation");
+
+            throw new ReleaseBlockedException(remoteEpisode.Release, rejection);
         }
 
         private void EnsureReleaseIsNotBlocklisted(RemoteEpisode remoteEpisode, IIndexer indexer, string hash)

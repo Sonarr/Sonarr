@@ -15,7 +15,7 @@ import React, {
   useId,
   useState,
 } from 'react';
-import styles from './Menu.css';
+import styles from './Menu.module.css';
 
 interface MenuProps {
   className?: string;

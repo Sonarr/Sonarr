@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -5,6 +6,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Network;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update;
@@ -13,12 +15,15 @@ using NzbDrone.Core.Validation.Paths;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Sonarr.Http.Validation;
 
 namespace Sonarr.Api.V3.Config
 {
     [V3ApiController("config/host")]
     public class HostConfigController : RestController<HostConfigResource>
     {
+        private const string PrivateValue = "********";
+
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IConfigService _configService;
         private readonly IUserService _userService;
@@ -26,7 +31,8 @@ namespace Sonarr.Api.V3.Config
         public HostConfigController(IConfigFileProvider configFileProvider,
                                     IConfigService configService,
                                     IUserService userService,
-                                    IDiskProvider diskProvider)
+                                    IDiskProvider diskProvider,
+                                    OidcAuthorityValidator oidcAuthorityValidator)
         {
             _configFileProvider = configFileProvider;
             _configService = configService;
@@ -38,7 +44,19 @@ namespace Sonarr.Api.V3.Config
 
             SharedValidator.RuleFor(c => c.Port).ValidPort();
 
+            SharedValidator.RuleFor(c => c.AllowedHosts).NotNull();
+
+            SharedValidator.RuleFor(c => c.AllowedHosts)
+                           .Must(h => AllowedHostsParser.Parse(h).Any())
+                           .When(c => c.AuthenticationRequired != AuthenticationRequiredType.Enabled)
+                           .WithMessage("Allowed Hosts is required when 'Authentication Required' is not 'Enabled'");
+
+            SharedValidator.RuleFor(c => c.AllowedHosts)
+                           .ValidHosts()
+                           .When(c => c.AllowedHosts.IsNotNullOrWhiteSpace());
+
             SharedValidator.RuleFor(c => c.UrlBase).ValidUrlBase();
+            SharedValidator.RuleFor(c => c.TrustedNetworks).ValidIpNetworks();
             SharedValidator.RuleFor(c => c.InstanceName).StartsOrEndsWithSonarr();
 
             SharedValidator.RuleFor(c => c.Username).NotEmpty().When(c => c.AuthenticationMethod == AuthenticationType.Forms);
@@ -52,6 +70,40 @@ namespace Sonarr.Api.V3.Config
 
             SharedValidator.RuleFor(c => c.PasswordConfirmation)
                 .Must((resource, p) => IsMatchingPassword(resource)).WithMessage("Must match Password");
+
+            SharedValidator.RuleFor(c => c.OidcAuthority)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty()
+                .Must(c => c is not null && c.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                .WithMessage("OIDC Authority must start with 'https://'")
+                .When(c => c.AuthenticationMethod == AuthenticationType.Oidc)
+                .WithName("OIDC Authority");
+
+            SharedValidator.RuleFor(c => c.OidcAuthority)
+                .SetValidator(oidcAuthorityValidator)
+                .When(c => c.AuthenticationMethod == AuthenticationType.Oidc &&
+                           c.OidcAuthority != _configFileProvider.OidcAuthority)
+                .WithName("OIDC Authority");
+
+            SharedValidator.RuleFor(c => c.OidcClientId).NotEmpty()
+                .When(c => c.AuthenticationMethod == AuthenticationType.Oidc)
+                .WithName("OIDC Client ID");
+
+            SharedValidator.RuleFor(c => c.OidcClientSecret).NotEmpty()
+                .When(c => c.AuthenticationMethod == AuthenticationType.Oidc)
+                .WithName("OIDC Client Secret");
+
+            SharedValidator.RuleFor(c => c.OidcUserIdentifier).NotEmpty()
+                .When(c => c.AuthenticationMethod == AuthenticationType.Oidc)
+                .WithName("OIDC User");
+
+            SharedValidator.RuleFor(c => c.OidcScopes)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty()
+                .Must(c => AuthenticationConfigurationExtensions.GetOidcScopes(c).Contains("openid"))
+                .WithMessage("OIDC Scopes must include 'openid'")
+                .When(c => c.AuthenticationMethod == AuthenticationType.Oidc)
+                .WithName("OIDC Scopes");
 
             SharedValidator.RuleFor(c => c.SslPort).ValidPort().When(c => c.EnableSsl);
             SharedValidator.RuleFor(c => c.SslPort).NotEqual(c => c.Port).When(c => c.EnableSsl);
@@ -105,14 +157,17 @@ namespace Sonarr.Api.V3.Config
         [HttpGet]
         public HostConfigResource GetHostConfig()
         {
+            var oidcClientSecret = _configFileProvider.OidcClientSecret;
             var resource = _configFileProvider.ToResource(_configService);
-            resource.Id = 1;
-
             var user = _userService.FindUser();
 
+            resource.Id = 1;
             resource.Username = user?.Username ?? string.Empty;
             resource.Password = user?.Password ?? string.Empty;
             resource.PasswordConfirmation = string.Empty;
+
+            // Prevent the OIDC client secret from being exposed
+            resource.OidcClientSecret = oidcClientSecret.IsNullOrWhiteSpace() ? string.Empty : PrivateValue;
 
             return resource;
         }
@@ -120,9 +175,19 @@ namespace Sonarr.Api.V3.Config
         [RestPutById]
         public ActionResult<HostConfigResource> SaveHostConfig([FromBody] HostConfigResource resource)
         {
+            resource.TrustedNetworks = IPNetworkParser.NormalizeList(resource.TrustedNetworks);
+
             var dictionary = resource.GetType()
                                      .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                                      .ToDictionary(prop => prop.Name, prop => prop.GetValue(resource, null));
+
+            // Don't persist the secret OIDC client secret placeholder
+            var oidcClientSecret = _configFileProvider.OidcClientSecret;
+
+            if (resource.OidcClientSecret == PrivateValue)
+            {
+                dictionary["OidcClientSecret"] = oidcClientSecret;
+            }
 
             _configFileProvider.SaveConfigDictionary(dictionary);
             _configService.SaveConfigDictionary(dictionary);

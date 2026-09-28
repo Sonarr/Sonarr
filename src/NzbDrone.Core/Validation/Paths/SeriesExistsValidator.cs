@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using FluentValidation.Validators;
 using NzbDrone.Core.Tv;
 
@@ -25,7 +24,7 @@ namespace NzbDrone.Core.Validation.Paths
 
             var tvdbId = Convert.ToInt32(context.PropertyValue.ToString());
 
-            return !_seriesService.AllSeriesTvdbIds().Any(s => s == tvdbId);
+            return !_seriesService.AllSeriesTvdbIds().ContainsValue(tvdbId);
         }
     }
 }

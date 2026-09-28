@@ -1,0 +1,11 @@
+.menuButton {
+  composes: menuButton from 'Components/Page/Header/PageHeaderActionsMenu.module.css';
+}
+
+.itemIcon {
+  composes: itemIcon from 'Components/Page/Header/PageHeaderActionsMenu.module.css';
+}
+
+.menuButtonIcon {
+  composes: menuButtonIcon from 'Components/Page/Header/PageHeaderActionsMenu.module.css';
+}

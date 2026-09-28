@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
         List<Episode> GetEpisodesBySceneSeason(int seriesId, int sceneSeasonNumber);
         List<Episode> EpisodesWithFiles(int seriesId);
-        PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials);
+        PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials, HashSet<int> seriesTags = null);
         List<Episode> GetEpisodesByFileId(int episodeFileId);
         void UpdateEpisode(Episode episode);
         void SetEpisodeMonitored(int episodeId, bool monitored);
@@ -39,6 +39,7 @@ namespace NzbDrone.Core.Tv
         void UpdateMany(List<Episode> episodes);
         void DeleteMany(List<Episode> episodes);
         void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
+        List<int> SetEpisodeMonitoredBySeries(int seriesId, MonitorTypes monitor, int firstSeason, int lastSeason);
     }
 
     public class EpisodeService : IEpisodeService,
@@ -158,9 +159,9 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.EpisodesWithFiles(seriesId);
         }
 
-        public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials)
+        public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials, HashSet<int> seriesTags = null)
         {
-            return _episodeRepository.EpisodesWithoutFiles(pagingSpec, includeSpecials);
+            return _episodeRepository.EpisodesWithoutFiles(pagingSpec, includeSpecials, seriesTags);
         }
 
         public List<Episode> GetEpisodesByFileId(int episodeFileId)
@@ -189,6 +190,11 @@ namespace NzbDrone.Core.Tv
         public void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)
         {
             _episodeRepository.SetMonitoredBySeason(seriesId, seasonNumber, monitored);
+        }
+
+        public List<int> SetEpisodeMonitoredBySeries(int seriesId, MonitorTypes monitor, int firstSeason, int lastSeason)
+        {
+            return _episodeRepository.SetMonitored(seriesId, monitor, firstSeason, lastSeason);
         }
 
         public void UpdateEpisodes(List<Episode> episodes)

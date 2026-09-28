@@ -3,13 +3,14 @@ import { useQueueItemForEpisode } from 'Activity/Queue/Details/QueueDetailsProvi
 import QueueDetails from 'Activity/Queue/QueueDetails';
 import Icon from 'Components/Icon';
 import ProgressBar from 'Components/ProgressBar';
+import StatusIndicator from 'Components/StatusIndicator';
 import useEpisode, { EpisodeEntity } from 'Episode/useEpisode';
 import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import isBefore from 'Utilities/Date/isBefore';
 import translate from 'Utilities/String/translate';
 import EpisodeQuality from './EpisodeQuality';
-import styles from './EpisodeStatus.css';
+import styles from './EpisodeStatus.module.css';
 
 interface EpisodeStatusProps {
   episodeId: number;
@@ -41,7 +42,10 @@ function EpisodeStatus({
     const progress = size ? 100 - (sizeLeft / size) * 100 : 0;
 
     return (
-      <div className={styles.center}>
+      <StatusIndicator
+        className={styles.center}
+        label={translate('EpisodeIsDownloading')}
+      >
         <QueueDetails
           {...queueItem}
           progressBar={
@@ -52,72 +56,73 @@ function EpisodeStatus({
             />
           }
         />
-      </div>
+      </StatusIndicator>
     );
   }
 
   if (grabbed) {
+    const label = translate('EpisodeIsDownloading');
+
     return (
-      <div className={styles.center}>
-        <Icon
-          name={icons.DOWNLOADING}
-          title={translate('EpisodeIsDownloading')}
-        />
-      </div>
+      <StatusIndicator className={styles.center} label={label} title={label}>
+        <Icon name={icons.DOWNLOADING} />
+      </StatusIndicator>
     );
   }
 
   if (hasEpisodeFile) {
     const quality = episodeFile.quality;
     const isCutoffNotMet = episodeFile.qualityCutoffNotMet;
+    const label = translate('EpisodeDownloaded');
 
     return (
-      <div className={styles.center}>
+      <StatusIndicator className={styles.center} label={label}>
         <EpisodeQuality
           quality={quality}
           size={episodeFile.size}
           isCutoffNotMet={isCutoffNotMet}
-          title={translate('EpisodeDownloaded')}
+          title={label}
         />
-      </div>
+      </StatusIndicator>
     );
   }
 
   if (!airDateUtc) {
+    const label = translate('Tba');
+
     return (
-      <div className={styles.center}>
-        <Icon name={icons.TBA} title={translate('Tba')} />
-      </div>
+      <StatusIndicator className={styles.center} label={label} title={label}>
+        <Icon name={icons.TBA} />
+      </StatusIndicator>
     );
   }
 
   if (!monitored) {
+    const label = translate('EpisodeIsNotMonitored');
+
     return (
-      <div className={styles.center}>
-        <Icon
-          name={icons.UNMONITORED}
-          kind={kinds.DISABLED}
-          title={translate('EpisodeIsNotMonitored')}
-        />
-      </div>
+      <StatusIndicator className={styles.center} label={label} title={label}>
+        <Icon name={icons.MONITORED} kind={kinds.DISABLED} size={14} />
+      </StatusIndicator>
     );
   }
 
   if (hasAired) {
+    const label = translate('EpisodeMissingFromDisk');
+
     return (
-      <div className={styles.center}>
-        <Icon
-          name={icons.MISSING}
-          title={translate('EpisodeMissingFromDisk')}
-        />
-      </div>
+      <StatusIndicator className={styles.center} label={label} title={label}>
+        <Icon name={icons.MISSING} />
+      </StatusIndicator>
     );
   }
 
+  const label = translate('EpisodeHasNotAired');
+
   return (
-    <div className={styles.center}>
-      <Icon name={icons.NOT_AIRED} title={translate('EpisodeHasNotAired')} />
-    </div>
+    <StatusIndicator className={styles.center} label={label} title={label}>
+      <Icon name={icons.NOT_AIRED} />
+    </StatusIndicator>
   );
 }
 

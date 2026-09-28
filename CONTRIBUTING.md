@@ -21,7 +21,7 @@ Setup guides, [FAQ](https://wiki.servarr.com/sonarr/faq), the more information w
 1. Fork Sonarr
 2. Clone the repository into your development machine. [_info_](https://docs.github.com/en/get-started/quickstart/fork-a-repo)
 3. Install the required Node Packages `yarn install`
-4. Start webpack to monitor your dev environment for any frontend changes that need post processing using `yarn start` command.
+4. Start the Vite dev server to monitor your dev environment for any frontend changes using the `yarn start` command
 5. Build the project in Visual Studio, Setting startup project to `Sonarr.Console` and framework to `x86`
 6. Debug the project in Visual Studio
 7. Open http://localhost:8989

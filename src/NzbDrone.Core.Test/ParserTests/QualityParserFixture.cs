@@ -296,6 +296,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.2016.03.14.2160p.WEB.h266-GROUP", false)]
         [TestCase("Series.Title.2016.03.14.2160p.WEB-DL.H.266-GROUP", false)]
         [TestCase("Series Title S02 2013 WEB-DL 4k H266 AAC 2Audio-GROUP", false)]
+        [TestCase("Series.S01.AD.MULTi.VFF.2160p.HDR.DV.WEB.EAC3.5.1.H265-FW", false)]
         public void should_parse_webdl2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL2160p, proper);

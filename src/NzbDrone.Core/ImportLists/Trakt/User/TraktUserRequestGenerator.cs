@@ -4,36 +4,21 @@ using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.ImportLists.Trakt.User
 {
-    public class TraktUserRequestGenerator : IImportListRequestGenerator
+    public class TraktUserRequestGenerator : TraktRequestGeneratorBase<TraktUserSettings>
     {
-        private readonly TraktUserSettings _settings;
-        private readonly string _clientId;
-
-        public TraktUserRequestGenerator(TraktUserSettings settings, string clientId)
+        public TraktUserRequestGenerator(TraktUserSettings settings, string clientId, int pageSize, int maxNumResults)
+            : base(settings, clientId, pageSize, maxNumResults)
         {
-            _settings = settings;
-            _clientId = clientId;
         }
 
-        public virtual ImportListPageableRequestChain GetListItems()
+        protected override void SetResource(HttpRequestBuilder requestBuilder)
         {
-            var pageableRequests = new ImportListPageableRequestChain();
+            var userName = Settings.Username.IsNotNullOrWhiteSpace() ? Settings.Username.Trim() : Settings.AuthUser.Trim();
 
-            pageableRequests.Add(GetSeriesRequest());
-
-            return pageableRequests;
-        }
-
-        private IEnumerable<ImportListRequest> GetSeriesRequest()
-        {
-            var link = _settings.BaseUrl.Trim();
-
-            var userName = _settings.Username.IsNotNullOrWhiteSpace() ? _settings.Username.Trim() : _settings.AuthUser.Trim();
-
-            switch (_settings.TraktListType)
+            switch (Settings.TraktListType)
             {
                 case (int)TraktUserListType.UserWatchList:
-                    var watchSorting = _settings.TraktWatchSorting switch
+                    var watchSorting = Settings.TraktWatchSorting switch
                     {
                         (int)TraktUserWatchSorting.Added => "added",
                         (int)TraktUserWatchSorting.Title => "title",
@@ -41,36 +26,34 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
                         _ => "rank"
                     };
 
-                    link += $"/users/{userName}/watchlist/shows/{watchSorting}";
+                    requestBuilder
+                        .Resource("/users/{userName}/watchlist/shows/{watchSorting}")
+                        .SetSegment("userName", userName)
+                        .SetSegment("watchSorting", watchSorting);
                     break;
                 case (int)TraktUserListType.UserWatchedList:
-                    link += $"/users/{userName}/watched/shows";
+                    requestBuilder
+                        .Resource("/users/{userName}/watched/shows")
+                        .SetSegment("userName", userName);
                     break;
                 case (int)TraktUserListType.UserCollectionList:
-                    link += $"/users/{userName}/collection/shows";
+                    requestBuilder
+                        .Resource("/users/{userName}/collection/shows")
+                        .SetSegment("userName", userName);
                     break;
             }
+        }
 
-            var filterParams = TraktQueryHelper.BuildFilterParameters(_settings.Rating, _settings.Genres, _settings.Years, _settings.Limit, _settings.TraktAdditionalParameters);
+        protected override Dictionary<string, string> GetFilterParameters()
+        {
+            var filterParams = TraktQueryHelper.BuildFilterParameters(Settings.Rating, Settings.Genres, Settings.Years, _pageSize, Settings.TraktAdditionalParameters);
 
-            if (_settings.TraktListType == (int)TraktUserListType.UserWatchedList)
+            if (Settings.TraktListType == (int)TraktUserListType.UserWatchedList)
             {
                 filterParams["extended"] = "full";
             }
 
-            link += "?" + filterParams.ToQueryString();
-
-            var request = new ImportListRequest(link, HttpAccept.Json);
-
-            request.HttpRequest.Headers.Add("trakt-api-version", "2");
-            request.HttpRequest.Headers.Add("trakt-api-key", _clientId);
-
-            if (_settings.AccessToken.IsNotNullOrWhiteSpace())
-            {
-                request.HttpRequest.Headers.Add("Authorization", $"Bearer {_settings.AccessToken}");
-            }
-
-            yield return request;
+            return filterParams;
         }
     }
 }

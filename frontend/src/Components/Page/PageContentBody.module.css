@@ -1,0 +1,20 @@
+@layer base {
+.contentBody {
+  flex: 1 0 1px;
+}
+
+.innerContentBody {
+  padding: var(--pageContentBodyPadding);
+  padding-top: 24px;
+}
+@media (--breakpointSmall) {
+  .contentBody {
+    flex-basis: auto;
+    overflow-y: hidden !important;
+  }
+
+  .innerContentBody {
+    padding: var(--pageContentBodyPaddingSmallScreen);
+  }
+}
+}

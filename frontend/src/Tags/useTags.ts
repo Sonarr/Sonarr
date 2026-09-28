@@ -6,8 +6,8 @@ import useApiMutation, {
   getValidationFailures,
 } from 'Helpers/Hooks/useApiMutation';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
-import { ValidationFailures } from 'Store/Selectors/selectSettings';
 import sortByProp from 'Utilities/Array/sortByProp';
+import { ValidationFailures } from 'Utilities/selectSettings';
 
 const DEFAULT_TAGS: Tag[] = [];
 

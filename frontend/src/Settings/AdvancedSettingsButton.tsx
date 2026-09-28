@@ -8,7 +8,7 @@ import {
   toggleShowAdvancedSettings,
   useShowAdvancedSettings,
 } from './advancedSettingsStore';
-import styles from './AdvancedSettingsButton.css';
+import styles from './AdvancedSettingsButton.module.css';
 
 interface AdvancedSettingsButtonProps {
   showLabel: boolean;
@@ -31,32 +31,28 @@ function AdvancedSettingsButton({ showLabel }: AdvancedSettingsButtonProps) {
       }
       onPress={handlePress}
     >
-      <Icon name={icons.ADVANCED_SETTINGS} size={21} />
+      <div className={styles.iconWrapper}>
+        <Icon name={icons.ADVANCED_SETTINGS} size={16} />
 
-      <span
-        className={classNames(styles.indicatorContainer, 'fa-layers fa-fw')}
-      >
-        <Icon
-          className={styles.indicatorBackground}
-          name={icons.CIRCLE}
-          size={16}
-        />
-
-        <Icon
-          className={showAdvancedSettings ? styles.enabled : styles.disabled}
-          name={showAdvancedSettings ? icons.CHECK : icons.CLOSE}
-          size={10}
-        />
-      </span>
+        <span
+          className={classNames(
+            styles.indicatorContainer,
+            showAdvancedSettings ? styles.enabled : styles.disabled
+          )}
+        >
+          <Icon
+            name={showAdvancedSettings ? icons.CHECK_CIRCLE : icons.FATAL}
+            size={9}
+          />
+        </span>
+      </div>
 
       {showLabel ? (
-        <div className={styles.labelContainer}>
-          <div className={styles.label}>
-            {showAdvancedSettings
-              ? translate('HideAdvanced')
-              : translate('ShowAdvanced')}
-          </div>
-        </div>
+        <span className={styles.label}>
+          {showAdvancedSettings
+            ? translate('HideAdvanced')
+            : translate('ShowAdvanced')}
+        </span>
       ) : null}
     </Link>
   );

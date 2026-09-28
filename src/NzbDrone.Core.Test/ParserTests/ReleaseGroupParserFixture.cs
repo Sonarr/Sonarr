@@ -51,6 +51,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Show.Name.2009.S01.1080p.BluRay.DTS5.1.x264-D-Z0N3", "D-Z0N3")]
         [TestCase("Series Stampede S01 MULTi 1080p BD x265 Opus AAC -Báleygr", "Báleygr")]
         [TestCase("Series S01E01 VOSTFR 1080p WEB x265 EAC3 -Hveðrungr", "Hveðrungr")]
+        [TestCase("Series.S01E06.1080p.AMZN.WEB-DL.JPN.DDP2.0.H.264-ToonsHub.mkv-[N-Z-B]-xpost", "ToonsHub")]
         public void should_parse_release_group(string title, string expected)
         {
             Parser.ReleaseGroupParser.ParseReleaseGroup(title).Should().Be(expected);
@@ -122,6 +123,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The Series (2023) S03E01 (1080p DS4K NF Webrip DV HDR DDP5.1 x265) - Vialle.mkv", "Vialle")]
         [TestCase("The Show (2020) - S02E03 - Fighting His Series(1080p ATVP WEB-DL x265 t3nzinFAKE)", null)]
         [TestCase("The Series (2023) S03E01 (1080p DS4K NF Webrip DV HDR DDP5.1 x265) - VialleFAKE.mkv", null)]
+        [TestCase("The Series (2025) S03E01 (1080p AMZN WEB-DL x265 SDR DDP 5.1 English - Celdra QxR)", "QxR")]
+        [TestCase("The Series (2025) - S03E01 - We're Already Here (1080p AMZN WEB-DL x265 Celdra)", "Celdra")]
         public void should_parse_exception_release_group(string title, string expected)
         {
             Parser.ReleaseGroupParser.ParseReleaseGroup(title).Should().Be(expected);

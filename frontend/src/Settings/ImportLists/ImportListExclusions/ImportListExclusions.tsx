@@ -32,7 +32,7 @@ import useImportListExclusions, {
   ImportListExclusion,
   useDeleteImportListExclusions,
 } from './useImportListExclusions';
-import styles from './ImportListExclusions.css';
+import styles from './ImportListExclusions.module.css';
 
 const COLUMNS: Column[] = [
   {
@@ -153,7 +153,10 @@ function ImportListExclusionsContent() {
   }, [refetch]);
 
   return (
-    <FieldSet legend={translate('ImportListExclusions')}>
+    <FieldSet
+      legend={translate('ImportListExclusions')}
+      caption={translate('ImportListExclusionsCaption')}
+    >
       <PageSectionContent
         errorMessage={translate('ImportListExclusionsLoadError')}
         isFetching={isLoading && !isFetched}

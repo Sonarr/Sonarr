@@ -19,7 +19,7 @@ import { CustomFormat } from 'Settings/CustomFormats/CustomFormats/useCustomForm
 import { HistoryData, HistoryEventType } from 'typings/History';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import translate from 'Utilities/String/translate';
-import styles from './EpisodeHistoryRow.css';
+import styles from './EpisodeHistoryRow.module.css';
 
 function getTitle(eventType: HistoryEventType) {
   switch (eventType) {

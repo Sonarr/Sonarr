@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_true_if_skip_free_space_check_is_true()
         {
             Mocker.GetMock<IConfigService>()
-                .Setup(s => s.SkipFreeSpaceCheckWhenImporting)
+                .Setup(s => s.SkipFreeSpaceCheckWhenGrabbing)
                 .Returns(true);
 
             WithMinimumFreeSpace(150);

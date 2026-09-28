@@ -1,0 +1,19 @@
+.headerCell {
+  composes: headerCell from 'Components/Table/TableHeaderCell.module.css';
+}
+
+.content {
+  composes: content from 'Components/Table/TableHeaderCell.module.css';
+}
+
+.sortable {
+  composes: sortable from 'Components/Table/TableHeaderCell.module.css';
+}
+
+.sorted {
+  composes: sorted from 'Components/Table/TableHeaderCell.module.css';
+}
+
+.sortIcon {
+  composes: sortIcon from 'Components/Table/TableHeaderCell.module.css';
+}

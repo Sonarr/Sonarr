@@ -250,7 +250,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             var status = new DownloadClientInfo
             {
-                IsLocalhost = Settings.Host is "127.0.0.1" or "localhost"
+                IsLocalhost = Settings.Host.IsLocalhostAddress()
             };
 
             if (!destDir.IsEmpty)

@@ -1,0 +1,20 @@
+.intro {
+  margin: 0 0 8px;
+  max-width: 70ch;
+  color: var(--inkMuted);
+  font-size: 13px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.55;
+}
+
+.deleteButton {
+  composes: button from 'Components/Link/Button.module.css';
+
+  margin-right: auto;
+}
+
+.tagInternalInput {
+  composes: internalInput from 'Components/Form/Tag/TagInput.module.css';
+
+  flex: 0 0 100%;
+}

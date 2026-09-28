@@ -1,0 +1,27 @@
+.titleContainer {
+  display: flex;
+  align-items: center;
+  flex: 0 1 auto;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.title {
+  @add-mixin truncate;
+
+  color: var(--ink);
+}
+
+.year {
+  flex-shrink: 0;
+  margin-right: 4px;
+  margin-left: 4px;
+  color: var(--inkMuted);
+  font-size: var(--smallFontSize);
+}
+
+.existing {
+  flex-shrink: 0;
+  margin-left: 4px;
+  color: var(--inkMuted);
+}

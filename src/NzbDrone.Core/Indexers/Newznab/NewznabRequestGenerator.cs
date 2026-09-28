@@ -450,16 +450,33 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            if (SupportsSearch && Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0)
+            if (!SupportsSearch || searchCriteria.SeasonNumber <= 0)
+            {
+                return pageableRequests;
+            }
+
+            var queryTitles = TextSearchEngine == "raw" ? searchCriteria.AllSceneTitles : searchCriteria.CleanSceneTitles;
+            var seasonQueryTitles = TextSearchEngine == "raw" ? searchCriteria.AllSeasonSceneTitles : searchCriteria.CleanSeasonSceneTitles;
+
+            if (Settings.AnimeStandardFormatSearch)
             {
                 AddTvIdPageableRequests(pageableRequests,
                     Settings.AnimeCategories,
                     searchCriteria,
                     $"&season={NewznabifySeasonNumber(searchCriteria.SeasonNumber)}");
+            }
 
-                var queryTitles = TextSearchEngine == "raw" ? searchCriteria.AllSceneTitles : searchCriteria.CleanSceneTitles;
-
-                foreach (var queryTitle in queryTitles)
+            foreach (var queryTitle in queryTitles)
+            {
+                if (seasonQueryTitles.Contains(queryTitle, StringComparer.InvariantCultureIgnoreCase))
+                {
+                    // A season title alias already identifies the season, no need to add a season number.
+                    pageableRequests.Add(GetPagedRequests(MaxPages,
+                        Settings.AnimeCategories,
+                        "search",
+                        $"&q={NewsnabifyTitle(queryTitle)}"));
+                }
+                else if (Settings.AnimeStandardFormatSearch)
                 {
                     pageableRequests.Add(GetPagedRequests(MaxPages,
                         Settings.AnimeCategories,

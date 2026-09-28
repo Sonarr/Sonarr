@@ -1,0 +1,11 @@
+.cell {
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.module.css';
+
+  flex: 0 0 36px;
+}
+
+.input {
+  composes: input from 'Components/Form/CheckInput.module.css';
+
+  margin: 0;
+}

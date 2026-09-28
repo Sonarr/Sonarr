@@ -1,0 +1,72 @@
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  font-size: var(--smallFontSize);
+}
+
+.legendItem {
+  display: flex;
+  margin-bottom: 4px;
+  line-height: 16px;
+}
+
+.legendItemColor {
+  margin-right: 8px;
+  width: 30px;
+  height: 16px;
+  border-radius: 8px;
+}
+
+.continuing {
+  composes: legendItemColor;
+
+  background-color: var(--accent);
+}
+
+.ended {
+  composes: legendItemColor;
+
+  background-color: var(--successColor);
+}
+
+.missingMonitored {
+  composes: legendItemColor;
+
+  background-color: var(--dangerColor);
+}
+
+.missingUnmonitored {
+  composes: legendItemColor;
+
+  background-color: var(--warningColor);
+}
+
+.downloading {
+  composes: legendItemColor;
+
+  background-color: var(--purple);
+}
+
+.statistics {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+@media (--breakpointLarge) {
+  .statistics {
+    display: block;
+  }
+}
+
+@media (--breakpointSmall) {
+  .footer {
+    display: block;
+  }
+
+  .statistics {
+    display: flex;
+    margin-top: 20px;
+  }
+}

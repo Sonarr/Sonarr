@@ -1,0 +1,14 @@
+.section {
+  margin-bottom: 48px;
+}
+
+.fieldSet {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 28px;
+  min-width: 0;
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
+  background-color: var(--paperCard);
+  gap: 16px;
+}

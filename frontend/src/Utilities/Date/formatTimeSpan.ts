@@ -1,4 +1,4 @@
-import moment, { DurationInputArg1 } from 'moment';
+import moment, { DurationInputArg1 } from 'moment-timezone';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
 

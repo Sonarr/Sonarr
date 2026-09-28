@@ -266,7 +266,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             };
 
             Mocker.GetMock<ISceneMappingService>()
-                .Setup(s => s.FindSceneMapping(_parsedEpisodeInfo.SeriesTitle, _parsedEpisodeInfo.ReleaseTitle, _parsedEpisodeInfo.SeasonNumber))
+                .Setup(s => s.FindSceneMapping(_parsedEpisodeInfo.SeriesTitle, _parsedEpisodeInfo.ReleaseTitle, _parsedEpisodeInfo.SeasonNumber.Value))
                 .Returns(sceneMapping);
 
             var result = Subject.Map(_parsedEpisodeInfo, _series);
@@ -286,7 +286,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             };
 
             Mocker.GetMock<ISceneMappingService>()
-                .Setup(s => s.FindSceneMapping(_parsedEpisodeInfo.SeriesTitle, _parsedEpisodeInfo.ReleaseTitle, _parsedEpisodeInfo.SeasonNumber))
+                .Setup(s => s.FindSceneMapping(_parsedEpisodeInfo.SeriesTitle, _parsedEpisodeInfo.ReleaseTitle, _parsedEpisodeInfo.SeasonNumber.Value))
                 .Returns(sceneMapping);
 
             var result = Subject.Map(_parsedEpisodeInfo, _series);
@@ -386,6 +386,24 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             var result = Subject.Map(_parsedEpisodeInfo, 0, 0, "", null);
 
             result.Series.Should().Be(_series);
+        }
+
+        [Test]
+        public void should_not_have_a_mapped_season_number_when_the_scene_mapping_has_no_season()
+        {
+            GivenMatchBySeriesTitle();
+
+            _parsedEpisodeInfo.SeasonNumber = null;
+            _parsedEpisodeInfo.IsSeasonTitle = true;
+            _parsedEpisodeInfo.EpisodeNumbers = [];
+
+            Mocker.GetMock<ISceneMappingService>()
+                  .Setup(v => v.FindSceneMapping(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                  .Returns(new SceneMapping { TvdbId = _series.TvdbId });
+
+            var result = Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId, _series.ImdbId);
+
+            result.MappedSeasonNumber.Should().BeNull();
         }
     }
 }

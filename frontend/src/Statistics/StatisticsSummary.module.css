@@ -1,0 +1,30 @@
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.item {
+  padding: 15px;
+  border-radius: 3px;
+  background-color: var(--cardBackgroundColor);
+  box-shadow: 0 0 10px 1px var(--cardShadowColor);
+  text-align: center;
+}
+
+.value {
+  color: var(--textColor);
+  font-weight: 300;
+  font-size: 24px;
+}
+
+.label {
+  color: var(--helpTextColor);
+  font-size: 13px;
+}
+
+.secondary {
+  margin-top: 2px;
+  color: var(--dimColor);
+  font-size: 12px;
+}

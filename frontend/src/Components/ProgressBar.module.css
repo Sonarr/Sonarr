@@ -1,0 +1,97 @@
+.container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border-radius: 4px;
+  background-color: var(--progressBarBackgroundColor);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.progressBar {
+  position: relative;
+  z-index: 1;
+  float: left;
+  width: 0;
+  height: 100%;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  color: var(--white);
+  transition: width 0.6s ease;
+}
+
+.primary {
+  background-color: color-mix(in oklab, var(--accent) 80%, oklch(0% 0 0));
+}
+
+.danger {
+  background-color: color-mix(in oklab, var(--dangerColor) 80%, oklch(0% 0 0));
+}
+
+.success {
+  background-color: color-mix(in oklab, var(--successColor) 80%, oklch(0% 0 0));
+}
+
+.purple {
+  background-color: var(--purple);
+}
+
+.warning {
+  background-color: color-mix(in oklab, var(--warningColor) 80%, oklch(0% 0 0));
+}
+
+.info {
+  background-color: var(--infoColor);
+}
+
+.frontTextContainer {
+  z-index: 1;
+  color: var(--progressBarFrontTextColor);
+}
+
+.backTextContainer {
+  color: var(--progressBarBackTextColor);
+}
+
+.backTextContainer,
+.frontTextContainer {
+  position: absolute;
+  overflow: hidden;
+  width: 0;
+  height: 100%;
+}
+
+.backText,
+.frontText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 12px;
+  cursor: default;
+}
+
+.small {
+  height: var(--progressBarSmallHeight);
+
+  .backText,
+  .frontText {
+    height: var(--progressBarSmallHeight);
+  }
+}
+
+.medium {
+  height: var(--progressBarMediumHeight);
+
+  .backText,
+  .frontText {
+    height: var(--progressBarMediumHeight);
+  }
+}
+
+.large {
+  height: var(--progressBarLargeHeight);
+
+  .backText,
+  .frontText {
+    height: var(--progressBarLargeHeight);
+  }
+}

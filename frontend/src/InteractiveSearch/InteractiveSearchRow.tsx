@@ -24,7 +24,7 @@ import OverrideMatchModal from './OverrideMatch/OverrideMatchModal';
 import Peers from './Peers';
 import ReleaseSceneIndicator from './ReleaseSceneIndicator';
 import { Release, useGrabRelease } from './useReleases';
-import styles from './InteractiveSearchRow.css';
+import styles from './InteractiveSearchRow.module.css';
 
 function getDownloadIcon(
   isGrabbing: boolean,
@@ -121,7 +121,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     indexerFlags = 0,
   } = release;
 
-  const { longDateFormat, timeFormat, timeZone } = useUiSettingsValues();
+  const { longDateFormat, timeFormat } = useUiSettingsValues();
 
   const [isConfirmGrabModalOpen, setIsConfirmGrabModalOpen] = useState(false);
   const [isOverrideModalOpen, setIsOverrideModalOpen] = useState(false);
@@ -184,7 +184,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
         className={styles.age}
         title={formatDateTime(publishDate, longDateFormat, timeFormat, {
           includeSeconds: true,
-          timeZone,
         })}
       >
         {formatAge(age, ageHours, ageMinutes)}
@@ -239,7 +238,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
 
         {isBlocklisted ? (
           <Icon
-            containerClassName={
+            titleWrapperClassName={
               history ? styles.blocklistIconContainer : undefined
             }
             name={icons.BLOCKLIST}

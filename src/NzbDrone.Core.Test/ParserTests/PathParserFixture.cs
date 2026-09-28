@@ -33,6 +33,12 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase(@"C:\Test\Series\Season 2\01. Total Series Action - Episode 1 - Monster Cash.mkv", 2, 1)]
         [TestCase(@"C:\Test\Series\Season 1\02.04.24 - S01E01 - The Rabbit Hole", 1, 1)]
         [TestCase(@"C:\Test\Series\Season 1\8 Series Rules - S01E01 - Pilot", 1, 1)]
+        [TestCase(@"C:\Test\Series Title\Series Title S02 01.mkv", 2, 1)]
+        [TestCase(@"C:\Test\Series Title\Series Title S2 1.mkv", 2, 1)]
+        [TestCase(@"C:\Test\Series Title\Series Title S2 10.mkv", 2, 10)]
+        [TestCase(@"C:\Test\Series Title\S02 01.mkv", 2, 1)]
+        [TestCase(@"C:\Test\Series Title\Series Title S02 10.mkv", 2, 10)]
+        [TestCase(@"C:\Test\Series Title S01 02\Series Title S02 01 1080p WEB-DL.mkv", 2, 1)]
 
         // [TestCase(@"C:\series.state.S02E04.720p.WEB-DL.DD5.1.H.264\73696S02-04.mkv", 2, 4)] //Gets treated as S01E04 (because it gets parsed as anime); 2020-01 broken test case: Expected result.EpisodeNumbers to contain 1 item(s), but found 0
         public void should_parse_from_path(string path, int season, int episode)

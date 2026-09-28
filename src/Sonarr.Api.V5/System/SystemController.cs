@@ -94,15 +94,15 @@ public class SystemController : Controller
     }
 
     [HttpGet("routes")]
-    [Produces("application/json")]
+    [Produces("text/plain")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     public ContentHttpResult GetRoutes()
     {
-        using (var sw = new StringWriter())
-        {
-            _graphWriter.Write(_endpointData, sw);
-            var graph = sw.ToString();
-            return TypedResults.Content(graph, "text/plain");
-        }
+        using var sw = new StringWriter();
+        _graphWriter.Write(_endpointData, sw);
+        var graph = sw.ToString();
+
+        return TypedResults.Content(graph, "text/plain");
     }
 
     [HttpGet("routes/duplicate")]
@@ -113,16 +113,24 @@ public class SystemController : Controller
     }
 
     [HttpPost("shutdown")]
-    public Ok<object> Shutdown()
+    public Ok<SystemShutdownResource> Shutdown()
     {
         Task.Factory.StartNew(() => _lifecycleService.Shutdown());
-        return TypedResults.Ok<object>(new { ShuttingDown = true });
+
+        return TypedResults.Ok(new SystemShutdownResource
+        {
+            ShuttingDown = true
+        });
     }
 
     [HttpPost("restart")]
-    public Ok<object> Restart()
+    public Ok<SystemRestartResource> Restart()
     {
         Task.Factory.StartNew(() => _lifecycleService.Restart());
-        return TypedResults.Ok<object>(new { Restarting = true });
+
+        return TypedResults.Ok(new SystemRestartResource
+        {
+            Restarting = true
+        });
     }
 }

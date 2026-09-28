@@ -69,7 +69,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             {
                 return audioProfile switch
                 {
-                    "DTS:X" or "DTS-HD MA + DTS:X IMAX" => "DTS-X",
+                    "DTS:X" or "DTS-HD MA + DTS:X" or "DTS-HD MA + DTS:X IMAX" => "DTS-X",
                     "DTS-HD MA" => "DTS-HD MA",
                     "DTS-ES" => "DTS-ES",
                     "DTS-HD HRA" => "DTS-HD HRA",

@@ -74,7 +74,7 @@ public class BackupController : Controller
 
     [HttpPost("restore/{id:int}")]
     [Produces("application/json")]
-    public Results<Ok<object>, NotFound> Restore([FromRoute] int id)
+    public Results<Ok<BackupRestoreResource>, NotFound> Restore([FromRoute] int id)
     {
         var backup = GetBackupById(id);
 
@@ -86,13 +86,16 @@ public class BackupController : Controller
         var path = GetBackupPath(backup);
         _backupService.Restore(path);
 
-        return TypedResults.Ok<object>(new { RestartRequired = true });
+        return TypedResults.Ok(new BackupRestoreResource
+        {
+            RestartRequired = true
+        });
     }
 
     [HttpPost("restore/upload")]
     [Produces("application/json")]
     [RequestFormLimits(MultipartBodyLengthLimit = 5000000000)]
-    public Results<Ok<object>, BadRequest<object>> RestoreUpload()
+    public Results<Ok<BackupRestoreResource>, BadRequest<BackupRestoreErrorResource>> RestoreUpload()
     {
         var files = Request.Form.Files;
 
@@ -106,7 +109,10 @@ public class BackupController : Controller
 
         if (!ValidExtensions.Contains(extension))
         {
-            return TypedResults.BadRequest<object>(new { error = $"Invalid extension, must be one of: {string.Join(", ", ValidExtensions)}" });
+            return TypedResults.BadRequest(new BackupRestoreErrorResource
+            {
+                Error = $"Invalid extension, must be one of: {string.Join(", ", ValidExtensions)}"
+            });
         }
 
         var path = Path.Combine(_appFolderInfo.TempFolder, $"sonarr_backup_restore{extension}");
@@ -115,7 +121,10 @@ public class BackupController : Controller
         _backupService.Restore(path);
         _diskProvider.DeleteFile(path);
 
-        return TypedResults.Ok<object>(new { RestartRequired = true });
+        return TypedResults.Ok(new BackupRestoreResource
+        {
+            RestartRequired = true
+        });
     }
 
     private string GetBackupPath(NzbDrone.Core.Backup.Backup backup)

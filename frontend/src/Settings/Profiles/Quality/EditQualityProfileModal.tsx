@@ -1,8 +1,6 @@
-import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import Modal from 'Components/Modal/Modal';
 import { sizes } from 'Helpers/Props';
-import { clearPendingChanges } from 'Store/Actions/baseActions';
 import EditQualityProfileModalContent from './EditQualityProfileModalContent';
 
 interface EditQualityProfileModalProps {
@@ -20,36 +18,13 @@ function EditQualityProfileModal({
   onDeleteQualityProfilePress,
   onModalClose,
 }: EditQualityProfileModalProps) {
-  const dispatch = useDispatch();
-  const [height, setHeight] = useState<'auto' | number>('auto');
-
-  const handleOnModalClose = useCallback(() => {
-    dispatch(clearPendingChanges({ section: 'settings.qualityProfiles' }));
-    onModalClose();
-  }, [dispatch, onModalClose]);
-
-  const handleContentHeightChange = useCallback(
-    (newHeight: number) => {
-      if (height === 'auto' || newHeight !== 0) {
-        setHeight(newHeight);
-      }
-    },
-    [height]
-  );
-
   return (
-    <Modal
-      style={{ height: height === 'auto' ? 'auto' : `${height}px` }}
-      isOpen={isOpen}
-      size={sizes.EXTRA_LARGE}
-      onModalClose={handleOnModalClose}
-    >
+    <Modal isOpen={isOpen} size={sizes.EXTRA_LARGE} onModalClose={onModalClose}>
       <EditQualityProfileModalContent
         id={id}
         cloneId={cloneId}
-        onContentHeightChange={handleContentHeightChange}
         onDeleteQualityProfilePress={onDeleteQualityProfilePress}
-        onModalClose={handleOnModalClose}
+        onModalClose={onModalClose}
       />
     </Modal>
   );

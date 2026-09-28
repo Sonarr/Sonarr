@@ -21,7 +21,7 @@ import useSeries from 'Series/useSeries';
 import { Tag, useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import SeriesSearchResult from './SeriesSearchResult';
-import styles from './SeriesSearchInput.css';
+import styles from './SeriesSearchInput.module.css';
 
 const ADD_NEW_TYPE = 'addNew';
 
@@ -161,7 +161,6 @@ function SeriesSearchInput() {
         requestValue.current = null;
         setRequestLoading(false);
         isLoading.current = false;
-        // setLoading(false);
       } else {
         setSuggestions(suggestions);
         setRequestLoading(true);
@@ -198,7 +197,6 @@ function SeriesSearchInput() {
   const reset = useCallback(() => {
     setValue('');
     setSuggestions([]);
-    // setLoading(false);
     isLoading.current = false;
   }, []);
 
@@ -414,23 +412,25 @@ function SeriesSearchInput() {
 
   return (
     <div className={styles.wrapper}>
-      <Icon name={icons.SEARCH} />
+      <div className={styles.inputWrapper}>
+        <Icon className={styles.searchIcon} name={icons.SEARCH} />
 
-      <Autosuggest
-        ref={autosuggestRef}
-        inputProps={inputProps}
-        theme={theme}
-        focusInputOnSuggestionClick={false}
-        multiSection={true}
-        suggestions={suggestionGroups}
-        getSectionSuggestions={getSectionSuggestions}
-        renderSectionTitle={renderSectionTitle}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        onSuggestionSelected={handleSuggestionSelected}
-        onSuggestionsFetchRequested={handleSuggestionsFetchRequested}
-        onSuggestionsClearRequested={handleSuggestionsClearRequested}
-      />
+        <Autosuggest
+          ref={autosuggestRef}
+          inputProps={inputProps}
+          theme={theme}
+          focusInputOnSuggestionClick={false}
+          multiSection={true}
+          suggestions={suggestionGroups}
+          getSectionSuggestions={getSectionSuggestions}
+          renderSectionTitle={renderSectionTitle}
+          getSuggestionValue={getSuggestionValue}
+          renderSuggestion={renderSuggestion}
+          onSuggestionSelected={handleSuggestionSelected}
+          onSuggestionsFetchRequested={handleSuggestionsFetchRequested}
+          onSuggestionsClearRequested={handleSuggestionsClearRequested}
+        />
+      </div>
     </div>
   );
 }

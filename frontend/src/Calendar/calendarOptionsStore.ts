@@ -4,6 +4,7 @@ import { CalendarView } from './calendarViews';
 
 export interface CalendarOptions {
   collapseMultipleEpisodes: boolean;
+  showCoverArt: boolean;
   showEpisodeInformation: boolean;
   showFinaleIcon: boolean;
   showSpecialIcon: boolean;
@@ -17,6 +18,7 @@ const { useOptions, useOption, getOptions, getOption, setOptions, setOption } =
   createOptionsStore<CalendarOptions>('calendar_options', () => {
     return {
       collapseMultipleEpisodes: false,
+      showCoverArt: true,
       showEpisodeInformation: true,
       showFinaleIcon: false,
       showSpecialIcon: false,

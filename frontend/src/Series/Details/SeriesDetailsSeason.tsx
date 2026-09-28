@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useAppDimension } from 'App/appStore';
 import CommandNames from 'Commands/CommandNames';
-import { useCommands } from 'Commands/useCommands';
+import { useCommands, useExecuteCommand } from 'Commands/useCommands';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
@@ -44,7 +43,7 @@ import getToggledRange from 'Utilities/Table/getToggledRange';
 import EpisodeRow from './EpisodeRow';
 import SeasonInfo from './SeasonInfo';
 import SeasonProgressLabel from './SeasonProgressLabel';
-import styles from './SeriesDetailsSeason.css';
+import styles from './SeriesDetailsSeason.module.css';
 
 function getSeasonStatistics(episodes: Episode[]) {
   let episodeCount = 0;
@@ -112,7 +111,7 @@ function SeriesDetailsSeason({
   isExpanded,
   onExpandPress,
 }: SeriesDetailsSeasonProps) {
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
   const { monitored: seriesMonitored, path } = useSingleSeries(seriesId)!;
   const { data: items } = useSeasonEpisodes(seriesId, seasonNumber);
 
@@ -195,12 +194,12 @@ function SeriesDetailsSeason({
   );
 
   const handleSearchPress = useCallback(() => {
-    dispatch({
+    executeCommand({
       name: CommandNames.SeasonSearch,
       seriesId,
       seasonNumber,
     });
-  }, [seriesId, seasonNumber, dispatch]);
+  }, [seriesId, seasonNumber, executeCommand]);
 
   const handleOrganizePress = useCallback(() => {
     setIsOrganizeModalOpen(true);
@@ -348,7 +347,7 @@ function SeriesDetailsSeason({
             alignMenu={align.RIGHT}
             enforceMaxHeight={false}
           >
-            <MenuButton>
+            <MenuButton className={styles.actionsMenuButton}>
               <Icon name={icons.ACTIONS} size={22} />
             </MenuButton>
 
@@ -421,7 +420,7 @@ function SeriesDetailsSeason({
                   ? translate('SearchForMonitoredEpisodesSeason')
                   : translate('NoMonitoredEpisodesSeason')
               }
-              size={24}
+              size={20}
               isSpinning={isSearching}
               isDisabled={
                 isSearching || !hasMonitoredEpisodes || !seriesMonitored
@@ -434,7 +433,7 @@ function SeriesDetailsSeason({
               name={icons.INTERACTIVE}
               title={translate('InteractiveSearchSeason')}
               aria-label={translate('InteractiveSearchSeason')}
-              size={24}
+              size={20}
               isDisabled={!totalEpisodeCount}
               onPress={handleInteractiveSearchPress}
             />
@@ -444,7 +443,7 @@ function SeriesDetailsSeason({
               name={icons.ORGANIZE}
               title={translate('PreviewRenameSeason')}
               aria-label={translate('PreviewRenameSeason')}
-              size={24}
+              size={20}
               isDisabled={!episodeFileCount}
               onPress={handleOrganizePress}
             />
@@ -454,7 +453,7 @@ function SeriesDetailsSeason({
               name={icons.EPISODE_FILE}
               title={translate('ManageEpisodesSeason')}
               aria-label={translate('ManageEpisodesSeason')}
-              size={24}
+              size={20}
               isDisabled={!episodeFileCount}
               onPress={handleManageEpisodesPress}
             />
@@ -464,7 +463,7 @@ function SeriesDetailsSeason({
               name={icons.HISTORY}
               title={translate('HistorySeason')}
               aria-label={translate('HistorySeason')}
-              size={24}
+              size={20}
               isDisabled={!totalEpisodeCount}
               onPress={handleHistoryPress}
             />

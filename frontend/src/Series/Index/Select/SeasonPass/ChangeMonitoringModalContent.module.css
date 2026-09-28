@@ -1,0 +1,29 @@
+.intro {
+  margin: 0 0 8px;
+  max-width: 70ch;
+  color: var(--inkMuted);
+  font-size: 13px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.55;
+}
+
+.modalFooter {
+  composes: modalFooter from 'Components/Modal/ModalFooter.module.css';
+
+  justify-content: space-between;
+}
+
+.selected {
+  font-weight: 600;
+}
+
+.labelIcon {
+  margin-left: 8px;
+}
+
+@media (--breakpointExtraSmall) {
+  .modalFooter {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

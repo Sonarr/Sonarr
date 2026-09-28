@@ -294,10 +294,12 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
                 .Verify(v => v.Update(episodeFile), Times.Never());
         }
 
-        [Test]
-        public void should_not_update_media_info_if_file_does_not_support_media_info()
+        [TestCase(".iso")]
+        [TestCase(".m3u")]
+        [TestCase(".strm")]
+        public void should_not_update_media_info_if_file_does_not_support_media_info(string extension)
         {
-            var path = Path.Combine(_series.Path, "media.iso");
+            var path = Path.Combine(_series.Path, "media" + extension);
 
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                 .With(v => v.Path = path)

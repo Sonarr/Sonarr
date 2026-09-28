@@ -165,3 +165,5 @@ src/.idea/
 
 # Ignore Jetbrains IntelliJ Workspace Directories
 .idea/
+
+frontend/src/**/*.module.css.d.ts

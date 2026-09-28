@@ -2,7 +2,7 @@ import React from 'react';
 import Label from 'Components/Label';
 import { kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import styles from './ImportSeriesTitle.css';
+import styles from './ImportSeriesTitle.module.css';
 
 interface ImportSeriesTitleProps {
   title: string;
@@ -25,7 +25,7 @@ function ImportSeriesTitle({
         <span className={styles.year}>({year})</span>
       ) : null}
 
-      {network ? <Label>{network}</Label> : null}
+      {network ? <Label dot={false}>{network}</Label> : null}
 
       {isExistingSeries ? (
         <Label kind={kinds.WARNING}>{translate('Existing')}</Label>

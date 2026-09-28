@@ -10,7 +10,7 @@ import {
 import translate from 'Utilities/String/translate';
 import QualityDefinition from './QualityDefinition';
 import { useManageQualityDefinitions } from './useQualityDefinitions';
-import styles from './QualityDefinitions.css';
+import styles from './QualityDefinitions.module.css';
 
 interface QualityDefinitionsProps {
   isResettingQualityDefinitions: boolean;
@@ -63,7 +63,10 @@ function QualityDefinitions({
   ]);
 
   return (
-    <FieldSet legend={translate('QualityDefinitions')}>
+    <FieldSet
+      legend={translate('QualityDefinitions')}
+      caption={translate('QualityDefinitionsCaption')}
+    >
       <PageSectionContent
         errorMessage={translate('QualityDefinitionsLoadError')}
         isFetching={isFetching}
@@ -71,8 +74,8 @@ function QualityDefinitions({
         error={error}
       >
         <div className={styles.header}>
-          <div className={styles.quality}>{translate('Quality')}</div>
-          <div className={styles.title}>{translate('Title')}</div>
+          <div className={styles.headerQuality}>{translate('Quality')}</div>
+          <div className={styles.headerTitle}>{translate('Title')}</div>
         </div>
 
         <div className={styles.definitions}>

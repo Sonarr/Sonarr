@@ -11,7 +11,7 @@ namespace NzbDrone.Common.Http
         private readonly string _uri;
         public string FullUri => _uri;
 
-        [GeneratedRegex(@"^(?:(?<scheme>[a-z]+):)?(?://(?<host>[-_A-Z0-9.]+|\[[[A-F0-9:]+\])(?::(?<port>[0-9]{1,5}))?)?(?<path>(?:(?:(?<=^)|/+)[^/?#\r\n]+)+/*|/+)?(?:\?(?<query>[^#\r\n]*))?(?:\#(?<fragment>.*))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+        [GeneratedRegex(@"^(?:(?<scheme>[a-z]+):)?(?://(?<host>[-_A-Z0-9.]+|\[[A-F0-9:.]+\])(?::(?<port>[0-9]{1,5}))?)?(?<path>(?:(?:(?<=^)|/+)[^/?#\r\n]+)+/*|/+)?(?:\?(?<query>[^#\r\n]*))?(?:\#(?<fragment>.*))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
         private static partial Regex UriRegex();
 
         public HttpUri(string uri)

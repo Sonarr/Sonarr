@@ -1,0 +1,15 @@
+.selectCell {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 30px;
+
+  label {
+    min-height: 0;
+  }
+}
+
+.input {
+  composes: input from 'Components/Form/CheckInput.module.css';
+
+  margin: 0;
+}

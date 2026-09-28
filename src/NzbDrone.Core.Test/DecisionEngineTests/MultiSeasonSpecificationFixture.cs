@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 ParsedEpisodeInfo = new ParsedEpisodeInfo
                 {
                     FullSeason = true,
-                    IsMultiSeason = true
+                    SeasonNumbers = new[] { 1, 2, 3, 4, 5 }
                 },
                 Episodes = Builder<Episode>.CreateListOfSize(3)
                                            .All()
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_if_is_not_a_multi_season_release()
         {
-            _remoteEpisode.ParsedEpisodeInfo.IsMultiSeason = false;
+            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = new[] { 1 };
             _remoteEpisode.Episodes.Last().AirDateUtc = DateTime.UtcNow.AddDays(+2);
             Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }

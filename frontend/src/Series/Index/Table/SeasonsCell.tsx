@@ -4,7 +4,7 @@ import Popover from 'Components/Tooltip/Popover';
 import SeasonDetails from 'Series/Index/Select/SeasonPass/SeasonDetails';
 import { Season } from 'Series/Series';
 import translate from 'Utilities/String/translate';
-import styles from './SeasonsCell.css';
+import styles from './SeasonsCell.module.css';
 
 interface SeriesStatusCellProps {
   className: string;

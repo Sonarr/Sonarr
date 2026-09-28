@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import moment from 'moment-timezone';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useIsDownloadingEpisodes } from 'Activity/Queue/Details/QueueDetailsProvider';
 import { useCalendarOptions } from 'Calendar/calendarOptionsStore';
@@ -10,12 +11,11 @@ import { icons, kinds } from 'Helpers/Props';
 import { useSingleSeries } from 'Series/useSeries';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import { CalendarItem } from 'typings/Calendar';
-import { convertToTimezone } from 'Utilities/Date/convertToTimezone';
 import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
 import CalendarEvent from './CalendarEvent';
-import styles from './CalendarEventGroup.css';
+import styles from './CalendarEventGroup.module.css';
 
 interface CalendarEventGroupProps {
   episodeIds: number[];
@@ -33,8 +33,7 @@ function CalendarEventGroup({
   const isDownloading = useIsDownloadingEpisodes(episodeIds);
   const series = useSingleSeries(seriesId)!;
 
-  const { timeFormat, enableColorImpairedMode, timeZone } =
-    useUiSettingsValues();
+  const { timeFormat } = useUiSettingsValues();
 
   const { showEpisodeInformation, showFinaleIcon, fullColorEvents } =
     useCalendarOptions();
@@ -44,11 +43,8 @@ function CalendarEventGroup({
   const firstEpisode = events[0];
   const lastEpisode = events[events.length - 1];
   const airDateUtc = firstEpisode.airDateUtc;
-  const startTime = convertToTimezone(airDateUtc, timeZone);
-  const endTime = convertToTimezone(lastEpisode.airDateUtc, timeZone).add(
-    series.runtime,
-    'minutes'
-  );
+  const startTime = moment(airDateUtc);
+  const endTime = moment(lastEpisode.airDateUtc).add(series.runtime, 'minutes');
   const seasonNumber = firstEpisode.seasonNumber;
 
   const { allDownloaded, anyGrabbed, anyMonitored, allAbsoluteEpisodeNumbers } =
@@ -132,7 +128,6 @@ function CalendarEventGroup({
       className={classNames(
         styles.eventGroup,
         styles[statusStyle],
-        enableColorImpairedMode && 'colorImpaired',
         fullColorEvents && 'fullColor'
       )}
     >
@@ -147,15 +142,16 @@ function CalendarEventGroup({
         >
           {isMissingAbsoluteNumber ? (
             <Icon
-              containerClassName={styles.statusIcon}
+              titleWrapperClassName={styles.statusIcon}
               name={icons.WARNING}
+              kind={kinds.WARNING}
               title={translate('EpisodeMissingAbsoluteNumber')}
             />
           ) : null}
 
           {anyDownloading ? (
             <Icon
-              containerClassName={styles.statusIcon}
+              titleWrapperClassName={styles.statusIcon}
               name={icons.DOWNLOADING}
               title={translate('AnEpisodeIsDownloading')}
             />
@@ -163,7 +159,7 @@ function CalendarEventGroup({
 
           {firstEpisode.episodeNumber === 1 && seasonNumber > 0 ? (
             <Icon
-              containerClassName={styles.statusIcon}
+              titleWrapperClassName={styles.statusIcon}
               name={icons.PREMIERE}
               kind={kinds.INFO}
               title={
@@ -176,7 +172,7 @@ function CalendarEventGroup({
 
           {showFinaleIcon && lastEpisode.finaleType ? (
             <Icon
-              containerClassName={styles.statusIcon}
+              titleWrapperClassName={styles.statusIcon}
               name={
                 lastEpisode.finaleType === 'series'
                   ? icons.FINALE_SERIES
@@ -195,10 +191,9 @@ function CalendarEventGroup({
 
       <div className={styles.airingInfo}>
         <div className={styles.airTime}>
-          {formatTime(airDateUtc, timeFormat, { timeZone })} -{' '}
+          {formatTime(airDateUtc, timeFormat)} -{' '}
           {formatTime(endTime.toISOString(), timeFormat, {
             includeMinuteZero: true,
-            timeZone,
           })}
         </div>
 

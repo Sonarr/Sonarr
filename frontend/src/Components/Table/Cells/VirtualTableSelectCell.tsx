@@ -2,10 +2,11 @@ import React, { useCallback } from 'react';
 import CheckInput from 'Components/Form/CheckInput';
 import { CheckInputChanged } from 'typings/inputs';
 import { SelectStateInputProps } from 'typings/props';
+import translate from 'Utilities/String/translate';
 import VirtualTableRowCell, {
   VirtualTableRowCellProps,
 } from './VirtualTableRowCell';
-import styles from './VirtualTableSelectCell.css';
+import styles from './VirtualTableSelectCell.module.css';
 
 interface VirtualTableSelectCellProps<T extends number | string = number>
   extends VirtualTableRowCellProps {
@@ -36,6 +37,7 @@ function VirtualTableSelectCell<T extends number | string = number>({
       <CheckInput
         className={inputClassName}
         name={id.toString()}
+        ariaLabel={translate('SelectRow')}
         value={isSelected}
         isDisabled={isDisabled}
         onChange={handleChange}

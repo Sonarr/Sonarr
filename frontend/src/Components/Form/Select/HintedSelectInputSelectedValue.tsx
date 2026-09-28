@@ -3,7 +3,7 @@ import Label from 'Components/Label';
 import ArrayElement from 'typings/Helpers/ArrayElement';
 import { EnhancedSelectInputValue } from './EnhancedSelectInput';
 import EnhancedSelectInputSelectedValue from './EnhancedSelectInputSelectedValue';
-import styles from './HintedSelectInputSelectedValue.css';
+import styles from './HintedSelectInputSelectedValue.module.css';
 
 interface HintedSelectInputSelectedValueProps<T, V> {
   selectedValue: V;
@@ -40,7 +40,11 @@ function HintedSelectInputSelectedValue<
           ? selectedValue.map((key) => {
               const v = valuesMap.get(key);
 
-              return <Label key={key}>{v ? v : key}</Label>;
+              return (
+                <Label key={key} dot={false}>
+                  {v ? v : key}
+                </Label>
+              );
             })
           : valuesMap.get(selectedValue as ArrayElement<V>)}
       </div>

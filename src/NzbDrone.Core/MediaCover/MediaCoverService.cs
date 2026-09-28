@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -17,7 +18,7 @@ namespace NzbDrone.Core.MediaCover
 {
     public interface IMapCoversToLocal
     {
-        void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers);
+        void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers, DateTime? added = null);
         string GetCoverPath(int seriesId, MediaCoverTypes coverType, int? height = null);
     }
 
@@ -35,11 +36,14 @@ namespace NzbDrone.Core.MediaCover
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
+        private readonly ICached<bool> _coverExistsCache;
         private readonly string _coverRootFolder;
 
         // ImageSharp is slow on ARM (no hardware acceleration on mono yet)
         // So limit the number of concurrent resizing tasks
-        private static SemaphoreSlim _semaphore = new SemaphoreSlim((int)Math.Ceiling(Environment.ProcessorCount / 2.0));
+        private static readonly SemaphoreSlim Semaphore = new((int)Math.Ceiling(Environment.ProcessorCount / 2.0));
+
+        private static readonly TimeSpan CoverExistsCheckWindow = TimeSpan.FromDays(1);
 
         public MediaCoverService(IMediaCoverProxy mediaCoverProxy,
                                  IImageResizer resizer,
@@ -49,6 +53,7 @@ namespace NzbDrone.Core.MediaCover
                                  ICoverExistsSpecification coverExistsSpecification,
                                  IConfigFileProvider configFileProvider,
                                  IEventAggregator eventAggregator,
+                                 ICacheManager cacheManager,
                                  Logger logger)
         {
             _mediaCoverProxy = mediaCoverProxy;
@@ -60,17 +65,18 @@ namespace NzbDrone.Core.MediaCover
             _eventAggregator = eventAggregator;
             _logger = logger;
 
+            _coverExistsCache = cacheManager.GetCache<bool>(GetType(), "coverExists");
             _coverRootFolder = appFolderInfo.GetMediaCoverPath();
         }
 
         public string GetCoverPath(int seriesId, MediaCoverTypes coverType, int? height = null)
         {
-            var heightSuffix = height.HasValue ? "-" + height.ToString() : "";
+            var heightSuffix = height.HasValue ? $"-{height}" : "";
 
-            return Path.Combine(GetSeriesCoverPath(seriesId), coverType.ToString().ToLower() + heightSuffix + GetExtension(coverType));
+            return Path.Combine(GetSeriesCoverPath(seriesId), coverType.ToString().ToLowerInvariant() + heightSuffix + GetExtension(coverType));
         }
 
-        public void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers)
+        public void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers, DateTime? added = null)
         {
             if (seriesId == 0)
             {
@@ -89,16 +95,38 @@ namespace NzbDrone.Core.MediaCover
                         continue;
                     }
 
-                    var filePath = GetCoverPath(seriesId, mediaCover.CoverType);
+                    mediaCover.Url = _configFileProvider.UrlBase + @"/MediaCover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLowerInvariant() + GetExtension(mediaCover.CoverType);
 
-                    mediaCover.Url = _configFileProvider.UrlBase + @"/MediaCover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + GetExtension(mediaCover.CoverType);
-
-                    if (_diskProvider.FileExists(filePath))
+                    if (mediaCover.RemoteUrl.IsNotNullOrWhiteSpace() && CoverExists(seriesId, mediaCover.CoverType, added))
                     {
-                        var lastWrite = _diskProvider.FileGetLastWrite(filePath);
-                        mediaCover.Url += "?lastWrite=" + lastWrite.Ticks;
+                        mediaCover.Url += "?h=" + mediaCover.RemoteUrl.SHA256Hash()[..20];
                     }
                 }
+            }
+        }
+
+        private bool CoverExists(int seriesId, MediaCoverTypes coverType, DateTime? added)
+        {
+            if (!IsRecentlyAdded(added))
+            {
+                return true;
+            }
+
+            var filePath = GetCoverPath(seriesId, coverType);
+
+            return _coverExistsCache.Get(filePath, () => _diskProvider.FileExists(filePath));
+        }
+
+        private static bool IsRecentlyAdded(DateTime? added)
+        {
+            return added > DateTime.UtcNow - CoverExistsCheckWindow;
+        }
+
+        private void RemoveCoverExistsCache(Series series)
+        {
+            foreach (var cover in series.Images)
+            {
+                _coverExistsCache.Remove(GetCoverPath(series.Id, cover.CoverType));
             }
         }
 
@@ -131,6 +159,11 @@ namespace NzbDrone.Core.MediaCover
                         DownloadCover(series, cover);
                         updated = true;
                     }
+
+                    if (IsRecentlyAdded(series.Added))
+                    {
+                        _coverExistsCache.Set(fileName, true);
+                    }
                 }
                 catch (HttpException e)
                 {
@@ -150,7 +183,7 @@ namespace NzbDrone.Core.MediaCover
 
             try
             {
-                _semaphore.Wait();
+                Semaphore.Wait();
 
                 foreach (var tuple in toResize)
                 {
@@ -159,7 +192,7 @@ namespace NzbDrone.Core.MediaCover
             }
             finally
             {
-                _semaphore.Release();
+                Semaphore.Release();
             }
 
             return updated;
@@ -218,16 +251,13 @@ namespace NzbDrone.Core.MediaCover
             }
         }
 
-        private string GetExtension(MediaCoverTypes coverType)
+        private static string GetExtension(MediaCoverTypes coverType)
         {
-            switch (coverType)
+            return coverType switch
             {
-                default:
-                    return ".jpg";
-
-                case MediaCoverTypes.Clearlogo:
-                    return ".png";
-            }
+                MediaCoverTypes.Clearlogo => ".png",
+                _ => ".jpg"
+            };
         }
 
         public void HandleAsync(SeriesUpdatedEvent message)
@@ -241,6 +271,8 @@ namespace NzbDrone.Core.MediaCover
         {
             foreach (var series in message.Series)
             {
+                RemoveCoverExistsCache(series);
+
                 var path = GetSeriesCoverPath(series.Id);
                 if (_diskProvider.FolderExists(path))
                 {

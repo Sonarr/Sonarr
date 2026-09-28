@@ -7,8 +7,9 @@ import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import KeyboardShortcutsModal from './KeyboardShortcutsModal';
 import PageHeaderActionsMenu from './PageHeaderActionsMenu';
+import PageHeaderToolsMenu from './PageHeaderToolsMenu';
 import SeriesSearchInput from './SeriesSearchInput';
-import styles from './PageHeader.css';
+import styles from './PageHeader.module.css';
 
 function PageHeader() {
   const [isKeyboardShortcutsModalOpen, setIsKeyboardShortcutsModalOpen] =
@@ -42,12 +43,13 @@ function PageHeader() {
   return (
     <div className={styles.header}>
       <div className={styles.logoContainer}>
-        <Link className={styles.logoLink} to="/">
+        <Link className={styles.logoLink} to="/" aria-label={translate('Home')}>
           <img
             className={styles.logo}
             src={`${window.Sonarr.urlBase}/Content/Images/logo.svg`}
-            alt="Sonarr Logo"
+            alt=""
           />
+          <span className={styles.brandName}>Sonarr</span>
         </Link>
       </div>
 
@@ -65,12 +67,15 @@ function PageHeader() {
       <div className={styles.right}>
         <IconButton
           className={styles.donate}
+          iconClassName={styles.donateIcon}
           name={icons.HEART}
           aria-label={translate('Donate')}
           to="https://sonarr.tv/donate.html"
           size={14}
           title={translate('Donate')}
         />
+
+        <PageHeaderToolsMenu />
 
         <PageHeaderActionsMenu
           onKeyboardShortcutsPress={handleOpenKeyboardShortcutsModal}

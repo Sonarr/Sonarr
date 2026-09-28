@@ -1,0 +1,62 @@
+.row {
+  display: grid;
+  align-items: start;
+  padding: 16px 0;
+  column-gap: 32px;
+}
+
+.row + .row {
+  border-top: 1px solid var(--borderColor);
+}
+
+.row:first-child {
+  padding-top: 0;
+}
+
+.row:last-child {
+  padding-bottom: 0;
+}
+
+.right {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: min-content min-content 1fr;
+}
+
+.right > :last-child {
+  grid-column: 2;
+  grid-row: 1 / -1;
+
+  align-self: start;
+  min-width: 0;
+}
+
+/* Stacked: single column, input flows below the text stack. */
+.stacked {
+  grid-template-columns: 1fr;
+}
+
+/* Sizes — no per-size variation currently, declared for type compatibility. */
+.extraSmall,
+.small,
+.medium,
+.large {
+  /* empty */
+}
+
+@media only screen and (max-width: 992px) {
+  .right {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    row-gap: 8px;
+  }
+
+  .right > :last-child {
+    grid-column: 1;
+    grid-row: auto;
+    order: 1;
+  }
+
+  .right > :not(:first-child):not(:last-child) {
+    order: 2;
+  }
+}

@@ -1,0 +1,18 @@
+.contentFooter {
+  display: flex;
+  flex: 0 0 auto;
+  padding: 20px;
+  background-color: var(--pageFooterBackground);
+}
+
+@media (--breakpointSmall) {
+  .contentFooter {
+    display: block;
+  }
+}
+
+@media (--breakpointExtraLarge) {
+  .contentFooter {
+    flex-wrap: wrap;
+  }
+}

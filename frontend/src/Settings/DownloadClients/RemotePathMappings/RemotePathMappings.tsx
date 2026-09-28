@@ -1,8 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
-import Icon from 'Components/Icon';
-import Link from 'Components/Link/Link';
+import IconButton from 'Components/Link/IconButton';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { icons, kinds } from 'Helpers/Props';
@@ -10,7 +9,7 @@ import translate from 'Utilities/String/translate';
 import EditRemotePathMappingModal from './EditRemotePathMappingModal';
 import RemotePathMapping from './RemotePathMapping';
 import { useRemotePathMappings } from './useRemotePathMappings';
-import styles from './RemotePathMappings.css';
+import styles from './RemotePathMappings.module.css';
 
 function RemotePathMappings() {
   const { isFetching, isFetched, error, data } = useRemotePathMappings();
@@ -27,7 +26,10 @@ function RemotePathMappings() {
   }, []);
 
   return (
-    <FieldSet legend={translate('RemotePathMappings')}>
+    <FieldSet
+      legend={translate('RemotePathMappings')}
+      caption={translate('RemotePathMappingsCaption')}
+    >
       <PageSectionContent
         errorMessage={translate('RemotePathMappingsLoadError')}
         error={error}
@@ -56,12 +58,13 @@ function RemotePathMappings() {
         </div>
 
         <div className={styles.addRemotePathMapping}>
-          <Link
+          <IconButton
             className={styles.addButton}
+            name={icons.ADD}
+            aria-label={translate('AddRemotePathMapping')}
+            title={translate('AddRemotePathMapping')}
             onPress={handleAddRemotePathMappingPress}
-          >
-            <Icon name={icons.ADD} />
-          </Link>
+          />
         </div>
 
         <EditRemotePathMappingModal

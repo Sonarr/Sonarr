@@ -1,0 +1,35 @@
+.alert {
+  display: block;
+  padding: 14px 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  letter-spacing: -0.005em;
+  font-weight: 450;
+  font-size: 13px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.55;
+}
+
+.danger {
+  border-color: var(--alertDangerBorderColor);
+  background-color: var(--alertDangerBackgroundColor);
+  color: var(--alertDangerColor);
+}
+
+.info {
+  border-color: var(--alertInfoBorderColor);
+  background-color: var(--alertInfoBackgroundColor);
+  color: var(--alertInfoColor);
+}
+
+.success {
+  border-color: var(--alertSuccessBorderColor);
+  background-color: var(--alertSuccessBackgroundColor);
+  color: var(--alertSuccessColor);
+}
+
+.warning {
+  border-color: var(--alertWarningBorderColor);
+  background-color: var(--alertWarningBackgroundColor);
+  color: var(--alertWarningColor);
+}

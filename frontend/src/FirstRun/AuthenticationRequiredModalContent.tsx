@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect } from 'react';
 import Alert from 'Components/Alert';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
-import SpinnerButton from 'Components/Link/SpinnerButton';
+import FormRow from 'Components/Form/FormRow';
+import Link from 'Components/Link/Link';
+import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -11,6 +13,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { inputTypes, kinds } from 'Helpers/Props';
+import AuthenticationMethodSettings from 'Settings/General/AuthenticationMethodSettings';
 import {
   authenticationMethodOptions,
   authenticationRequiredOptions,
@@ -19,7 +22,6 @@ import { useManageGeneralSettings } from 'Settings/General/useGeneralSettings';
 import useSystemStatus from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import styles from './AuthenticationRequiredModalContent.css';
 
 function onModalClose() {
   // No-op
@@ -28,8 +30,15 @@ function onModalClose() {
 export default function AuthenticationRequiredModalContent() {
   const { refetch: refetchStatus } = useSystemStatus();
 
-  const { settings, isFetched, error, isSaving, saveSettings, updateSetting } =
-    useManageGeneralSettings();
+  const {
+    settings,
+    isFetched,
+    error,
+    isSaving,
+    saveError,
+    saveSettings,
+    updateSetting,
+  } = useManageGeneralSettings();
 
   const {
     authenticationMethod,
@@ -37,6 +46,12 @@ export default function AuthenticationRequiredModalContent() {
     username,
     password,
     passwordConfirmation,
+    allowedHosts,
+    oidcAuthority,
+    oidcClientId,
+    oidcClientSecret,
+    oidcUserIdentifier,
+    oidcScopes,
   } = settings;
 
   const wasSaving = usePrevious(isSaving);
@@ -53,12 +68,12 @@ export default function AuthenticationRequiredModalContent() {
     authenticationMethod && authenticationMethod.value !== 'none';
 
   useEffect(() => {
-    if (isSaving || !wasSaving) {
+    if (isSaving || !wasSaving || saveError) {
       return;
     }
 
     refetchStatus();
-  }, [isSaving, wasSaving, refetchStatus]);
+  }, [isSaving, wasSaving, saveError, refetchStatus]);
 
   const onPress = useCallback(() => {
     saveSettings();
@@ -67,110 +82,98 @@ export default function AuthenticationRequiredModalContent() {
   return (
     <ModalContent showCloseButton={false} onModalClose={onModalClose}>
       <ModalHeader>{translate('AuthenticationRequired')}</ModalHeader>
-
       <ModalBody>
-        <Alert className={styles.authRequiredAlert} kind={kinds.WARNING}>
-          {translate('AuthenticationRequiredWarning')}
+        <Alert kind={kinds.WARNING}>
+          {translate('AuthenticationRequiredWarning')}{' '}
+          <Link to="https://wiki.servarr.com/sonarr/faq#forced-authentication">
+            {translate('MoreInfo')}
+          </Link>
         </Alert>
 
         {isFetched && !error ? (
           <div>
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('AuthenticationMethod')}</FormLabel>
-
-              <FormInputGroup
-                type={inputTypes.SELECT}
-                name="authenticationMethod"
-                values={authenticationMethodOptions}
-                helpText={translate('AuthenticationMethodHelpText')}
-                helpTextWarning={
+              <FormInputHelpText
+                text={translate('AuthenticationMethodHelpText')}
+              />
+              <FormInputHelpText
+                text={
                   authenticationMethod.value === 'none'
                     ? translate('AuthenticationMethodHelpTextWarning')
                     : undefined
                 }
-                helpLink="https://wiki.servarr.com/sonarr/faq#forced-authentication"
+                isWarning={true}
+              />
+              <FormInput
+                type={inputTypes.SELECT}
+                name="authenticationMethod"
+                values={authenticationMethodOptions}
                 onChange={onInputChange}
                 {...authenticationMethod}
               />
-            </FormGroup>
+            </FormRow>
 
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('AuthenticationRequired')}</FormLabel>
-
-              <FormInputGroup
+              <FormInputHelpText
+                text={translate('AuthenticationRequiredHelpText')}
+              />
+              <FormInput
                 type={inputTypes.SELECT}
                 name="authenticationRequired"
                 values={authenticationRequiredOptions}
-                helpText={translate('AuthenticationRequiredHelpText')}
                 onChange={onInputChange}
                 {...authenticationRequired}
               />
-            </FormGroup>
+            </FormRow>
 
-            <FormGroup>
-              <FormLabel>{translate('Username')}</FormLabel>
+            <AuthenticationMethodSettings
+              authenticationMethod={authenticationMethod}
+              username={username}
+              password={password}
+              passwordConfirmation={passwordConfirmation}
+              oidcAuthority={oidcAuthority}
+              oidcClientId={oidcClientId}
+              oidcClientSecret={oidcClientSecret}
+              oidcUserIdentifier={oidcUserIdentifier}
+              oidcScopes={oidcScopes}
+              showValidationWarnings={true}
+              onInputChange={onInputChange}
+            />
 
-              <FormInputGroup
+            <FormRow>
+              <FormLabel>{translate('AllowedHosts')}</FormLabel>
+              <FormInputHelpText
+                text={translate('AllowedHostsHelpText')}
+                link="https://wiki.servarr.com/sonarr/settings#host"
+              />
+              <FormInputHelpText
+                text={translate('RestartRequiredHelpTextWarning')}
+                isWarning={true}
+              />
+              <FormInput
                 type={inputTypes.TEXT}
-                name="username"
-                helpTextWarning={
-                  username?.value
-                    ? undefined
-                    : translate('AuthenticationRequiredUsernameHelpTextWarning')
-                }
+                name="allowedHosts"
                 onChange={onInputChange}
-                {...username}
+                {...allowedHosts}
               />
-            </FormGroup>
-
-            <FormGroup>
-              <FormLabel>{translate('Password')}</FormLabel>
-
-              <FormInputGroup
-                type={inputTypes.PASSWORD}
-                name="password"
-                helpTextWarning={
-                  password?.value
-                    ? undefined
-                    : translate('AuthenticationRequiredPasswordHelpTextWarning')
-                }
-                onChange={onInputChange}
-                {...password}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <FormLabel>{translate('PasswordConfirmation')}</FormLabel>
-
-              <FormInputGroup
-                type={inputTypes.PASSWORD}
-                name="passwordConfirmation"
-                helpTextWarning={
-                  passwordConfirmation?.value
-                    ? undefined
-                    : translate(
-                        'AuthenticationRequiredPasswordConfirmationHelpTextWarning'
-                      )
-                }
-                onChange={onInputChange}
-                {...passwordConfirmation}
-              />
-            </FormGroup>
+            </FormRow>
           </div>
         ) : null}
 
         {!isFetched && !error ? <LoadingIndicator /> : null}
       </ModalBody>
-
       <ModalFooter>
-        <SpinnerButton
+        <SpinnerErrorButton
           kind={kinds.PRIMARY}
           isSpinning={isSaving}
           isDisabled={!authenticationEnabled}
+          error={saveError}
           onPress={onPress}
         >
           {translate('Save')}
-        </SpinnerButton>
+        </SpinnerErrorButton>
       </ModalFooter>
     </ModalContent>
   );

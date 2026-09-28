@@ -37,6 +37,12 @@ namespace Sonarr.Api.V3.Parse
 
             var parsedEpisodeInfo = path.IsNotNullOrWhiteSpace() ? Parser.ParsePath(path) : Parser.ParseTitle(title);
 
+            // Try to parse a season title if previous parsing failed and we're not dealing with a path.
+            if (parsedEpisodeInfo == null && path.IsNullOrWhiteSpace())
+            {
+                parsedEpisodeInfo = Parser.ParseSeasonTitle(title);
+            }
+
             if (parsedEpisodeInfo == null)
             {
                 return new ParseResource
@@ -57,7 +63,7 @@ namespace Sonarr.Api.V3.Parse
                 return new ParseResource
                 {
                     Title = title,
-                    ParsedEpisodeInfo = remoteEpisode.ParsedEpisodeInfo,
+                    ParsedEpisodeInfo = remoteEpisode.ParsedEpisodeInfo.ToResource(),
                     Series = remoteEpisode.Series.ToResource(),
                     Episodes = remoteEpisode.Episodes.ToResource(),
                     Languages = remoteEpisode.Languages,
@@ -70,7 +76,7 @@ namespace Sonarr.Api.V3.Parse
                 return new ParseResource
                 {
                     Title = title,
-                    ParsedEpisodeInfo = parsedEpisodeInfo
+                    ParsedEpisodeInfo = parsedEpisodeInfo.ToResource()
                 };
             }
         }

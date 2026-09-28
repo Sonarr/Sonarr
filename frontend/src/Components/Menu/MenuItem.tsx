@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import Link, { LinkProps } from 'Components/Link/Link';
-import styles from './MenuItem.css';
+import styles from './MenuItem.module.css';
 
 export interface MenuItemProps extends LinkProps {
   className?: string;

@@ -1,8 +1,9 @@
 import { createOptionsStore } from 'Helpers/Hooks/useOptionsStore';
 import { SortDirection } from 'Helpers/Props/sortDirections';
+import { DownloadClientModel } from 'Settings/DownloadClients/DownloadClients/useDownloadClients';
 
 export interface ManageDownloadClientsOptions {
-  sortKey: string;
+  sortKey: keyof DownloadClientModel;
   sortDirection: SortDirection;
 }
 

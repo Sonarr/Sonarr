@@ -14,7 +14,7 @@ import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import Language from 'Language/Language';
 import { useFilteredLanguages } from 'Language/useLanguages';
 import translate from 'Utilities/String/translate';
-import styles from './SelectLanguageModalContent.css';
+import styles from './SelectLanguageModalContent.module.css';
 
 interface SelectLanguageModalContentProps {
   languageIds: number[];

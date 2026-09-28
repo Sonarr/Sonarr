@@ -52,6 +52,7 @@ public abstract class LogFileControllerBase : Controller
 
     [HttpGet(@"{filename:regex([[-.a-zA-Z0-9]]+?\.txt)}")]
     [Produces("text/plain")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     public Results<PhysicalFileHttpResult, NotFound> GetLogFileResponse(string filename)
     {
         LogManager.Flush();

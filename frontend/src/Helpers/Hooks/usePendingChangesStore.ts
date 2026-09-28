@@ -36,21 +36,6 @@ export const usePendingChangesStore = <T extends object>(
     [store]
   );
 
-  const unsetPendingChange = useCallback(
-    <K extends keyof T>(key: K) => {
-      store.setState((state) => {
-        const newPendingChanges = { ...state.pendingChanges };
-        delete newPendingChanges[key];
-
-        return {
-          ...state,
-          pendingChanges: newPendingChanges,
-        };
-      });
-    },
-    [store]
-  );
-
   const clearPendingChanges = useCallback(() => {
     store.setState((state) => ({
       ...state,
@@ -73,7 +58,6 @@ export const usePendingChangesStore = <T extends object>(
     store,
     pendingChanges,
     setPendingChange,
-    unsetPendingChange,
     clearPendingChanges,
     hasPendingChanges,
   };

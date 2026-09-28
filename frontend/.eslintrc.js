@@ -35,9 +35,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 6,
     sourceType: 'module',
-    babelOptions: {
-      configFile: `${frontendFolder}/babel.config.js`
-    },
+    requireConfigFile: false,
     ecmaFeatures: {
       modules: true,
       impliedStrict: true

@@ -17,7 +17,7 @@ export interface ParsedEpisodeInfo {
   seriesTitle: string;
   seriesTitleInfo: SeriesTitleInfo;
   quality: QualityModel;
-  seasonNumber: number;
+  seasonNumber: number | null;
   episodeNumbers: number[];
   absoluteEpisodeNumbers: number[];
   specialAbsoluteEpisodeNumbers: number[];

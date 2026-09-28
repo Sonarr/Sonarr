@@ -45,7 +45,9 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 throw new FileNotFoundException("Media file does not exist: " + filename);
             }
 
-            if (MediaFileExtensions.DiskExtensions.Contains(Path.GetExtension(filename)))
+            if (MediaFileExtensions.DiskExtensions
+                .Concat(MediaFileExtensions.StreamingExtensions)
+                .Contains(Path.GetExtension(filename)))
             {
                 return null;
             }
@@ -103,6 +105,10 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                         {
                             model.Title = audioTitle.Trim();
                         }
+                        else if ((stream.Tags?.TryGetValue("name", out var audioName) ?? false) && audioName.IsNotNullOrWhiteSpace())
+                        {
+                            model.Title = audioName.Trim();
+                        }
 
                         return  model;
                     })
@@ -122,6 +128,10 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                         if ((stream.Tags?.TryGetValue("title", out var subtitleTitle) ?? false) && subtitleTitle.IsNotNullOrWhiteSpace())
                         {
                             model.Title = subtitleTitle.Trim();
+                        }
+                        else if ((stream.Tags?.TryGetValue("name", out var subtitleName) ?? false) && subtitleName.IsNotNullOrWhiteSpace())
+                        {
+                            model.Title = subtitleName.Trim();
                         }
 
                         if (stream.Disposition?.TryGetValue("forced", out var forcedSubtitle) ?? false)

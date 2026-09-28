@@ -1,7 +1,7 @@
 import React from 'react';
 import PageContent from 'Components/Page/PageContent';
 import translate from 'Utilities/String/translate';
-import styles from './NotFound.css';
+import styles from './NotFound.module.css';
 
 interface NotFoundProps {
   message?: string;
@@ -11,7 +11,7 @@ function NotFound(props: NotFoundProps) {
   const { message = translate('DefaultNotFoundMessage') } = props;
 
   return (
-    <PageContent title="MIA">
+    <PageContent title={translate('PageNotFound')}>
       <div className={styles.container}>
         <div className={styles.message}>{message}</div>
 

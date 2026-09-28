@@ -1,5 +1,5 @@
 {
-    "About": "約",
+    "About": "このソフトウェアについて",
     "Activity": "アクティビティ",
     "Add": "追加",
     "AddANewPath": "新しいパスを追加",
@@ -9,5 +9,7 @@
     "AddCustomFormat": "カスタムフォーマットを追加",
     "AddCustomFormatError": "カスタムフォーマットを追加できません。もう一度試してください。",
     "AddIndexer": "インデクサーを追加",
-    "DeleteAutoTagHelpText": "オートタグ'{name}'を削除してもよろしいですか？"
+    "DeleteAutoTagHelpText": "オートタグ'{name}'を削除してもよろしいですか？",
+    "UseSsl": "SSLを使用する",
+    "Yesterday": "昨日"
 }

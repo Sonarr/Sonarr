@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { Children, useCallback } from 'react';
 import Icon, { IconName } from 'Components/Icon';
 import Link from 'Components/Link/Link';
-import styles from './PageSidebarItem.css';
+import styles from './PageSidebarItem.module.css';
 
 export interface PageSidebarItemProps {
   iconName?: IconName;
@@ -36,9 +36,7 @@ function PageSidebarItem({
   }, [isChildItem, isParentItem, onPress]);
 
   return (
-    <div
-      className={classNames(styles.item, isActiveParent && styles.isActiveItem)}
-    >
+    <div className={styles.item}>
       <Link
         className={classNames(
           isChildItem ? styles.childLink : styles.link,

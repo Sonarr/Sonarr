@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_prefer_file()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC) [ABCDEFGH]");
+            var fileEpisodeInfo = Parser.Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC) [ABCDEF01]");
             var folderEpisodeInfo = Parser.Parser.ParseTitle("[DHD] Series Title! - 08 [12345678]");
             var downloadClientEpisodeInfo = Parser.Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC) [ABCD1234]");
             var localEpisode = new LocalEpisode
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
             Subject.Aggregate(localEpisode, null);
 
-            localEpisode.ReleaseHash.Should().Be("ABCDEFGH");
+            localEpisode.ReleaseHash.Should().Be("ABCDEF01");
         }
 
         [Test]

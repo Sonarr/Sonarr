@@ -1,6 +1,6 @@
 import React, { createContext, PropsWithChildren, useMemo } from 'react';
 import { ValidationError, ValidationWarning } from 'typings/pending';
-import { ValidationMessage } from './FormInputGroup';
+import type { ValidationMessage } from './FormInputGroup';
 
 interface FormInputGroupProviderProps extends PropsWithChildren {
   setClientErrors: (errors: (ValidationMessage | ValidationError)[]) => void;

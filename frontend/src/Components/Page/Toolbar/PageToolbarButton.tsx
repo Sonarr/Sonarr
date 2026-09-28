@@ -3,7 +3,7 @@ import React from 'react';
 import Icon, { IconName } from 'Components/Icon';
 import Link, { LinkProps } from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
-import styles from './PageToolbarButton.css';
+import styles from './PageToolbarButton.module.css';
 
 export interface PageToolbarButtonProps extends LinkProps {
   label: string;
@@ -11,8 +11,6 @@ export interface PageToolbarButtonProps extends LinkProps {
   spinningName?: IconName;
   isSpinning?: boolean;
   isDisabled?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  overflowComponent?: React.ComponentType<any>;
 }
 
 function PageToolbarButton({
@@ -21,7 +19,6 @@ function PageToolbarButton({
   spinningName = icons.SPINNER,
   isDisabled = false,
   isSpinning = false,
-  overflowComponent,
   ...otherProps
 }: PageToolbarButtonProps) {
   return (
@@ -37,12 +34,10 @@ function PageToolbarButton({
       <Icon
         name={isSpinning ? spinningName || iconName : iconName}
         isSpinning={isSpinning}
-        size={21}
+        size={16}
       />
 
-      <div className={styles.labelContainer}>
-        <div className={styles.label}>{label}</div>
-      </div>
+      <span className={styles.label}>{label}</span>
     </Link>
   );
 }

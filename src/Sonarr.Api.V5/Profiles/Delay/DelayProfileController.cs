@@ -79,7 +79,7 @@ public class DelayProfileController : RestController<DelayProfileResource>
         return TypedResults.Ok(_delayProfileService.All().ToResource());
     }
 
-    [HttpPut("reorder/{id}")]
+    [HttpPut("reorder/{id:int}")]
     [Produces("application/json")]
     public Ok<List<DelayProfileResource>> Reorder([FromRoute] int id, [FromQuery] int? after)
     {

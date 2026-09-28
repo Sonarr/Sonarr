@@ -2,7 +2,7 @@ import React, { SyntheticEvent } from 'react';
 import { IconName } from 'Components/Icon';
 import MenuItem from 'Components/Menu/MenuItem';
 import SpinnerIcon from 'Components/SpinnerIcon';
-import styles from './PageToolbarOverflowMenuItem.css';
+import styles from './PageToolbarOverflowMenuItem.module.css';
 
 interface PageToolbarOverflowMenuItemProps {
   iconName: IconName;

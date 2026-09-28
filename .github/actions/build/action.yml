@@ -20,8 +20,16 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Cache nuget packages
+      uses: actions/cache@v6
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/Directory.*.props') }}
+        restore-keys:
+          ${{ runner.os }}-nuget-
+
     - name: Setup .NET
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
 
     - name: Setup NuGet registry source
       shell: bash
@@ -38,10 +46,6 @@ runs:
         echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
         echo "SONARR_VERSION=${{ inputs.version }}" >> "$GITHUB_ENV"
         echo "BRANCH=${{ inputs.branch }}" >> "$GITHUB_ENV"
-
-        if [ "$RUNNER_OS" == "Windows" ]; then
-          echo "NUGET_PACKAGES=D:\nuget\packages" >> "$GITHUB_ENV"
-        fi
 
     - name: Enable Extra Platforms In SDK
       if: ${{ inputs.runtime == 'freebsd-x64' }}
@@ -122,8 +126,8 @@ runs:
 
             echo "Adding Sonarr.Mono to UpdatePackage"
             cp $folder/Sonarr.Mono.* $folder/Sonarr.Update
-            cp $folder/Mono.Posix.NETStandard.* $folder/Sonarr.Update
-            cp $folder/libMonoPosixHelper.* $folder/Sonarr.Update
+            cp $folder/Openur.Mono.Unix.* $folder/Sonarr.Update
+            cp $folder/libMono.Unix.* $folder/Sonarr.Update
             ;;
           win)
             folder=_artifacts/$runtime/$framework/Sonarr
@@ -138,8 +142,8 @@ runs:
 
             echo "Removing Sonarr.Mono"
             rm -f $folder/Sonarr.Mono.*
-            rm -f $folder/Mono.Posix.NETStandard.*
-            rm -f $folder/libMonoPosixHelper.*
+            rm -f $folder/Openur.Mono.Unix.*
+            rm -f $folder/libMono.Unix.*
 
             echo "Adding Sonarr.Windows to UpdatePackage"
             cp $folder/Sonarr.Windows.* $folder/Sonarr.Update
@@ -164,8 +168,8 @@ runs:
 
             echo "Adding Sonarr.Mono to UpdatePackage"
             cp $folder/Sonarr.Mono.* $folder/Sonarr.Update
-            cp $folder/Mono.Posix.NETStandard.* $folder/Sonarr.Update
-            cp $folder/libMonoPosixHelper.* $folder/Sonarr.Update
+            cp $folder/Openur.Mono.Unix.* $folder/Sonarr.Update
+            cp $folder/libMono.Unix.* $folder/Sonarr.Update
             ;;
         esac
 

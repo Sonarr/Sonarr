@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Chrome, Opera, and Firefox OS -->
+    <meta
+      name="theme-color"
+      content="#e8ebf1"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#1b1f26"
+      media="(prefers-color-scheme: dark)"
+    />
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#1b1f26" />
+    <!-- Android/Apple Phone -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="format-detection" content="telephone=no" />
+
+    <meta name="description" content="Sonarr" />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/Content/Images/Icons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/Content/Images/Icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/Content/Images/Icons/favicon-16x16.png"
+    />
+    <link
+      rel="manifest"
+      href="/Content/manifest.json"
+      crossorigin="use-credentials"
+    />
+    <link
+      rel="mask-icon"
+      href="/Content/Images/Icons/safari-pinned-tab.svg"
+      color="#00ccff"
+    />
+    <link
+      rel="shortcut icon"
+      type="image/ico"
+      href="/favicon.ico"
+      data-no-hash
+    />
+    <meta name="msapplication-config" content="/Content/browserconfig.xml" />
+
+    <link rel="stylesheet" type="text/css" href="/Content/theme.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/Fonts/fonts.css" />
+
+    <title>Signed Out - Sonarr</title>
+
+    <script type="text/javascript">
+      var theme = '_THEME_';
+      var defaultDark = window.matchMedia(
+        '(prefers-color-scheme: dark)'
+      ).matches;
+
+      document.documentElement.dataset.theme =
+        theme === 'dark' || (theme === 'auto' && defaultDark) ? 'dark' : 'light';
+    </script>
+
+    <style>
+      html {
+        background-color: var(--paper);
+      }
+
+      body {
+        background-color: var(--paper);
+        color: var(--textColor);
+        font-family: 'Inter', ui-sans-serif, system-ui, 'Helvetica Neue',
+          'Helvetica', 'Arial', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .center {
+        display: flex;
+        justify-content: center;
+      }
+
+      .content {
+        flex: 0 0 325px;
+      }
+
+      .logo {
+        width: 40px;
+        height: 40px;
+      }
+
+      .panel {
+        margin-top: 50px;
+        border: 1px solid var(--hairline);
+        border-radius: 12px;
+        background-color: var(--paperCard);
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: center;
+        padding: 24px 24px 0;
+      }
+
+      .panel-body {
+        padding: 20px 24px 24px;
+        text-align: center;
+      }
+
+      .signed-out {
+        padding: 10px 0 16px;
+        color: var(--inkMuted);
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 600;
+        font-size: 11px;
+      }
+
+      .description {
+        color: var(--inkSoft);
+        text-align: left;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .button {
+        display: block;
+        overflow: hidden;
+        margin-top: 20px;
+        padding: 11px 20px;
+        width: 100%;
+        border: 1px solid var(--primaryBorderColor);
+        border-radius: 8px;
+        background-color: var(--primaryBackgroundColor);
+        color: var(--primaryButtonColor);
+        vertical-align: middle;
+        text-align: center;
+        text-decoration: none;
+        white-space: nowrap;
+        font-weight: 500;
+        font-size: 14px;
+        font-family: inherit;
+        line-height: 1.2;
+        cursor: pointer;
+      }
+
+      .button:hover {
+        border-color: var(--primaryHoverBorderColor);
+        background-color: var(--primaryHoverBackgroundColor);
+        color: var(--primaryButtonColor);
+        text-decoration: none;
+      }
+
+      .copy {
+        margin-top: 15px;
+        color: var(--inkMuted);
+        text-align: center;
+        font-size: 13px;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="center">
+      <div class="content">
+        <div class="panel">
+          <div class="panel-header">
+            <img src="/Content/Images/logo.svg" alt="Sonarr" class="logo" />
+          </div>
+
+          <div class="panel-body">
+            <div class="signed-out">SUCCESSFULLY SIGNED OUT</div>
+
+            <div class="description">
+              You have been successfully signed out of Sonarr. Your session has
+              been terminated and all authentication tokens have been cleared.
+            </div>
+
+            <a href="__URL_BASE__/" class="button"> Go back to Sonarr </a>
+          </div>
+        </div>
+
+        <div id="copy" class="copy hidden">
+          <span>&copy;</span>
+          <span id="year"></span>
+          <span>-</span>
+          <span>Sonarr</span>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+    var yearSpan = document.getElementById('year');
+    yearSpan.innerHTML = '2010-' + new Date().getFullYear();
+
+    var copyDiv = document.getElementById('copy');
+    copyDiv.classList.remove('hidden');
+  </script>
+</html>

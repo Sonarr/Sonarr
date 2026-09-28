@@ -1924,8 +1924,6 @@
     "Size": "크기",
     "SizeLimit": "크기 제한",
     "SizeOnDisk": "디스크 상 크기",
-    "SkipFreeSpaceCheck": "여유 공간 확인 건너뛰기",
-    "SkipFreeSpaceCheckHelpText": "{appName}가 루트 폴더의 여유 공간을 감지할 수 없는 경우 사용하세요",
     "SkipRedownload": "재다운로드 건너뛰기",
     "SkipRedownloadHelpText": "{appName}가 이 항목에 대한 대체 릴리스를 다운로드하려는 것을 방지합니다",
     "Small": "작게",

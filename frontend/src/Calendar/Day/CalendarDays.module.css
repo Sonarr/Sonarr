@@ -1,0 +1,17 @@
+.days {
+  display: flex;
+  flex-grow: 1;
+  border-right: 1px solid var(--calendarBorderColor);
+}
+
+.day,
+.week,
+.forecast {
+  flex-wrap: nowrap;
+}
+
+.month {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: minmax(140px, 1fr);
+}

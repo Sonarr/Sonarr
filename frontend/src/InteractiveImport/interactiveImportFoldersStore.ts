@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { createPersist } from 'Helpers/createPersist';
 import sortByProp from 'Utilities/Array/sortByProp';
 

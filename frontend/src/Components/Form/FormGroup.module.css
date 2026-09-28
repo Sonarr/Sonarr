@@ -1,0 +1,28 @@
+.group {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+/* Sizes */
+
+.extraSmall {
+  max-width: var(--formGroupExtraSmallWidth);
+}
+
+.small {
+  max-width: var(--formGroupSmallWidth);
+}
+
+.medium {
+  max-width: var(--formGroupMediumWidth);
+}
+
+.large {
+  max-width: var(--formGroupLargeWidth);
+}
+
+@media (--breakpointLarge) {
+  .group {
+    display: block;
+  }
+}

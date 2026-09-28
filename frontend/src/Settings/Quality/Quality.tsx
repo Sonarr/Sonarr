@@ -2,12 +2,14 @@ import React, { useCallback, useRef, useState } from 'react';
 import CommandNames from 'Commands/CommandNames';
 import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageHeading from 'Components/Page/PageHeading';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { icons } from 'Helpers/Props';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import settingsStyles from 'Settings/Settings.module.css';
+import SettingsPage from 'Settings/SettingsPage';
 import {
   SaveCallback,
   SettingsStateChange,
@@ -66,31 +68,42 @@ function Quality() {
   }, []);
 
   return (
-    <PageContent title={translate('QualitySettings')}>
-      <SettingsToolbar
-        isSaving={isSaving}
-        hasPendingChanges={hasPendingChanges}
-        additionalButtons={
-          <>
+    <SettingsPage
+      title={translate('QualitySettings')}
+      isSaving={isSaving}
+      hasPendingChanges={hasPendingChanges}
+      toolbarChildren={
+        <>
+          <OverflowDivider groupId="extras">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
-            <PageToolbarButton
-              label={translate('ResetDefinitions')}
-              iconName={icons.REFRESH}
-              isSpinning={isResettingQualityDefinitions}
-              isDisabled={isResettingQualityDefinitions}
-              onPress={handleResetQualityDefinitionsPress}
-            />
-          </>
-        }
-        onSavePress={handleSavePress}
-      />
+          <ToolbarItem
+            id="reset-definitions"
+            priority={1}
+            groupId="extras"
+            label={translate('ResetDefinitions')}
+            iconName={icons.REFRESH}
+            isSpinning={isResettingQualityDefinitions}
+            isDisabled={isResettingQualityDefinitions}
+            onPress={handleResetQualityDefinitionsPress}
+          />
+        </>
+      }
+      onSavePress={handleSavePress}
+    >
       <PageContentBody>
-        <QualityDefinitions
-          isResettingQualityDefinitions={isResettingQualityDefinitions}
-          setChildSave={handleSetChildSave}
-          onChildStateChange={handleChildStateChange}
-        />
+        <div className={settingsStyles.section}>
+          <PageHeading
+            scope={translate('Settings')}
+            title={translate('Quality')}
+          />
+          <QualityDefinitions
+            isResettingQualityDefinitions={isResettingQualityDefinitions}
+            setChildSave={handleSetChildSave}
+            onChildStateChange={handleChildStateChange}
+          />
+        </div>
       </PageContentBody>
 
       <ConfirmModal
@@ -102,7 +115,7 @@ function Quality() {
         onConfirm={handleResetQualityDefinitionsConfirmed}
         onCancel={handleCloseResetQualityDefinitionsModal}
       />
-    </PageContent>
+    </SettingsPage>
   );
 }
 

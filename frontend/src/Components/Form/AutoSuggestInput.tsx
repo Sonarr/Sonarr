@@ -22,7 +22,7 @@ import Autosuggest, {
 } from 'react-autosuggest';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { InputChanged } from 'typings/inputs';
-import styles from './AutoSuggestInput.css';
+import styles from './AutoSuggestInput.module.css';
 
 interface AutoSuggestInputProps<T>
   extends Omit<AutosuggestPropsBase<T>, 'renderInputComponent' | 'inputProps'> {

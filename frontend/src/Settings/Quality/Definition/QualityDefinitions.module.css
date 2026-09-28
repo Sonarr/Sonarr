@@ -1,0 +1,27 @@
+.header {
+  display: flex;
+  margin-top: 16px;
+  gap: 24px;
+
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.headerQuality {
+  flex: 0 0 240px;
+}
+
+.headerTitle {
+  flex: 1 1 auto;
+}
+
+.definitions {
+  display: flex;
+  flex-direction: column;
+}
+
+@media only screen and (max-width: 768px) {
+  .header {
+    display: none;
+  }
+}

@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { ElementType, ReactNode, useMemo, useState } from 'react';
 import Link from 'Components/Link/Link';
 import { inputTypes } from 'Helpers/Props';
@@ -56,7 +57,7 @@ import TagSelectInput, { TagSelectInputProps } from './Tag/TagSelectInput';
 import TextTagInput, { TextTagInputProps } from './Tag/TextTagInput';
 import TextArea, { TextAreaProps } from './TextArea';
 import TextInput, { TextInputProps } from './TextInput';
-import styles from './FormInputGroup.css';
+import styles from './FormInputGroup.module.css';
 
 const componentMap: Record<InputType, ElementType> = {
   autoComplete: AutoCompleteInput,
@@ -242,7 +243,15 @@ function FormInputGroup<T, C extends InputType>(
       setClientWarnings={setClientWarnings}
     >
       <div className={containerClassName}>
-        <div className={className}>
+        <div
+          className={classNames(
+            className,
+            checkInput && styles.checkInput,
+            hasButton && styles.hasButtons,
+            hasButton && hasError && styles.hasError,
+            hasButton && hasWarning && styles.hasWarning
+          )}
+        >
           <div className={styles.inputContainer}>
             {/* @ts-expect-error - types are validated already */}
             <InputComponent

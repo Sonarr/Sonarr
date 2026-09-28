@@ -1,7 +1,6 @@
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import ModelBase from 'App/ModelBase';
-import { ValidationFailures } from 'Store/Selectors/selectSettings';
 import {
   ValidationError,
   ValidationFailure,
@@ -13,6 +12,7 @@ import fetchJson, {
 } from 'Utilities/Fetch/fetchJson';
 import getQueryPath from 'Utilities/Fetch/getQueryPath';
 import getQueryString, { QueryParams } from 'Utilities/Fetch/getQueryString';
+import { ValidationFailures } from 'Utilities/selectSettings';
 
 interface MutationOptions<T, TData>
   extends Omit<FetchJsonOptions<TData>, 'method'> {

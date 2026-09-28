@@ -3,7 +3,7 @@ import React from 'react';
 import EnhancedSelectInputOption, {
   EnhancedSelectInputOptionProps,
 } from './EnhancedSelectInputOption';
-import styles from './SeriesTypeSelectInputOption.css';
+import styles from './SeriesTypeSelectInputOption.module.css';
 
 interface SeriesTypeSelectInputOptionProps
   extends EnhancedSelectInputOptionProps {

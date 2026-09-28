@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import Card from 'Components/Card';
-import Label from 'Components/Label';
-import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import SettingsCard from 'Components/SettingsCard/SettingsCard';
+import SettingsCardAction from 'Components/SettingsCard/SettingsCardAction';
+import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
 import TagList from 'Components/TagList';
 import { icons, kinds } from 'Helpers/Props';
 import { useTagList } from 'Tags/useTags';
@@ -10,14 +10,14 @@ import formatShortTimeSpan from 'Utilities/Date/formatShortTimeSpan';
 import translate from 'Utilities/String/translate';
 import EditImportListModal from './EditImportListModal';
 import { useDeleteImportList } from './useImportLists';
-import styles from './ImportList.css';
 
 interface ImportListProps {
   id: number;
   name: string;
   enableAutomaticAdd: boolean;
-  tags: number[];
   minRefreshInterval: string;
+  tags: number[];
+  tagExisting: boolean;
   onCloneImportListPress: (id: number) => void;
 }
 
@@ -25,8 +25,8 @@ function ImportList({
   id,
   name,
   enableAutomaticAdd,
-  tags,
   minRefreshInterval,
+  tags,
   onCloneImportListPress,
 }: ImportListProps) {
   const tagList = useTagList();
@@ -64,38 +64,30 @@ function ImportList({
   }, [id, onCloneImportListPress]);
 
   return (
-    <Card
-      className={styles.list}
-      overlayContent={true}
-      onPress={handleEditImportListPress}
-    >
-      <div className={styles.nameContainer}>
-        <div className={styles.name}>{name}</div>
-
-        <IconButton
-          className={styles.cloneButton}
+    <SettingsCard
+      name={name}
+      aria-label={translate('EditImportListName', { name })}
+      actions={
+        <SettingsCardAction
           title={translate('CloneImportList')}
           aria-label={translate('CloneImportList')}
           name={icons.CLONE}
           onPress={handleCloneImportListPress}
         />
-      </div>
+      }
+      onPress={handleEditImportListPress}
+    >
+      <SettingsCardStatus
+        dot={enableAutomaticAdd ? 'active' : 'muted'}
+        segments={[
+          enableAutomaticAdd ? translate('AutomaticAdd') : null,
+          <>
+            {translate('Refresh')}: {formatShortTimeSpan(minRefreshInterval)}
+          </>,
+        ]}
+      />
 
-      <div className={styles.enabled}>
-        {enableAutomaticAdd ? (
-          <Label kind={kinds.SUCCESS}>{translate('AutomaticAdd')}</Label>
-        ) : null}
-      </div>
-
-      <TagList tags={tags} tagList={tagList} />
-
-      <div className={styles.enabled}>
-        <Label kind={kinds.DEFAULT} title="List Refresh Interval">
-          {`${translate('Refresh')}: ${formatShortTimeSpan(
-            minRefreshInterval
-          )}`}
-        </Label>
-      </div>
+      {tags.length > 0 ? <TagList tags={tags} tagList={tagList} /> : null}
 
       <EditImportListModal
         id={id}
@@ -113,7 +105,7 @@ function ImportList({
         onConfirm={handleConfirmDeleteImportList}
         onCancel={handleDeleteImportListModalClose}
       />
-    </Card>
+    </SettingsCard>
   );
 }
 

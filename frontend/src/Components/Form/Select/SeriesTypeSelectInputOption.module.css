@@ -1,0 +1,21 @@
+.optionText {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1 0 0;
+  flex-wrap: wrap;
+  gap: 2px 15px;
+
+  &.isMobile {
+    display: block;
+  }
+}
+
+.value {
+  display: flex;
+}
+
+.format {
+  color: var(--darkGray);
+  font-size: var(--smallFontSize);
+}

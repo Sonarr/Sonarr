@@ -1,0 +1,61 @@
+.columnContainer {
+  border-bottom: 1px solid var(--hairline);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.column {
+  display: flex;
+  align-items: center;
+  padding: 11px 14px;
+  width: 100%;
+  gap: 11px;
+
+  &:hover {
+    background-color: var(--paperWarm);
+  }
+
+  &.hidden .label {
+    color: var(--inkMuted);
+  }
+
+  &.hidden .dragHandle {
+    opacity: 0;
+  }
+
+  &.hidden:hover .dragHandle {
+    opacity: 1;
+  }
+}
+
+.checkContainer {
+  margin: 0;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  gap: 11px;
+
+  margin: 0;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: auto;
+  color: var(--inkFaint);
+  cursor: grab;
+  transition: opacity 120ms ease;
+  touch-action: none;
+}
+
+.isDragging {
+  opacity: 0.25;
+}

@@ -1,0 +1,89 @@
+.inputGroupContainer {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.inputGroup {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+}
+
+.hasButtons {
+  overflow: hidden;
+  border: 1px solid var(--inputBorderColor);
+  border-radius: 8px;
+  background-color: var(--inputBackgroundColor);
+  transition:
+    border-color 160ms cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow 160ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:focus-within {
+    border-color: var(--accent);
+  }
+
+  &.hasError {
+    border-color: var(--inputErrorBorderColor);
+
+    &:focus-within {
+      border-color: var(--inputErrorBorderColor);
+    }
+  }
+
+  &.hasWarning {
+    border-color: var(--inputWarningBorderColor);
+
+    &:focus-within {
+      border-color: var(--inputWarningBorderColor);
+    }
+  }
+}
+
+.inputContainer {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.checkInput {
+  justify-content: flex-end;
+}
+
+.checkInput .inputContainer {
+  flex: 0 1 auto;
+}
+
+.inputUnit {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  margin-top: 7px;
+  width: max-content;
+  color: var(--inkFaint);
+  text-align: right;
+  pointer-events: none;
+  user-select: none;
+}
+
+.inputUnitNumber {
+  composes: inputUnit;
+
+  right: 40px;
+}
+
+.pendingChangesContainer {
+  display: flex;
+  justify-content: flex-end;
+  width: 30px;
+}
+
+.pendingChangesIcon {
+  color: var(--warningColor);
+  font-size: 20px;
+  line-height: 35px;
+}
+
+.helpLink {
+  margin-top: 5px;
+  line-height: 20px;
+}

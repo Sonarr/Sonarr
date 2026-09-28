@@ -63,6 +63,12 @@ namespace NzbDrone.Core.Messaging.Events
                 return;
             }
 
+            if (_serviceFactory.IsDisposed)
+            {
+                _logger.Debug("Event {0} dropped, container is disposed", eventName);
+                return;
+            }
+
             /*
                         int workerThreads;
                         int completionPortThreads;

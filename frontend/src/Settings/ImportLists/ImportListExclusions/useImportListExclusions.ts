@@ -5,7 +5,7 @@ import useApiMutation from 'Helpers/Hooks/useApiMutation';
 import usePage from 'Helpers/Hooks/usePage';
 import usePagedApiQuery from 'Helpers/Hooks/usePagedApiQuery';
 import { usePendingChangesStore } from 'Helpers/Hooks/usePendingChangesStore';
-import selectSettings from 'Store/Selectors/selectSettings';
+import selectSettings from 'Utilities/selectSettings';
 import { useImportListExclusionOptions } from './importListExclusionOptionsStore';
 
 export interface ImportListExclusion extends ModelBase {

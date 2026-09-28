@@ -1,7 +1,5 @@
-import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import Modal from 'Components/Modal/Modal';
-import { clearPendingChanges } from 'Store/Actions/baseActions';
 import EditSeriesModalContent, {
   EditSeriesModalContentProps,
 } from './EditSeriesModalContent';
@@ -15,16 +13,9 @@ function EditSeriesModal({
   onModalClose,
   ...otherProps
 }: EditSeriesModalProps) {
-  const dispatch = useDispatch();
-
-  const handleModalClose = useCallback(() => {
-    dispatch(clearPendingChanges({ section: 'series' }));
-    onModalClose();
-  }, [dispatch, onModalClose]);
-
   return (
-    <Modal isOpen={isOpen} onModalClose={handleModalClose}>
-      <EditSeriesModalContent {...otherProps} onModalClose={handleModalClose} />
+    <Modal isOpen={isOpen} onModalClose={onModalClose}>
+      <EditSeriesModalContent {...otherProps} onModalClose={onModalClose} />
     </Modal>
   );
 }

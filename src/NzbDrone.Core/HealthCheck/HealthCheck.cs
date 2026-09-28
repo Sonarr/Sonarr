@@ -55,6 +55,7 @@ namespace NzbDrone.Core.HealthCheck
 
     public enum HealthCheckReason
     {
+        AllowedHostsNotConfigured,
         AppDataLocation,
         DownloadClientCheckNoneAvailable,
         DownloadClientCheckUnableToCommunicate,
@@ -85,6 +86,9 @@ namespace NzbDrone.Core.HealthCheck
         MountSeries,
         NotificationStatusAll,
         NotificationStatusSingle,
+        OidcAuthorityNotSecure,
+        OidcDiscoveryFailed,
+        OidcNotConfigured,
         Package,
         ProxyBadRequest,
         ProxyFailed,

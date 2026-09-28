@@ -22,6 +22,7 @@ namespace Sonarr.Api.V3.Config
         public string ChownGroup { get; set; }
 
         public EpisodeTitleRequiredType EpisodeTitleRequired { get; set; }
+        public bool SkipFreeSpaceCheckWhenGrabbing { get; set; }
         public bool SkipFreeSpaceCheckWhenImporting { get; set; }
         public int MinimumFreeSpaceWhenImporting { get; set; }
         public bool CopyUsingHardlinks { get; set; }
@@ -56,6 +57,7 @@ namespace Sonarr.Api.V3.Config
 
                 EpisodeTitleRequired = model.EpisodeTitleRequired,
                 SkipFreeSpaceCheckWhenImporting = model.SkipFreeSpaceCheckWhenImporting,
+                SkipFreeSpaceCheckWhenGrabbing = model.SkipFreeSpaceCheckWhenGrabbing,
                 MinimumFreeSpaceWhenImporting = model.MinimumFreeSpaceWhenImporting,
                 CopyUsingHardlinks = model.CopyUsingHardlinks,
                 UseScriptImport = model.UseScriptImport,

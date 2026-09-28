@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { ReactNode } from 'react';
 import { Size } from 'Helpers/Props/sizes';
-import styles from './FormLabel.css';
+import styles from './FormLabel.module.css';
 
 interface FormLabelProps {
   children: ReactNode;

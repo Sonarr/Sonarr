@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import { CalendarView } from 'Calendar/calendarViews';
-import Button, { ButtonProps } from 'Components/Link/Button';
+import Link, { LinkProps } from 'Components/Link/Link';
 import titleCase from 'Utilities/String/titleCase';
 
 interface CalendarHeaderViewButtonProps
-  extends Omit<ButtonProps, 'children' | 'onPress'> {
+  extends Omit<LinkProps, 'children' | 'onPress'> {
   view: CalendarView;
   selectedView: CalendarView;
   onPress: (view: CalendarView) => void;
@@ -21,13 +21,13 @@ function CalendarHeaderViewButton({
   }, [view, onPress]);
 
   return (
-    <Button
+    <Link
       isDisabled={selectedView === view}
       {...otherProps}
       onPress={handlePress}
     >
       {titleCase(view)}
-    </Button>
+    </Link>
   );
 }
 

@@ -36,5 +36,10 @@ namespace Sonarr.Http.Validation
         {
             return ruleBuilder.SetValidator(new RssSyncIntervalValidator());
         }
+
+        public static IRuleBuilderOptions<T, string> IsValidCertificate<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            return ruleBuilder.SetValidator(new CertificateValidator());
+        }
     }
 }

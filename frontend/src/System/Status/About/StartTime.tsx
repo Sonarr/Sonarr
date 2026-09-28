@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import formatDateTime from 'Utilities/Date/formatDateTime';

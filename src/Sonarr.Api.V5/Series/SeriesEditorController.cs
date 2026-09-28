@@ -25,6 +25,8 @@ public class SeriesEditorController : Controller
     }
 
     [HttpPut]
+    [Consumes("application/json")]
+    [Produces("application/json")]
     public Results<Ok<List<SeriesResource>>, BadRequest> SaveAll([FromBody] SeriesEditorResource resource)
     {
         var seriesToUpdate = _seriesService.GetSeries(resource.SeriesIds);
@@ -107,6 +109,7 @@ public class SeriesEditorController : Controller
     }
 
     [HttpDelete]
+    [Consumes("application/json")]
     public NoContent DeleteSeries([FromBody] SeriesEditorResource resource)
     {
         _seriesService.DeleteSeries(resource.SeriesIds, resource.DeleteFiles, resource.AddImportListExclusion);

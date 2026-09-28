@@ -2,11 +2,11 @@ import React from 'react';
 import DocumentTitle from 'react-document-title';
 import ErrorBoundary from 'Components/Error/ErrorBoundary';
 import PageContentError from './PageContentError';
-import styles from './PageContent.css';
+import styles from './PageContent.module.css';
 
 interface PageContentProps {
   className?: string;
-  title?: string;
+  title: string;
   children: React.ReactNode;
 }
 
@@ -24,7 +24,9 @@ function PageContent({
             : window.Sonarr.instanceName
         }
       >
-        <div className={className}>{children}</div>
+        <main className={className} aria-label={title}>
+          {children}
+        </main>
       </DocumentTitle>
     </ErrorBoundary>
   );

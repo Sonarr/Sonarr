@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Tv
         Series FindByPath(string path);
         void DeleteSeries(List<int> seriesIds, bool deleteFiles, bool addImportListExclusion);
         List<Series> GetAllSeries();
-        List<int> AllSeriesTvdbIds();
+        Dictionary<int, int> AllSeriesTvdbIds();
         Dictionary<int, string> GetAllSeriesPaths();
         Dictionary<int, List<int>> GetAllSeriesTags();
         List<Series> AllForTag(int tagId);
@@ -33,7 +33,8 @@ namespace NzbDrone.Core.Tv
         List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder);
         bool SeriesPathExists(string folder);
         void RemoveAddOptions(Series series);
-        bool UpdateTags(Series series);
+        bool UpdateAutoTaggingTags(Series series);
+        void UpdateTags(List<Series> series);
     }
 
     public class SeriesService : ISeriesService
@@ -172,9 +173,9 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.All().ToList();
         }
 
-        public List<int> AllSeriesTvdbIds()
+        public Dictionary<int, int> AllSeriesTvdbIds()
         {
-            return _seriesRepository.AllSeriesTvdbIds().ToList();
+            return _seriesRepository.AllSeriesTvdbIds();
         }
 
         public Dictionary<int, string> GetAllSeriesPaths()
@@ -222,7 +223,7 @@ namespace NzbDrone.Core.Tv
 
             // Never update AddOptions when updating a series, keep it the same as the existing stored series.
             series.AddOptions = storedSeries.AddOptions;
-            UpdateTags(series);
+            UpdateAutoTaggingTags(series);
 
             var updatedSeries = _seriesRepository.Update(series);
             if (publishUpdatedEvent)
@@ -252,7 +253,7 @@ namespace NzbDrone.Core.Tv
                     _logger.Trace("Not changing path for: {0}", s.Title);
                 }
 
-                UpdateTags(s);
+                UpdateAutoTaggingTags(s);
             }
 
             _seriesRepository.UpdateMany(series);
@@ -272,7 +273,7 @@ namespace NzbDrone.Core.Tv
             _seriesRepository.SetFields(series, s => s.AddOptions);
         }
 
-        public bool UpdateTags(Series series)
+        public bool UpdateAutoTaggingTags(Series series)
         {
             _logger.Trace("Updating tags for {0}", series);
 
@@ -308,6 +309,17 @@ namespace NzbDrone.Core.Tv
             _logger.Debug("Tags not updated for '{0}'", series.Title);
 
             return false;
+        }
+
+        public void UpdateTags(List<Series> series)
+        {
+            if (series.Count == 0)
+            {
+                return;
+            }
+
+            _seriesRepository.SetFields(series, s => s.Tags);
+            _eventAggregator.PublishEvent(new SeriesBulkEditedEvent(series));
         }
     }
 }

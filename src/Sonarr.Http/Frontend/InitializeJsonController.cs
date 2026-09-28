@@ -1,5 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
@@ -31,9 +33,11 @@ namespace Sonarr.Http.Frontend
         }
 
         [HttpGet("/initialize.json")]
-        public IActionResult Index()
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        public ContentHttpResult Index()
         {
-            return Content(GetContent(), "application/json");
+            return TypedResults.Content(GetContent(), "application/json");
         }
 
         private string GetContent()

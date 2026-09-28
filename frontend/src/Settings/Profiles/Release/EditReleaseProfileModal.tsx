@@ -1,8 +1,6 @@
-import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import Modal from 'Components/Modal/Modal';
 import { sizes } from 'Helpers/Props';
-import { clearPendingChanges } from 'Store/Actions/baseActions';
 import EditReleaseProfileModalContent from './EditReleaseProfileModalContent';
 
 interface EditReleaseProfileModalProps {
@@ -17,22 +15,11 @@ function EditReleaseProfileModal({
   onModalClose,
   ...otherProps
 }: EditReleaseProfileModalProps) {
-  const dispatch = useDispatch();
-
-  const handleModalClose = useCallback(() => {
-    dispatch(
-      clearPendingChanges({
-        section: 'settings.releaseProfiles',
-      })
-    );
-    onModalClose();
-  }, [dispatch, onModalClose]);
-
   return (
-    <Modal size={sizes.MEDIUM} isOpen={isOpen} onModalClose={handleModalClose}>
+    <Modal size={sizes.MEDIUM} isOpen={isOpen} onModalClose={onModalClose}>
       <EditReleaseProfileModalContent
         {...otherProps}
-        onModalClose={handleModalClose}
+        onModalClose={onModalClose}
       />
     </Modal>
   );

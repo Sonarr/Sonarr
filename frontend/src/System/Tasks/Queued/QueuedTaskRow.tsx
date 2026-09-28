@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { CommandBody } from 'Commands/Command';
 import { useCancelCommand } from 'Commands/useCommands';
@@ -16,7 +16,7 @@ import formatTimeSpan from 'Utilities/Date/formatTimeSpan';
 import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
 import QueuedTaskRowNameCell from './QueuedTaskRowNameCell';
-import styles from './QueuedTaskRow.css';
+import styles from './QueuedTaskRow.module.css';
 
 function getStatusIconProps(
   status: string,
@@ -42,7 +42,7 @@ function getStatusIconProps(
       return {
         name: icons.CHECK,
         kind: kinds.SUCCESS,
-        title: message === 'Completed' ? title : `${title}: ${message}`,
+        title: message == null ? title : `${title}: ${message}`,
       };
 
     case 'failed':

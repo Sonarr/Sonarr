@@ -1,5 +1,0 @@
-.timeLeft {
-  composes: cell from '~Components/Table/Cells/TableRowCell.css';
-
-  width: 100px;
-}

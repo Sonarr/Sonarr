@@ -38,6 +38,10 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.13.02.2025.1080i.HDTV.MPA2.0.H.264", "Series Title", 2025, 2, 13)]
         [TestCase("Series.2025.09.01.The.170.Million.Pound.Diamond.Scam.1080p.HDTV.H264-DEADPOOL'", "Series", 2025, 9, 1)]
         [TestCase("Series.2025.09.01.The.Million.Pound.Diamond.Scam.1080p.HDTV.H264-DEADPOOL'", "Series", 2025, 9, 1)]
+        [TestCase("Series Title - 2026-07-03 - Episode Title 2026 [WEBDL-1080p]-RlsGrp", "Series Title", 2026, 7, 3)]
+        [TestCase("Series Title - 2026-07-03 - Friday July 3 2026 [AMZN][WEBDL-1080p][EAC3 2.0][h264]-RlsGrp", "Series Title", 2026, 7, 3)]
+        [TestCase("Series Title - 2026-07-03 - Recap 2025 Part 2 [WEBDL-1080p]-RlsGrp", "Series Title", 2026, 7, 3)]
+        [TestCase("Series Title - 2026-07-03 - Look Back At 2025 Part.1", "Series Title", 2026, 7, 3)]
         public void should_parse_daily_episode(string postTitle, string title, int year, int month, int day)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

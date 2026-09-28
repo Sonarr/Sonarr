@@ -6,7 +6,7 @@
       "baseUrl": "src",
       "jsx": "react",
       "module": "esnext",
-      "moduleResolution": "node",
+      "moduleResolution": "bundler",
       "allowSyntheticDefaultImports": true,
       "forceConsistentCasingInFileNames": true,
       "noEmit": true,
@@ -28,7 +28,7 @@
   "include": [
       "./src/**/*",
       "./.eslintrc.js",
-      "./build/webpack.config.js",
+      "../vite.config.ts",
       "./typings/*.ts",
   ],
   "exclude": [

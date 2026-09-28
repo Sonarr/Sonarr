@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Tv
 {
     public interface IEpisodeCutoffService
     {
-        PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec);
+        PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, HashSet<int> seriesTags = null, List<int> quality = null);
     }
 
     public class EpisodeCutoffService : IEpisodeCutoffService
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Tv
             _qualityProfileService = qualityProfileService;
         }
 
-        public PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec)
+        public PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, HashSet<int> seriesTags = null, List<int> quality = null)
         {
             var qualitiesBelowCutoff = new List<QualitiesBelowCutoff>();
             var profiles = _qualityProfileService.All();
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Tv
                 return pagingSpec;
             }
 
-            return _episodeRepository.EpisodesWhereCutoffUnmet(pagingSpec, qualitiesBelowCutoff, false);
+            return _episodeRepository.EpisodesWhereCutoffUnmet(pagingSpec, qualitiesBelowCutoff, false, seriesTags, quality);
         }
     }
 }

@@ -20,7 +20,7 @@ import { inputTypes } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import FilterBuilderRow from './FilterBuilderRow';
-import styles from './FilterBuilderModalContent.css';
+import styles from './FilterBuilderModalContent.module.css';
 
 const NEW_FILTER: PropertyFilter = {
   key: '',
@@ -169,7 +169,7 @@ function FilterBuilderModalContent<T>({
 
         <div className={styles.label}>{translate('Filters')}</div>
 
-        <div className={styles.rows}>
+        <div className={styles.bordered}>
           {filters.map((filter, index) => {
             return (
               <FilterBuilderRow

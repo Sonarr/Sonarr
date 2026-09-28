@@ -1,0 +1,12 @@
+.name,
+.includeCustomFormatWhenRenaming {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  word-break: break-all;
+}
+
+.actions {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 40px;
+}

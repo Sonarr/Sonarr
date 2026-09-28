@@ -191,7 +191,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("DownloadClientHistoryLimit", value); }
         }
 
-        // TODO: Rename to 'Skip Free Space Check'
+        public bool SkipFreeSpaceCheckWhenGrabbing
+        {
+            get { return GetValueBoolean("SkipFreeSpaceCheckWhenGrabbing", false); }
+
+            set { SetValue("SkipFreeSpaceCheckWhenGrabbing", value); }
+        }
+
         public bool SkipFreeSpaceCheckWhenImporting
         {
             get { return GetValueBoolean("SkipFreeSpaceCheckWhenImporting", false); }

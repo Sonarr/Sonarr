@@ -324,7 +324,11 @@ namespace NzbDrone.Common.Disk
                     return TransferMode.HardLink;
                 }
 
-                if (!mode.HasFlag(TransferMode.Copy))
+                if (mode.HasFlag(TransferMode.Copy))
+                {
+                    _logger.Warn("Hardlinking from '{0}' to '{1}' failed, fallback to copy.", sourcePath, targetPath);
+                }
+                else
                 {
                     throw new IOException("Hardlinking from '" + sourcePath + "' to '" + targetPath + "' failed.");
                 }

@@ -1,8 +1,9 @@
 import { createOptionsStore } from 'Helpers/Hooks/useOptionsStore';
 import { SortDirection } from 'Helpers/Props/sortDirections';
+import { IndexerModel } from 'Settings/Indexers/useIndexers';
 
 export interface ManageIndexersOptions {
-  sortKey: string;
+  sortKey: keyof IndexerModel;
   sortDirection: SortDirection;
 }
 

@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useCommand, useExecuteCommand } from 'Commands/useCommands';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
@@ -11,7 +11,7 @@ import formatDate from 'Utilities/Date/formatDate';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatTimeSpan from 'Utilities/Date/formatTimeSpan';
 import translate from 'Utilities/String/translate';
-import styles from './ScheduledTaskRow.css';
+import styles from './ScheduledTaskRow.module.css';
 
 interface ScheduledTaskRowProps {
   id: number;

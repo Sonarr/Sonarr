@@ -5,7 +5,7 @@ import SeriesTitleLink from 'Series/SeriesTitleLink';
 import translate from 'Utilities/String/translate';
 import { ParseModel } from './ParseModel';
 import ParseResultItem from './ParseResultItem';
-import styles from './ParseResult.css';
+import styles from './ParseResult.module.css';
 
 interface ParseResultProps {
   item: ParseModel;
@@ -83,7 +83,8 @@ function ParseResult(props: ParseResultProps) {
             <ParseResultItem
               title={translate('SeasonNumber')}
               data={
-                seasonNumber === 0 && absoluteEpisodeNumbers.length
+                seasonNumber == null ||
+                (seasonNumber === 0 && absoluteEpisodeNumbers.length)
                   ? '-'
                   : seasonNumber
               }

@@ -3,7 +3,7 @@ import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
 import EnhancedSelectInputSelectedValue from './EnhancedSelectInputSelectedValue';
 import { RootFolderSelectInputValue } from './RootFolderSelectInput';
-import styles from './RootFolderSelectInputSelectedValue.css';
+import styles from './RootFolderSelectInputSelectedValue.module.css';
 
 interface RootFolderSelectInputSelectedValueProps {
   selectedValue: string;

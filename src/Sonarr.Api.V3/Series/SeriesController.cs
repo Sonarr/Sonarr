@@ -228,11 +228,11 @@ namespace Sonarr.Api.V3.Series
             return resource;
         }
 
-        private void MapCoversToLocal(params SeriesResource[] series)
+        private void MapCoversToLocal(params IEnumerable<SeriesResource> series)
         {
             foreach (var seriesResource in series)
             {
-                _coverMapper.ConvertToLocalUrls(seriesResource.Id, seriesResource.Images);
+                _coverMapper.ConvertToLocalUrls(seriesResource.Id, seriesResource.Images, seriesResource.Added);
             }
         }
 

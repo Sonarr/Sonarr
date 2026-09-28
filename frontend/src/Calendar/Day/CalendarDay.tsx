@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React from 'react';
 import { useCalendarOption } from 'Calendar/calendarOptionsStore';
 import * as calendarViews from 'Calendar/calendarViews';
@@ -11,7 +11,7 @@ import {
   CalendarEventGroup as CalendarEventGroupModel,
   CalendarItem,
 } from 'typings/Calendar';
-import styles from './CalendarDay.css';
+import styles from './CalendarDay.module.css';
 
 function sort(items: (CalendarEventModel | CalendarEventGroupModel)[]) {
   return items.sort((a, b) => {
@@ -111,7 +111,8 @@ function CalendarDay({
       ref={ref}
       className={classNames(
         styles.day,
-        view === calendarViews.DAY && styles.isSingleDay
+        view === calendarViews.DAY && styles.isSingleDay,
+        isTodaysDate && styles.isTodayCell
       )}
     >
       {view === calendarViews.MONTH && (

@@ -2,11 +2,11 @@ import classNames from 'classnames';
 import React from 'react';
 import Icon, { IconProps } from 'Components/Icon';
 import Link, { LinkProps } from './Link';
-import styles from './IconButton.css';
+import styles from './IconButton.module.css';
 
 export interface IconButtonProps
   extends Omit<LinkProps, 'name' | 'kind'>,
-    Pick<IconProps, 'name' | 'kind' | 'size' | 'isSpinning'> {
+    Pick<IconProps, 'name' | 'kind' | 'size' | 'isSpinning' | 'filled'> {
   iconClassName?: IconProps['className'];
 }
 
@@ -17,6 +17,7 @@ export default function IconButton({
   kind,
   size = 12,
   isSpinning,
+  filled,
   ...otherProps
 }: IconButtonProps) {
   return (
@@ -33,6 +34,7 @@ export default function IconButton({
         kind={kind}
         size={size}
         isSpinning={isSpinning}
+        filled={filled}
         aria-hidden={true}
       />
     </Link>

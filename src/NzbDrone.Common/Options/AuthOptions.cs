@@ -7,4 +7,9 @@ public class AuthOptions
     public string Method { get; set; }
     public string Required { get; set; }
     public bool? TrustCgnatIpAddresses { get; set; }
+    public string OidcAuthority { get; set; }
+    public string OidcClientId { get; set; }
+    public string OidcClientSecret { get; set; }
+    public string OidcUserIdentifier { get; set; }
+    public string OidcScopes { get; set; }
 }
