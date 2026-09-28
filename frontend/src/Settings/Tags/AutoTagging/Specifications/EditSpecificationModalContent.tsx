@@ -176,7 +176,6 @@ function EditSpecificationModalContent({
                 <ProviderFieldFormGroup
                   key={field.name}
                   advancedSettings={advancedSettings}
-                  layout="row"
                   provider="specifications"
                   providerData={item}
                   {...field}

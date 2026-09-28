@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -99,39 +99,36 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
 
         {isSchemaFetched && !schemaError ? (
           <Form>
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('Quality')}</FormLabel>
-
-              <FormInputGroup
+              <FormInput
                 type={inputTypes.SELECT}
                 name="quality"
                 value={qualityId}
                 values={qualityOptions}
                 onChange={onQualityChange}
               />
-            </FormGroup>
+            </FormRow>
 
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('Proper')}</FormLabel>
-
-              <FormInputGroup
+              <FormInput
                 type={inputTypes.CHECK}
                 name="proper"
                 value={proper}
                 onChange={onProperChange}
               />
-            </FormGroup>
+            </FormRow>
 
-            <FormGroup>
+            <FormRow>
               <FormLabel>{translate('Real')}</FormLabel>
-
-              <FormInputGroup
+              <FormInput
                 type={inputTypes.CHECK}
                 name="real"
                 value={real}
                 onChange={onRealChange}
               />
-            </FormGroup>
+            </FormRow>
           </Form>
         ) : null}
       </ModalBody>

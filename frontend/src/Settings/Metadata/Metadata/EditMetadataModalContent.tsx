@@ -100,7 +100,6 @@ function EditMetadataModalContent({
               <ProviderFieldFormGroup
                 key={field.name}
                 advancedSettings={advancedSettings}
-                layout="row"
                 provider="metadata"
                 {...field}
                 isDisabled={!enable.value}
