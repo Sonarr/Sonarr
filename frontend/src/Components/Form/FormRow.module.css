@@ -59,4 +59,20 @@
   .right > :not(:first-child):not(:last-child) {
     order: 2;
   }
+
+  .right:has(> :last-child input[type=checkbox]) {
+    grid-template-columns: minmax(0, 1fr) auto;
+
+    align-items: center;
+  }
+
+  .right:has(> :last-child input[type=checkbox]) > :last-child {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .right:has(> :last-child input[type=checkbox])
+    > :not(:first-child):not(:last-child) {
+    grid-column: 1 / -1;
+  }
 }
