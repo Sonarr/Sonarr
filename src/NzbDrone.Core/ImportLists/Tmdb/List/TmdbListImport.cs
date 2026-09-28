@@ -65,8 +65,7 @@ public class TmdbListImport : TmdbImportBase<TmdbListSettings>
         var builder = new HttpRequestBuilder(Settings.BaseUrl)
             .Accept(HttpAccept.Json)
             .Resource($"4/account/{Settings.AccountId}/lists")
-            .SetHeader("Authorization", $"Bearer {Settings.AuthToken}")
-            .AddQueryParam("language", "en-US");
+            .SetHeader("Authorization", $"Bearer {Settings.AuthToken}");
 
         for (var i = 1; i <= maxPages; i++)
         {

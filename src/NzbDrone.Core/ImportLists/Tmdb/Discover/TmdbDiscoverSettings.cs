@@ -11,12 +11,13 @@ namespace NzbDrone.Core.ImportLists.Tmdb.Discover;
 
 public class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDiscoverSettings>
 {
-    private static readonly Regex AndDelimitedIdsRegex = new(@"^\d+(?:,\d+)*$", RegexOptions.Compiled);
     private static readonly Regex AndOrDelimitedIdsRegex = new(@"^\d+(?:[,|]\d+)*$", RegexOptions.Compiled);
 
     public TmdbDiscoverSettingsValidator()
     {
         RuleFor(c => c.VoteAverageMinimum).Custom(ValidateVoteAverage);
+
+        RuleFor(c => c.VoteCountMinimum).Custom(ValidateVoteCount);
 
         RuleFor(c => c.AirDateMinimum).Must(ValidateAirDate)
             .WithMessage("Must be in the format: yyyy-MM-dd");
@@ -30,8 +31,8 @@ public class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDisco
         RuleFor(c => c.WithCompanies).Matches(AndOrDelimitedIdsRegex)
             .When(c => c.WithCompanies.IsNotNullOrWhiteSpace());
 
-        RuleFor(c => c.WithNetworks).Matches(AndDelimitedIdsRegex)
-            .When(c => c.WithNetworks.IsNotNullOrWhiteSpace());
+        RuleForEach(c => c.WithNetworks).Must(id => int.TryParse(id, out var idInt) && idInt > 0)
+            .WithMessage("Must be a valid network id.");
     }
 
     private static bool ValidateAirDate(string airDate)
@@ -55,7 +56,7 @@ public class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDisco
             return;
         }
 
-        if (!float.TryParse(voteAverage, out var voteAverageParsed))
+        if (!float.TryParse(voteAverage, NumberStyles.Float, CultureInfo.InvariantCulture, out var voteAverageParsed))
         {
             context.AddFailure("Must be a valid single-precision floating-point number.");
         }
@@ -68,6 +69,19 @@ public class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDisco
             context.AddFailure("Must be less than or equal to ten. (10.00)");
         }
     }
+
+    private static void ValidateVoteCount(string voteCount, CustomContext context)
+    {
+        if (voteCount.IsNullOrWhiteSpace())
+        {
+            return;
+        }
+
+        if (!int.TryParse(voteCount, NumberStyles.Integer, CultureInfo.InvariantCulture, out var voteCountParsed) || voteCountParsed < 0)
+        {
+            context.AddFailure("Must be a valid whole number greater than or equal to zero.");
+        }
+    }
 }
 
 public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
@@ -78,6 +92,7 @@ public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
         : base(Validator)
     {
         WithGenreTypes = [];
+        WithNetworks = [];
         OriginalLanguage = (int)TmdbLanguage.Any;
         SortByType = (int)TmdbDiscoverSortByType.PopularityDesc;
     }
@@ -109,8 +124,8 @@ public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
     [FieldDefinition(9, Label = "ImportListsTmdbSettingsWithCompanies", HelpText = "ImportListsTmdbSettingsAndOrDelimitedIdsHelpText", Type = FieldType.Textbox)]
     public string WithCompanies { get; set; }
 
-    [FieldDefinition(10, Label = "ImportListsTmdbSettingsWithNetworks", HelpText = "ImportListsTmdbSettingsAndDelimitedIdsHelpText", Type = FieldType.Textbox)]
-    public string WithNetworks { get; set; }
+    [FieldDefinition(10, Label = "ImportListsTmdbSettingsWithNetworks", HelpText = "ImportListsTmdbSettingsWithNetworksHelpText", Type = FieldType.Tag)]
+    public IEnumerable<string> WithNetworks { get; set; }
 
     [FieldDefinition(11, Label = "ImportListsTmdbSettingsIncludeNullFirstAirDates", HelpText = "ImportListsTmdbSettingsIncludeNullFirstAirDatesHelpText", Type = FieldType.Checkbox, Advanced = true)]
     public bool IncludeNullFirstAirDates { get; set; }
