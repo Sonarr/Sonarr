@@ -51,8 +51,8 @@ public abstract class TmdbParserBase<TResponse> : IParseImportListResponse
                 $"TMDb API(${importListResponse.Request.Url.Path}) call resulted in an unexpected StatusCode [{importListResponse.HttpResponse.StatusCode}]");
         }
 
-        if (importListResponse.HttpResponse.Headers.ContentType != null && !importListResponse.HttpResponse.Headers.ContentType.Contains("text/json", StringComparison.OrdinalIgnoreCase) &&
-            importListResponse.HttpRequest.Headers.Accept != null && importListResponse.HttpRequest.Headers.Accept.Contains("text/json", StringComparison.OrdinalIgnoreCase))
+        if (importListResponse.HttpResponse.Headers.ContentType != null && !importListResponse.HttpResponse.Headers.ContentType.Contains("application/json", StringComparison.OrdinalIgnoreCase) &&
+            importListResponse.HttpRequest.Headers.Accept != null && importListResponse.HttpRequest.Headers.Accept.Contains("application/json", StringComparison.OrdinalIgnoreCase))
         {
             throw new ImportListException(importListResponse,
                 $"TMDb API(${importListResponse.Request.Url.Path}) responded with html content. Site is likely blocked or unavailable.");
