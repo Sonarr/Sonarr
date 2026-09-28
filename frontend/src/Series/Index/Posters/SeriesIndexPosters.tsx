@@ -121,29 +121,32 @@ export default function SeriesIndexPosters({
   const posterHeight = Math.ceil((250 / 170) * posterWidth);
 
   const rowHeight = useMemo(() => {
-    const nextAiringHeight = 22;
+    const gap = 6;
+    const lineHeight = 18 + gap;
+    const tagsHeight = 23 + gap;
     const cellPadding = isSmallScreen
       ? columnPaddingSmallScreen
       : columnPadding;
 
     const heights = [
       posterHeight,
-      detailedProgressBar ? detailedProgressBarHeight : progressBarHeight,
-      nextAiringHeight,
+      (detailedProgressBar ? detailedProgressBarHeight : progressBarHeight) +
+        gap,
+      lineHeight,
       // Top + bottom cell padding, plus 8px of slack.
       cellPadding * 2 + 8,
     ];
 
     if (showTitle) {
-      heights.push(22);
+      heights.push(6 + 20 + gap);
     }
 
     if (showMonitored || showQualityProfile) {
-      heights.push(22);
+      heights.push(lineHeight);
     }
 
     if (showTags && items.some((s) => s.tags && s.tags.length > 0)) {
-      heights.push(24);
+      heights.push(tagsHeight);
     }
 
     switch (sortKey) {
@@ -154,17 +157,17 @@ export default function SeriesIndexPosters({
       case 'path':
       case 'sizeOnDisk':
       case 'ratings':
-        heights.push(22);
+        heights.push(lineHeight);
         break;
       case 'qualityProfileId':
         if (!showQualityProfile) {
-          heights.push(22);
+          heights.push(lineHeight);
         }
 
         break;
       case 'tags':
         if (!showTags && items.some((s) => s.tags && s.tags.length > 0)) {
-          heights.push(24);
+          heights.push(tagsHeight);
         }
 
         break;
