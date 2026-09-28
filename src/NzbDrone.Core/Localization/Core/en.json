@@ -1074,6 +1074,7 @@
   "ImportListsTmdbSettingsWithCompanies": "Company IDs",
   "ImportListsTmdbSettingsWithKeywords": "Keyword IDs",
   "ImportListsTmdbSettingsWithNetworks": "Network IDs",
+  "ImportListsTmdbSettingsWithNetworksHelpText": "TMDb network ids to filter by",
   "ImportListsTmdbSettingsWithGenreTypes": "Genre(s)",
   "ImportListsTmdbSettingsWithGenreTypesHelpText": "Filter series by genre",
   "ImportListsTmdbSettingsDiscoverGenreTypeActionAdventure": "Action & Adventure",

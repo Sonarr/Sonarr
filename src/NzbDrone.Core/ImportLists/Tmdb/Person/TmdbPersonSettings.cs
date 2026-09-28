@@ -9,8 +9,7 @@ public class TmdbPersonSettingsValidator : TmdbSettingsBaseValidator<TmdbPersonS
 {
     public TmdbPersonSettingsValidator()
     {
-        RuleFor(c => c.PersonId).Must(id => int.TryParse(id, out var idInt) && idInt > 0)
-            .WithMessage($"Must be a valid 32-bit integer greater than zero, and less than or equal to {int.MaxValue}.");
+        RuleFor(c => c.PersonId).GreaterThan(0);
 
         RuleFor(c => c.IncludingCastCredits).Equal(true)
             .When(c => !c.IncludeDepartmentTypes.Any())
@@ -33,8 +32,8 @@ public class TmdbPersonSettings : TmdbSettingsBase<TmdbPersonSettings>
         IncludeDepartmentTypes = [];
     }
 
-    [FieldDefinition(1, Label = "ImportListsTmdbSettingsPersonId", HelpText = "ImportListsTmdbSettingsPersonIdHelpText", Type = FieldType.Textbox)]
-    public string PersonId { get; set; }
+    [FieldDefinition(1, Label = "ImportListsTmdbSettingsPersonId", HelpText = "ImportListsTmdbSettingsPersonIdHelpText", Type = FieldType.Number)]
+    public int PersonId { get; set; }
 
     [FieldDefinition(2, Label = "ImportListsTmdbSettingsIncludingCastCredits", HelpText = "ImportListsTmdbSettingsIncludingCastCreditsHelpText", Type = FieldType.Checkbox)]
     public bool IncludingCastCredits { get; set; }

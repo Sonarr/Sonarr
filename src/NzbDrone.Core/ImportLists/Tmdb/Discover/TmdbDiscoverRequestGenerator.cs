@@ -1,21 +1,44 @@
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.ImportLists.Tmdb.Discover;
 
-public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscoverSettings>
+public class TmdbDiscoverRequestGenerator : IImportListRequestGenerator
 {
+    private readonly TmdbDiscoverSettings _settings;
+    private readonly int _maxPages;
+
     public TmdbDiscoverRequestGenerator(TmdbDiscoverSettings settings, int maxPages)
-        : base(settings, maxPages)
     {
+        _settings = settings;
+        _maxPages = maxPages;
     }
 
-    protected override HttpRequestBuilder CreateSeriesRequestsBuilder()
+    public ImportListPageableRequestChain GetListItems()
     {
-        var originalLanguage = (TmdbLanguage)Settings.OriginalLanguage;
+        var pageableRequests = new ImportListPageableRequestChain();
+        pageableRequests.Add(GetSeriesRequests());
+        return pageableRequests;
+    }
 
-        var sortByType = (TmdbDiscoverSortByType)Settings.SortByType;
+    private IEnumerable<ImportListRequest> GetSeriesRequests()
+    {
+        var builder = CreateSeriesRequestsBuilder();
+
+        for (var i = 1; i <= _maxPages; i++)
+        {
+            builder.AddQueryParam("page", i, true);
+            yield return new ImportListRequest(builder.Build());
+        }
+    }
+
+    private HttpRequestBuilder CreateSeriesRequestsBuilder()
+    {
+        var originalLanguage = (TmdbLanguage)_settings.OriginalLanguage;
+
+        var sortByType = (TmdbDiscoverSortByType)_settings.SortByType;
         var sortByString = sortByType switch
         {
             TmdbDiscoverSortByType.FirstAirDateAsc => "first_air_date.asc",
@@ -39,11 +62,11 @@ public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscove
             _ => "popularity.desc"
         };
 
-        var builder = new HttpRequestBuilder(Settings.BaseUrl)
+        var builder = new HttpRequestBuilder(_settings.BaseUrl)
             .Accept(HttpAccept.Json)
-            .SetHeader("Authorization", $"Bearer {Settings.AuthToken}")
+            .SetHeader("Authorization", $"Bearer {_settings.AuthToken}")
             .Resource("3/discover/tv")
-            .AddQueryParam("include_null_first_air_dates", Settings.IncludeNullFirstAirDates)
+            .AddQueryParam("include_null_first_air_dates", _settings.IncludeNullFirstAirDates)
             .AddQueryParam("sort_by", sortByString);
 
         if (originalLanguage != TmdbLanguage.Any)
@@ -51,18 +74,22 @@ public class TmdbDiscoverRequestGenerator : TmdbRequestGeneratorBase<TmdbDiscove
             builder.AddQueryParam("with_original_language", originalLanguage.ToString().ToLowerInvariant());
         }
 
-        if (Settings.WithGenreTypes.Any())
+        if (_settings.WithGenreTypes.Any())
         {
-            builder.AddQueryParam("with_genres", string.Join(',', Settings.WithGenreTypes));
+            builder.AddQueryParam("with_genres", string.Join(',', _settings.WithGenreTypes));
         }
 
-        AddOrSkipQueryParam(builder, "air_date.gte", Settings.AirDateMinimum);
-        AddOrSkipQueryParam(builder, "air_date.lte", Settings.AirDateMaximum);
-        AddOrSkipQueryParam(builder, "vote_average.gte", Settings.VoteAverageMinimum);
-        AddOrSkipQueryParam(builder, "vote_count.gte", Settings.VoteCountMinimum);
-        AddOrSkipQueryParam(builder, "with_companies", Settings.WithCompanies);
-        AddOrSkipQueryParam(builder, "with_keywords", Settings.WithKeywords);
-        AddOrSkipQueryParam(builder, "with_networks", Settings.WithNetworks);
+        if (_settings.WithNetworks.Any())
+        {
+            builder.AddQueryParam("with_networks", string.Join(',', _settings.WithNetworks));
+        }
+
+        AddOrSkipQueryParam(builder, "air_date.gte", _settings.AirDateMinimum);
+        AddOrSkipQueryParam(builder, "air_date.lte", _settings.AirDateMaximum);
+        AddOrSkipQueryParam(builder, "vote_average.gte", _settings.VoteAverageMinimum);
+        AddOrSkipQueryParam(builder, "vote_count.gte", _settings.VoteCountMinimum);
+        AddOrSkipQueryParam(builder, "with_companies", _settings.WithCompanies);
+        AddOrSkipQueryParam(builder, "with_keywords", _settings.WithKeywords);
 
         return builder;
     }
