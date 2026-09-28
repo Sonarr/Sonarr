@@ -153,7 +153,6 @@ function EditDownloadClientModalContent({
                 advancedSettings={showAdvancedSettings}
                 provider="downloadClient"
                 providerData={item}
-                layout="row"
                 {...field}
                 onChange={handleFieldChange}
               />
