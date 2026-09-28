@@ -1,19 +1,42 @@
-﻿using NzbDrone.Common.Http;
+using System.Collections.Generic;
+using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.ImportLists.Tmdb.List;
 
-public class TmdbListRequestGenerator : TmdbRequestGeneratorBase<TmdbListSettings>
+public class TmdbListRequestGenerator : IImportListRequestGenerator
 {
+    private readonly TmdbListSettings _settings;
+    private readonly int _maxPages;
+
     public TmdbListRequestGenerator(TmdbListSettings settings, int maxPages)
-        : base(settings, maxPages)
     {
+        _settings = settings;
+        _maxPages = maxPages;
     }
 
-    protected override HttpRequestBuilder CreateSeriesRequestsBuilder()
+    public ImportListPageableRequestChain GetListItems()
     {
-        return new HttpRequestBuilder(Settings.BaseUrl)
+        var pageableRequests = new ImportListPageableRequestChain();
+        pageableRequests.Add(GetSeriesRequests());
+        return pageableRequests;
+    }
+
+    private IEnumerable<ImportListRequest> GetSeriesRequests()
+    {
+        var builder = CreateSeriesRequestsBuilder();
+
+        for (var i = 1; i <= _maxPages; i++)
+        {
+            builder.AddQueryParam("page", i, true);
+            yield return new ImportListRequest(builder.Build());
+        }
+    }
+
+    private HttpRequestBuilder CreateSeriesRequestsBuilder()
+    {
+        return new HttpRequestBuilder(_settings.BaseUrl)
             .Accept(HttpAccept.Json)
-            .SetHeader("Authorization", $"Bearer {Settings.AuthToken}")
-            .Resource($"4/list/{Settings.ListId ?? Settings.AccountListId}");
+            .SetHeader("Authorization", $"Bearer {_settings.AuthToken}")
+            .Resource($"4/list/{_settings.ListId ?? _settings.AccountListId}");
     }
 }
