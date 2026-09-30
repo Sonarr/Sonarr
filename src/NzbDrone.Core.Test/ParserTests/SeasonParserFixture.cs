@@ -90,8 +90,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Series.2016.S02.Part.1.1080p.NF.WEBRip.DD5.1.x264-NTb", "The Series 2016", 2, 1)]
         [TestCase("The.Series.S07.Vol.1.1080p.NF.WEBRip.DD5.1.x264-NTb", "The Series", 7, 1)]
         [TestCase("The.Series.S06.P1.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD", "The Series", 6, 1)]
-        [TestCase("[SallySubs] Series Title S03 - Vol.02 [BD 1080p FLAC]", "Series Title", 3, 2)]
-        [TestCase("[SallySubs] Series Title S03 Vol.02 [BD 1080p FLAC]", "Series Title", 3, 2)]
+        [TestCase("[Group] Series Title S03 - Vol.02 [BD 1080p FLAC]", "Series Title", 3, 2)]
+        [TestCase("[Group] Series Title S03 Vol.02 [BD 1080p FLAC]", "Series Title", 3, 2)]
         [TestCase("[Group] Series Title S03 Part 2 [1080p]", "Series Title", 3, 2)]
         public void should_parse_partial_season_release(string postTitle, string title, int season, int seasonPart)
         {
