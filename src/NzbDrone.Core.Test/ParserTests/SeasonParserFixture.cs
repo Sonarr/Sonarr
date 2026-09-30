@@ -90,6 +90,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Series.2016.S02.Part.1.1080p.NF.WEBRip.DD5.1.x264-NTb", "The Series 2016", 2, 1)]
         [TestCase("The.Series.S07.Vol.1.1080p.NF.WEBRip.DD5.1.x264-NTb", "The Series", 7, 1)]
         [TestCase("The.Series.S06.P1.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD", "The Series", 6, 1)]
+        [TestCase("[SallySubs] Series Title S03 - Vol.02 [BD 1080p FLAC]", "Series Title", 3, 2)]
+        [TestCase("[SallySubs] Series Title S03 Vol.02 [BD 1080p FLAC]", "Series Title", 3, 2)]
+        [TestCase("[Group] Series Title S03 Part 2 [1080p]", "Series Title", 3, 2)]
         public void should_parse_partial_season_release(string postTitle, string title, int season, int seasonPart)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
@@ -113,6 +116,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title S01 S02 S03 S04", "Series Title", new[] { 1, 2, 3, 4 })]
         [TestCase("Series Title S01 S03 S04", "Series Title", new[] { 1, 3, 4 })]
         [TestCase("Series Title S01 S04", "Series Title", new[] { 1, 2, 3, 4 })]
+        [TestCase("[Group] Series Title S01-04 (BD 1080p) [Dual Audio]", "Series Title", new[] { 1, 2, 3, 4 })]
+        [TestCase("[Group] Series Title S01-S04 (BD 1080p)", "Series Title", new[] { 1, 2, 3, 4 })]
         public void should_parse_multi_season_release(string postTitle, string title, int[] expectedSeasons)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
@@ -127,6 +132,8 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("30.Series.Season.04.HDTV.XviD-DIMENSION", 4)]
         [TestCase("Sonarr.and.Series.S02.720p.x264-DIMENSION", 2)]
+        [TestCase("[Group] Series Title S02 [1080p]", 2)]
+        [TestCase("[Group] Series Title 2 S01 [BD 1080p]", 1)]
         public void should_not_be_multi_season_for_a_single_season_release(string postTitle, int season)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
