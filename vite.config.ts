@@ -80,7 +80,7 @@ function cssModuleTypes(): Plugin {
       child = spawn(
         path.join(import.meta.dirname, 'node_modules', '.bin', bin),
         ['frontend/src', '--camelCase', '--pattern', '**/*.module.css', '--watch'],
-        { cwd: import.meta.dirname, stdio: 'inherit' }
+        { cwd: import.meta.dirname, stdio: 'inherit', shell: process.platform === 'win32' }
       );
 
       server.httpServer?.on('close', stop);
