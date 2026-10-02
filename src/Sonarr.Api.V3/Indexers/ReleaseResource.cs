@@ -32,7 +32,7 @@ namespace Sonarr.Api.V3.Indexers
         public bool FullSeason { get; set; }
         public bool SceneSource { get; set; }
         public int SeasonNumber { get; set; }
-        public int[] SeasonNumbers { get; set; }
+        public List<int> SeasonNumbers { get; set; }
         public List<Language> Languages { get; set; }
         public int LanguageWeight { get; set; }
         public string AirDate { get; set; }
