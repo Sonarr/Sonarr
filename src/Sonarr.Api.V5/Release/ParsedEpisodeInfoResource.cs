@@ -10,7 +10,7 @@ public class ParsedEpisodeInfoResource
     public string? ReleaseHash { get; set; }
     public bool FullSeason { get; set; }
     public int? SeasonNumber { get; set; }
-    public int[] SeasonNumbers { get; set; } = [];
+    public List<int> SeasonNumbers { get; set; } = [];
     public string? AirDate { get; set; }
     public string? SeriesTitle { get; set; }
     public int[] EpisodeNumbers { get; set; } = [];
