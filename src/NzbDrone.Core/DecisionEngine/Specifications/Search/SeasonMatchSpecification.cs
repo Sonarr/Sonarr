@@ -1,6 +1,4 @@
-using System.Linq;
 using NLog;
-using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 
@@ -9,12 +7,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
     public class SeasonMatchSpecification : IDownloadDecisionEngineSpecification
     {
         private readonly Logger _logger;
-        private readonly ISceneMappingService _sceneMappingService;
 
-        public SeasonMatchSpecification(ISceneMappingService sceneMappingService, Logger logger)
+        public SeasonMatchSpecification(Logger logger)
         {
             _logger = logger;
-            _sceneMappingService = sceneMappingService;
         }
 
         public SpecificationPriority Priority => SpecificationPriority.Default;
@@ -36,7 +32,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 
             var seasonNumbers = remoteEpisode.ParsedEpisodeInfo.SeasonNumbers;
 
-            var matches = seasonNumbers.Length > 0
+            var matches = seasonNumbers.Count > 0
                 ? seasonNumbers.Contains(singleEpisodeSpec.SeasonNumber)
                 : singleEpisodeSpec.SeasonNumber == remoteEpisode.MappedSeasonNumber;
 

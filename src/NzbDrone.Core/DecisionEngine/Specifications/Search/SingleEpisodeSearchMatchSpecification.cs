@@ -46,7 +46,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
         {
             var seasonNumbers = remoteEpisode.ParsedEpisodeInfo.SeasonNumbers;
 
-            var seasonMatches = seasonNumbers.Length > 0
+            var seasonMatches = seasonNumbers.Count > 0
                 ? seasonNumbers.Contains(singleEpisodeSpec.SeasonNumber)
                 : singleEpisodeSpec.SeasonNumber == remoteEpisode.MappedSeasonNumber;
 
