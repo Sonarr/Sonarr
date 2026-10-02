@@ -11,6 +11,7 @@ export interface MediaManagementSettingsModel {
   episodeTitleRequired: string;
   skipFreeSpaceCheckWhenGrabbing: boolean;
   skipFreeSpaceCheckWhenImporting: boolean;
+  allowMissingYearImport: boolean;
   minimumFreeSpaceWhenImporting: number;
   copyUsingHardlinks: boolean;
   useScriptImport: boolean;

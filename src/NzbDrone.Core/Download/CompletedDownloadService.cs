@@ -36,6 +36,7 @@ namespace NzbDrone.Core.Download
         private readonly IEpisodeService _episodeService;
         private readonly IMediaFileService _mediaFileService;
         private readonly IRejectedImportService _rejectedImportService;
+        private readonly IMissingYearImportValidator _missingYearImportValidator;
         private readonly Logger _logger;
 
         public CompletedDownloadService(IEventAggregator eventAggregator,
@@ -48,6 +49,7 @@ namespace NzbDrone.Core.Download
                                         IEpisodeService episodeService,
                                         IMediaFileService mediaFileService,
                                         IRejectedImportService rejectedImportService,
+                                        IMissingYearImportValidator missingYearImportValidator,
                                         Logger logger)
         {
             _eventAggregator = eventAggregator;
@@ -60,6 +62,7 @@ namespace NzbDrone.Core.Download
             _episodeService = episodeService;
             _mediaFileService = mediaFileService;
             _rejectedImportService = rejectedImportService;
+            _missingYearImportValidator = missingYearImportValidator;
             _logger = logger;
         }
 
@@ -113,7 +116,8 @@ namespace NzbDrone.Core.Download
                 Enum.TryParse(historyItem.Data.GetValueOrDefault(EpisodeHistory.RELEASE_SOURCE, ReleaseSourceType.Unknown.ToString()), out ReleaseSourceType releaseSource);
 
                 // Show a warning if the release was matched by ID and the source is not interactive search
-                if (seriesMatchType == SeriesMatchType.Id && releaseSource != ReleaseSourceType.InteractiveSearch)
+                if (seriesMatchType == SeriesMatchType.Id && releaseSource != ReleaseSourceType.InteractiveSearch &&
+                    !_missingYearImportValidator.IsValid(trackedDownload, series, grabbedHistories))
                 {
                     trackedDownload.Warn("Found matching series via grab history, but release was matched to series by ID. Automatic import is not possible. See the FAQ for details.");
                     SetStateToImportBlocked(trackedDownload);

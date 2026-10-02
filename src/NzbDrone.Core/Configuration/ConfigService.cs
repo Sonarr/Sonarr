@@ -205,6 +205,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("SkipFreeSpaceCheckWhenImporting", value); }
         }
 
+        public bool AllowMissingYearImport
+        {
+            get { return GetValueBoolean("AllowMissingYearImport", false); }
+
+            set { SetValue("AllowMissingYearImport", value); }
+        }
+
         public int MinimumFreeSpaceWhenImporting
         {
             get { return GetValueInt("MinimumFreeSpaceWhenImporting", 100); }

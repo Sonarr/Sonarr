@@ -56,6 +56,12 @@ namespace NzbDrone.Core.Test.Configuration
         }
 
         [Test]
+        public void missing_year_import_should_be_disabled_by_default()
+        {
+            Subject.AllowMissingYearImport.Should().BeFalse();
+        }
+
+        [Test]
         [Description("This test will use reflection to ensure each config property read/writes to a unique key")]
         public void config_properties_should_write_and_read_using_same_key()
         {

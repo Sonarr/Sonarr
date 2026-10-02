@@ -184,6 +184,36 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
             _trackedDownload.State.Should().NotBe(TrackedDownloadState.ImportPending);
         }
 
+        [TestCase(true)]
+        [TestCase(false)]
+        public void should_only_allow_missing_year_exception_after_validation(bool valid)
+        {
+            var series = _trackedDownload.RemoteEpisode.Series;
+            var history = new List<EpisodeHistory>
+            {
+                new EpisodeHistory
+                {
+                    EventType = EpisodeHistoryEventType.Grabbed,
+                    SeriesId = series.Id,
+                    Data = new Dictionary<string, string>
+                    {
+                        { EpisodeHistory.SERIES_MATCH_TYPE, SeriesMatchType.Id.ToString() },
+                        { EpisodeHistory.RELEASE_SOURCE, ReleaseSourceType.Rss.ToString() }
+                    }
+                }
+            };
+            Mocker.GetMock<IParsingService>().Setup(s => s.GetSeries(It.IsAny<string>())).Returns((Series)null);
+            Mocker.GetMock<ISeriesService>().Setup(s => s.GetSeries(series.Id)).Returns(series);
+            Mocker.GetMock<IHistoryService>().Setup(s => s.FindByDownloadId(It.IsAny<string>())).Returns(history);
+            Mocker.GetMock<IMissingYearImportValidator>()
+                  .Setup(s => s.IsValid(_trackedDownload, series, It.IsAny<List<EpisodeHistory>>()))
+                  .Returns(valid);
+
+            Subject.Check(_trackedDownload);
+
+            _trackedDownload.State.Should().Be(valid ? TrackedDownloadState.ImportPending : TrackedDownloadState.ImportBlocked);
+        }
+
         private void AssertReadyToImport()
         {
             _trackedDownload.State.Should().Be(TrackedDownloadState.ImportPending);

@@ -290,6 +290,23 @@ function MediaManagement() {
                     isAdvanced={true}
                     size={sizes.MEDIUM}
                   >
+                    <FormLabel>{translate('AllowMissingYearImport')}</FormLabel>
+                    <FormInputHelpText
+                      text={translate('AllowMissingYearImportHelpText')}
+                    />
+                    <FormInput
+                      type={inputTypes.CHECK}
+                      name="allowMissingYearImport"
+                      onChange={handleInputChange}
+                      {...settings.allowMissingYearImport}
+                    />
+                  </FormRow>
+
+                  <FormRow
+                    advancedSettings={showAdvancedSettings}
+                    isAdvanced={true}
+                    size={sizes.MEDIUM}
+                  >
                     <FormLabel>
                       {translate('SkipFreeSpaceCheckWhenGrabbing')}
                     </FormLabel>
