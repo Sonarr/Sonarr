@@ -83,26 +83,31 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
         }
 
         [Test]
-        public void should_return_true_if_searched_season_is_within_multi_season_pack_range()
+        public void should_reject_as_full_season_if_searched_season_is_within_multi_season_pack_range()
         {
-            // e.g. "Show.S05E24.S06E01" - a season finale bundled with the next season's premiere.
-            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = [5, 6];
-            _remoteEpisode.ParsedEpisodeInfo.EpisodeNumbers = [24, 1];
-            _searchCriteria.SeasonNumber = 6;
-            _searchCriteria.EpisodeNumber = 1;
+            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = [1, 2, 3, 4, 5];
+            _remoteEpisode.ParsedEpisodeInfo.EpisodeNumbers = [];
+            _remoteEpisode.ParsedEpisodeInfo.FullSeason = true;
+            _searchCriteria.SeasonNumber = 3;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeTrue();
+            var decision = Subject.IsSatisfiedBy(_remoteEpisode, _information);
+
+            decision.Accepted.Should().BeFalse();
+            decision.Reason.Should().Be(DownloadRejectionReason.FullSeason);
         }
 
         [Test]
-        public void should_return_false_if_searched_season_is_outside_multi_season_pack_range()
+        public void should_reject_as_wrong_season_if_searched_season_is_outside_multi_season_pack_range()
         {
-            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = [5, 6];
-            _remoteEpisode.ParsedEpisodeInfo.EpisodeNumbers = [24, 1];
+            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = [1, 2, 3, 4, 5];
+            _remoteEpisode.ParsedEpisodeInfo.EpisodeNumbers = [];
+            _remoteEpisode.ParsedEpisodeInfo.FullSeason = true;
             _searchCriteria.SeasonNumber = 7;
-            _searchCriteria.EpisodeNumber = 1;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeFalse();
+            var decision = Subject.IsSatisfiedBy(_remoteEpisode, _information);
+
+            decision.Accepted.Should().BeFalse();
+            decision.Reason.Should().Be(DownloadRejectionReason.WrongSeason);
         }
     }
 }
