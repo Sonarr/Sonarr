@@ -396,13 +396,13 @@ namespace NzbDrone.Core.Download.Pending
                     {
                         _logger.Debug(ex, ex.Message);
 
-                        release.RemoteEpisode.MappedSeasonNumber = release.ParsedEpisodeInfo.SeasonNumbers.FirstOrDefault();
+                        release.RemoteEpisode.MappedSeasonNumber = release.ParsedEpisodeInfo.SeasonNumber;
                         release.RemoteEpisode.Episodes = new List<Episode>();
                     }
                 }
                 else
                 {
-                    release.RemoteEpisode.MappedSeasonNumber = release.ParsedEpisodeInfo.SeasonNumbers.FirstOrDefault();
+                    release.RemoteEpisode.MappedSeasonNumber = release.ParsedEpisodeInfo.SeasonNumber;
                     release.RemoteEpisode.Episodes = new List<Episode>();
                 }
 
