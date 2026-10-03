@@ -1200,6 +1200,12 @@ namespace NzbDrone.Core.Parser
                     throw new InvalidDateException("Invalid date found: {0}-{1}-{2}", airYear, airmonth, airday);
                 }
 
+                // Allow early releases, but reject dates too far in the future (most likely a parse error)
+                if (airDate > DateTime.Now.AddDays(14).Date)
+                {
+                    throw new InvalidDateException("Invalid date found: {0}", airDate);
+                }
+
                 // If the parsed air date is before 1970 and the title year wasn't matched (not a match for the Plex DVR format) throw an error
                 if (airDate < new DateTime(1970, 1, 1) && matchCollection[0].Groups["titleyear"].Value.IsNullOrWhiteSpace())
                 {
