@@ -309,6 +309,15 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.VuzeTests
         }
 
         [Test]
+        public void should_not_allow_category_and_directory()
+        {
+            GivenTvCategory();
+            GivenTvDirectory();
+
+            Subject.Test().IsValid.Should().BeFalse();
+        }
+
+        [Test]
         public void should_have_correct_output_directory_for_multifile_torrents()
         {
             WindowsOnly();
