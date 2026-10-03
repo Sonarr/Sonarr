@@ -97,7 +97,11 @@ namespace NzbDrone.Core.Test.ParserTests
 
             var validDate = title.Expand(new { year = twoDaysFromNow.Year, month = twoDaysFromNow.Month.ToString("00"), day = twoDaysFromNow.Day.ToString("00") });
 
-            Parser.Parser.ParseTitle(validDate).AirDate.Should().Be(twoDaysFromNow.ToString(Episode.AIR_DATE_FORMAT));
+            var result = Parser.Parser.ParseTitle(validDate);
+
+            result.Should().NotBeNull();
+            result.AirDate.Should().NotBeNull();
+            result.AirDate.Should().Be(twoDaysFromNow.ToString(Episode.AIR_DATE_FORMAT));
         }
 
         [TestCase(7)]
