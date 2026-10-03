@@ -117,6 +117,17 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 HasNotifiedManualInteractionRequired = existingItem?.HasNotifiedManualInteractionRequired ?? false
             };
 
+            if (existingItem != null &&
+                existingItem.DownloadItem.Status == downloadItem.Status &&
+                existingItem.DownloadItem.RemainingSize == downloadItem.RemainingSize)
+            {
+                trackedDownload.LastProgressDate = existingItem.LastProgressDate;
+            }
+            else
+            {
+                trackedDownload.LastProgressDate = DateTime.UtcNow;
+            }
+
             try
             {
                 var downloadHistory = _downloadHistoryService.GetLatestDownloadHistoryItem(downloadItem.DownloadId);
