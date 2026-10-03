@@ -79,5 +79,14 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = IsoLanguages.Find(isoCode);
             result.Language.Should().Be(Language.Georgian);
         }
+
+        [TestCase("ga")]
+        [TestCase("gle")]
+        [TestCase("ga-IE")]
+        public void should_return_irish(string isoCode)
+        {
+            var result = IsoLanguages.Find(isoCode);
+            result.Language.Should().Be(Language.Irish);
+        }
     }
 }
