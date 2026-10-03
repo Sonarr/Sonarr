@@ -1,16 +1,15 @@
 import React, { useMemo } from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
 import FormRow from 'Components/Form/FormRow';
 import { FieldSelectOption } from 'typings/Field';
 import { InputChanged } from 'typings/inputs';
 import { Failure } from 'typings/pending';
+import translate from 'Utilities/String/translate';
 
 interface ProviderFieldFormGroupProps<T> {
   advancedSettings: boolean;
-  layout?: 'group' | 'row';
   name: string;
   label: string;
   helpText?: string;
@@ -34,7 +33,6 @@ interface ProviderFieldFormGroupProps<T> {
 
 function ProviderFieldFormGroup<T>({
   advancedSettings = false,
-  layout = 'group',
   name,
   label,
   helpText,
@@ -114,51 +112,30 @@ function ProviderFieldFormGroup<T>({
     return null;
   }
 
-  const isRow = layout === 'row';
-
-  const input = (
-    <FormInputGroup
-      type={type}
-      name={name}
-      helpText={isRow ? undefined : helpText}
-      helpTextWarning={isRow ? undefined : helpTextWarning}
-      helpLink={helpLink}
-      placeholder={placeholder}
-      // @ts-expect-error - this isn't available on all types
-      selectOptionsProviderAction={selectOptionsProviderAction}
-      value={value}
-      values={selectValues}
-      errors={errors}
-      warnings={warnings}
-      pending={pending}
-      includeFiles={providerType === 'filePath' ? true : undefined}
-      onChange={onChange}
-      {...otherProps}
-    />
-  );
-
-  if (isRow) {
-    return (
-      <FormRow advancedSettings={advancedSettings} isAdvanced={advanced}>
-        <FormLabel>{label}</FormLabel>
-
-        {helpText ? <FormInputHelpText text={helpText} /> : null}
-
-        {helpTextWarning ? (
-          <FormInputHelpText text={helpTextWarning} isWarning={true} />
-        ) : null}
-
-        {input}
-      </FormRow>
-    );
-  }
-
   return (
-    <FormGroup advancedSettings={advancedSettings} isAdvanced={advanced}>
+    <FormRow advancedSettings={advancedSettings} isAdvanced={advanced}>
       <FormLabel>{label}</FormLabel>
-
-      {input}
-    </FormGroup>
+      <FormInputHelpText
+        text={helpText ?? (helpLink ? translate('MoreInfo') : undefined)}
+        link={helpLink}
+      />
+      <FormInputHelpText text={helpTextWarning} isWarning={true} />
+      <FormInput
+        type={type}
+        name={name}
+        placeholder={placeholder}
+        // @ts-expect-error - this isn't available on all types
+        selectOptionsProviderAction={selectOptionsProviderAction}
+        value={value}
+        values={selectValues}
+        errors={errors}
+        warnings={warnings}
+        pending={pending}
+        includeFiles={providerType === 'filePath' ? true : undefined}
+        onChange={onChange}
+        {...otherProps}
+      />
+    </FormRow>
   );
 }
 

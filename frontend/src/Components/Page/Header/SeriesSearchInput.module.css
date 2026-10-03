@@ -49,8 +49,7 @@
   line-height: 1.4;
   transition:
     background-color var(--transitionSmooth),
-    border-color var(--transitionSmooth),
-    box-shadow var(--transitionSmooth);
+    border-color var(--transitionSmooth);
 
   &::placeholder {
     color: var(--inkMuted);
@@ -64,7 +63,7 @@
     outline: 0;
     border-color: var(--accent);
     background-color: var(--searchInputFocusBackgroundColor);
-    box-shadow: 0 0 0 3px var(--inputFocusBoxShadowColor);
+    box-shadow: none;
 
     &::placeholder {
       color: var(--inkFaint);
@@ -80,29 +79,31 @@
   flex-grow: 0;
 }
 
+.dropdown {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  z-index: 1000;
+  overflow: hidden;
+  padding: 6px;
+  min-width: 320px;
+  max-width: 420px;
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
+  background-color: var(--cardBackgroundColor);
+  box-shadow: var(--shadowDropdown);
+  color: var(--ink);
+}
+
 .seriesContainer {
   @add-mixin scrollbar;
   @add-mixin scrollbarTrack;
   @add-mixin scrollbarThumb;
 }
 
-.containerOpen {
-  .seriesContainer {
-    position: absolute;
-    top: 42px;
-    right: 0;
-    z-index: 1000;
-    overflow-y: auto;
-    padding: 6px;
-    min-width: 320px;
-    max-width: 420px;
-    max-height: 380px;
-    border: 1px solid var(--borderColor);
-    border-radius: 12px;
-    background-color: var(--cardBackgroundColor);
-    box-shadow: var(--shadowDropdown);
-    color: var(--ink);
-  }
+.dropdown .seriesContainer {
+  overflow-y: auto;
+  max-height: 368px;
 }
 
 .list {
@@ -131,7 +132,7 @@
 }
 
 .addNewSeriesSuggestion {
-  padding: 10px 12px;
+  padding: 10px;
   border-radius: 8px;
   color: var(--inkSoft);
   font-size: 14px;
@@ -156,9 +157,9 @@
     max-width: none;
   }
 
-  .containerOpen .seriesContainer {
+  .dropdown {
     position: fixed;
-    top: calc($headerHeight + 4px);
+    top: calc(var(--headerHeight) + 4px);
     right: 12px;
     left: 12px;
     min-width: 0;

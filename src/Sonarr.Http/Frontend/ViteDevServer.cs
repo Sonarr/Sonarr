@@ -16,6 +16,8 @@ namespace Sonarr.Http.Frontend
 
     public class ViteDevServer : IViteDevServer
     {
+        private const string DefaultBaseAddress = "http://localhost:8959";
+
         private static readonly string[] Prefixes =
         {
             "/@vite/", "/@react-refresh", "/@id/", "/@fs/", "/node_modules/", "/frontend/src/"
@@ -26,7 +28,7 @@ namespace Sonarr.Http.Frontend
 
         public ViteDevServer(string baseAddress = null)
         {
-            _baseAddress = baseAddress ?? Environment.GetEnvironmentVariable("SONARR_VITE_DEV_SERVER");
+            _baseAddress = baseAddress ?? Environment.GetEnvironmentVariable("SONARR_VITE_DEV_SERVER") ?? DefaultBaseAddress;
             _httpClient = new HttpClient
             {
                 Timeout = TimeSpan.FromSeconds(10)

@@ -204,7 +204,6 @@ function EditIndexerModalContent({
                 advancedSettings={showAdvancedSettings}
                 provider="indexer"
                 providerData={item}
-                layout="row"
                 {...field}
                 onChange={handleFieldChange}
               />

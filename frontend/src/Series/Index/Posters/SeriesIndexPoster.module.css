@@ -2,10 +2,10 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
 
-  padding-bottom: 4px;
-
-  &:hover {
+@media (hover: hover) {
+  .content:hover {
     z-index: 2;
 
     .controls {
@@ -198,7 +198,6 @@
 .tags {
   display: flex;
   align-items: center;
-  padding: 4px 0 0;
   height: auto;
   background-color: transparent;
 }

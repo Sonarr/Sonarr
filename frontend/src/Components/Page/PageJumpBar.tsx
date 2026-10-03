@@ -4,7 +4,7 @@ import dimensions from 'Styles/Variables/dimensions';
 import PageJumpBarItem, { PageJumpBarItemProps } from './PageJumpBarItem';
 import styles from './PageJumpBar.module.css';
 
-const ITEM_HEIGHT = parseInt(dimensions.jumpBarItemHeight);
+const ITEM_HEIGHT = dimensions.jumpBarItemHeight;
 
 export interface PageJumpBarItems {
   characters: Record<string, number>;

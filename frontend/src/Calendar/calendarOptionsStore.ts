@@ -1,5 +1,6 @@
 import { SelectedFilterKey } from 'Components/Filter/Filter';
 import { createOptionsStore } from 'Helpers/Hooks/useOptionsStore';
+import dimensions from 'Styles/Variables/dimensions';
 import { CalendarView } from './calendarViews';
 
 export interface CalendarOptions {
@@ -25,7 +26,7 @@ const { useOptions, useOption, getOptions, getOption, setOptions, setOption } =
       showCutoffUnmetIcon: false,
       fullColorEvents: false,
       selectedFilterKey: 'monitored',
-      view: window.innerWidth > 768 ? 'week' : 'day',
+      view: window.innerWidth > dimensions.breakpointSmall ? 'week' : 'day',
     };
   });
 

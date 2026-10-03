@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -50,6 +50,7 @@ function EpisodeDetailsModalContent({
   onModalClose,
 }: EpisodeDetailsModalContentProps) {
   const [currentlySelectedTab, setCurrentlySelectedTab] = useState(selectedTab);
+  const modalBodyRef = useRef<HTMLDivElement>(null);
 
   const {
     title: seriesTitle,
@@ -126,7 +127,7 @@ function EpisodeDetailsModalContent({
         </div>
       </ModalHeader>
 
-      <ModalBody>
+      <ModalBody ref={modalBodyRef}>
         <Tabs
           className={styles.tabs}
           selectedIndex={TABS.indexOf(currentlySelectedTab)}
@@ -168,6 +169,7 @@ function EpisodeDetailsModalContent({
             <EpisodeSearch
               episodeId={episodeId}
               startInteractiveSearch={startInteractiveSearch}
+              scrollerRef={modalBodyRef}
               onModalClose={onModalClose}
             />
           </TabPanel>

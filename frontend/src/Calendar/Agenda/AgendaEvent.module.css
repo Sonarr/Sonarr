@@ -152,7 +152,7 @@
   100% { opacity: 1; }
 }
 
-@media only screen and (max-width: 768px) {
+@media (--breakpointSmall) {
   .event {
     align-items: flex-start;
     gap: 10px;

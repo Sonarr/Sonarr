@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { RefObject, useCallback, useState } from 'react';
 import CommandNames from 'Commands/CommandNames';
 import { useExecuteCommand } from 'Commands/useCommands';
 import Icon from 'Components/Icon';
@@ -12,12 +12,14 @@ import styles from './EpisodeSearch.module.css';
 interface EpisodeSearchProps {
   episodeId: number;
   startInteractiveSearch: boolean;
+  scrollerRef: RefObject<HTMLDivElement>;
   onModalClose: () => void;
 }
 
 function EpisodeSearch({
   episodeId,
   startInteractiveSearch,
+  scrollerRef,
   onModalClose,
 }: EpisodeSearchProps) {
   const executeCommand = useExecuteCommand();
@@ -41,7 +43,13 @@ function EpisodeSearch({
   }, []);
 
   if (isInteractiveSearchOpen) {
-    return <InteractiveSearch type="episode" searchPayload={{ episodeId }} />;
+    return (
+      <InteractiveSearch
+        type="episode"
+        searchPayload={{ episodeId }}
+        scrollerRef={scrollerRef}
+      />
+    );
   }
 
   return (

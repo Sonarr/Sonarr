@@ -45,7 +45,7 @@
   gap: 12px;
 }
 
-@media only screen and (max-width: 768px) {
+@media (--breakpointSmall) {
   .headerRow {
     display: none;
   }

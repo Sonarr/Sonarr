@@ -125,7 +125,7 @@
   }
 }
 
-@media only screen and (max-width: 768px) {
+@media (--breakpointSmall) {
   .overlay {
     flex-wrap: wrap;
     row-gap: 8px;

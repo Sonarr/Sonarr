@@ -10,14 +10,12 @@ namespace Sonarr.Http.Frontend.Mappers
     {
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IConfigFileProvider _configFileProvider;
-        private readonly IViteDevServer _viteDevServer;
 
-        public StaticResourceMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, IConfigFileProvider configFileProvider, IViteDevServer viteDevServer, Logger logger)
+        public StaticResourceMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, IConfigFileProvider configFileProvider, Logger logger)
             : base(diskProvider, logger)
         {
             _appFolderInfo = appFolderInfo;
             _configFileProvider = configFileProvider;
-            _viteDevServer = viteDevServer;
         }
 
         protected override string FolderPath => Path.Combine(_appFolderInfo.StartUpFolder, _configFileProvider.UiFolder);
@@ -32,11 +30,6 @@ namespace Sonarr.Http.Frontend.Mappers
 
         public override bool CanHandle(string resourceUrl)
         {
-            if (_viteDevServer.HandlesPath(resourceUrl))
-            {
-                return false;
-            }
-
             resourceUrl = resourceUrl.ToLowerInvariant();
 
             if (resourceUrl.StartsWith("/content/manifest") ||

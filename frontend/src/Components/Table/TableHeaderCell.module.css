@@ -3,7 +3,6 @@
   color: var(--inkMuted);
   text-align: left;
   text-transform: uppercase;
-  white-space: nowrap;
   letter-spacing: 0.06em;
   font-weight: 600;
   font-size: 11px;
@@ -31,4 +30,10 @@
 .sortIcon {
   margin-left: 8px;
   color: var(--accentDeep);
+}
+
+@media (--breakpointMedium) {
+  .headerCell {
+    white-space: nowrap;
+  }
 }

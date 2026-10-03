@@ -50,7 +50,6 @@ namespace Sonarr.Http.Test.Frontend
             ViteDevServer.IsViteDevPath(resourceUrl).Should().BeFalse();
         }
 
-        [TestCase(null)]
         [TestCase("")]
         [TestCase("   ")]
         public void should_not_be_enabled_without_a_dev_server_address(string baseAddress)
@@ -62,6 +61,12 @@ namespace Sonarr.Http.Test.Frontend
         public void should_be_enabled_with_a_dev_server_address()
         {
             new DebugViteDevServer("http://localhost:8959").IsEnabled.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_default_to_local_dev_server_without_an_address()
+        {
+            new DebugViteDevServer(null).IsEnabled.Should().BeTrue();
         }
 
         [Test]
@@ -79,7 +84,7 @@ namespace Sonarr.Http.Test.Frontend
         [TestCase("/frontend/src/Components/Page/Page.module.css")]
         public void should_not_handle_any_path_when_disabled(string resourceUrl)
         {
-            new DebugViteDevServer(null).HandlesPath(resourceUrl).Should().BeFalse();
+            new DebugViteDevServer("").HandlesPath(resourceUrl).Should().BeFalse();
         }
 
         [TestCase("/@vite/client")]

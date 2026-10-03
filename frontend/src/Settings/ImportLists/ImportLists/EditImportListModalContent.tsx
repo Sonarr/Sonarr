@@ -280,7 +280,6 @@ function EditImportListModalContent({
                 advancedSettings={showAdvancedSettings}
                 provider="importList"
                 providerData={item}
-                layout="row"
                 {...field}
                 onChange={handleFieldChange}
               />

@@ -33,7 +33,7 @@ All issues must follow the provided templates, these templates help us triage an
 - We expect that all issues are opened by a human selecting the appropriate issue template while opening the issue
 - Issues opened automatically or by other means may be closed automatically
 - We also expect discussions on issues to be conducted by humans, we are not interested in conversing with AI or triaging AI hallucinations
-- Bug reports for issues that generate logs must contain a link to the approproate trace logs. See the [Wiki](https://wiki.servarr.com/sonarr/troubleshooting#logging-and-log-files) for more information
+- Bug reports for issues that generate logs must contain a link to the appropriate trace logs. See the [Wiki](https://wiki.servarr.com/sonarr/troubleshooting#logging-and-log-files) for more information
 
 ### How to Contribute
 

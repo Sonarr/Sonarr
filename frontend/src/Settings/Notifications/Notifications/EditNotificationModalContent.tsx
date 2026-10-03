@@ -130,7 +130,6 @@ function EditNotificationModalContent({
                 advancedSettings={showAdvancedSettings}
                 provider="notification"
                 providerData={item}
-                layout="row"
                 onChange={handleFieldChange}
               />
             );

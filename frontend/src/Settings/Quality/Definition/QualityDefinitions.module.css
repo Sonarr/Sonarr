@@ -20,7 +20,7 @@
   flex-direction: column;
 }
 
-@media only screen and (max-width: 768px) {
+@media (--breakpointSmall) {
   .header {
     display: none;
   }

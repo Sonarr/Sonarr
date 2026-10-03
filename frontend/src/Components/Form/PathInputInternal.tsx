@@ -147,7 +147,7 @@ export function PathInputInternal({
     <div
       className={classNames(
         className,
-        hasFileBrowser && styles.fileBrowserGroup
+        hasFileBrowser && !hasButton && styles.fileBrowserGroup
       )}
     >
       <AutoSuggestInput
