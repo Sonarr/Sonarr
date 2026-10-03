@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Extras.Others
                         continue;
                     }
 
-                    if (fileEpisodeInfo.SeasonNumber == localEpisode.FileEpisodeInfo.SeasonNumber &&
+                    if (fileEpisodeInfo.SeasonNumbers.SequenceEqual(localEpisode.FileEpisodeInfo.SeasonNumbers) &&
                         fileEpisodeInfo.EpisodeNumbers.SequenceEqual(localEpisode.FileEpisodeInfo.EpisodeNumbers))
                     {
                         matchingFiles.Add(file);

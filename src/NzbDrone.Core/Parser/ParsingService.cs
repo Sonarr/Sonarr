@@ -277,6 +277,17 @@ namespace NzbDrone.Core.Parser
         {
             if (parsedEpisodeInfo.FullSeason)
             {
+                if (parsedEpisodeInfo.IsMultiSeason)
+                {
+                    // Scene numbering is per-season, so it isn't meaningful for a pack spanning
+                    // multiple seasons; apply the scene-mapping offset (if any) to every season instead.
+                    var offset = mappedSeasonNumber - parsedEpisodeInfo.SeasonNumbers.FirstOrDefault();
+
+                    return parsedEpisodeInfo.SeasonNumbers
+                        .SelectMany(seasonNumber => _episodeService.GetEpisodesBySeason(series.Id, seasonNumber + offset))
+                        .ToList();
+                }
+
                 if (series.UseSceneNumbering && sceneSource)
                 {
                     var episodes = _episodeService.GetEpisodesBySceneSeason(series.Id, mappedSeasonNumber);
