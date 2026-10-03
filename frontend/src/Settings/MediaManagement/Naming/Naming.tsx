@@ -15,30 +15,13 @@ import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import NamingModal from './NamingModal';
+import NamingModal, { NamingModalOptions } from './NamingModal';
 import {
   NamingSettingsModel,
   useManageNamingSettings,
   useNamingExamples,
 } from './useNamingSettings';
 import styles from './Naming.module.css';
-
-interface NamingModalOptions {
-  name: keyof Pick<
-    NamingSettingsModel,
-    | 'standardEpisodeFormat'
-    | 'dailyEpisodeFormat'
-    | 'animeEpisodeFormat'
-    | 'seriesFolderFormat'
-    | 'seasonFolderFormat'
-    | 'specialsFolderFormat'
-  >;
-  season?: boolean;
-  episode?: boolean;
-  daily?: boolean;
-  anime?: boolean;
-  additional?: boolean;
-}
 
 interface NamingProps {
   setChildSave: (saveCallback: () => void) => void;
@@ -128,6 +111,7 @@ function Naming({ setChildSave, onChildStateChange }: NamingProps) {
     setNamingModalOptions({
       name: 'seasonFolderFormat',
       season: true,
+      seasonTitle: true,
     });
   }, [setNamingModalOpen, setNamingModalOptions]);
 
@@ -137,6 +121,7 @@ function Naming({ setChildSave, onChildStateChange }: NamingProps) {
     setNamingModalOptions({
       name: 'specialsFolderFormat',
       season: true,
+      seasonTitle: true,
     });
   }, [setNamingModalOpen, setNamingModalOptions]);
 

@@ -1,5 +1,8 @@
-import React, { useCallback, useMemo } from 'react';
-import { useAddSeriesOptions } from 'AddSeries/addSeriesOptionsStore';
+import React, { useCallback, useMemo, useState } from 'react';
+import {
+  useAddSeriesLanguage,
+  useAddSeriesOptions,
+} from 'AddSeries/addSeriesOptionsStore';
 import { useSelect } from 'App/Select/SelectContext';
 import CheckInput from 'Components/Form/CheckInput';
 import Icon from 'Components/Icon';
@@ -7,8 +10,10 @@ import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import PageContentFooter from 'Components/Page/PageContentFooter';
 import Popover from 'Components/Tooltip/Popover';
+import Tooltip from 'Components/Tooltip/Tooltip';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import useSeries from 'Series/useSeries';
+import MetadataSettingsModal from 'Settings/MetadataSource/MetadataSettingsModal';
 import { CheckInputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import ImportSeriesDefaults from './ImportSeriesDefaults';
@@ -22,6 +27,7 @@ import {
   startProcessing,
   stopProcessing,
   updateImportSeriesItem,
+  useHasSearchedItems,
   useImportSeriesItems,
   useImportSeriesViewOption,
   useLookupQueueHasItems,
@@ -31,6 +37,7 @@ import styles from './ImportSeriesFooter.module.css';
 
 function ImportSeriesFooter() {
   const defaults = useAddSeriesOptions();
+  const defaultLanguage = useAddSeriesLanguage();
   const items = useImportSeriesItems();
   const compactRows = useImportSeriesViewOption('compactRows');
   const isLookingUpSeries = useLookupQueueHasItems();
@@ -170,17 +177,31 @@ function ImportSeriesFooter() {
     importSeries(importableIds);
   }, [importSeries, importableIds]);
 
+  const hasSearchedItems = useHasSearchedItems();
+  const isMetadataSettingsDisabled = hasSearchedItems || isLookingUpSeries;
+  const [isMetadataSettingsModalOpen, setIsMetadataSettingsModalOpen] =
+    useState(false);
+
+  const handleMetadataSettingsPress = useCallback(() => {
+    setIsMetadataSettingsModalOpen(true);
+  }, []);
+
+  const handleMetadataSettingsModalClose = useCallback(() => {
+    setIsMetadataSettingsModalOpen(false);
+  }, []);
+
   const handleApplyDefaults = useCallback(() => {
     importableIds.forEach((id) => {
       updateImportSeriesItem({
         id,
+        language: defaultLanguage,
         monitor: defaults.monitor,
         qualityProfileId: defaults.qualityProfileId,
         seasonFolder: defaults.seasonFolder,
         seriesType: defaults.seriesType,
       });
     });
-  }, [defaults, importableIds]);
+  }, [defaults, defaultLanguage, importableIds]);
 
   return (
     <PageContentFooter className={styles.footerShell}>
@@ -246,6 +267,26 @@ function ImportSeriesFooter() {
           </div>
 
           <div className={styles.buttonGroup}>
+            {isMetadataSettingsDisabled ? (
+              <Tooltip
+                anchor={
+                  <Button kind={kinds.DEFAULT} isDisabled={true}>
+                    {translate('MetadataSettings')}
+                  </Button>
+                }
+                tooltip={translate('MetadataSettingsDisabledHelpText')}
+                kind={kinds.INVERSE}
+                position={tooltipPositions.TOP}
+              />
+            ) : (
+              <Button
+                kind={kinds.DEFAULT}
+                onPress={handleMetadataSettingsPress}
+              >
+                {translate('MetadataSettings')}
+              </Button>
+            )}
+
             <div className={styles.importButtonContainer}>
               <SpinnerButton
                 className={styles.importButton}
@@ -311,6 +352,10 @@ function ImportSeriesFooter() {
           </div>
         </div>
       </div>
+      <MetadataSettingsModal
+        isOpen={isMetadataSettingsModalOpen}
+        onModalClose={handleMetadataSettingsModalClose}
+      />
     </PageContentFooter>
   );
 }

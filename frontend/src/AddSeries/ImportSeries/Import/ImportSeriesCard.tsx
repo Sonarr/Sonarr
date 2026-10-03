@@ -1,12 +1,14 @@
 import classNames from 'classnames';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelect } from 'App/Select/SelectContext';
 import CheckInput from 'Components/Form/CheckInput';
 import EnhancedSelectInput, {
   EnhancedSelectInputValue,
 } from 'Components/Form/Select/EnhancedSelectInput';
+import LanguageSelectInput from 'Components/Form/Select/LanguageSelectInput';
 import MonitorEpisodesSelectInput from 'Components/Form/Select/MonitorEpisodesSelectInput';
 import QualityProfileSelectInput from 'Components/Form/Select/QualityProfileSelectInput';
+import SeasonTypeSelectInput from 'Components/Form/Select/SeasonTypeSelectInput';
 import SeriesTypeSelectInput from 'Components/Form/Select/SeriesTypeSelectInput';
 import Label from 'Components/Label';
 import { kinds } from 'Helpers/Props';
@@ -60,9 +62,11 @@ function ImportSeriesCard({
 
   const {
     relativePath,
+    language,
     monitor,
     qualityProfileId,
     seasonFolder,
+    seasonType,
     seriesType,
     selectedSeries,
   } = item ?? {};
@@ -107,6 +111,31 @@ function ImportSeriesCard({
   );
 
   const [isSearching, setIsSearching] = useState(false);
+
+  const seasonTypes = useMemo(
+    () =>
+      selectedSeries?.seasonTypes?.length
+        ? selectedSeries.seasonTypes
+        : [
+            {
+              type: 'official',
+              name: translate('AiredOrder'),
+              seasonNumbers: [],
+              episodeCount: 0,
+            },
+          ],
+    [selectedSeries]
+  );
+
+  useEffect(() => {
+    if (
+      selectedSeries &&
+      seasonType &&
+      !seasonTypes.some((s) => s.type === seasonType)
+    ) {
+      updateImportSeriesItem({ id, seasonType: 'official' });
+    }
+  }, [id, selectedSeries, seasonType, seasonTypes]);
 
   const seasonFolderOptions: EnhancedSelectInputValue<boolean>[] = useMemo(
     () => [
@@ -244,6 +273,38 @@ function ImportSeriesCard({
                 modalTitle={translate('SeriesType')}
                 isDisabled={!selectedSeries}
                 selectedValueOptions={HIDE_HINT}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div className={styles.setting}>
+              <div className={styles.settingLabel}>
+                {translate('SeasonType')}
+              </div>
+
+              <SeasonTypeSelectInput
+                name="seasonType"
+                value={seasonType}
+                seasonTypes={seasonTypes}
+                modalTitle={translate('SeasonType')}
+                isDisabled={!selectedSeries}
+                includeMixed={false}
+                includeNoChange={false}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div className={styles.setting}>
+              <div className={styles.settingLabel}>
+                {translate('MetadataLanguage')}
+              </div>
+
+              <LanguageSelectInput
+                name="language"
+                value={language}
+                modalTitle={translate('MetadataLanguage')}
+                isDisabled={!selectedSeries}
+                includeAny={false}
                 onChange={handleInputChange}
               />
             </div>

@@ -1,5 +1,6 @@
 using System;
 using NzbDrone.Core.ImportLists;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Tv;
 
 namespace Sonarr.Api.V3.ImportLists
@@ -13,6 +14,7 @@ namespace Sonarr.Api.V3.ImportLists
         public string RootFolderPath { get; set; }
         public int QualityProfileId { get; set; }
         public SeriesTypes SeriesType { get; set; }
+        public Language Language { get; set; }
         public bool SeasonFolder { get; set; }
         public ImportListType ListType { get; set; }
         public int ListOrder { get; set; }
@@ -38,6 +40,7 @@ namespace Sonarr.Api.V3.ImportLists
             resource.RootFolderPath = definition.RootFolderPath;
             resource.QualityProfileId = definition.QualityProfileId;
             resource.SeriesType = definition.SeriesType;
+            resource.Language = definition.Language;
             resource.SeasonFolder = definition.SeasonFolder;
             resource.ListType = definition.ListType;
             resource.ListOrder = (int)definition.ListType;
@@ -63,6 +66,7 @@ namespace Sonarr.Api.V3.ImportLists
             definition.RootFolderPath = resource.RootFolderPath;
             definition.QualityProfileId = resource.QualityProfileId;
             definition.SeriesType = resource.SeriesType;
+            definition.Language = resource.Language ?? Language.English;
             definition.SeasonFolder = resource.SeasonFolder;
             definition.ListType = resource.ListType;
             definition.MinRefreshInterval = resource.MinRefreshInterval;

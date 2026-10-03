@@ -1,5 +1,6 @@
 using System;
 using Equ;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 
@@ -15,6 +16,7 @@ namespace NzbDrone.Core.ImportLists
         public NewItemMonitorTypes MonitorNewItems { get; set; }
         public int QualityProfileId { get; set; }
         public SeriesTypes SeriesType { get; set; }
+        public Language Language { get; set; }
         public bool SeasonFolder { get; set; }
         public string RootFolderPath { get; set; }
         public bool TagExisting { get; set; }

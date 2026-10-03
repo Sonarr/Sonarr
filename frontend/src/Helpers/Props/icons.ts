@@ -70,6 +70,7 @@ import {
   LayoutList,
   ListChecks,
   ListFilter,
+  ListOrdered,
   Loader,
   LogOut,
   Menu,
@@ -205,6 +206,7 @@ export const REORDER = Menu;
 export const ROOT_FOLDER = FolderTree;
 export const RSS = Rss;
 export const SAVE = Save;
+export const SEASON_TYPE = ListOrdered;
 export const SCENE_MAPPING = Network;
 export const SCHEDULED = Clock;
 export const SCORE = UserPlus;

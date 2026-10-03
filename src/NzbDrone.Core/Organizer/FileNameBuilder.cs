@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Organizer
         string BuildFilePath(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension, NamingConfig namingConfig = null, List<CustomFormat> customFormats = null);
         string BuildSeasonPath(Series series, int seasonNumber);
         string GetSeriesFolder(Series series, NamingConfig namingConfig = null);
+        string GetSeriesFolder(Series series, string title, NamingConfig namingConfig = null);
         string GetSeasonFolder(Series series, int seasonNumber, NamingConfig namingConfig = null);
         bool RequiresEpisodeTitle(Series series, List<Episode> episodes);
         bool RequiresAbsoluteEpisodeNumber();
@@ -191,7 +192,7 @@ namespace NzbDrone.Core.Organizer
 
                 UpdateMediaInfoIfNeeded(splitPattern, episodeFile, series);
 
-                AddSeriesTokens(tokenHandlers, series);
+                AddSeriesTokens(tokenHandlers, series, series.Title);
                 AddIdTokens(tokenHandlers, series);
                 AddEpisodeTokens(tokenHandlers, episodes);
                 AddEpisodeTitlePlaceholderTokens(tokenHandlers);
@@ -257,6 +258,11 @@ namespace NzbDrone.Core.Organizer
 
         public string GetSeriesFolder(Series series, NamingConfig namingConfig = null)
         {
+            return GetSeriesFolder(series, series.Title, namingConfig);
+        }
+
+        public string GetSeriesFolder(Series series, string title, NamingConfig namingConfig = null)
+        {
             if (namingConfig == null)
             {
                 namingConfig = _namingConfigService.GetConfig();
@@ -264,7 +270,7 @@ namespace NzbDrone.Core.Organizer
 
             var tokenHandlers = new Dictionary<string, Func<TokenMatch, string>>(FileNameBuilderTokenEqualityComparer.Instance);
 
-            AddSeriesTokens(tokenHandlers, series);
+            AddSeriesTokens(tokenHandlers, series, title);
             AddIdTokens(tokenHandlers, series);
 
             var folderName = ReplaceTokens(namingConfig.SeriesFolderFormat, tokenHandlers, namingConfig);
@@ -283,16 +289,18 @@ namespace NzbDrone.Core.Organizer
                 namingConfig = _namingConfigService.GetConfig();
             }
 
+            var title = series.Seasons.FirstOrDefault(s => s.SeasonNumber == seasonNumber)?.Title;
             var tokenHandlers = new Dictionary<string, Func<TokenMatch, string>>(FileNameBuilderTokenEqualityComparer.Instance);
 
-            AddSeriesTokens(tokenHandlers, series);
+            AddSeriesTokens(tokenHandlers, series, series.Title);
             AddIdTokens(tokenHandlers, series);
-            AddSeasonTokens(tokenHandlers, seasonNumber);
+            AddSeasonNumberToken(tokenHandlers, seasonNumber);
+            AddSeasonTitleToken(tokenHandlers, title);
 
             var format = seasonNumber == 0 ? namingConfig.SpecialsFolderFormat : namingConfig.SeasonFolderFormat;
             var folderName = ReplaceTokens(format, tokenHandlers, namingConfig);
 
-            folderName = CleanFolderName(folderName);
+            folderName = CleanFolderName(folderName).Trim(' ', '.', '-', '_');
             folderName = ReplaceReservedDeviceNames(folderName);
             folderName = folderName.Replace("{ellipsis}", "...");
 
@@ -448,21 +456,21 @@ namespace NzbDrone.Core.Organizer
             });
         }
 
-        private void AddSeriesTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series)
+        private void AddSeriesTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series, string title)
         {
-            tokenHandlers["{Series Title}"] = m => Truncate(series.Title, m.CustomFormat);
-            tokenHandlers["{Series CleanTitle}"] = m => Truncate(CleanTitle(series.Title), m.CustomFormat);
-            tokenHandlers["{Series TitleYear}"] = m => Truncate(TitleYear(series.Title, series.Year), m.CustomFormat);
-            tokenHandlers["{Series CleanTitleYear}"] = m => Truncate(CleanTitle(TitleYear(series.Title, series.Year)), m.CustomFormat);
-            tokenHandlers["{Series TitleWithoutYear}"] = m => Truncate(TitleWithoutYear(series.Title), m.CustomFormat);
-            tokenHandlers["{Series CleanTitleWithoutYear}"] = m => Truncate(CleanTitle(TitleWithoutYear(series.Title)), m.CustomFormat);
-            tokenHandlers["{Series TitleThe}"] = m => Truncate(TitleThe(series.Title), m.CustomFormat);
-            tokenHandlers["{Series CleanTitleThe}"] = m => Truncate(CleanTitleThe(series.Title), m.CustomFormat);
-            tokenHandlers["{Series TitleTheYear}"] = m => Truncate(TitleYear(TitleThe(series.Title), series.Year), m.CustomFormat);
-            tokenHandlers["{Series CleanTitleTheYear}"] = m => Truncate(CleanTitleTheYear(series.Title, series.Year), m.CustomFormat);
-            tokenHandlers["{Series TitleTheWithoutYear}"] = m => Truncate(TitleWithoutYear(TitleThe(series.Title)), m.CustomFormat);
-            tokenHandlers["{Series CleanTitleTheWithoutYear}"] = m => Truncate(CleanTitleThe(TitleWithoutYear(series.Title)), m.CustomFormat);
-            tokenHandlers["{Series TitleFirstCharacter}"] = m => Truncate(TitleFirstCharacter(TitleThe(series.Title)), m.CustomFormat);
+            tokenHandlers["{Series Title}"] = m => Truncate(title, m.CustomFormat);
+            tokenHandlers["{Series CleanTitle}"] = m => Truncate(CleanTitle(title), m.CustomFormat);
+            tokenHandlers["{Series TitleYear}"] = m => Truncate(TitleYear(title, series.Year), m.CustomFormat);
+            tokenHandlers["{Series CleanTitleYear}"] = m => Truncate(CleanTitle(TitleYear(title, series.Year)), m.CustomFormat);
+            tokenHandlers["{Series TitleWithoutYear}"] = m => Truncate(TitleWithoutYear(title), m.CustomFormat);
+            tokenHandlers["{Series CleanTitleWithoutYear}"] = m => Truncate(CleanTitle(TitleWithoutYear(title)), m.CustomFormat);
+            tokenHandlers["{Series TitleThe}"] = m => Truncate(TitleThe(title), m.CustomFormat);
+            tokenHandlers["{Series CleanTitleThe}"] = m => Truncate(CleanTitleThe(title), m.CustomFormat);
+            tokenHandlers["{Series TitleTheYear}"] = m => Truncate(TitleYear(TitleThe(title), series.Year), m.CustomFormat);
+            tokenHandlers["{Series CleanTitleTheYear}"] = m => Truncate(CleanTitleTheYear(title, series.Year), m.CustomFormat);
+            tokenHandlers["{Series TitleTheWithoutYear}"] = m => Truncate(TitleWithoutYear(TitleThe(title)), m.CustomFormat);
+            tokenHandlers["{Series CleanTitleTheWithoutYear}"] = m => Truncate(CleanTitleThe(TitleWithoutYear(title)), m.CustomFormat);
+            tokenHandlers["{Series TitleFirstCharacter}"] = m => Truncate(TitleFirstCharacter(TitleThe(title)), m.CustomFormat);
             tokenHandlers["{Series Year}"] = m => series.Year.ToString();
         }
 
@@ -515,7 +523,7 @@ namespace NzbDrone.Core.Organizer
                 tokenHandlers[token] = m => seasonEpisodePattern;
             }
 
-            AddSeasonTokens(tokenHandlers, episodes.First().SeasonNumber);
+            AddSeasonNumberToken(tokenHandlers, episodes.First().SeasonNumber);
 
             if (episodes.Count > 1)
             {
@@ -592,9 +600,15 @@ namespace NzbDrone.Core.Organizer
             return pattern;
         }
 
-        private void AddSeasonTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, int seasonNumber)
+        private void AddSeasonNumberToken(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, int seasonNumber)
         {
             tokenHandlers["{Season}"] = m => seasonNumber.ToString(m.CustomFormat);
+        }
+
+        private void AddSeasonTitleToken(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, string title)
+        {
+            tokenHandlers["{Season Title}"] = m => title.IsNullOrWhiteSpace() ? string.Empty : Truncate(title, m.CustomFormat);
+            tokenHandlers["{Season CleanTitle}"] = m => title.IsNullOrWhiteSpace() ? string.Empty : Truncate(CleanTitle(title), m.CustomFormat);
         }
 
         private void AddEpisodeTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, List<Episode> episodes)

@@ -13,7 +13,7 @@
   max-width: 1440px;
   grid-template-columns:
     minmax(150px, 0.8fr)
-    repeat(4, minmax(112px, 1fr))
+    repeat(5, minmax(112px, 1fr))
     auto;
   gap: 9px;
 }

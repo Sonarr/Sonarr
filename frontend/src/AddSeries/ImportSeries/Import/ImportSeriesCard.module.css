@@ -83,7 +83,7 @@
   display: grid;
   align-items: center;
   flex: 1;
-  grid-template-columns: minmax(190px, 0.72fr) minmax(560px, 2fr);
+  grid-template-columns: minmax(190px, 1fr) auto;
 
   min-width: 0;
   gap: 14px;
@@ -104,7 +104,9 @@
 
 .settingsRow {
   display: grid;
-  grid-template-columns: repeat(4, minmax(112px, 1fr));
+  grid-template-columns: repeat(6, minmax(112px, 180px));
+
+  justify-content: end;
 
   min-width: 0;
   gap: 9px;
@@ -196,6 +198,8 @@
 
   .settingsRow {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    justify-content: stretch;
   }
 
   .poster {

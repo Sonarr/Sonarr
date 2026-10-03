@@ -8,6 +8,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.ImportLists;
 using NzbDrone.Core.ImportLists.Exclusions;
 using NzbDrone.Core.ImportLists.ImportListItems;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
@@ -105,11 +106,11 @@ namespace NzbDrone.Core.Test.ImportListTests
                 .Returns(_existingSeries);
 
             Mocker.GetMock<ISearchForNewSeries>()
-                  .Setup(v => v.SearchForNewSeries(It.IsAny<string>()))
+                  .Setup(v => v.SearchForNewSeries(It.IsAny<string>(), It.IsAny<Language>()))
                   .Returns(new List<Series>());
 
             Mocker.GetMock<ISearchForNewSeries>()
-                  .Setup(v => v.SearchForNewSeriesByImdbId(It.IsAny<string>()))
+                  .Setup(v => v.SearchForNewSeriesByImdbId(It.IsAny<string>(), It.IsAny<Language>()))
                   .Returns(new List<Series>());
 
             Mocker.GetMock<IImportListFactory>()
@@ -147,7 +148,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             _list1Series.First().ImdbId = "tt0496424";
 
             Mocker.GetMock<ISearchForNewSeries>()
-                .Setup(s => s.SearchForNewSeriesByImdbId(_list1Series.First().ImdbId))
+                .Setup(s => s.SearchForNewSeriesByImdbId(_list1Series.First().ImdbId, It.IsAny<Language>()))
                 .Returns(
                     Builder<Series>
                         .CreateListOfSize(1)
@@ -537,7 +538,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(_commandAll);
 
             Mocker.GetMock<ISearchForNewSeries>()
-                  .Verify(v => v.SearchForNewSeries(It.IsAny<string>()), Times.Never());
+                  .Verify(v => v.SearchForNewSeries(It.IsAny<string>(), It.IsAny<Language>()), Times.Never());
         }
 
         [Test]
@@ -551,7 +552,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(_commandAll);
 
             Mocker.GetMock<ISearchForNewSeries>()
-                  .Verify(v => v.SearchForNewSeriesByImdbId(It.IsAny<string>()), Times.Once());
+                  .Verify(v => v.SearchForNewSeriesByImdbId(It.IsAny<string>(), It.IsAny<Language>()), Times.Once());
 
             Mocker.GetMock<IAddSeriesService>()
                 .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 1), It.IsAny<bool>()));

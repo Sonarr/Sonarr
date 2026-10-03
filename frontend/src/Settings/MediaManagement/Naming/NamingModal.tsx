@@ -52,6 +52,7 @@ function withFootNotes(
 
 interface TokenFlags {
   season: boolean;
+  seasonTitle: boolean;
   episode: boolean;
   daily: boolean;
   anime: boolean;
@@ -243,6 +244,11 @@ const seasonTokens = [
   { token: '{season:00}', example: '01' },
 ];
 
+const seasonTitleTokens = [
+  { token: '{Season Title}', example: 'Part 1!' },
+  { token: '{Season CleanTitle}', example: 'Part 1' },
+];
+
 const episodeTokens = [
   { token: '{episode:0}', example: '1' },
   { token: '{episode:00}', example: '01' },
@@ -318,6 +324,7 @@ const originalTokens = [
 
 function getNamingTokenGroups({
   season,
+  seasonTitle,
   episode,
   daily,
   anime,
@@ -354,8 +361,14 @@ function getNamingTokenGroups({
 
   groups.push({ legend: translate('SeriesID'), tokens: seriesIdTokens });
 
-  if (season) {
-    groups.push({ legend: translate('Season'), tokens: seasonTokens });
+  if (season || seasonTitle) {
+    groups.push({
+      legend: translate('Season'),
+      tokens: [
+        ...(season ? seasonTokens : []),
+        ...(seasonTitle ? seasonTitleTokens : []),
+      ],
+    });
   }
 
   if (episode) {
@@ -409,8 +422,7 @@ function getNamingTokenGroups({
   return groups;
 }
 
-interface NamingModalProps {
-  isOpen: boolean;
+export interface NamingModalOptions {
   name: keyof Pick<
     NamingSettingsModel,
     | 'standardEpisodeFormat'
@@ -420,12 +432,17 @@ interface NamingModalProps {
     | 'seasonFolderFormat'
     | 'specialsFolderFormat'
   >;
-  value: string;
   season?: boolean;
+  seasonTitle?: boolean;
   episode?: boolean;
   daily?: boolean;
   anime?: boolean;
   additional?: boolean;
+}
+
+interface NamingModalProps extends NamingModalOptions {
+  isOpen: boolean;
+  value: string;
   onInputChange: ({ name, value }: { name: string; value: string }) => void;
   onModalClose: () => void;
 }
@@ -436,6 +453,7 @@ function NamingModal(props: NamingModalProps) {
     name,
     value,
     season = false,
+    seasonTitle = false,
     episode = false,
     daily = false,
     anime = false,
@@ -503,6 +521,7 @@ function NamingModal(props: NamingModalProps) {
 
   const tokenGroups = getNamingTokenGroups({
     season,
+    seasonTitle,
     episode,
     daily,
     anime,

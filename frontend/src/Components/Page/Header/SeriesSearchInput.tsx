@@ -45,6 +45,7 @@ export interface SuggestedSeries
     | 'sortTitle'
     | 'images'
     | 'alternateTitles'
+    | 'translations'
     | 'tvdbId'
     | 'tvMazeId'
     | 'imdbId'
@@ -79,6 +80,7 @@ function useSeriesSuggestions(tagList: ReadonlyArray<Tag>) {
         sortTitle,
         images,
         alternateTitles = [],
+        translations = [],
         tvdbId,
         tvMazeId,
         imdbId,
@@ -92,6 +94,7 @@ function useSeriesSuggestions(tagList: ReadonlyArray<Tag>) {
         sortTitle,
         images,
         alternateTitles,
+        translations,
         tvdbId,
         tvMazeId,
         imdbId,

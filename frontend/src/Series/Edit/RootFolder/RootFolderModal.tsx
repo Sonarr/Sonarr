@@ -9,12 +9,20 @@ interface RootFolderModalProps extends RootFolderModalContentProps {
 }
 
 function RootFolderModal(props: RootFolderModalProps) {
-  const { isOpen, rootFolderPath, seriesId, onSavePress, onModalClose } = props;
+  const {
+    isOpen,
+    rootFolderPath,
+    seriesId,
+    languageId,
+    onSavePress,
+    onModalClose,
+  } = props;
 
   return (
     <Modal isOpen={isOpen} onModalClose={onModalClose}>
       <RootFolderModalContent
         seriesId={seriesId}
+        languageId={languageId}
         rootFolderPath={rootFolderPath}
         onSavePress={onSavePress}
         onModalClose={onModalClose}

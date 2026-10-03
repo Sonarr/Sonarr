@@ -6,6 +6,7 @@ import { useInitializeLanguage } from 'Language/useLanguageName';
 import { useLanguages } from 'Language/useLanguages';
 import useSeries from 'Series/useSeries';
 import useIndexerFlags from 'Settings/Indexers/useIndexerFlags';
+import { useMetadataSourceSettings } from 'Settings/MetadataSource/useMetadataSourceSettings';
 import { useQualityProfiles } from 'Settings/Profiles/Quality/useQualityProfiles';
 import { useUiSettings } from 'Settings/UI/useUiSettings';
 import useSystemStatus from 'System/Status/useSystemStatus';
@@ -40,6 +41,11 @@ const useAppPage = () => {
   const { isFetched: isIndexerFlagsFetched, error: indexerFlagsError } =
     useIndexerFlags();
 
+  const {
+    isFetched: isMetadataSourceSettingsFetched,
+    error: metadataSourceSettingsError,
+  } = useMetadataSourceSettings();
+
   const isPopulated =
     isCustomFiltersFetched &&
     isIndexerFlagsFetched &&
@@ -49,7 +55,8 @@ const useAppPage = () => {
     isTranslationsFetched &&
     isUiSettingsFetched &&
     isQualityProfilesFetched &&
-    isLanguagesFetched;
+    isLanguagesFetched &&
+    isMetadataSourceSettingsFetched;
 
   const { hasError, errors } = useMemo(() => {
     return {
@@ -62,7 +69,8 @@ const useAppPage = () => {
         indexerFlagsError ||
         systemStatusError ||
         tagsError ||
-        translationsError
+        translationsError ||
+        metadataSourceSettingsError
       ),
       errors: {
         seriesError,
@@ -74,6 +82,7 @@ const useAppPage = () => {
         indexerFlagsError,
         systemStatusError,
         translationsError,
+        metadataSourceSettingsError,
       },
     };
   }, [
@@ -86,6 +95,7 @@ const useAppPage = () => {
     systemStatusError,
     tagsError,
     translationsError,
+    metadataSourceSettingsError,
   ]);
 
   const isLocalStorageSupported = useMemo(() => {

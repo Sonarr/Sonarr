@@ -25,6 +25,7 @@ import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import useDebounce from 'Helpers/Hooks/useDebounce';
 import { icons, kinds } from 'Helpers/Props';
+import { usePreferredMetadataLanguage } from 'Language/useLanguages';
 import useExistingSeries from 'Series/useExistingSeries';
 import { InputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
@@ -60,6 +61,7 @@ function ImportSeriesSelectSeries({
 }: ImportSeriesSelectSeriesProps) {
   const importSeriesItem = useImportSeriesItem(id);
   const { selectedSeries, name } = importSeriesItem ?? {};
+  const language = usePreferredMetadataLanguage();
   const isExistingSeries = useExistingSeries(selectedSeries?.tvdbId);
 
   const [term, setTerm] = useState(name);
@@ -76,6 +78,7 @@ function ImportSeriesSelectSeries({
 
   const { isFetching, isFetched, error, data } = useLookupSeries(
     query,
+    language,
     isCurrentLookupQueueItem
   );
 

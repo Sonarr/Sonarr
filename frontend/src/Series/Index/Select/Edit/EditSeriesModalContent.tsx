@@ -11,12 +11,14 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes } from 'Helpers/Props';
+import Language from 'Language/Language';
 import MoveSeriesModal from 'Series/MoveSeries/MoveSeriesModal';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './EditSeriesModalContent.module.css';
 
 interface SavePayload {
+  language?: Language;
   monitored?: boolean;
   monitorNewItems?: string;
   qualityProfileId?: number;
@@ -80,6 +82,7 @@ const seasonFolderOptions: EnhancedSelectInputValue<string>[] = [
 function EditSeriesModalContent(props: EditSeriesModalContentProps) {
   const { onSavePress, onModalClose } = props;
 
+  const [language, setLanguage] = useState<Language | string>(NO_CHANGE);
   const [monitored, setMonitored] = useState(NO_CHANGE);
   const [monitorNewItems, setMonitorNewItems] = useState(NO_CHANGE);
   const [qualityProfileId, setQualityProfileId] = useState<string | number>(
@@ -95,6 +98,11 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
     (moveFiles: boolean) => {
       let hasChanges = false;
       const payload: SavePayload = {};
+
+      if (language !== NO_CHANGE) {
+        hasChanges = true;
+        payload.language = language as Language;
+      }
 
       if (monitored !== NO_CHANGE) {
         hasChanges = true;
@@ -134,6 +142,7 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
       onModalClose();
     },
     [
+      language,
       monitored,
       monitorNewItems,
       qualityProfileId,
@@ -148,6 +157,9 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
   const onInputChange = useCallback(
     ({ name, value }: InputChanged) => {
       switch (name) {
+        case 'language':
+          setLanguage(value as Language);
+          break;
         case 'monitored':
           setMonitored(value as string);
           break;
@@ -199,6 +211,20 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('EditSelectedSeries')}</ModalHeader>
       <ModalBody>
+        <FormRow>
+          <FormLabel>{translate('Language')}</FormLabel>
+
+          <FormInputHelpText text={translate('SeriesLanguageHelpText')} />
+          <FormInput
+            type={inputTypes.LANGUAGE_SELECT}
+            name="language"
+            value={language}
+            includeNoChange={true}
+            includeNoChangeDisabled={false}
+            onChange={onInputChange}
+          />
+        </FormRow>
+
         <FormRow>
           <FormLabel>{translate('Monitored')}</FormLabel>
 

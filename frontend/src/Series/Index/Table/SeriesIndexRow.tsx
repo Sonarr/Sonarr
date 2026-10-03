@@ -138,6 +138,9 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
     certification,
     year,
     useSceneNumbering,
+    language,
+    seasonType,
+    seasonTypes,
     genres = [],
     ratings,
     seasons = [],
@@ -545,6 +548,23 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
               {monitorNewItems === 'all'
                 ? translate('SeasonsMonitoredAll')
                 : translate('SeasonsMonitoredNone')}
+            </VirtualTableRowCell>
+          );
+        }
+
+        if (name === 'language') {
+          return (
+            <VirtualTableRowCell key={name} className={styles[name]}>
+              {language.name}
+            </VirtualTableRowCell>
+          );
+        }
+
+        if (name === 'seasonType') {
+          return (
+            <VirtualTableRowCell key={name} className={styles[name]}>
+              {seasonTypes.find((s) => s.type === seasonType)?.name ??
+                seasonType}
             </VirtualTableRowCell>
           );
         }
