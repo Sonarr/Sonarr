@@ -182,6 +182,11 @@ namespace Sonarr.Api.V3.Indexers
                 return await GetSeasonReleases(seriesId.Value, seasonNumber.Value);
             }
 
+            if (seriesId.HasValue || seasonNumber.HasValue)
+            {
+                throw new NzbDroneClientException(HttpStatusCode.BadRequest, "seriesId and seasonNumber must be provided together");
+            }
+
             return await GetRss();
         }
 
