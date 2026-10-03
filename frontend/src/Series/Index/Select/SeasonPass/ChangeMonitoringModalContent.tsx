@@ -77,7 +77,7 @@ function ChangeMonitoringModalContent({
           {translate('CountSeriesSelected', { count: selectedCount })}
         </div>
 
-        <div>
+        <div className={styles.buttons}>
           <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
           <Button onPress={onSavePressWrapper}>{translate('Save')}</Button>

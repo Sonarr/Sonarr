@@ -182,6 +182,7 @@ function ManageDownloadClientsEditModalContent(
           </FormRow>
         </ModalSection>
       </ModalBody>
+
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>
           {translate('CountDownloadClientsSelected', {
@@ -189,7 +190,7 @@ function ManageDownloadClientsEditModalContent(
           })}
         </div>
 
-        <div>
+        <div className={styles.buttons}>
           <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
           <Button onPress={save}>{translate('ApplyChanges')}</Button>

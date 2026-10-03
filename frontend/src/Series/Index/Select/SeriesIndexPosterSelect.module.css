@@ -17,6 +17,10 @@
   background-color: var(--defaultColor);
 }
 
+.icon {
+  vertical-align: baseline;
+}
+
 .selected {
   color: var(--sonarrBlue);
 }

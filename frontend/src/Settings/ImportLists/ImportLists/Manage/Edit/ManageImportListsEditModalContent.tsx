@@ -181,6 +181,7 @@ function ManageImportListsEditModalContent(
           </FormRow>
         </ModalSection>
       </ModalBody>
+
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>
           {translate('CountImportListsSelected', {
@@ -188,7 +189,7 @@ function ManageImportListsEditModalContent(
           })}
         </div>
 
-        <div>
+        <div className={styles.buttons}>
           <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
           <Button onPress={save}>{translate('ApplyChanges')}</Button>
