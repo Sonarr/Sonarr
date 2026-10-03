@@ -242,7 +242,7 @@ function FormInput<T, C extends InputType>(props: FormInputProps<T, C>) {
             {unit && (
               <div
                 className={
-                  type === inputTypes.NUMBER
+                  type === inputTypes.NUMBER || type === inputTypes.FLOAT
                     ? styles.inputUnitNumber
                     : styles.inputUnit
                 }
