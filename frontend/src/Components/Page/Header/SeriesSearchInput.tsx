@@ -207,8 +207,8 @@ function SeriesSearchInput() {
     inputRef.current?.focus();
   }, []);
 
-  const getSectionSuggestions = useCallback((section: Section) => {
-    return section.suggestions;
+  const getSectionSuggestions = useCallback((section: Section | undefined) => {
+    return section?.suggestions ?? [];
   }, []);
 
   const renderSectionTitle = useCallback((section: Section) => {
