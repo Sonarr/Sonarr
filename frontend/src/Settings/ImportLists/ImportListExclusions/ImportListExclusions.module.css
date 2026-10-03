@@ -1,0 +1,6 @@
+.actions {
+  composes: headerCell from 'Components/Table/TableHeaderCell.module.css';
+
+  width: 35px;
+  white-space: nowrap;
+}

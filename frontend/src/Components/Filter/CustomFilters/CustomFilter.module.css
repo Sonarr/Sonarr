@@ -1,0 +1,21 @@
+.customFilter {
+  display: flex;
+  padding: 8px 12px;
+  border-top: 1px solid var(--borderColor);
+
+  &:first-child {
+    border-top: none;
+  }
+
+  &:hover {
+    background-color: var(--tableRowHoverBackgroundColor);
+  }
+}
+
+.label {
+  flex: 0 1 300px;
+}
+
+.actions {
+  flex: 0 0 60px;
+}

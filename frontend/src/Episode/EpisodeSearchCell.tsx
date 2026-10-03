@@ -9,7 +9,7 @@ import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import EpisodeDetailsModal from './EpisodeDetailsModal';
-import styles from './EpisodeSearchCell.css';
+import styles from './EpisodeSearchCell.module.css';
 
 interface EpisodeSearchCellProps {
   episodeId: number;
@@ -46,6 +46,7 @@ function EpisodeSearchCell({
     <TableRowCell className={styles.episodeSearchCell}>
       <SpinnerIconButton
         name={icons.SEARCH}
+        size={14}
         isSpinning={isSearching}
         title={translate('AutomaticSearch')}
         onPress={handleSearchPress}
@@ -53,6 +54,7 @@ function EpisodeSearchCell({
 
       <IconButton
         name={icons.INTERACTIVE}
+        size={14}
         title={translate('InteractiveSearch')}
         aria-label={translate('InteractiveSearch')}
         onPress={setDetailsModalOpen}

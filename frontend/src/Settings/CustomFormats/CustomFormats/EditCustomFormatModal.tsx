@@ -15,7 +15,7 @@ function EditCustomFormatModal({
   ...otherProps
 }: EditCustomFormatModalProps) {
   return (
-    <Modal isOpen={isOpen} size={sizes.LARGE} onModalClose={onModalClose}>
+    <Modal isOpen={isOpen} size={sizes.MEDIUM} onModalClose={onModalClose}>
       <EditCustomFormatModalContent
         {...otherProps}
         onModalClose={onModalClose}

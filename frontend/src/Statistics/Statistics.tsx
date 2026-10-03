@@ -4,8 +4,10 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
+import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, kinds } from 'Helpers/Props';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -20,7 +22,7 @@ import {
 import StatisticsSummary, { SummaryItem } from './StatisticsSummary';
 import useChartColors from './useChartColors';
 import useStatistics, { FILTERS } from './useStatistics';
-import styles from './Statistics.css';
+import styles from './Statistics.module.css';
 
 function Statistics() {
   const selectedFilterKey = useStatisticsOption('selectedFilterKey');
@@ -243,9 +245,9 @@ function Statistics() {
   return (
     <PageContent title={translate('Statistics')}>
       <PageToolbar>
-        <PageToolbarSection />
+        <PageToolbarSpacer />
 
-        <PageToolbarSection alignContent={align.RIGHT}>
+        <ToolbarItem id="filter" pinned={true}>
           <FilterMenu
             alignMenu={align.RIGHT}
             selectedFilterKey={selectedFilterKey}
@@ -254,10 +256,15 @@ function Statistics() {
             filterModalConnectorComponent={StatisticsFilterModal}
             onFilterSelect={handleFilterSelect}
           />
-        </PageToolbarSection>
+        </ToolbarItem>
       </PageToolbar>
 
       <PageContentBody>
+        <PageHeading
+          scope={translate('Media')}
+          title={translate('Statistics')}
+        />
+
         {isLoading ? <LoadingIndicator /> : null}
 
         {!isLoading && error ? (

@@ -1,0 +1,5 @@
+.message {
+  margin-bottom: 20px;
+  color: var(--inkMuted);
+  font-size: 13px;
+}

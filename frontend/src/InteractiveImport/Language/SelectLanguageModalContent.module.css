@@ -1,0 +1,6 @@
+.languageInput {
+  display: grid;
+  align-items: center;
+  padding: 4px 0;
+  column-gap: 32px;
+}

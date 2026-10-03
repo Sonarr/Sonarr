@@ -4,7 +4,7 @@ import { kinds } from 'Helpers/Props';
 import SeriesPoster from 'Series/SeriesPoster';
 import { Tag } from 'Tags/useTags';
 import { SuggestedSeries } from './SeriesSearchInput';
-import styles from './SeriesSearchResult.css';
+import styles from './SeriesSearchResult.module.css';
 
 interface Match {
   key: string;

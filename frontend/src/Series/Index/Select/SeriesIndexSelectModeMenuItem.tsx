@@ -14,15 +14,15 @@ function SeriesIndexSelectModeMenuItem(
   props: SeriesIndexSelectModeMenuItemProps
 ) {
   const { label, iconName, isSelectMode, onPress } = props;
-  const { reset } = useSelect();
+  const { unselectAll } = useSelect();
 
   const onPressWrapper = useCallback(() => {
     if (isSelectMode) {
-      reset();
+      unselectAll();
     }
 
     onPress();
-  }, [isSelectMode, onPress, reset]);
+  }, [isSelectMode, onPress, unselectAll]);
 
   return (
     <PageToolbarOverflowMenuItem

@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 import { InputOnChange } from 'typings/inputs';
 import KeyValueListInputItem from './KeyValueListInputItem';
-import styles from './KeyValueListInput.css';
+import styles from './KeyValueListInput.module.css';
 
 interface KeyValue {
   key: string;

@@ -114,7 +114,10 @@ jobs:
           run: yarn stylelint -f github
 
         - name: Build
-          run: yarn build --env production
+          run: yarn build
+
+      - name: Typecheck
+        run: yarn typecheck
 
       - name: Publish UI Artifact
         uses: actions/upload-artifact@v7

@@ -1,0 +1,16 @@
+.version {
+  margin: 0 3px;
+  font-weight: 600;
+  font-family: var(--defaultFontFamily);
+}
+
+.maintenance {
+  margin-top: 20px;
+}
+
+.changes {
+  margin-top: 20px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--borderColor);
+  font-size: 18px;
+}

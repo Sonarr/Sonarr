@@ -1,9 +1,0 @@
-.deleteButton {
-  composes: button from '~Components/Link/Button.css';
-
-  margin-right: auto;
-}
-
-.labelIcon {
-  margin-left: 8px;
-}

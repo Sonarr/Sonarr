@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './VirtualTableHeader.css';
+import styles from './VirtualTableHeader.module.css';
 
 interface VirtualTableHeaderProps {
   children?: React.ReactNode;

@@ -1,0 +1,59 @@
+.legendItem {
+  display: flex;
+  align-items: center;
+  margin: 3px 0;
+  margin-right: 8px;
+  padding: 4px 8px;
+  width: 160px;
+  color: var(--inkSoft);
+  font-size: 12px;
+  font-family: var(--defaultFontFamily);
+  cursor: default;
+  gap: 8px;
+}
+
+.indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+}
+
+.bar {
+  width: 8px;
+  height: 15px;
+  border-radius: 2px;
+  background-color: var(--inkMuted);
+
+  &.downloaded {
+    background-color: var(--successColor);
+  }
+
+  &.downloading {
+    background-color: var(--statusGrabbing);
+  }
+
+  &.unmonitored {
+    background-color: var(--inkMuted);
+    opacity: 0.5;
+  }
+
+  &.onAir {
+    background-color: var(--statusAiring);
+  }
+
+  &.missing {
+    background-color: var(--dangerColor);
+  }
+
+  &.unaired {
+    background-color: var(--statusUnaired);
+  }
+}
+
+.icon {
+  &.fullColor {
+    filter: var(--calendarFullColorFilter);
+  }
+}

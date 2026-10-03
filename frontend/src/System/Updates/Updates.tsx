@@ -11,6 +11,7 @@ import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
 import { icons, kinds } from 'Helpers/Props';
 import {
   UpdateMechanism,
@@ -24,7 +25,7 @@ import formatDateTime from 'Utilities/Date/formatDateTime';
 import translate from 'Utilities/String/translate';
 import UpdateChanges from './UpdateChanges';
 import useUpdates from './useUpdates';
-import styles from './Updates.css';
+import styles from './Updates.module.css';
 
 const VERSION_REGEX = /\d+\.\d+\.\d+\.\d+/i;
 
@@ -112,6 +113,8 @@ function Updates() {
   return (
     <PageContent title={translate('Updates')}>
       <PageContentBody>
+        <PageHeading scope={translate('System')} title={translate('Updates')} />
+
         {isPopulated || hasError ? null : <LoadingIndicator />}
 
         {noUpdates ? (

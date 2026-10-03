@@ -5,7 +5,7 @@ import translate from 'Utilities/String/translate';
 import EnhancedSelectInputOption, {
   EnhancedSelectInputOptionProps,
 } from './EnhancedSelectInputOption';
-import styles from './RootFolderSelectInputOption.css';
+import styles from './RootFolderSelectInputOption.module.css';
 
 interface RootFolderSelectInputOptionProps
   extends EnhancedSelectInputOptionProps {

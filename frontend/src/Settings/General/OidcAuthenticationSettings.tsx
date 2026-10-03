@@ -1,7 +1,8 @@
 import React from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { inputTypes } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
@@ -29,89 +30,96 @@ function OidcAuthenticationSettings({
 }: OidcAuthenticationSettingsProps) {
   return (
     <>
-      <FormGroup>
+      <FormRow>
         <FormLabel>{translate('OidcAuthority')}</FormLabel>
-
-        <FormInputGroup
-          type={inputTypes.TEXT}
-          name="oidcAuthority"
-          helpText={translate('OidcAuthorityHelpText')}
-          helpTextWarning={
+        <FormInputHelpText text={translate('OidcAuthorityHelpText')} />
+        <FormInputHelpText
+          text={
             showValidationWarnings && !oidcAuthority?.value
               ? translate('AuthenticationRequiredOidcAuthorityHelpTextWarning')
               : undefined
           }
+          isWarning={true}
+        />
+        <FormInput
+          type={inputTypes.TEXT}
+          name="oidcAuthority"
           onChange={onInputChange}
           {...oidcAuthority}
         />
-      </FormGroup>
+      </FormRow>
 
-      <FormGroup>
+      <FormRow>
         <FormLabel>{translate('OidcClientId')}</FormLabel>
-
-        <FormInputGroup
-          type={inputTypes.TEXT}
-          name="oidcClientId"
-          helpText={translate('OidcClientIdHelpText')}
-          helpTextWarning={
+        <FormInputHelpText text={translate('OidcClientIdHelpText')} />
+        <FormInputHelpText
+          text={
             showValidationWarnings && !oidcClientId?.value
               ? translate('AuthenticationRequiredOidcClientIdHelpTextWarning')
               : undefined
           }
+          isWarning={true}
+        />
+        <FormInput
+          type={inputTypes.TEXT}
+          name="oidcClientId"
           onChange={onInputChange}
           {...oidcClientId}
         />
-      </FormGroup>
+      </FormRow>
 
-      <FormGroup>
+      <FormRow>
         <FormLabel>{translate('OidcClientSecret')}</FormLabel>
-
-        <FormInputGroup
-          type={inputTypes.PASSWORD}
-          name="oidcClientSecret"
-          helpText={translate('OidcClientSecretHelpText')}
-          helpTextWarning={
+        <FormInputHelpText text={translate('OidcClientSecretHelpText')} />
+        <FormInputHelpText
+          text={
             showValidationWarnings && !oidcClientSecret?.value
               ? translate(
                   'AuthenticationRequiredOidcClientSecretHelpTextWarning'
                 )
               : undefined
           }
+          isWarning={true}
+        />
+        <FormInput
+          type={inputTypes.PASSWORD}
+          name="oidcClientSecret"
           onChange={onInputChange}
           {...oidcClientSecret}
         />
-      </FormGroup>
+      </FormRow>
 
-      <FormGroup>
+      <FormRow>
         <FormLabel>{translate('OidcUserIdentifier')}</FormLabel>
-
-        <FormInputGroup
-          type={inputTypes.TEXT}
-          name="oidcUserIdentifier"
-          helpText={translate('OidcUserIdentifierHelpText')}
-          helpTextWarning={
+        <FormInputHelpText text={translate('OidcUserIdentifierHelpText')} />
+        <FormInputHelpText
+          text={
             showValidationWarnings && !oidcUserIdentifier?.value
               ? translate(
                   'AuthenticationRequiredOidcUserIdentifierHelpTextWarning'
                 )
               : undefined
           }
+          isWarning={true}
+        />
+        <FormInput
+          type={inputTypes.TEXT}
+          name="oidcUserIdentifier"
           onChange={onInputChange}
           {...oidcUserIdentifier}
         />
-      </FormGroup>
+      </FormRow>
 
-      <FormGroup>
+      <FormRow>
         <FormLabel>{translate('OidcScopes')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('OidcScopesHelpText')} />
+        <FormInput
           type={inputTypes.TEXT}
           name="oidcScopes"
-          helpText={translate('OidcScopesHelpText')}
           onChange={onInputChange}
           {...oidcScopes}
         />
-      </FormGroup>
+      </FormRow>
     </>
   );
 }

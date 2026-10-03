@@ -15,7 +15,7 @@ import EpisodeFileQuality from 'EpisodeFile/EpisodeFileQuality';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import { useSingleSeries } from 'Series/useSeries';
 import { SelectStateInputProps } from 'typings/props';
-import styles from './CutoffUnmetRow.css';
+import styles from './CutoffUnmetRow.module.css';
 
 interface CutoffUnmetRowProps {
   id: number;

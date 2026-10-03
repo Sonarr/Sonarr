@@ -4,12 +4,10 @@ import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import Scroller from 'Components/Scroller/Scroller';
 import useMeasure from 'Helpers/Hooks/useMeasure';
 import dimensions from 'Styles/Variables/dimensions';
-import styles from './VirtualTable.css';
+import styles from './VirtualTable.module.css';
 
-const bodyPadding = parseInt(dimensions.pageContentBodyPadding);
-const bodyPaddingSmallScreen = parseInt(
-  dimensions.pageContentBodyPaddingSmallScreen
-);
+const bodyPadding = dimensions.pageContentBodyPadding;
+const bodyPaddingSmallScreen = dimensions.pageContentBodyPaddingSmallScreen;
 
 interface VirtualTableProps<T> {
   Header: React.JSX.Element;

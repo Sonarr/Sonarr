@@ -23,7 +23,7 @@ import { useThemeColor } from 'Helpers/Hooks/useTheme';
 import { kinds } from 'Helpers/Props';
 import { Kind } from 'Helpers/Props/kinds';
 import { isMobile } from 'Utilities/browser';
-import styles from './Tooltip.css';
+import styles from './Tooltip.module.css';
 
 export interface TooltipProps {
   accessibleLabel?: string;

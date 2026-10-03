@@ -11,7 +11,7 @@ import { HistoryData, HistoryEventType } from 'typings/History';
 import translate from 'Utilities/String/translate';
 import { useMarkAsFailed } from '../useHistory';
 import HistoryDetails from './HistoryDetails';
-import styles from './HistoryDetailsModal.css';
+import styles from './HistoryDetailsModal.module.css';
 
 function getHeaderTitle(eventType: HistoryEventType) {
   switch (eventType) {

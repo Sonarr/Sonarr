@@ -2,7 +2,6 @@ import moment from 'moment-timezone';
 import React, { useCallback, useEffect, useState } from 'react';
 import { saveDimensions, useAppValue } from 'App/appStore';
 import AppUpdatedModal from 'App/AppUpdatedModal';
-import ColorImpairedContext from 'App/ColorImpairedContext';
 import ConnectionLostModal from 'App/ConnectionLostModal';
 import SignalRListener from 'Components/SignalRListener';
 import AuthenticationRequiredModal from 'FirstRun/AuthenticationRequiredModal';
@@ -13,7 +12,7 @@ import ErrorPage from './ErrorPage';
 import PageHeader from './Header/PageHeader';
 import LoadingPage from './LoadingPage';
 import PageSidebar from './Sidebar/PageSidebar';
-import styles from './Page.css';
+import styles from './Page.module.css';
 
 interface PageProps {
   children: React.ReactNode;
@@ -29,7 +28,7 @@ function Page({ children }: PageProps) {
   const [isConnectionLostModalOpen, setIsConnectionLostModalOpen] =
     useState(false);
 
-  const { enableColorImpairedMode, timeZone } = useUiSettingsValues();
+  const { timeZone } = useUiSettingsValues();
   const { authentication } = useSystemStatusData();
 
   const authenticationEnabled = authentication !== 'none';
@@ -91,28 +90,26 @@ function Page({ children }: PageProps) {
   }
 
   return (
-    <ColorImpairedContext.Provider value={enableColorImpairedMode}>
-      <div className={styles.page}>
-        <SignalRListener />
+    <div className={styles.page}>
+      <SignalRListener />
 
-        <PageHeader />
+      <PageHeader />
 
-        <div className={styles.main}>
-          <PageSidebar />
+      <div className={styles.main}>
+        <PageSidebar />
 
-          {children}
-        </div>
-
-        <AppUpdatedModal
-          isOpen={isUpdatedModalOpen}
-          onModalClose={handleUpdatedModalClose}
-        />
-
-        <ConnectionLostModal isOpen={isConnectionLostModalOpen} />
-
-        <AuthenticationRequiredModal isOpen={!authenticationEnabled} />
+        {children}
       </div>
-    </ColorImpairedContext.Provider>
+
+      <AppUpdatedModal
+        isOpen={isUpdatedModalOpen}
+        onModalClose={handleUpdatedModalClose}
+      />
+
+      <ConnectionLostModal isOpen={isConnectionLostModalOpen} />
+
+      <AuthenticationRequiredModal isOpen={!authenticationEnabled} />
+    </div>
   );
 }
 

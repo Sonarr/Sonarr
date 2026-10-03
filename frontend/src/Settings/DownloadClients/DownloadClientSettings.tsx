@@ -1,10 +1,13 @@
 import React, { useCallback, useRef, useState } from 'react';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageHeading from 'Components/Page/PageHeading';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
+import SectionHeading from 'Components/SectionHeading';
 import { icons } from 'Helpers/Props';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import settingsStyles from 'Settings/Settings.module.css';
+import SettingsPage from 'Settings/SettingsPage';
 import {
   SaveCallback,
   SettingsStateChange,
@@ -53,52 +56,73 @@ function DownloadClientSettings() {
     saveOptions.current?.();
   }, []);
 
-  const handleTestAllClientsPress = useCallback(() => {
+  const handleTestAllDownloadClientsPress = useCallback(() => {
     testAllDownloadClients();
   }, [testAllDownloadClients]);
 
   return (
-    <PageContent title={translate('DownloadClientSettings')}>
-      <SettingsToolbar
-        isSaving={isSaving}
-        hasPendingChanges={hasPendingChanges}
-        additionalButtons={
-          <>
+    <SettingsPage
+      title={translate('DownloadClientSettings')}
+      isSaving={isSaving}
+      hasPendingChanges={hasPendingChanges}
+      toolbarChildren={
+        <>
+          <OverflowDivider groupId="extras">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
-            <PageToolbarButton
-              label={translate('TestAllClients')}
-              iconName={icons.TEST}
-              isSpinning={isTestingAllDownloadClients}
-              onPress={handleTestAllClientsPress}
-            />
+          <ToolbarItem
+            id="test-all"
+            priority={1}
+            groupId="extras"
+            label={translate('TestAllClients')}
+            iconName={icons.TEST}
+            isSpinning={isTestingAllDownloadClients}
+            onPress={handleTestAllDownloadClientsPress}
+          />
 
-            <PageToolbarButton
-              label={translate('ManageClients')}
-              iconName={icons.MANAGE}
-              onPress={handleManageDownloadClientsPress}
-            />
-          </>
-        }
-        onSavePress={handleSavePress}
-      />
-
+          <ToolbarItem
+            id="manage"
+            priority={1}
+            groupId="extras"
+            label={translate('ManageClients')}
+            iconName={icons.MANAGE}
+            onPress={handleManageDownloadClientsPress}
+          />
+        </>
+      }
+      onSavePress={handleSavePress}
+    >
       <PageContentBody>
-        <DownloadClients />
+        <div className={settingsStyles.section}>
+          <PageHeading
+            scope={translate('Settings')}
+            title={translate('DownloadClients')}
+          />
 
-        <DownloadClientOptions
-          setChildSave={handleSetChildSave}
-          onChildStateChange={handleChildStateChange}
-        />
+          <div className={settingsStyles.pageSection}>
+            <SectionHeading
+              title={translate('DownloadClients')}
+              description={translate('DownloadClientsSectionDescription')}
+            />
 
-        <RemotePathMappings />
+            <DownloadClients />
+          </div>
 
-        <ManageDownloadClientsModal
-          isOpen={isManageDownloadClientsModalOpen}
-          onModalClose={handleManageDownloadClientsModalClose}
-        />
+          <DownloadClientOptions
+            setChildSave={handleSetChildSave}
+            onChildStateChange={handleChildStateChange}
+          />
+
+          <RemotePathMappings />
+
+          <ManageDownloadClientsModal
+            isOpen={isManageDownloadClientsModalOpen}
+            onModalClose={handleManageDownloadClientsModalClose}
+          />
+        </div>
       </PageContentBody>
-    </PageContent>
+    </SettingsPage>
   );
 }
 

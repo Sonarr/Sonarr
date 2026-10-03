@@ -20,7 +20,7 @@ import { InputChanged } from 'typings/inputs';
 import AutoSuggestInput from '../AutoSuggestInput';
 import TagInputInput from './TagInputInput';
 import TagInputTag, { EditedTag, TagInputTagProps } from './TagInputTag';
-import styles from './TagInput.css';
+import styles from './TagInput.module.css';
 
 export interface TagBase {
   id: boolean | number | string | null;

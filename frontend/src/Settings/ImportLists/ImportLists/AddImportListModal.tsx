@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'Components/Modal/Modal';
+import { sizes } from 'Helpers/Props';
 import AddImportListModalContent, {
   AddImportListModalContentProps,
 } from './AddImportListModalContent';
@@ -14,7 +15,7 @@ function AddImportListModal({
   ...otherProps
 }: AddImportListModalProps) {
   return (
-    <Modal isOpen={isOpen} onModalClose={onModalClose}>
+    <Modal isOpen={isOpen} size={sizes.MEDIUM} onModalClose={onModalClose}>
       <AddImportListModalContent {...otherProps} onModalClose={onModalClose} />
     </Modal>
   );

@@ -19,7 +19,7 @@ import { TableOptionsChangePayload } from 'typings/Table';
 import translate from 'Utilities/String/translate';
 import hasGrowableColumns from './hasGrowableColumns';
 import SeriesIndexTableOptions from './SeriesIndexTableOptions';
-import styles from './SeriesIndexTableHeader.css';
+import styles from './SeriesIndexTableHeader.module.css';
 
 interface SeriesIndexTableHeaderProps {
   showBanners: boolean;

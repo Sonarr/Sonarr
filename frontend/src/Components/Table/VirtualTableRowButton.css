@@ -1,4 +1,0 @@
-.row {
-  composes: link from '~Components/Link/Link.css';
-  composes: row from '~./VirtualTableRow.css';
-}

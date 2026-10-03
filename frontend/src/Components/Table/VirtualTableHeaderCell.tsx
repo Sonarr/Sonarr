@@ -1,9 +1,10 @@
+import classNames from 'classnames';
 import React, { useCallback } from 'react';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons, sortDirections } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
-import styles from './VirtualTableHeaderCell.css';
+import styles from './VirtualTableHeaderCell.module.css';
 
 interface VirtualTableHeaderCellProps {
   className?: string;
@@ -44,13 +45,21 @@ function VirtualTableHeaderCell({
   return isSortable ? (
     <Link
       component="div"
-      className={className}
+      className={classNames(
+        className,
+        styles.sortable,
+        isSorting && styles.sorted
+      )}
       onPress={handlePress}
       {...otherProps}
     >
-      {children}
+      <span className={styles.content}>
+        {children}
 
-      {isSorting ? <Icon name={sortIcon} className={styles.sortIcon} /> : null}
+        {isSorting ? (
+          <Icon name={sortIcon} className={styles.sortIcon} size={12} />
+        ) : null}
+      </span>
     </Link>
   ) : (
     <div className={className}>{children}</div>

@@ -1,13 +1,11 @@
 import classNames from 'classnames';
 import React, { ReactNode } from 'react';
-import { Size } from 'Helpers/Props/sizes';
-import styles from './FormLabel.css';
+import styles from './FormLabel.module.css';
 
 interface FormLabelProps {
   children: ReactNode;
   className?: string;
   errorClassName?: string;
-  size?: Extract<Size, keyof typeof styles>;
   name?: string;
   hasError?: boolean;
   isAdvanced?: boolean;
@@ -18,7 +16,6 @@ function FormLabel(props: FormLabelProps) {
     children,
     className = styles.label,
     errorClassName = styles.hasError,
-    size = 'large',
     name,
     hasError,
     isAdvanced = false,
@@ -28,7 +25,6 @@ function FormLabel(props: FormLabelProps) {
     <label
       className={classNames(
         className,
-        styles[size],
         hasError && errorClassName,
         isAdvanced && styles.isAdvanced
       )}

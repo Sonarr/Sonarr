@@ -1,0 +1,57 @@
+.reference:focus-visible {
+  outline: 2px solid var(--linkColor);
+  outline-offset: 2px;
+}
+
+.tooltipContainer {
+  z-index: var(--popperZIndex);
+}
+
+.tooltip {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--hairlineStrong);
+  border-radius: 12px;
+
+  &.default {
+    background-color: var(--paperCard);
+    box-shadow:
+      0 16px 40px -12px rgba(0, 0, 0, 0.45),
+      0 2px 8px -2px rgba(0, 0, 0, 0.18);
+    color: var(--ink);
+  }
+
+  &.inverse {
+    border-color: var(--ink);
+    background-color: var(--ink);
+    box-shadow:
+      0 12px 32px -12px rgba(0, 0, 0, 0.45),
+      0 2px 8px -2px rgba(0, 0, 0, 0.18);
+    color: var(--paper);
+  }
+}
+
+.body {
+  padding: 8px 12px;
+  font-size: 12px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.5;
+}
+
+@media (--breakpointExtraSmallUp) {
+  .tooltip {
+    max-width: calc(var(--breakpointSmall) * 0.8);
+  }
+}
+
+@media (--breakpointSmallUp) {
+  .tooltip {
+    max-width: calc(var(--breakpointMedium) * 0.8);
+  }
+}
+
+@media (--breakpointMediumUp) {
+  .tooltip {
+    max-width: calc(var(--breakpointLarge) * 0.8);
+  }
+}

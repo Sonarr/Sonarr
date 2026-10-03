@@ -15,7 +15,7 @@ import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
 import CalendarEvent from './CalendarEvent';
-import styles from './CalendarEventGroup.css';
+import styles from './CalendarEventGroup.module.css';
 
 interface CalendarEventGroupProps {
   episodeIds: number[];
@@ -33,7 +33,7 @@ function CalendarEventGroup({
   const isDownloading = useIsDownloadingEpisodes(episodeIds);
   const series = useSingleSeries(seriesId)!;
 
-  const { timeFormat, enableColorImpairedMode } = useUiSettingsValues();
+  const { timeFormat } = useUiSettingsValues();
 
   const { showEpisodeInformation, showFinaleIcon, fullColorEvents } =
     useCalendarOptions();
@@ -128,7 +128,6 @@ function CalendarEventGroup({
       className={classNames(
         styles.eventGroup,
         styles[statusStyle],
-        enableColorImpairedMode && 'colorImpaired',
         fullColorEvents && 'fullColor'
       )}
     >
@@ -143,15 +142,16 @@ function CalendarEventGroup({
         >
           {isMissingAbsoluteNumber ? (
             <Icon
-              containerClassName={styles.statusIcon}
+              titleWrapperClassName={styles.statusIcon}
               name={icons.WARNING}
+              kind={kinds.WARNING}
               title={translate('EpisodeMissingAbsoluteNumber')}
             />
           ) : null}
 
           {anyDownloading ? (
             <Icon
-              containerClassName={styles.statusIcon}
+              titleWrapperClassName={styles.statusIcon}
               name={icons.DOWNLOADING}
               title={translate('AnEpisodeIsDownloading')}
             />
@@ -159,7 +159,7 @@ function CalendarEventGroup({
 
           {firstEpisode.episodeNumber === 1 && seasonNumber > 0 ? (
             <Icon
-              containerClassName={styles.statusIcon}
+              titleWrapperClassName={styles.statusIcon}
               name={icons.PREMIERE}
               kind={kinds.INFO}
               title={
@@ -172,7 +172,7 @@ function CalendarEventGroup({
 
           {showFinaleIcon && lastEpisode.finaleType ? (
             <Icon
-              containerClassName={styles.statusIcon}
+              titleWrapperClassName={styles.statusIcon}
               name={
                 lastEpisode.finaleType === 'series'
                   ? icons.FINALE_SERIES

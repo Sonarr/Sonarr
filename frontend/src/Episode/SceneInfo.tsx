@@ -4,7 +4,7 @@ import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem'
 import { AlternateTitle } from 'Series/Series';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
-import styles from './SceneInfo.css';
+import styles from './SceneInfo.module.css';
 
 interface SceneInfoProps {
   seasonNumber?: number;

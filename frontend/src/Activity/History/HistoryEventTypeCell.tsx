@@ -9,7 +9,7 @@ import {
   HistoryEventType,
 } from 'typings/History';
 import translate from 'Utilities/String/translate';
-import styles from './HistoryEventTypeCell.css';
+import styles from './HistoryEventTypeCell.module.css';
 
 function getIconName(eventType: HistoryEventType, data: HistoryData) {
   switch (eventType) {

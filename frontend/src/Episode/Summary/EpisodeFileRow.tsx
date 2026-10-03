@@ -16,7 +16,7 @@ import formatBytes from 'Utilities/Number/formatBytes';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import translate from 'Utilities/String/translate';
 import MediaInfo from './MediaInfo';
-import styles from './EpisodeFileRow.css';
+import styles from './EpisodeFileRow.module.css';
 
 interface EpisodeFileRowProps
   extends Pick<

@@ -1,0 +1,11 @@
+.body {
+  composes: modalBody from 'Components/Modal/ModalBody.module.css';
+
+  flex: 1 1 430px;
+}
+
+.deleteButton {
+  composes: button from 'Components/Link/Button.module.css';
+
+  margin-right: auto;
+}

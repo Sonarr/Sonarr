@@ -1,8 +1,9 @@
 import React from 'react';
 import FieldSet from 'Components/FieldSet';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { inputTypes, sizes } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
@@ -19,19 +20,24 @@ function AnalyticSettings({
   onInputChange,
 }: AnalyticSettingsProps) {
   return (
-    <FieldSet legend={translate('Analytics')}>
-      <FormGroup size={sizes.MEDIUM}>
+    <FieldSet
+      legend={translate('Analytics')}
+      caption={translate('AnalyticsCaption')}
+    >
+      <FormRow size={sizes.MEDIUM}>
         <FormLabel>{translate('SendAnonymousUsageData')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('AnalyticsEnabledHelpText')} />
+        <FormInputHelpText
+          text={translate('RestartRequiredHelpTextWarning')}
+          isWarning={true}
+        />
+        <FormInput
           type={inputTypes.CHECK}
           name="analyticsEnabled"
-          helpText={translate('AnalyticsEnabledHelpText')}
-          helpTextWarning={translate('RestartRequiredHelpTextWarning')}
           onChange={onInputChange}
           {...analyticsEnabled}
         />
-      </FormGroup>
+      </FormRow>
     </FieldSet>
   );
 }

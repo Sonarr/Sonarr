@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import styles from './CircularProgressBar.css';
+import styles from './CircularProgressBar.module.css';
 
 interface CircularProgressBarProps {
   className?: string;

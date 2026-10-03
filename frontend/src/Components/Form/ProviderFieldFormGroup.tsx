@@ -1,10 +1,12 @@
 import React, { useMemo } from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { FieldSelectOption } from 'typings/Field';
 import { InputChanged } from 'typings/inputs';
 import { Failure } from 'typings/pending';
+import translate from 'Utilities/String/translate';
 
 interface ProviderFieldFormGroupProps<T> {
   advancedSettings: boolean;
@@ -111,15 +113,16 @@ function ProviderFieldFormGroup<T>({
   }
 
   return (
-    <FormGroup advancedSettings={advancedSettings} isAdvanced={advanced}>
+    <FormRow advancedSettings={advancedSettings} isAdvanced={advanced}>
       <FormLabel>{label}</FormLabel>
-
-      <FormInputGroup
+      <FormInputHelpText
+        text={helpText ?? (helpLink ? translate('MoreInfo') : undefined)}
+        link={helpLink}
+      />
+      <FormInputHelpText text={helpTextWarning} isWarning={true} />
+      <FormInput
         type={type}
         name={name}
-        helpText={helpText}
-        helpTextWarning={helpTextWarning}
-        helpLink={helpLink}
         placeholder={placeholder}
         // @ts-expect-error - this isn't available on all types
         selectOptionsProviderAction={selectOptionsProviderAction}
@@ -132,7 +135,7 @@ function ProviderFieldFormGroup<T>({
         onChange={onChange}
         {...otherProps}
       />
-    </FormGroup>
+    </FormRow>
   );
 }
 

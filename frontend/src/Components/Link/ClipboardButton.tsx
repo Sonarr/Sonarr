@@ -6,7 +6,7 @@ import StatusIndicator from 'Components/StatusIndicator';
 import { icons, kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import { ButtonProps } from './Button';
-import styles from './ClipboardButton.css';
+import styles from './ClipboardButton.module.css';
 
 export interface ClipboardButtonProps extends Omit<ButtonProps, 'children'> {
   value: string;

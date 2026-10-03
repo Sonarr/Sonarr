@@ -3,7 +3,7 @@ import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import styles from './ModalContent.css';
+import styles from './ModalContent.module.css';
 
 interface ModalContentProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;

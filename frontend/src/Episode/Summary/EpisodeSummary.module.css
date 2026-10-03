@@ -1,0 +1,38 @@
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 48px;
+
+  margin-bottom: 20px;
+}
+
+.metaItem {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.metaLabel {
+  color: var(--inkMuted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  font-size: 10px;
+  font-family: var(--monoSpaceFontFamily);
+}
+
+.metaValue {
+  color: var(--inkSoft);
+  font-size: 14px;
+}
+
+.overview {
+  margin-bottom: 20px;
+  max-width: 80ch;
+  color: var(--inkSoft);
+  text-wrap: pretty;
+  font-size: 14px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.6;
+}

@@ -1,0 +1,9 @@
+.heart {
+  margin-right: 5px;
+  color: var(--themeRed);
+}
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+}

@@ -1,0 +1,29 @@
+.section {
+  padding: 16px 0;
+  border-top: 1px solid var(--borderColor);
+  border-bottom: 1px solid var(--borderColor);
+}
+
+.section:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.section:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.section + .section {
+  border-top: none;
+}
+
+.heading {
+  margin: 0 0 12px;
+  color: var(--inkSoft);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: var(--defaultFontFamily);
+}

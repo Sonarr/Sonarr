@@ -376,7 +376,7 @@ const releaseStore = create<ReleaseStore>(() => ({
 const DEFAULT_RELEASES: Release[] = [];
 const THIRTY_MINUTES = 30 * 60 * 1000;
 
-const useReleases = (payload: InteractiveSearchPayload) => {
+const useReleases = (payload: InteractiveSearchPayload, filter = '') => {
   const customFilters = useCustomFiltersList('releases');
   const { episodeSelectedFilterKey, seasonSelectedFilterKey } =
     useReleaseOptions();
@@ -401,22 +401,30 @@ const useReleases = (payload: InteractiveSearchPayload) => {
     },
   });
 
-  const { data: filteredData, totalItems } = useMemo(
-    () =>
-      clientSideFilterAndSort<Release, typeof FILTER_PREDICATES>(
-        data ?? DEFAULT_RELEASES,
-        {
-          selectedFilterKey,
-          filters: FILTERS,
-          filterPredicates: FILTER_PREDICATES,
-          customFilters,
-          sortKey,
-          sortDirection,
-          sortPredicates: SORT_PREDICATES,
-        }
-      ),
-    [data, selectedFilterKey, customFilters, sortKey, sortDirection]
-  );
+  const { data: filteredData, totalItems } = useMemo(() => {
+    const { data: sortedData, totalItems } = clientSideFilterAndSort<
+      Release,
+      typeof FILTER_PREDICATES
+    >(data ?? DEFAULT_RELEASES, {
+      selectedFilterKey,
+      filters: FILTERS,
+      filterPredicates: FILTER_PREDICATES,
+      customFilters,
+      sortKey,
+      sortDirection,
+      sortPredicates: SORT_PREDICATES,
+    });
+
+    const trimmedFilter = filter.trim().toLowerCase();
+
+    const filteredData = trimmedFilter
+      ? sortedData.filter((item) =>
+          item.release.title.toLowerCase().includes(trimmedFilter)
+        )
+      : sortedData;
+
+    return { data: filteredData, totalItems };
+  }, [data, selectedFilterKey, customFilters, sortKey, sortDirection, filter]);
 
   useEffect(() => {
     if (!data) {

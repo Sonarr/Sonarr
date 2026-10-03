@@ -1,0 +1,19 @@
+.info {
+  @add-mixin truncate;
+
+  background-color: transparent;
+  color: var(--inkMuted);
+  text-align: left;
+  font-weight: 400;
+  font-size: 11.5px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.5;
+}
+
+.tags {
+  composes: tags from './SeriesIndexPoster.module.css';
+}
+
+.tagsList {
+  composes: tagsList from './SeriesIndexPoster.module.css';
+}

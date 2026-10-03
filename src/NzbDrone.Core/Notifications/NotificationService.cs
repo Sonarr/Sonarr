@@ -102,6 +102,12 @@ namespace NzbDrone.Core.Notifications
                 return true;
             }
 
+            if (series == null)
+            {
+                _logger.Debug("{0} has tags but the series is unknown. Notification will not be sent", definition.Name);
+                return false;
+            }
+
             if (definition.Tags.Intersect(series.Tags).Any())
             {
                 _logger.Debug("Notification and series have one or more intersecting tags.");
@@ -353,7 +359,7 @@ namespace NzbDrone.Core.Notifications
             {
                 Message = mess,
                 Series = series,
-                Quality = message.Episode?.ParsedEpisodeInfo.Quality,
+                Quality = message.Episode?.ParsedEpisodeInfo?.Quality,
                 Episode = message.Episode,
                 TrackedDownload = message.TrackedDownload,
                 DownloadClientInfo = message.TrackedDownload.DownloadItem?.DownloadClientInfo,
@@ -365,7 +371,7 @@ namespace NzbDrone.Core.Notifications
             {
                 try
                 {
-                    if (!ShouldHandleSeries(notification.Definition, message.Episode.Series))
+                    if (!ShouldHandleSeries(notification.Definition, message.Episode?.Series))
                     {
                         continue;
                     }

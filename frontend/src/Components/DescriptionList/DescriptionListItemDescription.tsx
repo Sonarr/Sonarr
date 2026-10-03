@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import styles from './DescriptionListItemDescription.css';
+import styles from './DescriptionListItemDescription.module.css';
 
 export interface DescriptionListItemDescriptionProps {
   className?: string;

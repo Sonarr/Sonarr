@@ -26,7 +26,7 @@ function SeriesGenres({ className, genres }: SeriesGenresProps) {
             })}
           </div>
         }
-        kind={kinds.INVERSE}
+        kind={kinds.DEFAULT}
         position={tooltipPositions.TOP}
       />
     );

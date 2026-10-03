@@ -1,8 +1,9 @@
 import React from 'react';
 import FieldSet from 'Components/FieldSet';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { inputTypes } from 'Helpers/Props';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
 import { InputChanged } from 'typings/inputs';
@@ -30,45 +31,43 @@ function BackupSettings({
   }
 
   return (
-    <FieldSet legend={translate('Backups')}>
-      <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+    <FieldSet
+      legend={translate('Backups')}
+      caption={translate('BackupsCaption')}
+    >
+      <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
         <FormLabel>{translate('Folder')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('BackupFolderHelpText')} />
+        <FormInput
           type={inputTypes.PATH}
           name="backupFolder"
-          helpText={translate('BackupFolderHelpText')}
           includeFiles={false}
           onChange={onInputChange}
           {...backupFolder}
         />
-      </FormGroup>
-
-      <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+      </FormRow>
+      <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
         <FormLabel>{translate('Interval')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('BackupIntervalHelpText')} />
+        <FormInput
           type={inputTypes.NUMBER}
           name="backupInterval"
           unit="days"
-          helpText={translate('BackupIntervalHelpText')}
           onChange={onInputChange}
           {...backupInterval}
         />
-      </FormGroup>
-
-      <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+      </FormRow>
+      <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
         <FormLabel>{translate('Retention')}</FormLabel>
-
-        <FormInputGroup
+        <FormInputHelpText text={translate('BackupRetentionHelpText')} />
+        <FormInput
           type={inputTypes.NUMBER}
           name="backupRetention"
           unit="days"
-          helpText={translate('BackupRetentionHelpText')}
           onChange={onInputChange}
           {...backupRetention}
         />
-      </FormGroup>
+      </FormRow>
     </FieldSet>
   );
 }

@@ -5,7 +5,7 @@ import * as calendarViews from 'Calendar/calendarViews';
 import { useCalendarDates } from 'Calendar/useCalendar';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import DayOfWeek from './DayOfWeek';
-import styles from './DaysOfWeek.css';
+import styles from './DaysOfWeek.module.css';
 
 function DaysOfWeek() {
   const view = useCalendarOption('view');
@@ -39,9 +39,11 @@ function DaysOfWeek() {
     return null;
   }
 
+  const headerDates = view === calendarViews.MONTH ? dates.slice(0, 7) : dates;
+
   return (
     <div className={styles.daysOfWeek}>
-      {dates.map((date) => {
+      {headerDates.map((date) => {
         return (
           <DayOfWeek
             key={date}

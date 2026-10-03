@@ -7,7 +7,7 @@ import Icon from 'Components/Icon';
 import Popover from 'Components/Tooltip/Popover';
 import { icons, tooltipPositions } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import styles from './ReleaseSceneIndicator.css';
+import styles from './ReleaseSceneIndicator.module.css';
 
 function formatReleaseNumber(
   seasonNumber: number | null | undefined,

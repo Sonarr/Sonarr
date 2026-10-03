@@ -10,7 +10,7 @@ import {
   removeRecentFolder,
 } from 'InteractiveImport/interactiveImportFoldersStore';
 import translate from 'Utilities/String/translate';
-import styles from './RecentFolderRow.css';
+import styles from './RecentFolderRow.module.css';
 
 interface RecentFolderRowProps {
   folder: string;
@@ -70,7 +70,8 @@ function RecentFolderRow({
               : translate('FavoriteFolderAdd')
           }
           kind={isFavorite ? 'danger' : 'default'}
-          name={isFavorite ? icons.HEART : icons.HEART_OUTLINE}
+          name={icons.HEART}
+          filled={isFavorite}
           onPress={handleFavoritePress}
         />
 

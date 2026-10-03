@@ -1,0 +1,16 @@
+.modalFooter {
+  composes: modalFooter from 'Components/Modal/ModalFooter.module.css';
+
+  justify-content: space-between;
+}
+
+.selected {
+  font-weight: 600;
+}
+
+@media (--breakpointExtraSmall) {
+  .modalFooter {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

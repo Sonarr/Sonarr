@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import styles from './InteractiveImportRowCellPlaceholder.css';
+import styles from './InteractiveImportRowCellPlaceholder.module.css';
 
 interface InteractiveImportRowCellPlaceholderProps {
   isOptional?: boolean;

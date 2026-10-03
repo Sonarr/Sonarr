@@ -1,0 +1,15 @@
+.row {
+  position: relative;
+  display: flex;
+  transition: background-color 500ms;
+
+  &:hover {
+    background-color: var(--tableRowHoverBackgroundColor);
+  }
+}
+
+@media (--breakpointMedium) {
+  .row {
+    overflow-x: visible !important;
+  }
+}

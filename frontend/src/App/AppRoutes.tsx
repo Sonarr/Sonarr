@@ -4,7 +4,8 @@ import Blocklist from 'Activity/Blocklist/Blocklist';
 import History from 'Activity/History/History';
 import Queue from 'Activity/Queue/Queue';
 import AddNewSeries from 'AddSeries/AddNewSeries/AddNewSeries';
-import ImportSeriesPage from 'AddSeries/ImportSeries/ImportSeriesPage';
+import ImportSeries from 'AddSeries/ImportSeries/Import/ImportSeries';
+import ImportSeriesSelectFolder from 'AddSeries/ImportSeries/SelectFolder/ImportSeriesSelectFolder';
 import CalendarPage from 'Calendar/CalendarPage';
 import NotFound from 'Components/NotFound';
 import SeriesDetailsPage from 'Series/Details/SeriesDetailsPage';
@@ -26,7 +27,8 @@ import UISettings from 'Settings/UI/UISettings';
 import Statistics from 'Statistics/Statistics';
 import Backups from 'System/Backup/Backups';
 import LogsTable from 'System/Events/LogsTable';
-import Logs from 'System/Logs/Logs';
+import AppLogFiles from 'System/Logs/App/AppLogFiles';
+import UpdateLogFiles from 'System/Logs/Update/UpdateLogFiles';
 import Status from 'System/Status/Status';
 import Tasks from 'System/Tasks/Tasks';
 import Updates from 'System/Updates/Updates';
@@ -37,21 +39,33 @@ export function appRouteElements() {
   return (
     <>
       {/*
+        Home (v5) — TODO: swap to <HomePage /> when the homepage redesign lands.
+        Until then, "/" redirects to SeriesIndex and the sidebar's "Home" nav is hidden.
+      */}
+
+      <Route path="/" element={<Navigate to="/series" replace={true} />} />
+
+      {/*
         Series
       */}
 
-      <Route path="/" element={<SeriesIndex />} />
+      <Route path="/series" element={<SeriesIndex />} />
 
       <Route path="/add/new" element={<AddNewSeries />} />
 
-      <Route path="/add/import/*" element={<ImportSeriesPage />} />
+      <Route path="/add/import" element={<ImportSeriesSelectFolder />} />
+
+      <Route path="/add/import/:rootFolderId" element={<ImportSeries />} />
 
       <Route
         path="/serieseditor"
-        element={<Navigate to="/" replace={true} />}
+        element={<Navigate to="/series" replace={true} />}
       />
 
-      <Route path="/seasonpass" element={<Navigate to="/" replace={true} />} />
+      <Route
+        path="/seasonpass"
+        element={<Navigate to="/series" replace={true} />}
+      />
 
       <Route path="/series/:titleSlug" element={<SeriesDetailsPage />} />
 
@@ -136,7 +150,9 @@ export function appRouteElements() {
 
       <Route path="/system/events" element={<LogsTable />} />
 
-      <Route path="/system/logs/files/*" element={<Logs />} />
+      <Route path="/system/logs/files" element={<AppLogFiles />} />
+
+      <Route path="/system/logs/files/update" element={<UpdateLogFiles />} />
 
       {/*
         Not Found

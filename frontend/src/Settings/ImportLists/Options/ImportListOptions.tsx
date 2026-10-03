@@ -2,9 +2,10 @@ import React, { useCallback, useEffect } from 'react';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import { inputTypes, kinds } from 'Helpers/Props';
@@ -99,7 +100,10 @@ function ImportListOptions({
   }
 
   return (
-    <FieldSet legend={translate('Options')}>
+    <FieldSet
+      legend={translate('Options')}
+      caption={translate('ImportListOptionsCaption')}
+    >
       {isFetching ? <LoadingIndicator /> : null}
 
       {!isFetching && error ? (
@@ -108,25 +112,27 @@ function ImportListOptions({
 
       {hasSettings && isFetched && !error ? (
         <Form>
-          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+          <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
             <FormLabel>{translate('CleanLibraryLevel')}</FormLabel>
-            <FormInputGroup
+
+            <FormInputHelpText text={translate('ListSyncLevelHelpText')} />
+
+            <FormInput
               type={inputTypes.SELECT}
               name="listSyncLevel"
               values={cleanLibraryLevelOptions}
-              helpText={translate('ListSyncLevelHelpText')}
               onChange={handleInputChange}
               {...settings.listSyncLevel}
             />
-          </FormGroup>
+          </FormRow>
 
           {settings.listSyncLevel.value === 'keepAndTag' ? (
-            <FormGroup
-              advancedSettings={showAdvancedSettings}
-              isAdvanced={true}
-            >
+            <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
               <FormLabel>{translate('ListSyncTag')}</FormLabel>
-              <FormInputGroup
+
+              <FormInputHelpText text={translate('ListSyncTagHelpText')} />
+
+              <FormInput
                 {...settings.listSyncTag}
                 type={inputTypes.SERIES_TAG}
                 name="listSyncTag"
@@ -135,10 +141,9 @@ function ImportListOptions({
                     ? []
                     : [settings.listSyncTag.value]
                 }
-                helpText={translate('ListSyncTagHelpText')}
                 onChange={handleTagChange}
               />
-            </FormGroup>
+            </FormRow>
           ) : null}
         </Form>
       ) : null}

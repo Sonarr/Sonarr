@@ -1,0 +1,23 @@
+.tableContainer {
+  &.horizontalScroll {
+    overflow-x: auto;
+  }
+}
+
+.table {
+  max-width: 100%;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+@media (--breakpointMedium) {
+  .tableContainer {
+    min-width: 100%;
+    width: fit-content;
+
+    &.horizontalScroll {
+      overflow-y: hidden;
+      width: 100%;
+    }
+  }
+}

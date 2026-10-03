@@ -15,7 +15,7 @@ import { useRestart } from 'System/useSystem';
 import { FileInputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import { useRestoreBackup, useRestoreBackupUpload } from './useBackups';
-import styles from './RestoreBackupModalContent.css';
+import styles from './RestoreBackupModalContent.module.css';
 
 function getErrorMessage(error: Error) {
   if (

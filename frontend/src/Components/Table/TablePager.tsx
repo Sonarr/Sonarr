@@ -7,7 +7,7 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import { icons } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import styles from './TablePager.css';
+import styles from './TablePager.module.css';
 
 interface TablePagerProps {
   page?: number;

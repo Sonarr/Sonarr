@@ -1,5 +1,0 @@
-.cell {
-  composes: cell from '~./TableRowCell.css';
-
-  width: 180px;
-}

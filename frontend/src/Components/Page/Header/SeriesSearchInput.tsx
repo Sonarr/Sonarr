@@ -9,7 +9,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import Autosuggest from 'react-autosuggest';
+import Autosuggest, {
+  RenderSuggestionsContainerParams,
+} from 'react-autosuggest';
 import { useNavigate } from 'react-router-dom';
 import { useDebouncedCallback } from 'use-debounce';
 import Icon from 'Components/Icon';
@@ -21,7 +23,7 @@ import useSeries from 'Series/useSeries';
 import { Tag, useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import SeriesSearchResult from './SeriesSearchResult';
-import styles from './SeriesSearchInput.css';
+import styles from './SeriesSearchInput.module.css';
 
 const ADD_NEW_TYPE = 'addNew';
 
@@ -161,13 +163,12 @@ function SeriesSearchInput() {
         requestValue.current = null;
         setRequestLoading(false);
         isLoading.current = false;
-        // setLoading(false);
       } else {
         setSuggestions(suggestions);
         setRequestLoading(true);
 
         const payload = {
-          value: requestValue,
+          value: requestValue.current,
           series,
         };
 
@@ -198,7 +199,6 @@ function SeriesSearchInput() {
   const reset = useCallback(() => {
     setValue('');
     setSuggestions([]);
-    // setLoading(false);
     isLoading.current = false;
   }, []);
 
@@ -226,6 +226,21 @@ function SeriesSearchInput() {
       </div>
     );
   }, []);
+
+  const renderSuggestionsContainer = useCallback(
+    ({ containerProps, children }: RenderSuggestionsContainerParams) => {
+      const { key, ...otherContainerProps } = containerProps;
+
+      return (
+        <div className={children ? styles.dropdown : undefined}>
+          <div key={key} {...otherContainerProps}>
+            {children}
+          </div>
+        </div>
+      );
+    },
+    []
+  );
 
   const getSuggestionValue = useCallback(({ title }: { title: string }) => {
     return title;
@@ -368,7 +383,6 @@ function SeriesSearchInput() {
 
   const theme = {
     container: styles.container,
-    containerOpen: styles.containerOpen,
     suggestionsContainer: styles.seriesContainer,
     suggestionsList: styles.list,
     suggestion: styles.listItem,
@@ -376,7 +390,9 @@ function SeriesSearchInput() {
   };
 
   useEffect(() => {
-    worker.current = new Worker(new URL('./fuse.worker.ts', import.meta.url));
+    worker.current = new Worker(new URL('./fuse.worker.ts', import.meta.url), {
+      type: 'module',
+    });
 
     return () => {
       if (worker.current) {
@@ -414,23 +430,26 @@ function SeriesSearchInput() {
 
   return (
     <div className={styles.wrapper}>
-      <Icon name={icons.SEARCH} />
+      <div className={styles.inputWrapper}>
+        <Icon className={styles.searchIcon} name={icons.SEARCH} />
 
-      <Autosuggest
-        ref={autosuggestRef}
-        inputProps={inputProps}
-        theme={theme}
-        focusInputOnSuggestionClick={false}
-        multiSection={true}
-        suggestions={suggestionGroups}
-        getSectionSuggestions={getSectionSuggestions}
-        renderSectionTitle={renderSectionTitle}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        onSuggestionSelected={handleSuggestionSelected}
-        onSuggestionsFetchRequested={handleSuggestionsFetchRequested}
-        onSuggestionsClearRequested={handleSuggestionsClearRequested}
-      />
+        <Autosuggest
+          ref={autosuggestRef}
+          inputProps={inputProps}
+          theme={theme}
+          focusInputOnSuggestionClick={false}
+          multiSection={true}
+          suggestions={suggestionGroups}
+          getSectionSuggestions={getSectionSuggestions}
+          renderSectionTitle={renderSectionTitle}
+          renderSuggestionsContainer={renderSuggestionsContainer}
+          getSuggestionValue={getSuggestionValue}
+          renderSuggestion={renderSuggestion}
+          onSuggestionSelected={handleSuggestionSelected}
+          onSuggestionsFetchRequested={handleSuggestionsFetchRequested}
+          onSuggestionsClearRequested={handleSuggestionsClearRequested}
+        />
+      </div>
     </div>
   );
 }

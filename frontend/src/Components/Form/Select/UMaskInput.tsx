@@ -5,7 +5,7 @@ import translate from 'Utilities/String/translate';
 import EnhancedSelectInput, {
   EnhancedSelectInputValue,
 } from './EnhancedSelectInput';
-import styles from './UMaskInput.css';
+import styles from './UMaskInput.module.css';
 
 const umaskOptions: EnhancedSelectInputValue<string>[] = [
   {

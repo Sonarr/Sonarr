@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import TextInput from 'Components/Form/TextInput';
 import Quality from 'Quality/Quality';
 import { useManageQualityDefinitions } from './useQualityDefinitions';
-import styles from './QualityDefinition.css';
+import styles from './QualityDefinition.module.css';
 
 interface QualityDefinitionProps {
   id: number;

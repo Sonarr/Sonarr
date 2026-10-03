@@ -2,7 +2,7 @@ import React, { MouseEvent, Ref, useCallback } from 'react';
 import { Kind } from 'Helpers/Props/kinds';
 import { TagBase } from './TagInput';
 import { TagInputTagProps } from './TagInputTag';
-import styles from './TagInputInput.css';
+import styles from './TagInputInput.module.css';
 
 interface TagInputInputProps<T extends TagBase> {
   forwardedRef?: Ref<HTMLDivElement>;

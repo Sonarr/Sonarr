@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { ComponentProps, ReactNode } from 'react';
-import styles from './StatusIndicator.css';
+import styles from './StatusIndicator.module.css';
 
 interface StatusIndicatorProps extends ComponentProps<'span'> {
   label: string;

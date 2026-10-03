@@ -25,7 +25,7 @@ import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
 import SelectSeriesModalTableHeader from './SelectSeriesModalTableHeader';
 import SelectSeriesRow from './SelectSeriesRow';
-import styles from './SelectSeriesModalContent.css';
+import styles from './SelectSeriesModalContent.module.css';
 
 const columns = [
   {
@@ -50,7 +50,7 @@ const columns = [
   },
 ];
 
-const bodyPadding = parseInt(dimensions.pageContentBodyPadding);
+const bodyPadding = dimensions.pageContentBodyPadding;
 
 interface SelectSeriesModalContentProps {
   modalTitle: string;

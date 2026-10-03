@@ -20,7 +20,7 @@ import formatAge from 'Utilities/Number/formatAge';
 import formatBytes from 'Utilities/Number/formatBytes';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import translate from 'Utilities/String/translate';
-import styles from './HistoryDetails.css';
+import styles from './HistoryDetails.module.css';
 
 interface HistoryDetailsProps {
   eventType: HistoryEventType;

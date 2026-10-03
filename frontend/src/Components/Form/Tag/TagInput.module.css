@@ -1,0 +1,40 @@
+.input {
+  composes: input from 'Components/Form/AutoSuggestInput.module.css';
+
+  padding: 0;
+  min-height: 35px;
+  height: auto;
+
+  &.isFocused {
+    outline: 0;
+    border-color: var(--inputFocusBorderColor);
+  }
+}
+
+.hasError {
+  composes: hasError from 'Components/Form/Input.module.css';
+}
+
+.hasWarning {
+  composes: hasWarning from 'Components/Form/Input.module.css';
+}
+
+.internalInput {
+  flex: 1 1 0%;
+  margin-left: 3px;
+  min-width: 20%;
+  max-width: 100%;
+  width: 0%;
+  height: 31px;
+  border: none;
+  background-color: transparent;
+  color: var(--ink);
+  font-size: 13px;
+
+  &:focus-visible {
+    box-shadow: none;
+  }
+  @media (pointer: coarse) {
+    font-size: 16px;
+  }
+}

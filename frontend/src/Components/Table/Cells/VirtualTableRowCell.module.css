@@ -1,0 +1,14 @@
+.cell {
+  @add-mixin truncate;
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  flex-grow: 0;
+  flex-shrink: 1;
+  white-space: nowrap;
+}
+
+@media (--breakpointMedium) {
+  .cell {
+    white-space: nowrap;
+  }
+}
