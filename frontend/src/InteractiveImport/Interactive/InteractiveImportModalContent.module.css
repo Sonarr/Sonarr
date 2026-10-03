@@ -30,6 +30,7 @@
 .rightButtons {
   justify-content: flex-end;
   flex: 1 1 50%;
+  gap: 10px;
 }
 
 .deleteButton {
