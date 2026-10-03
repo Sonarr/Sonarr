@@ -90,14 +90,18 @@ function Calendar() {
       ) : null}
       {!error && !isLoading && view === 'agenda' ? (
         <div className={styles.calendarContent}>
-          <CalendarHeader />
+          <div className={styles.sticky}>
+            <CalendarHeader />
+          </div>
           <Agenda />
         </div>
       ) : null}
       {!error && !isLoading && view !== 'agenda' ? (
         <div className={styles.calendarContent}>
-          <CalendarHeader />
-          <DaysOfWeek />
+          <div className={styles.sticky}>
+            <CalendarHeader />
+            <DaysOfWeek />
+          </div>
           <CalendarDays />
         </div>
       ) : null}

@@ -11,3 +11,19 @@
   flex-grow: 1;
   width: 100%;
 }
+
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin-top: -24px;
+  padding-top: 24px;
+  background: var(--pageBackground);
+}
+
+@media (--breakpointSmall) {
+  .sticky {
+    margin-top: calc(var(--pageContentBodyPaddingSmallScreen) * -1);
+    padding-top: var(--pageContentBodyPaddingSmallScreen);
+  }
+}
