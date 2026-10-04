@@ -13,6 +13,14 @@
   width: 100%;
 }
 
+.noEvents {
+  padding: 32px 0;
+  color: var(--inkMuted);
+  text-align: center;
+  font-size: 15px;
+  font-family: var(--defaultFontFamily);
+}
+
 .dayOfMonth {
   display: flex;
   align-items: baseline;
