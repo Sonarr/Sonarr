@@ -820,6 +820,7 @@
     "FilterNotEqual": "no és igual",
     "FilterNotInLast": "no en l'últim",
     "FilterNotInNext": "no en el següent",
+    "FilterReleasesPlaceholder": "Filtra els llançaments per títol",
     "FilterSeriesPlaceholder": "Filtra les sèries",
     "FilterStartsWith": "comença amb",
     "Filters": "Filtres",

@@ -820,6 +820,7 @@
     "FilterNotEqual": "no igual",
     "FilterNotInLast": "no en el último",
     "FilterNotInNext": "no en el próximo",
+    "FilterReleasesPlaceholder": "Filtrar lanzamientos por título",
     "FilterSeriesPlaceholder": "Filtrar series",
     "FilterStartsWith": "empieza con",
     "Filters": "Filtros",

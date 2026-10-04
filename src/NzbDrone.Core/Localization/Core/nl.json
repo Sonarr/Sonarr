@@ -820,6 +820,7 @@
     "FilterNotEqual": "niet gelijk",
     "FilterNotInLast": "Niet in de afgelopen",
     "FilterNotInNext": "Niet in de volgende",
+    "FilterReleasesPlaceholder": "Filter releases op titel",
     "FilterSeriesPlaceholder": "Series filteren",
     "FilterStartsWith": "Start met",
     "Filters": "Filters",
