@@ -37,20 +37,21 @@ namespace NzbDrone.Core.ImportLists.Simkl
             {
                 foreach (var show in jsonResponse.Anime)
                 {
-                    if (int.TryParse(show.Show.Ids.Tvdb, out var tvdbId) && tvdbId > 0 && show.AnimeType is SimklAnimeType.Tv or SimklAnimeType.Ona or SimklAnimeType.Ova or SimklAnimeType.Special)
-                    {
-                        series.AddIfNotNull(new ImportListItemInfo
-                        {
-                            Title = show.Show.Title,
-                            ImdbId = show.Show.Ids.Imdb,
-                            TvdbId = tvdbId,
-                            MalId = int.TryParse(show.Show.Ids.Mal, out var malId) ? malId : 0,
-                        });
-                    }
-                    else
+                    if (show.AnimeType is not (SimklAnimeType.Tv or SimklAnimeType.Ona or SimklAnimeType.Ova or SimklAnimeType.Special))
                     {
                         Logger.Warn("Skipping info grabbing for '{0}' because it is an unsupported content type.", show.Show.Title);
+                        continue;
                     }
+
+                    var item = MapSeries(show);
+
+                    if (item.TvdbId <= 0 && item.ImdbId.IsNullOrWhiteSpace() && item.TmdbId <= 0 && item.MalId <= 0)
+                    {
+                        Logger.Warn("Skipping info grabbing for '{0}' because it has no supported IDs.", show.Show.Title);
+                        continue;
+                    }
+
+                    series.Add(item);
                 }
             }
 
@@ -58,16 +59,25 @@ namespace NzbDrone.Core.ImportLists.Simkl
             {
                 foreach (var show in jsonResponse.Shows)
                 {
-                    series.AddIfNotNull(new ImportListItemInfo
-                    {
-                        Title = show.Show.Title,
-                        TvdbId = int.TryParse(show.Show.Ids.Tvdb, out var tvdbId) ? tvdbId : 0,
-                        ImdbId = show.Show.Ids.Imdb,
-                    });
+                    series.Add(MapSeries(show));
                 }
             }
 
             return series;
+        }
+
+        private static ImportListItemInfo MapSeries(SimklSeriesResource show)
+        {
+            var ids = show.Show.Ids;
+
+            return new ImportListItemInfo
+            {
+                Title = show.Show.Title,
+                TvdbId = int.TryParse(ids.Tvdb, out var tvdbId) ? tvdbId : 0,
+                ImdbId = ids.Imdb,
+                TmdbId = int.TryParse(ids.Tmdb, out var tmdbId) ? tmdbId : 0,
+                MalId = int.TryParse(ids.Mal, out var malId) ? malId : 0
+            };
         }
 
         protected virtual bool PreProcess(ImportListResponse netImportResponse)
