@@ -401,7 +401,7 @@ namespace NzbDrone.Core.ImportLists
                 }
             }
 
-            _seriesService.UpdateSeries(seriesToUpdate, true);
+            _seriesService.UpdateSeries(seriesToUpdate, false);
             _importListStatusService.MarkListsAsCleaned();
         }
 

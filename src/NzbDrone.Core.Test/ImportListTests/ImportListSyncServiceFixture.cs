@@ -253,7 +253,7 @@ namespace NzbDrone.Core.Test.ImportListTests
         private void VerifyDidAddTag(int expectedSeriesCount, int expectedTagId)
         {
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<List<Series>>(x => x.Count == expectedSeriesCount && x.All(series => series.Tags.Contains(expectedTagId))), true), Times.Once());
+                  .Verify(v => v.UpdateSeries(It.Is<List<Series>>(x => x.Count == expectedSeriesCount && x.All(series => series.Tags.Contains(expectedTagId))), false), Times.Once());
         }
 
         [Test]
@@ -270,7 +270,7 @@ namespace NzbDrone.Core.Test.ImportListTests
                   .Verify(v => v.GetAllSeries(), Times.Never());
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.IsAny<List<Series>>(), true), Times.Never());
+                  .Verify(v => v.UpdateSeries(It.IsAny<List<Series>>(), false), Times.Never());
         }
 
         [Test]
@@ -286,7 +286,7 @@ namespace NzbDrone.Core.Test.ImportListTests
                   .Verify(v => v.GetAllSeries(), Times.Never());
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(new List<Series>(), true), Times.Never());
+                  .Verify(v => v.UpdateSeries(new List<Series>(), false), Times.Never());
         }
 
         [Test]
@@ -305,7 +305,7 @@ namespace NzbDrone.Core.Test.ImportListTests
                   .Verify(v => v.DeleteSeries(It.IsAny<List<int>>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Never());
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(new List<Series>(), true), Times.Once());
+                  .Verify(v => v.UpdateSeries(new List<Series>(), false), Times.Once());
         }
 
         [Test]
@@ -325,7 +325,7 @@ namespace NzbDrone.Core.Test.ImportListTests
                   .Verify(v => v.DeleteSeries(It.IsAny<List<int>>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Never());
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == monitored && s.All(m => !m.Monitored)), true), Times.Once());
+                  .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == monitored && s.All(m => !m.Monitored)), false), Times.Once());
         }
 
         [Test]
@@ -344,7 +344,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(_commandAll);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), true), Times.Once());
+                  .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), false), Times.Once());
         }
 
         [Test]
@@ -363,7 +363,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(_commandAll);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), true), Times.Once());
+                  .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), false), Times.Once());
         }
 
         [Test]
@@ -382,7 +382,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(_commandAll);
 
             Mocker.GetMock<ISeriesService>()
-                .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), true), Times.Once());
+                .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), false), Times.Once());
         }
 
         [Test]
@@ -401,7 +401,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(_commandAll);
 
             Mocker.GetMock<ISeriesService>()
-                .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), true), Times.Once());
+                .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), false), Times.Once());
         }
 
         [Test]
@@ -420,7 +420,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(_commandAll);
 
             Mocker.GetMock<ISeriesService>()
-                .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), true), Times.Once());
+                .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), false), Times.Once());
         }
 
         [Test]
@@ -656,7 +656,7 @@ namespace NzbDrone.Core.Test.ImportListTests
                   .Verify(v => v.GetSeries(It.IsAny<IEnumerable<int>>()), Times.Never());
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.IsAny<List<Series>>(), true), Times.Never());
+                  .Verify(v => v.UpdateSeries(It.IsAny<List<Series>>(), false), Times.Never());
         }
     }
 }
