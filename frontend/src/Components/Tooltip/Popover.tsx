@@ -13,11 +13,11 @@ function Popover({ title, body, ...otherProps }: PopoverProps) {
       {...otherProps}
       bodyClassName={styles.tooltipBody}
       tooltip={
-        <div>
+        <>
           <div className={styles.title}>{title}</div>
 
           <div className={styles.body}>{body}</div>
-        </div>
+        </>
       }
     />
   );

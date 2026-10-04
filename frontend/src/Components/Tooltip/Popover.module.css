@@ -1,4 +1,5 @@
 .title {
+  flex: 0 0 auto;
   padding: 10px 14px;
   border-bottom: 1px solid var(--borderColor);
   background-color: var(--paperWarm);
@@ -11,8 +12,10 @@
 }
 
 .body {
+  flex: 1 1 auto;
   overflow: auto;
   padding: 12px 14px;
+  min-height: 0;
   background-color: var(--paperCard);
   color: var(--inkSoft);
   font-size: 13px;
@@ -21,5 +24,8 @@
 }
 
 .tooltipBody {
+  display: flex;
+  flex-direction: column;
   padding: 0;
+  min-height: 0;
 }
