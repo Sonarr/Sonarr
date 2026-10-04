@@ -11,6 +11,7 @@ import {
   CalendarEventGroup as CalendarEventGroupModel,
   CalendarItem,
 } from 'typings/Calendar';
+import translate from 'Utilities/String/translate';
 import styles from './CalendarDay.module.css';
 
 function sort(items: (CalendarEventModel | CalendarEventGroupModel)[]) {
@@ -127,6 +128,9 @@ function CalendarDay({
           {moment(date).date()}
         </div>
       )}
+      {!events.length && view === calendarViews.DAY ? (
+        <div className={styles.noEvents}>{translate('NoEpisodesAiring')}</div>
+      ) : null}
       <div>
         {events.map((event) => {
           if (event.isGroup) {
