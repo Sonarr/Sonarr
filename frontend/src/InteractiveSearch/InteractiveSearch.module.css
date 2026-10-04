@@ -13,10 +13,21 @@
 }
 
 .filterInput {
-  flex: 0 0 auto;
-  width: 250px;
+  flex: 0 1 250px;
+  min-width: 0;
 }
 
 .filteredMessage {
   margin-top: 10px;
+}
+
+@media (--breakpointLarge) {
+  .tableContainer {
+    overflow-x: auto;
+  }
+
+  .table {
+    min-width: 100%;
+    width: max-content;
+  }
 }

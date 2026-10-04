@@ -17,6 +17,13 @@
   min-width: 0;
 }
 
+@media (--breakpointLarge) {
+  .title {
+    min-width: 250px;
+    white-space: normal;
+  }
+}
+
 .titleContent {
   display: flex;
   align-items: center;
@@ -33,6 +40,8 @@
 
   flex: 0 0 auto;
   width: 85px;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .quality,
@@ -44,19 +53,19 @@
 }
 
 .quality {
-  width: 100px;
+  width: 170px;
   white-space: nowrap;
 }
 
 .languages {
-  width: 100px;
+  width: 140px;
 }
 
 .customFormatScore {
   composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
 
   flex: 0 0 auto;
-  width: 55px;
+  width: 70px;
   font-weight: bold;
   cursor: default;
 }
