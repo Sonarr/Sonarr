@@ -236,28 +236,30 @@ function InteractiveSearch({
       ) : null}
 
       {!isFetching && !!data.length ? (
-        <div ref={measureRef}>
-          <InteractiveSearchTableHeader
-            columns={columns}
-            sortKey={sortKey}
-            sortDirection={sortDirection}
-            onSortPress={handleSortPress}
-          />
+        <div className={styles.tableContainer}>
+          <div ref={measureRef} className={styles.table}>
+            <InteractiveSearchTableHeader
+              columns={columns}
+              sortKey={sortKey}
+              sortDirection={sortDirection}
+              onSortPress={handleSortPress}
+            />
 
-          <VariableSizeList<RowItemData>
-            ref={listRef}
-            outerRef={listOuterRef}
-            style={{ width: '100%', height: '100%', overflow: 'visible' }}
-            width={bounds.width}
-            height={viewportHeight}
-            itemCount={data.length}
-            itemSize={getRowHeight}
-            estimatedItemSize={ESTIMATED_ROW_HEIGHT}
-            itemData={itemData}
-            overscanCount={20}
-          >
-            {Row}
-          </VariableSizeList>
+            <VariableSizeList<RowItemData>
+              ref={listRef}
+              outerRef={listOuterRef}
+              style={{ width: '100%', height: '100%', overflow: 'visible' }}
+              width={bounds.width}
+              height={viewportHeight}
+              itemCount={data.length}
+              itemSize={getRowHeight}
+              estimatedItemSize={ESTIMATED_ROW_HEIGHT}
+              itemData={itemData}
+              overscanCount={20}
+            >
+              {Row}
+            </VariableSizeList>
+          </div>
         </div>
       ) : null}
 
