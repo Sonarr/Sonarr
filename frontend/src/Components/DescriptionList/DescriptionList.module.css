@@ -2,3 +2,14 @@
   margin-top: 0;
   margin-bottom: 0;
 }
+
+@media (--breakpointSmall) {
+  .descriptionList dt {
+    margin-top: 12px;
+  }
+
+  .descriptionList > dt:first-child,
+  .descriptionList > :first-child > dt:first-child {
+    margin-top: 0;
+  }
+}
