@@ -1,5 +1,5 @@
 {
-    "About": "SobreSobre",
+    "About": "Sobre",
     "Absolute": "Absoluto",
     "AbsoluteEpisodeNumber": "Número absoluto do episódio",
     "AbsoluteEpisodeNumbers": "Número(s) absoluto(s) do episódio",
@@ -820,6 +820,7 @@
     "FilterNotEqual": "não é igual a",
     "FilterNotInLast": "não no(a) último(a)",
     "FilterNotInNext": "não no(a) próximo(a)",
+    "FilterReleasesPlaceholder": "Filtrar lançamentos por título",
     "FilterSeriesPlaceholder": "Filtrar séries",
     "FilterStartsWith": "começa com",
     "Filters": "Filtros",
