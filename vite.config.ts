@@ -143,5 +143,8 @@ export default defineConfig({
 
   css: {
     postcss: path.resolve(import.meta.dirname, 'frontend'),
+    modules: {
+      generateScopedName: '[name]_[local]_[hash:base64:5]',
+    },
   },
 });
