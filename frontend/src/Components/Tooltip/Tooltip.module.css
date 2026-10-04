@@ -9,7 +9,10 @@
 
 .tooltip {
   position: relative;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+  max-height: inherit;
   border: 1px solid var(--hairlineStrong);
   border-radius: 12px;
 
@@ -32,7 +35,9 @@
 }
 
 .body {
+  overflow: auto;
   padding: 8px 12px;
+  min-height: 0;
   font-size: 12px;
   font-family: var(--defaultFontFamily);
   line-height: 1.5;
