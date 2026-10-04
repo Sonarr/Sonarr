@@ -11,6 +11,7 @@ import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, kinds } from 'Helpers/Props';
 import formatBytes from 'Utilities/Number/formatBytes';
+import roundNumber from 'Utilities/Number/roundNumber';
 import translate from 'Utilities/String/translate';
 import BarChart, { BarChartItem } from './Charts/BarChart';
 import DoughnutChart, { DoughnutChartItem } from './Charts/DoughnutChart';
@@ -41,13 +42,15 @@ function Statistics() {
     }
 
     const downloadedPercent = data.totalEpisodeCount
-      ? Math.round((data.downloadedEpisodeCount / data.totalEpisodeCount) * 100)
+      ? roundNumber(
+          (data.downloadedEpisodeCount / data.totalEpisodeCount) * 100
+        )
       : 0;
 
     const wantedEpisodeCount =
       data.downloadedEpisodeCount + data.missingEpisodeCount;
     const completedPercent = wantedEpisodeCount
-      ? Math.round((data.downloadedEpisodeCount / wantedEpisodeCount) * 100)
+      ? roundNumber((data.downloadedEpisodeCount / wantedEpisodeCount) * 100)
       : 0;
 
     const averageSizePerEpisode = data.totalEpisodeCount
