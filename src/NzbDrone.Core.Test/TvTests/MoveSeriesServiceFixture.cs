@@ -150,7 +150,7 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
-        public void should_not_update_path_if_neither_source_nor_destination_folder_exists()
+        public void should_update_path_to_destination_if_neither_source_nor_destination_folder_exists()
         {
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.FolderExists(It.IsAny<string>()))
@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Test.TvTests
                   .Verify(v => v.TransferFolder(_command.SourcePath, _command.DestinationPath, TransferMode.Move), Times.Never());
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.IsAny<Series>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Never());
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Path == _command.DestinationPath && s.PendingPath == null), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
         }
 
         [Test]

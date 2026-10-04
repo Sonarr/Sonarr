@@ -54,7 +54,8 @@ namespace NzbDrone.Core.Tv
                 }
                 else
                 {
-                    _logger.Warn("Folder '{0}' for '{1}' does not exist and '{2}' was not found either, unable to confirm the move completed, leaving path unchanged.", sourcePath, series.Title, destinationPath);
+                    _logger.Warn("Folder '{0}' for '{1}' does not exist and '{2}' was not found either, updating the series path anyway. Try moving files manually", sourcePath, series.Title, destinationPath);
+                    UpdatePath(series.Id, destinationPath);
                 }
 
                 return;
