@@ -195,7 +195,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 items.Add(item);
             }
 
-            if (ignoredCount > 0 && _hasAttemptedReconnecting)
+            if (ignoredCount > 0)
             {
                 if (_hasAttemptedReconnecting)
                 {
@@ -204,6 +204,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 else
                 {
                     _proxy.ReconnectToDaemon(Settings);
+                    _hasAttemptedReconnecting = true;
                 }
             }
             else
