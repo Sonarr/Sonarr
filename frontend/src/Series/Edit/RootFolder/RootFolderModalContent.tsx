@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -57,10 +58,10 @@ function RootFolderModalContent(props: RootFolderModalContentProps) {
       <ModalHeader>{translate('UpdateSeriesPath')}</ModalHeader>
 
       <ModalBody>
-        <FormGroup>
+        <FormRow>
           <FormLabel>{translate('RootFolder')}</FormLabel>
-
-          <FormInputGroup
+          <FormInputHelpText text={translate('SeriesEditRootFolderHelpText')} />
+          <FormInput
             type={inputTypes.ROOT_FOLDER_SELECT}
             name="rootFolderPath"
             value={rootFolderPath}
@@ -72,10 +73,9 @@ function RootFolderModalContent(props: RootFolderModalContentProps) {
               seriesFolder: data?.folder,
               isWindows,
             }}
-            helpText={translate('SeriesEditRootFolderHelpText')}
             onChange={onInputChange}
           />
-        </FormGroup>
+        </FormRow>
       </ModalBody>
 
       <ModalFooter>

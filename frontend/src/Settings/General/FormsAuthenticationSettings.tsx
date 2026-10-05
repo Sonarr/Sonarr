@@ -1,7 +1,8 @@
 import React from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { inputTypes } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
@@ -25,55 +26,61 @@ function FormsAuthenticationSettings({
 }: FormsAuthenticationSettingsProps) {
   return (
     <>
-      <FormGroup>
+      <FormRow>
         <FormLabel>{translate('Username')}</FormLabel>
-
-        <FormInputGroup
-          type={inputTypes.TEXT}
-          name="username"
-          helpTextWarning={
+        <FormInputHelpText
+          text={
             showValidationWarnings && !username?.value
               ? translate('AuthenticationRequiredUsernameHelpTextWarning')
               : undefined
           }
+          isWarning={true}
+        />
+        <FormInput
+          type={inputTypes.TEXT}
+          name="username"
           onChange={onInputChange}
           {...username}
         />
-      </FormGroup>
+      </FormRow>
 
-      <FormGroup>
+      <FormRow>
         <FormLabel>{translate('Password')}</FormLabel>
-
-        <FormInputGroup
-          type={inputTypes.PASSWORD}
-          name="password"
-          helpTextWarning={
+        <FormInputHelpText
+          text={
             showValidationWarnings && !password?.value
               ? translate('AuthenticationRequiredPasswordHelpTextWarning')
               : undefined
           }
+          isWarning={true}
+        />
+        <FormInput
+          type={inputTypes.PASSWORD}
+          name="password"
           onChange={onInputChange}
           {...password}
         />
-      </FormGroup>
+      </FormRow>
 
-      <FormGroup>
+      <FormRow>
         <FormLabel>{translate('PasswordConfirmation')}</FormLabel>
-
-        <FormInputGroup
-          type={inputTypes.PASSWORD}
-          name="passwordConfirmation"
-          helpTextWarning={
+        <FormInputHelpText
+          text={
             showValidationWarnings && !passwordConfirmation?.value
               ? translate(
                   'AuthenticationRequiredPasswordConfirmationHelpTextWarning'
                 )
               : undefined
           }
+          isWarning={true}
+        />
+        <FormInput
+          type={inputTypes.PASSWORD}
+          name="passwordConfirmation"
           onChange={onInputChange}
           {...passwordConfirmation}
         />
-      </FormGroup>
+      </FormRow>
     </>
   );
 }

@@ -16,9 +16,3 @@
 .isAdvanced {
   color: var(--advancedFormLabelColor);
 }
-
-.small,
-.large {
-  /* Size hints from FormGroup are no longer about flex basis — drop the
-     fixed-width allotments. Kept as classnames so existing markup compiles. */
-}

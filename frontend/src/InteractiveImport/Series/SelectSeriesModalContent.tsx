@@ -50,7 +50,7 @@ const columns = [
   },
 ];
 
-const bodyPadding = parseInt(dimensions.pageContentBodyPadding);
+const bodyPadding = dimensions.pageContentBodyPadding;
 
 interface SelectSeriesModalContentProps {
   modalTitle: string;

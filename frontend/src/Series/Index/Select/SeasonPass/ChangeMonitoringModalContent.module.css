@@ -17,6 +17,11 @@
   font-weight: 600;
 }
 
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
 .labelIcon {
   margin-left: 8px;
 }
@@ -25,5 +30,10 @@
   .modalFooter {
     flex-direction: column;
     gap: 10px;
+  }
+
+  .buttons {
+    justify-content: space-between;
+    flex-grow: 1;
   }
 }

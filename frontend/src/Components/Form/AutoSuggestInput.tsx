@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import React, {
   FocusEvent,
   FormEvent,
+  Key,
   KeyboardEvent,
   KeyboardEventHandler,
   MutableRefObject,
@@ -107,13 +108,18 @@ function AutoSuggestInput<T = any>(props: AutoSuggestInputProps<T>) {
 
   const createRenderInputComponent = useCallback(
     (inputProps: RenderInputComponentProps) => {
+      const { key, ...otherInputProps } =
+        inputProps as RenderInputComponentProps & {
+          key?: Key;
+        };
+
       if (renderInputComponent) {
-        return renderInputComponent(inputProps, refs.setReference);
+        return renderInputComponent(otherInputProps, refs.setReference);
       }
 
       return (
         <div ref={refs.setReference}>
-          <input {...inputProps} />
+          <input key={key} {...otherInputProps} />
         </div>
       );
     },
@@ -122,6 +128,8 @@ function AutoSuggestInput<T = any>(props: AutoSuggestInputProps<T>) {
 
   const renderSuggestionsContainer = useCallback(
     ({ containerProps, children }: RenderSuggestionsContainerParams) => {
+      const { key, ...otherContainerProps } = containerProps;
+
       return (
         <div
           ref={refs.setFloating}
@@ -129,7 +137,8 @@ function AutoSuggestInput<T = any>(props: AutoSuggestInputProps<T>) {
           className={children ? styles.suggestionsContainerOpen : undefined}
         >
           <div
-            {...containerProps}
+            key={key}
+            {...otherContainerProps}
             style={{
               maxHeight: enforceMaxHeight ? maxHeight : undefined,
             }}

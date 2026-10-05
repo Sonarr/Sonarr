@@ -170,7 +170,7 @@ function InteractiveImportSelectFolderModalContent(
           <div className={styles.buttonContainer}>
             <Button
               className={styles.button}
-              kind={kinds.PRIMARY}
+              kind={kinds.WARNING}
               size={sizes.LARGE}
               isDisabled={!folder}
               onPress={onQuickImportPress}
