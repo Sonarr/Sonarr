@@ -10,7 +10,7 @@ public class MediaManagementSettingsResource : RestResource
 {
     public bool AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
     public string? RecycleBin { get; set; }
-    public int RecycleBinCleanupDays { get; set; }
+    public int? RecycleBinCleanupDays { get; set; }
     public ProperDownloadTypes DownloadPropersAndRepacks { get; set; }
     public bool CreateEmptySeriesFolders { get; set; }
     public bool DeleteEmptyFolders { get; set; }
@@ -24,7 +24,7 @@ public class MediaManagementSettingsResource : RestResource
     public EpisodeTitleRequiredType EpisodeTitleRequired { get; set; }
     public bool SkipFreeSpaceCheckWhenGrabbing { get; set; }
     public bool SkipFreeSpaceCheckWhenImporting { get; set; }
-    public int MinimumFreeSpaceWhenImporting { get; set; }
+    public int? MinimumFreeSpaceWhenImporting { get; set; }
     public bool CopyUsingHardlinks { get; set; }
     public bool UseScriptImport { get; set; }
     public string? ScriptImportPath { get; set; }
@@ -33,7 +33,7 @@ public class MediaManagementSettingsResource : RestResource
     public bool EnableMediaInfo { get; set; }
     public string? UserRejectedExtensions { get; set; }
     public SeasonPackUpgradeType SeasonPackUpgrade { get; set; }
-    public double SeasonPackUpgradeThreshold { get; set; }
+    public double? SeasonPackUpgradeThreshold { get; set; }
 }
 
 public static class MediaManagementConfigResourceMapper
