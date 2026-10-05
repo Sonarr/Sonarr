@@ -62,6 +62,8 @@ namespace Sonarr.Api.V3.Config
                     context.AddFailure($"Rejected extensions may not include valid media file extensions: {string.Join(", ", matchingMediaFileExtensions)}");
                 }
             });
+
+            SharedValidator.RuleFor(c => c.SeasonPackUpgradeThreshold).InclusiveBetween(0, 100);
         }
 
         protected override MediaManagementConfigResource ToResource(IConfigService model)

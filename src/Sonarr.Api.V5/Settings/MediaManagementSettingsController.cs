@@ -23,7 +23,10 @@ public class MediaManagementSettingsController : SettingsController<MediaManagem
         RootFolderValidator rootFolderValidator)
         : base(configFileProvider, configService)
     {
-        SharedValidator.RuleFor(c => c.RecycleBinCleanupDays).GreaterThanOrEqualTo(0);
+        SharedValidator.RuleFor(c => c.RecycleBinCleanupDays).Cascade(CascadeMode.Stop)
+            .NotNull()
+            .GreaterThanOrEqualTo(0);
+
         SharedValidator.RuleFor(c => c.ChmodFolder).SetValidator(folderChmodValidator).When(c => !string.IsNullOrEmpty(c.ChmodFolder) && (OsInfo.IsLinux || OsInfo.IsOsx));
 
         SharedValidator.RuleFor(c => c.RecycleBin).IsValidPath()
@@ -38,7 +41,9 @@ public class MediaManagementSettingsController : SettingsController<MediaManagem
 
         SharedValidator.RuleFor(c => c.ScriptImportPath).IsValidPath().When(c => c.UseScriptImport);
 
-        SharedValidator.RuleFor(c => c.MinimumFreeSpaceWhenImporting).GreaterThanOrEqualTo(100);
+        SharedValidator.RuleFor(c => c.MinimumFreeSpaceWhenImporting).Cascade(CascadeMode.Stop)
+            .NotNull()
+            .GreaterThanOrEqualTo(100);
 
         SharedValidator.RuleFor(c => c.UserRejectedExtensions).Custom((extensions, context) =>
         {
@@ -61,6 +66,10 @@ public class MediaManagementSettingsController : SettingsController<MediaManagem
                 context.AddFailure($"Rejected extensions may not include valid media file extensions: {string.Join(", ", matchingMediaFileExtensions)}");
             }
         });
+
+        SharedValidator.RuleFor(c => c.SeasonPackUpgradeThreshold).Cascade(CascadeMode.Stop)
+            .NotNull()
+            .InclusiveBetween(0, 100);
     }
 
     protected override MediaManagementSettingsResource ToResource(IConfigFileProvider configFile, IConfigService model)
