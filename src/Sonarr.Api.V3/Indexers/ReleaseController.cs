@@ -239,6 +239,15 @@ namespace Sonarr.Api.V3.Indexers
             return MapDecisions(prioritizedDecisions);
         }
 
+        protected override List<ReleaseResource> MapDecisions(IEnumerable<DownloadDecision> decisions)
+        {
+            // Expired entries are only removed when the same key is looked up again (a grab),
+            // so without this every interactive search would stay in memory until a restart.
+            _remoteEpisodeCache.ClearExpired();
+
+            return base.MapDecisions(decisions);
+        }
+
         protected override ReleaseResource MapDecision(DownloadDecision decision, int initialWeight)
         {
             var resource = base.MapDecision(decision, initialWeight);

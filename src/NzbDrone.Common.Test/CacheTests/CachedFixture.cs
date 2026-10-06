@@ -101,6 +101,21 @@ namespace NzbDrone.Common.Test.CacheTests
 
             hitCount.Should().BeInRange(3, 6);
         }
+
+        [Test]
+        public void should_remove_expired_items_when_clearing_expired()
+        {
+            _cachedString.Set("expired", "old", TimeSpan.FromMilliseconds(1));
+            _cachedString.Set("fresh", "new", TimeSpan.FromMinutes(30));
+
+            Thread.Sleep(50);
+
+            _cachedString.ClearExpired();
+
+            _cachedString.Find("expired").Should().BeNull();
+            _cachedString.Find("fresh").Should().Be("new");
+            _cachedString.Values.Should().HaveCount(1);
+        }
     }
 
     public class Worker
