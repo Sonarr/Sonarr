@@ -529,5 +529,41 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
             trackedDownload.RemoteEpisode.ParsedEpisodeInfo.SeasonNumber.Should().Be(1);
             trackedDownload.RemoteEpisode.MappedSeasonNumber.Should().Be(1);
         }
+
+        [Test]
+        public void should_stop_tracking_downloads_missing_from_their_download_client()
+        {
+            GivenTrackedDownload(1, "present");
+            GivenTrackedDownload(1, "missing");
+            GivenTrackedDownload(2, "other");
+
+            Subject.StopTrackingMissing(1, new List<string> { "present" });
+
+            Subject.Find("present").Should().NotBeNull();
+            Subject.Find("missing").Should().BeNull();
+            Subject.Find("other").Should().NotBeNull();
+        }
+
+        private void GivenTrackedDownload(int downloadClientId, string downloadId)
+        {
+            var client = new DownloadClientDefinition
+            {
+                Id = downloadClientId,
+                Protocol = DownloadProtocol.Torrent
+            };
+
+            var item = new DownloadClientItem
+            {
+                Title = "Unparsable",
+                DownloadId = downloadId,
+                DownloadClientInfo = new DownloadClientItemClientInfo
+                {
+                    Protocol = client.Protocol,
+                    Id = client.Id
+                }
+            };
+
+            Subject.TrackDownload(client, item);
+        }
     }
 }
