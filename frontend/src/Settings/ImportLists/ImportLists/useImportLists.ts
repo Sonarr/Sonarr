@@ -21,6 +21,8 @@ import { ApiError } from 'Utilities/Fetch/fetchJson';
 import clientSideFilterAndSort from 'Utilities/Filter/clientSideFilterAndSort';
 import translate from 'Utilities/String/translate';
 
+export type TagExisting = 'none' | 'add' | 'sync';
+
 export interface ImportListModel extends Provider {
   enableAutomaticAdd: boolean;
   searchForMissingEpisodes: boolean;
@@ -35,7 +37,7 @@ export interface ImportListModel extends Provider {
   listOrder: number;
   minRefreshInterval: string;
   tags: number[];
-  tagExisting: boolean;
+  tagExisting: TagExisting;
 }
 
 interface BulkEditImportListsPayload {

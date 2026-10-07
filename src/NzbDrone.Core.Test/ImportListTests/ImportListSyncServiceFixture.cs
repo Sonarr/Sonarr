@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Test.ImportListTests
         private ImportListFetchResult _importListFetch;
         private List<ImportListItemInfo> _list1Series;
         private List<ImportListItemInfo> _list2Series;
+        private List<ImportListItemInfo> _storedListItems;
 
         private List<Series> _existingSeries;
         private List<IImportList> _importLists;
@@ -31,6 +32,7 @@ namespace NzbDrone.Core.Test.ImportListTests
         public void SetUp()
         {
             _importLists = new List<IImportList>();
+            _storedListItems = new List<ImportListItemInfo>();
 
             var item1 = new ImportListItemInfo()
             {
@@ -136,6 +138,10 @@ namespace NzbDrone.Core.Test.ImportListTests
             Mocker.GetMock<IImportListItemService>()
                 .Setup(s => s.All())
                 .Returns(new List<ImportListItemInfo>());
+
+            Mocker.GetMock<IImportListItemService>()
+                .Setup(s => s.GetAllForLists(It.IsAny<List<int>>()))
+                .Returns((List<int> ids) => _storedListItems.Where(i => ids.Contains(i.ImportListId)).ToList());
         }
 
         private void WithTvdbId()
@@ -197,14 +203,38 @@ namespace NzbDrone.Core.Test.ImportListTests
             _importLists.ForEach(li => (li.Definition as ImportListDefinition).ShouldMonitor = monitor);
         }
 
-        private void WithTagExisting(int tagId)
+        private void WithTagExisting(TagExistingType tagExisting, int tagId)
         {
             _importLists.ForEach(li =>
             {
                 var def = li.Definition as ImportListDefinition;
-                def.TagExisting = true;
+                def.TagExisting = tagExisting;
                 def.Tags = new HashSet<int> { tagId };
             });
+        }
+
+        private void WithStoredListItems(int listId, params int[] tvdbIds)
+        {
+            var items = tvdbIds.Select(id => new ImportListItemInfo { ImportListId = listId, TvdbId = id, TmdbId = -1, MalId = -1, AniListId = -1 }).ToList();
+
+            _storedListItems.AddRange(items);
+        }
+
+        private void WithExistingSeriesTagged(int tagId)
+        {
+            _existingSeries.ForEach(s => s.Tags = new HashSet<int> { tagId });
+        }
+
+        private void VerifyRemovedTag(int tagId, params int[] tvdbIds)
+        {
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateTags(It.Is<List<Series>>(x => x.Select(s => s.TvdbId).OrderBy(i => i).SequenceEqual(tvdbIds.OrderBy(i => i)) && x.All(s => !s.Tags.Contains(tagId)))), Times.Once());
+        }
+
+        private void VerifyNoTagsRemoved()
+        {
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateTags(It.Is<List<Series>>(x => x.Count > 0)), Times.Never());
         }
 
         private void WithCleanLevel(ListSyncLevelType cleanLevel, int? tagId = null)
@@ -658,6 +688,103 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             Mocker.GetMock<ISeriesService>()
                   .Verify(v => v.UpdateSeries(It.IsAny<List<Series>>(), true), Times.Never());
+        }
+
+        [Test]
+        public void should_tag_existing_series_if_existing_series_tags_add()
+        {
+            WithList(1, true);
+            WithTvdbId();
+            WithTagExisting(TagExistingType.Add, 1);
+            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+
+            var existing = new Series { Id = 5, TvdbId = 81189 };
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(v => v.AllSeriesTvdbIds())
+                  .Returns(new Dictionary<int, int> { { 5, 81189 } });
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(v => v.GetSeries(It.IsAny<IEnumerable<int>>()))
+                  .Returns(new List<Series> { existing });
+
+            Subject.Execute(_commandAll);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateTags(It.Is<List<Series>>(x => x.Count == 1 && x[0].Tags.Contains(1))), Times.Once());
+        }
+
+        [Test]
+        public void should_remove_tag_from_series_no_longer_on_list_if_existing_series_tags_sync()
+        {
+            WithList(1, true);
+            WithTagExisting(TagExistingType.Sync, 1);
+            WithExistingSeriesTagged(1);
+            WithStoredListItems(1, 6);
+            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+
+            Subject.Execute(_commandAll);
+
+            VerifyRemovedTag(1, 7, 8);
+        }
+
+        [Test]
+        public void should_not_remove_tags_if_existing_series_tags_add()
+        {
+            WithList(1, true);
+            WithTagExisting(TagExistingType.Add, 1);
+            WithExistingSeriesTagged(1);
+            WithStoredListItems(1, 6);
+            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+
+            Subject.Execute(_commandAll);
+
+            VerifyNoTagsRemoved();
+        }
+
+        [Test]
+        public void should_not_remove_tag_if_series_is_on_another_list_with_the_same_tag()
+        {
+            WithList(1, true);
+            WithList(2, true);
+            WithTagExisting(TagExistingType.Sync, 1);
+            (_importLists[1].Definition as ImportListDefinition).TagExisting = TagExistingType.None;
+            WithExistingSeriesTagged(1);
+            WithStoredListItems(1, 6);
+            WithStoredListItems(2, 7);
+            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+
+            Subject.Execute(_commandAll);
+
+            VerifyRemovedTag(1, 8);
+        }
+
+        [Test]
+        public void should_not_remove_tag_if_a_list_with_the_tag_has_not_synced_successfully()
+        {
+            WithList(1, true);
+            WithList(2, true, disabledTill: DateTime.UtcNow.AddHours(1));
+            WithTagExisting(TagExistingType.Sync, 1);
+            WithExistingSeriesTagged(1);
+            WithStoredListItems(1, 6);
+            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+
+            Subject.Execute(_commandAll);
+
+            VerifyNoTagsRemoved();
+        }
+
+        [Test]
+        public void should_not_remove_tags_that_do_not_belong_to_the_list()
+        {
+            WithList(1, true);
+            WithTagExisting(TagExistingType.Sync, 1);
+            WithExistingSeriesTagged(2);
+            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+
+            Subject.Execute(_commandAll);
+
+            VerifyNoTagsRemoved();
         }
     }
 }

@@ -17,7 +17,6 @@ interface ImportListProps {
   enableAutomaticAdd: boolean;
   minRefreshInterval: string;
   tags: number[];
-  tagExisting: boolean;
   onCloneImportListPress: (id: number) => void;
 }
 
