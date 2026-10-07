@@ -117,10 +117,21 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
+        public void should_be_true_if_release_date_is_within_grace_period()
+        {
+            _remoteEpisode.Episodes.First().AirDateUtc = DateTime.UtcNow;
+            _remoteEpisode.Release.PublishDate = DateTime.UtcNow.AddHours(-1);
+
+            GivenSettings(true, -2);
+
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
+        }
+
+        [Test]
         public void should_be_false_if_release_date_with_grace_period_is_before_air_date()
         {
             _remoteEpisode.Episodes.First().AirDateUtc = DateTime.UtcNow;
-            _remoteEpisode.Release.PublishDate = DateTime.UtcNow.AddDays(-3);
+            _remoteEpisode.Release.PublishDate = DateTime.UtcNow.AddHours(-3);
 
             GivenSettings(true, -2);
 
@@ -131,7 +142,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_be_false_if_release_date_is_after_air_date_and_grace_period_is_positive()
         {
             _remoteEpisode.Episodes.First().AirDateUtc = DateTime.UtcNow;
-            _remoteEpisode.Release.PublishDate = DateTime.UtcNow.AddDays(1);
+            _remoteEpisode.Release.PublishDate = DateTime.UtcNow.AddHours(1);
 
             GivenSettings(true, 2);
 

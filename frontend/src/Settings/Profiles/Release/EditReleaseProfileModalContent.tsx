@@ -162,7 +162,7 @@ function EditReleaseProfileModalContent({
                 <FormInput
                   {...airDateGracePeriod}
                   type={inputTypes.NUMBER}
-                  unit="days"
+                  unit="hours"
                   name="airDateGracePeriod"
                   onChange={handleInputChange}
                 />
