@@ -21,7 +21,10 @@ const fuseOptions = {
   ],
 };
 
-function getSuggestions(series: SuggestedSeries[], value: string) {
+let series: SuggestedSeries[] = [];
+let fuse: Fuse<SuggestedSeries> | null = null;
+
+function getSuggestions(value: string) {
   const limit = 10;
   let suggestions = [];
 
@@ -48,7 +51,7 @@ function getSuggestions(series: SuggestedSeries[], value: string) {
       }
     }
   } else {
-    const fuse = new Fuse(series, fuseOptions);
+    fuse ??= new Fuse(series, fuseOptions);
     suggestions = fuse.search(value, { limit });
   }
 
@@ -60,9 +63,15 @@ onmessage = function (e) {
     return;
   }
 
-  const { series, value } = e.data;
+  if ('series' in e.data) {
+    series = e.data.series;
+    fuse = null;
+    return;
+  }
 
-  const suggestions = getSuggestions(series, value);
+  const { value } = e.data;
+
+  const suggestions = getSuggestions(value);
 
   const results = {
     value,
