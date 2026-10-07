@@ -19,7 +19,7 @@ public class ImportListResource : ProviderResource<ImportListResource>
     public ImportListType ListType { get; set; }
     public int ListOrder { get; set; }
     public TimeSpan MinRefreshInterval { get; set; }
-    public bool TagExisting { get; set; }
+    public TagExistingType TagExisting { get; set; }
 }
 
 public class ImportListResourceMapper : ProviderResourceMapper<ImportListResource, ImportListDefinition>

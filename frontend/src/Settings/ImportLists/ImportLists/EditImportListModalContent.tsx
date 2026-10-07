@@ -26,6 +26,7 @@ import { SelectedSchema } from 'Settings/useProviderSchema';
 import { EnhancedSelectInputChanged, InputChanged } from 'typings/inputs';
 import formatShortTimeSpan from 'Utilities/Date/formatShortTimeSpan';
 import translate from 'Utilities/String/translate';
+import tagExistingOptions from './tagExistingOptions';
 import { useManageImportList } from './useImportLists';
 import styles from './EditImportListModalContent.module.css';
 
@@ -313,9 +314,14 @@ function EditImportListModalContent({
           <FormRow>
             <FormLabel>{translate('TagExisting')}</FormLabel>
             <FormInputHelpText text={translate('TagExistingHelpText')} />
+            <FormInputHelpText
+              text={translate('TagExistingHelpTextWarning')}
+              isWarning={true}
+            />
             <FormInput
-              type={inputTypes.CHECK}
+              type={inputTypes.SELECT}
               name="tagExisting"
+              values={tagExistingOptions}
               {...tagExisting}
               onChange={handleInputChange}
             />

@@ -99,6 +99,8 @@ namespace NzbDrone.Core.ImportLists
 
             ProcessListItems(listItems);
 
+            RemoveTagsFromSeriesNotOnLists();
+
             TryCleanLibrary();
         }
 
@@ -111,6 +113,8 @@ namespace NzbDrone.Core.ImportLists
             var listItems = result.Series.ToList();
 
             ProcessListItems(listItems);
+
+            RemoveTagsFromSeriesNotOnLists();
 
             TryCleanLibrary();
         }
@@ -287,7 +291,7 @@ namespace NzbDrone.Core.ImportLists
 
         private void QueueTagsOnPendingSeries(ImportListDefinition importList, Dictionary<int, HashSet<int>> existingSeriesToUpdate, int existingSeriesId)
         {
-            if (!importList.TagExisting || importList.Tags.Count == 0)
+            if (importList.TagExisting == TagExistingType.None || importList.Tags.Count == 0)
             {
                 return;
             }
@@ -335,6 +339,84 @@ namespace NzbDrone.Core.ImportLists
             _seriesService.UpdateTags(seriesWithUpdatedTags);
         }
 
+        private void RemoveTagsFromSeriesNotOnLists()
+        {
+            var importLists = _importListFactory.All().Where(l => l.EnableAutomaticAdd).ToList();
+
+            var tagsToSync = importLists
+                .Where(l => l.TagExisting == TagExistingType.Sync)
+                .SelectMany(l => l.Tags)
+                .ToHashSet();
+
+            if (tagsToSync.Empty())
+            {
+                return;
+            }
+
+            var listsByTag = tagsToSync.ToDictionary(t => t, t => importLists.Where(l => l.Tags.Contains(t)).ToList());
+
+            tagsToSync.RemoveWhere(tag =>
+            {
+                var unsyncedList = listsByTag[tag].FirstOrDefault(l => !HasSyncedSuccessfully(l.Id));
+
+                if (unsyncedList != null)
+                {
+                    _logger.Debug("Not removing tag {0}, import list {1} has not synced successfully", tag, unsyncedList.Name);
+                    return true;
+                }
+
+                return false;
+            });
+
+            if (tagsToSync.Empty())
+            {
+                return;
+            }
+
+            var itemsByList = _importListItemService.GetAllForLists(importLists.Select(l => l.Id).ToList())
+                .GroupBy(i => i.ImportListId)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            var seriesWithUpdatedTags = new List<Series>();
+
+            foreach (var series in _seriesService.GetAllSeries())
+            {
+                var tagsToRemove = series.Tags
+                    .Where(tag => tagsToSync.Contains(tag) &&
+                                  !listsByTag[tag].Any(l => itemsByList.TryGetValue(l.Id, out var items) && IsSeriesOnList(series, items)))
+                    .ToList();
+
+                if (tagsToRemove.Empty())
+                {
+                    continue;
+                }
+
+                series.Tags.ExceptWith(tagsToRemove);
+
+                _logger.Debug("{0} [{1}] no longer on import lists, removed tags", series.TvdbId, series.Title);
+                seriesWithUpdatedTags.Add(series);
+            }
+
+            _seriesService.UpdateTags(seriesWithUpdatedTags);
+        }
+
+        private bool HasSyncedSuccessfully(int importListId)
+        {
+            var status = _importListStatusService.GetListStatus(importListId);
+
+            return !status.DisabledTill.HasValue && status.LastInfoSync.HasValue;
+        }
+
+        private static bool IsSeriesOnList(Series series, IEnumerable<ImportListItemInfo> listItems)
+        {
+            return listItems.Any(l =>
+                l.TvdbId == series.TvdbId ||
+                (l.ImdbId.IsNotNullOrWhiteSpace() && series.ImdbId.IsNotNullOrWhiteSpace() && l.ImdbId == series.ImdbId) ||
+                l.TmdbId == series.TmdbId ||
+                series.MalIds.Contains(l.MalId) ||
+                series.AniListIds.Contains(l.AniListId));
+        }
+
         public void Execute(ImportListSyncCommand message)
         {
             if (message.DefinitionId.HasValue)
@@ -373,14 +455,7 @@ namespace NzbDrone.Core.ImportLists
 
             foreach (var series in seriesInLibrary)
             {
-                var seriesExists = allListItems.Where(l =>
-                    l.TvdbId == series.TvdbId ||
-                    (l.ImdbId.IsNotNullOrWhiteSpace() && series.ImdbId.IsNotNullOrWhiteSpace() && l.ImdbId == series.ImdbId) ||
-                    l.TmdbId == series.TmdbId ||
-                    series.MalIds.Contains(l.MalId) ||
-                    series.AniListIds.Contains(l.AniListId)).ToList();
-
-                if (!seriesExists.Any())
+                if (!IsSeriesOnList(series, allListItems))
                 {
                     switch (_configService.ListSyncLevel)
                     {

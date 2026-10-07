@@ -12,6 +12,8 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalSection from 'Components/ModalSection';
 import { inputTypes } from 'Helpers/Props';
 import Language from 'Language/Language';
+import tagExistingOptions from 'Settings/ImportLists/ImportLists/tagExistingOptions';
+import { TagExisting } from 'Settings/ImportLists/ImportLists/useImportLists';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './ManageImportListsEditModalContent.module.css';
@@ -21,7 +23,7 @@ interface SavePayload {
   qualityProfileId?: number;
   rootFolderPath?: string;
   language?: Language;
-  tagExisting?: boolean;
+  tagExisting?: TagExisting;
 }
 
 interface ManageImportListsEditModalContentProps {
@@ -31,6 +33,17 @@ interface ManageImportListsEditModalContentProps {
 }
 
 const NO_CHANGE = 'noChange';
+
+const tagExistingWithNoChangeOptions: EnhancedSelectInputValue<string>[] = [
+  {
+    key: NO_CHANGE,
+    get value() {
+      return translate('NoChange');
+    },
+    isDisabled: true,
+  },
+  ...tagExistingOptions,
+];
 
 const autoAddOptions: EnhancedSelectInputValue<string>[] = [
   {
@@ -65,7 +78,9 @@ function ManageImportListsEditModalContent(
   );
   const [rootFolderPath, setRootFolderPath] = useState(NO_CHANGE);
   const [language, setLanguage] = useState<string | Language>(NO_CHANGE);
-  const [tagExisting, setTagExisting] = useState(NO_CHANGE);
+  const [tagExisting, setTagExisting] = useState<
+    TagExisting | typeof NO_CHANGE
+  >(NO_CHANGE);
 
   const save = useCallback(() => {
     let hasChanges = false;
@@ -93,7 +108,7 @@ function ManageImportListsEditModalContent(
 
     if (tagExisting !== NO_CHANGE) {
       hasChanges = true;
-      payload.tagExisting = tagExisting === 'enabled';
+      payload.tagExisting = tagExisting;
     }
 
     if (hasChanges) {
@@ -126,7 +141,7 @@ function ManageImportListsEditModalContent(
         setLanguage(value as Language);
         break;
       case 'tagExisting':
-        setTagExisting(value as string);
+        setTagExisting(value as TagExisting);
         break;
       default:
         console.warn(`EditImportListModalContent Unknown Input: '${name}'`);
@@ -202,7 +217,7 @@ function ManageImportListsEditModalContent(
               type={inputTypes.SELECT}
               name="tagExisting"
               value={tagExisting}
-              values={autoAddOptions}
+              values={tagExistingWithNoChangeOptions}
               onChange={onInputChange}
             />
           </FormRow>
