@@ -39,10 +39,20 @@ namespace NzbDrone.Core.Datastore
 
                 var dbPath = _appFolderInfo.GetDatabase();
 
-                _diskProvider.DeleteFile(dbPath + "-shm");
-                _diskProvider.DeleteFile(dbPath + "-wal");
-                _diskProvider.DeleteFile(dbPath + "-journal");
-                _diskProvider.DeleteFile(dbPath);
+                foreach (var suffix in new[] { "", "-shm", "-wal", "-journal" })
+                {
+                    var preRestorePath = dbPath + ".pre-restore" + suffix;
+
+                    if (_diskProvider.FileExists(preRestorePath))
+                    {
+                        _diskProvider.DeleteFile(preRestorePath);
+                    }
+
+                    if (_diskProvider.FileExists(dbPath + suffix))
+                    {
+                        _diskProvider.MoveFile(dbPath + suffix, preRestorePath);
+                    }
+                }
 
                 _diskProvider.MoveFile(dbRestorePath, dbPath);
             }
