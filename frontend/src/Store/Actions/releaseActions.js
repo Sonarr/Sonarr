@@ -40,7 +40,7 @@ export const defaultState = {
       return seeders * 1000000 + leechers;
     },
 
-    languages: function(item, direction) {
+    languageWeight: function(item, direction) {
       if (item.languages.length > 1) {
         return 10000;
       }
