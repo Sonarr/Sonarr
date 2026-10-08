@@ -40,6 +40,7 @@ namespace NzbDrone.Core.Backup
         private string _backupTempFolder;
 
         public static readonly Regex BackupFileRegex = new Regex(@"(nzbdrone|sonarr)_backup_(v[0-9.]+_)?[._0-9]+\.zip", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly byte[] SqliteHeader = Encoding.ASCII.GetBytes("SQLite format 3\0");
 
         public BackupService(IMainDatabase maindDb,
                              IMakeDatabaseBackup makeDatabaseBackup,
@@ -141,19 +142,19 @@ namespace NzbDrone.Core.Backup
 
                     if (fileName.Equals("Config.xml", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        _diskProvider.MoveFile(file, _appFolderInfo.GetConfigPath(), true);
+                        RestoreConfigFile(file);
                         restoredFile = true;
                     }
 
                     if (fileName.Equals("nzbdrone.db", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        _diskProvider.MoveFile(file, _appFolderInfo.GetDatabaseRestore(), true);
+                        RestoreDatabase(file);
                         restoredFile = true;
                     }
 
                     if (fileName.Equals("sonarr.db", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        _diskProvider.MoveFile(file, _appFolderInfo.GetDatabaseRestore(), true);
+                        RestoreDatabase(file);
                         restoredFile = true;
                     }
                 }
@@ -168,7 +169,14 @@ namespace NzbDrone.Core.Backup
                 return;
             }
 
-            _diskProvider.MoveFile(backupFileName, _appFolderInfo.GetDatabaseRestore(), true);
+            if (backupFileName.EndsWith(".xml"))
+            {
+                RestoreConfigFile(backupFileName);
+
+                return;
+            }
+
+            RestoreDatabase(backupFileName);
         }
 
         public string GetBackupFolder()
@@ -214,6 +222,31 @@ namespace NzbDrone.Core.Backup
             var tempConfigFile = Path.Combine(_backupTempFolder, Path.GetFileName(configFile));
 
             _diskTransferService.TransferFile(configFile, tempConfigFile, TransferMode.Copy);
+        }
+
+        private void RestoreConfigFile(string file)
+        {
+            _diskProvider.MoveFile(file, _appFolderInfo.GetConfigPath(), true);
+        }
+
+        private void RestoreDatabase(string file)
+        {
+            if (!IsSqliteDatabase(file))
+            {
+                throw new RestoreBackupFailedException(HttpStatusCode.BadRequest, "Backup database is not a valid SQLite database");
+            }
+
+            _diskProvider.MoveFile(file, _appFolderInfo.GetDatabaseRestore(), true);
+        }
+
+        private bool IsSqliteDatabase(string file)
+        {
+            var header = new byte[SqliteHeader.Length];
+
+            using (var stream = _diskProvider.OpenReadStream(file))
+            {
+                return stream.Read(header, 0, header.Length) == header.Length && header.SequenceEqual(SqliteHeader);
+            }
         }
 
         private void CreateVersionInfo(DateTime dateNow)
