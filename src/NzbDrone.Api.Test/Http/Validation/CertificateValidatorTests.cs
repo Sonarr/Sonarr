@@ -99,4 +99,21 @@ public class CertificateValidatorTests : TestBase
         result.ShouldHaveValidationErrorFor(r => r.SslCertPath);
         result.Errors.Should().Contain(e => e.ErrorMessage.Contains("password"));
     }
+
+    [Test]
+    public void validate_uses_resolved_password()
+    {
+        var validator = new InlineValidator<TestSslCertificateResource>();
+        validator.RuleFor(x => x.SslCertPath).IsValidCertificate(p => p == "********" ? SslTestCertificates.PfxPassword : p);
+
+        var resource = new TestSslCertificateResource
+        {
+            SslCertPath = _certs.PfxPath,
+            SslCertPassword = "********"
+        };
+
+        var result = validator.TestValidate(resource);
+
+        result.ShouldNotHaveAnyValidationErrors();
+    }
 }

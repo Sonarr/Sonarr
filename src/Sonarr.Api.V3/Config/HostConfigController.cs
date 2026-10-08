@@ -113,7 +113,7 @@ namespace Sonarr.Api.V3.Config
                 .NotEmpty()
                 .IsValidPath()
                 .SetValidator(new FileExistsValidator(diskProvider))
-                .IsValidCertificate()
+                .IsValidCertificate(p => p == PrivateValue ? _configFileProvider.SslCertPassword : p)
                 .When(c => c.EnableSsl);
 
             SharedValidator.RuleFor(c => c.SslKeyPath)
@@ -132,21 +132,14 @@ namespace Sonarr.Api.V3.Config
             SharedValidator.RuleFor(c => c.BackupRetention).InclusiveBetween(1, 90);
         }
 
-        private bool IsMatchingPassword(HostConfigResource resource)
+        private static bool IsMatchingPassword(HostConfigResource resource)
         {
-            var user = _userService.FindUser();
+            return resource.Password == PrivateValue || resource.Password == resource.PasswordConfirmation;
+        }
 
-            if (user != null && user.Password == resource.Password)
-            {
-                return true;
-            }
-
-            if (resource.Password == resource.PasswordConfirmation)
-            {
-                return true;
-            }
-
-            return false;
+        private static string MaskSecret(string value)
+        {
+            return value.IsNullOrWhiteSpace() ? string.Empty : PrivateValue;
         }
 
         protected override HostConfigResource GetResourceById(int id)
@@ -157,17 +150,18 @@ namespace Sonarr.Api.V3.Config
         [HttpGet]
         public HostConfigResource GetHostConfig()
         {
-            var oidcClientSecret = _configFileProvider.OidcClientSecret;
             var resource = _configFileProvider.ToResource(_configService);
             var user = _userService.FindUser();
 
             resource.Id = 1;
             resource.Username = user?.Username ?? string.Empty;
-            resource.Password = user?.Password ?? string.Empty;
+            resource.Password = MaskSecret(user?.Password);
             resource.PasswordConfirmation = string.Empty;
 
-            // Prevent the OIDC client secret from being exposed
-            resource.OidcClientSecret = oidcClientSecret.IsNullOrWhiteSpace() ? string.Empty : PrivateValue;
+            // Prevent secrets from being exposed
+            resource.OidcClientSecret = MaskSecret(_configFileProvider.OidcClientSecret);
+            resource.SslCertPassword = MaskSecret(resource.SslCertPassword);
+            resource.ProxyPassword = MaskSecret(resource.ProxyPassword);
 
             return resource;
         }
@@ -181,12 +175,20 @@ namespace Sonarr.Api.V3.Config
                                      .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                                      .ToDictionary(prop => prop.Name, prop => prop.GetValue(resource, null));
 
-            // Don't persist the secret OIDC client secret placeholder
-            var oidcClientSecret = _configFileProvider.OidcClientSecret;
-
+            // Don't persist secret placeholders
             if (resource.OidcClientSecret == PrivateValue)
             {
-                dictionary["OidcClientSecret"] = oidcClientSecret;
+                dictionary["OidcClientSecret"] = _configFileProvider.OidcClientSecret;
+            }
+
+            if (resource.SslCertPassword == PrivateValue)
+            {
+                dictionary["SslCertPassword"] = _configFileProvider.SslCertPassword;
+            }
+
+            if (resource.ProxyPassword == PrivateValue)
+            {
+                dictionary["ProxyPassword"] = _configService.ProxyPassword;
             }
 
             _configFileProvider.SaveConfigDictionary(dictionary);
@@ -194,7 +196,7 @@ namespace Sonarr.Api.V3.Config
 
             if (resource.Username.IsNotNullOrWhiteSpace() && resource.Password.IsNotNullOrWhiteSpace())
             {
-                _userService.Upsert(resource.Username, resource.Password);
+                _userService.Upsert(resource.Username, resource.Password == PrivateValue ? null : resource.Password);
             }
 
             return Accepted(resource.Id);

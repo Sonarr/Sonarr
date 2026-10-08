@@ -19,6 +19,7 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
     private const string PrivateValue = "********";
 
     private readonly IConfigFileProvider _configFileProvider;
+    private readonly IConfigService _configService;
     private readonly IUserService _userService;
 
     public GeneralSettingsController(IConfigFileProvider configFileProvider,
@@ -29,6 +30,7 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
         : base(configFileProvider, configService)
     {
         _configFileProvider = configFileProvider;
+        _configService = configService;
         _userService = userService;
 
         SharedValidator.RuleFor(c => c.BindAddress)
@@ -106,7 +108,7 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
             .NotEmpty()
             .IsValidPath()
             .SetValidator(new FileExistsValidator(diskProvider))
-            .IsValidCertificate()
+            .IsValidCertificate(p => p == PrivateValue ? _configFileProvider.SslCertPassword : p)
             .When(c => c.EnableSsl);
 
         SharedValidator.RuleFor(c => c.SslKeyPath)
@@ -125,21 +127,14 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
         SharedValidator.RuleFor(c => c.BackupRetention).InclusiveBetween(1, 90);
     }
 
-    private bool IsMatchingPassword(GeneralSettingsResource resource)
+    private static bool IsMatchingPassword(GeneralSettingsResource resource)
     {
-        var user = _userService.FindUser();
+        return resource.Password == PrivateValue || resource.Password == resource.PasswordConfirmation;
+    }
 
-        if (user != null && user.Password == resource.Password)
-        {
-            return true;
-        }
-
-        if (resource.Password == resource.PasswordConfirmation)
-        {
-            return true;
-        }
-
-        return false;
+    private static string MaskSecret(string? value)
+    {
+        return value.IsNullOrWhiteSpace() ? string.Empty : PrivateValue;
     }
 
     protected override GeneralSettingsResource ToResource(IConfigFileProvider configFile, IConfigService model)
@@ -149,11 +144,13 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
         var user = _userService.FindUser();
 
         resource.Username = user?.Username ?? string.Empty;
-        resource.Password = user?.Password ?? string.Empty;
+        resource.Password = MaskSecret(user?.Password);
         resource.PasswordConfirmation = string.Empty;
 
-        // Prevent the OIDC client secret from being exposed
-        resource.OidcClientSecret = configFile.OidcClientSecret.IsNullOrWhiteSpace() ? string.Empty : PrivateValue;
+        // Prevent secrets from being exposed
+        resource.OidcClientSecret = MaskSecret(configFile.OidcClientSecret);
+        resource.SslCertPassword = MaskSecret(resource.SslCertPassword);
+        resource.ProxyPassword = MaskSecret(resource.ProxyPassword);
 
         return resource;
     }
@@ -164,13 +161,23 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
 
         if (resource.Username.IsNotNullOrWhiteSpace() && resource.Password.IsNotNullOrWhiteSpace())
         {
-            _userService.Upsert(resource.Username, resource.Password);
+            _userService.Upsert(resource.Username, resource.Password == PrivateValue ? null : resource.Password);
         }
 
-        // Don't persist the OIDC client secret placeholder
+        // Don't persist secret placeholders
         if (resource.OidcClientSecret == PrivateValue)
         {
             resource.OidcClientSecret = _configFileProvider.OidcClientSecret;
+        }
+
+        if (resource.SslCertPassword == PrivateValue)
+        {
+            resource.SslCertPassword = _configFileProvider.SslCertPassword;
+        }
+
+        if (resource.ProxyPassword == PrivateValue)
+        {
+            resource.ProxyPassword = _configService.ProxyPassword;
         }
 
         return base.SaveSettings(resource);
