@@ -65,7 +65,7 @@ const columns: Column[] = [
     isVisible: true,
   },
   {
-    name: 'languageWeight',
+    name: 'languages',
     label: () => translate('Languages'),
     isSortable: true,
     isVisible: true,
