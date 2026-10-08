@@ -1,6 +1,6 @@
 import path from 'path';
 import { spawn, type ChildProcess } from 'child_process';
-import { cpSync, mkdirSync, readdirSync } from 'fs';
+import { cpSync, existsSync, mkdirSync, readdirSync } from 'fs';
 import react from '@vitejs/plugin-react';
 import { defineConfig, type Plugin } from 'vite';
 import { patchCssModules } from 'vite-css-modules';
@@ -62,6 +62,53 @@ function copyStaticContent(): Plugin {
   };
 }
 
+function copyLocalization(): Plugin {
+  const localizationDir = path.resolve(
+    import.meta.dirname,
+    'src/NzbDrone.Core/Localization/Core'
+  );
+
+  function targetDirs() {
+    const output = path.resolve(import.meta.dirname, '_output');
+
+    if (!existsSync(output)) {
+      return [];
+    }
+
+    return readdirSync(output)
+      .map((name) => path.join(output, name, 'Localization', 'Core'))
+      .filter((dir) => existsSync(dir));
+  }
+
+  function copy(file: string) {
+    for (const dir of targetDirs()) {
+      cpSync(file, path.join(dir, path.basename(file)));
+    }
+  }
+
+  function owns(file: string) {
+    return path.dirname(file) === localizationDir && file.endsWith('.json');
+  }
+
+  return {
+    name: 'copy-localization',
+    apply: 'serve',
+
+    configureServer(server) {
+      for (const file of readdirSync(localizationDir)) {
+        if (file.endsWith('.json')) {
+          copy(path.join(localizationDir, file));
+        }
+      }
+
+      server.watcher.add(localizationDir);
+
+      server.watcher.on('add', (file) => owns(file) && copy(file));
+      server.watcher.on('change', (file) => owns(file) && copy(file));
+    },
+  };
+}
+
 function cssModuleTypes(): Plugin {
   let child: ChildProcess | undefined;
 
@@ -100,6 +147,7 @@ export default defineConfig({
     patchCssModules({ exportMode: 'default' }),
     react(),
     copyStaticContent(),
+    copyLocalization(),
     cssModuleTypes(),
   ],
 

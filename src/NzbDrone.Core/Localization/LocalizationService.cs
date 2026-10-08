@@ -128,6 +128,11 @@ namespace NzbDrone.Core.Localization
             var prefix = Path.Combine(startupFolder, "Localization", "Core");
             var key = prefix + language;
 
+            if (BuildInfo.IsDebug)
+            {
+                return GetDictionary(prefix, language, DefaultCulture + ".json").GetAwaiter().GetResult();
+            }
+
             return _cache.Get("localization", () => GetDictionary(prefix, language, DefaultCulture + ".json").GetAwaiter().GetResult());
         }
 
