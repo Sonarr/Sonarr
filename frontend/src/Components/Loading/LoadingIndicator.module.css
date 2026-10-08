@@ -32,6 +32,26 @@
   animation-fill-mode: both;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  /* Animations are disabled globally for reduced motion, which would leave the ripples on their final, transparent frame */
+  .ripple {
+    animation: none;
+  }
+
+  .ripple:nth-child(1) {
+    transform: scale(0.4);
+  }
+
+  .ripple:nth-child(2) {
+    opacity: 0.7;
+    transform: scale(0.7);
+  }
+
+  .ripple:nth-child(3) {
+    opacity: 0.4;
+  }
+}
+
 @keyframes rippleContainer {
   0% {
     opacity: 1;
