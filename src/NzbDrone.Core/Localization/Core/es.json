@@ -594,6 +594,7 @@
     "DownloadClientSortingHealthCheckMessage": "El cliente de descarga {downloadClientName} tiene habilitada la ordenación {sortingMode} para la categoría de {appName}. Debería deshabilitar la ordenación en su cliente de descarga para evitar problemas al importar.",
     "DownloadClientStatusAllClientHealthCheckMessage": "Ningún cliente de descarga está disponible debido a fallos",
     "DownloadClientStatusSingleClientHealthCheckMessage": "Clientes de descarga no disponibles debido a fallos: {downloadClientNames}",
+    "DownloadClientTransmissionSettingsCategoryHelpText": "Añadir una categoría específica a {appName} evita conflictos con descargas no relacionadas con {appName}. Usar una categoría es opcional, pero altamente recomendado. Transmission 4.0 o superior aplica la categoría como una etiqueta; versiones inferiores crean un subdirectorio [categoría] en el directorio de salida.",
     "DownloadClientTransmissionSettingsDirectoryHelpText": "Ubicación opcional en la que poner las descargas, dejar en blanco para usar la ubicación predeterminada de Transmission",
     "DownloadClientTransmissionSettingsUrlBaseHelpText": "Añade un prefijo a la url rpc de {clientName}, p. ej. {url}, predeterminado a '{defaultUrl}'",
     "DownloadClientTriblerProviderMessage": "La integración con Tribler es altamente experimental. Probado con {clientName} versión {clientVersionRange}.",
