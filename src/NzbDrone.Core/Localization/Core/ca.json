@@ -594,6 +594,7 @@
     "DownloadClientSortingHealthCheckMessage": "El client de baixada {downloadClientName} té l'ordenació {sortingMode} activada per a la categoria de {appName}. Hauríeu de desactivar l'ordenació al vostre client de descàrrega per a evitar problemes d'importació.",
     "DownloadClientStatusAllClientHealthCheckMessage": "Tots els clients de descàrrega no estan disponibles a causa d'errors",
     "DownloadClientStatusSingleClientHealthCheckMessage": "Clients de baixada no disponibles a causa d'errors: {downloadClientNames}",
+    "DownloadClientTransmissionSettingsCategoryHelpText": "Afegir una categoria específica a {appName} evita conflictes amb baixades no relacionades amb {appName}. L'ús d'una categoria és opcional, però molt recomanable. Transmission 4.0 i versions posteriors apliquen la categoria com a etiqueta; les versions anteriors creen un subdirectori [categoria] al directori de sortida.",
     "DownloadClientTransmissionSettingsDirectoryHelpText": "Ubicació opcional per a les baixades, deixeu-lo en blanc per utilitzar la ubicació predeterminada de Transmission",
     "DownloadClientTransmissionSettingsUrlBaseHelpText": "Afegeix un prefix a l'URL rpc de {clientName}, ex. {url}, per defecte a ‘{defaultUrl}’",
     "DownloadClientTriblerProviderMessage": "La integració tribler és altament experimental. S'ha provat amb {clientName} versió {clientVersionRange}.",
