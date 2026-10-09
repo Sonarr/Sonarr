@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -60,7 +62,7 @@ namespace Sonarr.Http.Authentication
                 return Task.FromResult(AuthenticateResult.NoResult());
             }
 
-            if (_configFileProvider.ApiKey == providedApiKey)
+            if (CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(_configFileProvider.ApiKey), Encoding.UTF8.GetBytes(providedApiKey)))
             {
                 var claims = new List<Claim>
                 {
