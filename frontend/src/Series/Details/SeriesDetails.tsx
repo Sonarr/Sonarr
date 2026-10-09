@@ -39,6 +39,7 @@ import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import MonitoringOptionsModal from 'Series/MonitoringOptions/MonitoringOptionsModal';
 import { Image, SeriesStatus, Statistics } from 'Series/Series';
 import SeriesGenres from 'Series/SeriesGenres';
+import SeriesMovePending from 'Series/SeriesMovePending';
 import SeriesPoster from 'Series/SeriesPoster';
 import { getSeriesStatusDetails } from 'Series/SeriesStatus';
 import useSeries, {
@@ -407,6 +408,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     runtime,
     ratings,
     path,
+    pendingPath,
     statistics = {} as Statistics,
     qualityProfileId,
     status,
@@ -815,6 +817,10 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                   <div className={styles.pathLine}>
                     <Icon name={icons.FOLDER} size={14} />
                     <span>{path}</span>
+
+                    {pendingPath ? (
+                      <SeriesMovePending pendingPath={pendingPath} />
+                    ) : null}
                   </div>
 
                   <MetadataAttribution />

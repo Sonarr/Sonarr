@@ -1,11 +1,8 @@
 using System.Collections.Generic;
-using System.Linq;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Tv.Commands;
 using Sonarr.Http;
 
 namespace Sonarr.Api.V3.Series
@@ -14,13 +11,11 @@ namespace Sonarr.Api.V3.Series
     public class SeriesEditorController : Controller
     {
         private readonly ISeriesService _seriesService;
-        private readonly IManageCommandQueue _commandQueueManager;
         private readonly SeriesEditorValidator _seriesEditorValidator;
 
-        public SeriesEditorController(ISeriesService seriesService, IManageCommandQueue commandQueueManager, SeriesEditorValidator seriesEditorValidator)
+        public SeriesEditorController(ISeriesService seriesService, SeriesEditorValidator seriesEditorValidator)
         {
             _seriesService = seriesService;
-            _commandQueueManager = commandQueueManager;
             _seriesEditorValidator = seriesEditorValidator;
         }
 
@@ -28,7 +23,6 @@ namespace Sonarr.Api.V3.Series
         public object SaveAll([FromBody] SeriesEditorResource resource)
         {
             var seriesToUpdate = _seriesService.GetSeries(resource.SeriesIds);
-            var seriesToMove = new List<BulkMoveSeries>();
 
             foreach (var series in seriesToUpdate)
             {
@@ -60,11 +54,6 @@ namespace Sonarr.Api.V3.Series
                 if (resource.RootFolderPath.IsNotNullOrWhiteSpace())
                 {
                     series.RootFolderPath = resource.RootFolderPath;
-                    seriesToMove.Add(new BulkMoveSeries
-                    {
-                        SeriesId = series.Id,
-                        SourcePath = series.Path
-                    });
                 }
 
                 if (resource.Tags != null)
@@ -94,16 +83,9 @@ namespace Sonarr.Api.V3.Series
                 }
             }
 
-            if (resource.MoveFiles && seriesToMove.Any())
-            {
-                _commandQueueManager.Push(new BulkMoveSeriesCommand
-                {
-                    DestinationRootFolder = resource.RootFolderPath,
-                    Series = seriesToMove
-                });
-            }
+            var updated = _seriesService.UpdateSeries(seriesToUpdate, resource.MoveFiles);
 
-            return Accepted(_seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles).ToResource());
+            return Accepted(updated.ToResource());
         }
 
         [HttpDelete]
