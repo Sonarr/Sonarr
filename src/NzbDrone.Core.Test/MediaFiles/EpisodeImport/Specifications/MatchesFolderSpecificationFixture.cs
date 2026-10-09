@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 
         private void GivenEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, int[] episodeNumbers)
         {
-            var seasonNumber = parsedEpisodeInfo.SeasonNumber.Value;
+            var seasonNumber = parsedEpisodeInfo.SeasonNumbers.First();
 
             var episodes = episodeNumbers.Select(n =>
                 Builder<Episode>.CreateNew()

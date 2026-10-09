@@ -14,7 +14,7 @@ namespace Sonarr.Api.V5.Queue
     {
         public int? SeriesId { get; set; }
         public IEnumerable<int> EpisodeIds { get; set; } = [];
-        public List<int> SeasonNumbers { get; set; } = [];
+        public List<QueueSeasonResource> Seasons { get; set; } = [];
         public SeriesResource? Series { get; set; }
         public List<EpisodeResource>? Episodes { get; set; }
         public List<Language> Languages { get; set; } = [];
@@ -54,7 +54,16 @@ namespace Sonarr.Api.V5.Queue
                 Id = model.Id,
                 SeriesId = model.Series?.Id,
                 EpisodeIds = model.Episodes?.Select(e => e.Id).ToList() ?? [],
-                SeasonNumbers = model.SeasonNumber.HasValue ? [model.SeasonNumber.Value] : [],
+                Seasons = model.Episodes?
+                    .GroupBy(e => e.SeasonNumber)
+                    .OrderBy(g => g.Key)
+                    .Select(g => new QueueSeasonResource
+                    {
+                        SeasonNumber = g.Key,
+                        EpisodeCount = g.Count(),
+                        EpisodesWithFilesCount = g.Count(e => e.HasFile)
+                    })
+                    .ToList() ?? [],
                 Series = includeSeries && model.Series != null ? model.Series.ToResource() : null,
                 Episodes = includeEpisodes ? model.Episodes?.ToResource() : null,
                 Languages = model.Languages,

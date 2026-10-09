@@ -2074,6 +2074,7 @@
   "SeasonPassTruncated": "Only latest 25 seasons are shown, go to details to see all seasons",
   "SeasonPremiere": "Season Premiere",
   "SeasonPremieresOnly": "Season Premieres Only",
+  "SeasonRangeToken": "Seasons {firstSeasonNumber}-{lastSeasonNumber}",
   "Seasons": "Seasons",
   "SeasonsMonitoredAll": "All",
   "SeasonsMonitoredNone": "None",

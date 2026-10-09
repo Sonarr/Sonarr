@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
-            result.SeasonNumber.Should().Be(seasonNumber);
+            result.SeasonNumbers.Should().Equal(seasonNumber);
             result.EpisodeNumbers.SingleOrDefault().Should().Be(episodeNumber);
             result.SeriesTitle.Should().Be(title);
             result.FullSeason.Should().BeFalse();
@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
-            result.SeasonNumber.Should().Be(0);
+            result.SeasonNumbers.Should().Equal(0);
             result.EpisodeNumbers.SingleOrDefault().Should().Be(0);
             result.SeriesTitle.Should().Be(title);
             result.FullSeason.Should().BeFalse();
@@ -175,7 +175,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
-            result.SeasonNumber.Should().Be(0);
+            result.SeasonNumbers.Should().Equal(0);
             result.EpisodeNumbers.Should().BeEmpty();
             result.SeriesTitle.Should().Be(title);
             result.FullSeason.Should().BeFalse();
@@ -232,7 +232,7 @@ namespace NzbDrone.Core.Test.ParserTests
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
             result.SeriesTitle.Should().Be(title);
             result.FullSeason.Should().BeTrue();
-            result.SeasonNumber.Should().Be(seasonNumber);
+            result.SeasonNumbers.Should().Equal(seasonNumber);
         }
 
         [TestCase("[Anime Time] Series no Mayo - 12.5.mkv", "Series no Mayo", 12.5)]
@@ -255,7 +255,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParsePath(Path.Combine(@"C:\Test".AsOsAgnostic(), releaseName, filename));
             result.Should().NotBeNull();
             result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
-            result.SeasonNumber.Should().Be(0);
+            result.SeasonNumbers.Should().Equal(0);
             result.EpisodeNumbers.Should().BeEmpty();
             result.SeriesTitle.Should().Be(title);
             result.FullSeason.Should().BeFalse();
@@ -271,7 +271,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
-            result.SeasonNumber.Should().Be(seasonNumber);
+            result.SeasonNumbers.Should().Equal(seasonNumber);
             result.EpisodeNumbers.First().Should().Be(episodeNumber);
             result.SeriesTitle.Should().Be(title);
             result.SpecialAbsoluteEpisodeNumbers.Should().HaveCount(1);

@@ -60,7 +60,6 @@ namespace NzbDrone.Core.Queue
             var queue = new Queue
             {
                 Series = trackedDownload.RemoteEpisode?.Series,
-                SeasonNumber = trackedDownload.RemoteEpisode?.MappedSeasonNumber,
                 Episodes = episodes,
                 Languages = trackedDownload.RemoteEpisode?.Languages ?? new List<Language> { Language.Unknown },
                 Quality = trackedDownload.RemoteEpisode?.ParsedEpisodeInfo.Quality ?? new QualityModel(Quality.Unknown),

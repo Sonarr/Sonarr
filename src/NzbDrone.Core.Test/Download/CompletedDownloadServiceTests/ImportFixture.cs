@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -103,6 +104,30 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
             Mocker.GetMock<IParsingService>()
                 .Setup(s => s.GetSeries("Droned S01E01"))
                 .Returns(BuildRemoteEpisode().Series);
+        }
+
+        private List<Episode> GivenMultiSeasonDownload()
+        {
+            _trackedDownload.DownloadItem.Title = "Drone.S01-S03.1080p.BluRay";
+
+            var episodes = Enumerable.Range(1, 3)
+                .SelectMany(s => Enumerable.Range(1, 2).Select(e => new Episode { Id = (s * 10) + e, SeasonNumber = s, EpisodeNumber = e }))
+                .ToList();
+
+            _trackedDownload.RemoteEpisode.ParsedEpisodeInfo = Parser.Parser.ParseTitle(_trackedDownload.DownloadItem.Title);
+            _trackedDownload.RemoteEpisode.Episodes = episodes;
+
+            return episodes;
+        }
+
+        private void GivenImportedEpisodes(IEnumerable<Episode> episodes)
+        {
+            Mocker.GetMock<IDownloadedEpisodesImportService>()
+                  .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<ImportMode>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
+                  .Returns(episodes.Select(e => new ImportResult(
+                          new ImportDecision(
+                              new LocalEpisode { Path = $@"C:\TestPath\Droned.S{e.SeasonNumber:00}E{e.EpisodeNumber:00}.mkv", Episodes = new List<Episode> { e } })))
+                      .ToList());
         }
 
         private void GivenSeriesMatch()
@@ -307,6 +332,30 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
             Mocker.GetMock<ITrackedDownloadAlreadyImported>()
                   .Setup(s => s.IsImported(It.IsAny<TrackedDownload>(), It.IsAny<List<EpisodeHistory>>()))
                   .Returns(true);
+
+            Subject.Import(_trackedDownload);
+
+            AssertImported();
+        }
+
+        [Test]
+        public void should_not_mark_multi_season_download_as_imported_if_only_first_season_was_imported()
+        {
+            var episodes = GivenMultiSeasonDownload();
+
+            GivenImportedEpisodes(episodes.Where(e => e.SeasonNumber == 1));
+
+            Subject.Import(_trackedDownload);
+
+            AssertNotImported();
+        }
+
+        [Test]
+        public void should_mark_multi_season_download_as_imported_if_all_seasons_were_imported()
+        {
+            var episodes = GivenMultiSeasonDownload();
+
+            GivenImportedEpisodes(episodes);
 
             Subject.Import(_trackedDownload);
 

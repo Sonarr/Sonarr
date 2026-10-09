@@ -22,6 +22,12 @@ export interface StatusMessage {
   messages: string[];
 }
 
+export interface QueueSeason {
+  seasonNumber: number;
+  episodeCount: number;
+  episodesWithFilesCount: number;
+}
+
 interface Queue extends ModelBase {
   languages: Language[];
   quality: QualityModel;
@@ -45,7 +51,7 @@ interface Queue extends ModelBase {
   episodesWithFilesCount: number;
   seriesId?: number;
   episodeIds: number[];
-  seasonNumbers: number[];
+  seasons: QueueSeason[];
   downloadClientHasPostImportCategory: boolean;
   isFullSeason: boolean;
   episodes?: Episode[];

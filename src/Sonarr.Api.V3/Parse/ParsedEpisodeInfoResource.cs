@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
@@ -53,7 +54,7 @@ namespace Sonarr.Api.V3.Parse
                 SeriesTitleInfo = model.SeriesTitleInfo,
                 Quality = model.Quality,
                 SeasonNumbers = model.SeasonNumbers,
-                SeasonNumber = model.SeasonNumber ?? -1,
+                SeasonNumber = model.SeasonNumbers.FirstOrDefault(-1),
                 EpisodeNumbers = model.EpisodeNumbers,
                 AbsoluteEpisodeNumbers = model.AbsoluteEpisodeNumbers,
                 SpecialAbsoluteEpisodeNumbers = model.SpecialAbsoluteEpisodeNumbers,
