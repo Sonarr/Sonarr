@@ -91,19 +91,35 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("{year}.{month}.{day} - A Late Talk Show  - HD TV.mkv")]
         [TestCase("A Late Talk Show - {year}-{month}-{day} - Larry David, \"Bachelorette\" Ashley Hebert, Pitbull with Ne-Yo")]
         [TestCase("2020.NZ.{year}.{month}.{day}.PDTV.XviD-C4TV")]
-        public void should_not_accept_future_dates(string title)
+        public void should_accept_dates_within_future_limit(string title)
         {
             var twoDaysFromNow = DateTime.Now.AddDays(2);
 
             var validDate = title.Expand(new { year = twoDaysFromNow.Year, month = twoDaysFromNow.Month.ToString("00"), day = twoDaysFromNow.Day.ToString("00") });
 
-            Parser.Parser.ParseTitle(validDate).Should().BeNull();
+            var result = Parser.Parser.ParseTitle(validDate);
+
+            result.Should().NotBeNull();
+            result.AirDate.Should().NotBeNull();
+            result.AirDate.Should().Be(twoDaysFromNow.ToString(Episode.AIR_DATE_FORMAT));
         }
 
-        [Test]
-        public void should_fail_if_episode_is_far_in_future()
+        [TestCase(7)]
+        [TestCase(14)]
+        public void should_parse_episodes_released_before_their_air_date(int days)
         {
-            var title = string.Format("{0:yyyy.MM.dd} - A Talk Show - HD TV.mkv", DateTime.Now.AddDays(2));
+            var airDate = DateTime.Today.AddDays(days);
+            var title = string.Format("A.Talk.Show.{0:yyyy.MM.dd}.1080p.WEB-DL.H264-Sonarr", airDate);
+
+            Parser.Parser.ParseTitle(title).AirDate.Should().Be(airDate.ToString(Episode.AIR_DATE_FORMAT));
+        }
+
+        [TestCase(15)]
+        [TestCase(366)]
+        public void should_not_parse_dates_beyond_future_limit(int days)
+        {
+            var airDate = DateTime.Today.AddDays(days);
+            var title = string.Format("A.Talk.Show.{0:yyyy.MM.dd}.1080p.WEB-DL.H264-Sonarr", airDate);
 
             Parser.Parser.ParseTitle(title).Should().BeNull();
         }

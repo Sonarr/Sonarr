@@ -1208,8 +1208,8 @@ namespace NzbDrone.Core.Parser
                     throw new InvalidDateException("Invalid date found: {0}-{1}-{2}", airYear, airmonth, airday);
                 }
 
-                // Check if episode is in the future (most likely a parse error)
-                if (airDate > DateTime.Now.AddDays(1).Date)
+                // Allow early releases, but reject dates too far in the future (most likely a parse error)
+                if (airDate > DateTime.Now.AddDays(14).Date)
                 {
                     throw new InvalidDateException("Invalid date found: {0}", airDate);
                 }
