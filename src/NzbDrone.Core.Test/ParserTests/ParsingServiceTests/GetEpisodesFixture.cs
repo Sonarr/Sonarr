@@ -582,6 +582,25 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         }
 
         [Test]
+        public void should_skip_seasons_missing_from_the_series_in_a_multi_season_pack()
+        {
+            GivenFullSeason();
+            _parsedEpisodeInfo.SeasonNumbers = [1, 2];
+
+            Mocker.GetMock<IEpisodeService>()
+                .Setup(s => s.GetEpisodesBySeason(_series.Id, 1))
+                .Returns(Builder<Episode>.CreateListOfSize(2).Build().ToList());
+
+            Mocker.GetMock<IEpisodeService>()
+                .Setup(s => s.GetEpisodesBySeason(_series.Id, 2))
+                .Returns(new List<Episode>());
+
+            var result = Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
+
+            result.Should().HaveCount(2);
+        }
+
+        [Test]
         public void should_use_season_zero_when_looking_up_is_partial_special_episode_found_by_title()
         {
             _series.UseSceneNumbering = false;

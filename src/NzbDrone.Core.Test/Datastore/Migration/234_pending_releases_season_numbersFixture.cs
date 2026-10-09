@@ -59,5 +59,14 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             result.ContainsKey("seasonNumber").Should().BeFalse();
             result["seasonNumbers"].Values<int>().Should().Equal(1, 2, 3);
         }
+
+        [Test]
+        public void should_not_change_rows_without_season_number()
+        {
+            var result = MigratePendingRelease("{\"seriesTitle\":\"Series Title\",\"seasonNumbers\":[4],\"episodeNumbers\":[2]}");
+
+            result["seasonNumbers"].Values<int>().Should().Equal(4);
+            result["episodeNumbers"].Values<int>().Should().Equal(2);
+        }
     }
 }
