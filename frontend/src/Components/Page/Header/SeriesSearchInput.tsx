@@ -23,6 +23,7 @@ import useSeries from 'Series/useSeries';
 import { Tag, useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import SeriesSearchResult from './SeriesSearchResult';
+import SeriesSearchSuggestionLink from './SeriesSearchSuggestionLink';
 import styles from './SeriesSearchInput.module.css';
 
 const ADD_NEW_TYPE = 'addNew';
@@ -256,9 +257,12 @@ function SeriesSearchInput() {
     ) => {
       if ('type' in item) {
         return (
-          <div className={styles.addNewSeriesSuggestion}>
+          <SeriesSearchSuggestionLink
+            className={styles.addNewSeriesSuggestion}
+            to={`/add/new?term=${encodeURIComponent(query)}`}
+          >
             {translate('SearchForQuery', { query })}
-          </div>
+          </SeriesSearchSuggestionLink>
         );
       }
 
