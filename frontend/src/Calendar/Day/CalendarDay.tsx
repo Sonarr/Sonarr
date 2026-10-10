@@ -6,6 +6,7 @@ import * as calendarViews from 'Calendar/calendarViews';
 import CalendarEvent from 'Calendar/Events/CalendarEvent';
 import CalendarEventGroup from 'Calendar/Events/CalendarEventGroup';
 import useCalendar, { useCalendarTime } from 'Calendar/useCalendar';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import {
   CalendarEvent as CalendarEventModel,
   CalendarEventGroup as CalendarEventGroupModel,
@@ -98,8 +99,10 @@ function CalendarDay({
   const view = useCalendarOption('view');
   const time = useCalendarTime();
   const events = useCalendarEvents(date);
+  const { longDateFormat } = useUiSettingsValues();
+  const momentDate = moment(date);
 
-  const ref = React.useRef<HTMLDivElement>(null);
+  const ref = React.useRef<HTMLTableCellElement>(null);
 
   React.useEffect(() => {
     if (isTodaysDate && view === calendarViews.MONTH && ref.current) {
@@ -108,7 +111,7 @@ function CalendarDay({
   }, [time, isTodaysDate, view]);
 
   return (
-    <div
+    <td
       ref={ref}
       className={classNames(
         styles.day,
@@ -125,7 +128,15 @@ function CalendarDay({
               styles.isDifferentMonth
           )}
         >
-          {moment(date).date()}
+          <time
+            dateTime={momentDate.format('YYYY-MM-DD')}
+            aria-current={isTodaysDate ? 'date' : undefined}
+          >
+            <span className={styles.fullDate}>
+              {momentDate.format(longDateFormat)}
+            </span>
+            <span aria-hidden={true}>{momentDate.date()}</span>
+          </time>
         </div>
       )}
       {!events.length && view === calendarViews.DAY ? (
@@ -155,7 +166,7 @@ function CalendarDay({
           );
         })}
       </div>
-    </div>
+    </td>
   );
 }
 

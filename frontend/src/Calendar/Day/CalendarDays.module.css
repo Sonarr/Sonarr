@@ -1,17 +1,21 @@
 .days {
-  display: flex;
   flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  border-spacing: 0;
+  border-collapse: separate;
   border-right: 1px solid var(--calendarBorderColor);
+  table-layout: fixed;
 }
 
-.day,
-.week,
-.forecast {
-  flex-wrap: nowrap;
+.days tbody {
+  height: 100%;
 }
 
-.month {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-auto-rows: minmax(140px, 1fr);
+.days tbody tr {
+  height: 110px;
+}
+
+.month tbody tr {
+  height: 140px;
 }

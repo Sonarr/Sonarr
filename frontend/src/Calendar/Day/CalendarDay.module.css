@@ -1,12 +1,11 @@
 .day {
   position: relative;
-  flex: 1 0 14.28%;
   overflow: hidden;
   padding: 6px 6px 8px;
-  min-height: 110px;
   border-bottom: 1px solid var(--calendarBorderColor);
   border-left: 1px solid var(--calendarBorderColor);
   background-color: var(--pageBackground);
+  vertical-align: top;
 }
 
 .isSingleDay {
@@ -44,4 +43,8 @@
 .isDifferentMonth {
   color: var(--inkMuted);
   opacity: 0.4;
+}
+
+.fullDate {
+  @add-mixin visuallyHidden;
 }
