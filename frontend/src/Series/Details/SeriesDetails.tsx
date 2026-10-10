@@ -1,6 +1,13 @@
 import classNames from 'classnames';
 import moment from 'moment-timezone';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import CommandNames from 'Commands/CommandNames';
 import { useCommands, useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
@@ -385,6 +392,29 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
       populate();
     }
   }, [isRefreshing, wasRefreshing, isRenaming, wasRenaming, populate]);
+
+  const overviewRef = useRef<HTMLParagraphElement>(null);
+  const [isOverviewClamped, setIsOverviewClamped] = useState(false);
+
+  useLayoutEffect(() => {
+    const element = overviewRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    const compute = () =>
+      setIsOverviewClamped(
+        !isOverviewExpanded && element.scrollHeight > element.clientHeight
+      );
+
+    compute();
+
+    const observer = new ResizeObserver(compute);
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, [series?.overview, isOverviewExpanded]);
 
   let expandIcon = icons.EXPAND_INDETERMINATE;
 
@@ -859,6 +889,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                 </div>
 
                 <p
+                  ref={overviewRef}
                   className={classNames(
                     styles.overview,
                     !isOverviewExpanded && styles.overviewClamped
@@ -867,12 +898,14 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                   {overview}
                 </p>
 
-                <Link
-                  className={styles.overviewToggle}
-                  onPress={handleToggleOverview}
-                >
-                  {isOverviewExpanded ? translate('Less') : translate('More')}
-                </Link>
+                {isOverviewClamped || isOverviewExpanded ? (
+                  <Link
+                    className={styles.overviewToggle}
+                    onPress={handleToggleOverview}
+                  >
+                    {isOverviewExpanded ? translate('Less') : translate('More')}
+                  </Link>
+                ) : null}
               </section>
             ) : null}
 
