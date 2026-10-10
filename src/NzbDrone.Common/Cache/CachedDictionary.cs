@@ -111,12 +111,7 @@ namespace NzbDrone.Common.Cache
 
         public void ClearExpired()
         {
-            if (!_ttl.HasValue)
-            {
-                throw new InvalidOperationException("Checking expiry without ttl not possible.");
-            }
-
-            if (IsExpired(_ttl.Value))
+            if (_ttl.HasValue && IsExpired(_ttl.Value))
             {
                 Clear();
             }

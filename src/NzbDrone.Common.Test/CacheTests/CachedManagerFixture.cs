@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Cache;
@@ -24,6 +26,37 @@ namespace NzbDrone.Common.Test.CacheTests
             var result2 = Subject.GetCache<DateTime>(typeof(string));
 
             result1.Should().BeSameAs(result2);
+        }
+
+        [Test]
+        public void should_clear_expired_items_from_all_caches()
+        {
+            var cache1 = Subject.GetCache<string>(typeof(string), "first");
+            var cache2 = Subject.GetCache<string>(typeof(string), "second");
+
+            cache1.Set("expired", "old", TimeSpan.FromMilliseconds(1));
+            cache1.Set("fresh", "new", TimeSpan.FromMinutes(30));
+            cache2.Set("expired", "old", TimeSpan.FromMilliseconds(1));
+
+            Thread.Sleep(50);
+
+            Subject.ClearExpired();
+
+            cache1.Count.Should().Be(1);
+            cache1.Find("fresh").Should().Be("new");
+            cache2.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void should_clear_expired_with_dictionary_cache_without_ttl()
+        {
+            var dictionary = Subject.GetCacheDictionary<string>(typeof(string), "dict");
+
+            dictionary.Update(new Dictionary<string, string> { { "key", "value" } });
+
+            Subject.ClearExpired();
+
+            dictionary.Count.Should().Be(1);
         }
     }
 }
