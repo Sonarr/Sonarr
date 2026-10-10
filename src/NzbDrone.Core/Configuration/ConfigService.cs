@@ -157,6 +157,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("AutoRedownloadFailedFromInteractiveSearch", value); }
         }
 
+        public int StalledTorrentTimeout
+        {
+            get { return GetValueInt("StalledTorrentTimeout", 0); }
+
+            set { SetValue("StalledTorrentTimeout", value); }
+        }
+
         public bool CreateEmptySeriesFolders
         {
             get { return GetValueBoolean("CreateEmptySeriesFolders", false); }
