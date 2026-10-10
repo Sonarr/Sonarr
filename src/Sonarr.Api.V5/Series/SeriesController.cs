@@ -66,7 +66,8 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
                         SystemFolderValidator systemFolderValidator,
                         QualityProfileExistsValidator qualityProfileExistsValidator,
                         RootFolderExistsValidator rootFolderExistsValidator,
-                        SeriesFolderAsRootFolderValidator seriesFolderAsRootFolderValidator)
+                        SeriesFolderAsRootFolderValidator seriesFolderAsRootFolderValidator,
+                        SeriesSeasonTypeValidator seriesSeasonTypeValidator)
         : base(signalRBroadcaster)
     {
         _seriesService = seriesService;
@@ -113,6 +114,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
             .WithMessage("Invalid Language value");
 
         SharedValidator.RuleFor(s => s.SeasonType).NotEmpty();
+        PutValidator.RuleFor(s => s.SeasonType).SetValidator(seriesSeasonTypeValidator);
 
         PostValidator.RuleFor(s => s.Title).NotEmpty();
         PostValidator.RuleFor(s => s.TvdbId).GreaterThan(0).SetValidator(seriesExistsValidator);
@@ -223,12 +225,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
                 trigger: CommandTrigger.Manual);
         }
 
-        var seasonType = series.SeasonType;
-
         var model = seriesResource.ToModel(series);
-
-        // Don't change the season type for an existing series
-        model.SeasonType = seasonType;
 
         _seriesService.UpdateSeries(model);
 

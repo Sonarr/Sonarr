@@ -24,7 +24,7 @@ import {
   tooltipPositions,
 } from 'Helpers/Props';
 import MoveSeriesModal from 'Series/MoveSeries/MoveSeriesModal';
-import Series from 'Series/Series';
+import Series, { Statistics } from 'Series/Series';
 import { useSaveSeries, useSingleSeries } from 'Series/useSeries';
 import { InputChanged } from 'typings/inputs';
 import selectSettings from 'Utilities/selectSettings';
@@ -53,11 +53,16 @@ function EditSeriesModalContent({
     seasonFolder,
     qualityProfileId,
     seriesType,
+    seasonType,
+    seasonTypes,
     language,
     path,
     tags,
     rootFolderPath: initialRootFolderPath,
+    statistics = {} as Statistics,
   } = series;
+
+  const { episodeFileCount = 0 } = statistics;
 
   const { pendingChanges, setPendingChange } = usePendingChangesStore<Series>(
     {}
@@ -81,6 +86,7 @@ function EditSeriesModalContent({
         seasonFolder,
         qualityProfileId,
         seriesType,
+        seasonType,
         language,
         path,
         tags,
@@ -94,6 +100,7 @@ function EditSeriesModalContent({
     seasonFolder,
     qualityProfileId,
     seriesType,
+    seasonType,
     language,
     path,
     tags,
@@ -248,6 +255,22 @@ function EditSeriesModalContent({
               type={inputTypes.LANGUAGE_SELECT}
               name="language"
               {...settings.language}
+              onChange={handleInputChange}
+            />
+          </FormRow>
+
+          <FormRow size={sizes.MEDIUM}>
+            <FormLabel>{translate('SeasonType')}</FormLabel>
+
+            <FormInputHelpText text={translate('SeasonTypeHelpText')} />
+            <FormInput
+              type={inputTypes.SEASON_TYPE_SELECT}
+              name="seasonType"
+              {...settings.seasonType}
+              seasonTypes={seasonTypes}
+              isDisabled={!seasonTypes.length || episodeFileCount > 0}
+              includeNoChange={false}
+              includeMixed={false}
               onChange={handleInputChange}
             />
           </FormRow>
