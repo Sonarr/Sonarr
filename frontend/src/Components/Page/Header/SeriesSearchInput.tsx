@@ -170,15 +170,10 @@ function SeriesSearchInput() {
         setSuggestions(suggestions);
         setRequestLoading(true);
 
-        const payload = {
-          value: requestValue.current,
-          series,
-        };
-
-        worker.current?.postMessage(payload);
+        worker.current?.postMessage({ value: requestValue.current });
       }
     },
-    [series]
+    []
   );
 
   const requestSuggestions = useDebouncedCallback((value: string) => {
@@ -190,12 +185,7 @@ function SeriesSearchInput() {
     setRequestLoading(true);
 
     if (!requestLoading) {
-      const payload = {
-        value,
-        series,
-      };
-
-      worker.current?.postMessage(payload);
+      worker.current?.postMessage({ value });
     }
   }, 250);
 
@@ -404,6 +394,10 @@ function SeriesSearchInput() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    worker.current?.postMessage({ series });
+  }, [series]);
 
   useEffect(() => {
     worker.current?.addEventListener(
