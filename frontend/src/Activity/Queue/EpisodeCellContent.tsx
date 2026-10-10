@@ -7,22 +7,29 @@ import translate from 'Utilities/String/translate';
 interface EpisodeCellContentProps {
   episodes: Episode[];
   isFullSeason: boolean;
-  seasonNumber?: number;
+  seasonNumbers: number[];
   series?: Series;
 }
 
 export default function EpisodeCellContent({
   episodes,
   isFullSeason,
-  seasonNumber,
+  seasonNumbers,
   series,
 }: EpisodeCellContentProps) {
   if (episodes.length === 0) {
     return '-';
   }
 
-  if (isFullSeason && seasonNumber != null) {
-    return translate('SeasonNumberToken', { seasonNumber });
+  if (isFullSeason && seasonNumbers.length > 1) {
+    return translate('SeasonRangeToken', {
+      firstSeasonNumber: seasonNumbers[0],
+      lastSeasonNumber: seasonNumbers[seasonNumbers.length - 1],
+    });
+  }
+
+  if (isFullSeason && seasonNumbers.length === 1) {
+    return translate('SeasonNumberToken', { seasonNumber: seasonNumbers[0] });
   }
 
   if (episodes.length === 1) {

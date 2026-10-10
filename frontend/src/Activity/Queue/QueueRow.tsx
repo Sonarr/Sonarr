@@ -25,6 +25,7 @@ import { CustomFormat } from 'Settings/CustomFormats/CustomFormats/useCustomForm
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import { SelectStateInputProps } from 'typings/props';
 import Queue, {
+  QueueSeason,
   QueueTrackedDownloadState,
   QueueTrackedDownloadStatus,
   StatusMessage,
@@ -60,7 +61,7 @@ interface QueueRowProps {
   protocol: DownloadProtocol;
   indexer?: string;
   isFullSeason: boolean;
-  seasonNumbers: number[];
+  seasons: QueueSeason[];
   outputPath?: string;
   downloadClient?: string;
   downloadClientHasPostImportCategory?: boolean;
@@ -97,7 +98,7 @@ function QueueRow(props: QueueRowProps) {
     downloadClientHasPostImportCategory,
     estimatedCompletionTime,
     isFullSeason,
-    seasonNumbers,
+    seasons,
     added,
     timeLeft,
     size,
@@ -222,7 +223,7 @@ function QueueRow(props: QueueRowProps) {
               <EpisodeCellContent
                 episodes={episodes}
                 isFullSeason={isFullSeason}
-                seasonNumber={seasonNumbers[0]}
+                seasonNumbers={seasons.map((s) => s.seasonNumber)}
                 series={series}
               />
             </TableRowCell>

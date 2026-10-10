@@ -3,7 +3,9 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -24,7 +26,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 ParsedEpisodeInfo = new ParsedEpisodeInfo
                 {
                     FullSeason = true,
-                    SeasonNumbers = new[] { 1, 2, 3, 4, 5 }
+                    SeasonNumbers = [1, 2, 3, 4, 5]
                 },
                 Episodes = Builder<Episode>.CreateListOfSize(3)
                                            .All()
@@ -41,7 +43,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_if_is_not_a_multi_season_release()
         {
-            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = new[] { 1 };
+            _remoteEpisode.ParsedEpisodeInfo.SeasonNumbers = [1];
             _remoteEpisode.Episodes.Last().AirDateUtc = DateTime.UtcNow.AddDays(+2);
             Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
@@ -49,7 +51,18 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_false_if_is_a_multi_season_release()
         {
-            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
+            var decision = Subject.IsSatisfiedBy(_remoteEpisode, new());
+
+            decision.Accepted.Should().BeFalse();
+            decision.Reason.Should().Be(DownloadRejectionReason.MultiSeason);
+        }
+
+        [Test]
+        public void should_return_false_if_is_a_multi_season_release_in_interactive_search()
+        {
+            var information = new ReleaseDecisionInformation(false, new SeasonSearchCriteria { SeasonNumber = 3, InteractiveSearch = true });
+
+            Subject.IsSatisfiedBy(_remoteEpisode, information).Accepted.Should().BeFalse();
         }
     }
 }

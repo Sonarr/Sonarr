@@ -23,6 +23,7 @@ import { QualityModel } from 'Quality/Quality';
 import Series from 'Series/Series';
 import { useSingleSeries } from 'Series/useSeries';
 import { useEnabledDownloadClients } from 'Settings/DownloadClients/DownloadClients/useDownloadClients';
+import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
 import SelectDownloadClientModal from './DownloadClient/SelectDownloadClientModal';
 import OverrideMatchData from './OverrideMatchData';
@@ -85,13 +86,11 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
     return episodes.map((episode) => {
       return (
         <div key={episode.id}>
-          {episode.episodeNumber}
-
+          {episode.seasonNumber}x{padNumber(episode.episodeNumber, 2)}
           {series?.seriesType === 'anime' &&
           episode.absoluteEpisodeNumber != null
             ? ` (${episode.absoluteEpisodeNumber})`
             : ''}
-
           {` - ${episode.title}`}
         </div>
       );

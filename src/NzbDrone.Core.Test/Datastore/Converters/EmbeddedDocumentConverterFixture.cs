@@ -40,20 +40,10 @@ namespace NzbDrone.Core.Test.Datastore.Converters
             var json = Serialize(parsedEpisodeInfo);
             var result = Deserialize(json);
 
+            json.Should().NotContain("\"seasonNumber\"");
+
             result.SeasonNumbers.Should().Equal(1, 2, 3);
             result.IsMultiSeason.Should().BeTrue();
-        }
-
-        [Test]
-        public void should_populate_season_numbers_from_legacy_season_number_json()
-        {
-            var json = "{\"seriesTitle\":\"Series Title\",\"seasonNumber\":2,\"fullSeason\":true}";
-
-            var result = Deserialize(json);
-
-            result.SeasonNumbers.Should().Equal(2);
-            result.SeasonNumber.Should().Be(2);
-            result.IsMultiSeason.Should().BeFalse();
         }
     }
 }

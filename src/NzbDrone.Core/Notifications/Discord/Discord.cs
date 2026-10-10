@@ -727,6 +727,13 @@ namespace NzbDrone.Core.Notifications.Discord
                 return $"{series.Title} - {episode.AirDate} - {episode.Title}".Replace("`", "\\`");
             }
 
+            var seasonNumbers = episodes.Select(e => e.SeasonNumber).Distinct().Order().ToList();
+
+            if (seasonNumbers.Count > 1)
+            {
+                return $"{series.Title} - Seasons {seasonNumbers.First()}-{seasonNumbers.Last()}".Replace("`", "\\`");
+            }
+
             var episodeNumbers = string.Concat(episodes.Select(e => $"x{e.EpisodeNumber:00}"));
 
             var episodeTitles = string.Join(" + ", episodes.Select(e => e.Title));

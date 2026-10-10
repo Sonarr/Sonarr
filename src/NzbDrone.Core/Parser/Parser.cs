@@ -860,7 +860,6 @@ namespace NzbDrone.Core.Parser
                     Title = seriesTitle,
                     TitleWithoutYear = seriesTitle
                 },
-                SeasonNumber = null,
                 EpisodeNumbers = [],
                 AbsoluteEpisodeNumbers = [],
                 FullSeason = true,
@@ -1013,7 +1012,7 @@ namespace NzbDrone.Core.Parser
                 result = new ParsedEpisodeInfo
                 {
                     ReleaseTitle = releaseTitle,
-                    SeasonNumber = 0,
+                    SeasonNumbers = [0],
                     EpisodeNumbers = Array.Empty<int>(),
                     AbsoluteEpisodeNumbers = Array.Empty<int>()
                 };
@@ -1133,15 +1132,15 @@ namespace NzbDrone.Core.Parser
                     }
                 }
 
-                var distinctSeasons = seasons.Distinct().OrderBy(s => s).ToArray();
+                var distinctSeasons = seasons.Distinct().OrderBy(s => s).ToList();
 
-                if (distinctSeasons.Length is 1 or > 2)
+                if (distinctSeasons.Count is 1 or > 2)
                 {
                     result.SeasonNumbers = distinctSeasons;
                 }
-                else if (distinctSeasons.Length == 2)
+                else if (distinctSeasons.Count == 2)
                 {
-                    result.SeasonNumbers = Enumerable.Range(distinctSeasons.First(), distinctSeasons.Last() - distinctSeasons.First() + 1).ToArray();
+                    result.SeasonNumbers = Enumerable.Range(distinctSeasons.First(), distinctSeasons.Last() - distinctSeasons.First() + 1).ToList();
                 }
                 else if (!result.AbsoluteEpisodeNumbers.Any() && result.EpisodeNumbers.Any())
                 {
@@ -1227,7 +1226,7 @@ namespace NzbDrone.Core.Parser
                 result = new ParsedEpisodeInfo
                 {
                     ReleaseTitle = releaseTitle,
-                    SeasonNumber = 0,
+                    SeasonNumbers = [0],
                     AirDate = airDate.ToString(Episode.AIR_DATE_FORMAT),
                 };
 

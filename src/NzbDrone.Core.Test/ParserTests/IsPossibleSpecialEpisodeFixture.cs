@@ -12,8 +12,8 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var parsedEpisodeInfo = new ParsedEpisodeInfo
                                     {
-                                        EpisodeNumbers = new[] { 7 },
-                                        SeasonNumber = 1,
+                                        EpisodeNumbers = [7],
+                                        SeasonNumbers = [1],
                                         SeriesTitle = ""
                                     };
 
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var parsedEpisodeInfo = new ParsedEpisodeInfo
             {
-                SeasonNumber = 1,
+                SeasonNumbers = [1],
                 SeriesTitle = ""
             };
 

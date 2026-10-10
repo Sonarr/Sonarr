@@ -10,18 +10,25 @@ import translate from 'Utilities/String/translate';
 import styles from './ReleaseSceneIndicator.module.css';
 
 function formatReleaseNumber(
-  seasonNumber: number | null | undefined,
+  seasonNumbers: number[],
   episodeNumbers: number[] | undefined,
   absoluteEpisodeNumbers: number[] | undefined
 ) {
+  if (seasonNumbers.length > 1) {
+    return translate('SeasonRangeToken', {
+      firstSeasonNumber: seasonNumbers[0],
+      lastSeasonNumber: seasonNumbers[seasonNumbers.length - 1],
+    });
+  }
+
   if (episodeNumbers && episodeNumbers.length) {
     if (episodeNumbers.length > 1) {
-      return `${seasonNumber}x${episodeNumbers[0]}-${
+      return `${seasonNumbers[0]}x${episodeNumbers[0]}-${
         episodeNumbers[episodeNumbers.length - 1]
       }`;
     }
 
-    return `${seasonNumber}x${episodeNumbers[0]}`;
+    return `${seasonNumbers[0]}x${episodeNumbers[0]}`;
   }
 
   if (absoluteEpisodeNumbers && absoluteEpisodeNumbers.length) {
@@ -34,8 +41,8 @@ function formatReleaseNumber(
     return absoluteEpisodeNumbers[0];
   }
 
-  if (seasonNumber != null) {
-    return translate('SeasonNumberToken', { seasonNumber });
+  if (seasonNumbers.length === 1) {
+    return translate('SeasonNumberToken', { seasonNumber: seasonNumbers[0] });
   }
 
   return null;
@@ -43,10 +50,10 @@ function formatReleaseNumber(
 
 interface ReleaseSceneIndicatorProps {
   className: string;
-  seasonNumber?: number;
+  seasonNumbers: number[];
   episodeNumbers?: number[];
   absoluteEpisodeNumbers?: number[];
-  sceneSeasonNumber?: number | null;
+  sceneSeasonNumbers: number[];
   sceneEpisodeNumbers?: number[];
   sceneAbsoluteEpisodeNumbers?: number[];
   sceneMapping?: {
@@ -61,10 +68,10 @@ interface ReleaseSceneIndicatorProps {
 function ReleaseSceneIndicator(props: ReleaseSceneIndicatorProps) {
   const {
     className,
-    seasonNumber,
+    seasonNumbers,
     episodeNumbers,
     absoluteEpisodeNumbers,
-    sceneSeasonNumber,
+    sceneSeasonNumbers,
     sceneEpisodeNumbers,
     sceneAbsoluteEpisodeNumbers,
     sceneMapping = {},
@@ -78,8 +85,7 @@ function ReleaseSceneIndicator(props: ReleaseSceneIndicatorProps) {
     return null;
   }
 
-  let mappingDifferent =
-    sceneSeasonNumber !== undefined && seasonNumber !== sceneSeasonNumber;
+  let mappingDifferent = !_.isEqual(sceneSeasonNumbers, seasonNumbers);
 
   if (sceneEpisodeNumbers !== undefined) {
     mappingDifferent =
@@ -95,12 +101,12 @@ function ReleaseSceneIndicator(props: ReleaseSceneIndicatorProps) {
   }
 
   const releaseNumber = formatReleaseNumber(
-    sceneSeasonNumber,
+    sceneSeasonNumbers,
     sceneEpisodeNumbers,
     sceneAbsoluteEpisodeNumbers
   );
   const mappedNumber = formatReleaseNumber(
-    seasonNumber,
+    seasonNumbers,
     episodeNumbers,
     absoluteEpisodeNumbers
   );
