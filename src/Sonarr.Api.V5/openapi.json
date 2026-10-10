@@ -139,6 +139,67 @@
         }
       }
     },
+    "/reset-password/request": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "responses": {
+          "302": {
+            "description": "Found"
+          }
+        }
+      }
+    },
+    "/reset-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "passwordConfirmation": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "token": {
+                  "style": "form"
+                },
+                "username": {
+                  "style": "form"
+                },
+                "password": {
+                  "style": "form"
+                },
+                "passwordConfirmation": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "302": {
+            "description": "Found"
+          }
+        }
+      }
+    },
     "/logout": {
       "get": {
         "tags": [
@@ -5089,6 +5150,97 @@
         }
       }
     },
+    "/api/v5/settings/metadata": {
+      "get": {
+        "tags": [
+          "MetadataSourceSettings"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetadataSourceSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/metadata/{id}": {
+      "put": {
+        "tags": [
+          "MetadataSourceSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetadataSourceSettingsResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetadataSourceSettingsResource"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "MetadataSourceSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetadataSourceSettingsResource"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v5/wanted/missing": {
       "get": {
         "tags": [
@@ -7144,6 +7296,14 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
         ],
         "responses": {
@@ -7205,6 +7365,14 @@
             "in": "query",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -9821,6 +9989,7 @@
           "oidcDiscoveryFailed",
           "oidcNotConfigured",
           "package",
+          "passwordResetTokenConfigured",
           "proxyBadRequest",
           "proxyFailed",
           "proxyResolveIp",
@@ -10041,6 +10210,12 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
+          "tagExisting": {
+            "$ref": "#/components/schemas/TagExistingType"
           }
         },
         "additionalProperties": false
@@ -10189,6 +10364,9 @@
           "seriesType": {
             "$ref": "#/components/schemas/SeriesTypes"
           },
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
           "seasonFolder": {
             "type": "boolean"
           },
@@ -10204,7 +10382,7 @@
             "format": "date-span"
           },
           "tagExisting": {
-            "type": "boolean"
+            "$ref": "#/components/schemas/TagExistingType"
           }
         },
         "additionalProperties": false
@@ -10996,7 +11174,8 @@
           },
           "recycleBinCleanupDays": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "downloadPropersAndRepacks": {
             "$ref": "#/components/schemas/ProperDownloadTypes"
@@ -11035,7 +11214,8 @@
           },
           "minimumFreeSpaceWhenImporting": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "copyUsingHardlinks": {
             "type": "boolean"
@@ -11066,7 +11246,8 @@
           },
           "seasonPackUpgradeThreshold": {
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -11126,6 +11307,20 @@
           },
           "enable": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MetadataSourceSettingsResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "preferredMetadataLanguage": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -11494,6 +11689,14 @@
           "seasonNumber": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "seasonNumbers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
             "nullable": true
           },
           "airDate": {
@@ -12343,7 +12546,8 @@
           },
           "airDateGracePeriod": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "allowSeasonPackWithoutAllEpisodesAired": {
             "type": "boolean"
@@ -12781,6 +12985,10 @@
           "monitored": {
             "type": "boolean"
           },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
           "statistics": {
             "$ref": "#/components/schemas/SeasonStatisticsResource"
           },
@@ -12856,6 +13064,32 @@
         },
         "additionalProperties": false
       },
+      "SeasonTypeResource": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "seasonNumbers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "episodeCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "SelectOption": {
         "type": "object",
         "properties": {
@@ -12901,6 +13135,9 @@
             "format": "int32",
             "nullable": true
           },
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
           "seriesType": {
             "$ref": "#/components/schemas/SeriesTypes"
           },
@@ -12936,8 +13173,15 @@
         "additionalProperties": false
       },
       "SeriesFolderResource": {
+        "required": [
+          "folder",
+          "language"
+        ],
         "type": "object",
         "properties": {
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
           "folder": {
             "type": "string",
             "nullable": true
@@ -13007,6 +13251,9 @@
             },
             "nullable": true
           },
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
           "originalLanguage": {
             "$ref": "#/components/schemas/Language"
           },
@@ -13014,10 +13261,28 @@
             "type": "string",
             "nullable": true
           },
+          "seasonType": {
+            "type": "string",
+            "nullable": true
+          },
           "seasons": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SeasonResource"
+            },
+            "nullable": true
+          },
+          "seasonTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeasonTypeResource"
+            },
+            "nullable": true
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeriesTranslationResource"
             },
             "nullable": true
           },
@@ -13096,7 +13361,15 @@
           "seriesType": {
             "$ref": "#/components/schemas/SeriesTypes"
           },
+          "originalTitle": {
+            "type": "string",
+            "nullable": true
+          },
           "cleanTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "cleanOriginalTitle": {
             "type": "string",
             "nullable": true
           },
@@ -13114,6 +13387,13 @@
           },
           "folder": {
             "type": "string",
+            "nullable": true
+          },
+          "folders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeriesFolderResource"
+            },
             "nullable": true
           },
           "certification": {
@@ -13251,6 +13531,23 @@
             "items": {
               "type": "string"
             },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeriesTranslationResource": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "overview": {
+            "type": "string",
             "nullable": true
           }
         },
@@ -13637,6 +13934,14 @@
           }
         },
         "additionalProperties": false
+      },
+      "TagExistingType": {
+        "enum": [
+          "none",
+          "add",
+          "sync"
+        ],
+        "type": "string"
       },
       "TagResource": {
         "type": "object",
@@ -14111,6 +14416,9 @@
     },
     {
       "name": "Metadata"
+    },
+    {
+      "name": "MetadataSourceSettings"
     },
     {
       "name": "Missing"
