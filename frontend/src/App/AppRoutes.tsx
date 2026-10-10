@@ -144,7 +144,7 @@ export function appRouteElements() {
 
       <Route path="/system/tasks" element={<Tasks />} />
 
-      <Route path="/system/backup" element={<Backups />} />
+      <Route path="/system/backups" element={<Backups />} />
 
       <Route path="/system/updates" element={<Updates />} />
 
