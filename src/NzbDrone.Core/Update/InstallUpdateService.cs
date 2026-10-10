@@ -214,12 +214,22 @@ namespace NzbDrone.Core.Update
             _processProvider.Start(scriptPath, GetUpdaterArgs(updateSandboxFolder));
         }
 
-        private string GetUpdaterArgs(string updateSandboxFolder)
+        private IEnumerable<string> GetUpdaterArgs(string updateSandboxFolder)
         {
             var processId = _processProvider.GetCurrentProcess().Id.ToString();
             var executingApplication = _runtimeInfo.ExecutingApplication;
 
-            return string.Join(" ", processId, updateSandboxFolder.TrimEnd(Path.DirectorySeparatorChar).WrapInQuotes(), executingApplication.WrapInQuotes(), _startupContext.PreservedArguments);
+            var baseArgs = new List<string>
+            {
+                processId,
+                updateSandboxFolder.TrimEnd(Path.DirectorySeparatorChar),
+                executingApplication
+            };
+
+            var preservedArgs = _processProvider.ParseCommandLineArguments(_startupContext.PreservedArguments);
+            baseArgs.AddRange(preservedArgs ?? new List<string>());
+
+            return baseArgs;
         }
 
         private void EnsureAppDataSafety()

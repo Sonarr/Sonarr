@@ -61,14 +61,17 @@ namespace NzbDrone.Common
         {
             _logger.Info("Installing service '{0}'", serviceName);
 
-            var args = $"create {serviceName} " +
-                $"DisplayName= \"{serviceName}\" " +
-                $"binpath= \"{Environment.ProcessPath}\" " +
-                "start= auto " +
-                "depend= EventLog/Tcpip/http " +
-                "obj= \"NT AUTHORITY\\LocalService\"";
+            var args = new[]
+            {
+                "create", serviceName,
+                "DisplayName=", serviceName,
+                "binpath=", Environment.ProcessPath,
+                "start=", "auto",
+                "depend=", "EventLog/Tcpip/http",
+                "obj=", "NT AUTHORITY\\LocalService"
+            };
 
-            _logger.Info(args);
+            _logger.Info(string.Join(" ", args));
 
             var installOutput = _processProvider.StartAndCapture("sc.exe", args);
 
@@ -80,7 +83,8 @@ namespace NzbDrone.Common
 
             _logger.Info(installOutput.Lines.Select(x => x.Content).ConcatToString("\n"));
 
-            var descOutput = _processProvider.StartAndCapture("sc.exe", $"description {serviceName} \"Sonarr Application Server\"");
+            args = new[] { "description", serviceName, "Sonarr Application Server" };
+            var descOutput = _processProvider.StartAndCapture("sc.exe", args);
             if (descOutput.ExitCode != 0)
             {
                 _logger.Error($"Failed to install service: {descOutput.Lines.Select(x => x.Content).ConcatToString("\n")}");
@@ -98,7 +102,8 @@ namespace NzbDrone.Common
 
             Stop(serviceName);
 
-            var output = _processProvider.StartAndCapture("sc.exe", $"delete {serviceName}");
+            var args = new[] { "delete", serviceName };
+            var output = _processProvider.StartAndCapture("sc.exe", args);
             _logger.Info(output.Lines.Select(x => x.Content).ConcatToString("\n"));
 
             _logger.Info("{0} successfully uninstalled", serviceName);
@@ -184,8 +189,10 @@ namespace NzbDrone.Common
 
         public void Restart(string serviceName)
         {
-            var args = string.Format("/C net.exe stop \"{0}\" && net.exe start \"{0}\"", serviceName);
+            var args = new[] { "/C", "net.exe", "stop", serviceName };
+            _processProvider.Start("cmd.exe", args).WaitForExit();
 
+            args = new[] { "/C", "net.exe", "start", serviceName };
             _processProvider.Start("cmd.exe", args);
         }
 
@@ -197,7 +204,8 @@ namespace NzbDrone.Common
 
         private string GetServiceDacls(string serviceName)
         {
-            var output = _processProvider.StartAndCapture("sc.exe", $"sdshow {serviceName}");
+            var args = new[] { "sdshow", serviceName };
+            var output = _processProvider.StartAndCapture("sc.exe", args);
 
             var dacls = output.Standard.Select(s => s.Content).Where(s => s.IsNotNullOrWhiteSpace()).ToList();
 
@@ -223,7 +231,8 @@ namespace NzbDrone.Common
 
             dacls = indexOfS == -1 ? $"{dacls}{authenticatedUsersDacl}" : dacls.Insert(indexOfS, authenticatedUsersDacl);
 
-            _processProvider.Start("sc.exe", $"sdset {serviceName} {dacls}").WaitForExit();
+            var args = new[] { "sdset", serviceName, dacls };
+            _processProvider.Start("sc.exe", args).WaitForExit();
         }
     }
 }
