@@ -252,26 +252,6 @@
   gap: 12px;
 }
 
-.pathLine {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  min-width: 0;
-  max-width: 560px;
-  font-size: 12px;
-  gap: 7px;
-}
-
-.pathLine svg {
-  flex-shrink: 0;
-}
-
-.pathLine span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .heroFooter a {
   color: inherit;
   font-size: 12px;
@@ -419,5 +399,11 @@
 
   .overviewToggle {
     display: inline-block;
+  }
+
+  .heroFooter {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 6px;
   }
 }

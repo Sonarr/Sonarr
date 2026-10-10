@@ -65,6 +65,7 @@ import translate from 'Utilities/String/translate';
 import toggleSelected from 'Utilities/Table/toggleSelected';
 import SeriesAlternateTitles from './SeriesAlternateTitles';
 import SeriesDetailsLinks from './SeriesDetailsLinks';
+import SeriesDetailsPath from './SeriesDetailsPath';
 import SeriesDetailsProvider from './SeriesDetailsProvider';
 import SeriesDetailsSeason from './SeriesDetailsSeason';
 import SeriesProgressLabel from './SeriesProgressLabel';
@@ -868,19 +869,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                 </div>
 
                 <div className={styles.heroFooter}>
-                  <div className={styles.pathLine}>
-                    <Tooltip
-                      anchor={
-                        <>
-                          <Icon name={icons.FOLDER} size={14} />
-                          <span>{path}</span>
-                        </>
-                      }
-                      tooltip={<span>{path}</span>}
-                      kind={kinds.DEFAULT}
-                      position={tooltipPositions.BOTTOM}
-                    />
-                  </div>
+                  <SeriesDetailsPath path={path} />
 
                   <MetadataAttribution />
                 </div>
