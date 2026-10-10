@@ -1,12 +1,13 @@
 import React, { ReactNode } from 'react';
-import styles from './PageMessage.module.css';
+import Alert from 'Components/Alert';
+import { kinds } from 'Helpers/Props';
 
 interface PageMessageProps {
   children: ReactNode;
 }
 
 function PageMessage({ children }: PageMessageProps) {
-  return <p className={styles.message}>{children}</p>;
+  return <Alert kind={kinds.INFO}>{children}</Alert>;
 }
 
 export default PageMessage;

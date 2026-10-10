@@ -2,4 +2,8 @@
   composes: descriptionList from 'Components/DescriptionList/DescriptionList.module.css';
 
   margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }

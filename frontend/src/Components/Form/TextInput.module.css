@@ -1,5 +1,9 @@
 .input {
   composes: input from 'Components/Form/Input.module.css';
+
+  &[type=file] {
+    padding: 7px 14px;
+  }
 }
 
 .readOnly {
