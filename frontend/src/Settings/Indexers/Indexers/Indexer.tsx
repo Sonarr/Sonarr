@@ -8,12 +8,17 @@ import SettingsCardAction from 'Components/SettingsCard/SettingsCardAction';
 import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
 import TagList from 'Components/TagList';
 import { icons, kinds, sizes } from 'Helpers/Props';
+import {
+  getProviderTestStatusLabel,
+  ProviderTestStatus,
+} from 'Settings/ProviderTestAllResult';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import { IndexerModel, useDeleteIndexer } from '../useIndexers';
 import EditIndexerModal from './EditIndexerModal';
 
 interface IndexerProps extends IndexerModel {
+  testStatus?: ProviderTestStatus;
   showPriority: boolean;
   onCloneIndexerPress: (id: number) => void;
 }
@@ -29,6 +34,7 @@ function Indexer({
   supportsRss,
   supportsSearch,
   priority,
+  testStatus,
   showPriority,
   onCloneIndexerPress,
 }: IndexerProps) {
@@ -65,11 +71,21 @@ function Indexer({
   }, [id, onCloneIndexerPress]);
 
   const enabled = enableRss || enableAutomaticSearch || enableInteractiveSearch;
+  const testStatusLabel = testStatus
+    ? getProviderTestStatusLabel(testStatus)
+    : undefined;
 
   return (
     <SettingsCard
       name={name}
-      aria-label={translate('EditIndexerName', { name })}
+      aria-label={
+        testStatusLabel
+          ? translate('EditIndexerNameWithTestStatus', {
+              name,
+              testStatus: testStatusLabel,
+            })
+          : translate('EditIndexerName', { name })
+      }
       actions={
         <SettingsCardAction
           title={translate('CloneIndexer')}
@@ -89,6 +105,7 @@ function Indexer({
               {translate('Priority')} {priority}
             </>
           ) : null,
+          testStatusLabel,
         ]}
       />
 
