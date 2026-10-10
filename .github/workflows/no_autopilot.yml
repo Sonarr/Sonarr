@@ -152,7 +152,7 @@ jobs:
             });
 
             if (!isLabeled) {
-              const contributing = `https://github.com/${context.repo.owner}/${context.repo.repo}/blob/v5-develop/CONTRIBUTING.md`;
+              const contributing = `https://github.com/${context.repo.owner}/${context.repo.repo}/blob/develop/CONTRIBUTING.md`;
 
               await github.rest.issues.createComment({
                 owner: context.repo.owner,

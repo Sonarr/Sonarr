@@ -7,7 +7,6 @@ on:
   pull_request_target:
     branches:
       - develop
-      - v5-develop
     types: [synchronize]
 
 jobs:
