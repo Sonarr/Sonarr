@@ -11,7 +11,7 @@ namespace Sonarr.Api.V3.Parse
         public string SeriesTitle { get; set; }
         public SeriesTitleInfo SeriesTitleInfo { get; set; }
         public QualityModel Quality { get; set; }
-        public int[] SeasonNumbers { get; set; }
+        public List<int> SeasonNumbers { get; set; }
         public int SeasonNumber { get; set; }
         public int[] EpisodeNumbers { get; set; }
         public int[] AbsoluteEpisodeNumbers { get; set; }
