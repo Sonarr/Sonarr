@@ -179,8 +179,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  column-gap: 8px;
-  row-gap: 8px;
+  gap: 8px 8px;
 }
 
 .detailsLabel {

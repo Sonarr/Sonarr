@@ -1,10 +1,10 @@
 .jumpBar {
   z-index: var(--pageJumpBarZIndex);
   display: flex;
-  align-content: stretch;
+  place-content: stretch center;
+
   align-items: stretch;
   align-self: stretch;
-  justify-content: center;
   flex: 0 0 30px;
 }
 
