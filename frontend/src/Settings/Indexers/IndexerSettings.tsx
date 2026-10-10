@@ -5,6 +5,7 @@ import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import SectionHeading from 'Components/SectionHeading';
+import StatusIndicator from 'Components/StatusIndicator';
 import { icons } from 'Helpers/Props';
 import settingsStyles from 'Settings/Settings.module.css';
 import SettingsPage from 'Settings/SettingsPage';
@@ -19,7 +20,12 @@ import IndexerOptions from './Options/IndexerOptions';
 import { useTestAllIndexers } from './useIndexers';
 
 function IndexerSettings() {
-  const { isTestingAllIndexers, testAllIndexers } = useTestAllIndexers();
+  const {
+    isTestingAllIndexers,
+    testAllIndexers,
+    testAllResults,
+    testAllError,
+  } = useTestAllIndexers();
 
   const saveOptions = useRef<() => void>();
 
@@ -56,6 +62,16 @@ function IndexerSettings() {
     testAllIndexers();
   }, [testAllIndexers]);
 
+  let testStatusLabel: string | undefined = undefined;
+
+  if (isTestingAllIndexers) {
+    testStatusLabel = translate('TestingAllIndexers');
+  } else if (testAllResults) {
+    testStatusLabel = translate('IndexerTestAllCompleted');
+  } else if (testAllError) {
+    testStatusLabel = translate('IndexerTestAllFailed');
+  }
+
   return (
     <SettingsPage
       title={translate('IndexerSettings')}
@@ -90,6 +106,16 @@ function IndexerSettings() {
       onSavePress={handleSavePress}
     >
       <PageContentBody>
+        {testStatusLabel ? (
+          <StatusIndicator
+            label={testStatusLabel}
+            role={testAllError ? 'alert' : 'status'}
+            aria-atomic={true}
+          >
+            <span />
+          </StatusIndicator>
+        ) : null}
+
         <div className={settingsStyles.section}>
           <PageHeading
             scope={translate('Settings')}
@@ -102,7 +128,7 @@ function IndexerSettings() {
               description={translate('IndexersSectionDescription')}
             />
 
-            <Indexers />
+            <Indexers testResults={testAllResults} />
           </div>
 
           <IndexerOptions
