@@ -19,7 +19,7 @@ function SeasonInfo({
   sizeOnDisk,
 }: SeasonInfoProps) {
   return (
-    <DescriptionList>
+    <DescriptionList className={styles.descriptionList}>
       <DescriptionListItem
         titleClassName={styles.title}
         descriptionClassName={styles.description}

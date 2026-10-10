@@ -1,9 +1,20 @@
+.descriptionList {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 .title {
+  @add-mixin truncate;
+
   composes: title from 'Components/DescriptionList/DescriptionListItemTitle.module.css';
 
+  float: left;
+  clear: left;
   width: 90px;
+  text-align: right;
 }
 
 .description {
   margin-left: 110px;
+  line-height: var(--lineHeight);
 }
