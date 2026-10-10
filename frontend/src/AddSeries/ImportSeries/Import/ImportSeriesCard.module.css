@@ -191,9 +191,7 @@
 
   .matchAction {
     grid-column: 2;
-    justify-self: end;
-
-    align-self: center;
+    place-self: center end;
   }
 
   .settingsRow {
