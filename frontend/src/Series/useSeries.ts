@@ -17,7 +17,7 @@ import { SortDirection } from 'Helpers/Props/sortDirections';
 import sortByProp from 'Utilities/Array/sortByProp';
 import clientSideFilterAndSort from 'Utilities/Filter/clientSideFilterAndSort';
 import translate from 'Utilities/String/translate';
-import Series, { Statistics } from './Series';
+import Series, { Season, Statistics } from './Series';
 import { useSeriesOptions } from './seriesOptionsStore';
 
 // Date filter predicate helper
@@ -710,6 +710,10 @@ interface SaveSeriesPayload extends Partial<Series> {
   id: number;
 }
 
+interface SaveSeriesRequest extends Omit<SaveSeriesPayload, 'seasons'> {
+  seasons?: Omit<Season, 'statistics'>[];
+}
+
 interface DeleteSeriesPayload {
   deleteFiles?: boolean;
   addImportListExclusion?: boolean;
@@ -759,7 +763,7 @@ export const useSaveSeries = (moveFiles?: boolean) => {
 
   const { mutate, isPending, error } = useApiMutation<
     Series,
-    SaveSeriesPayload
+    SaveSeriesRequest
   >({
     path: '/series',
     queryParams: {
@@ -788,8 +792,26 @@ export const useSaveSeries = (moveFiles?: boolean) => {
     },
   });
 
+  const saveSeries = useCallback(
+    ({
+      alternateTitles,
+      images,
+      seasons,
+      seasonTypes,
+      statistics,
+      translations,
+      ...payload
+    }: SaveSeriesPayload) => {
+      mutate({
+        ...payload,
+        seasons: seasons?.map(({ statistics, ...season }) => season),
+      });
+    },
+    [mutate]
+  );
+
   return {
-    saveSeries: mutate,
+    saveSeries,
     isSaving: isPending,
     saveError: error,
   };

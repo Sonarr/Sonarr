@@ -22,24 +22,9 @@ namespace Sonarr.Api.V5.Series
             };
         }
 
-        public static SeriesTranslation ToModel(this SeriesTranslationResource resource)
-        {
-            return new SeriesTranslation
-            {
-                Language = resource.Language,
-                Title = resource.Title,
-                Overview = resource.Overview
-            };
-        }
-
         public static List<SeriesTranslationResource> ToResource(this IEnumerable<SeriesTranslation> models)
         {
             return models.Select(ToResource).ToList();
-        }
-
-        public static List<SeriesTranslation> ToModel(this IEnumerable<SeriesTranslationResource> resources)
-        {
-            return resources.Select(ToModel).ToList();
         }
     }
 }

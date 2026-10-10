@@ -23,25 +23,9 @@ namespace Sonarr.Api.V5.Series
             };
         }
 
-        public static SeasonType ToModel(this SeasonTypeResource resource)
-        {
-            return new SeasonType
-            {
-                Name = resource.Name,
-                Type = resource.Type,
-                SeasonNumbers = resource.SeasonNumbers,
-                EpisodeCount = resource.EpisodeCount
-            };
-        }
-
         public static List<SeasonTypeResource> ToResource(this IEnumerable<SeasonType> models)
         {
             return models.Select(ToResource).ToList();
-        }
-
-        public static List<SeasonType> ToModel(this IEnumerable<SeasonTypeResource> resources)
-        {
-            return resources.Select(ToModel).ToList();
         }
     }
 }
