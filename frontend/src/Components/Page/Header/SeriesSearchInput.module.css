@@ -82,7 +82,7 @@
 .dropdown {
   position: absolute;
   top: 42px;
-  right: 0;
+  left: 50%;
   z-index: 1000;
   overflow: hidden;
   padding: 6px;
@@ -93,6 +93,7 @@
   background-color: var(--cardBackgroundColor);
   box-shadow: var(--shadowDropdown);
   color: var(--ink);
+  transform: translateX(-50%);
 }
 
 .seriesContainer {
@@ -164,5 +165,6 @@
     left: 12px;
     min-width: 0;
     max-width: none;
+    transform: none;
   }
 }
