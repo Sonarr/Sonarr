@@ -176,6 +176,9 @@ jobs:
                     ...reasons.map((r) => `- ${r}`),
                     "",
                     `Please edit the issue to address the points above using the [issue templates](${templatesUrl}). It will be closed automatically in 7 days if it is not updated.`,
+                    "",
+                    `> [!WARNING]`,
+                    `> **Don't open new issues to address this.**`
                   ].join("\n"),
                 });
               }
