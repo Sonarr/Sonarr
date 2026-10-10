@@ -94,6 +94,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 downloadClientItems = downloadClient.GetItems().ToList();
 
                 _downloadClientStatusService.RecordSuccess(downloadClient.Definition.Id);
+                _trackedDownloadService.StopTrackingMissing(downloadClient.Definition.Id, downloadClientItems.Select(i => i.DownloadId).ToList());
             }
             catch (Exception ex)
             {
