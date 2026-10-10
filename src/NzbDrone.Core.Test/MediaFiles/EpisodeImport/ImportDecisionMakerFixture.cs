@@ -145,6 +145,20 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         }
 
         [Test]
+        public void should_use_multi_season_pack_release_type_from_download_client_item()
+        {
+            GivenAugmentationSuccess();
+            GivenSpecifications(_pass1);
+
+            var downloadClientItemInfo = Parser.Parser.ParseTitle("Series.Title.S01-S03.1080p.BluRay.x264-RlsGrp");
+
+            var result = Subject.GetImportDecisions(_videoFiles, _series, new DownloadClientItem(), downloadClientItemInfo, null, true);
+
+            result.Single().LocalEpisode.ReleaseType.Should().Be(ReleaseType.MultiSeasonPack);
+            result.Single().LocalEpisode.ToEpisodeFile().ReleaseType.Should().Be(ReleaseType.MultiSeasonPack);
+        }
+
+        [Test]
         public void should_have_same_number_of_rejections_as_specs_that_failed()
         {
             GivenAugmentationSuccess();

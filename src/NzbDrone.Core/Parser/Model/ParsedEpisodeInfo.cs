@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Parser.Model
 
                 if (FullSeason)
                 {
-                    return Model.ReleaseType.SeasonPack;
+                    return IsMultiSeason ? Model.ReleaseType.MultiSeasonPack : Model.ReleaseType.SeasonPack;
                 }
 
                 return Model.ReleaseType.Unknown;
