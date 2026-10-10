@@ -9,6 +9,7 @@ import {
   goToPreviousRange,
   useCalendarDates,
 } from 'Calendar/useCalendar';
+import translate from 'Utilities/String/translate';
 import CalendarDay from './CalendarDay';
 import styles from './CalendarDays.module.css';
 
@@ -110,21 +111,55 @@ function CalendarDays() {
     };
   }, [handleTouchStart, handleTouchEnd, handleTouchCancel, handleTouchMove]);
 
+  const columnDates = view === calendarViews.MONTH ? dates.slice(0, 7) : dates;
+  const rowSize = view === calendarViews.MONTH ? 7 : Math.max(dates.length, 1);
+  const rows: string[][] = [];
+
+  for (let index = 0; index < dates.length; index += rowSize) {
+    rows.push(dates.slice(index, index + rowSize));
+  }
+
   return (
-    <div
+    <table
       className={classNames(styles.days, styles[view as keyof typeof styles])}
+      aria-label={translate('Calendar')}
     >
-      {dates.map((date) => {
-        return (
-          <CalendarDay
-            key={date}
-            date={date}
-            isTodaysDate={date === todaysDate}
-            onEventModalOpenToggle={handleEventModalOpenToggle}
-          />
-        );
-      })}
-    </div>
+      <thead>
+        <tr className={styles.headerRow}>
+          {columnDates.map((date) => {
+            const momentDate = moment(date);
+            const label = momentDate.format(
+              view === calendarViews.MONTH ? 'dddd' : 'dddd, LL'
+            );
+
+            return (
+              <th key={date} className={styles.headerCell} scope="col">
+                <span className={styles.headerLabel}>{label}</span>
+              </th>
+            );
+          })}
+        </tr>
+      </thead>
+
+      <tbody>
+        {rows.map((row) => {
+          return (
+            <tr key={row[0]}>
+              {row.map((date) => {
+                return (
+                  <CalendarDay
+                    key={date}
+                    date={date}
+                    isTodaysDate={date === todaysDate}
+                    onEventModalOpenToggle={handleEventModalOpenToggle}
+                  />
+                );
+              })}
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 }
 
