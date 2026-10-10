@@ -2,6 +2,7 @@ import React from 'react';
 import FieldSet from 'Components/FieldSet';
 import EpisodeFormats from 'Episode/EpisodeFormats';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
+import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
 import { ParseModel } from './ParseModel';
 import ParseResultItem from './ParseResultItem';
@@ -201,7 +202,11 @@ function ParseResult(props: ParseResultProps) {
 
         <ParseResultItem
           title={translate('MatchedToSeason')}
-          data={episodes.length ? episodes[0].seasonNumber : '-'}
+          data={
+            episodes.length
+              ? [...new Set(episodes.map((e) => e.seasonNumber))].join(', ')
+              : '-'
+          }
         />
 
         <ParseResultItem
@@ -212,7 +217,7 @@ function ParseResult(props: ParseResultProps) {
                 {episodes.map((e) => {
                   return (
                     <div key={e.id}>
-                      {e.episodeNumber}
+                      {e.seasonNumber}x{padNumber(e.episodeNumber, 2)}
                       {series?.seriesType === 'anime' && e.absoluteEpisodeNumber
                         ? ` (${e.absoluteEpisodeNumber})`
                         : ''}{' '}
