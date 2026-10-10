@@ -13,10 +13,12 @@ import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
 import { icons, kinds } from 'Helpers/Props';
 import { useSingleSeries } from 'Series/useSeries';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
+import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
 import CalendarEventQueueDetails from './CalendarEventQueueDetails';
+import getCalendarStatusLabel from './getCalendarStatusLabel';
 import styles from './CalendarEvent.module.css';
 
 interface CalendarEventProps {
@@ -59,7 +61,7 @@ function CalendarEvent(props: CalendarEventProps) {
   const episodeFile = useEpisodeFile(episodeFileId);
   const queueItem = useQueueItemForEpisode(id);
 
-  const { timeFormat } = useUiSettingsValues();
+  const { longDateFormat, timeFormat } = useUiSettingsValues();
 
   const {
     showEpisodeInformation,
@@ -98,6 +100,13 @@ function CalendarEvent(props: CalendarEventProps) {
   );
   const missingAbsoluteNumber =
     series.seriesType === 'anime' && seasonNumber > 0 && !absoluteEpisodeNumber;
+  const eventLabel = translate('CalendarOpenEpisodeDetails', {
+    series: series.title,
+    episode: `${seasonNumber}x${padNumber(episodeNumber, 2)}`,
+    title,
+    airDate: formatDateTime(airDateUtc, longDateFormat, timeFormat),
+    status: getCalendarStatusLabel(statusStyle),
+  });
 
   return (
     <div
@@ -107,7 +116,11 @@ function CalendarEvent(props: CalendarEventProps) {
         fullColorEvents && 'fullColor'
       )}
     >
-      <Link className={styles.underlay} onPress={handlePress} />
+      <Link
+        className={styles.underlay}
+        aria-label={eventLabel}
+        onPress={handlePress}
+      />
 
       <div className={styles.overlay}>
         <div className={styles.info}>

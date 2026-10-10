@@ -4,6 +4,7 @@ import React, { useCallback, useState } from 'react';
 import { useQueueItemForEpisode } from 'Activity/Queue/Details/QueueDetailsProvider';
 import { useCalendarOptions } from 'Calendar/calendarOptionsStore';
 import CalendarEventQueueDetails from 'Calendar/Events/CalendarEventQueueDetails';
+import getCalendarStatusLabel from 'Calendar/Events/getCalendarStatusLabel';
 import getStatusStyle from 'Calendar/getStatusStyle';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
@@ -15,6 +16,7 @@ import { icons, kinds } from 'Helpers/Props';
 import SeriesPoster from 'Series/SeriesPoster';
 import { useSingleSeries } from 'Series/useSeries';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
+import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
@@ -56,7 +58,7 @@ function AgendaEvent(props: AgendaEventProps) {
   const series = useSingleSeries(seriesId)!;
   const episodeFile = useEpisodeFile(episodeFileId);
   const queueItem = useQueueItemForEpisode(id);
-  const { timeFormat } = useUiSettingsValues();
+  const { longDateFormat, timeFormat } = useUiSettingsValues();
 
   const {
     showCoverArt,
@@ -81,6 +83,13 @@ function AgendaEvent(props: AgendaEventProps) {
   );
   const missingAbsoluteNumber =
     series.seriesType === 'anime' && seasonNumber > 0 && !absoluteEpisodeNumber;
+  const eventLabel = translate('CalendarOpenEpisodeDetails', {
+    series: series.title,
+    episode: `${seasonNumber}x${padNumber(episodeNumber, 2)}`,
+    title,
+    airDate: formatDateTime(airDateUtc, longDateFormat, timeFormat),
+    status: getCalendarStatusLabel(statusStyle),
+  });
 
   const handlePress = useCallback(() => {
     setIsDetailsModalOpen(true);
@@ -92,7 +101,11 @@ function AgendaEvent(props: AgendaEventProps) {
 
   return (
     <div className={styles.event}>
-      <Link className={styles.underlay} onPress={handlePress} />
+      <Link
+        className={styles.underlay}
+        aria-label={eventLabel}
+        onPress={handlePress}
+      />
 
       {showCoverArt ? (
         <SeriesPoster
