@@ -839,8 +839,17 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
 
                 <div className={styles.heroFooter}>
                   <div className={styles.pathLine}>
-                    <Icon name={icons.FOLDER} size={14} />
-                    <span>{path}</span>
+                    <Tooltip
+                      anchor={
+                        <>
+                          <Icon name={icons.FOLDER} size={14} />
+                          <span>{path}</span>
+                        </>
+                      }
+                      tooltip={<span>{path}</span>}
+                      kind={kinds.DEFAULT}
+                      position={tooltipPositions.BOTTOM}
+                    />
                   </div>
 
                   <MetadataAttribution />
