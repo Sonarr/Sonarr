@@ -132,6 +132,7 @@
 }
 
 .addNewSeriesSuggestion {
+  display: block;
   padding: 10px;
   border-radius: 8px;
   color: var(--inkSoft);
