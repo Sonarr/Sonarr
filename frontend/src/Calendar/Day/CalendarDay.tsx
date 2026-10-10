@@ -6,6 +6,7 @@ import * as calendarViews from 'Calendar/calendarViews';
 import CalendarEvent from 'Calendar/Events/CalendarEvent';
 import CalendarEventGroup from 'Calendar/Events/CalendarEventGroup';
 import useCalendar, { useCalendarTime } from 'Calendar/useCalendar';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import {
   CalendarEvent as CalendarEventModel,
   CalendarEventGroup as CalendarEventGroupModel,
@@ -98,6 +99,7 @@ function CalendarDay({
   const view = useCalendarOption('view');
   const time = useCalendarTime();
   const events = useCalendarEvents(date);
+  const { longDateFormat } = useUiSettingsValues();
   const momentDate = moment(date);
 
   const ref = React.useRef<HTMLTableCellElement>(null);
@@ -131,7 +133,7 @@ function CalendarDay({
             aria-current={isTodaysDate ? 'date' : undefined}
           >
             <span className={styles.fullDate}>
-              {momentDate.format('dddd, LL')}
+              {momentDate.format(longDateFormat)}
             </span>
             <span aria-hidden={true}>{momentDate.date()}</span>
           </time>

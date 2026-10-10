@@ -11,6 +11,7 @@ import {
 } from 'Calendar/useCalendar';
 import translate from 'Utilities/String/translate';
 import CalendarDay from './CalendarDay';
+import CalendarTableHeader from './CalendarTableHeader';
 import styles from './CalendarDays.module.css';
 
 function CalendarDays() {
@@ -111,7 +112,6 @@ function CalendarDays() {
     };
   }, [handleTouchStart, handleTouchEnd, handleTouchCancel, handleTouchMove]);
 
-  const columnDates = view === calendarViews.MONTH ? dates.slice(0, 7) : dates;
   const rowSize = view === calendarViews.MONTH ? 7 : Math.max(dates.length, 1);
   const rows: string[][] = [];
 
@@ -124,22 +124,7 @@ function CalendarDays() {
       className={classNames(styles.days, styles[view as keyof typeof styles])}
       aria-label={translate('Calendar')}
     >
-      <thead>
-        <tr className={styles.headerRow}>
-          {columnDates.map((date) => {
-            const momentDate = moment(date);
-            const label = momentDate.format(
-              view === calendarViews.MONTH ? 'dddd' : 'dddd, LL'
-            );
-
-            return (
-              <th key={date} className={styles.headerCell} scope="col">
-                <span className={styles.headerLabel}>{label}</span>
-              </th>
-            );
-          })}
-        </tr>
-      </thead>
+      <CalendarTableHeader todaysDate={todaysDate} />
 
       <tbody>
         {rows.map((row) => {

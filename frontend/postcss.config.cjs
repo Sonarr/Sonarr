@@ -4,7 +4,8 @@ const mixinsFiles = [
   'frontend/src/Styles/Mixins/cover.css',
   'frontend/src/Styles/Mixins/linkOverlay.css',
   'frontend/src/Styles/Mixins/scroller.css',
-  'frontend/src/Styles/Mixins/truncate.css'
+  'frontend/src/Styles/Mixins/truncate.css',
+  'frontend/src/Styles/Mixins/visuallyHidden.css'
 ];
 
 module.exports = {
