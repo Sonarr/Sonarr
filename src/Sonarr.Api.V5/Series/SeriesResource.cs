@@ -135,8 +135,6 @@ public static class SeriesResourceMapper
             Language = resource.Language,
             SeasonType = resource.SeasonType,
             Seasons = resource.Seasons?.ToModel() ?? [],
-            SeasonTypes = resource.SeasonTypes?.ToModel() ?? [],
-            Translations = resource.Translations?.ToModel() ?? [],
             Year = resource.Year,
             OriginalLanguage = resource.OriginalLanguage,
             Path = resource.Path,

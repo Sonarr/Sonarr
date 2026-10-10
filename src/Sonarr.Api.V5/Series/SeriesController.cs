@@ -232,8 +232,6 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
 
         _seriesService.UpdateSeries(model);
 
-        BroadcastResourceChange(ModelAction.Updated, seriesResource);
-
         return TypedAccepted(seriesResource.Id);
     }
 
