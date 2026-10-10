@@ -3,13 +3,12 @@ name: Build
 on:
   push:
     branches:
-      - develop
       - main
     paths-ignore:
       - "src/Sonarr.Api.*/openapi.json"
   pull_request:
     branches:
-      - develop
+      - main
     paths-ignore:
       - "src/NzbDrone.Core/Localization/Core/**"
       - "src/Sonarr.Api.*/openapi.json"
@@ -216,7 +215,7 @@ jobs:
           binary_path: ${{ matrix.binary_path }}
 
   deploy:
-    if: ${{ github.ref_name == 'develop' || github.ref_name == 'main' }}
+    if: ${{ github.ref_name == 'main' }}
     needs: [backend, frontend, unit_test, unit_test_postgres, integration_test]
     secrets: inherit
     uses: ./.github/workflows/deploy.yml
@@ -237,7 +236,7 @@ jobs:
         integration_test,
         deploy,
       ]
-    if: ${{ !cancelled() && (github.ref_name == 'develop' || github.ref_name == 'main') }}
+    if: ${{ !cancelled() && github.ref_name == 'main' }}
     env:
       STATUS: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
     runs-on: ubuntu-latest
