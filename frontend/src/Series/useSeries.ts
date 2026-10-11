@@ -15,21 +15,11 @@ import { FilterType } from 'Helpers/Props/filterTypes';
 import getFilterTypePredicate from 'Helpers/Props/getFilterTypePredicate';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import sortByProp from 'Utilities/Array/sortByProp';
+import dateFilterPredicate from 'Utilities/Date/dateFilterPredicate';
 import clientSideFilterAndSort from 'Utilities/Filter/clientSideFilterAndSort';
 import translate from 'Utilities/String/translate';
 import Series, { Season, Statistics } from './Series';
 import { useSeriesOptions } from './seriesOptionsStore';
-
-// Date filter predicate helper
-const dateFilterPredicate = (
-  itemDate: string | undefined,
-  filterValue: string | Date,
-  type: FilterType
-): boolean => {
-  if (!itemDate) return false;
-  const predicate = getFilterTypePredicate(type);
-  return predicate(itemDate, filterValue);
-};
 
 export const FILTERS: Filter[] = [
   {
@@ -220,19 +210,27 @@ const FILTER_PREDICATES = {
     return episodeCount - episodeFileCount > 0;
   },
 
-  nextAiring: (item: Series, filterValue: string | Date, type: FilterType) => {
+  nextAiring: (
+    item: Series,
+    filterValue: string | { time: string; value: number },
+    type: FilterType
+  ) => {
     return dateFilterPredicate(item.nextAiring, filterValue, type);
   },
 
   previousAiring: (
     item: Series,
-    filterValue: string | Date,
+    filterValue: string | { time: string; value: number },
     type: FilterType
   ) => {
     return dateFilterPredicate(item.previousAiring, filterValue, type);
   },
 
-  added: (item: Series, filterValue: string | Date, type: FilterType) => {
+  added: (
+    item: Series,
+    filterValue: string | { time: string; value: number },
+    type: FilterType
+  ) => {
     return dateFilterPredicate(item.added, filterValue, type);
   },
 
