@@ -1,4 +1,5 @@
 declare module '*.module.css';
+declare module 'moment/min/locales';
 
 interface Window {
   Sonarr: {

@@ -1,6 +1,6 @@
 import moment, { DurationInputArg1 } from 'moment-timezone';
+import formatUnit from 'Utilities/Number/formatUnit';
 import padNumber from 'Utilities/Number/padNumber';
-import translate from 'Utilities/String/translate';
 
 function formatTimeSpan(timeSpan: DurationInputArg1) {
   if (!timeSpan) {
@@ -17,7 +17,7 @@ function formatTimeSpan(timeSpan: DurationInputArg1) {
   const time = `${hours}:${minutes}:${seconds}`;
 
   if (days > 0) {
-    return translate('FormatTimeSpanDays', { days, time });
+    return `${formatUnit(days, 'day', { unitDisplay: 'narrow' })} ${time}`;
   }
 
   return time;

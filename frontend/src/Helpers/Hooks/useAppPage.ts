@@ -14,7 +14,8 @@ import useTags from 'Tags/useTags';
 
 const useAppPage = () => {
   useCommands();
-  useInitializeLanguage();
+
+  const { isInitialized: isLanguageInitialized } = useInitializeLanguage();
 
   const { isFetched: isCustomFiltersFetched, error: customFiltersError } =
     useCustomFilters();
@@ -49,6 +50,7 @@ const useAppPage = () => {
   const isPopulated =
     isCustomFiltersFetched &&
     isIndexerFlagsFetched &&
+    isLanguageInitialized &&
     isSeriesFetched &&
     isSystemStatusFetched &&
     isTagsFetched &&

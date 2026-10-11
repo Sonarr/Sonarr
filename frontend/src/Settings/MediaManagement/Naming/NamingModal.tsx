@@ -355,7 +355,7 @@ function getNamingTokenGroups({
   }
 
   groups.push({
-    legend: translate('Series'),
+    legend: translate('SeriesSingular'),
     tokens: withFootNotes(seriesTokens, { 1: translate('SeriesFootNote') }),
   });
 
