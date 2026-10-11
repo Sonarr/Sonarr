@@ -182,6 +182,10 @@ export default defineConfig({
     },
   },
 
+  optimizeDeps: {
+    exclude: ['moment'],
+  },
+
   resolve: {
     alias: {
       ...srcAliases,

@@ -1,4 +1,4 @@
-import translate from 'Utilities/String/translate';
+import formatUnit from 'Utilities/Number/formatUnit';
 
 function formatAge(
   age: string | number,
@@ -7,27 +7,17 @@ function formatAge(
 ) {
   const ageRounded = Math.round(Number(age));
   const ageHoursFloat = parseFloat(String(ageHours));
-  const ageMinutesFloat = ageMinutes && parseFloat(String(ageMinutes));
+  const ageMinutesFloat = parseFloat(String(ageMinutes));
 
   if (ageRounded < 2 && ageHoursFloat) {
-    if (ageHoursFloat < 2 && !!ageMinutesFloat) {
-      return `${ageMinutesFloat.toFixed(0)} ${
-        ageHoursFloat === 1
-          ? translate('FormatAgeMinute')
-          : translate('FormatAgeMinutes')
-      }`;
+    if (ageHoursFloat < 2 && ageMinutesFloat) {
+      return formatUnit(ageMinutesFloat, 'minute');
     }
 
-    return `${ageHoursFloat.toFixed(1)} ${
-      ageHoursFloat === 1
-        ? translate('FormatAgeHour')
-        : translate('FormatAgeHours')
-    }`;
+    return formatUnit(ageHoursFloat, 'hour', { maximumFractionDigits: 1 });
   }
 
-  return `${ageRounded} ${
-    ageRounded === 1 ? translate('FormatAgeDay') : translate('FormatAgeDays')
-  }`;
+  return formatUnit(ageRounded, 'day');
 }
 
 export default formatAge;

@@ -83,7 +83,7 @@ function DeleteSeriesModalContent({
           <FormLabel>{translate('AddListExclusion')}</FormLabel>
 
           <FormInputHelpText
-            text={translate('AddListExclusionSeriesHelpText')}
+            text={translate('AddListExclusionSingleSeriesHelpText')}
           />
           <FormInput
             type={inputTypes.CHECK}

@@ -1,6 +1,6 @@
-import moment from 'moment-timezone';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
+import loadMomentLocale from './loadMomentLocale';
 
 interface LanguageResponse {
   identifier: string;
@@ -23,11 +23,16 @@ export const useLanguage = () => {
 };
 
 export const useInitializeLanguage = () => {
-  const { data } = useLanguage();
+  const { data, isFetched } = useLanguage();
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    moment.locale(data?.identifier);
-  }, [data]);
+    if (isFetched) {
+      loadMomentLocale(data?.identifier).then(() => setIsInitialized(true));
+    }
+  }, [data, isFetched]);
+
+  return { isInitialized };
 };
 
 const useLanguageName = () => {

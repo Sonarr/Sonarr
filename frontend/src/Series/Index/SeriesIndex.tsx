@@ -324,7 +324,7 @@ function SeriesIndexBody({ seriesIndex }: SeriesIndexBodyProps) {
           label={
             isSelectMode
               ? translate('StopSelecting')
-              : translate('SelectSeries')
+              : translate('SelectMultipleSeries')
           }
           iconName={isSelectMode ? icons.SERIES_ENDED : icons.CHECK}
           renderButton={renderSelectButton}

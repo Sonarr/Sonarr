@@ -89,7 +89,7 @@ const COLUMNS = [
   },
   {
     name: 'series',
-    label: () => translate('Series'),
+    label: () => translate('SeriesSingular'),
     isSortable: true,
     isVisible: true,
   },

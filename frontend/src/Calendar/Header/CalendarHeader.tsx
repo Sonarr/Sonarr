@@ -56,11 +56,11 @@ function CalendarHeader() {
 
   const datePickerValue = useMemo(() => {
     if (view === 'month') {
-      return moment(time).startOf('month').format('YYYY-MM-DD');
+      return moment(time).locale('en').startOf('month').format('YYYY-MM-DD');
     }
 
     if (start) {
-      return moment(start).format('YYYY-MM-DD');
+      return moment(start).locale('en').format('YYYY-MM-DD');
     }
 
     return '';
