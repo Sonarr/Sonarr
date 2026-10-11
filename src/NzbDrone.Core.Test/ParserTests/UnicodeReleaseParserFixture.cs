@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Test.ParserTests
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
             result.SeriesTitle.Should().Be(title);
             result.FullSeason.Should().BeTrue();
-            result.SeasonNumber.Should().Be(season);
+            result.SeasonNumbers.Should().Equal(season);
         }
 
         [TestCase("【高清剧集网发布 www.DDHDTV.com】当我飞奔向你[第01-15集][国语配音+中文字幕].Series.Towards.You.S01.2023.2160p.YK.WEB-DL.H265.AAC-BlackTV", "Series Towards You", "BlackTV", 1, new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 })]
@@ -169,7 +169,7 @@ namespace NzbDrone.Core.Test.ParserTests
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
 
             var result = Parser.Parser.ParseTitle(postTitle);
-            result.SeasonNumber.Should().Be(season);
+            result.SeasonNumbers.Should().Equal(season);
             result.EpisodeNumbers.Should().BeEquivalentTo(episodes);
             result.SeriesTitle.Should().Be(title);
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
