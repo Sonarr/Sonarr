@@ -207,6 +207,8 @@
   "BypassProxyForLocalAddresses": "Bypass Proxy for Local Addresses",
   "Calendar": "Calendar",
   "CalendarCaption": "Choose how weeks and days appear in the calendar",
+  "CalendarCollapseEpisodeGroup": "Collapse episodes for {series}, season {season}",
+  "CalendarExpandEpisodeGroup": "Expand {count} episodes for {series}, season {season}. {status}",
   "CalendarFeed": "{appName} Calendar Feed",
   "CalendarLegendEpisodeDownloadedTooltip": "Episode was downloaded and sorted",
   "CalendarLegendEpisodeDownloadingTooltip": "Episode is currently downloading",
