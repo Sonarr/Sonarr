@@ -198,7 +198,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
-            result.SeasonNumber.Should().Be(seasonNumber);
+            result.SeasonNumbers.Should().Equal(seasonNumber);
             result.EpisodeNumbers.First().Should().Be(episodeNumber);
             result.SeriesTitle.Should().Be(title);
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
@@ -217,7 +217,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
-            result.SeasonNumber.Should().Be(seasonNumber);
+            result.SeasonNumbers.Should().Equal(seasonNumber);
             result.EpisodeNumbers.First().Should().Be(episodeNumber);
             result.SeriesTitle.Should().Be(title);
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
@@ -230,7 +230,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
-            result.SeasonNumber.Should().Be(seasonNumber);
+            result.SeasonNumbers.Should().Equal(seasonNumber);
             result.EpisodeNumbers.First().Should().Be(episodeNumber);
             result.SeriesTitle.Should().Be(title);
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
@@ -244,7 +244,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
-            result.SeasonNumber.Should().Be(seasonNumber);
+            result.SeasonNumbers.Should().Equal(seasonNumber);
             result.EpisodeNumbers.First().Should().Be(episodeNumber);
             result.SeriesTitle.Should().Be(title);
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();

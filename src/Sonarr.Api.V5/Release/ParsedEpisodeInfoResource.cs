@@ -31,7 +31,7 @@ public static class ParsedEpisodeInfoResourceMapper
             ReleaseGroup = parsedEpisodeInfo.ReleaseGroup,
             ReleaseHash = parsedEpisodeInfo.ReleaseHash,
             FullSeason = parsedEpisodeInfo.FullSeason,
-            SeasonNumber = parsedEpisodeInfo.SeasonNumber,
+            SeasonNumber = parsedEpisodeInfo.SeasonNumbers.Any() ? parsedEpisodeInfo.SeasonNumbers.First() : null,
             SeasonNumbers = parsedEpisodeInfo.SeasonNumbers,
             AirDate = parsedEpisodeInfo.AirDate,
             SeriesTitle = parsedEpisodeInfo.SeriesTitle,
