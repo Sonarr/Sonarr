@@ -300,6 +300,11 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.57.1.tgz#de633db3ec2ef6a3c89e2f19038063e8a122e2c2"
   integrity sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==
 
+"@fastify/deepmerge@3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@fastify/deepmerge/-/deepmerge-3.2.2.tgz#920abc844a9c9186fc59bfbd9381b6b5c61c7ffe"
+  integrity sha512-155eqA/WMQdN6gUD4RrhS2K0Pcz2Ou9pQ86L0sipOpP9ONbTA6oYw/hW4VdBjR4egcDHqmWUK9x80oUX7S1mDQ==
+
 "@floating-ui/core@^1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.8.0.tgz#d01c0bbea02e4a57f6fd7d5de6fc2c5c7dca40e1"
