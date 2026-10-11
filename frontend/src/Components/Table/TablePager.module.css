@@ -2,7 +2,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 16px;
   padding-top: 12px;
   border-top: 1px solid var(--borderColor);
 }
