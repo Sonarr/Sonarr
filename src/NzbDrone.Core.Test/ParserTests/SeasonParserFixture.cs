@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_full_season_release(string postTitle, string title, int season)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
-            result.SeasonNumber.Should().Be(season);
+            result.SeasonNumbers.Should().Equal(season);
             result.SeriesTitle.Should().Be(title);
             result.EpisodeNumbers.Should().BeEmpty();
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_season_extras(string postTitle, string title, int season)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
-            result.SeasonNumber.Should().Be(season);
+            result.SeasonNumbers.Should().Equal(season);
             result.SeriesTitle.Should().Be(title);
             result.EpisodeNumbers.Should().BeEmpty();
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_season_subpack(string postTitle, string title, int season)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
-            result.SeasonNumber.Should().Be(season);
+            result.SeasonNumbers.Should().Equal(season);
             result.SeriesTitle.Should().Be(title);
             result.EpisodeNumbers.Should().BeEmpty();
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_partial_season_release(string postTitle, string title, int season, int seasonPart)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
-            result.SeasonNumber.Should().Be(season);
+            result.SeasonNumbers.Should().Equal(season);
             result.SeriesTitle.Should().Be(title);
             result.EpisodeNumbers.Should().BeEmpty();
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();

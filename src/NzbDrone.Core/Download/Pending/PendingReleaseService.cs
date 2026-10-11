@@ -375,7 +375,9 @@ namespace NzbDrone.Core.Download.Pending
                     SeriesMatchType = release.AdditionalInfo?.SeriesMatchType ?? SeriesMatchType.Unknown,
                     ReleaseSource = release.AdditionalInfo?.ReleaseSource ?? ReleaseSourceType.Unknown,
                     ParsedEpisodeInfo = release.ParsedEpisodeInfo,
-                    Release = release.Release
+                    Release = release.Release,
+                    MappedSeasonNumber = release.ParsedEpisodeInfo.SeasonNumbers.Any() ? release.ParsedEpisodeInfo.SeasonNumbers.First() : null,
+                    Episodes = new List<Episode>()
                 };
 
                 if (knownRemoteEpisodes != null && knownRemoteEpisodes.TryGetValue(release.Release.Title, out var knownRemoteEpisode))
@@ -395,15 +397,7 @@ namespace NzbDrone.Core.Download.Pending
                     catch (InvalidOperationException ex)
                     {
                         _logger.Debug(ex, ex.Message);
-
-                        release.RemoteEpisode.MappedSeasonNumber = release.ParsedEpisodeInfo.SeasonNumber;
-                        release.RemoteEpisode.Episodes = new List<Episode>();
                     }
-                }
-                else
-                {
-                    release.RemoteEpisode.MappedSeasonNumber = release.ParsedEpisodeInfo.SeasonNumber;
-                    release.RemoteEpisode.Episodes = new List<Episode>();
                 }
 
                 _aggregationService.Augment(release.RemoteEpisode);
