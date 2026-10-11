@@ -217,6 +217,7 @@
   "CalendarLegendSeriesFinaleTooltip": "Series or season finale",
   "CalendarLegendSeriesPremiereTooltip": "Series or season premiere",
   "CalendarLoadError": "Unable to load the calendar",
+  "CalendarOpenEpisodeDetails": "Open details for {series}, {episode}, {title}, airing {airDate}. {status}",
   "CalendarOptions": "Calendar Options",
   "Cancel": "Cancel",
   "CancelPendingTask": "Are you sure you want to cancel this pending task?",
