@@ -89,12 +89,11 @@ function cssModuleTypes(): Plugin {
   };
 }
 
-const srcAliases = readdirSync(src, { withFileTypes: true })
-  .filter((entry) => entry.isDirectory())
-  .map((entry) => ({
-    find: entry.name,
-    replacement: path.join(src, entry.name),
-  }));
+const srcAliases = Object.fromEntries(
+  readdirSync(src, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => [entry.name, path.join(src, entry.name)])
+);
 
 export default defineConfig({
   plugins: [
@@ -135,13 +134,15 @@ export default defineConfig({
     },
   },
 
+  optimizeDeps: {
+    exclude: ['moment'],
+  },
+
   resolve: {
-    alias: [
+    alias: {
       ...srcAliases,
-      { find: 'jquery', replacement: 'jquery/dist/jquery.min.js' },
-      // moment/min/locales registers locales on the CommonJS build
-      { find: /^moment$/, replacement: 'moment/moment.js' },
-    ],
+      jquery: 'jquery/dist/jquery.min.js',
+    },
   },
 
   css: {

@@ -7,7 +7,7 @@ async function loadMomentLocale(identifier: string | undefined) {
 
   try {
     // All locales are bundled in one chunk that is only fetched when needed
-    await import('moment/min/locales');
+    await import('./momentLocales');
 
     moment.locale(identifier);
   } catch (e) {

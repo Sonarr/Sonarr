@@ -1,5 +1,4 @@
 declare module '*.module.css';
-declare module 'moment/min/locales';
 
 interface Window {
   Sonarr: {
@@ -11,4 +10,8 @@ interface Window {
     version: string;
     isProduction: boolean;
   };
+}
+
+interface ImportMeta {
+  glob: (pattern: string, options: { eager: true }) => unknown;
 }
