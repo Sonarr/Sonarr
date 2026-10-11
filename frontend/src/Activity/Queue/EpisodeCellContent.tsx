@@ -1,28 +1,28 @@
 import React from 'react';
 import Episode from 'Episode/Episode';
 import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
+import formatSeasonNumbers from 'Season/formatSeasonNumbers';
 import Series from 'Series/Series';
-import translate from 'Utilities/String/translate';
 
 interface EpisodeCellContentProps {
   episodes: Episode[];
   isFullSeason: boolean;
-  seasonNumber?: number;
+  seasonNumbers: number[];
   series?: Series;
 }
 
 export default function EpisodeCellContent({
   episodes,
   isFullSeason,
-  seasonNumber,
+  seasonNumbers,
   series,
 }: EpisodeCellContentProps) {
   if (episodes.length === 0) {
     return '-';
   }
 
-  if (isFullSeason && seasonNumber != null) {
-    return translate('SeasonNumberToken', { seasonNumber });
+  if (isFullSeason && seasonNumbers.length) {
+    return formatSeasonNumbers(seasonNumbers);
   }
 
   if (episodes.length === 1) {
