@@ -20,7 +20,9 @@ function TagDetailsDelayProfile({
   return (
     <div>
       <div>
-        {titleCase(translate('DelayProfileProtocol', { preferredProtocol }))}
+        {translate('DelayProfileProtocol', {
+          preferredProtocol: titleCase(preferredProtocol),
+        })}
       </div>
 
       <div>
