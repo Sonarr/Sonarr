@@ -26,6 +26,7 @@
   "dependencies": {
     "@dnd-kit/helpers": "0.5.0",
     "@dnd-kit/react": "0.5.0",
+    "@fastify/deepmerge": "3.2.2",
     "@floating-ui/react": "0.27.20",
     "@fluentui/priority-overflow": "9.4.3",
     "@fontsource/fraunces": "5.3.0",

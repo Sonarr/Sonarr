@@ -33,30 +33,20 @@ interface SeriesIndexPosterProps {
   posterHeight: number;
 }
 
-function getStatusBadge(status: SeriesStatus, showStatus: ShowStatusMode) {
-  if (showStatus === 'none') {
-    return null;
-  }
-
-  if (status === 'deleted') {
+function getStatusBadge(status: SeriesStatus, showStatuses: ShowStatusMode[]) {
+  if (status === 'deleted' && showStatuses.includes('deleted')) {
     return { label: translate('Deleted'), statusClass: styles.deleted };
   }
 
-  if (
-    status === 'continuing' &&
-    (showStatus === 'active' || showStatus === 'all')
-  ) {
+  if (status === 'continuing' && showStatuses.includes('continuing')) {
     return { label: translate('Continuing'), statusClass: styles.continuing };
   }
 
-  if (
-    status === 'upcoming' &&
-    (showStatus === 'active' || showStatus === 'all')
-  ) {
+  if (status === 'upcoming' && showStatuses.includes('upcoming')) {
     return { label: translate('Upcoming'), statusClass: styles.upcoming };
   }
 
-  if (status === 'ended' && showStatus === 'all') {
+  if (status === 'ended' && showStatuses.includes('ended')) {
     return { label: translate('Ended'), statusClass: styles.ended };
   }
 
@@ -76,7 +66,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
     showQualityProfile,
     showTags,
     showSearchAction,
-    showStatus,
+    showStatuses,
   } = useSeriesPosterOptions();
 
   const { showRelativeDates, shortDateFormat, longDateFormat, timeFormat } =
@@ -163,7 +153,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
     height: `${posterHeight}px`,
   };
 
-  const statusBadge = getStatusBadge(status, showStatus);
+  const statusBadge = getStatusBadge(status, showStatuses);
 
   const monitoredLabel = monitored
     ? translate('Monitored')

@@ -40,27 +40,27 @@ const posterSizeOptions: EnhancedSelectInputValue<string>[] = [
 
 const showStatusOptions: EnhancedSelectInputValue<string>[] = [
   {
-    key: 'none',
-    get value() {
-      return translate('None');
-    },
-  },
-  {
     key: 'deleted',
     get value() {
-      return translate('DeletedOnly');
+      return translate('Deleted');
     },
   },
   {
-    key: 'active',
+    key: 'continuing',
     get value() {
-      return translate('Active');
+      return translate('Continuing');
     },
   },
   {
-    key: 'all',
+    key: 'upcoming',
     get value() {
-      return translate('All');
+      return translate('Upcoming');
+    },
+  },
+  {
+    key: 'ended',
+    get value() {
+      return translate('Ended');
     },
   },
 ];
@@ -80,7 +80,7 @@ function SeriesIndexPosterOptionsModalContent({
     showQualityProfile,
     showTags,
     showSearchAction,
-    showStatus,
+    showStatuses,
   } = useSeriesPosterOptions();
 
   const onPosterOptionChange = useCallback(
@@ -176,12 +176,12 @@ function SeriesIndexPosterOptionsModalContent({
           </FormRow>
 
           <FormRow>
-            <FormLabel>{translate('ShowStatus')}</FormLabel>
-            <FormInputHelpText text={translate('ShowStatusHelpText')} />
+            <FormLabel>{translate('ShowStatuses')}</FormLabel>
+            <FormInputHelpText text={translate('ShowStatusesHelpText')} />
             <FormInput
               type={inputTypes.SELECT}
-              name="showStatus"
-              value={showStatus ?? 'deleted'}
+              name="showStatuses"
+              value={showStatuses}
               values={showStatusOptions}
               onChange={onPosterOptionChange}
             />
