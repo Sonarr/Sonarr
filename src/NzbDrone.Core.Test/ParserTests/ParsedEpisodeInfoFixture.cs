@@ -58,6 +58,15 @@ namespace NzbDrone.Core.Test.ParserTests
             parsedEpisodeInfo.ToString().Should().Contain(expected);
         }
 
+        [TestCase("Series.Title.S01-S03.1080p.BluRay.x264-RlsGrp", ReleaseType.MultiSeasonPack)]
+        [TestCase("Series.Title.S01.1080p.BluRay.x264-RlsGrp", ReleaseType.SeasonPack)]
+        [TestCase("Series.Title.S01E01-E02.1080p.BluRay.x264-RlsGrp", ReleaseType.MultiEpisode)]
+        [TestCase("Series.Title.S01E01.1080p.BluRay.x264-RlsGrp", ReleaseType.SingleEpisode)]
+        public void should_get_release_type(string title, ReleaseType expected)
+        {
+            Parser.Parser.ParseTitle(title).ReleaseType.Should().Be(expected);
+        }
+
         [Test]
         public void should_format_episode_with_first_season()
         {
