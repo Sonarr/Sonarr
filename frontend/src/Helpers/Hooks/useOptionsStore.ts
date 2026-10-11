@@ -109,10 +109,10 @@ const merge = <T extends TSettings>(
   currentState: T
 ) => {
   if ('columns' in currentState) {
-    return deepMerge(
-      currentState,
-      mergeColumns(persistedState, currentState)
-    ) as T;
+    return {
+      ...(deepMerge(currentState, persistedState) as T),
+      columns: mergeColumns(persistedState, currentState),
+    };
   }
 
   return deepMerge(currentState, persistedState) as T;
@@ -165,10 +165,7 @@ const mergeColumns = <T extends { columns: Column[] }>(
     }
   });
 
-  return {
-    ...(persistedState as T),
-    columns,
-  };
+  return columns;
 };
 
 export const applySort = <T extends TSettings>(
