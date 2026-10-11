@@ -119,7 +119,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             {
                 var trackedDownload = _trackedDownloadService.Find(downloadId);
 
-                if (trackedDownload == null)
+                if (trackedDownload?.ImportItem == null)
                 {
                     return new List<ManualImportItem>();
                 }
