@@ -1,10 +1,7 @@
 .intro {
-  margin: 0 0 8px;
-  max-width: 70ch;
-  color: var(--inkMuted);
-  font-size: 13px;
-  font-family: var(--defaultFontFamily);
-  line-height: 1.55;
+  composes: alert from 'Components/Alert.module.css';
+
+  margin-top: 20px;
 }
 
 .deleteButton {

@@ -76,7 +76,9 @@ function DelayProfile({
       return translate('OnlyUsenet');
     }
 
-    return titleCase(translate('PreferProtocol', { preferredProtocol }));
+    return translate('PreferProtocol', {
+      preferredProtocol: titleCase(preferredProtocol),
+    });
   }, [preferredProtocol, enableUsenet, enableTorrent]);
 
   const handleEditDelayProfilePress = useCallback(() => {

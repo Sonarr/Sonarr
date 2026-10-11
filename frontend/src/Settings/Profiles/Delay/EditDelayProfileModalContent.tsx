@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
+import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormInput from 'Components/Form/FormInput';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
@@ -247,9 +248,9 @@ function EditDelayProfileModalContent({
           </ModalSection>
 
           {id === 1 ? (
-            <p className={styles.intro}>
+            <Alert className={styles.intro}>
               {translate('DefaultDelayProfileSeries')}
-            </p>
+            </Alert>
           ) : (
             <FormRow>
               <FormLabel>{translate('Tags')}</FormLabel>
