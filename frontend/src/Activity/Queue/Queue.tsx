@@ -174,7 +174,9 @@ function QueueContent() {
     setIsInteractiveImportDownloadIds(
       selectedIds
         .map((id) => {
-          const item = records.find((i) => i.id === id);
+          const item = records.find(
+            (i) => i.id === id && i.status === 'completed'
+          );
 
           return item?.downloadId;
         })
