@@ -109,6 +109,20 @@ function QueueContent() {
     });
   }, [records, selectedIds]);
 
+  const completedDownloadIds = useMemo(
+    () =>
+      selectedIds
+        .map((id) => {
+          const item = records.find(
+            (i) => i.id === id && i.status === 'completed'
+          );
+
+          return item?.downloadId;
+        })
+        .filter((id): id is string => !!id),
+    [records, selectedIds]
+  );
+
   const [isConfirmRemoveModalOpen, setIsConfirmRemoveModalOpen] =
     useState(false);
 
@@ -127,6 +141,8 @@ function QueueContent() {
   const hasError = error || episodesError;
   const selectedCount = selectedIds.length;
   const disableSelectedActions = selectedCount === 0;
+  const disableImportSelected =
+    selectedCount === 0 || completedDownloadIds.length === 0;
 
   const handleSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
@@ -171,18 +187,8 @@ function QueueContent() {
 
   const handleImportSelectedPress = useCallback(() => {
     shouldBlockRefresh.current = true;
-    setIsInteractiveImportDownloadIds(
-      selectedIds
-        .map((id) => {
-          const item = records.find(
-            (i) => i.id === id && i.status === 'completed'
-          );
-
-          return item?.downloadId;
-        })
-        .filter((id): id is string => !!id)
-    );
-  }, [records, selectedIds]);
+    setIsInteractiveImportDownloadIds(completedDownloadIds);
+  }, [completedDownloadIds]);
 
   const handleImportSelectedModalClose = useCallback(() => {
     shouldBlockRefresh.current = false;
@@ -350,7 +356,7 @@ function QueueContent() {
           groupId="left-c"
           label={translate('ImportSelected')}
           iconName={icons.INTERACTIVE}
-          isDisabled={disableSelectedActions}
+          isDisabled={disableImportSelected}
           onPress={handleImportSelectedPress}
         />
 
