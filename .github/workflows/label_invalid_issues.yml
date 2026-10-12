@@ -7,6 +7,10 @@ on:
       - reopened
       - edited
 
+concurrency:
+  group: issue-labels-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
 jobs:
   validate:
     name: Validate issue and apply/clear waiting-for-info label
@@ -148,14 +152,16 @@ jobs:
               }
             }
 
-            const alreadyLabeled = (issue.labels || []).some((l) => l.name === "waiting-for-info");
-            const createdWithoutTemplate = (issue.labels || []).length === 0;
             const templatesUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/issues/new/choose`;
             const common = {
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issue.number,
             };
+
+            const currentLabels = await github.paginate(github.rest.issues.listLabelsOnIssue, common);
+            const alreadyLabeled = currentLabels.some((l) => l.name === "waiting-for-info");
+            const createdWithoutTemplate = currentLabels.length === 0;
 
             const notes = [];
 
