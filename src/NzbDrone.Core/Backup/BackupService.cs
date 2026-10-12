@@ -136,25 +136,24 @@ namespace NzbDrone.Core.Backup
 
                 _archiveService.Extract(backupFileName, temporaryPath);
 
-                foreach (var file in _diskProvider.GetFiles(temporaryPath, false))
-                {
-                    var fileName = Path.GetFileName(file);
+                var files = _diskProvider.GetFiles(temporaryPath, false);
 
-                    if (fileName.Equals("Config.xml", StringComparison.InvariantCultureIgnoreCase))
+                foreach (var file in files.Where(IsDatabaseFile))
+                {
+                    ValidateDatabase(file);
+                }
+
+                foreach (var file in files)
+                {
+                    if (Path.GetFileName(file).Equals("Config.xml", StringComparison.InvariantCultureIgnoreCase))
                     {
                         RestoreConfigFile(file);
                         restoredFile = true;
                     }
 
-                    if (fileName.Equals("nzbdrone.db", StringComparison.InvariantCultureIgnoreCase))
+                    if (IsDatabaseFile(file))
                     {
-                        RestoreDatabase(file);
-                        restoredFile = true;
-                    }
-
-                    if (fileName.Equals("sonarr.db", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        RestoreDatabase(file);
+                        _diskProvider.MoveFile(file, _appFolderInfo.GetDatabaseRestore(), true);
                         restoredFile = true;
                     }
                 }
@@ -231,12 +230,25 @@ namespace NzbDrone.Core.Backup
 
         private void RestoreDatabase(string file)
         {
+            ValidateDatabase(file);
+
+            _diskProvider.MoveFile(file, _appFolderInfo.GetDatabaseRestore(), true);
+        }
+
+        private static bool IsDatabaseFile(string file)
+        {
+            var fileName = Path.GetFileName(file);
+
+            return fileName.Equals("nzbdrone.db", StringComparison.InvariantCultureIgnoreCase) ||
+                   fileName.Equals("sonarr.db", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private void ValidateDatabase(string file)
+        {
             if (!IsSqliteDatabase(file))
             {
                 throw new RestoreBackupFailedException(HttpStatusCode.BadRequest, "Backup database is not a valid SQLite database");
             }
-
-            _diskProvider.MoveFile(file, _appFolderInfo.GetDatabaseRestore(), true);
         }
 
         private bool IsSqliteDatabase(string file)

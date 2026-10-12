@@ -126,5 +126,18 @@ namespace NzbDrone.Core.Test.BackupTests
 
             Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(It.IsAny<string>(), _databaseRestorePath, It.IsAny<bool>()), Times.Never());
         }
+
+        [Test]
+        public void should_not_restore_config_from_zip_when_database_is_not_sqlite()
+        {
+            var config = GivenXmlFile("config.xml");
+            var database = GivenXmlFile("sonarr.db");
+
+            GivenZipContents(config, database);
+
+            Assert.Throws<RestoreBackupFailedException>(() => Subject.Restore("sonarr_backup.zip"));
+
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()), Times.Never());
+        }
     }
 }
