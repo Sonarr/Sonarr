@@ -122,14 +122,14 @@ namespace NzbDrone.Integration.Test.Client
         public TResource Post(TResource body, HttpStatusCode statusCode = HttpStatusCode.Created)
         {
             var request = BuildRequest();
-            request.AddJsonBody(body);
+            request.AddParameter("application/json", body.ToJson(), ParameterType.RequestBody);
             return Post<TResource>(request, statusCode);
         }
 
         public TResource Put(TResource body, HttpStatusCode statusCode = HttpStatusCode.Accepted)
         {
             var request = BuildRequest();
-            request.AddJsonBody(body);
+            request.AddParameter("application/json", body.ToJson(), ParameterType.RequestBody);
             return Put<TResource>(request, statusCode);
         }
 
@@ -160,14 +160,14 @@ namespace NzbDrone.Integration.Test.Client
         public object InvalidPost(TResource body, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
         {
             var request = BuildRequest();
-            request.AddJsonBody(body);
+            request.AddParameter("application/json", body.ToJson(), ParameterType.RequestBody);
             return Post<object>(request, statusCode);
         }
 
         public object InvalidPut(TResource body, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
         {
             var request = BuildRequest();
-            request.AddJsonBody(body);
+            request.AddParameter("application/json", body.ToJson(), ParameterType.RequestBody);
             return Put<object>(request, statusCode);
         }
 
