@@ -278,5 +278,38 @@ namespace NzbDrone.Core.Test.TvTests
 
             ExceptionVerification.ExpectedErrors(1);
         }
+
+        [Test]
+        public void should_update_tags_on_refreshed_series_when_refreshing_all_series()
+        {
+            var staleSeries = Builder<Series>.CreateNew()
+                                             .With(s => s.Id = _series.Id)
+                                             .Build();
+
+            GivenNewSeriesInfo(_series.JsonClone());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.GetAllSeries())
+                  .Returns(new List<Series> { staleSeries });
+
+            Mocker.GetMock<ICheckIfSeriesShouldBeRefreshed>()
+                  .Setup(s => s.ShouldRefresh(It.IsAny<Series>()))
+                  .Returns(true);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.UpdateAutoTaggingTags(It.IsAny<Series>()))
+                  .Returns(true);
+
+            Subject.Execute(new RefreshSeriesCommand());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateAutoTaggingTags(_series), Times.Once());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateAutoTaggingTags(staleSeries), Times.Never());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(staleSeries, It.IsAny<bool>(), It.IsAny<bool>()), Times.Never());
+        }
     }
 }
