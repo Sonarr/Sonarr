@@ -4,6 +4,8 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
+using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -12,8 +14,10 @@ namespace NzbDrone.Core.Datastore
         void Restore();
     }
 
-    public class DatabaseRestorationService : IRestoreDatabase
+    public class DatabaseRestorationService : IRestoreDatabase, IHandleAsync<ApplicationStartedEvent>
     {
+        private static readonly string[] DatabaseFileSuffixes = { "", "-shm", "-wal", "-journal" };
+
         private readonly IDiskProvider _diskProvider;
         private readonly IAppFolderInfo _appFolderInfo;
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(DatabaseRestorationService));
@@ -39,7 +43,7 @@ namespace NzbDrone.Core.Datastore
 
                 var dbPath = _appFolderInfo.GetDatabase();
 
-                foreach (var suffix in new[] { "", "-shm", "-wal", "-journal" })
+                foreach (var suffix in DatabaseFileSuffixes)
                 {
                     var preRestorePath = dbPath + ".pre-restore" + suffix;
 
@@ -60,6 +64,21 @@ namespace NzbDrone.Core.Datastore
             {
                 Logger.Error(e, "Failed to restore database");
                 throw;
+            }
+        }
+
+        public void HandleAsync(ApplicationStartedEvent message)
+        {
+            var dbPath = _appFolderInfo.GetDatabase();
+
+            foreach (var suffix in DatabaseFileSuffixes)
+            {
+                var preRestorePath = dbPath + ".pre-restore" + suffix;
+
+                if (_diskProvider.FileExists(preRestorePath))
+                {
+                    _diskProvider.DeleteFile(preRestorePath);
+                }
             }
         }
     }

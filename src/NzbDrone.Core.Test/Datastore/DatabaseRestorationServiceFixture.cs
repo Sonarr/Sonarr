@@ -4,6 +4,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 
@@ -71,6 +72,19 @@ namespace NzbDrone.Core.Test.Datastore
             Mocker.GetMock<IDiskProvider>().Verify(v => v.DeleteFile(_databasePath + ".pre-restore-wal"), Times.Once());
             Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(_databasePath, _databasePath + ".pre-restore", false), Times.Once());
             Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(_databaseRestorePath, _databasePath, false), Times.Once());
+        }
+
+        [Test]
+        public void should_delete_pre_restore_database_after_startup()
+        {
+            GivenFileExists(_databasePath + ".pre-restore");
+            GivenFileExists(_databasePath + ".pre-restore-wal");
+
+            Subject.HandleAsync(new ApplicationStartedEvent());
+
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.DeleteFile(_databasePath + ".pre-restore"), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.DeleteFile(_databasePath + ".pre-restore-wal"), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.DeleteFile(_databasePath), Times.Never());
         }
     }
 }
