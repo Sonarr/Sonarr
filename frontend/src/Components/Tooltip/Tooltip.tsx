@@ -71,6 +71,7 @@ function Tooltip(props: TooltipProps) {
         crossAxis: canFlip ? 'alignment' : false,
         mainAxis: canFlip,
         fallbackAxisSideDirection: 'start',
+        padding: VIEWPORT_PADDING,
       }),
       shift({ padding: VIEWPORT_PADDING }),
       size({
