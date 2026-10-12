@@ -632,6 +632,27 @@ namespace NzbDrone.Core.Test.ImportListTests
         }
 
         [Test]
+        public void should_not_add_if_excluded_series_has_duplicate_exclusions()
+        {
+            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+            WithList(1, true);
+            WithTvdbId();
+
+            Mocker.GetMock<IImportListExclusionService>()
+                  .Setup(v => v.All())
+                  .Returns(new List<ImportListExclusion>
+                  {
+                      new ImportListExclusion { TvdbId = _list1Series.First().TvdbId },
+                      new ImportListExclusion { TvdbId = _list1Series.First().TvdbId }
+                  });
+
+            Subject.Execute(_commandAll);
+
+            Mocker.GetMock<IAddSeriesService>()
+                  .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 0), It.IsAny<bool>()));
+        }
+
+        [Test]
         public void should_not_fetch_if_no_lists_are_enabled()
         {
             Mocker.GetMock<IImportListFactory>()

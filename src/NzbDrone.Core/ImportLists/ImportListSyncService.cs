@@ -134,10 +134,11 @@ namespace NzbDrone.Core.ImportLists
 
             var reportNumber = 1;
 
-            var listExclusions = _importListExclusionService.All();
+            var excludedTvdbIds = _importListExclusionService.All().Select(e => e.TvdbId).ToHashSet();
             var importLists = _importListFactory.All();
 
-            var existingSeriesIds = _seriesService.AllSeriesTvdbIds();
+            var existingSeriesIds = _seriesService.AllSeriesTvdbIds().ToDictionary(x => x.Value, x => x.Key);
+            var pendingSeriesByTvdbId = new Dictionary<int, Series>();
 
             var existingSeriesToUpdate = new Dictionary<int, HashSet<int>>();
 
@@ -221,18 +222,14 @@ namespace NzbDrone.Core.ImportLists
                 }
 
                 // Check to see if series excluded
-                var excludedSeries = listExclusions.SingleOrDefault(s => s.TvdbId == item.TvdbId);
-
-                if (excludedSeries != null)
+                if (excludedTvdbIds.Contains(item.TvdbId))
                 {
                     _logger.Debug("{0} [{1}] Rejected due to list exclusion", item.TvdbId, item.Title);
                     continue;
                 }
 
                 // Break if Series Exists in DB, if it exists, update the tags with the tags in the import list and move to the next item
-                var existingSeriesId = existingSeriesIds.FirstOrDefault(x => x.Value == item.TvdbId).Key;
-
-                if (existingSeriesId > 0)
+                if (existingSeriesIds.TryGetValue(item.TvdbId, out var existingSeriesId))
                 {
                     QueueTagsOnPendingSeries(importList, existingSeriesToUpdate, existingSeriesId);
 
@@ -240,16 +237,12 @@ namespace NzbDrone.Core.ImportLists
                     continue;
                 }
 
-                // search the existing seriesToAdd queue to see if we already have the series queued to insert
-                var pendingSeries = seriesToAdd.FirstOrDefault(s => s.TvdbId == item.TvdbId);
-
                 // Append Series if not already in DB or already on add list
-                if (pendingSeries == null)
+                if (!pendingSeriesByTvdbId.TryGetValue(item.TvdbId, out var pendingSeries))
                 {
-                    // Add the series to `seriesToAdd`
                     var monitored = importList.ShouldMonitor != MonitorTypes.None;
 
-                    seriesToAdd.Add(new Series
+                    pendingSeries = new Series
                     {
                         TvdbId = item.TvdbId,
                         Title = item.Title,
@@ -271,7 +264,10 @@ namespace NzbDrone.Core.ImportLists
                             // If seasons are provided use them for syncing monitored status, otherwise use the list setting.
                             Monitor = item.Seasons.Any() ? MonitorTypes.Skip : importList.ShouldMonitor
                         }
-                    });
+                    };
+
+                    pendingSeriesByTvdbId.Add(item.TvdbId, pendingSeries);
+                    seriesToAdd.Add(pendingSeries);
                 }
                 else
                 {
@@ -375,7 +371,7 @@ namespace NzbDrone.Core.ImportLists
 
             var itemsByList = _importListItemService.GetAllForLists(importLists.Select(l => l.Id).ToList())
                 .GroupBy(i => i.ImportListId)
-                .ToDictionary(g => g.Key, g => g.ToList());
+                .ToDictionary(g => g.Key, g => new ListItemIds(g));
 
             var seriesWithUpdatedTags = new List<Series>();
 
@@ -383,7 +379,7 @@ namespace NzbDrone.Core.ImportLists
             {
                 var tagsToRemove = series.Tags
                     .Where(tag => tagsToSync.Contains(tag) &&
-                                  !listsByTag[tag].Any(l => itemsByList.TryGetValue(l.Id, out var items) && IsSeriesOnList(series, items)))
+                                  !listsByTag[tag].Any(l => itemsByList.TryGetValue(l.Id, out var items) && items.Contains(series)))
                     .ToList();
 
                 if (tagsToRemove.Empty())
@@ -407,14 +403,33 @@ namespace NzbDrone.Core.ImportLists
             return !status.DisabledTill.HasValue && status.LastInfoSync.HasValue;
         }
 
-        private static bool IsSeriesOnList(Series series, IEnumerable<ImportListItemInfo> listItems)
+        private class ListItemIds
         {
-            return listItems.Any(l =>
-                l.TvdbId == series.TvdbId ||
-                (l.ImdbId.IsNotNullOrWhiteSpace() && series.ImdbId.IsNotNullOrWhiteSpace() && l.ImdbId == series.ImdbId) ||
-                l.TmdbId == series.TmdbId ||
-                series.MalIds.Contains(l.MalId) ||
-                series.AniListIds.Contains(l.AniListId));
+            private readonly HashSet<int> _tvdbIds;
+            private readonly HashSet<string> _imdbIds;
+            private readonly HashSet<int> _tmdbIds;
+            private readonly HashSet<int> _malIds;
+            private readonly HashSet<int> _aniListIds;
+
+            public ListItemIds(IEnumerable<ImportListItemInfo> listItems)
+            {
+                var items = listItems.ToList();
+
+                _tvdbIds = items.Select(l => l.TvdbId).ToHashSet();
+                _imdbIds = items.Where(l => l.ImdbId.IsNotNullOrWhiteSpace()).Select(l => l.ImdbId).ToHashSet();
+                _tmdbIds = items.Select(l => l.TmdbId).ToHashSet();
+                _malIds = items.Select(l => l.MalId).ToHashSet();
+                _aniListIds = items.Select(l => l.AniListId).ToHashSet();
+            }
+
+            public bool Contains(Series series)
+            {
+                return _tvdbIds.Contains(series.TvdbId) ||
+                       (series.ImdbId.IsNotNullOrWhiteSpace() && _imdbIds.Contains(series.ImdbId)) ||
+                       _tmdbIds.Contains(series.TmdbId) ||
+                       series.MalIds.Overlaps(_malIds) ||
+                       series.AniListIds.Overlaps(_aniListIds);
+            }
         }
 
         public void Execute(ImportListSyncCommand message)
@@ -451,11 +466,11 @@ namespace NzbDrone.Core.ImportLists
 
             var seriesToUpdate = new List<Series>();
             var seriesInLibrary = _seriesService.GetAllSeries();
-            var allListItems = _importListItemService.All();
+            var allListItems = new ListItemIds(_importListItemService.All());
 
             foreach (var series in seriesInLibrary)
             {
-                if (!IsSeriesOnList(series, allListItems))
+                if (!allListItems.Contains(series))
                 {
                     switch (_configService.ListSyncLevel)
                     {
