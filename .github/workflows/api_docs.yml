@@ -27,6 +27,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
@@ -40,13 +42,13 @@ jobs:
         run: |
           git config --global user.email "development@sonarr.tv"
           git config --global user.name "Sonarr"
-          git checkout -b api-docs
+          git checkout -b api-docs-v4
           git add src
           if git status | grep -q modified
           then
             git commit -am 'Automated API Docs update' -m "ignore-downstream"
-            git push -f --set-upstream origin api-docs
-            curl -X POST -H "Authorization: Bearer ${{ secrets.OPENAPI_PAT }}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/sonarr/sonarr/pulls -d '{"head":"api-docs","base":"main","title":"Update API docs"}'
+            git push -f --set-upstream origin api-docs-v4
+            curl -X POST -H "Authorization: Bearer ${{ secrets.OPENAPI_PAT }}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/sonarr/sonarr/pulls -d '{"head":"api-docs-v4","base":"main","title":"Update API docs"}'
           else
             echo "No changes since last run"
           fi
