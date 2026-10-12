@@ -1,7 +1,18 @@
 .container {
   display: flex;
+  align-items: center;
   flex: 1;
   min-width: 0;
+  gap: 7px;
+}
+
+.pathContainer {
+  display: flex;
+  min-width: 0;
+}
+
+.pendingIcon {
+  flex-shrink: 0;
 }
 
 .path {
