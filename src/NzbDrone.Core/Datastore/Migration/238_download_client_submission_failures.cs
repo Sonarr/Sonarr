@@ -3,7 +3,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(237)]
+    [Migration(238)]
     public class download_client_submission_failures : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
