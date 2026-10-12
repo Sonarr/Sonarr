@@ -54,7 +54,7 @@ jobs:
 
               await github.rest.issues.createComment({
                 ...common,
-                body: `:wave: This issue has been closed automatically because it has had no activity for ${DAYS} days while labelled \`waiting-for-info\`. If you update it to follow the issue template, reply here and we'll reopen it.`,
+                body: `:wave: This issue has been closed automatically because it has had no activity for ${DAYS} days while labelled \`waiting-for-info\`. If you update it to follow the issue template, reply here and we'll reopen it. Please do not open a new issue for the same problem, duplicates will be closed.`,
               });
 
               await github.rest.issues.update({
