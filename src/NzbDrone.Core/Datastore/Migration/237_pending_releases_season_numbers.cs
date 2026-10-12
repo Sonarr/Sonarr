@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Dapper;
 using FluentMigrator;
 using Newtonsoft.Json.Linq;
@@ -23,14 +24,15 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;
-                cmd.CommandText = "SELECT \"Id\", \"ParsedEpisodeInfo\" FROM \"PendingReleases\"";
+                cmd.CommandText = "SELECT \"Id\", \"Title\", \"ParsedEpisodeInfo\" FROM \"PendingReleases\"";
 
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
                         var id = reader.GetInt32(0);
-                        var parsedEpisodeInfo = Json.Deserialize<JObject>(reader.GetString(1));
+                        var title = reader.GetString(1);
+                        var parsedEpisodeInfo = Json.Deserialize<JObject>(reader.GetString(2));
 
                         if (!parsedEpisodeInfo.TryGetValue("seasonNumber", out var seasonNumber))
                         {
@@ -39,9 +41,18 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         if (parsedEpisodeInfo["seasonNumbers"] == null)
                         {
-                            parsedEpisodeInfo["seasonNumbers"] = seasonNumber.Type == JTokenType.Integer
-                                ? new JArray(seasonNumber.Value<int>())
-                                : new JArray();
+                            var parsedSeasonNumbers = Parser.Parser.ParseTitle(title)?.SeasonNumbers;
+
+                            if (parsedSeasonNumbers != null && parsedSeasonNumbers.Any())
+                            {
+                                parsedEpisodeInfo["seasonNumbers"] = new JArray(parsedSeasonNumbers);
+                            }
+                            else
+                            {
+                                parsedEpisodeInfo["seasonNumbers"] = seasonNumber.Type == JTokenType.Integer
+                                    ? new JArray(seasonNumber.Value<int>())
+                                    : new JArray();
+                            }
                         }
 
                         parsedEpisodeInfo.Remove("seasonNumber");
