@@ -117,7 +117,7 @@ function EditSpecificationModalContent({
 
   return (
     <ModalContent onModalClose={handleCancelPress}>
-      <ModalHeader>
+      <ModalHeader subtitle={specification.id ? specification.name : undefined}>
         {specification.id
           ? translate('EditConditionImplementation', { implementationName })
           : translate('AddConditionImplementation', { implementationName })}

@@ -115,7 +115,7 @@ function EditImportListModalContent({
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>
+      <ModalHeader subtitle={id ? name.previousValue ?? name.value : undefined}>
         {id
           ? translate('EditImportListImplementation', { implementationName })
           : translate('AddImportListImplementation', { implementationName })}
