@@ -438,6 +438,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     runtime,
     ratings,
     path,
+    pendingPath,
     statistics = {} as Statistics,
     qualityProfileId,
     language,
@@ -869,7 +870,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                 </div>
 
                 <div className={styles.heroFooter}>
-                  <SeriesDetailsPath path={path} />
+                  <SeriesDetailsPath path={path} pendingPath={pendingPath} />
 
                   <MetadataAttribution />
                 </div>

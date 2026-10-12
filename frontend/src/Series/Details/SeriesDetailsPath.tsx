@@ -12,6 +12,7 @@ import Link from 'Components/Link/Link';
 import StatusIndicator from 'Components/StatusIndicator';
 import Tooltip from 'Components/Tooltip/Tooltip';
 import { icons, kinds, sizes, tooltipPositions } from 'Helpers/Props';
+import SeriesMovePending from 'Series/SeriesMovePending';
 import { isMobile as isMobileUtil } from 'Utilities/browser';
 import translate from 'Utilities/String/translate';
 import styles from './SeriesDetailsPath.module.css';
@@ -20,9 +21,10 @@ type CopyState = 'success' | 'error' | null;
 
 interface SeriesDetailsPathProps {
   path: string;
+  pendingPath?: string;
 }
 
-function SeriesDetailsPath({ path }: SeriesDetailsPathProps) {
+function SeriesDetailsPath({ path, pendingPath }: SeriesDetailsPathProps) {
   const [state, setState] = useState<CopyState>(null);
   const isMobile = useMemo(() => isMobileUtil(), []);
   const [textElement, setTextElement] = useState<HTMLSpanElement | null>(null);
@@ -73,10 +75,12 @@ function SeriesDetailsPath({ path }: SeriesDetailsPathProps) {
     }
   }, [path]);
 
+  let pathElement: React.ReactNode = null;
+
   if (isMobile) {
-    return (
+    pathElement = (
       <Tooltip
-        className={styles.container}
+        className={styles.pathContainer}
         anchor={
           <span className={styles.path}>
             <span className={styles.icon}>
@@ -103,62 +107,73 @@ function SeriesDetailsPath({ path }: SeriesDetailsPathProps) {
         position={tooltipPositions.BOTTOM}
       />
     );
-  }
+  } else {
+    const anchor = (
+      <Link className={styles.path} onPress={handlePress}>
+        {state ? (
+          <StatusIndicator
+            className={styles.icon}
+            label={translate(
+              state === 'error' ? 'CopyToClipboardError' : 'CopiedToClipboard'
+            )}
+            role={state === 'error' ? 'alert' : 'status'}
+            aria-atomic={true}
+          >
+            <Icon
+              name={state === 'error' ? icons.DANGER : icons.CHECK}
+              kind={state === 'error' ? kinds.DANGER : kinds.SUCCESS}
+              size={14}
+              aria-hidden={true}
+            />
+          </StatusIndicator>
+        ) : (
+          <span className={styles.icon}>
+            <Icon
+              className={styles.folderIcon}
+              name={icons.FOLDER}
+              size={14}
+              aria-hidden={true}
+            />
+            <Icon
+              className={styles.copyIcon}
+              name={icons.CLIPBOARD}
+              size={14}
+              aria-hidden={true}
+            />
+          </span>
+        )}
 
-  const anchor = (
-    <Link className={styles.path} onPress={handlePress}>
-      {state ? (
-        <StatusIndicator
-          className={styles.icon}
-          label={translate(
-            state === 'error' ? 'CopyToClipboardError' : 'CopiedToClipboard'
-          )}
-          role={state === 'error' ? 'alert' : 'status'}
-          aria-atomic={true}
-        >
-          <Icon
-            name={state === 'error' ? icons.DANGER : icons.CHECK}
-            kind={state === 'error' ? kinds.DANGER : kinds.SUCCESS}
-            size={14}
-            aria-hidden={true}
-          />
-        </StatusIndicator>
-      ) : (
-        <span className={styles.icon}>
-          <Icon
-            className={styles.folderIcon}
-            name={icons.FOLDER}
-            size={14}
-            aria-hidden={true}
-          />
-          <Icon
-            className={styles.copyIcon}
-            name={icons.CLIPBOARD}
-            size={14}
-            aria-hidden={true}
-          />
+        <span ref={setTextElement} className={styles.text}>
+          {path}
         </span>
-      )}
+      </Link>
+    );
 
-      <span ref={setTextElement} className={styles.text}>
-        {path}
-      </span>
-    </Link>
-  );
-
-  if (!isTruncated) {
-    return <span className={styles.container}>{anchor}</span>;
+    pathElement = isTruncated ? (
+      <Tooltip
+        className={styles.pathContainer}
+        anchor={anchor}
+        tooltip={<span>{path}</span>}
+        kind={kinds.DEFAULT}
+        position={tooltipPositions.BOTTOM}
+        isAnchorFocusable={false}
+      />
+    ) : (
+      <span className={styles.pathContainer}>{anchor}</span>
+    );
   }
 
   return (
-    <Tooltip
-      className={styles.container}
-      anchor={anchor}
-      tooltip={<span>{path}</span>}
-      kind={kinds.DEFAULT}
-      position={tooltipPositions.BOTTOM}
-      isAnchorFocusable={false}
-    />
+    <span className={styles.container}>
+      {pathElement}
+
+      {pendingPath ? (
+        <SeriesMovePending
+          className={styles.pendingIcon}
+          pendingPath={pendingPath}
+        />
+      ) : null}
+    </span>
   );
 }
 

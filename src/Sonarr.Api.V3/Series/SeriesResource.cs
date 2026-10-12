@@ -43,6 +43,7 @@ namespace Sonarr.Api.V3.Series
 
         // View & Edit
         public string Path { get; set; }
+        public string PendingPath { get; set; }
         public int QualityProfileId { get; set; }
 
         // Editing Only
@@ -122,6 +123,7 @@ namespace Sonarr.Api.V3.Series
                        OriginalLanguage = model.OriginalLanguage,
 
                        Path = model.Path,
+                       PendingPath = model.PendingPath,
                        QualityProfileId = model.QualityProfileId,
 
                        SeasonFolder = model.SeasonFolder,
