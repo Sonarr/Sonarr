@@ -167,7 +167,10 @@ namespace NzbDrone.Core.Indexers.Torznab
         {
             try
             {
-                return Math.Min(100, Math.Max(_capabilitiesProvider.GetCapabilities(Settings).DefaultPageSize, _capabilitiesProvider.GetCapabilities(Settings).MaxPageSize));
+                return Math.Clamp(
+                    _capabilitiesProvider.GetCapabilities(Settings).DefaultPageSize,
+                    Math.Min(100, _capabilitiesProvider.GetCapabilities(Settings).MaxPageSize),
+                    _capabilitiesProvider.GetCapabilities(Settings).MaxPageSize);
             }
             catch
             {
