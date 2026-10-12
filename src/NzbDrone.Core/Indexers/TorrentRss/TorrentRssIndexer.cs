@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using System.Collections.Generic;
+using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
@@ -11,6 +12,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
         public override string Name => "Torrent RSS Feed";
 
         public override DownloadProtocol Protocol => DownloadProtocol.Torrent;
+        public override IEnumerable<FailDownloads> DefaultFailDownloads => [FailDownloads.Executables, FailDownloads.PotentiallyDangerous];
         public override bool SupportsSearch => false;
         public override int PageSize => 0;
 

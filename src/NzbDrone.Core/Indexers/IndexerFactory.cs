@@ -42,6 +42,16 @@ namespace NzbDrone.Core.Indexers
             return base.Active().Where(c => c.Enable).ToList();
         }
 
+        public override IEnumerable<IndexerDefinition> GetDefaultDefinitions()
+        {
+            return base.GetDefaultDefinitions().Select(SetDefaultFailDownloads);
+        }
+
+        public override IEnumerable<IndexerDefinition> GetPresetDefinitions(IndexerDefinition providerDefinition)
+        {
+            return base.GetPresetDefinitions(providerDefinition).Select(SetDefaultFailDownloads);
+        }
+
         public override void SetProviderCharacteristics(IIndexer provider, IndexerDefinition definition)
         {
             base.SetProviderCharacteristics(provider, definition);
@@ -156,6 +166,15 @@ namespace NzbDrone.Core.Indexers
             }
 
             return result;
+        }
+
+        private IndexerDefinition SetDefaultFailDownloads(IndexerDefinition definition)
+        {
+            var provider = _providers.First(v => v.GetType().Name == definition.Implementation);
+
+            ((IIndexerSettings)definition.Settings).FailDownloads = [.. provider.DefaultFailDownloads.Select(f => (int)f)];
+
+            return definition;
         }
     }
 }
