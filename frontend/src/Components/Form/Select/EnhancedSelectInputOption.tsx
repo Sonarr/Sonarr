@@ -15,6 +15,7 @@ export interface EnhancedSelectInputOptionProps {
   id: string | number;
   depth?: number;
   isSelected: boolean;
+  isFocused?: boolean;
   isDisabled?: boolean;
   isHidden?: boolean;
   isMultiSelect?: boolean;
@@ -28,6 +29,7 @@ function EnhancedSelectInputOption({
   id,
   depth = 0,
   isSelected,
+  isFocused = false,
   isDisabled = false,
   isHidden = false,
   isMultiSelect = false,
@@ -49,6 +51,7 @@ function EnhancedSelectInputOption({
       className={classNames(
         className,
         isSelected && !isMultiSelect && styles.isSelected,
+        isFocused && styles.isFocused,
         isDisabled && !isMultiSelect && styles.isDisabled,
         isHidden && styles.isHidden,
         isMobile && styles.isMobile
