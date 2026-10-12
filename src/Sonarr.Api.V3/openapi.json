@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.4",
   "info": {
     "title": "Sonarr",
     "description": "Sonarr API docs - The v3 API docs apply to both v3 and v4 versions of Sonarr. Some functionality may only be available in v4 of the Sonarr application.",
@@ -34,7 +34,35 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiInfoResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login/sso": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "parameters": [
+          {
+            "name": "returnUrl",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Found"
           }
         }
       }
@@ -85,8 +113,18 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "OK"
+          "302": {
+            "description": "Found"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
           }
         }
       },
@@ -101,14 +139,75 @@
         }
       }
     },
+    "/reset-password/request": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "responses": {
+          "302": {
+            "description": "Found"
+          }
+        }
+      }
+    },
+    "/reset-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "passwordConfirmation": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "token": {
+                  "style": "form"
+                },
+                "username": {
+                  "style": "form"
+                },
+                "password": {
+                  "style": "form"
+                },
+                "passwordConfirmation": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "302": {
+            "description": "Found"
+          }
+        }
+      }
+    },
     "/logout": {
       "get": {
         "tags": [
           "Authentication"
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "302": {
+            "description": "Found"
           }
         }
       }
@@ -264,6 +363,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -610,6 +712,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -773,6 +878,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -928,6 +1036,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -1083,6 +1194,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -1257,6 +1371,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -1412,6 +1529,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -1645,6 +1765,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -1883,6 +2006,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -2043,6 +2169,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -2214,6 +2343,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -2236,7 +2368,8 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "deprecated": true
       }
     },
     "/api/v3/episodefile/bulk": {
@@ -2761,6 +2894,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -2915,6 +3051,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -3153,6 +3292,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -3362,6 +3504,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -3547,6 +3692,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -3785,6 +3933,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -3891,6 +4042,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -4030,6 +4184,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -4118,6 +4275,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -4434,6 +4594,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -4588,6 +4751,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -4791,6 +4957,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -4906,6 +5075,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -5168,6 +5340,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -5318,6 +5493,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PingResource"
+                }
+              }
+            }
           }
         }
       },
@@ -5328,6 +5513,16 @@
         "responses": {
           "200": {
             "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PingResource"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
             "content": {
               "application/json": {
                 "schema": {
@@ -5421,6 +5616,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -5683,6 +5881,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -6339,6 +6540,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -6551,6 +6755,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -6575,6 +6782,41 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RenameEpisodeResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v3/rename/bulk": {
+      "get": {
+        "tags": [
+          "RenameEpisode"
+        ],
+        "parameters": [
+          {
+            "name": "seriesIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
             }
           }
         ],
@@ -6700,6 +6942,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -7045,6 +7290,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
         ],
         "responses": {
@@ -7076,6 +7329,18 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/loggedout": {
+      "get": {
+        "tags": [
+          "StaticResource"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -7366,6 +7631,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -7418,6 +7686,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -7486,6 +7757,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -7562,6 +7836,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -7704,6 +7981,23 @@
         },
         "additionalProperties": false
       },
+      "ApiInfoResource": {
+        "type": "object",
+        "properties": {
+          "current": {
+            "type": "string",
+            "nullable": true
+          },
+          "deprecated": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ApplyTags": {
         "enum": [
           "add",
@@ -7715,7 +8009,8 @@
       "AuthenticationRequiredType": {
         "enum": [
           "enabled",
-          "disabledForLocalAddresses"
+          "disabledForLocalAddresses",
+          "disabledForLocalhost"
         ],
         "type": "string"
       },
@@ -7724,7 +8019,8 @@
           "none",
           "basic",
           "forms",
-          "external"
+          "external",
+          "oidc"
         ],
         "type": "string"
       },
@@ -8095,7 +8391,8 @@
         "enum": [
           "unknown",
           "successful",
-          "unsuccessful"
+          "unsuccessful",
+          "indeterminate"
         ],
         "type": "string"
       },
@@ -8674,16 +8971,6 @@
           "unverifiedSceneNumbering": {
             "type": "boolean"
           },
-          "endTime": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "grabDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
           "series": {
             "$ref": "#/components/schemas/SeriesResource"
           },
@@ -8863,7 +9150,8 @@
             "nullable": true
           },
           "wikiUrl": {
-            "$ref": "#/components/schemas/HttpUri"
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -9002,6 +9290,10 @@
           "authenticationRequired": {
             "$ref": "#/components/schemas/AuthenticationRequiredType"
           },
+          "allowedHosts": {
+            "type": "string",
+            "nullable": true
+          },
           "analyticsEnabled": {
             "type": "boolean"
           },
@@ -9014,6 +9306,26 @@
             "nullable": true
           },
           "passwordConfirmation": {
+            "type": "string",
+            "nullable": true
+          },
+          "oidcAuthority": {
+            "type": "string",
+            "nullable": true
+          },
+          "oidcClientId": {
+            "type": "string",
+            "nullable": true
+          },
+          "oidcClientSecret": {
+            "type": "string",
+            "nullable": true
+          },
+          "oidcUserIdentifier": {
+            "type": "string",
+            "nullable": true
+          },
+          "oidcScopes": {
             "type": "string",
             "nullable": true
           },
@@ -9041,11 +9353,19 @@
             "type": "string",
             "nullable": true
           },
+          "sslKeyPath": {
+            "type": "string",
+            "nullable": true
+          },
           "sslCertPassword": {
             "type": "string",
             "nullable": true
           },
           "urlBase": {
+            "type": "string",
+            "nullable": true
+          },
+          "trustedNetworks": {
             "type": "string",
             "nullable": true
           },
@@ -9117,48 +9437,6 @@
         },
         "additionalProperties": false
       },
-      "HttpUri": {
-        "type": "object",
-        "properties": {
-          "fullUri": {
-            "type": "string",
-            "nullable": true,
-            "readOnly": true
-          },
-          "scheme": {
-            "type": "string",
-            "nullable": true,
-            "readOnly": true
-          },
-          "host": {
-            "type": "string",
-            "nullable": true,
-            "readOnly": true
-          },
-          "port": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true,
-            "readOnly": true
-          },
-          "path": {
-            "type": "string",
-            "nullable": true,
-            "readOnly": true
-          },
-          "query": {
-            "type": "string",
-            "nullable": true,
-            "readOnly": true
-          },
-          "fragment": {
-            "type": "string",
-            "nullable": true,
-            "readOnly": true
-          }
-        },
-        "additionalProperties": false
-      },
       "ImportListBulkResource": {
         "type": "object",
         "properties": {
@@ -9193,6 +9471,9 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "tagExisting": {
+            "$ref": "#/components/schemas/TagExistingType"
           }
         },
         "additionalProperties": false
@@ -9355,6 +9636,9 @@
           "seriesType": {
             "$ref": "#/components/schemas/SeriesTypes"
           },
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
           "seasonFolder": {
             "type": "boolean"
           },
@@ -9368,6 +9652,9 @@
           "minRefreshInterval": {
             "type": "string",
             "format": "date-span"
+          },
+          "tagExisting": {
+            "$ref": "#/components/schemas/TagExistingType"
           }
         },
         "additionalProperties": false
@@ -9431,6 +9718,11 @@
             "nullable": true
           },
           "priority": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "seasonSearchMaximumSingleEpisodeAge": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -10102,6 +10394,9 @@
           "episodeTitleRequired": {
             "$ref": "#/components/schemas/EpisodeTitleRequiredType"
           },
+          "skipFreeSpaceCheckWhenGrabbing": {
+            "type": "boolean"
+          },
           "skipFreeSpaceCheckWhenImporting": {
             "type": "boolean"
           },
@@ -10128,6 +10423,17 @@
           },
           "enableMediaInfo": {
             "type": "boolean"
+          },
+          "userRejectedExtensions": {
+            "type": "string",
+            "nullable": true
+          },
+          "seasonPackUpgrade": {
+            "$ref": "#/components/schemas/SeasonPackUpgradeType"
+          },
+          "seasonPackUpgradeThreshold": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
@@ -10441,7 +10747,7 @@
             "nullable": true
           },
           "parsedEpisodeInfo": {
-            "$ref": "#/components/schemas/ParsedEpisodeInfo"
+            "$ref": "#/components/schemas/ParsedEpisodeInfoResource"
           },
           "series": {
             "$ref": "#/components/schemas/SeriesResource"
@@ -10474,7 +10780,7 @@
         },
         "additionalProperties": false
       },
-      "ParsedEpisodeInfo": {
+      "ParsedEpisodeInfoResource": {
         "type": "object",
         "properties": {
           "releaseTitle": {
@@ -10490,6 +10796,14 @@
           },
           "quality": {
             "$ref": "#/components/schemas/QualityModel"
+          },
+          "seasonNumbers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
           },
           "seasonNumber": {
             "type": "integer",
@@ -10573,20 +10887,16 @@
             "nullable": true
           },
           "isDaily": {
-            "type": "boolean",
-            "readOnly": true
+            "type": "boolean"
           },
           "isAbsoluteNumbering": {
-            "type": "boolean",
-            "readOnly": true
+            "type": "boolean"
           },
           "isPossibleSpecialEpisode": {
-            "type": "boolean",
-            "readOnly": true
+            "type": "boolean"
           },
           "isPossibleSceneSeasonSpecial": {
-            "type": "boolean",
-            "readOnly": true
+            "type": "boolean"
           },
           "releaseType": {
             "$ref": "#/components/schemas/ReleaseType"
@@ -10612,6 +10922,33 @@
           "userName"
         ],
         "type": "string"
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
       },
       "ProfileFormatItemResource": {
         "type": "object",
@@ -11146,11 +11483,30 @@
           "ignored": {
             "nullable": true
           },
+          "airDateRestriction": {
+            "type": "boolean"
+          },
+          "airDateGracePeriod": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "allowSeasonPackWithoutAllEpisodesAired": {
+            "type": "boolean"
+          },
           "indexerId": {
             "type": "integer",
             "format": "int32"
           },
           "tags": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "excludedTags": {
             "uniqueItems": true,
             "type": "array",
             "items": {
@@ -11229,6 +11585,14 @@
           "seasonNumber": {
             "type": "integer",
             "format": "int32"
+          },
+          "seasonNumbers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
           },
           "languages": {
             "type": "array",
@@ -11550,6 +11914,11 @@
             "format": "int64",
             "nullable": true
           },
+          "totalSpace": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
           "unmappedFolders": {
             "type": "array",
             "items": {
@@ -11565,6 +11934,14 @@
           "console",
           "service",
           "tray"
+        ],
+        "type": "string"
+      },
+      "SeasonPackUpgradeType": {
+        "enum": [
+          "all",
+          "threshold",
+          "any"
         ],
         "type": "string"
       },
@@ -11614,6 +11991,10 @@
           },
           "monitored": {
             "type": "boolean"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
           },
           "statistics": {
             "$ref": "#/components/schemas/SeasonStatisticsResource"
@@ -11672,6 +12053,32 @@
         },
         "additionalProperties": false
       },
+      "SeasonTypeResource": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "seasonNumbers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "episodeCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "SelectOption": {
         "type": "object",
         "properties": {
@@ -11717,6 +12124,9 @@
             "format": "int32",
             "nullable": true
           },
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
           "seriesType": {
             "$ref": "#/components/schemas/SeriesTypes"
           },
@@ -11747,6 +12157,19 @@
           },
           "addImportListExclusion": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeriesFolderResource": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
+          "folder": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -11813,6 +12236,9 @@
             },
             "nullable": true
           },
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
           "originalLanguage": {
             "$ref": "#/components/schemas/Language"
           },
@@ -11820,10 +12246,28 @@
             "type": "string",
             "nullable": true
           },
+          "seasonType": {
+            "type": "string",
+            "nullable": true
+          },
           "seasons": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SeasonResource"
+            },
+            "nullable": true
+          },
+          "seasonTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeasonTypeResource"
+            },
+            "nullable": true
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeriesTranslationResource"
             },
             "nullable": true
           },
@@ -11888,6 +12332,14 @@
             "type": "string",
             "nullable": true
           },
+          "originalTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "cleanOriginalTitle": {
+            "type": "string",
+            "nullable": true
+          },
           "imdbId": {
             "type": "string",
             "nullable": true
@@ -11902,6 +12354,13 @@
           },
           "folder": {
             "type": "string",
+            "nullable": true
+          },
+          "folders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeriesFolderResource"
+            },
             "nullable": true
           },
           "certification": {
@@ -12022,6 +12481,23 @@
         },
         "additionalProperties": false
       },
+      "SeriesTranslationResource": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "overview": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "SeriesTypes": {
         "enum": [
           "standard",
@@ -12098,6 +12574,9 @@
             "type": "boolean"
           },
           "isDocker": {
+            "type": "boolean"
+          },
+          "isContainerized": {
             "type": "boolean"
           },
           "mode": {
@@ -12202,6 +12681,14 @@
             },
             "nullable": true
           },
+          "excludedReleaseProfileIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
           "indexerIds": {
             "type": "array",
             "items": {
@@ -12236,6 +12723,14 @@
           }
         },
         "additionalProperties": false
+      },
+      "TagExistingType": {
+        "enum": [
+          "none",
+          "add",
+          "sync"
+        ],
+        "type": "string"
       },
       "TagResource": {
         "type": "object",
@@ -12352,6 +12847,10 @@
             "nullable": true
           },
           "timeFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "timeZone": {
             "type": "string",
             "nullable": true
           },
@@ -12493,6 +12992,215 @@
     },
     {
       "apikey": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "ApiInfo"
+    },
+    {
+      "name": "Authentication"
+    },
+    {
+      "name": "StaticResource"
+    },
+    {
+      "name": "AutoTagging"
+    },
+    {
+      "name": "Backup"
+    },
+    {
+      "name": "Blocklist"
+    },
+    {
+      "name": "Calendar"
+    },
+    {
+      "name": "CalendarFeed"
+    },
+    {
+      "name": "Command"
+    },
+    {
+      "name": "CustomFilter"
+    },
+    {
+      "name": "CustomFormat"
+    },
+    {
+      "name": "Cutoff"
+    },
+    {
+      "name": "DelayProfile"
+    },
+    {
+      "name": "DiskSpace"
+    },
+    {
+      "name": "DownloadClient"
+    },
+    {
+      "name": "DownloadClientConfig"
+    },
+    {
+      "name": "Episode"
+    },
+    {
+      "name": "EpisodeFile"
+    },
+    {
+      "name": "FileSystem"
+    },
+    {
+      "name": "Health"
+    },
+    {
+      "name": "History"
+    },
+    {
+      "name": "HostConfig"
+    },
+    {
+      "name": "ImportList"
+    },
+    {
+      "name": "ImportListConfig"
+    },
+    {
+      "name": "ImportListExclusion"
+    },
+    {
+      "name": "Indexer"
+    },
+    {
+      "name": "IndexerConfig"
+    },
+    {
+      "name": "IndexerFlag"
+    },
+    {
+      "name": "Language"
+    },
+    {
+      "name": "LanguageProfile"
+    },
+    {
+      "name": "LanguageProfileSchema"
+    },
+    {
+      "name": "Localization"
+    },
+    {
+      "name": "Log"
+    },
+    {
+      "name": "LogFile"
+    },
+    {
+      "name": "ManualImport"
+    },
+    {
+      "name": "MediaCover"
+    },
+    {
+      "name": "MediaManagementConfig"
+    },
+    {
+      "name": "Metadata"
+    },
+    {
+      "name": "Missing"
+    },
+    {
+      "name": "NamingConfig"
+    },
+    {
+      "name": "Notification"
+    },
+    {
+      "name": "Parse"
+    },
+    {
+      "name": "Ping"
+    },
+    {
+      "name": "QualityDefinition"
+    },
+    {
+      "name": "QualityProfile"
+    },
+    {
+      "name": "QualityProfileSchema"
+    },
+    {
+      "name": "Queue"
+    },
+    {
+      "name": "QueueAction"
+    },
+    {
+      "name": "QueueDetails"
+    },
+    {
+      "name": "QueueStatus"
+    },
+    {
+      "name": "Release"
+    },
+    {
+      "name": "ReleaseProfile"
+    },
+    {
+      "name": "ReleasePush"
+    },
+    {
+      "name": "RemotePathMapping"
+    },
+    {
+      "name": "RenameEpisode"
+    },
+    {
+      "name": "RootFolder"
+    },
+    {
+      "name": "SeasonPass"
+    },
+    {
+      "name": "Series"
+    },
+    {
+      "name": "SeriesEditor"
+    },
+    {
+      "name": "SeriesFolder"
+    },
+    {
+      "name": "SeriesImport"
+    },
+    {
+      "name": "SeriesLookup"
+    },
+    {
+      "name": "System"
+    },
+    {
+      "name": "Tag"
+    },
+    {
+      "name": "TagDetails"
+    },
+    {
+      "name": "Task"
+    },
+    {
+      "name": "UiConfig"
+    },
+    {
+      "name": "Update"
+    },
+    {
+      "name": "UpdateLogFile"
     }
   ]
 }
