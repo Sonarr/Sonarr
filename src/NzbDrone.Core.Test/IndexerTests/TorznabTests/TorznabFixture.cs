@@ -155,6 +155,15 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
             Subject.PageSize.Should().Be(100);
         }
 
+        [Test]
+        public void should_use_pagesize_over_100_if_reported_in_caps()
+        {
+            _caps.MaxPageSize = 250;
+            _caps.DefaultPageSize = 200;
+
+            Subject.PageSize.Should().Be(200);
+        }
+
         [TestCase("http://localhost:9117/", "/api")]
         public void url_and_api_not_jackett_all(string baseUrl, string apiPath)
         {
