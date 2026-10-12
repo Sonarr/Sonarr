@@ -52,6 +52,11 @@ namespace Sonarr.Http.Frontend.Mappers
                    !resourceUrl.StartsWith("/logout");
         }
 
+        protected override bool FileExists(string filePath)
+        {
+            return _viteDevServer.IsEnabled || base.FileExists(filePath);
+        }
+
         protected override string ReadHtml()
         {
             if (_viteDevServer.IsEnabled)
