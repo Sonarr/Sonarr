@@ -36,6 +36,20 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(GetType());
             }
 
+            var pausedProviders = backOffProviders.Where(p => p.Status.IsSubmissionPaused()).ToList();
+
+            if (pausedProviders.Any())
+            {
+                return new HealthCheck(GetType(),
+                    backOffProviders.Count == enabledProviders.Count ? HealthCheckResult.Error : HealthCheckResult.Warning,
+                    HealthCheckReason.DownloadClientStatusSubmissionPaused,
+                    _localizationService.GetLocalizedString("DownloadClientStatusSubmissionPausedHealthCheckMessage", new Dictionary<string, object>
+                    {
+                        { "downloadClientNames", string.Join(", ", pausedProviders.Select(p => p.Provider.Definition.Name)) }
+                    }),
+                    "#download-clients-are-unavailable-due-to-failures");
+            }
+
             if (backOffProviders.Count == enabledProviders.Count)
             {
                 return new HealthCheck(GetType(),

@@ -94,7 +94,10 @@ namespace NzbDrone.Core.Download
 
         private IEnumerable<IDownloadClient> FilterBlockedClients(IEnumerable<IDownloadClient> clients)
         {
-            var blockedClients = _downloadClientStatusService.GetBlockedProviders().ToDictionary(v => v.ProviderId, v => v);
+            // Submission failures should not prevent queue monitoring and imports.
+            var blockedClients = _downloadClientStatusService.GetBlockedProviders()
+                .Where(v => v.DisabledTill.HasValue && v.DisabledTill.Value > DateTime.UtcNow)
+                .ToDictionary(v => v.ProviderId, v => v);
 
             foreach (var client in clients)
             {

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
-using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
@@ -32,7 +31,6 @@ namespace NzbDrone.Core.Download
         private readonly IRateLimitService _rateLimitService;
         private readonly IEventAggregator _eventAggregator;
         private readonly ISeedConfigProvider _seedConfigProvider;
-        private readonly ICached<bool> _failedDownloadClients;
         private readonly Logger _logger;
 
         public DownloadService(IProvideDownloadClient downloadClientProvider,
@@ -42,7 +40,6 @@ namespace NzbDrone.Core.Download
                                IRateLimitService rateLimitService,
                                IEventAggregator eventAggregator,
                                ISeedConfigProvider seedConfigProvider,
-                               ICacheManager cacheManager,
                                Logger logger)
         {
             _downloadClientProvider = downloadClientProvider;
@@ -52,7 +49,6 @@ namespace NzbDrone.Core.Download
             _rateLimitService = rateLimitService;
             _eventAggregator = eventAggregator;
             _seedConfigProvider = seedConfigProvider;
-            _failedDownloadClients = cacheManager.GetCache<bool>(GetType(), "failedDownloadClients");
             _logger = logger;
         }
 
@@ -87,12 +83,6 @@ namespace NzbDrone.Core.Download
             {
                 if (triedClients.Contains(downloadClient.Definition.Id))
                 {
-                    continue;
-                }
-
-                if (filterBlockedClients && _failedDownloadClients.Find(downloadClient.Definition.Id.ToString()))
-                {
-                    _logger.Debug("Temporarily ignoring download client {0} due to recent submission failures.", downloadClient.Definition.Name);
                     continue;
                 }
 
@@ -161,7 +151,7 @@ namespace NzbDrone.Core.Download
             try
             {
                 downloadClientId = await downloadClient.Download(remoteEpisode, indexer);
-                _failedDownloadClients.Remove(downloadClient.Definition.Id.ToString());
+                _downloadClientStatusService.RecordSubmissionSuccess(downloadClient.Definition.Id);
                 _downloadClientStatusService.RecordSuccess(downloadClient.Definition.Id);
                 _indexerStatusService.RecordSuccess(remoteEpisode.Release.IndexerId);
             }
@@ -195,9 +185,7 @@ namespace NzbDrone.Core.Download
             }
             catch (Exception ex) when (ex is DownloadClientException or IOException or UnauthorizedAccessException)
             {
-                // Queue polling can succeed even when adding downloads fails.
-                _failedDownloadClients.Set(downloadClient.Definition.Id.ToString(), true, TimeSpan.FromMinutes(5));
-                _downloadClientStatusService.RecordFailure(downloadClient.Definition.Id, TimeSpan.FromMinutes(5));
+                _downloadClientStatusService.RecordSubmissionFailure(downloadClient.Definition.Id);
 
                 throw new DownloadClientUnavailableException("Unable to add download to {0}", ex, downloadClient.Definition.Name);
             }

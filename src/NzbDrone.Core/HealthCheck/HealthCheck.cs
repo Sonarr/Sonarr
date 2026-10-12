@@ -64,6 +64,7 @@ namespace NzbDrone.Core.HealthCheck
         DownloadClientSorting,
         DownloadClientStatusAllClients,
         DownloadClientStatusSingleClient,
+        DownloadClientStatusSubmissionPaused,
         ImportListRootFolderMissing,
         ImportListRootFolderMultipleMissing,
         ImportListStatusAllUnavailable,
