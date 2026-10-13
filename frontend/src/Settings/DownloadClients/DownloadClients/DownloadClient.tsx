@@ -8,6 +8,10 @@ import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
 import TagList from 'Components/TagList';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import { icons, kinds, sizes } from 'Helpers/Props';
+import {
+  getProviderTestStatusLabel,
+  ProviderTestStatus,
+} from 'Settings/ProviderTestAllResult';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import EditDownloadClientModal from './EditDownloadClientModal';
@@ -20,6 +24,7 @@ interface DownloadClientProps {
   enable: boolean;
   priority: number;
   tags: number[];
+  testStatus?: ProviderTestStatus;
   onCloneDownloadClientPress: (id: number) => void;
 }
 
@@ -30,6 +35,7 @@ function DownloadClient({
   enable,
   priority,
   tags,
+  testStatus,
   onCloneDownloadClientPress,
 }: DownloadClientProps) {
   const tagList = useTagList();
@@ -65,10 +71,21 @@ function DownloadClient({
     onCloneDownloadClientPress(id);
   }, [id, onCloneDownloadClientPress]);
 
+  const testStatusLabel = testStatus
+    ? getProviderTestStatusLabel(testStatus)
+    : undefined;
+
   return (
     <SettingsCard
       name={name}
-      aria-label={translate('EditDownloadClientName', { name })}
+      aria-label={
+        testStatusLabel
+          ? translate('EditDownloadClientNameWithTestStatus', {
+              name,
+              testStatus: testStatusLabel,
+            })
+          : translate('EditDownloadClientName', { name })
+      }
       actions={
         <SettingsCardAction
           title={translate('CloneDownloadClient')}
@@ -84,6 +101,7 @@ function DownloadClient({
         segments={[
           translate(enable ? 'Enabled' : 'Disabled'),
           priority > 1 ? translate('PrioritySettings', { priority }) : null,
+          testStatusLabel,
         ]}
       />
 
