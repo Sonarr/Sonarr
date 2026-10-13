@@ -1,16 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import FieldSet from 'Components/FieldSet';
-import IconButton from 'Components/Link/IconButton';
-import SpinnerButton from 'Components/Link/SpinnerButton';
+import Icon from 'Components/Icon';
+import Link from 'Components/Link/Link';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageSectionContent from 'Components/Page/PageSectionContent';
-import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TablePager from 'Components/Table/TablePager';
-import TableRow from 'Components/Table/TableRow';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { icons, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
@@ -186,27 +184,6 @@ function ImportListExclusionsContent() {
                 />
               );
             })}
-
-            <TableRow>
-              <TableRowCell colSpan={3}>
-                <SpinnerButton
-                  kind={kinds.DANGER}
-                  isSpinning={isDeleting}
-                  isDisabled={!anySelected}
-                  onPress={handleDeleteSelectedPress}
-                >
-                  {translate('Delete')}
-                </SpinnerButton>
-              </TableRowCell>
-
-              <TableRowCell>
-                <IconButton
-                  name={icons.ADD}
-                  aria-label={translate('Add')}
-                  onPress={setAddImportListExclusionModalOpen}
-                />
-              </TableRowCell>
-            </TableRow>
           </TableBody>
         </Table>
 
@@ -215,8 +192,30 @@ function ImportListExclusionsContent() {
           totalPages={totalPages}
           totalRecords={totalRecords}
           isFetching={isFetching}
+          leftActions={
+            <Link
+              className={styles.deleteRow}
+              isDisabled={!anySelected || isDeleting}
+              onPress={handleDeleteSelectedPress}
+            >
+              <Icon
+                name={isDeleting ? icons.SPINNER : icons.DELETE}
+                size={12}
+                isSpinning={isDeleting}
+              />
+              {translate('DeleteSelected')}
+            </Link>
+          }
           onPageSelect={goToPage}
         />
+
+        <Link
+          className={styles.addRow}
+          onPress={setAddImportListExclusionModalOpen}
+        >
+          <Icon name={icons.ADD} size={12} />
+          {translate('AddImportListExclusion')}
+        </Link>
 
         <EditImportListExclusionModal
           isOpen={isAddImportListExclusionModalOpen}

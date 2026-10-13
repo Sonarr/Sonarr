@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
-import IconButton from 'Components/Link/IconButton';
+import Icon from 'Components/Icon';
+import Link from 'Components/Link/Link';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { icons, kinds } from 'Helpers/Props';
@@ -57,15 +58,13 @@ function RemotePathMappings() {
           })}
         </div>
 
-        <div className={styles.addRemotePathMapping}>
-          <IconButton
-            className={styles.addButton}
-            name={icons.ADD}
-            aria-label={translate('AddRemotePathMapping')}
-            title={translate('AddRemotePathMapping')}
-            onPress={handleAddRemotePathMappingPress}
-          />
-        </div>
+        <Link
+          className={styles.addRow}
+          onPress={handleAddRemotePathMappingPress}
+        >
+          <Icon name={icons.ADD} size={12} />
+          {translate('AddRemotePathMapping')}
+        </Link>
 
         <EditRemotePathMappingModal
           isOpen={isAddRemotePathMappingModalOpen}
