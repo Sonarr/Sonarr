@@ -132,6 +132,33 @@ const seasonPackUpgradeOptions: EnhancedSelectInputValue<string>[] = [
   },
 ];
 
+const seasonPackUpgradeThresholdExampleTotals = [8, 12, 24];
+
+function getSeasonPackUpgradeThresholdExamples(threshold: number) {
+  if (typeof threshold !== 'number' || threshold < 0 || threshold > 100) {
+    return undefined;
+  }
+
+  const examples = seasonPackUpgradeThresholdExampleTotals.map(
+    (totalEpisodes) => {
+      let numberEpisodes = 0;
+
+      while ((numberEpisodes / totalEpisodes) * 100 < threshold) {
+        numberEpisodes++;
+      }
+
+      return translate('SeasonPackUpgradeThresholdHelpTextExample', {
+        numberEpisodes,
+        totalEpisodes,
+      });
+    }
+  );
+
+  return translate('SeasonPackUpgradeThresholdHelpTextExamples', {
+    examples: examples.join(', '),
+  });
+}
+
 function MediaManagement() {
   const showAdvancedSettings = useShowAdvancedSettings();
   const isWindows = useIsWindows();
@@ -500,33 +527,8 @@ function MediaManagement() {
                             )}
                           />
                           <FormInputHelpText
-                            text={translate(
-                              'SeasonPackUpgradeThresholdHelpTextExample',
-                              {
-                                numberEpisodes: 2,
-                                totalEpisodes: 8,
-                                count: Math.ceil((100 * 2) / 8),
-                              }
-                            )}
-                          />
-                          <FormInputHelpText
-                            text={translate(
-                              'SeasonPackUpgradeThresholdHelpTextExample',
-                              {
-                                numberEpisodes: 3,
-                                totalEpisodes: 12,
-                                count: Math.ceil((100 * 3) / 12),
-                              }
-                            )}
-                          />
-                          <FormInputHelpText
-                            text={translate(
-                              'SeasonPackUpgradeThresholdHelpTextExample',
-                              {
-                                numberEpisodes: 6,
-                                totalEpisodes: 24,
-                                count: Math.ceil((100 * 6) / 24),
-                              }
+                            text={getSeasonPackUpgradeThresholdExamples(
+                              settings.seasonPackUpgradeThreshold.value
                             )}
                           />
                           <FormInput
