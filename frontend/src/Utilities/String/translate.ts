@@ -1,6 +1,10 @@
 let translations: Record<string, string> = {};
 
 export function setTranslations(translationData: Record<string, string>) {
+  if (translationData === translations) {
+    return;
+  }
+
   translations = translationData;
 }
 

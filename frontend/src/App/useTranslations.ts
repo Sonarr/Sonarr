@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import { setTranslations } from 'Utilities/String/translate';
 
@@ -15,11 +14,9 @@ export function useTranslations() {
     },
   });
 
-  useEffect(() => {
-    if (data) {
-      setTranslations(data.strings);
-    }
-  }, [data]);
+  if (data) {
+    setTranslations(data.strings);
+  }
 
   return {
     ...result,
