@@ -31,7 +31,7 @@ public abstract class TmdbParserBase<TResponse> : IParseImportListResponse
         // When MediaType is null/empty, it is implied to be a media type of "tv".
         if (resource.MediaType.IsNullOrWhiteSpace() || resource.MediaType == "tv")
         {
-            return new ImportListItemInfo()
+            return new ImportListItemInfo
             {
                 TmdbId = resource.Id,
                 Title = resource.Name
@@ -48,14 +48,14 @@ public abstract class TmdbParserBase<TResponse> : IParseImportListResponse
         if (importListResponse.HttpResponse.StatusCode != HttpStatusCode.OK)
         {
             throw new ImportListException(importListResponse,
-                $"TMDb API(${importListResponse.Request.Url.Path}) call resulted in an unexpected StatusCode [{importListResponse.HttpResponse.StatusCode}]");
+                $"TMDb API({importListResponse.Request.Url.Path}) call resulted in an unexpected StatusCode [{importListResponse.HttpResponse.StatusCode}]");
         }
 
         if (importListResponse.HttpResponse.Headers.ContentType != null && !importListResponse.HttpResponse.Headers.ContentType.Contains("application/json", StringComparison.OrdinalIgnoreCase) &&
             importListResponse.HttpRequest.Headers.Accept != null && importListResponse.HttpRequest.Headers.Accept.Contains("application/json", StringComparison.OrdinalIgnoreCase))
         {
             throw new ImportListException(importListResponse,
-                $"TMDb API(${importListResponse.Request.Url.Path}) responded with html content. Site is likely blocked or unavailable.");
+                $"TMDb API({importListResponse.Request.Url.Path}) responded with html content. Site is likely blocked or unavailable.");
         }
 
         return true;

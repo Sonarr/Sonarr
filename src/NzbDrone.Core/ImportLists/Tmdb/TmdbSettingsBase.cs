@@ -1,3 +1,4 @@
+using System;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
@@ -10,6 +11,9 @@ public abstract class TmdbSettingsBaseValidator<TSettings> : AbstractValidator<T
     protected TmdbSettingsBaseValidator()
     {
         RuleFor(c => c.BaseUrl).ValidRootUrl();
+
+        RuleFor(c => c.BaseUrl).Must(url => string.Equals(url?.TrimEnd('/'), TmdbSettingsBase<TSettings>.DefaultBaseUrl, StringComparison.OrdinalIgnoreCase))
+            .WithMessage("Must be " + TmdbSettingsBase<TSettings>.DefaultBaseUrl);
 
         RuleFor(c => c.AuthToken).NotEmpty()
             .OverridePropertyName("SignIn")
@@ -29,7 +33,9 @@ public abstract class TmdbSettingsBase<TSettings> : ImportListSettingsBase<TSett
         SignIn = "startOAuth";
     }
 
-    public override string BaseUrl { get; set; } = "https://api.themoviedb.org";
+    public const string DefaultBaseUrl = "https://api.themoviedb.org";
+
+    public override string BaseUrl { get; set; } = DefaultBaseUrl;
 
     [FieldDefinition(0, Label = "ImportListsTmdbSettingsAccountId", Type = FieldType.Textbox, Hidden = HiddenType.Hidden, Advanced = true)]
     public string AccountId { get; set; }
