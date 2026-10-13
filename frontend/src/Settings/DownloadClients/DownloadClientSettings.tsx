@@ -5,6 +5,7 @@ import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import SectionHeading from 'Components/SectionHeading';
+import StatusIndicator from 'Components/StatusIndicator';
 import { icons } from 'Helpers/Props';
 import settingsStyles from 'Settings/Settings.module.css';
 import SettingsPage from 'Settings/SettingsPage';
@@ -20,8 +21,12 @@ import DownloadClientOptions from './Options/DownloadClientOptions';
 import RemotePathMappings from './RemotePathMappings/RemotePathMappings';
 
 function DownloadClientSettings() {
-  const { testAllDownloadClients, isTestingAllDownloadClients } =
-    useTestAllDownloadClients();
+  const {
+    testAllDownloadClients,
+    isTestingAllDownloadClients,
+    testAllResults,
+    testAllError,
+  } = useTestAllDownloadClients();
 
   const saveOptions = useRef<() => void>();
 
@@ -60,6 +65,16 @@ function DownloadClientSettings() {
     testAllDownloadClients();
   }, [testAllDownloadClients]);
 
+  let testStatusLabel: string | undefined = undefined;
+
+  if (isTestingAllDownloadClients) {
+    testStatusLabel = translate('TestingAllDownloadClients');
+  } else if (testAllResults) {
+    testStatusLabel = translate('DownloadClientTestAllCompleted');
+  } else if (testAllError) {
+    testStatusLabel = translate('DownloadClientTestAllFailed');
+  }
+
   return (
     <SettingsPage
       title={translate('DownloadClientSettings')}
@@ -94,6 +109,16 @@ function DownloadClientSettings() {
       onSavePress={handleSavePress}
     >
       <PageContentBody>
+        {testStatusLabel ? (
+          <StatusIndicator
+            label={testStatusLabel}
+            role={testAllError ? 'alert' : 'status'}
+            aria-atomic={true}
+          >
+            <span />
+          </StatusIndicator>
+        ) : null}
+
         <div className={settingsStyles.section}>
           <PageHeading
             scope={translate('Settings')}
@@ -106,7 +131,7 @@ function DownloadClientSettings() {
               description={translate('DownloadClientsSectionDescription')}
             />
 
-            <DownloadClients />
+            <DownloadClients testResults={testAllResults} />
           </div>
 
           <DownloadClientOptions

@@ -1,7 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import AddCard from 'Components/SettingsCard/AddCard';
 import settingsCardStyles from 'Components/SettingsCard/SettingsCard.module.css';
+import {
+  getProviderTestStatus,
+  ProviderTestAllResult,
+} from 'Settings/ProviderTestAllResult';
 import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import AddDownloadClientModal from './AddDownloadClientModal';
@@ -9,8 +13,17 @@ import DownloadClient from './DownloadClient';
 import EditDownloadClientModal from './EditDownloadClientModal';
 import { useSortedDownloadClients } from './useDownloadClients';
 
-function DownloadClients() {
+interface DownloadClientsProps {
+  testResults?: ProviderTestAllResult[];
+}
+
+function DownloadClients({ testResults }: DownloadClientsProps) {
   const { isFetching, isFetched, data, error } = useSortedDownloadClients();
+
+  const testResultById = useMemo(
+    () => new Map(testResults?.map((result) => [result.id, result])),
+    [testResults]
+  );
 
   const [isAddDownloadClientModalOpen, setIsAddDownloadClientModalOpen] =
     useState(false);
@@ -61,6 +74,11 @@ function DownloadClients() {
             <DownloadClient
               key={item.id}
               {...item}
+              testStatus={
+                testResults
+                  ? getProviderTestStatus(testResultById.get(item.id))
+                  : undefined
+              }
               onCloneDownloadClientPress={handleCloneDownloadClientPress}
             />
           );
