@@ -23,7 +23,7 @@ function EpisodeSearch({
   onModalClose,
 }: EpisodeSearchProps) {
   const executeCommand = useExecuteCommand();
-  const { isFetched } = useReleases({ episodeId });
+  const { isFetched } = useReleases({ episodeId }, { enabled: false });
 
   const [isInteractiveSearchOpen, setIsInteractiveSearchOpen] = useState(
     startInteractiveSearch || isFetched

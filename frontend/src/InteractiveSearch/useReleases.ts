@@ -382,7 +382,15 @@ const releaseStore = create<ReleaseStore>(() => ({
 const DEFAULT_RELEASES: Release[] = [];
 const THIRTY_MINUTES = 30 * 60 * 1000;
 
-const useReleases = (payload: InteractiveSearchPayload, filter = '') => {
+interface UseReleasesOptions {
+  filter?: string;
+  enabled?: boolean;
+}
+
+const useReleases = (
+  payload: InteractiveSearchPayload,
+  { filter = '', enabled = true }: UseReleasesOptions = {}
+) => {
   const customFilters = useCustomFiltersList('releases');
   const { episodeSelectedFilterKey, seasonSelectedFilterKey } =
     useReleaseOptions();
@@ -398,6 +406,7 @@ const useReleases = (payload: InteractiveSearchPayload, filter = '') => {
       ...payload,
     },
     queryOptions: {
+      enabled,
       // Cache and stale times set to 30 minutes
       staleTime: THIRTY_MINUTES,
       gcTime: THIRTY_MINUTES,
