@@ -17,21 +17,21 @@ public class TmdbPersonParser : TmdbParserBase<TmdbCreditsResource>
     {
         var items = Enumerable.Empty<ImportListItemInfo>();
 
-        var departments = _settings.IncludeDepartmentTypes
+        var departments = (_settings.IncludeDepartmentTypes ?? [])
             .Cast<TmdbDepartmentType>()
             .Select(department => department switch
             {
-                TmdbDepartmentType.CostumeMakeup => "Costume & Makeup",
+                TmdbDepartmentType.CostumeMakeup => "Costume & Make-Up",
                 TmdbDepartmentType.VisualEffects => "Visual Effects",
                 _ => department.ToString()
             }).ToHashSet();
 
-        if (_settings.IncludingCastCredits && resource.Cast.Count > 0)
+        if (_settings.IncludingCastCredits && resource?.Cast?.Count > 0)
         {
             items = resource.Cast.Select(AsImportable);
         }
 
-        if (departments.Count > 0 && resource.Crew.Count > 0)
+        if (departments.Count > 0 && resource?.Crew?.Count > 0)
         {
             items = items.Concat(resource.Crew
                 .Where(c => departments.Contains(c.Department))

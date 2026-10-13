@@ -7,19 +7,15 @@ using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.ImportLists.Tmdb.Person;
 
-public class TmdbPersonImport : TmdbImportBase<TmdbPersonSettings>
+public class TmdbPersonImport(ISonarrCloudRequestBuilder requestBuilder,
+                              IHttpClient httpClient,
+                              IImportListStatusService importListStatusService,
+                              IConfigService configService,
+                              IParsingService parsingService,
+                              ILocalizationService localizationService,
+                              Logger logger)
+    : TmdbImportBase<TmdbPersonSettings>(requestBuilder, httpClient, importListStatusService, configService, parsingService, localizationService, logger)
 {
-    public TmdbPersonImport(ISonarrCloudRequestBuilder requestBuilder,
-                            IHttpClient httpClient,
-                            IImportListStatusService importListStatusService,
-                            IConfigService configService,
-                            IParsingService parsingService,
-                            ILocalizationService localizationService,
-                            Logger logger)
-        : base(requestBuilder, httpClient, importListStatusService, configService, parsingService, localizationService, logger)
-    {
-    }
-
     public override string Name => "TMDb Person";
 
     public override IParseImportListResponse GetParser()

@@ -12,7 +12,7 @@ public class TmdbPersonSettingsValidator : TmdbSettingsBaseValidator<TmdbPersonS
         RuleFor(c => c.PersonId).GreaterThan(0);
 
         RuleFor(c => c.IncludingCastCredits).Equal(true)
-            .When(c => !c.IncludeDepartmentTypes.Any())
+            .When(c => c.IncludeDepartmentTypes?.Any() != true)
             .WithMessage("Must choose to include cast credit filter when not including crew department credits.");
 
         RuleFor(c => c.IncludeDepartmentTypes).NotEmpty()
@@ -21,23 +21,16 @@ public class TmdbPersonSettingsValidator : TmdbSettingsBaseValidator<TmdbPersonS
     }
 }
 
-public class TmdbPersonSettings : TmdbSettingsBase<TmdbPersonSettings>
+public class TmdbPersonSettings() : TmdbSettingsBase<TmdbPersonSettings>(Validator)
 {
     private static readonly TmdbPersonSettingsValidator Validator = new();
-
-    public TmdbPersonSettings()
-        : base(Validator)
-    {
-        IncludingCastCredits = true;
-        IncludeDepartmentTypes = [];
-    }
 
     [FieldDefinition(1, Label = "ImportListsTmdbSettingsPersonId", HelpText = "ImportListsTmdbSettingsPersonIdHelpText", Type = FieldType.Number)]
     public int PersonId { get; set; }
 
     [FieldDefinition(2, Label = "ImportListsTmdbSettingsIncludingCastCredits", HelpText = "ImportListsTmdbSettingsIncludingCastCreditsHelpText", Type = FieldType.Checkbox)]
-    public bool IncludingCastCredits { get; set; }
+    public bool IncludingCastCredits { get; set; } = true;
 
     [FieldDefinition(3, Label = "ImportListsTmdbSettingsIncludeDepartmentTypes", HelpText = "ImportListsTmdbSettingsIncludeDepartmentTypesHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbDepartmentType))]
-    public IEnumerable<int> IncludeDepartmentTypes { get; set; }
+    public IEnumerable<int> IncludeDepartmentTypes { get; set; } = [];
 }
