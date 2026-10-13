@@ -28,6 +28,7 @@
   position: relative;
   display: inline-flex;
   align-items: center;
+  overflow: hidden;
   padding: 4px 8px;
   border: none;
   border-radius: 6px;
