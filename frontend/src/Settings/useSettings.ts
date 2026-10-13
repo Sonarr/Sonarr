@@ -1,13 +1,17 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 import useApiMutation from 'Helpers/Hooks/useApiMutation';
-import useApiQuery from 'Helpers/Hooks/useApiQuery';
+import useApiQuery, { QueryOptions } from 'Helpers/Hooks/useApiQuery';
 import { usePendingChangesStore } from 'Helpers/Hooks/usePendingChangesStore';
 import selectSettings from 'Utilities/selectSettings';
 
-export const useSettings = <T extends object>(path: string) => {
+export const useSettings = <T extends object>(
+  path: string,
+  queryOptions?: QueryOptions<T>['queryOptions']
+) => {
   const result = useApiQuery<T>({
     path,
+    queryOptions,
   });
 
   return {
