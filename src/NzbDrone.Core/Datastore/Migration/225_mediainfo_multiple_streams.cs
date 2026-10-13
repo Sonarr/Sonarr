@@ -1,15 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using Dapper;
 using FluentMigrator;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Migration.Framework;
-using NzbDrone.Core.MediaFiles.MediaInfo;
 
 namespace NzbDrone.Core.Datastore.Migration;
 
@@ -27,7 +26,7 @@ public class mediainfo_multiple_streams : NzbDroneMigrationBase
             PropertyNameCaseInsensitive = true,
             DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            WriteIndented = true
+            WriteIndented = false
         };
 
         serializerSettings.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, true));
@@ -44,192 +43,141 @@ public class mediainfo_multiple_streams : NzbDroneMigrationBase
 
     private void MigrateMediaInfoToMultipleStreams(IDbConnection conn, IDbTransaction tran)
     {
-        var existing = conn.Query<EpisodeFile224>("SELECT \"Id\", \"MediaInfo\" FROM \"EpisodeFiles\"");
+        var lastId = 0;
 
-        foreach (var row in existing)
+        while (true)
         {
-            if (row.MediaInfo.IsNullOrWhiteSpace())
+            var files = conn.Query<EpisodeFile225>(
+                    """
+                    SELECT "Id", "MediaInfo"
+                    FROM "EpisodeFiles"
+                    WHERE "MediaInfo" IS NOT NULL
+                    AND "Id" > @LastId
+                    ORDER BY "Id"
+                    LIMIT 1000
+                    """,
+                    new { LastId = lastId },
+                    tran)
+                .AsList();
+
+            if (files.Count == 0)
             {
-                continue;
+                break;
             }
 
-            MediaInfo224 oldMediaInfo;
-            try
+            var updated = new List<EpisodeFile225>();
+
+            foreach (var file in files.Where(file => file.MediaInfo.IsNotNullOrWhiteSpace()))
             {
-                oldMediaInfo = JsonSerializer.Deserialize<MediaInfo224>(row.MediaInfo, _serializerSettings);
+                JsonObject mediaInfo;
+
+                try
+                {
+                    mediaInfo = JsonSerializer.Deserialize<JsonObject>(file.MediaInfo, _serializerSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _logger.Warn(ex, "Episode {EpisodeId} contains invalid JSON data, skipping.", file.Id);
+
+                    updated.Add(new EpisodeFile225 { Id = file.Id, MediaInfo = null });
+
+                    continue;
+                }
+
+                if (mediaInfo["audioStreams"] is JsonArray && mediaInfo["subtitleStreams"] is JsonArray)
+                {
+                    _logger.Warn("Episode {EpisodeId} might be already migrated, skipping. Reason: Existing audioStreams and subtitleStreams fields.", file.Id);
+
+                    continue;
+                }
+
+                if (mediaInfo["audioLanguages"] == null && mediaInfo["subtitles"] == null)
+                {
+                    _logger.Warn("Episode {EpisodeId} might be already migrated, skipping. Reason: Missing audioLanguages and subtitles fields.", file.Id);
+
+                    continue;
+                }
+
+                if (mediaInfo["audioLanguages"] is not JsonArray || mediaInfo["subtitles"] is not JsonArray)
+                {
+                    _logger.Warn("Episode {EpisodeId} contains invalid JSON data for audioLanguages and/or subtitles, skipping.", file.Id);
+
+                    updated.Add(new EpisodeFile225 { Id = file.Id, MediaInfo = null });
+
+                    continue;
+                }
+
+                mediaInfo["audioStreams"] = MigrateAudioStreams(mediaInfo);
+                mediaInfo["subtitleStreams"] = MigrateSubtitleStreams(mediaInfo);
+
+                mediaInfo.Remove("audioLanguages");
+                mediaInfo.Remove("audioFormat");
+                mediaInfo.Remove("audioCodecID");
+                mediaInfo.Remove("audioProfile");
+                mediaInfo.Remove("audioBitrate");
+                mediaInfo.Remove("audioChannels");
+                mediaInfo.Remove("audioChannelPositions");
+                mediaInfo.Remove("subtitles");
+
+                updated.Add(new EpisodeFile225
+                {
+                    Id = file.Id,
+                    MediaInfo = JsonSerializer.Serialize(mediaInfo, _serializerSettings)
+                });
             }
-            catch (JsonException ex)
-            {
-                _logger.Warn(ex, "Episode {EpisodeId} contains invalid JSON data, skipping.", row.Id);
 
-                UpdateMediaInfoForEpisodeFile(conn, tran, new EpisodeFile225 { Id = row.Id, MediaInfo = null });
+            UpdateMediaInfoForEpisodeFile(conn, tran, updated);
 
-                continue;
-            }
-
-            if (oldMediaInfo.SchemaRevision >= 14)
-            {
-                continue;
-            }
-
-            var newMediaInfo = MigrateMediaInfo(oldMediaInfo);
-
-            if (oldMediaInfo.AudioLanguages == null && oldMediaInfo.Subtitles == null)
-            {
-                _logger.Warn("Episode {EpisodeId} might be already migrated, skipping.", row.Id);
-
-                continue;
-            }
-
-            UpdateMediaInfoForEpisodeFile(conn, tran, new EpisodeFile225
-            {
-                Id = row.Id,
-                MediaInfo = JsonSerializer.Serialize(newMediaInfo, _serializerSettings)
-            });
+            lastId = files[^1].Id;
         }
     }
 
-    private static void UpdateMediaInfoForEpisodeFile(IDbConnection conn, IDbTransaction tran, EpisodeFile225 updated)
+    private static void UpdateMediaInfoForEpisodeFile(IDbConnection conn, IDbTransaction tran, IReadOnlyList<EpisodeFile225> updated)
     {
         conn.Execute("UPDATE \"EpisodeFiles\" SET \"MediaInfo\" = @MediaInfo WHERE \"Id\" = @Id", updated, transaction: tran);
     }
 
-    private static MediaInfo225 MigrateMediaInfo(MediaInfo224 old)
+    private static JsonArray MigrateAudioStreams(JsonObject mediaInfo)
     {
-        return new MediaInfo225
-        {
-            RawStreamData = old.RawStreamData,
-            SchemaRevision = old.SchemaRevision,
-            ContainerFormat = old.ContainerFormat,
-            VideoFormat = old.VideoFormat,
-            VideoCodecID = old.VideoCodecID,
-            VideoProfile = old.VideoProfile,
-            VideoBitrate = old.VideoBitrate,
-            VideoBitDepth = old.VideoBitDepth,
-            VideoColourPrimaries = old.VideoColourPrimaries,
-            VideoTransferCharacteristics = old.VideoTransferCharacteristics,
-            VideoHdrFormat = old.VideoHdrFormat,
-            Height = old.Height,
-            Width = old.Width,
-            RunTime = old.RunTime,
-            VideoFps = old.VideoFps,
-            AudioStreams = MigrateAudioStreams(old),
-            SubtitleStreams = MigrateSubtitleStreams(old),
-            ScanType = old.ScanType
-        };
-    }
-
-    private static List<MediaInfoAudioStream225> MigrateAudioStreams(MediaInfo224 old)
-    {
-        var audioStreams = old.AudioLanguages?
-            .Select(language => new MediaInfoAudioStream225
+        var audioStreams = mediaInfo["audioLanguages"]?
+            .AsArray()
+            .Select(language => new JsonObject
             {
-                Language = language,
+                ["language"] = language.GetValue<string>(),
             })
             .ToList() ?? [];
 
         if (audioStreams.Count == 0)
         {
-            audioStreams.Add(new MediaInfoAudioStream225 { Language = "und" });
+            audioStreams.Add(new JsonObject
+            {
+                ["language"] = "und"
+            });
         }
 
-        audioStreams.FirstOrDefault()?.Format = old.AudioFormat;
-        audioStreams.FirstOrDefault()?.CodecId = old.AudioCodecID;
-        audioStreams.FirstOrDefault()?.Profile = old.AudioProfile;
-        audioStreams.FirstOrDefault()?.Bitrate = old.AudioBitrate;
-        audioStreams.FirstOrDefault()?.Channels = old.AudioChannels;
-        audioStreams.FirstOrDefault()?.ChannelPositions = old.AudioChannelPositions;
+        audioStreams.FirstOrDefault()?["format"] = mediaInfo["audioFormat"]?.GetValue<string>();
+        audioStreams.FirstOrDefault()?["codecId"] = mediaInfo["audioCodecID"]?.GetValue<string>();
+        audioStreams.FirstOrDefault()?["profile"] = mediaInfo["audioProfile"]?.GetValue<string>();
+        audioStreams.FirstOrDefault()?["bitrate"] = mediaInfo["audioBitrate"]?.GetValue<long>();
+        audioStreams.FirstOrDefault()?["channels"] = mediaInfo["audioChannels"]?.GetValue<int>();
+        audioStreams.FirstOrDefault()?["channelPositions"] = mediaInfo["audioChannelPositions"]?.GetValue<string>();
 
-        return audioStreams;
+        return new JsonArray(audioStreams.ToArray());
     }
 
-    private static List<MediaInfoSubtitleStream225> MigrateSubtitleStreams(MediaInfo224 old)
+    private static JsonArray MigrateSubtitleStreams(JsonObject mediaInfo)
     {
-        var subtitleStreams = old.Subtitles?
-            .Select(language => new MediaInfoSubtitleStream225
+        return new JsonArray(mediaInfo["subtitles"]?
+            .AsArray()
+            .Select(language => new JsonObject
             {
-                Language = language,
+                ["language"] = language.GetValue<string>()
             })
-            .ToList() ?? [];
-
-        return subtitleStreams;
-    }
-
-    internal class EpisodeFile224 : ModelBase
-    {
-        public string MediaInfo { get; set; }
-        public string SceneName { get; set; }
+            .ToArray() ?? []);
     }
 
     internal class EpisodeFile225 : ModelBase
     {
         public string MediaInfo { get; set; }
-    }
-
-    internal class MediaInfo224
-    {
-        public string RawStreamData { get; set; }
-        public int SchemaRevision { get; set; }
-        public string ContainerFormat { get; set; }
-        public string VideoFormat { get; set; }
-        public string VideoCodecID { get; set; }
-        public string VideoProfile { get; set; }
-        public long VideoBitrate { get; set; }
-        public int VideoBitDepth { get; set; }
-        public string VideoColourPrimaries { get; set; }
-        public string VideoTransferCharacteristics { get; set; }
-        public HdrFormat VideoHdrFormat { get; set; }
-        public int Height { get; set; }
-        public int Width { get; set; }
-        public string AudioFormat { get; set; }
-        public string AudioCodecID { get; set; }
-        public string AudioProfile { get; set; }
-        public long AudioBitrate { get; set; }
-        public TimeSpan RunTime { get; set; }
-        public int AudioStreamCount { get; set; }
-        public int AudioChannels { get; set; }
-        public string AudioChannelPositions { get; set; }
-        public decimal VideoFps { get; set; }
-        public List<string> AudioLanguages { get; set; }
-        public List<string> Subtitles { get; set; }
-        public string ScanType { get; set; }
-    }
-
-    internal class MediaInfo225
-    {
-        public string RawStreamData { get; set; }
-        public int SchemaRevision { get; set; }
-        public string ContainerFormat { get; set; }
-        public string VideoFormat { get; set; }
-        public string VideoCodecID { get; set; }
-        public string VideoProfile { get; set; }
-        public long VideoBitrate { get; set; }
-        public int VideoBitDepth { get; set; }
-        public string VideoColourPrimaries { get; set; }
-        public string VideoTransferCharacteristics { get; set; }
-        public HdrFormat VideoHdrFormat { get; set; }
-        public int Height { get; set; }
-        public int Width { get; set; }
-        public TimeSpan RunTime { get; set; }
-        public decimal VideoFps { get; set; }
-        public List<MediaInfoAudioStream225> AudioStreams { get; set; }
-        public List<MediaInfoSubtitleStream225> SubtitleStreams { get; set; }
-        public string ScanType { get; set; }
-    }
-
-    internal class MediaInfoAudioStream225
-    {
-        public string Language { get; set; }
-        public string Format { get; set; }
-        public string CodecId { get; set; }
-        public string Profile { get; set; }
-        public long Bitrate { get; set; }
-        public int Channels { get; set; }
-        public string ChannelPositions { get; set; }
-    }
-
-    internal class MediaInfoSubtitleStream225
-    {
-        public string Language { get; set; }
     }
 }
