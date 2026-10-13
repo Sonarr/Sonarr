@@ -1,8 +1,10 @@
 import { move } from '@dnd-kit/helpers';
 import { DragDropProvider, DragEndEvent, DragOverEvent } from '@dnd-kit/react';
 import React, { useCallback, useState } from 'react';
+import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import PageSectionContent from 'Components/Page/PageSectionContent';
+import { icons } from 'Helpers/Props';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import DelayProfile from './DelayProfile';
@@ -113,6 +115,7 @@ function DelayProfiles() {
           ) : null}
 
           <Link className={styles.addRow} onPress={handleAddDelayProfilePress}>
+            <Icon name={icons.ADD} size={12} />
             {translate('AddDelayProfile')}
           </Link>
         </div>

@@ -12,6 +12,11 @@
   flex: 0 1 33%;
 }
 
+.loadingContainer {
+  display: flex;
+  align-items: center;
+}
+
 .controlsContainer {
   display: flex;
   justify-content: center;
@@ -90,7 +95,7 @@
 
   .loadingContainer,
   .recordsContainer {
-    flex: 0 1 50%;
+    flex: 1 1 auto;
   }
 
   .controlsContainer {

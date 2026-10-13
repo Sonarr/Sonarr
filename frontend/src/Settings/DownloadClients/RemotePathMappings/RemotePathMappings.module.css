@@ -19,12 +19,8 @@
   flex: 0 1 400px;
 }
 
-.addRemotePathMapping {
-  display: flex;
-  justify-content: flex-end;
-  padding-right: 10px;
-}
+.addRow {
+  composes: addRow from 'Settings/Settings.module.css';
 
-.addButton {
-  text-align: center;
+  margin-top: 10px;
 }
