@@ -84,7 +84,7 @@ function InteractiveSearch({
     selectedFilterKey,
     sortKey,
     sortDirection,
-  } = useReleases(searchPayload, filter);
+  } = useReleases(searchPayload, { filter });
 
   const listRef = useRef<VariableSizeList<RowItemData>>(null);
   const listOuterRef = useRef<HTMLDivElement>(null);
