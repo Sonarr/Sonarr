@@ -5,7 +5,7 @@
   padding: 4px 10px;
   border: none;
   border-radius: 999px;
-  background-color: var(--paperWarm);
+  background-color: color-mix(in oklch, var(--ink) 12%, transparent);
   color: var(--inkSoft);
   vertical-align: middle;
   text-align: center;
@@ -140,7 +140,7 @@
 .small {
   padding: 3px 8px;
   letter-spacing: 0.08em;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .medium {
