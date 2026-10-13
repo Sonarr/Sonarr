@@ -31,6 +31,8 @@
 }
 
 .isTodayCell {
+  scroll-margin-top: var(--calendarStickyHeight, 0);
+
   border-left: 1px solid var(--calendarTodayColor);
   background-color: var(--calendarTodayBackgroundColor);
 }
