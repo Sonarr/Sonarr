@@ -8,7 +8,6 @@ import HeartRating from 'Components/HeartRating';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
-import SeriesTagList from 'Components/SeriesTagList';
 import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
 import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
 import VirtualTableSelectCell from 'Components/Table/Cells/VirtualTableSelectCell';
@@ -32,6 +31,7 @@ import useSeriesIndexItem from '../useSeriesIndexItem';
 import hasGrowableColumns from './hasGrowableColumns';
 import SeasonsCell from './SeasonsCell';
 import SeriesStatusCell from './SeriesStatusCell';
+import TagsCell from './TagsCell';
 import styles from './SeriesIndexRow.module.css';
 
 interface SeriesIndexRowProps {
@@ -281,7 +281,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
             // @ts-ignore ts(2739)
             <RelativeDateCell
               key={name}
-              className={classNames(styles[name], styles.nextAiringMono)}
+              className={styles[name]}
               date={nextAiring}
               component={VirtualTableRowCell}
             />
@@ -530,11 +530,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
         }
 
         if (name === 'tags') {
-          return (
-            <VirtualTableRowCell key={name} className={styles[name]}>
-              <SeriesTagList tags={tags} />
-            </VirtualTableRowCell>
-          );
+          return <TagsCell key={name} className={styles[name]} tags={tags} />;
         }
 
         if (name === 'useSceneNumbering') {

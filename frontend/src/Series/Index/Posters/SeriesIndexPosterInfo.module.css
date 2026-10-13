@@ -13,7 +13,3 @@
 .tags {
   composes: tags from './SeriesIndexPoster.module.css';
 }
-
-.tagsList {
-  composes: tagsList from './SeriesIndexPoster.module.css';
-}

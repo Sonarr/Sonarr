@@ -53,7 +53,7 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
       secondarySortDirection: 'ascending',
       view: 'posters',
       posterOptions: {
-        detailedProgressBar: false,
+        detailedProgressBar: true,
         size: 'large',
         showTitle: false,
         showMonitored: true,

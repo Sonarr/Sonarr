@@ -5,12 +5,12 @@ import { useExecuteCommand } from 'Commands/useCommands';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
-import SeriesTagList from 'Components/SeriesTagList';
 import { icons } from 'Helpers/Props';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
 import SeriesIndexProgressBar from 'Series/Index/ProgressBar/SeriesIndexProgressBar';
 import SeriesIndexPosterSelect from 'Series/Index/Select/SeriesIndexPosterSelect';
+import SeriesIndexTags from 'Series/Index/SeriesIndexTags';
 import { SeriesStatus, Statistics } from 'Series/Series';
 import {
   ShowStatusMode,
@@ -276,9 +276,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
 
       {showTags && tags.length ? (
         <div className={styles.tags}>
-          <div className={styles.tagsList}>
-            <SeriesTagList tags={tags} />
-          </div>
+          <SeriesIndexTags tags={tags} />
         </div>
       ) : null}
 
