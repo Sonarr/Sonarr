@@ -5,25 +5,25 @@ namespace NzbDrone.Core.ImportLists.Tmdb;
 public enum TmdbDepartmentType
 {
     [FieldOption(Label = "ImportListsTmdbSettingsDepartmentTypeArt")]
-    Art,
+    Art = 0,
     [FieldOption(Label = "ImportListsTmdbSettingsDepartmentTypeCamera")]
-    Camera,
+    Camera = 1,
     [FieldOption(Label = "ImportListsTmdbSettingsDepartmentTypeCostumeMakeup")]
-    CostumeMakeup,
+    CostumeMakeup = 2,
     [FieldOption(Label = "ImportListsTmdbSettingsDepartmentTypeCrew")]
-    Crew,
+    Crew = 3,
     [FieldOption(Label = "ImportListsTmdbSettingsDepartmentTypeDirecting")]
-    Directing,
+    Directing = 4,
     [FieldOption(Label = "ImportListsTmdbSettingsDepartmentTypeEditing")]
-    Editing,
+    Editing = 5,
     [FieldOption(Label = "ImportListsTmdbSettingsDepartmentTypeLighting")]
-    Lighting,
+    Lighting = 6,
     [FieldOption(Label = "ImportListsTmdbSettingsDepartmentTypeProduction")]
-    Production,
+    Production = 7,
     [FieldOption(Label = "ImportListsTmdbSettingsDepartmentTypeSound")]
-    Sound,
+    Sound = 8,
     [FieldOption(Label = "ImportListsTmdbSettingsDepartmentTypeVisualEffects")]
-    VisualEffects,
+    VisualEffects = 9,
     [FieldOption(Label = "ImportListsTmdbSettingsDepartmentTypeWriting")]
-    Writing
+    Writing = 10
 }
