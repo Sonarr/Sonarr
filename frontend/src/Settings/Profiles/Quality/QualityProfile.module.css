@@ -8,8 +8,9 @@
   composes: label from 'Components/Label.module.css';
   composes: small from 'Components/Label.module.css';
 
-  background-color: var(--accentDeep) !important;
-  color: var(--paper) !important;
+  background-color: color-mix(in oklch, var(--accent) 25%, transparent) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--accent) 60%, transparent);
+  color: var(--ink) !important;
 }
 
 .cutoffChip::before {
@@ -50,8 +51,12 @@
 
 .groupCount {
   margin-left: 4px;
-  color: var(--inkFaint);
   letter-spacing: 0.04em;
-  font-size: 10px;
+  font-size: 11px;
   font-family: var(--monoSpaceFontFamily);
+  opacity: 0.75;
+}
+
+.cutoffChip .groupCount {
+  opacity: 0.85;
 }

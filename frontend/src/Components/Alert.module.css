@@ -10,6 +10,17 @@
   line-height: 1.55;
 }
 
+.alert a {
+  text-decoration: underline;
+  font-weight: 600;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+
+  &:hover {
+    text-decoration-thickness: 2px;
+  }
+}
+
 .danger {
   border-color: var(--alertDangerBorderColor);
   background-color: var(--alertDangerBackgroundColor);
