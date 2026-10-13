@@ -1,19 +1,11 @@
+using System;
 using System.Collections.Generic;
 using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.ImportLists.Tmdb.Account;
 
-public class TmdbAccountRequestGenerator : IImportListRequestGenerator
+public class TmdbAccountRequestGenerator(TmdbAccountSettings settings, int maxPages) : IImportListRequestGenerator
 {
-    private readonly TmdbAccountSettings _settings;
-    private readonly int _maxPages;
-
-    public TmdbAccountRequestGenerator(TmdbAccountSettings settings, int maxPages)
-    {
-        _settings = settings;
-        _maxPages = maxPages;
-    }
-
     public ImportListPageableRequestChain GetListItems()
     {
         var pageableRequests = new ImportListPageableRequestChain();
@@ -25,7 +17,7 @@ public class TmdbAccountRequestGenerator : IImportListRequestGenerator
     {
         var builder = CreateSeriesRequestsBuilder();
 
-        for (var i = 1; i <= _maxPages; i++)
+        for (var i = 1; i <= maxPages; i++)
         {
             builder.AddQueryParam("page", i, true);
             yield return new ImportListRequest(builder.Build());
@@ -34,16 +26,18 @@ public class TmdbAccountRequestGenerator : IImportListRequestGenerator
 
     private HttpRequestBuilder CreateSeriesRequestsBuilder()
     {
-        var builder = new HttpRequestBuilder(_settings.BaseUrl)
+        var builder = new HttpRequestBuilder(settings.BaseUrl)
             .Accept(HttpAccept.Json)
-            .SetHeader("Authorization", $"Bearer {_settings.AuthToken}");
+            .SetHeader("Authorization", $"Bearer {settings.AuthToken}");
 
-        builder.ResourceUrl = (TmdbAccountListType)_settings.AccountListType switch
+        var accountId = Uri.EscapeDataString(settings.AccountId ?? string.Empty);
+
+        builder.ResourceUrl = (TmdbAccountListType)settings.AccountListType switch
         {
-            TmdbAccountListType.Rated => $"4/account/{_settings.AccountId}/tv/rated",
-            TmdbAccountListType.Recommended => $"4/account/{_settings.AccountId}/tv/recommendations",
-            TmdbAccountListType.Watchlist => $"4/account/{_settings.AccountId}/tv/watchlist",
-            _ => $"4/account/{_settings.AccountId}/tv/favorites"
+            TmdbAccountListType.Rated => $"4/account/{accountId}/tv/rated",
+            TmdbAccountListType.Recommended => $"4/account/{accountId}/tv/recommendations",
+            TmdbAccountListType.Watchlist => $"4/account/{accountId}/tv/watchlist",
+            _ => $"4/account/{accountId}/tv/favorites"
         };
 
         return builder;
