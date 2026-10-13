@@ -3,15 +3,8 @@ using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.ImportLists.Tmdb.Person;
 
-public class TmdbPersonRequestGenerator : IImportListRequestGenerator
+public class TmdbPersonRequestGenerator(TmdbPersonSettings settings) : IImportListRequestGenerator
 {
-    private readonly TmdbPersonSettings _settings;
-
-    public TmdbPersonRequestGenerator(TmdbPersonSettings settings)
-    {
-        _settings = settings;
-    }
-
     public ImportListPageableRequestChain GetListItems()
     {
         var pageableRequests = new ImportListPageableRequestChain();
@@ -21,10 +14,10 @@ public class TmdbPersonRequestGenerator : IImportListRequestGenerator
 
     private IEnumerable<ImportListRequest> GetSeriesRequests()
     {
-        var builder = new HttpRequestBuilder(_settings.BaseUrl)
+        var builder = new HttpRequestBuilder(settings.BaseUrl)
             .Accept(HttpAccept.Json)
-            .SetHeader("Authorization", $"Bearer {_settings.AuthToken}")
-            .Resource($"3/person/{_settings.PersonId}/tv_credits");
+            .SetHeader("Authorization", $"Bearer {settings.AuthToken}")
+            .Resource($"3/person/{settings.PersonId}/tv_credits");
 
         yield return new ImportListRequest(builder.Build());
     }
