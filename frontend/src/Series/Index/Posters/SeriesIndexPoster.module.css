@@ -201,9 +201,3 @@
   height: auto;
   background-color: transparent;
 }
-
-.tagsList {
-  display: flex;
-  overflow: hidden;
-  gap: 4px;
-}

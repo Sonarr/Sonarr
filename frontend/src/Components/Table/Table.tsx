@@ -1,13 +1,12 @@
 import classNames from 'classnames';
 import React from 'react';
-import IconButton from 'Components/Link/IconButton';
 import Scroller from 'Components/Scroller/Scroller';
+import TableOptionsButton from 'Components/Table/TableOptions/TableOptionsButton';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
-import { icons, scrollDirections } from 'Helpers/Props';
+import { scrollDirections } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import { CheckInputChanged } from 'typings/inputs';
 import { TableOptionsChangePayload } from 'typings/Table';
-import translate from 'Utilities/String/translate';
 import Column from './Column';
 import TableHeader from './TableHeader';
 import TableHeaderCell from './TableHeaderCell';
@@ -95,10 +94,7 @@ function Table({
                     canModifyColumns={canModifyColumns}
                     onTableOptionChange={onTableOptionChange}
                   >
-                    <IconButton
-                      name={icons.ADVANCED_SETTINGS}
-                      aria-label={translate('AdvancedSettings')}
-                    />
+                    <TableOptionsButton />
                   </TableOptionsModalWrapper>
                 </TableHeaderCell>
               );

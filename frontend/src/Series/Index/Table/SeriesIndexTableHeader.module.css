@@ -40,9 +40,6 @@
 
 .releaseGroups,
 .releaseTypes,
-.nextAiring,
-.previousAiring,
-.added,
 .genres {
   composes: headerCell from 'Components/Table/VirtualTableHeaderCell.module.css';
 
@@ -55,7 +52,20 @@
   flex: 0 0 220px;
 }
 
-.seasonCount,
+.nextAiring,
+.previousAiring,
+.added {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.module.css';
+
+  flex: 0 0 160px;
+}
+
+.seasonCount {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.module.css';
+
+  flex: 0 0 80px;
+}
+
 .certification {
   composes: headerCell from 'Components/Table/VirtualTableHeaderCell.module.css';
 
@@ -114,7 +124,7 @@
 .tags {
   composes: headerCell from 'Components/Table/VirtualTableHeaderCell.module.css';
 
-  flex: 1 0 60px;
+  flex: 1 0 200px;
 }
 
 .useSceneNumbering {

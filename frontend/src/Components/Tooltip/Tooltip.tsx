@@ -36,6 +36,7 @@ export interface TooltipProps {
   tooltip: string | React.ReactNode;
   contentRole?: 'dialog' | 'tooltip';
   isAnchorFocusable?: boolean;
+  isDisabled?: boolean;
   kind?: Extract<Kind, 'default' | 'inverse'>;
   position?: Placement;
   canFlip?: boolean;
@@ -50,6 +51,7 @@ function Tooltip(props: TooltipProps) {
     tooltip,
     contentRole = 'tooltip',
     isAnchorFocusable = true,
+    isDisabled = false,
     kind = kinds.DEFAULT,
     position,
     canFlip = true,
@@ -61,6 +63,7 @@ function Tooltip(props: TooltipProps) {
       : 'popoverArrowBorderColor'
   );
   const [isOpen, setIsOpen] = useState(false);
+  const isTooltipOpen = isOpen && !isDisabled;
 
   const arrowRef = useRef(null);
 
@@ -87,7 +90,7 @@ function Tooltip(props: TooltipProps) {
         element: arrowRef,
       }),
     ],
-    open: isOpen,
+    open: isTooltipOpen,
     placement: position,
     whileElementsMounted: autoUpdate,
     onOpenChange: setIsOpen,
@@ -140,7 +143,7 @@ function Tooltip(props: TooltipProps) {
       >
         {anchor}
       </span>
-      {isOpen ? (
+      {isTooltipOpen ? (
         <FloatingPortal id="portal-root">
           {contentRole === 'dialog' ? (
             <FloatingFocusManager

@@ -90,9 +90,6 @@
 
 .releaseGroups,
 .releaseTypes,
-.nextAiring,
-.previousAiring,
-.added,
 .genres {
   composes: cell;
 
@@ -105,7 +102,20 @@
   flex: 0 0 220px;
 }
 
-.seasonCount,
+.nextAiring,
+.previousAiring,
+.added {
+  composes: cell;
+
+  flex: 0 0 160px;
+}
+
+.seasonCount {
+  composes: cell;
+
+  flex: 0 0 80px;
+}
+
 .certification {
   composes: cell;
 
@@ -195,7 +205,7 @@
 .tags {
   composes: cell;
 
-  flex: 1 0 60px;
+  flex: 1 0 200px;
 }
 
 .useSceneNumbering {

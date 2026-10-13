@@ -1,0 +1,5 @@
+.button {
+  composes: button from 'Components/Link/IconButton.module.css';
+
+  color: var(--ink);
+}
