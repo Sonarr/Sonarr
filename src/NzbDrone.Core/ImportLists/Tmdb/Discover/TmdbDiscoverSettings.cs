@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -9,9 +8,9 @@ using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.ImportLists.Tmdb.Discover;
 
-public class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDiscoverSettings>
+public partial class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDiscoverSettings>
 {
-    private static readonly Regex AndOrDelimitedIdsRegex = new(@"^\d+(?:[,|]\d+)*$", RegexOptions.Compiled);
+    private const int MaxAirDateOffsetDays = 36500;
 
     public TmdbDiscoverSettingsValidator()
     {
@@ -19,35 +18,28 @@ public class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDisco
 
         RuleFor(c => c.VoteCountMinimum).Custom(ValidateVoteCount);
 
-        RuleFor(c => c.AirDateMinimum).Must(ValidateAirDate)
-            .WithMessage("Must be in the format: yyyy-MM-dd");
+        RuleFor(c => c.AirDateMinimumDays).InclusiveBetween(-MaxAirDateOffsetDays, MaxAirDateOffsetDays)
+            .When(c => c.AirDateMinimumDays.HasValue);
 
-        RuleFor(c => c.AirDateMaximum).Must(ValidateAirDate)
-            .WithMessage("Must be in the format: yyyy-MM-dd");
+        RuleFor(c => c.AirDateMaximumDays).InclusiveBetween(-MaxAirDateOffsetDays, MaxAirDateOffsetDays)
+            .When(c => c.AirDateMaximumDays.HasValue);
 
-        RuleFor(c => c.WithKeywords).Matches(AndOrDelimitedIdsRegex)
+        RuleFor(c => c.AirDateMaximumDays).GreaterThanOrEqualTo(c => c.AirDateMinimumDays)
+            .When(c => c.AirDateMinimumDays.HasValue && c.AirDateMaximumDays.HasValue)
+            .WithMessage("Must be greater than or equal to the minimum air date days.");
+
+        RuleFor(c => c.WithKeywords).Matches(AndOrDelimitedIdsRegex())
             .When(c => c.WithKeywords.IsNotNullOrWhiteSpace());
 
-        RuleFor(c => c.WithCompanies).Matches(AndOrDelimitedIdsRegex)
+        RuleFor(c => c.WithCompanies).Matches(AndOrDelimitedIdsRegex())
             .When(c => c.WithCompanies.IsNotNullOrWhiteSpace());
 
         RuleForEach(c => c.WithNetworks).Must(id => int.TryParse(id, out var idInt) && idInt > 0)
             .WithMessage("Must be a valid network id.");
     }
 
-    private static bool ValidateAirDate(string airDate)
-    {
-        if (airDate.IsNullOrWhiteSpace())
-        {
-            return true;
-        }
-
-        return DateTime.TryParseExact(airDate,
-            "yyyy-MM-dd",
-            CultureInfo.InvariantCulture,
-            DateTimeStyles.None,
-            out _);
-    }
+    [GeneratedRegex(@"^\d+(?:[,|]\d+)*$")]
+    private static partial Regex AndOrDelimitedIdsRegex();
 
     private static void ValidateVoteAverage(string voteAverage, CustomContext context)
     {
@@ -56,17 +48,20 @@ public class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDisco
             return;
         }
 
-        if (!float.TryParse(voteAverage, NumberStyles.Float, CultureInfo.InvariantCulture, out var voteAverageParsed))
+        if (!float.TryParse(voteAverage, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var voteAverageParsed) || !float.IsFinite(voteAverageParsed))
         {
             context.AddFailure("Must be a valid single-precision floating-point number.");
+            return;
         }
-        else if (voteAverageParsed < 0)
+
+        switch (voteAverageParsed)
         {
-            context.AddFailure("Must be greater than or equal to zero. (0.00)");
-        }
-        else if (voteAverageParsed > 10)
-        {
-            context.AddFailure("Must be less than or equal to ten. (10.00)");
+            case < 0:
+                context.AddFailure("Must be greater than or equal to zero. (0.00)");
+                break;
+            case > 10:
+                context.AddFailure("Must be less than or equal to ten. (10.00)");
+                break;
         }
     }
 
@@ -84,24 +79,15 @@ public class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<TmdbDisco
     }
 }
 
-public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
+public class TmdbDiscoverSettings() : TmdbSettingsBase<TmdbDiscoverSettings>(Validator)
 {
     private static readonly TmdbDiscoverSettingsValidator Validator = new();
 
-    public TmdbDiscoverSettings()
-        : base(Validator)
-    {
-        WithGenreTypes = [];
-        WithNetworks = [];
-        OriginalLanguage = (int)TmdbLanguage.Any;
-        SortByType = (int)TmdbDiscoverSortByType.PopularityDesc;
-    }
-
     [FieldDefinition(1, Label = "ImportListsTmdbSettingsOriginalLanguage", HelpText  = "ImportListsTmdbSettingsOriginalLanguageHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbLanguage))]
-    public int OriginalLanguage { get; set; }
+    public int OriginalLanguage { get; set; } = (int)TmdbLanguage.Any;
 
     [FieldDefinition(2, Label = "ImportListsTmdbSettingsSortByType", HelpText = "ImportListsTmdbSettingsSortByTypeHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverSortByType))]
-    public int SortByType { get; set; }
+    public int SortByType { get; set; } = (int)TmdbDiscoverSortByType.PopularityDesc;
 
     [FieldDefinition(3, Label = "ImportListsTmdbSettingsVoteAverageMinimum", HelpText = "ImportListsTmdbSettingsVoteAverageMinimumHelpText", Type = FieldType.Textbox)]
     public string VoteAverageMinimum { get; set; }
@@ -109,14 +95,14 @@ public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
     [FieldDefinition(4, Label = "ImportListsTmdbSettingsVoteCountMinimum", HelpText = "ImportListsTmdbSettingsVoteCountMinimumHelpText", Type = FieldType.Textbox, Advanced = true)]
     public string VoteCountMinimum { get; set; }
 
-    [FieldDefinition(5, Label = "ImportListsTmdbSettingsAirDateMinimum", HelpText = "ImportListsTmdbSettingsAirDateMinimumHelpText", Type = FieldType.Textbox, Advanced = true)]
-    public string AirDateMinimum { get; set; }
+    [FieldDefinition(5, Label = "ImportListsTmdbSettingsAirDateMinimumDays", HelpText = "ImportListsTmdbSettingsAirDateMinimumDaysHelpText", Type = FieldType.Number, Advanced = true)]
+    public int? AirDateMinimumDays { get; set; }
 
-    [FieldDefinition(6, Label = "ImportListsTmdbSettingsAirDateMaximum", HelpText = "ImportListsTmdbSettingsAirDateMaximumHelpText", Type = FieldType.Textbox, Advanced = true)]
-    public string AirDateMaximum { get; set; }
+    [FieldDefinition(6, Label = "ImportListsTmdbSettingsAirDateMaximumDays", HelpText = "ImportListsTmdbSettingsAirDateMaximumDaysHelpText", Type = FieldType.Number, Advanced = true)]
+    public int? AirDateMaximumDays { get; set; }
 
     [FieldDefinition(7, Label = "ImportListsTmdbSettingsWithGenreTypes", HelpText = "ImportListsTmdbSettingsWithGenreTypesHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbDiscoverGenreType))]
-    public IEnumerable<int> WithGenreTypes { get; set; }
+    public IEnumerable<int> WithGenreTypes { get; set; } = [];
 
     [FieldDefinition(8, Label = "ImportListsTmdbSettingsWithKeywords", HelpText = "ImportListsTmdbSettingsAndOrDelimitedIdsHelpText", Type = FieldType.Textbox)]
     public string WithKeywords { get; set; }
@@ -125,7 +111,7 @@ public class TmdbDiscoverSettings : TmdbSettingsBase<TmdbDiscoverSettings>
     public string WithCompanies { get; set; }
 
     [FieldDefinition(10, Label = "ImportListsTmdbSettingsWithNetworks", HelpText = "ImportListsTmdbSettingsWithNetworksHelpText", Type = FieldType.Tag)]
-    public IEnumerable<string> WithNetworks { get; set; }
+    public IEnumerable<string> WithNetworks { get; set; } = [];
 
     [FieldDefinition(11, Label = "ImportListsTmdbSettingsIncludeNullFirstAirDates", HelpText = "ImportListsTmdbSettingsIncludeNullFirstAirDatesHelpText", Type = FieldType.Checkbox, Advanced = true)]
     public bool IncludeNullFirstAirDates { get; set; }

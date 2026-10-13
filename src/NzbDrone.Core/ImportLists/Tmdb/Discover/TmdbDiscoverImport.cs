@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.Cloud;
@@ -9,19 +8,15 @@ using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.ImportLists.Tmdb.Discover;
 
-public class TmdbDiscoverImport : TmdbImportBase<TmdbDiscoverSettings>
+public class TmdbDiscoverImport(ISonarrCloudRequestBuilder requestBuilder,
+                                IHttpClient httpClient,
+                                IImportListStatusService importListStatusService,
+                                IConfigService configService,
+                                IParsingService parsingService,
+                                ILocalizationService localizationService,
+                                Logger logger)
+    : TmdbImportBase<TmdbDiscoverSettings>(requestBuilder, httpClient, importListStatusService, configService, parsingService, localizationService, logger)
 {
-    public TmdbDiscoverImport(ISonarrCloudRequestBuilder requestBuilder,
-                              IHttpClient httpClient,
-                              IImportListStatusService importListStatusService,
-                              IConfigService configService,
-                              IParsingService parsingService,
-                              ILocalizationService localizationService,
-                              Logger logger)
-        : base(requestBuilder, httpClient, importListStatusService, configService, parsingService, localizationService, logger)
-    {
-    }
-
     public override int PageSize => 20;
     public override string Name => "TMDb Discover";
 
@@ -37,23 +32,19 @@ public class TmdbDiscoverImport : TmdbImportBase<TmdbDiscoverSettings>
 
     protected override IEnumerable<KeyValuePair<string, TmdbDiscoverSettings>> GetPresetDefinitionPairs()
     {
-        var now = DateTime.UtcNow;
-        var todaysDate = now.ToString("yyyy-MM-dd");
-        var sevenDaysFromNowDate = now.AddDays(7).ToString("yyyy-MM-dd");
-
-        yield return new KeyValuePair<string, TmdbDiscoverSettings>($"Airing Today ({todaysDate})",
+        yield return new KeyValuePair<string, TmdbDiscoverSettings>("Airing Today",
             new TmdbDiscoverSettings
             {
-                AirDateMinimum =  todaysDate,
-                AirDateMaximum =  todaysDate,
+                AirDateMinimumDays = 0,
+                AirDateMaximumDays = 0,
                 SortByType = (int)TmdbDiscoverSortByType.PopularityDesc
             });
 
-        yield return new KeyValuePair<string, TmdbDiscoverSettings>($"On The Air ({todaysDate} - {sevenDaysFromNowDate})",
+        yield return new KeyValuePair<string, TmdbDiscoverSettings>("On The Air",
             new TmdbDiscoverSettings
             {
-                AirDateMinimum =  todaysDate,
-                AirDateMaximum =  sevenDaysFromNowDate,
+                AirDateMinimumDays = 0,
+                AirDateMaximumDays = 7,
                 SortByType = (int)TmdbDiscoverSortByType.PopularityDesc
             });
 
