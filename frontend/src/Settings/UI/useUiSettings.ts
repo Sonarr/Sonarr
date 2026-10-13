@@ -19,15 +19,16 @@ export interface UiSettingsModel {
 }
 
 const PATH = '/settings/ui';
+const QUERY_OPTIONS = { staleTime: 60 * 60 * 1000 };
 
 export const useUiSettingsValues = () => {
-  const { data } = useSettings<UiSettingsModel>(PATH);
+  const { data } = useSettings<UiSettingsModel>(PATH, QUERY_OPTIONS);
 
   return data;
 };
 
 export const useUiSettings = () => {
-  return useSettings<UiSettingsModel>(PATH);
+  return useSettings<UiSettingsModel>(PATH, QUERY_OPTIONS);
 };
 
 export const useManageUiSettings = () => {
@@ -35,7 +36,7 @@ export const useManageUiSettings = () => {
 };
 
 export const useSaveUiSettings = () => {
-  const { data } = useSettings<UiSettingsModel>(PATH);
+  const { data } = useSettings<UiSettingsModel>(PATH, QUERY_OPTIONS);
   const { save } = useSaveSettings<UiSettingsModel>(PATH);
 
   const saveSettings = useCallback(
