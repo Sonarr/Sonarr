@@ -20,13 +20,8 @@ export interface AddImportListModalContentProps {
 }
 
 function getListGroupTitle(typeOfList: string) {
-  // Does not need to be translated as it is a proper name.
-  if (typeOfList === 'tmdb') {
-    return 'TMDb';
-  }
-
   return translate('TypeOfList', {
-    typeOfList: titleCase(typeOfList),
+    typeOfList: typeOfList === 'tmdb' ? 'TMDb' : titleCase(typeOfList),
   });
 }
 
