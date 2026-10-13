@@ -11,27 +11,43 @@ function SeriesDetailsPage() {
   const { titleSlug } = useParams<{ titleSlug: string }>();
   const navigate = useNavigate();
 
-  const seriesIndex = allSeries.findIndex(
-    (series) => series.titleSlug === titleSlug
-  );
-
-  const previousIndex = usePrevious(seriesIndex);
+  const series = allSeries.find((series) => series.titleSlug === titleSlug);
+  const seriesId = series?.id;
+  const previousSeriesId = usePrevious(seriesId);
+  const previousTitleSlug = usePrevious(titleSlug);
 
   useEffect(() => {
     if (
-      seriesIndex === -1 &&
-      previousIndex !== -1 &&
-      previousIndex !== undefined
+      seriesId !== undefined ||
+      previousSeriesId === undefined ||
+      titleSlug !== previousTitleSlug
     ) {
+      return;
+    }
+
+    const renamedSeries = allSeries.find(
+      (series) => series.id === previousSeriesId
+    );
+
+    if (renamedSeries) {
+      navigate(`/series/${renamedSeries.titleSlug}`, { replace: true });
+    } else {
       navigate('/');
     }
-  }, [seriesIndex, previousIndex, navigate]);
+  }, [
+    allSeries,
+    seriesId,
+    previousSeriesId,
+    titleSlug,
+    previousTitleSlug,
+    navigate,
+  ]);
 
-  if (seriesIndex === -1) {
+  if (!series) {
     return <NotFound message={translate('SeriesCannotBeFound')} />;
   }
 
-  return <SeriesDetails seriesId={allSeries[seriesIndex].id} />;
+  return <SeriesDetails seriesId={series.id} />;
 }
 
 export default SeriesDetailsPage;
