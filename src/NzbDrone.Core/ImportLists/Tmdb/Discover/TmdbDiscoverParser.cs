@@ -8,6 +8,6 @@ public class TmdbDiscoverParser : TmdbParserBase<TmdbPagedResource<TmdbMediaReso
 {
     protected override IEnumerable<ImportListItemInfo> ParseResponse(TmdbPagedResource<TmdbMediaResource> resource)
     {
-        return resource.Results.Select(AsImportable);
+        return resource?.Results?.Select(AsImportable) ?? [];
     }
 }

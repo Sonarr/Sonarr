@@ -1,21 +1,14 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.ImportLists.Tmdb.Discover;
 
-public class TmdbDiscoverRequestGenerator : IImportListRequestGenerator
+public class TmdbDiscoverRequestGenerator(TmdbDiscoverSettings settings, int maxPages) : IImportListRequestGenerator
 {
-    private readonly TmdbDiscoverSettings _settings;
-    private readonly int _maxPages;
-
-    public TmdbDiscoverRequestGenerator(TmdbDiscoverSettings settings, int maxPages)
-    {
-        _settings = settings;
-        _maxPages = maxPages;
-    }
-
     public ImportListPageableRequestChain GetListItems()
     {
         var pageableRequests = new ImportListPageableRequestChain();
@@ -27,7 +20,7 @@ public class TmdbDiscoverRequestGenerator : IImportListRequestGenerator
     {
         var builder = CreateSeriesRequestsBuilder();
 
-        for (var i = 1; i <= _maxPages; i++)
+        for (var i = 1; i <= maxPages; i++)
         {
             builder.AddQueryParam("page", i, true);
             yield return new ImportListRequest(builder.Build());
@@ -36,9 +29,9 @@ public class TmdbDiscoverRequestGenerator : IImportListRequestGenerator
 
     private HttpRequestBuilder CreateSeriesRequestsBuilder()
     {
-        var originalLanguage = (TmdbLanguage)_settings.OriginalLanguage;
+        var originalLanguage = (TmdbLanguage)settings.OriginalLanguage;
 
-        var sortByType = (TmdbDiscoverSortByType)_settings.SortByType;
+        var sortByType = (TmdbDiscoverSortByType)settings.SortByType;
         var sortByString = sortByType switch
         {
             TmdbDiscoverSortByType.FirstAirDateAsc => "first_air_date.asc",
@@ -62,43 +55,55 @@ public class TmdbDiscoverRequestGenerator : IImportListRequestGenerator
             _ => "popularity.desc"
         };
 
-        var builder = new HttpRequestBuilder(_settings.BaseUrl)
+        var builder = new HttpRequestBuilder(settings.BaseUrl)
             .Accept(HttpAccept.Json)
-            .SetHeader("Authorization", $"Bearer {_settings.AuthToken}")
+            .SetHeader("Authorization", $"Bearer {settings.AuthToken}")
             .Resource("3/discover/tv")
-            .AddQueryParam("include_null_first_air_dates", _settings.IncludeNullFirstAirDates)
+            .AddQueryParam("include_null_first_air_dates", settings.IncludeNullFirstAirDates ? "true" : "false")
             .AddQueryParam("sort_by", sortByString);
 
         if (originalLanguage != TmdbLanguage.Any)
         {
+            // TMDb expects lowercase ISO 639-1 codes
             builder.AddQueryParam("with_original_language", originalLanguage.ToString().ToLowerInvariant());
         }
 
-        if (_settings.WithGenreTypes.Any())
+        if (settings.WithGenreTypes?.Any() == true)
         {
-            builder.AddQueryParam("with_genres", string.Join(',', _settings.WithGenreTypes));
+            builder.AddQueryParam("with_genres", string.Join('|', settings.WithGenreTypes));
         }
 
-        if (_settings.WithNetworks.Any())
+        if (settings.WithNetworks?.Any() == true)
         {
-            builder.AddQueryParam("with_networks", string.Join(',', _settings.WithNetworks));
+            builder.AddQueryParam("with_networks", string.Join('|', settings.WithNetworks));
         }
 
-        AddOrSkipQueryParam(builder, "air_date.gte", _settings.AirDateMinimum);
-        AddOrSkipQueryParam(builder, "air_date.lte", _settings.AirDateMaximum);
-        AddOrSkipQueryParam(builder, "vote_average.gte", _settings.VoteAverageMinimum);
-        AddOrSkipQueryParam(builder, "vote_count.gte", _settings.VoteCountMinimum);
-        AddOrSkipQueryParam(builder, "with_companies", _settings.WithCompanies);
-        AddOrSkipQueryParam(builder, "with_keywords", _settings.WithKeywords);
+        AddAirDateQueryParam(builder, "air_date.gte", settings.AirDateMinimumDays);
+        AddAirDateQueryParam(builder, "air_date.lte", settings.AirDateMaximumDays);
+        AddOrSkipQueryParam(builder, "vote_average.gte", settings.VoteAverageMinimum);
+        AddOrSkipQueryParam(builder, "vote_count.gte", settings.VoteCountMinimum);
+        AddOrSkipQueryParam(builder, "with_companies", settings.WithCompanies);
+        AddOrSkipQueryParam(builder, "with_keywords", settings.WithKeywords);
 
         return builder;
+    }
+
+    private static void AddAirDateQueryParam(HttpRequestBuilder builder, string name, int? daysFromToday)
+    {
+        if (!daysFromToday.HasValue)
+        {
+            return;
+        }
+
+        var date = DateTime.UtcNow.Date.AddDays(daysFromToday.Value);
+        builder.AddQueryParam(name, date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
     }
 
     private static void AddOrSkipQueryParam(HttpRequestBuilder builder, string name, string value)
     {
         if (value.IsNotNullOrWhiteSpace())
         {
-            builder.AddQueryParam(name, value);
+            builder.AddQueryParam(name, value.Trim());
         }
     }
 }
