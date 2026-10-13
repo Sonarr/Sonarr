@@ -112,28 +112,28 @@
 
 .downloaded {
   & .info::before {
-    background-color: var(--successColor);
+    background-color: var(--calendarDownloadedColor);
   }
 
   &:global(.fullColor) {
-    background-color: color-mix(in oklch, var(--successColor) 10%, transparent);
+    background-color: color-mix(in oklch, var(--calendarDownloadedColor) 10%, transparent);
 
     &:hover {
-      background-color: color-mix(in oklch, var(--successColor) 26%, transparent);
+      background-color: color-mix(in oklch, var(--calendarDownloadedColor) 26%, transparent);
     }
   }
 }
 
 .downloading {
   & .info::before {
-    background-color: var(--statusGrabbing);
+    background-color: var(--calendarDownloadingColor);
   }
 
   &:global(.fullColor) {
-    background-color: color-mix(in oklch, var(--statusGrabbing) 10%, transparent);
+    background-color: color-mix(in oklch, var(--calendarDownloadingColor) 10%, transparent);
 
     &:hover {
-      background-color: color-mix(in oklch, var(--statusGrabbing) 26%, transparent);
+      background-color: color-mix(in oklch, var(--calendarDownloadingColor) 26%, transparent);
     }
   }
 }
@@ -157,42 +157,42 @@
 
 .onAir {
   & .info::before {
-    background-color: var(--statusAiring);
+    background-color: var(--calendarOnAirColor);
   }
 
   &:global(.fullColor) {
-    background-color: color-mix(in oklch, var(--statusAiring) 14%, transparent);
+    background-color: color-mix(in oklch, var(--calendarOnAirColor) 14%, transparent);
 
     &:hover {
-      background-color: color-mix(in oklch, var(--statusAiring) 30%, transparent);
+      background-color: color-mix(in oklch, var(--calendarOnAirColor) 30%, transparent);
     }
   }
 }
 
 .missing {
   & .info::before {
-    background-color: var(--dangerColor);
+    background-color: var(--calendarMissingColor);
   }
 
   &:global(.fullColor) {
-    background-color: color-mix(in oklch, var(--dangerColor) 14%, transparent);
+    background-color: color-mix(in oklch, var(--calendarMissingColor) 14%, transparent);
 
     &:hover {
-      background-color: color-mix(in oklch, var(--dangerColor) 30%, transparent);
+      background-color: color-mix(in oklch, var(--calendarMissingColor) 30%, transparent);
     }
   }
 }
 
 .unaired {
   & .info::before {
-    background-color: var(--statusUnaired);
+    background-color: var(--calendarUnairedColor);
   }
 
   &:global(.fullColor) {
-    background-color: color-mix(in oklch, var(--statusUnaired) 10%, transparent);
+    background-color: color-mix(in oklch, var(--calendarUnairedColor) 10%, transparent);
 
     &:hover {
-      background-color: color-mix(in oklch, var(--statusUnaired) 26%, transparent);
+      background-color: color-mix(in oklch, var(--calendarUnairedColor) 26%, transparent);
     }
   }
 }

@@ -17,5 +17,5 @@
 }
 
 .isToday {
-  color: var(--accent);
+  color: var(--calendarTodayColor);
 }

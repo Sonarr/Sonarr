@@ -1,9 +1,9 @@
 :root {
   /* Surfaces */
-  --paper: oklch(92% 0.012 260);
+  --paper: oklch(97% 0.010 260);
   --pageBackground: var(--paper);
   --paperWarm: oklch(88% 0.014 260);
-  --paperCard: oklch(97% 0.010 260);
+  --paperCard: oklch(94% 0.011 260);
   --hairline: oklch(84% 0.012 260);
   --hairlineStrong: oklch(76% 0.014 260);
 
@@ -71,11 +71,11 @@
   --pageHeaderBackgroundColor: oklch(86% 0.013 260);
   --sidebarColor: var(--ink);
   --sidebarBackgroundColor: var(--pageHeaderBackgroundColor);
-  --sidebarActiveBackgroundColor: var(--paper);
+  --sidebarActiveBackgroundColor: oklch(95% 0.008 250);
   --toolbarColor: oklch(32% 0.012 260);
-  --toolbarBackgroundColor: var(--paperWarm);
-  --toolbarMenuItemBackgroundColor: var(--paperWarm);
-  --toolbarMenuItemHoverBackgroundColor: var(--paperCard);
+  --toolbarBackgroundColor: oklch(91% 0.012 260);
+  --toolbarMenuItemBackgroundColor: var(--toolbarBackgroundColor);
+  --toolbarMenuItemHoverBackgroundColor: var(--paper);
   --toolbarLabelColor: oklch(52% 0.010 260);
   --borderColor: var(--hairline);
 
@@ -114,7 +114,7 @@
   --iconButtonHoverColor: oklch(32% 0.012 260);
   --iconButtonHoverLightColor: oklch(18% 0.014 260);
   --modalBackdropBackgroundColor: oklch(0% 0 0 / 0.45);
-  --modalBackgroundColor: var(--paperCard);
+  --modalBackgroundColor: var(--paper);
   --modalCloseButtonHoverColor: oklch(32% 0.012 260);
   --menuItemColor: oklch(32% 0.012 260);
   --menuItemHoverColor: oklch(18% 0.014 260);
@@ -150,17 +150,23 @@
   --disabledInputColor: oklch(72% 0.007 260);
   --popoverTitleBackgroundColor: var(--paperWarm);
   --popoverTitleBorderColor: var(--hairline);
-  --popoverBodyBackgroundColor: var(--paperCard);
+  --popoverBodyBackgroundColor: var(--paper);
   --popoverShadowColor: oklch(0% 0 0 / 0.18);
-  --popoverArrowBorderColor: var(--paperCard);
+  --popoverArrowBorderColor: var(--paper);
   --popoverTitleBackgroundInverseColor: oklch(18% 0.014 260);
   --popoverTitleBorderInverseColor: oklch(32% 0.012 260);
   --popoverShadowInverseColor: oklch(0% 0 0 / 0.32);
   --popoverArrowBorderInverseColor: oklch(18% 0.014 260 / 0.92);
 
   /* Calendar, series, progress */
-  --calendarTodayBackgroundColor: var(--paperWarm);
-  --calendarBackgroundColor: var(--paper);
+  --calendarTodayBackgroundColor: oklch(94% 0.006 240);
+  --calendarTodayColor: oklch(56% 0.130 215);
+  --calendarDownloadedColor: oklch(62% 0.170 148);
+  --calendarDownloadingColor: oklch(58% 0.190 305);
+  --calendarOnAirColor: oklch(73% 0.170 69);
+  --calendarMissingColor: oklch(60% 0.200 27);
+  --calendarUnairedColor: oklch(64% 0.080 245);
+  --calendarBackgroundColor: var(--paperCard);
   --calendarBorderColor: var(--hairline);
   --calendarTextDim: oklch(52% 0.010 260);
   --calendarTextDimAlternate: oklch(32% 0.012 260);
@@ -180,6 +186,10 @@
   --progressBarFrontTextColor: oklch(100% 0 0);
   --progressBarBackTextColor: oklch(32% 0.012 260);
   --progressBarBackgroundColor: var(--hairline);
+  --progressBarPrimaryColor: oklch(64% 0.140 252);
+  --progressBarSuccessColor: oklch(64% 0.180 148);
+  --progressBarDangerColor: oklch(61% 0.195 25);
+  --progressBarWarningColor: oklch(73% 0.170 69);
   --logEventsBackgroundColor: var(--paperCard);
 
   --shadowChip: 0 1px 4px oklch(0% 0 0 / 0.06);
@@ -353,7 +363,13 @@
   --popoverArrowBorderInverseColor: oklch(90% 0.007 260 / 0.92);
 
   /* Calendar, series, progress */
-  --calendarTodayBackgroundColor: oklch(29% 0.015 260);
+  --calendarTodayBackgroundColor: var(--paperWarm);
+  --calendarTodayColor: var(--accent);
+  --calendarDownloadedColor: var(--successColor);
+  --calendarDownloadingColor: var(--statusGrabbing);
+  --calendarOnAirColor: var(--warningColor);
+  --calendarMissingColor: var(--dangerColor);
+  --calendarUnairedColor: var(--statusUnaired);
   --calendarBackgroundColor: oklch(27% 0.014 260);
   --calendarBorderColor: oklch(36% 0.016 260);
   --calendarTextDim: oklch(66% 0.011 260);
@@ -369,6 +385,10 @@
   --progressBarFrontTextColor: oklch(90% 0.007 260);
   --progressBarBackTextColor: oklch(90% 0.007 260);
   --progressBarBackgroundColor: oklch(36% 0.016 260);
+  --progressBarPrimaryColor: color-mix(in oklab, var(--accent) 80%, oklch(0% 0 0));
+  --progressBarSuccessColor: color-mix(in oklab, var(--successColor) 80%, oklch(0% 0 0));
+  --progressBarDangerColor: color-mix(in oklab, var(--dangerColor) 80%, oklch(0% 0 0));
+  --progressBarWarningColor: color-mix(in oklab, var(--warningColor) 80%, oklch(0% 0 0));
   --logEventsBackgroundColor: oklch(27% 0.014 260);
 
   --shadowChip: 0 1px 4px oklch(0% 0 0 / 0.45);
@@ -393,6 +413,16 @@
   --primaryColor:    oklch(73.5% 0.117 236);
   --accent:          oklch(73.5% 0.117 236);
   --pink:            oklch(67.9% 0.118 346);  /* Reddish purple #CC79A7 */
+
+  --progressBarPrimaryColor: color-mix(in oklab, var(--accent) 80%, oklch(0% 0 0));
+  --progressBarSuccessColor: color-mix(in oklab, var(--successColor) 80%, oklch(0% 0 0));
+  --progressBarDangerColor: color-mix(in oklab, var(--dangerColor) 80%, oklch(0% 0 0));
+  --progressBarWarningColor: color-mix(in oklab, var(--warningColor) 80%, oklch(0% 0 0));
+  --calendarDownloadedColor: var(--successColor);
+  --calendarDownloadingColor: var(--statusGrabbing);
+  --calendarOnAirColor: var(--statusAiring);
+  --calendarMissingColor: var(--dangerColor);
+  --calendarUnairedColor: var(--statusUnaired);
 
   --alertDangerBorderColor:      color-mix(in oklch, var(--dangerColor) 30%, transparent);
   --alertSuccessBorderColor:     color-mix(in oklch, var(--successColor) 30%, transparent);

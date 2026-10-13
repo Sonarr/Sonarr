@@ -27,11 +27,11 @@
   background-color: var(--inkMuted);
 
   &.downloaded {
-    background-color: var(--successColor);
+    background-color: var(--calendarDownloadedColor);
   }
 
   &.downloading {
-    background-color: var(--statusGrabbing);
+    background-color: var(--calendarDownloadingColor);
   }
 
   &.unmonitored {
@@ -40,15 +40,15 @@
   }
 
   &.onAir {
-    background-color: var(--statusAiring);
+    background-color: var(--calendarOnAirColor);
   }
 
   &.missing {
-    background-color: var(--dangerColor);
+    background-color: var(--calendarMissingColor);
   }
 
   &.unaired {
-    background-color: var(--statusUnaired);
+    background-color: var(--calendarUnairedColor);
   }
 }
 

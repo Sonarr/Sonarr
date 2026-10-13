@@ -31,8 +31,8 @@
 }
 
 .isTodayCell {
-  border-left: 1px solid var(--accent);
-  background-color: var(--paperWarm);
+  border-left: 1px solid var(--calendarTodayColor);
+  background-color: var(--calendarTodayBackgroundColor);
 }
 
 .isToday {
