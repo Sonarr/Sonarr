@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Cloud;
@@ -13,19 +13,15 @@ using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.ImportLists.Tmdb.List;
 
-public class TmdbListImport : TmdbImportBase<TmdbListSettings>
+public class TmdbListImport(ISonarrCloudRequestBuilder requestBuilder,
+                            IHttpClient httpClient,
+                            IImportListStatusService importListStatusService,
+                            IConfigService configService,
+                            IParsingService parsingService,
+                            ILocalizationService localizationService,
+                            Logger logger)
+    : TmdbImportBase<TmdbListSettings>(requestBuilder, httpClient, importListStatusService, configService, parsingService, localizationService, logger)
 {
-    public TmdbListImport(ISonarrCloudRequestBuilder requestBuilder,
-                          IHttpClient httpClient,
-                          IImportListStatusService importListStatusService,
-                          IConfigService configService,
-                          IParsingService parsingService,
-                          ILocalizationService localizationService,
-                          Logger logger)
-        : base(requestBuilder, httpClient, importListStatusService, configService, parsingService, localizationService, logger)
-    {
-    }
-
     public override int PageSize => 20;
     public override string Name => "TMDb List";
 
@@ -49,12 +45,12 @@ public class TmdbListImport : TmdbImportBase<TmdbListSettings>
         return new TmdbListRequestGenerator(Settings, 10);
     }
 
-    private List<FieldSelectStringOption> GetAccountListOptions()
+    private List<FieldSelectOption<int>> GetAccountListOptions()
     {
         const int maxPages = 3;
-        var options = new List<FieldSelectStringOption>()
+        var options = new List<FieldSelectOption<int>>
         {
-            new() { Name = "None" }
+            new() { Name = "None", Value = 0 }
         };
 
         if (Settings.AuthToken.IsNullOrWhiteSpace() || Settings.AccountId.IsNullOrWhiteSpace())
@@ -64,7 +60,7 @@ public class TmdbListImport : TmdbImportBase<TmdbListSettings>
 
         var builder = new HttpRequestBuilder(Settings.BaseUrl)
             .Accept(HttpAccept.Json)
-            .Resource($"4/account/{Settings.AccountId}/lists")
+            .Resource($"4/account/{Uri.EscapeDataString(Settings.AccountId)}/lists")
             .SetHeader("Authorization", $"Bearer {Settings.AuthToken}");
 
         for (var i = 1; i <= maxPages; i++)
@@ -75,15 +71,17 @@ public class TmdbListImport : TmdbImportBase<TmdbListSettings>
             var response = FetchImportListResponse(request);
             var resource = STJson.Deserialize<TmdbPagedResource<TmdbAccountListResource>>(response.Content);
 
-            options.AddRange(resource.Results
-                .Select(r => new FieldSelectStringOption
+            var results = resource.Results ?? [];
+
+            options.AddRange(results
+                .Select(r => new FieldSelectOption<int>
                 {
                     Name = r.Name,
-                    Value = r.Id.ToString(CultureInfo.InvariantCulture),
+                    Value = r.Id,
                     Hint = $"(Id: {r.Id}, Items: {r.NumberOfItems})"
                 }));
 
-            if (resource.Results.Count < PageSize || resource.Results.Count >= MaxNumResultsPerQuery)
+            if (results.Count < PageSize || results.Count >= MaxNumResultsPerQuery)
             {
                 break;
             }
