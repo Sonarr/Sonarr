@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.ImportListTests
         [SetUp]
         public void Setup()
         {
-            _importLists = new List<IImportList>();
+            _importLists = [];
 
             Mocker.GetMock<IImportListFactory>()
                   .Setup(v => v.AutomaticAddEnabled(It.IsAny<bool>()))
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             Mocker.GetMock<ISearchForNewSeries>()
                 .Setup(v => v.SearchForNewSeriesByImdbId(It.IsAny<string>(), It.IsAny<Language>()))
-                .Returns((string value, Language _) => new List<Tv.Series>() { new Tv.Series() { ImdbId = value } });
+                .Returns((string value, Language _) => [new Tv.Series { ImdbId = value }]);
         }
 
         private Mock<IImportList> WithList(int id, bool enabled, bool enabledAuto, ImportListFetchResult fetchResult, TimeSpan? minRefresh = null, int? lastSyncOffset = null, int? syncDeletedCount = null)
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             DateTime? lastSync = lastSyncOffset.HasValue ? DateTime.UtcNow.AddHours(lastSyncOffset.Value) : null;
             Mocker.GetMock<IImportListStatusService>()
                 .Setup(v => v.GetListStatus(id))
-                .Returns(new ImportListStatus() { LastInfoSync = lastSync });
+                .Returns(new ImportListStatus { LastInfoSync = lastSync });
 
             if (syncDeletedCount.HasValue)
             {
@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test.ImportListTests
         }
 
         [Test]
-        public void should_skip_recently_fetched_list()
+        public void ShouldSkipRecentlyFetchedList()
         {
             var fetchResult = new ImportListFetchResult();
             var list = WithList(1, true, true, fetchResult, lastSyncOffset: 0);
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.ImportListTests
         }
 
         [Test]
-        public void should_skip_recent_and_fetch_good()
+        public void ShouldSkipRecentAndFetchGood()
         {
             var fetchResult = new ImportListFetchResult();
             var recent = WithList(1, true, true, fetchResult, lastSyncOffset: 0);
@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Test.ImportListTests
         }
 
         [Test]
-        public void should_return_failure_if_single_list_fails()
+        public void ShouldReturnFailureIfSingleListFails()
         {
             var fetchResult = new ImportListFetchResult { Series = _listSeries, AnyFailure = true };
             WithList(1, true, true, fetchResult);
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Test.ImportListTests
         }
 
         [Test]
-        public void should_return_failure_if_any_list_fails()
+        public void ShouldReturnFailureIfAnyListFails()
         {
             var fetchResult1 = new ImportListFetchResult { Series = _listSeries, AnyFailure = true };
             WithList(1, true, true, fetchResult1);
@@ -122,7 +122,36 @@ namespace NzbDrone.Core.Test.ImportListTests
         }
 
         [Test]
-        public void should_return_early_if_no_available_lists()
+        public void ShouldNotDeduplicateItemsWithSameTitleButDifferentTmdbId()
+        {
+            var series = new List<ImportListItemInfo>
+            {
+                new() { Title = "Doctor Who", TvdbId = 0, TmdbId = 1 },
+                new() { Title = "Doctor Who", TvdbId = 0, TmdbId = 2 },
+                new() { Title = "Doctor Who", TvdbId = 0, TmdbId = 3 }
+            };
+
+            WithList(1, true, true, new ImportListFetchResult { Series = series });
+
+            Subject.Fetch().Series.Should().HaveCount(3);
+        }
+
+        [Test]
+        public void ShouldDeduplicateItemsWithSameTmdbIdAndTitle()
+        {
+            var series = new List<ImportListItemInfo>
+            {
+                new() { Title = "Doctor Who", TvdbId = 0, TmdbId = 1 },
+                new() { Title = "Doctor Who", TvdbId = 0, TmdbId = 1 }
+            };
+
+            WithList(1, true, true, new ImportListFetchResult { Series = series });
+
+            Subject.Fetch().Series.Should().HaveCount(1);
+        }
+
+        [Test]
+        public void ShouldReturnEarlyIfNoAvailableLists()
         {
             var listResult = Subject.Fetch();
 
@@ -134,9 +163,9 @@ namespace NzbDrone.Core.Test.ImportListTests
         }
 
         [Test]
-        public void should_store_series_if_list_doesnt_fail()
+        public void ShouldStoreSeriesIfListDoesntFail()
         {
-            var listId = 1;
+            const int listId = 1;
             var fetchResult = new ImportListFetchResult { Series = _listSeries, AnyFailure = false };
             WithList(listId, true, true, fetchResult);
 
@@ -150,9 +179,9 @@ namespace NzbDrone.Core.Test.ImportListTests
         }
 
         [Test]
-        public void should_not_store_series_if_list_fails()
+        public void ShouldNotStoreSeriesIfListFails()
         {
-            var listId = 1;
+            const int listId = 1;
             var fetchResult = new ImportListFetchResult { Series = _listSeries, AnyFailure = true };
             WithList(listId, true, true, fetchResult);
 
@@ -166,12 +195,12 @@ namespace NzbDrone.Core.Test.ImportListTests
         }
 
         [Test]
-        public void should_only_store_series_for_lists_that_dont_fail()
+        public void ShouldOnlyStoreSeriesForListsThatDontFail()
         {
-            var passedListId = 1;
+            const int passedListId = 1;
             var fetchResult1 = new ImportListFetchResult { Series = _listSeries, AnyFailure = false };
             WithList(passedListId, true, true, fetchResult1);
-            var failedListId = 2;
+            const int failedListId = 2;
             var fetchResult2 = new ImportListFetchResult { Series = _listSeries, AnyFailure = true };
             WithList(failedListId, true, true, fetchResult2);
 
@@ -189,12 +218,12 @@ namespace NzbDrone.Core.Test.ImportListTests
         }
 
         [Test]
-        public void should_return_all_results_for_all_lists()
+        public void ShouldReturnAllResultsForAllLists()
         {
-            var passedListId = 1;
+            const int passedListId = 1;
             var fetchResult1 = new ImportListFetchResult { Series = _listSeries, AnyFailure = false };
             WithList(passedListId, true, true, fetchResult1);
-            var secondListId = 2;
+            const int secondListId = 2;
             var fetchResult2 = new ImportListFetchResult { Series = _listSeries, AnyFailure = false };
             WithList(secondListId, true, true, fetchResult2);
 
@@ -204,9 +233,9 @@ namespace NzbDrone.Core.Test.ImportListTests
         }
 
         [Test]
-        public void should_set_removed_flag_if_list_has_removed_items()
+        public void ShouldSetRemovedFlagIfListHasRemovedItems()
         {
-            var listId = 1;
+            const int listId = 1;
             var fetchResult = new ImportListFetchResult { Series = _listSeries, AnyFailure = false };
             WithList(listId, true, true, fetchResult, syncDeletedCount: 500);
 
@@ -215,6 +244,21 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             Mocker.GetMock<IImportListStatusService>()
                 .Verify(v => v.UpdateListSyncStatus(listId, true), Times.Once());
+        }
+
+        [Test]
+        public void ShouldNotCollapseTvdbOnlyAndTmdbBearingItemsWithSameTitle()
+        {
+            var series = new List<ImportListItemInfo>
+            {
+                new() { Title = "Show", TvdbId = 5, TmdbId = 0 },
+                new() { Title = "Show", TvdbId = 5, TmdbId = 7 }
+            };
+
+            WithList(1, true, true, new ImportListFetchResult { Series = series });
+
+            // Documented behaviour: later sync dedupes on the resolved TvdbId.
+            Subject.Fetch().Series.Should().HaveCount(2);
         }
     }
 }
