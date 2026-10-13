@@ -62,11 +62,11 @@
   }
 
   &.downloaded::before {
-    background-color: var(--successColor);
+    background-color: var(--calendarDownloadedColor);
   }
 
   &.downloading::before {
-    background-color: var(--statusGrabbing);
+    background-color: var(--calendarDownloadingColor);
   }
 
   &.unmonitored::before {
@@ -79,16 +79,16 @@
   }
 
   &.onAir::before {
-    background-color: var(--statusAiring);
+    background-color: var(--calendarOnAirColor);
     animation: agendaNowPulse 1.5s ease-in-out infinite;
   }
 
   &.missing::before {
-    background-color: var(--dangerColor);
+    background-color: var(--calendarMissingColor);
   }
 
   &.unaired::before {
-    background-color: var(--statusUnaired);
+    background-color: var(--calendarUnairedColor);
   }
 }
 
