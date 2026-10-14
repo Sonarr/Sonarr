@@ -36,9 +36,7 @@ public class TmdbCreditsResource
     public IReadOnlyList<TmdbCrewResource> Crew { get; init; }
 }
 
-public class TmdbCastResource : TmdbMediaResource
-{
-}
+public class TmdbCastResource : TmdbMediaResource;
 
 public class TmdbCrewResource : TmdbMediaResource
 {
