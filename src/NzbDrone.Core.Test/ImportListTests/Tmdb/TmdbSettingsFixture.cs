@@ -21,8 +21,6 @@ public class TmdbSettingsFixture : CoreTest
         new TmdbPersonSettings { PersonId = 1, AccountId = "a" }.Validate().IsValid.Should().BeFalse();
     }
 
-    // Account
-
     [Test]
     public void AccountShouldBeValidWhenAuthenticated()
     {
@@ -34,8 +32,6 @@ public class TmdbSettingsFixture : CoreTest
     {
         new TmdbAccountSettings { AuthToken = "t" }.Validate().IsValid.Should().BeFalse();
     }
-
-    // List
 
     [Test]
     public void ListShouldBeValidWithListId()
@@ -75,8 +71,6 @@ public class TmdbSettingsFixture : CoreTest
         new TmdbListSettings { AuthToken = "t", ListId = -1 }.Validate().IsValid.Should().BeFalse();
     }
 
-    // Person
-
     [Test]
     public void PersonShouldBeValidWithCastCredits()
     {
@@ -106,10 +100,6 @@ public class TmdbSettingsFixture : CoreTest
     {
         new TmdbPersonSettings { AuthToken = "t" }.Validate().IsValid.Should().BeFalse();
     }
-
-    // Discover
-
-    private static TmdbDiscoverSettings Discover() => new() { AuthToken = "t" };
 
     [Test]
     public void DiscoverShouldBeValidByDefault()
@@ -226,8 +216,6 @@ public class TmdbSettingsFixture : CoreTest
         settings.Validate().IsValid.Should().BeFalse();
     }
 
-    // Enum stability: values are persisted in settings, so they must never shift.
-
     [Test]
     public void LanguageValuesShouldBeExplicitAndStable()
     {
@@ -293,12 +281,13 @@ public class TmdbSettingsFixture : CoreTest
     {
         foreach (var language in Enum.GetValues<TmdbLanguage>().Where(l => l != TmdbLanguage.Any))
         {
-            var attribute = typeof(TmdbLanguage).GetField(language.ToString())
+            var attribute = typeof(TmdbLanguage).GetField(language.ToString())!
                 .GetCustomAttributes(typeof(FieldOptionAttribute), false)
                 .Cast<FieldOptionAttribute>()
                 .Single();
 
-            attribute.Hint.Should().Be(language.ToString().ToLowerInvariant(), language.ToString());
+            attribute.Hint.Should().BeEquivalentTo(language.ToString(), language.ToString());
+            attribute.Hint.Should().NotMatchRegex("[A-Z]", language.ToString());
         }
     }
 
@@ -327,4 +316,6 @@ public class TmdbSettingsFixture : CoreTest
         new TmdbPersonSettings { AuthToken = "t", PersonId = 1, BaseUrl = baseUrl }.Validate().Errors
             .Select(e => e.PropertyName).Should().Contain(nameof(TmdbPersonSettings.BaseUrl));
     }
+
+    private static TmdbDiscoverSettings Discover() => new() { AuthToken = "t" };
 }
