@@ -2,6 +2,9 @@
 
 namespace NzbDrone.Core.ImportLists.Tmdb;
 
+// The numeric values are persisted in import list settings. Therefore, never reorder or reuse them
+// but assign the next unused number when adding a language (even if inserted alphabetically).
+// The member names are sent to TMDb as the lowercase ISO 639-1 code, so don't rename them.
 public enum TmdbLanguage
 {
     [FieldOption(Label = "Any Language", Hint = "any")]
