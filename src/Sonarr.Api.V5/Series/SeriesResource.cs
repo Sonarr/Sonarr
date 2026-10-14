@@ -34,6 +34,9 @@ public class SeriesResource : RestResource
     public int QualityProfileId { get; set; }
     public bool SeasonFolder { get; set; }
     public bool Monitored { get; set; }
+    public bool RetentionEnabled { get; set; }
+    public int RetentionKeepEpisodes { get; set; } = 5;
+    public bool RetentionIncludeSpecials { get; set; }
     public NewItemMonitorTypes MonitorNewItems { get; set; }
     public bool UseSceneNumbering { get; set; }
     public int Runtime { get; set; }
@@ -95,6 +98,9 @@ public static class SeriesResourceMapper
             SeasonFolder = model.SeasonFolder,
             Monitored = model.Monitored,
             MonitorNewItems = model.MonitorNewItems,
+            RetentionEnabled = model.RetentionEnabled,
+            RetentionKeepEpisodes = model.RetentionKeepEpisodes,
+            RetentionIncludeSpecials = model.RetentionIncludeSpecials,
             UseSceneNumbering = model.UseSceneNumbering,
             Runtime = model.Runtime,
             TvdbId = model.TvdbId,
@@ -142,6 +148,9 @@ public static class SeriesResourceMapper
             SeasonFolder = resource.SeasonFolder,
             Monitored = resource.Monitored,
             MonitorNewItems = resource.MonitorNewItems,
+            RetentionEnabled = resource.RetentionEnabled,
+            RetentionKeepEpisodes = resource.RetentionKeepEpisodes,
+            RetentionIncludeSpecials = resource.RetentionIncludeSpecials,
             UseSceneNumbering = resource.UseSceneNumbering,
             Runtime = resource.Runtime,
             TvdbId = resource.TvdbId,

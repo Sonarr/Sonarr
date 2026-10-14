@@ -144,5 +144,28 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileDeletionService
             Mocker.GetMock<IRecycleBinProvider>().Verify(v => v.DeleteFile(_episodeFile.Path, "Series Title"), Times.Once());
             Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(_episodeFile, DeleteMediaFileReason.Manual), Times.Never());
         }
+
+        [Test]
+        public void should_use_recycle_bin_and_retention_reason()
+        {
+            GivenRootFolderExists();
+            GivenRootFolderHasFolders();
+            GivenSeriesFolderExists();
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.FileExists(_episodeFile.Path)).Returns(true);
+
+            Subject.DeleteEpisodeFile(_series, _episodeFile, DeleteMediaFileReason.Retention);
+
+            Mocker.GetMock<IRecycleBinProvider>().Verify(v => v.DeleteFile(_episodeFile.Path, "Series Title"), Times.Once());
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(_episodeFile, DeleteMediaFileReason.Retention), Times.Once());
+        }
+
+        [Test]
+        public void should_preserve_root_folder_guard_for_retention()
+        {
+            Assert.Throws<NzbDroneClientException>(() => Subject.DeleteEpisodeFile(_series, _episodeFile, DeleteMediaFileReason.Retention));
+
+            ExceptionVerification.ExpectedWarns(1);
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(It.IsAny<EpisodeFile>(), It.IsAny<DeleteMediaFileReason>()), Times.Never());
+        }
     }
 }

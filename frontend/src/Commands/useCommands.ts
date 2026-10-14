@@ -177,11 +177,9 @@ export const useUpdateCommand = () => {
   const queryClient = useQueryClient();
 
   return (command: Command) => {
-    queryClient.setQueryData<Command[]>(['/command'], (oldCommands = []) => {
-      return oldCommands.map((existingCommand) =>
-        existingCommand.id === command.id ? command : existingCommand
-      );
-    });
+    queryClient.setQueryData<Command[]>(['/command'], (oldCommands = []) =>
+      addOrUpdateQueryClientItem(oldCommands, command, 'id')
+    );
 
     // Show command message for user feedback
     showCommandMessage(command);
@@ -192,6 +190,12 @@ export const useUpdateCommand = () => {
       command.status === 'completed' || command.status === 'failed';
 
     if (isFinished) {
+      if (command.name === 'EpisodeRetention') {
+        queryClient.invalidateQueries({ queryKey: ['/series'] });
+        queryClient.invalidateQueries({ queryKey: ['/episode'] });
+        queryClient.invalidateQueries({ queryKey: ['/episodeFile'] });
+      }
+
       const commandFinished = commandFinishedCallbacks[command.id];
 
       if (commandFinished) {

@@ -101,6 +101,8 @@ namespace Sonarr.Api.V3.Series
                 .NotEmpty()
                 .IsValidPath();
 
+            SharedValidator.RuleFor(s => s.RetentionKeepEpisodes).GreaterThan(0);
+
             SharedValidator.RuleFor(s => s.QualityProfileId).Cascade(CascadeMode.Stop)
                 .ValidId()
                 .SetValidator(qualityProfileExistsValidator);

@@ -95,6 +95,7 @@ import {
   SquareMinus,
   Table,
   Tags,
+  Timer,
   Trash,
   TriangleAlert,
   Ungroup,
@@ -202,6 +203,7 @@ export const REFRESH = RefreshCw;
 export const REMOVE = X;
 export const RESTART = RotateCcw;
 export const RESTORE = History;
+export const RETENTION = Timer;
 export const REORDER = Menu;
 export const ROOT_FOLDER = FolderTree;
 export const RSS = Rss;
