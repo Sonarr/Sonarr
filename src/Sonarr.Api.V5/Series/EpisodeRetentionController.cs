@@ -60,7 +60,8 @@ public class EpisodeRetentionController : Controller
             var command = _commandQueue.Push(new EpisodeRetentionCommand
             {
                 SeriesId = id,
-                PreviewToken = request.PreviewToken
+                PreviewToken = request.PreviewToken,
+                SendUpdatesToClient = true
             },
                 trigger: CommandTrigger.Manual);
 
@@ -91,6 +92,8 @@ public class EpisodeRetentionResource
 
     public static EpisodeRetentionResource FromPlan(EpisodeRetentionPlan plan)
     {
+        var episodesByFileId = plan.Episodes.ToLookup(episode => episode.EpisodeFileId);
+
         return new EpisodeRetentionResource
         {
             PreviewToken = plan.PreviewToken,
@@ -98,7 +101,7 @@ public class EpisodeRetentionResource
             {
                 Id = file.Id,
                 RelativePath = file.RelativePath,
-                Episodes = plan.Episodes.Where(episode => episode.EpisodeFileId == file.Id)
+                Episodes = episodesByFileId[file.Id]
                     .Select(RetentionEpisodeResource.FromEpisode).ToList()
             }).ToList(),
             UnmonitorEpisodes = plan.EpisodesToUnmonitor.Select(RetentionEpisodeResource.FromEpisode).ToList()

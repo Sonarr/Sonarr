@@ -10,6 +10,7 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
+using NzbDrone.Core.MediaFiles.Retention;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Update.Commands;
 using NzbDrone.Test.Common;
@@ -19,6 +20,9 @@ namespace NzbDrone.Core.Test.Messaging.Commands
     [TestFixture]
     public class CommandEqualityComparerFixture
     {
+        private const string PreviewToken = "4792CEB9496AADF3E3E849D2E01EF8F10517635CBD38FE3D3E2BAF129682A134";
+        private const string ChangedPreviewToken = "35D38B9644844E321300DC5B88DCA0BCCA2B31D903A34B7C7641554B7B363B5F";
+
         private string GivenRandomPath()
         {
             return Path.Combine(@"C:\Tesst\", Guid.NewGuid().ToString()).AsOsAgnostic();
@@ -47,6 +51,25 @@ namespace NzbDrone.Core.Test.Messaging.Commands
         {
             var command1 = new SeasonSearchCommand { SeriesId = 1, SeasonNumber = 1 };
             var command2 = new SeasonSearchCommand { SeriesId = 1, SeasonNumber = 1 };
+
+            CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_false_for_different_preview_tokens_with_the_same_characters()
+        {
+            PreviewToken.Distinct().Should().BeEquivalentTo(ChangedPreviewToken.Distinct());
+            var command1 = new EpisodeRetentionCommand { SeriesId = 1, PreviewToken = PreviewToken };
+            var command2 = new EpisodeRetentionCommand { SeriesId = 1, PreviewToken = ChangedPreviewToken };
+
+            CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_true_for_identical_retention_preview_tokens()
+        {
+            var command1 = new EpisodeRetentionCommand { SeriesId = 1, PreviewToken = PreviewToken };
+            var command2 = new EpisodeRetentionCommand { SeriesId = 1, PreviewToken = PreviewToken };
 
             CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeTrue();
         }

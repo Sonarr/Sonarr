@@ -398,7 +398,7 @@ namespace NzbDrone.Core.Test.MediaFiles.Retention
         {
             Subject.Handle(new DownloadCompletedEvent(null, 1, new List<EpisodeFile>(), null));
 
-            Mocker.GetMock<IManageCommandQueue>().Verify(s => s.Push(It.Is<EpisodeRetentionCommand>(c => c.SeriesId == 1 && c.RequiresDiskAccess), CommandPriority.Normal, CommandTrigger.Unspecified), Times.Once());
+            Mocker.GetMock<IManageCommandQueue>().Verify(s => s.Push(It.Is<EpisodeRetentionCommand>(c => c.SeriesId == 1 && c.RequiresDiskAccess && c.SendUpdatesToClient && c.SuppressMessages), CommandPriority.Normal, CommandTrigger.Unspecified), Times.Once());
             Mocker.GetMock<IDeleteMediaFiles>().VerifyNoOtherCalls();
         }
 
@@ -419,7 +419,7 @@ namespace NzbDrone.Core.Test.MediaFiles.Retention
 
             Subject.Handle(new EpisodeImportedEvent(null, new EpisodeFile { SeriesId = 1 }, new List<DeletedEpisodeFile>(), newDownload, null));
 
-            Mocker.GetMock<IManageCommandQueue>().Verify(s => s.Push(It.Is<EpisodeRetentionCommand>(c => c.SeriesId == 1 && c.RequiresDiskAccess), CommandPriority.Normal, CommandTrigger.Unspecified), queued ? Times.Once() : Times.Never());
+            Mocker.GetMock<IManageCommandQueue>().Verify(s => s.Push(It.Is<EpisodeRetentionCommand>(c => c.SeriesId == 1 && c.RequiresDiskAccess && c.SendUpdatesToClient && c.SuppressMessages), CommandPriority.Normal, CommandTrigger.Unspecified), queued ? Times.Once() : Times.Never());
             Mocker.GetMock<IDeleteMediaFiles>().VerifyNoOtherCalls();
             Mocker.GetMock<IEpisodeService>().Verify(s => s.SetMonitored(It.IsAny<IEnumerable<int>>(), It.IsAny<bool>()), Times.Never());
         }
