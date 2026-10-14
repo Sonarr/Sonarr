@@ -16,6 +16,25 @@ public class TmdbDiscoverRequestGenerator(TmdbDiscoverSettings settings, int max
         return pageableRequests;
     }
 
+    private static void AddAirDateQueryParam(HttpRequestBuilder builder, string name, int? daysFromToday)
+    {
+        if (!daysFromToday.HasValue)
+        {
+            return;
+        }
+
+        var date = DateTime.UtcNow.Date.AddDays(daysFromToday.Value);
+        builder.AddQueryParam(name, date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+    }
+
+    private static void AddOrSkipQueryParam(HttpRequestBuilder builder, string name, string value)
+    {
+        if (value.IsNotNullOrWhiteSpace())
+        {
+            builder.AddQueryParam(name, value.Trim());
+        }
+    }
+
     private IEnumerable<ImportListRequest> GetSeriesRequests()
     {
         var builder = CreateSeriesRequestsBuilder();
@@ -86,24 +105,5 @@ public class TmdbDiscoverRequestGenerator(TmdbDiscoverSettings settings, int max
         AddOrSkipQueryParam(builder, "with_keywords", settings.WithKeywords);
 
         return builder;
-    }
-
-    private static void AddAirDateQueryParam(HttpRequestBuilder builder, string name, int? daysFromToday)
-    {
-        if (!daysFromToday.HasValue)
-        {
-            return;
-        }
-
-        var date = DateTime.UtcNow.Date.AddDays(daysFromToday.Value);
-        builder.AddQueryParam(name, date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
-    }
-
-    private static void AddOrSkipQueryParam(HttpRequestBuilder builder, string name, string value)
-    {
-        if (value.IsNotNullOrWhiteSpace())
-        {
-            builder.AddQueryParam(name, value.Trim());
-        }
     }
 }
