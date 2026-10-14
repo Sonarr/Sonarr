@@ -44,6 +44,7 @@ import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import MonitoringOptionsModal from 'Series/MonitoringOptions/MonitoringOptionsModal';
+import EpisodeRetentionModal from 'Series/Retention/EpisodeRetentionModal';
 import { Image, SeriesStatus, Statistics } from 'Series/Series';
 import SeriesGenres from 'Series/SeriesGenres';
 import SeriesPoster from 'Series/SeriesPoster';
@@ -220,6 +221,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     };
   }, [seriesId, allSeries]);
 
+  const [isRetentionModalOpen, setIsRetentionModalOpen] = useState(false);
   const [isOrganizeModalOpen, setIsOrganizeModalOpen] = useState(false);
   const [isManageEpisodesOpen, setIsManageEpisodesOpen] = useState(false);
   const [isEditSeriesModalOpen, setIsEditSeriesModalOpen] = useState(false);
@@ -292,6 +294,14 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
 
   const handleSeriesHistoryModalClose = useCallback(() => {
     setIsSeriesHistoryModalOpen(false);
+  }, []);
+
+  const handleRetentionPress = useCallback(() => {
+    setIsRetentionModalOpen(true);
+  }, []);
+
+  const handleRetentionClose = useCallback(() => {
+    setIsRetentionModalOpen(false);
   }, []);
 
   const handleMonitorOptionsPress = useCallback(() => {
@@ -550,6 +560,15 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
             label={translate('EpisodeMonitoring')}
             iconName={icons.MONITORED}
             onPress={handleMonitorOptionsPress}
+          />
+
+          <ToolbarItem
+            id="episode-retention"
+            priority={1}
+            groupId="left-c"
+            label={translate('EpisodeRetention')}
+            iconName={icons.RETENTION}
+            onPress={handleRetentionPress}
           />
 
           <ToolbarItem
@@ -987,6 +1006,12 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
             isOpen={isDeleteSeriesModalOpen}
             seriesId={seriesId}
             onModalClose={handleDeleteSeriesModalClose}
+          />
+
+          <EpisodeRetentionModal
+            isOpen={isRetentionModalOpen}
+            seriesId={seriesId}
+            onModalClose={handleRetentionClose}
           />
 
           <MonitoringOptionsModal

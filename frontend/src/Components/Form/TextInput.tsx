@@ -13,7 +13,9 @@ import { FileInputChanged, InputChanged } from 'typings/inputs';
 import styles from './TextInput.module.css';
 
 export interface CommonTextInputProps {
+  id?: string;
   className?: string;
+  ariaLabel?: string;
   readOnly?: boolean;
   autoFocus?: boolean;
   placeholder?: string;
@@ -44,7 +46,9 @@ export interface FileInputProps extends CommonTextInputProps {
 const TextInput = forwardRef<HTMLInputElement, TextInputProps | FileInputProps>(
   (
     {
+      id,
       className = styles.input,
+      ariaLabel,
       type = 'text',
       readOnly = false,
       autoFocus = false,
@@ -160,6 +164,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps | FileInputProps>(
     return (
       <input
         ref={combinedRef}
+        id={id}
         type={type}
         readOnly={readOnly}
         autoFocus={autoFocus}
@@ -172,6 +177,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps | FileInputProps>(
           hasButton && styles.hasButton
         )}
         name={name}
+        aria-label={ariaLabel}
         value={value}
         step={step}
         min={min}

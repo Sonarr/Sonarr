@@ -104,6 +104,9 @@ interface Series extends ModelBase {
   previousAiring?: string;
   nextAiring?: string;
   qualityProfileId: number;
+  retentionEnabled: boolean;
+  retentionKeepEpisodes: number;
+  retentionIncludeSpecials: boolean;
   ratings: Ratings;
   rootFolderPath: string;
   runtime: number;
