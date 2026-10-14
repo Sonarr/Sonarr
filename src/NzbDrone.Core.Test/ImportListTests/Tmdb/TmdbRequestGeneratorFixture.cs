@@ -15,15 +15,6 @@ namespace NzbDrone.Core.Test.ImportListTests.Tmdb;
 [TestFixture]
 public class TmdbRequestGeneratorFixture : CoreTest
 {
-    private static ImportListRequest[] Requests(IImportListRequestGenerator generator)
-    {
-        return [.. generator.GetListItems().GetAllTiers().SelectMany(t => t)];
-    }
-
-    private static string Query(ImportListRequest request) => request.Url.FullUri;
-
-    private static TmdbDiscoverSettings DiscoverSettings() => new() { AuthToken = "token" };
-
     [Test]
     public void DiscoverShouldRequestDiscoverTvWithBearerTokenAndJsonAccept()
     {
@@ -245,4 +236,13 @@ public class TmdbRequestGeneratorFixture : CoreTest
 
         Requests(new TmdbAccountRequestGenerator(settings, 1))[0].Url.FullUri.Should().Contain("/4/account/a%2Fb%20c/tv/");
     }
+
+    private static ImportListRequest[] Requests(IImportListRequestGenerator generator)
+    {
+        return [.. generator.GetListItems().GetAllTiers().SelectMany(t => t)];
+    }
+
+    private static string Query(ImportListRequest request) => request.Url.FullUri;
+
+    private static TmdbDiscoverSettings DiscoverSettings() => new() { AuthToken = "token" };
 }

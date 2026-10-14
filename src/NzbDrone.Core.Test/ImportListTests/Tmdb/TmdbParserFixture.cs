@@ -44,24 +44,6 @@ public class TmdbParserFixture : CoreTest
         }
         """;
 
-    private static ImportListResponse Response(string content, HttpStatusCode status = HttpStatusCode.OK, string contentType = "application/json")
-    {
-        var httpRequest = new HttpRequest("https://api.themoviedb.org/3/test")
-        {
-            Headers = { Accept = "application/json" }
-        };
-
-        var headers = new HttpHeader();
-        if (contentType != null)
-        {
-            headers.ContentType = contentType;
-        }
-
-        var httpResponse = new HttpResponse(httpRequest, headers, content, status);
-
-        return new ImportListResponse(new ImportListRequest(httpRequest), httpResponse);
-    }
-
     [Test]
     public void ListShouldParseTvItemsAndSkipMovies()
     {
@@ -110,16 +92,6 @@ public class TmdbParserFixture : CoreTest
         var action = () => new TmdbListParser().ParseResponse(Response("<html></html>", contentType: "text/html"));
 
         action.Should().Throw<ImportListException>().Which.Message.Should().Contain("html").And.NotContain("$");
-    }
-
-    private static TmdbPersonParser PersonParser(bool cast, params TmdbDepartmentType[] departments)
-    {
-        return new TmdbPersonParser(new TmdbPersonSettings
-        {
-            PersonId = 9,
-            IncludingCastCredits = cast,
-            IncludeDepartmentTypes = [.. departments.Select(d => (int)d)]
-        });
     }
 
     [Test]
@@ -200,5 +172,33 @@ public class TmdbParserFixture : CoreTest
         var parser = new TmdbPersonParser(new TmdbPersonSettings { IncludingCastCredits = true, IncludeDepartmentTypes = null });
 
         parser.ParseResponse(Response(CreditsJson)).Select(i => i.TmdbId).Should().Equal(10);
+    }
+
+    private static ImportListResponse Response(string content, HttpStatusCode status = HttpStatusCode.OK, string contentType = "application/json")
+    {
+        var httpRequest = new HttpRequest("https://api.themoviedb.org/3/test")
+        {
+            Headers = { Accept = "application/json" }
+        };
+
+        var headers = new HttpHeader();
+        if (contentType != null)
+        {
+            headers.ContentType = contentType;
+        }
+
+        var httpResponse = new HttpResponse(httpRequest, headers, content, status);
+
+        return new ImportListResponse(new ImportListRequest(httpRequest), httpResponse);
+    }
+
+    private static TmdbPersonParser PersonParser(bool cast, params TmdbDepartmentType[] departments)
+    {
+        return new TmdbPersonParser(new TmdbPersonSettings
+        {
+            PersonId = 9,
+            IncludingCastCredits = cast,
+            IncludeDepartmentTypes = [.. departments.Select(d => (int)d)]
+        });
     }
 }
