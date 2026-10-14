@@ -16,6 +16,7 @@ import styles from './TextInput.module.css';
 export interface CommonTextInputProps {
   id?: string;
   className?: string;
+  ariaLabel?: string;
   readOnly?: boolean;
   autoFocus?: boolean;
   placeholder?: string;
@@ -48,6 +49,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps | FileInputProps>(
     {
       className = styles.input,
       id,
+      ariaLabel,
       type = 'text',
       readOnly = false,
       autoFocus = false,
@@ -179,6 +181,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps | FileInputProps>(
           hasButton && styles.hasButton
         )}
         name={name}
+        aria-label={ariaLabel}
         value={value}
         step={step}
         min={min}
