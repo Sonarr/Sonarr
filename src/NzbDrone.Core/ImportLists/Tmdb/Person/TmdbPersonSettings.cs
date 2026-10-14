@@ -26,11 +26,11 @@ public class TmdbPersonSettings() : TmdbSettingsBase<TmdbPersonSettings>(Validat
     private static readonly TmdbPersonSettingsValidator Validator = new();
 
     [FieldDefinition(1, Label = "ImportListsTmdbSettingsPersonId", HelpText = "ImportListsTmdbSettingsPersonIdHelpText", Type = FieldType.Number)]
-    public int PersonId { get; set; }
+    public int PersonId { get; init; }
 
     [FieldDefinition(2, Label = "ImportListsTmdbSettingsIncludingCastCredits", HelpText = "ImportListsTmdbSettingsIncludingCastCreditsHelpText", Type = FieldType.Checkbox)]
-    public bool IncludingCastCredits { get; set; } = true;
+    public bool IncludingCastCredits { get; init; } = true;
 
     [FieldDefinition(3, Label = "ImportListsTmdbSettingsIncludeDepartmentTypes", HelpText = "ImportListsTmdbSettingsIncludeDepartmentTypesHelpText", Type = FieldType.Select, SelectOptions = typeof(TmdbDepartmentType))]
-    public IEnumerable<int> IncludeDepartmentTypes { get; set; } = [];
+    public IEnumerable<int> IncludeDepartmentTypes { get; init; } = [];
 }
