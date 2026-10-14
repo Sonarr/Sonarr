@@ -18,8 +18,6 @@ namespace NzbDrone.Core.Test.ImportListTests.Tmdb;
 [TestFixture]
 public class TmdbListImportFixture : CoreTest<TmdbListImport>
 {
-    private static Dictionary<string, string> Query(string key, string value) => new() { { key, value } };
-
     [SetUp]
     public void Setup()
     {
@@ -33,13 +31,6 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
         };
     }
 
-    private void GivenResponse(string content, HttpStatusCode status = HttpStatusCode.OK)
-    {
-        Mocker.GetMock<IHttpClient>()
-            .Setup(c => c.Execute(It.IsAny<HttpRequest>()))
-            .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), content, status));
-    }
-
     [Test]
     public void StartOauthShouldReturnApprovalUrlAndRequestToken()
     {
@@ -49,7 +40,7 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
 
         var type = result.GetType();
         type.GetProperty("RequestToken")!.GetValue(result).Should().Be("abc");
-        ((string)type.GetProperty("OauthUrl")!.GetValue(result)).Should().Contain("request_token=abc");
+        ((string)type.GetProperty("OauthUrl")!.GetValue(result)!).Should().Contain("request_token=abc");
     }
 
     [Test]
@@ -110,7 +101,7 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
 
         var result = Subject.RequestAction("getAccountLists", new Dictionary<string, string>());
 
-        var options = (List<FieldSelectOption<int>>)result.GetType().GetProperty("options")!.GetValue(result);
+        var options = (List<FieldSelectOption<int>>)result.GetType().GetProperty("options")!.GetValue(result)!;
         options.Should().ContainSingle().Which.Name.Should().Be("None");
     }
 
@@ -137,7 +128,7 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
 
         var result = Subject.RequestAction("getAccountLists", new Dictionary<string, string>());
 
-        var options = (List<FieldSelectOption<int>>)result.GetType().GetProperty("options")!.GetValue(result);
+        var options = (List<FieldSelectOption<int>>)result.GetType().GetProperty("options")!.GetValue(result)!;
         options.Should().ContainSingle().Which.Value.Should().Be(0);
     }
 
@@ -154,9 +145,18 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
 
         var result = Subject.RequestAction("getAccountLists", new Dictionary<string, string>());
 
-        var options = (List<FieldSelectOption<int>>)result.GetType().GetProperty("options")!.GetValue(result);
+        var options = (List<FieldSelectOption<int>>)result.GetType().GetProperty("options")!.GetValue(result)!;
         options.Should().HaveCount(1 + 20 + 1);
         options.Last().Value.Should().Be(99);
         Mocker.GetMock<IHttpClient>().Verify(c => c.Execute(It.IsAny<HttpRequest>()), Times.Exactly(2));
+    }
+
+    private static Dictionary<string, string> Query(string key, string value) => new() { { key, value } };
+
+    private void GivenResponse(string content, HttpStatusCode status = HttpStatusCode.OK)
+    {
+        Mocker.GetMock<IHttpClient>()
+            .Setup(c => c.Execute(It.IsAny<HttpRequest>()))
+            .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), content, status));
     }
 }
