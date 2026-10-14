@@ -21,33 +21,24 @@ public abstract class TmdbSettingsBaseValidator<TSettings> : AbstractValidator<T
     }
 }
 
-public abstract class TmdbSettingsBase<TSettings> : ImportListSettingsBase<TSettings>
+public abstract class TmdbSettingsBase<TSettings>(TmdbSettingsBaseValidator<TSettings> validator) : ImportListSettingsBase<TSettings>
     where TSettings : TmdbSettingsBase<TSettings>
 {
-    private readonly TmdbSettingsBaseValidator<TSettings> _validator;
-
-    protected TmdbSettingsBase(TmdbSettingsBaseValidator<TSettings> validator)
-    {
-        _validator = validator;
-
-        SignIn = "startOAuth";
-    }
-
     public const string DefaultBaseUrl = "https://api.themoviedb.org";
 
     public override string BaseUrl { get; set; } = DefaultBaseUrl;
 
     [FieldDefinition(0, Label = "ImportListsTmdbSettingsAccountId", Type = FieldType.Textbox, Hidden = HiddenType.Hidden, Advanced = true)]
-    public string AccountId { get; set; }
+    public string AccountId { get; init; }
 
     [FieldDefinition(0, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden, Privacy = PrivacyLevel.ApiKey, Advanced = true)]
     public string AuthToken { get; set; }
 
     [FieldDefinition(99, Label = "ImportListsTmdbSettingsAuthenticateWithTmdb", Type = FieldType.OAuth)]
-    public string SignIn { get; set; }
+    public string SignIn { get; set; } = "startOAuth";
 
     public override NzbDroneValidationResult Validate()
     {
-        return new NzbDroneValidationResult(_validator.Validate((TSettings)this));
+        return new NzbDroneValidationResult(validator.Validate((TSettings)this));
     }
 }
