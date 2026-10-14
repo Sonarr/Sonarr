@@ -13,6 +13,8 @@ public abstract class TmdbParserBase<TResponse> : IParseImportListResponse
 {
     public IList<ImportListItemInfo> ParseResponse(ImportListResponse importListResponse)
     {
+        ArgumentNullException.ThrowIfNull(importListResponse);
+
         var results = new List<ImportListItemInfo>();
 
         if (!PreProcess(importListResponse))
@@ -28,6 +30,8 @@ public abstract class TmdbParserBase<TResponse> : IParseImportListResponse
 
     protected static ImportListItemInfo AsImportable(TmdbMediaResource resource)
     {
+        ArgumentNullException.ThrowIfNull(resource);
+
         // When MediaType is null/empty, it is implied to be a media type of "tv".
         if (resource.MediaType.IsNullOrWhiteSpace() || resource.MediaType == "tv")
         {
