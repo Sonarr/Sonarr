@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -11,6 +12,7 @@ using NzbDrone.Core.Languages;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ImportListTests
 {
@@ -29,44 +31,11 @@ namespace NzbDrone.Core.Test.ImportListTests
                   .Setup(v => v.AutomaticAddEnabled(It.IsAny<bool>()))
                   .Returns(_importLists);
 
-            _listSeries = Builder<ImportListItemInfo>.CreateListOfSize(5)
-                .Build().ToList();
+            _listSeries = [.. Builder<ImportListItemInfo>.CreateListOfSize(5).Build()];
 
             Mocker.GetMock<ISearchForNewSeries>()
                 .Setup(v => v.SearchForNewSeriesByImdbId(It.IsAny<string>(), It.IsAny<Language>()))
                 .Returns((string value, Language _) => [new Tv.Series { ImdbId = value }]);
-        }
-
-        private Mock<IImportList> WithList(int id, bool enabled, bool enabledAuto, ImportListFetchResult fetchResult, TimeSpan? minRefresh = null, int? lastSyncOffset = null, int? syncDeletedCount = null)
-        {
-            return CreateListResult(id, enabled, enabledAuto, fetchResult, minRefresh, lastSyncOffset, syncDeletedCount);
-        }
-
-        private Mock<IImportList> CreateListResult(int id, bool enabled, bool enabledAuto, ImportListFetchResult fetchResult, TimeSpan? minRefresh = null, int? lastSyncOffset = null, int? syncDeletedCount = null)
-        {
-            var refreshInterval = minRefresh ?? TimeSpan.FromHours(12);
-            var importListDefinition = new ImportListDefinition { Id = id, Enable = enabled, EnableAutomaticAdd = enabledAuto, MinRefreshInterval = refreshInterval };
-
-            var mockImportList = new Mock<IImportList>();
-            mockImportList.SetupGet(s => s.Definition).Returns(importListDefinition);
-            mockImportList.Setup(s => s.Fetch()).Returns(fetchResult);
-            mockImportList.SetupGet(s => s.MinRefreshInterval).Returns(refreshInterval);
-
-            DateTime? lastSync = lastSyncOffset.HasValue ? DateTime.UtcNow.AddHours(lastSyncOffset.Value) : null;
-            Mocker.GetMock<IImportListStatusService>()
-                .Setup(v => v.GetListStatus(id))
-                .Returns(new ImportListStatus { LastInfoSync = lastSync });
-
-            if (syncDeletedCount.HasValue)
-            {
-                Mocker.GetMock<IImportListItemService>()
-                    .Setup(v => v.SyncSeriesForList(It.IsAny<List<ImportListItemInfo>>(), id))
-                    .Returns(syncDeletedCount.Value);
-            }
-
-            _importLists.Add(mockImportList.Object);
-
-            return mockImportList;
         }
 
         [Test]
@@ -257,8 +226,131 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             WithList(1, true, true, new ImportListFetchResult { Series = series });
 
-            // Documented behaviour: later sync dedupes on the resolved TvdbId.
+            // Documented behavior: later sync dedupes on the resolved TvdbId.
             Subject.Fetch().Series.Should().HaveCount(2);
+        }
+
+        [Test]
+        public void ShouldMergeAndSyncDistinctSeriesFromEachList()
+        {
+            var lists = Enumerable.Range(1, 3)
+                .Select(id => (Id: id, Series: new List<ImportListItemInfo> { new() { Title = $"Show {id}", TmdbId = id } }))
+                .ToList();
+
+            foreach (var (id, series) in lists)
+            {
+                WithList(id, true, true, new ImportListFetchResult { Series = series });
+            }
+
+            var result = Subject.Fetch();
+
+            result.AnyFailure.Should().BeFalse();
+            result.Series.Select(s => s.TmdbId).Should().BeEquivalentTo([1, 2, 3]);
+            result.Series.Should().OnlyContain(s => s.ImportListId == s.TmdbId);
+
+            foreach (var (id, series) in lists)
+            {
+                Mocker.GetMock<IImportListItemService>().Verify(v => v.SyncSeriesForList(series, id), Times.Once());
+                Mocker.GetMock<IImportListStatusService>().Verify(v => v.UpdateListSyncStatus(id, false), Times.Once());
+            }
+        }
+
+        [Test]
+        public void ShouldStillSyncOtherListsWhenOneListThrows()
+        {
+            const int throwingListId = 1;
+            const int goodListId = 2;
+
+            var throwingList = WithList(throwingListId, true, true, new ImportListFetchResult());
+            throwingList.Setup(s => s.Fetch()).Throws(new InvalidOperationException("boom"));
+
+            var goodSeries = new List<ImportListItemInfo> { new() { Title = "Good", TmdbId = 10 } };
+            WithList(goodListId, true, true, new ImportListFetchResult { Series = goodSeries });
+
+            var result = Subject.Fetch();
+
+            ExceptionVerification.ExpectedErrors(1);
+            result.Series.Should().ContainSingle(s => s.TmdbId == 10);
+
+            Mocker.GetMock<IImportListItemService>()
+                .Verify(v => v.SyncSeriesForList(goodSeries, goodListId), Times.Once());
+            Mocker.GetMock<IImportListItemService>()
+                .Verify(v => v.SyncSeriesForList(It.IsAny<List<ImportListItemInfo>>(), throwingListId), Times.Never());
+            Mocker.GetMock<IImportListStatusService>()
+                .Verify(v => v.UpdateListSyncStatus(throwingListId, It.IsAny<bool>()), Times.Never());
+        }
+
+        [Test]
+        public void ShouldFetchListsInParallel()
+        {
+            // Both fetches only complete if they are running at the same time.
+            var barrier = new Barrier(2);
+            var rendezvous = new List<bool>();
+
+            WithList(1, true, true, new ImportListFetchResult()).Setup(s => s.Fetch()).Returns(Fetch);
+            WithList(2, true, true, new ImportListFetchResult()).Setup(s => s.Fetch()).Returns(Fetch);
+
+            Subject.Fetch();
+
+            rendezvous.Should().Equal(true, true);
+            barrier.Dispose();
+
+            return;
+
+            ImportListFetchResult Fetch()
+            {
+                var met = barrier.SignalAndWait(TimeSpan.FromSeconds(10));
+
+                lock (rendezvous)
+                {
+                    rendezvous.Add(met);
+                }
+
+                return new ImportListFetchResult();
+            }
+        }
+
+        [Test]
+        public void ShouldDeduplicateItemsAcrossLists()
+        {
+            WithList(1, true, true, new ImportListFetchResult { Series = [new ImportListItemInfo { Title = "Doctor Who", TmdbId = 1 }] });
+            WithList(2, true, true, new ImportListFetchResult { Series = [new ImportListItemInfo { Title = "Doctor Who", TmdbId = 1 }, new ImportListItemInfo { Title = "Other", TmdbId = 2 }] });
+
+            var result = Subject.Fetch();
+
+            result.Series.Select(s => s.TmdbId).Should().BeEquivalentTo([1, 2]);
+        }
+
+        private Mock<IImportList> WithList(int id, bool enabled, bool enabledAuto, ImportListFetchResult fetchResult, TimeSpan? minRefresh = null, int? lastSyncOffset = null, int? syncDeletedCount = null)
+        {
+            return CreateListResult(id, enabled, enabledAuto, fetchResult, minRefresh, lastSyncOffset, syncDeletedCount);
+        }
+
+        private Mock<IImportList> CreateListResult(int id, bool enabled, bool enabledAuto, ImportListFetchResult fetchResult, TimeSpan? minRefresh = null, int? lastSyncOffset = null, int? syncDeletedCount = null)
+        {
+            var refreshInterval = minRefresh ?? TimeSpan.FromHours(12);
+            var importListDefinition = new ImportListDefinition { Id = id, Enable = enabled, EnableAutomaticAdd = enabledAuto, MinRefreshInterval = refreshInterval };
+
+            var mockImportList = new Mock<IImportList>();
+            mockImportList.SetupGet(s => s.Definition).Returns(importListDefinition);
+            mockImportList.Setup(s => s.Fetch()).Returns(fetchResult);
+            mockImportList.SetupGet(s => s.MinRefreshInterval).Returns(refreshInterval);
+
+            DateTime? lastSync = lastSyncOffset.HasValue ? DateTime.UtcNow.AddHours(lastSyncOffset.Value) : null;
+            Mocker.GetMock<IImportListStatusService>()
+                .Setup(v => v.GetListStatus(id))
+                .Returns(new ImportListStatus { LastInfoSync = lastSync });
+
+            if (syncDeletedCount.HasValue)
+            {
+                Mocker.GetMock<IImportListItemService>()
+                    .Setup(v => v.SyncSeriesForList(It.IsAny<List<ImportListItemInfo>>(), id))
+                    .Returns(syncDeletedCount.Value);
+            }
+
+            _importLists.Add(mockImportList.Object);
+
+            return mockImportList;
         }
     }
 }
