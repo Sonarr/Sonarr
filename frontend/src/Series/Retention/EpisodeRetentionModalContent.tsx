@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useCallback, useEffect, useState } from 'react';
-import Command from 'Commands/Command';
+import { useCommands } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormInput from 'Components/Form/FormInput';
@@ -63,32 +63,40 @@ function EpisodeRetentionModalContent({
   const [preview, setPreview] = useState<Readonly<RetentionPreview> | null>(
     null
   );
-  const [isComplete, setIsComplete] = useState(false);
-  const [commandId, setCommandId] = useState<number | null>(null);
-  const { data: command, error: commandError } = useApiQuery<Command>({
-    path: `/command/${commandId}`,
-    queryOptions: {
-      enabled: commandId !== null,
-      retry: false,
-      refetchInterval: ({ state }) => {
-        if (state.error) {
-          return false;
-        }
-
-        const status = state.data?.status;
-        return !status || status === 'queued' || status === 'started'
-          ? 1000
-          : false;
-      },
-    },
-  });
-  const isCommandRunning =
-    commandId !== null &&
+  const [dismissedCommandId, setDismissedCommandId] = useState<number | null>(
+    null
+  );
+  const {
+    data: commands,
+    error: commandError,
+    isPending: isLoadingCommands,
+    isFetching: isFetchingCommands,
+    refetch: refetchCommands,
+  } = useCommands();
+  const retentionCommands = commands.filter(
+    (command) =>
+      command.name === 'EpisodeRetention' &&
+      'seriesId' in command.body &&
+      command.body.seriesId === seriesId
+  );
+  const runningCommands = retentionCommands.filter(
+    (command) => command.status === 'queued' || command.status === 'started'
+  );
+  const command = (
+    runningCommands.length ? runningCommands : retentionCommands
+  ).reduce<(typeof commands)[number] | undefined>(
+    (latest, item) => (!latest || item.id > latest.id ? item : latest),
+    undefined
+  );
+  const isCommandRunning = runningCommands.length > 0;
+  const isComplete =
     !commandError &&
-    (!command || command.status === 'queued' || command.status === 'started');
+    command?.status === 'completed' &&
+    command.id !== dismissedCommandId;
   const commandFailed =
-    !!command &&
     !commandError &&
+    !!command &&
+    command.id !== dismissedCommandId &&
     !isCommandRunning &&
     command.status !== 'completed';
   const savedSettingsKey = JSON.stringify(savedSettings);
@@ -114,9 +122,9 @@ function EpisodeRetentionModalContent({
     path: `/series/${seriesId}/retention`,
     method: 'POST',
     mutationOptions: {
-      onSuccess: (result) => {
+      onSuccess: async () => {
         setPreview(null);
-        setCommandId(result.commandId);
+        await queryClient.invalidateQueries({ queryKey: ['/command'] });
       },
       onError: () => setPreview(null),
     },
@@ -124,22 +132,23 @@ function EpisodeRetentionModalContent({
   useEffect(() => {
     if (commandError) {
       setPreview(null);
-      setIsComplete(false);
     }
   }, [commandError]);
 
-  const isBusy = isSaving || isFetching || isTrimming || isCommandRunning;
+  const isBusy =
+    isSaving ||
+    isFetching ||
+    isTrimming ||
+    isCommandRunning ||
+    isLoadingCommands;
 
-  useEffect(() => {
-    if (command?.status === 'completed') {
-      setIsComplete(true);
-      queryClient.invalidateQueries({ queryKey: ['/series'] });
-      queryClient.invalidateQueries({ queryKey: ['/episode'] });
-      queryClient.invalidateQueries({ queryKey: ['/episodeFile'] });
-    }
-  }, [command?.status, queryClient]);
   const canPreview =
-    !isBusy && !isDirty && isValid && settings.retentionEnabled && !saveError;
+    !isBusy &&
+    !isDirty &&
+    isValid &&
+    settings.retentionEnabled &&
+    !saveError &&
+    !commandError;
   const deletedEpisodeIds = new Set(
     preview?.files.flatMap((file) => file.episodes.map((episode) => episode.id))
   );
@@ -154,32 +163,37 @@ function EpisodeRetentionModalContent({
   // A preview is valid only for the saved settings that produced it.
   useEffect(() => {
     setPreview(null);
-    setIsComplete(false);
   }, [savedSettingsKey]);
 
-  const handleChange = useCallback(({ name, value }: InputChanged) => {
-    setSettings((current) => ({ ...current, [name]: value }));
-    setPreview(null);
-    setIsComplete(false);
-  }, []);
+  const handleChange = useCallback(
+    ({ name, value }: InputChanged) => {
+      setSettings((current) => ({ ...current, [name]: value }));
+      setPreview(null);
+      setDismissedCommandId(command?.id ?? null);
+    },
+    [command?.id]
+  );
 
   const handleSave = useCallback(() => {
     setPreview(null);
-    setIsComplete(false);
+    setDismissedCommandId(command?.id ?? null);
     saveSeries({ ...series, ...settings });
-  }, [saveSeries, series, settings]);
+  }, [command?.id, saveSeries, series, settings]);
 
   const handlePreview = useCallback(async () => {
     setPreview(null);
-    setIsComplete(false);
+    setDismissedCommandId(command?.id ?? null);
     resetTrim();
-    setCommandId(null);
     const result = await refetch();
 
     if (result.isSuccess) {
       setPreview(result.data);
     }
-  }, [refetch, resetTrim]);
+  }, [command?.id, refetch, resetTrim]);
+
+  const handleRefreshCommands = useCallback(() => {
+    refetchCommands();
+  }, [refetchCommands]);
 
   const handleTrim = useCallback(() => {
     if (canPreview && preview && !previewError && !trimError && !commandError) {
@@ -350,6 +364,15 @@ function EpisodeRetentionModalContent({
         <Button className={styles.closeButton} onPress={onModalClose}>
           {translate('Close')}
         </Button>
+        {commandError ? (
+          <SpinnerButton
+            isSpinning={isFetchingCommands}
+            isDisabled={isFetchingCommands}
+            onPress={handleRefreshCommands}
+          >
+            {translate('Refresh')}
+          </SpinnerButton>
+        ) : null}
         <SpinnerButton
           isSpinning={isSaving}
           isDisabled={isBusy || !isDirty || !isValid}

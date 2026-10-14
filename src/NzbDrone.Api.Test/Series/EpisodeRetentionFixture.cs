@@ -59,7 +59,7 @@ namespace NzbDrone.Api.Test.Series
 
             Assert.That(result.Result, Is.TypeOf<Accepted<EpisodeRetentionQueuedResource>>());
             Assert.That(((Accepted<EpisodeRetentionQueuedResource>)result.Result).Value.CommandId, Is.EqualTo(17));
-            _queue.Verify(q => q.Push(It.Is<EpisodeRetentionCommand>(c => c.SeriesId == 1 && c.PreviewToken == "reviewed" && c.RequiresDiskAccess), CommandPriority.Normal, CommandTrigger.Manual), Times.Once());
+            _queue.Verify(q => q.Push(It.Is<EpisodeRetentionCommand>(c => c.SeriesId == 1 && c.PreviewToken == "reviewed" && c.RequiresDiskAccess && c.SendUpdatesToClient), CommandPriority.Normal, CommandTrigger.Manual), Times.Once());
             _retention.Verify(s => s.Trim(It.IsAny<int>(), It.IsAny<string>()), Times.Never());
         }
 

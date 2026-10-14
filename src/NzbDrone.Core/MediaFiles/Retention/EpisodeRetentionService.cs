@@ -89,6 +89,7 @@ namespace NzbDrone.Core.MediaFiles.Retention
                     plan.FilesToDelete.Count,
                     plan.EpisodesToUnmonitor.Count);
 
+                var episodesByFileId = plan.Episodes.ToLookup(e => e.EpisodeFileId);
                 var deletedFiles = 0;
                 var unmonitoredEpisodes = 0;
                 var unmonitoredMissingEpisodes = 0;
@@ -97,7 +98,7 @@ namespace NzbDrone.Core.MediaFiles.Retention
                 {
                     foreach (var file in plan.FilesToDelete)
                     {
-                        var episodes = plan.Episodes.Where(e => e.EpisodeFileId == file.Id).ToList();
+                        var episodes = episodesByFileId[file.Id].ToList();
                         var monitoredCount = episodes.Count(e => e.Monitored);
                         _deleteMediaFiles.DeleteEpisodeFile(series, file, DeleteMediaFileReason.Retention);
                         deletedFiles++;
@@ -160,6 +161,7 @@ namespace NzbDrone.Core.MediaFiles.Retention
 
             if (series.RetentionEnabled)
             {
+                var episodesByFileId = episodes.ToLookup(e => e.EpisodeFileId);
                 var fileIds = files.Select(f => f.Id).ToHashSet();
                 var downloaded = episodes.Where(e => fileIds.Contains(e.EpisodeFileId) && (series.RetentionIncludeSpecials || e.SeasonNumber != 0))
                                          .OrderByDescending(e => e.SeasonNumber)
@@ -169,8 +171,8 @@ namespace NzbDrone.Core.MediaFiles.Retention
                 var older = downloaded.Skip(series.RetentionKeepEpisodes).Select(e => e.Id).ToHashSet();
 
                 // A shared file is indivisible. Every linked episode must be eligible for deletion.
-                plan.FilesToDelete = files.Where(f => episodes.Any(e => e.EpisodeFileId == f.Id) &&
-                                                     episodes.Where(e => e.EpisodeFileId == f.Id).All(e => older.Contains(e.Id)))
+                plan.FilesToDelete = files.Where(f => episodesByFileId.Contains(f.Id) &&
+                                                     episodesByFileId[f.Id].All(e => older.Contains(e.Id)))
                                           .OrderBy(f => f.Id)
                                           .ToList();
                 var deletingIds = plan.FilesToDelete.Select(f => f.Id).ToHashSet();
@@ -240,7 +242,12 @@ namespace NzbDrone.Core.MediaFiles.Retention
         {
             if (_seriesService.GetSeries(seriesId).RetentionEnabled)
             {
-                _commandQueue.Push(new EpisodeRetentionCommand { SeriesId = seriesId });
+                _commandQueue.Push(new EpisodeRetentionCommand
+                {
+                    SeriesId = seriesId,
+                    SendUpdatesToClient = true,
+                    SuppressMessages = true
+                });
             }
         }
     }
