@@ -4,6 +4,7 @@ import PageHeading from 'Components/Page/PageHeading';
 import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
+import StatusIndicator from 'Components/StatusIndicator';
 import { icons } from 'Helpers/Props';
 import settingsStyles from 'Settings/Settings.module.css';
 import SettingsPage from 'Settings/SettingsPage';
@@ -19,8 +20,12 @@ import { useTestAllImportLists } from './ImportLists/useImportLists';
 import ImportListOptions from './Options/ImportListOptions';
 
 function ImportListSettings() {
-  const { isTestingAllImportLists, testAllImportLists } =
-    useTestAllImportLists();
+  const {
+    isTestingAllImportLists,
+    testAllImportLists,
+    testAllResults,
+    testAllError,
+  } = useTestAllImportLists();
 
   const saveOptions = useRef<() => void>();
 
@@ -57,6 +62,16 @@ function ImportListSettings() {
     testAllImportLists();
   }, [testAllImportLists]);
 
+  let testStatusLabel: string | undefined = undefined;
+
+  if (isTestingAllImportLists) {
+    testStatusLabel = translate('TestingAllImportLists');
+  } else if (testAllResults) {
+    testStatusLabel = translate('ImportListTestAllCompleted');
+  } else if (testAllError) {
+    testStatusLabel = translate('ImportListTestAllFailed');
+  }
+
   return (
     <SettingsPage
       title={translate('ImportListSettings')}
@@ -91,13 +106,23 @@ function ImportListSettings() {
       onSavePress={handleSavePress}
     >
       <PageContentBody>
+        {testStatusLabel ? (
+          <StatusIndicator
+            label={testStatusLabel}
+            role={testAllError ? 'alert' : 'status'}
+            aria-atomic={true}
+          >
+            <span />
+          </StatusIndicator>
+        ) : null}
+
         <div className={settingsStyles.section}>
           <PageHeading
             scope={translate('Settings')}
             title={translate('ImportLists')}
           />
 
-          <ImportLists />
+          <ImportLists testResults={testAllResults} />
 
           <ImportListOptions
             setChildSave={handleSetChildSave}

@@ -7,6 +7,10 @@ import { useLanguageById } from 'Language/useLanguages';
 import { MonitorNewItems, SeriesMonitor, SeriesType } from 'Series/Series';
 import { useMetadataSourceSettingsValues } from 'Settings/MetadataSource/useMetadataSourceSettings';
 import {
+  getProviderTestAllResults,
+  ProviderTestAllResult,
+} from 'Settings/ProviderTestAllResult';
+import {
   SelectedSchema,
   useProviderSchema,
   useSelectedSchema,
@@ -211,10 +215,13 @@ export const useImportListSchema = (enabled: boolean = true) => {
 };
 
 export const useTestAllImportLists = (
-  onSuccess?: () => void,
+  onSuccess?: (results: ProviderTestAllResult[]) => void,
   onError?: (error: ApiError) => void
 ) => {
-  const { mutate, isPending, error } = useApiMutation<void, void>({
+  const { mutate, isPending, data, error } = useApiMutation<
+    ProviderTestAllResult[],
+    void
+  >({
     path: `${PATH}/testall`,
     method: 'POST',
     mutationOptions: {
@@ -223,10 +230,13 @@ export const useTestAllImportLists = (
     },
   });
 
+  const errorResults = getProviderTestAllResults(error);
+
   return {
     testAllImportLists: mutate,
     isTestingAllImportLists: isPending,
-    testAllError: error,
+    testAllResults: data ?? errorResults,
+    testAllError: errorResults ? null : error,
   };
 };
 
