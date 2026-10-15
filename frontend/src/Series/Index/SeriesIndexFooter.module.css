@@ -21,25 +21,25 @@
 .continuing {
   composes: legendItemColor;
 
-  background-color: var(--accent);
+  background-color: var(--progressBarPrimaryColor);
 }
 
 .ended {
   composes: legendItemColor;
 
-  background-color: var(--successColor);
+  background-color: var(--progressBarSuccessColor);
 }
 
 .missingMonitored {
   composes: legendItemColor;
 
-  background-color: var(--dangerColor);
+  background-color: var(--progressBarDangerColor);
 }
 
 .missingUnmonitored {
   composes: legendItemColor;
 
-  background-color: var(--warningColor);
+  background-color: var(--progressBarWarningColor);
 }
 
 .downloading {
