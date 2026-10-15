@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using Dapper;
 using FluentMigrator;
 using Newtonsoft.Json.Linq;
@@ -43,7 +42,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         {
                             var parsedSeasonNumbers = Parser.Parser.ParseTitle(title)?.SeasonNumbers;
 
-                            if (parsedSeasonNumbers != null && parsedSeasonNumbers.Any())
+                            if (parsedSeasonNumbers is { Count: > 0 })
                             {
                                 parsedEpisodeInfo["seasonNumbers"] = new JArray(parsedSeasonNumbers);
                             }
