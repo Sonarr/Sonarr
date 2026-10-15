@@ -68,9 +68,23 @@
   --linkHoverColor: oklch(36% 0.130 215);
 
   /* Page header & sidebar */
-  --pageHeaderBackgroundColor: oklch(86% 0.013 260);
+  --pageHeaderAccentColor: oklch(61.5% 0.108 227);
+  --pageHeaderBackgroundColor: var(--pageHeaderAccentColor);
+  --pageHeaderBackgroundImage: none;
+  --pageHeaderBrandColor: oklch(100% 0 0);
+  --pageHeaderBorderColor: oklch(56% 0.105 227);
+  --pageHeaderColor: oklch(100% 0 0);
+  --pageHeaderMutedColor: oklch(100% 0 0 / 0.85);
+  --pageHeaderHoverBackgroundColor: oklch(100% 0 0 / 0.16);
+  --pageHeaderDonateColor: oklch(100% 0 0);
+  --pageHeaderSearchBorderColor: transparent;
+  --pageHeaderSearchBackgroundColor: oklch(100% 0 0 / 0.45);
+  --pageHeaderSearchHoverBackgroundColor: oklch(100% 0 0 / 0.6);
+  --pageHeaderSearchFocusBackgroundColor: var(--inputBackgroundColor);
+  --pageHeaderSearchFocusBorderColor: transparent;
+  --pageHeaderSearchFocusPlaceholderColor: oklch(58% 0.012 260);
   --sidebarColor: var(--ink);
-  --sidebarBackgroundColor: var(--pageHeaderBackgroundColor);
+  --sidebarBackgroundColor: oklch(86% 0.013 260);
   --sidebarActiveBackgroundColor: oklch(95% 0.008 250);
   --toolbarColor: oklch(32% 0.012 260);
   --toolbarBackgroundColor: oklch(91% 0.012 260);
@@ -272,9 +286,23 @@
   --linkHoverColor: oklch(88% 0.095 215);
 
   /* Page header & sidebar */
-  --pageHeaderBackgroundColor: oklch(20% 0.015 260);
+  --pageHeaderAccentColor: oklch(42% 0.085 228);
+  --pageHeaderBackgroundColor: var(--pageHeaderAccentColor);
+  --pageHeaderBackgroundImage: none;
+  --pageHeaderBrandColor: oklch(97% 0.005 228);
+  --pageHeaderBorderColor: oklch(36% 0.075 228);
+  --pageHeaderColor: oklch(97% 0.005 228);
+  --pageHeaderMutedColor: oklch(97% 0.005 228 / 0.85);
+  --pageHeaderHoverBackgroundColor: oklch(100% 0 0 / 0.12);
+  --pageHeaderDonateColor: oklch(97% 0.005 228);
+  --pageHeaderSearchBorderColor: transparent;
+  --pageHeaderSearchBackgroundColor: oklch(20% 0.015 260 / 0.4);
+  --pageHeaderSearchHoverBackgroundColor: oklch(20% 0.015 260 / 0.55);
+  --pageHeaderSearchFocusBackgroundColor: var(--searchInputFocusBackgroundColor);
+  --pageHeaderSearchFocusBorderColor: transparent;
+  --pageHeaderSearchFocusPlaceholderColor: var(--inkFaint);
   --sidebarColor: oklch(90% 0.007 260);
-  --sidebarBackgroundColor: var(--pageHeaderBackgroundColor);
+  --sidebarBackgroundColor: oklch(20% 0.015 260);
   --sidebarActiveBackgroundColor: oklch(29% 0.015 260);
   --toolbarColor: oklch(90% 0.007 260);
   --toolbarBackgroundColor: oklch(27% 0.014 260);
@@ -398,6 +426,21 @@
   --shadowSidebar: 0 24px 60px -16px oklch(0% 0 0 / 0.65);
 
   color-scheme: dark;
+}
+
+[data-header-color=gradient] {
+  --pageHeaderBackgroundColor: var(--sidebarBackgroundColor);
+  --pageHeaderBackgroundImage: linear-gradient(90deg in oklab, var(--pageHeaderAccentColor) min(var(--sidebarWidth), 25%), var(--sidebarBackgroundColor) max(40%, min(calc(var(--sidebarWidth) + 160px), 70%)));
+  --pageHeaderBorderColor: var(--borderColor);
+  --pageHeaderColor: var(--ink);
+  --pageHeaderMutedColor: var(--inkSoft);
+  --pageHeaderHoverBackgroundColor: var(--menuItemHoverBackgroundColor);
+  --pageHeaderDonateColor: var(--statusMissing);
+  --pageHeaderSearchBorderColor: var(--inputBorderColor);
+  --pageHeaderSearchBackgroundColor: var(--searchInputBackgroundColor);
+  --pageHeaderSearchHoverBackgroundColor: var(--searchInputFocusBackgroundColor);
+  --pageHeaderSearchFocusBackgroundColor: var(--searchInputFocusBackgroundColor);
+  --pageHeaderSearchFocusBorderColor: var(--accent);
 }
 
 [data-color-impaired] {

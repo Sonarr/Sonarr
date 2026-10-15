@@ -70,6 +70,21 @@ export const timeFormatOptions: EnhancedSelectInputValue<string>[] = [
   { key: 'HH:mm', value: '17:00/17:30' },
 ];
 
+const headerColorOptions: EnhancedSelectInputValue<string>[] = [
+  {
+    key: 'fullColor',
+    get value() {
+      return translate('FullColor');
+    },
+  },
+  {
+    key: 'gradient',
+    get value() {
+      return translate('Gradient');
+    },
+  },
+];
+
 function UISettings() {
   const {
     data: languageItems = [],
@@ -262,6 +277,18 @@ function UISettings() {
                     values={themeOptions}
                     onChange={handleInputChange}
                     {...settings.theme}
+                  />
+                </FormRow>
+
+                <FormRow>
+                  <FormLabel>{translate('HeaderColor')}</FormLabel>
+                  <FormInputHelpText text={translate('HeaderColorHelpText')} />
+                  <FormInput
+                    type={inputTypes.SELECT}
+                    name="headerColor"
+                    values={headerColorOptions}
+                    onChange={handleInputChange}
+                    {...settings.headerColor}
                   />
                 </FormRow>
 

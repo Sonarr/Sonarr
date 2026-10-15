@@ -4,9 +4,10 @@
   flex: 0 0 auto;
   padding: 0 20px 0 0;
   height: var(--headerHeight);
-  border-bottom: 1px solid var(--borderColor);
+  border-bottom: 1px solid var(--pageHeaderBorderColor);
   background-color: var(--pageHeaderBackgroundColor);
-  color: var(--ink);
+  background-image: var(--pageHeaderBackgroundImage);
+  color: var(--pageHeaderColor);
 }
 
 .logoContainer {
@@ -19,7 +20,7 @@
 .logoLink {
   display: inline-flex;
   align-items: center;
-  color: var(--ink);
+  color: var(--pageHeaderBrandColor);
   letter-spacing: -0.01em;
   font-weight: 600;
   font-size: 15px;
@@ -28,7 +29,7 @@
   gap: 10px;
 
   &:hover {
-    color: var(--ink);
+    color: var(--pageHeaderBrandColor);
     text-decoration: none;
   }
 }
@@ -39,7 +40,7 @@
 }
 
 .brandName {
-  color: var(--ink);
+  color: var(--pageHeaderBrandColor);
   letter-spacing: -0.01em;
   font-weight: 600;
   font-size: 15px;
@@ -51,6 +52,14 @@
   justify-content: center;
   flex: 0 0 45px;
   margin-right: 8px;
+}
+
+.sidebarToggle {
+  composes: button from 'Components/Link/IconButton.module.css';
+
+  &:hover {
+    color: var(--pageHeaderColor);
+  }
 }
 
 .right {
@@ -71,14 +80,14 @@
   width: var(--chipSize);
   height: var(--chipSize);
   border-radius: 6px;
-  color: var(--statusMissing);
+  color: var(--pageHeaderDonateColor);
   text-align: center;
   transition:
     color var(--transitionSmooth),
     background-color var(--transitionSmooth);
 
   &:hover {
-    background-color: var(--menuItemHoverBackgroundColor);
+    background-color: var(--pageHeaderHoverBackgroundColor);
   }
 }
 

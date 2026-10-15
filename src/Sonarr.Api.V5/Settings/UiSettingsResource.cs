@@ -17,6 +17,7 @@ public class UiSettingsResource : RestResource
     public bool ShowRelativeDates { get; set; }
 
     public bool EnableColorImpairedMode { get; set; }
+    public string? HeaderColor { get; set; }
     public string? Theme { get; set; }
     public int UiLanguage { get; set; }
 }
@@ -37,6 +38,7 @@ public static class UiSettingsResourceMapper
             ShowRelativeDates = model.ShowRelativeDates,
 
             EnableColorImpairedMode = model.EnableColorImpairedMode,
+            HeaderColor = model.HeaderColor,
             Theme = config.Theme,
             UiLanguage = model.UILanguage
         };

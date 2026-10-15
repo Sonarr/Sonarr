@@ -39,9 +39,9 @@
   margin: 0;
   padding: 7px 14px 7px 36px;
   width: 300px;
-  border: 1px solid var(--inputBorderColor);
+  border: 1px solid var(--pageHeaderSearchBorderColor);
   border-radius: 8px;
-  background-color: var(--searchInputBackgroundColor);
+  background-color: var(--pageHeaderSearchBackgroundColor);
   box-shadow: none;
   color: var(--ink);
   font-size: 13px;
@@ -56,17 +56,17 @@
   }
 
   &:hover {
-    background-color: var(--searchInputFocusBackgroundColor);
+    background-color: var(--pageHeaderSearchHoverBackgroundColor);
   }
 
   &:focus {
     outline: 0;
-    border-color: var(--accent);
-    background-color: var(--searchInputFocusBackgroundColor);
+    border-color: var(--pageHeaderSearchFocusBorderColor);
+    background-color: var(--pageHeaderSearchFocusBackgroundColor);
     box-shadow: none;
 
     &::placeholder {
-      color: var(--inkFaint);
+      color: var(--pageHeaderSearchFocusPlaceholderColor);
     }
   }
   @media (pointer: coarse) {

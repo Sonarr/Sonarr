@@ -5,14 +5,14 @@
   width: var(--chipSize);
   height: var(--chipSize);
   border-radius: 6px;
-  color: var(--inkSoft);
+  color: var(--pageHeaderMutedColor);
   transition:
     color var(--transitionSmooth),
     background-color var(--transitionSmooth);
 
   &:hover {
-    background-color: var(--menuItemHoverBackgroundColor);
-    color: var(--ink);
+    background-color: var(--pageHeaderHoverBackgroundColor);
+    color: var(--pageHeaderColor);
   }
 }
 
