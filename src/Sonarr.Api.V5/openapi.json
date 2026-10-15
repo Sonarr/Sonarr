@@ -5999,42 +5999,24 @@
             }
           },
           {
+            "name": "removalMethod",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/QueueRemovalMethod"
+            }
+          },
+          {
+            "name": "blocklistMethod",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/QueueBlocklistMethod"
+            }
+          },
+          {
             "name": "message",
             "in": "query",
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "removeFromClient",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": true
-            }
-          },
-          {
-            "name": "blocklist",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "skipRedownload",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "changeCategory",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
             }
           }
         ],
@@ -6055,42 +6037,24 @@
         ],
         "parameters": [
           {
+            "name": "removalMethod",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/QueueRemovalMethod"
+            }
+          },
+          {
+            "name": "blocklistMethod",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/QueueBlocklistMethod"
+            }
+          },
+          {
             "name": "message",
             "in": "query",
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "removeFromClient",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": true
-            }
-          },
-          {
-            "name": "blocklist",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "skipRedownload",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "changeCategory",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
             }
           }
         ],
@@ -9637,9 +9601,7 @@
             "type": "string",
             "nullable": true
           },
-          "value": {
-            "nullable": true
-          },
+          "value": { },
           "type": {
             "type": "string",
             "nullable": true
@@ -12069,6 +12031,14 @@
         },
         "additionalProperties": false
       },
+      "QueueBlocklistMethod": {
+        "enum": [
+          "doNotBlocklist",
+          "blocklistAndSearch",
+          "blocklistOnly"
+        ],
+        "type": "string"
+      },
       "QueueBulkResource": {
         "required": [
           "ids"
@@ -12085,6 +12055,14 @@
           }
         },
         "additionalProperties": false
+      },
+      "QueueRemovalMethod": {
+        "enum": [
+          "removeFromClient",
+          "changeCategory",
+          "ignore"
+        ],
+        "type": "string"
       },
       "QueueResource": {
         "type": "object",
@@ -13294,6 +13272,10 @@
             "type": "string",
             "nullable": true
           },
+          "pendingPath": {
+            "type": "string",
+            "nullable": true
+          },
           "qualityProfileId": {
             "type": "integer",
             "format": "int32"
@@ -14252,12 +14234,8 @@
             "type": "string",
             "nullable": true
           },
-          "attemptedValue": {
-            "nullable": true
-          },
-          "customState": {
-            "nullable": true
-          },
+          "attemptedValue": { },
+          "customState": { },
           "severity": {
             "$ref": "#/components/schemas/Severity"
           },
@@ -14273,9 +14251,7 @@
           },
           "formattedMessagePlaceholderValues": {
             "type": "object",
-            "additionalProperties": {
-              "nullable": true
-            },
+            "additionalProperties": { },
             "nullable": true
           }
         },
