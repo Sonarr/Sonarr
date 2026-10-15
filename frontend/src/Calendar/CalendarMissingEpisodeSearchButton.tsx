@@ -1,30 +1,17 @@
 import moment from 'moment-timezone';
 import React, { useCallback } from 'react';
 import { useQueueDetails } from 'Activity/Queue/Details/QueueDetailsProvider';
-import { useCommands } from 'Commands/useCommands';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import { icons } from 'Helpers/Props';
-import { isCommandExecuting } from 'Utilities/Command';
 import isBefore from 'Utilities/Date/isBefore';
 import translate from 'Utilities/String/translate';
 import useCalendar, {
+  setCalendarSearchMissingEpisodeIds,
   useCalendarRange,
-  useCalendarSearchMissingCommandId,
+  useCalendarSearchMissingEpisodeIds,
 } from './useCalendar';
-
-function useIsSearching(searchMissingCommandId: number | undefined) {
-  const { data: commands } = useCommands();
-
-  if (searchMissingCommandId == null) {
-    return false;
-  }
-
-  return isCommandExecuting(
-    commands.find((command) => {
-      return command.id === searchMissingCommandId;
-    })
-  );
-}
 
 const useMissingEpisodeIdsSelector = () => {
   const { start, end } = useCalendarRange();
@@ -49,11 +36,25 @@ const useMissingEpisodeIdsSelector = () => {
 };
 
 export default function CalendarMissingEpisodeSearchButton() {
-  const searchMissingCommandId = useCalendarSearchMissingCommandId();
+  const executeCommand = useExecuteCommand();
+  const searchMissingEpisodeIds = useCalendarSearchMissingEpisodeIds();
   const missingEpisodeIds = useMissingEpisodeIdsSelector();
-  const isSearchingForMissing = useIsSearching(searchMissingCommandId);
 
-  const handlePress = useCallback(() => {}, []);
+  const isSearchingEpisodes = useCommandExecuting(CommandNames.EpisodeSearch, {
+    episodeIds: searchMissingEpisodeIds,
+  });
+
+  const isSearchingForMissing =
+    !!searchMissingEpisodeIds && isSearchingEpisodes;
+
+  const handlePress = useCallback(() => {
+    setCalendarSearchMissingEpisodeIds(missingEpisodeIds);
+
+    executeCommand({
+      name: CommandNames.EpisodeSearch,
+      episodeIds: missingEpisodeIds,
+    });
+  }, [missingEpisodeIds, executeCommand]);
 
   return (
     <PageToolbarButton
