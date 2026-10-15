@@ -34,12 +34,14 @@
   composes: legendItemColor;
 
   background-color: var(--progressBarDangerColor);
+  background-image: var(--progressBarDangerPattern);
 }
 
 .missingUnmonitored {
   composes: legendItemColor;
 
   background-color: var(--progressBarWarningColor);
+  background-image: var(--progressBarWarningPattern);
 }
 
 .downloading {
