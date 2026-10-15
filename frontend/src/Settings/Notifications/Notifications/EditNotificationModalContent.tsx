@@ -107,7 +107,7 @@ function EditNotificationModalContent({
           ) : null}
 
           <FormRow>
-            <FormLabel>{translate('Name')}</FormLabel>
+            <FormLabel name="name">{translate('Name')}</FormLabel>
 
             <FormInput
               type={inputTypes.TEXT}
@@ -136,7 +136,7 @@ function EditNotificationModalContent({
           })}
 
           <FormRow>
-            <FormLabel>{translate('Tags')}</FormLabel>
+            <FormLabel name="tags">{translate('Tags')}</FormLabel>
             <FormInputHelpText
               text={translate('NotificationsTagsSeriesHelpText')}
             />

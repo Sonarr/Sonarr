@@ -114,7 +114,7 @@ function ProviderFieldFormGroup<T>({
 
   return (
     <FormRow advancedSettings={advancedSettings} isAdvanced={advanced}>
-      <FormLabel>{label}</FormLabel>
+      <FormLabel name={name}>{label}</FormLabel>
       <FormInputHelpText
         text={helpText ?? (helpLink ? translate('MoreInfo') : undefined)}
         link={helpLink}

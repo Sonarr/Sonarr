@@ -168,6 +168,7 @@ export type FormInputProps<V, C extends InputType> = Omit<
   'className'
 > & {
   type: C;
+  id?: string;
   className?: string;
   containerClassName?: string;
   inputClassName?: string;
@@ -188,6 +189,8 @@ function FormInput<T, C extends InputType>(props: FormInputProps<T, C>) {
     containerClassName = styles.inputGroupContainer,
     inputClassName,
     type,
+    id = props.name,
+    name,
     unit,
     buttons = [],
     pending,
@@ -238,6 +241,8 @@ function FormInput<T, C extends InputType>(props: FormInputProps<T, C>) {
           <div className={styles.inputContainer}>
             {/* @ts-expect-error - types are validated already */}
             <InputComponent
+              id={id}
+              name={name}
               className={inputClassName}
               hasError={hasError}
               hasWarning={hasWarning}

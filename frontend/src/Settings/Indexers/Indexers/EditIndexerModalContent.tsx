@@ -118,7 +118,7 @@ function EditIndexerModalContent({
           validationWarnings={validationWarnings}
         >
           <FormRow>
-            <FormLabel>{translate('Name')}</FormLabel>
+            <FormLabel name="name">{translate('Name')}</FormLabel>
 
             <FormInput
               type={inputTypes.TEXT}
@@ -130,7 +130,7 @@ function EditIndexerModalContent({
 
           <ModalSection title={translate('Search')}>
             <FormRow>
-              <FormLabel>{translate('EnableRss')}</FormLabel>
+              <FormLabel name="enableRss">{translate('EnableRss')}</FormLabel>
 
               {supportsRss.value ? (
                 <FormInputHelpText text={translate('EnableRssHelpText')} />
@@ -151,7 +151,9 @@ function EditIndexerModalContent({
             </FormRow>
 
             <FormRow>
-              <FormLabel>{translate('EnableAutomaticSearch')}</FormLabel>
+              <FormLabel name="enableAutomaticSearch">
+                {translate('EnableAutomaticSearch')}
+              </FormLabel>
 
               {supportsSearch.value ? (
                 <FormInputHelpText
@@ -174,7 +176,9 @@ function EditIndexerModalContent({
             </FormRow>
 
             <FormRow>
-              <FormLabel>{translate('EnableInteractiveSearch')}</FormLabel>
+              <FormLabel name="enableInteractiveSearch">
+                {translate('EnableInteractiveSearch')}
+              </FormLabel>
 
               {supportsSearch.value ? (
                 <FormInputHelpText
@@ -211,7 +215,9 @@ function EditIndexerModalContent({
           })}
 
           <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
-            <FormLabel>{translate('IndexerPriority')}</FormLabel>
+            <FormLabel name="priority">
+              {translate('IndexerPriority')}
+            </FormLabel>
 
             <FormInputHelpText text={translate('IndexerPriorityHelpText')} />
 
@@ -226,7 +232,9 @@ function EditIndexerModalContent({
           </FormRow>
 
           <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
-            <FormLabel>{translate('MaximumSingleEpisodeAge')}</FormLabel>
+            <FormLabel name="seasonSearchMaximumSingleEpisodeAge">
+              {translate('MaximumSingleEpisodeAge')}
+            </FormLabel>
 
             <FormInputHelpText
               text={translate('MaximumSingleEpisodeAgeHelpText')}
@@ -243,7 +251,9 @@ function EditIndexerModalContent({
           </FormRow>
 
           <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
-            <FormLabel>{translate('DownloadClient')}</FormLabel>
+            <FormLabel name="downloadClientId">
+              {translate('DownloadClient')}
+            </FormLabel>
 
             <FormInputHelpText
               text={translate('IndexerDownloadClientHelpText')}
@@ -260,7 +270,7 @@ function EditIndexerModalContent({
           </FormRow>
 
           <FormRow>
-            <FormLabel>{translate('Tags')}</FormLabel>
+            <FormLabel name="tags">{translate('Tags')}</FormLabel>
 
             <FormInputHelpText text={translate('IndexerTagSeriesHelpText')} />
 
