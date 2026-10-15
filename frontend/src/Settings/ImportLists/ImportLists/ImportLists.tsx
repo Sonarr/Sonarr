@@ -1,8 +1,12 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import SectionHeading from 'Components/SectionHeading';
 import AddCard from 'Components/SettingsCard/AddCard';
 import settingsCardStyles from 'Components/SettingsCard/SettingsCard.module.css';
+import {
+  getProviderTestStatus,
+  ProviderTestAllResult,
+} from 'Settings/ProviderTestAllResult';
 import settingsStyles from 'Settings/Settings.module.css';
 import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
@@ -11,8 +15,17 @@ import EditImportListModal from './EditImportListModal';
 import ImportList from './ImportList';
 import { useSortedImportLists } from './useImportLists';
 
-function ImportLists() {
+interface ImportListsProps {
+  testResults?: ProviderTestAllResult[];
+}
+
+function ImportLists({ testResults }: ImportListsProps) {
   const { isFetching, isFetched, data, error } = useSortedImportLists();
+
+  const testResultById = useMemo(
+    () => new Map(testResults?.map((result) => [result.id, result])),
+    [testResults]
+  );
 
   const [isAddImportListModalOpen, setIsAddImportListModalOpen] =
     useState(false);
@@ -70,6 +83,11 @@ function ImportLists() {
               <ImportList
                 key={item.id}
                 {...item}
+                testStatus={
+                  testResults
+                    ? getProviderTestStatus(testResultById.get(item.id))
+                    : undefined
+                }
                 onCloneImportListPress={handleCloneImportListPress}
               />
             );
