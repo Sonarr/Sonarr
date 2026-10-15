@@ -41,7 +41,7 @@
   --dangerColor: oklch(58% 0.165 28);
   --warningColor: oklch(72% 0.130 65);
   --infoColor: oklch(50% 0.130 215);
-  --purple: oklch(44% 0.180 305);
+  --purple: oklch(54% 0.200 305);
   --pink: oklch(74% 0.180 0);
   --sonarrBlue: oklch(78% 0.130 215);
   --helpTextColor: oklch(52% 0.010 260);
@@ -176,10 +176,10 @@
   --calendarTodayBackgroundColor: oklch(94% 0.006 240);
   --calendarTodayColor: oklch(56% 0.130 215);
   --calendarDownloadedColor: oklch(62% 0.170 148);
-  --calendarDownloadingColor: oklch(58% 0.190 305);
-  --calendarOnAirColor: oklch(73% 0.170 69);
-  --calendarMissingColor: oklch(60% 0.200 27);
-  --calendarUnairedColor: oklch(64% 0.080 245);
+  --calendarDownloadingColor: var(--purple);
+  --calendarOnAirColor: oklch(76% 0.140 84);
+  --calendarMissingColor: oklch(56% 0.170 22);
+  --calendarUnairedColor: oklch(60% 0.095 255);
   --calendarBackgroundColor: var(--paperCard);
   --calendarBorderColor: var(--hairline);
   --calendarTextDim: oklch(52% 0.010 260);
@@ -259,7 +259,7 @@
   --dangerColor: oklch(62% 0.150 28);
   --warningColor: oklch(76% 0.120 65);
   --infoColor: oklch(82% 0.115 215);
-  --purple: oklch(44% 0.180 305);
+  --purple: oklch(58% 0.190 305);
   --pink: oklch(74% 0.180 0);
   --sonarrBlue: oklch(82% 0.115 215);
   --helpTextColor: oklch(66% 0.011 260);
@@ -394,10 +394,9 @@
   --calendarTodayBackgroundColor: var(--paperWarm);
   --calendarTodayColor: var(--accent);
   --calendarDownloadedColor: var(--successColor);
-  --calendarDownloadingColor: var(--statusGrabbing);
-  --calendarOnAirColor: var(--warningColor);
-  --calendarMissingColor: var(--dangerColor);
-  --calendarUnairedColor: var(--statusUnaired);
+  --calendarOnAirColor: oklch(78% 0.135 86);
+  --calendarMissingColor: oklch(60% 0.165 22);
+  --calendarUnairedColor: oklch(66% 0.085 255);
   --calendarBackgroundColor: oklch(27% 0.014 260);
   --calendarBorderColor: oklch(36% 0.016 260);
   --calendarTextDim: oklch(66% 0.011 260);
@@ -462,7 +461,6 @@
   --progressBarDangerColor: color-mix(in oklab, var(--dangerColor) 80%, oklch(0% 0 0));
   --progressBarWarningColor: color-mix(in oklab, var(--warningColor) 80%, oklch(0% 0 0));
   --calendarDownloadedColor: var(--successColor);
-  --calendarDownloadingColor: var(--statusGrabbing);
   --calendarOnAirColor: var(--statusAiring);
   --calendarMissingColor: var(--dangerColor);
   --calendarUnairedColor: var(--statusUnaired);

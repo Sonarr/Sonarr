@@ -2,7 +2,7 @@
   position: relative;
   overflow-x: hidden;
   margin: 2px 0;
-  padding: 6px 8px 6px 10px;
+  padding: 6px 8px 6px 20px;
   border-radius: 8px;
   color: var(--ink);
   font-size: 12px;
@@ -12,22 +12,23 @@
   &:hover {
     background-color: var(--paperWarm);
   }
+
+  &::before {
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 8px;
+    width: 4px;
+    border-radius: 2px;
+    background-color: var(--inkMuted);
+    content: "";
+  }
 }
 
 .info {
   display: flex;
   align-items: center;
   gap: 6px;
-
-  &::before {
-    display: inline-block;
-    flex-shrink: 0;
-    width: 4px;
-    height: 15px;
-    border-radius: 2px;
-    background-color: var(--inkMuted);
-    content: "";
-  }
 }
 
 .airingInfo {
@@ -48,7 +49,6 @@
 
 .airTime {
   flex: 1 0 1px;
-  padding-left: 12px;
   color: var(--inkMuted);
   letter-spacing: 0.02em;
   font-size: 11px;
@@ -111,12 +111,12 @@
 
 
 .downloaded {
-  & .info::before {
+  &::before {
     background-color: var(--calendarDownloadedColor);
   }
 
   &:global(.fullColor) {
-    background-color: color-mix(in oklch, var(--calendarDownloadedColor) 10%, transparent);
+    background-color: color-mix(in oklch, var(--calendarDownloadedColor) 16%, transparent);
 
     &:hover {
       background-color: color-mix(in oklch, var(--calendarDownloadedColor) 26%, transparent);
@@ -125,12 +125,12 @@
 }
 
 .downloading {
-  & .info::before {
+  &::before {
     background-color: var(--calendarDownloadingColor);
   }
 
   &:global(.fullColor) {
-    background-color: color-mix(in oklch, var(--calendarDownloadingColor) 10%, transparent);
+    background-color: color-mix(in oklch, var(--calendarDownloadingColor) 16%, transparent);
 
     &:hover {
       background-color: color-mix(in oklch, var(--calendarDownloadingColor) 26%, transparent);
@@ -141,13 +141,13 @@
 .unmonitored {
   color: var(--inkMuted);
 
-  & .info::before {
+  &::before {
     background-color: var(--inkMuted);
     opacity: 0.5;
   }
 
   &:global(.fullColor) {
-    background-color: color-mix(in oklch, var(--inkMuted) 14%, transparent);
+    background-color: color-mix(in oklch, var(--inkMuted) 20%, transparent);
 
     &:hover {
       background-color: color-mix(in oklch, var(--inkMuted) 30%, transparent);
@@ -156,12 +156,12 @@
 }
 
 .onAir {
-  & .info::before {
+  &::before {
     background-color: var(--calendarOnAirColor);
   }
 
   &:global(.fullColor) {
-    background-color: color-mix(in oklch, var(--calendarOnAirColor) 14%, transparent);
+    background-color: color-mix(in oklch, var(--calendarOnAirColor) 20%, transparent);
 
     &:hover {
       background-color: color-mix(in oklch, var(--calendarOnAirColor) 30%, transparent);
@@ -170,12 +170,12 @@
 }
 
 .missing {
-  & .info::before {
+  &::before {
     background-color: var(--calendarMissingColor);
   }
 
   &:global(.fullColor) {
-    background-color: color-mix(in oklch, var(--calendarMissingColor) 14%, transparent);
+    background-color: color-mix(in oklch, var(--calendarMissingColor) 20%, transparent);
 
     &:hover {
       background-color: color-mix(in oklch, var(--calendarMissingColor) 30%, transparent);
@@ -184,12 +184,12 @@
 }
 
 .unaired {
-  & .info::before {
+  &::before {
     background-color: var(--calendarUnairedColor);
   }
 
   &:global(.fullColor) {
-    background-color: color-mix(in oklch, var(--calendarUnairedColor) 10%, transparent);
+    background-color: color-mix(in oklch, var(--calendarUnairedColor) 16%, transparent);
 
     &:hover {
       background-color: color-mix(in oklch, var(--calendarUnairedColor) 26%, transparent);
