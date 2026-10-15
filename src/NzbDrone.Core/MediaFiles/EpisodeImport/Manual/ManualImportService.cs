@@ -627,9 +627,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 if (allEpisodesImported)
                 {
                     var episodeFiles = importedResults.Select(i => i.EpisodeFile).ToList();
+                    var importedEpisodes = importedResults.SelectMany(i => i.ImportDecision.LocalEpisode.Episodes).ToList();
 
                     trackedDownload.State = TrackedDownloadState.Imported;
-                    _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, importedSeries.Id, episodeFiles, importedResults.First().ImportDecision.LocalEpisode.Release));
+                    _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, importedSeries, importedEpisodes, episodeFiles, importedResults.First().ImportDecision.LocalEpisode.Release));
                 }
             }
         }
