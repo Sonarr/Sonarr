@@ -754,6 +754,7 @@ interface SaveSeriesEditorPayload {
   seasonFolder?: boolean;
   rootFolderPath?: string;
   tags?: number[];
+  applyTags?: string;
 }
 
 export const useSaveSeries = (moveFiles?: boolean) => {

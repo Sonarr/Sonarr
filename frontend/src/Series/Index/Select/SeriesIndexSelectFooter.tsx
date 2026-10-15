@@ -96,13 +96,14 @@ function SeriesIndexSelectFooter() {
   }, [setIsTagsModalOpen]);
 
   const onApplyTagsPress = useCallback(
-    (tags: number[], _applyTags: string) => {
+    (tags: number[], applyTags: string) => {
       setIsSavingTags(true);
       setIsTagsModalOpen(false);
 
       saveSeriesEditor({
         seriesIds,
         tags,
+        applyTags,
       });
     },
     [seriesIds, saveSeriesEditor]
