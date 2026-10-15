@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
@@ -9,7 +10,6 @@ using NzbDrone.Common.Http;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.TPL;
 using NzbDrone.Core.Download.Clients;
-using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Events;
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Download
 
         public async Task DownloadReport(RemoteEpisode remoteEpisode, int? downloadClientId)
         {
-            var filterBlockedClients = remoteEpisode.Release.PendingReleaseReason == PendingReleaseReason.DownloadClientUnavailable;
+            var filterBlockedClients = remoteEpisode.ReleaseSource != ReleaseSourceType.InteractiveSearch;
 
             var tags = remoteEpisode.Series?.Tags;
 
@@ -151,6 +151,7 @@ namespace NzbDrone.Core.Download
             try
             {
                 downloadClientId = await downloadClient.Download(remoteEpisode, indexer);
+                _downloadClientStatusService.RecordSubmissionSuccess(downloadClient.Definition.Id);
                 _downloadClientStatusService.RecordSuccess(downloadClient.Definition.Id);
                 _indexerStatusService.RecordSuccess(remoteEpisode.Release.IndexerId);
             }
@@ -181,6 +182,12 @@ namespace NzbDrone.Core.Download
                 }
 
                 throw;
+            }
+            catch (Exception ex) when (ex is DownloadClientException or IOException or UnauthorizedAccessException)
+            {
+                _downloadClientStatusService.RecordSubmissionFailure(downloadClient.Definition.Id);
+
+                throw new DownloadClientUnavailableException("Unable to add download to {0}", ex, downloadClient.Definition.Name);
             }
 
             var episodeGrabbedEvent = new EpisodeGrabbedEvent(remoteEpisode);
