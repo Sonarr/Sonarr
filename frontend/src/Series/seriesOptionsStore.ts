@@ -63,7 +63,7 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
         showStatuses: ['deleted'],
       },
       overviewOptions: {
-        detailedProgressBar: false,
+        detailedProgressBar: true,
         size: 'medium',
         showMonitored: true,
         showNetwork: true,
