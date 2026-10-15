@@ -24,8 +24,6 @@
   --statusFinished: oklch(60% 0.008 260);
   --statusHiatus: oklch(58% 0.008 260);
   --statusMissing: oklch(58% 0.165 28);
-  --statusGrabbing: oklch(60% 0.130 305);
-  --statusUnaired: oklch(70% 0.035 245);
 
   /* Semantic & brand aliases */
   --textColor: oklch(32% 0.012 260);
@@ -185,6 +183,12 @@
   --calendarTextDim: oklch(52% 0.010 260);
   --calendarTextDimAlternate: oklch(32% 0.012 260);
   --calendarFullColorFilter: saturate(0.9) contrast(0.95);
+  --colorImpairedGradient: oklch(100% 0 0);
+  --calendarColorImpairedFullColorGradient: oklch(97% 0.002 247 / 0.2);
+  --calendarColorImpairedPattern: none;
+  --calendarColorImpairedDiagonalPattern: none;
+  --calendarColorImpairedFullColorPattern: none;
+  --calendarColorImpairedFullColorDiagonalPattern: none;
   --tableRowHoverBackgroundColor: oklch(0% 0 0 / 0.04);
   --addSeriesBackgroundColor: var(--paperWarm);
   --seriesBackgroundColor: var(--paperWarm);
@@ -204,6 +208,8 @@
   --progressBarSuccessColor: oklch(64% 0.180 148);
   --progressBarDangerColor: oklch(61% 0.195 25);
   --progressBarWarningColor: oklch(73% 0.170 69);
+  --progressBarDangerPattern: none;
+  --progressBarWarningPattern: none;
   --logEventsBackgroundColor: var(--paperCard);
 
   --shadowChip: 0 1px 4px oklch(0% 0 0 / 0.06);
@@ -242,8 +248,6 @@
   --statusFinished: oklch(60% 0.008 260);
   --statusHiatus: oklch(58% 0.008 260);
   --statusMissing: oklch(62% 0.150 28);
-  --statusGrabbing: oklch(65% 0.130 305);
-  --statusUnaired: oklch(58% 0.040 245);
 
   /* Semantic & brand aliases */
   --textColor: oklch(90% 0.007 260);
@@ -393,7 +397,7 @@
   /* Calendar, series, progress */
   --calendarTodayBackgroundColor: var(--paperWarm);
   --calendarTodayColor: var(--accent);
-  --calendarDownloadedColor: var(--successColor);
+  --calendarDownloadedColor: oklch(66% 0.115 148);
   --calendarOnAirColor: oklch(78% 0.135 86);
   --calendarMissingColor: oklch(60% 0.165 22);
   --calendarUnairedColor: oklch(66% 0.085 255);
@@ -402,6 +406,8 @@
   --calendarTextDim: oklch(66% 0.011 260);
   --calendarTextDimAlternate: oklch(90% 0.007 260);
   --calendarFullColorFilter: saturate(0.9) contrast(1.05) brightness(0.92);
+  --colorImpairedGradient: oklch(33% 0.015 260);
+  --calendarColorImpairedFullColorGradient: oklch(97% 0.002 247 / 0.07);
   --tableRowHoverBackgroundColor: oklch(100% 0 0 / 0.04);
   --addSeriesBackgroundColor: oklch(27% 0.014 260);
   --seriesBackgroundColor: oklch(27% 0.014 260);
@@ -443,54 +449,22 @@
 }
 
 [data-color-impaired] {
-  --statusMissing:   oklch(62.1% 0.170 48);   /* Vermillion     #D55E00 */
-  --statusAiring:    oklch(73.5% 0.117 236);  /* Sky blue       #56B4E9 */
-  --statusUpcoming:  oklch(75.3% 0.158 77);   /* Orange         #E69F00 */
-  --statusGrabbing:  oklch(67.9% 0.118 346);  /* Reddish purple #CC79A7 */
+  --progressBarPrimaryColor: color-mix(in oklab, var(--accent) 87%, oklch(0% 0 0));
+  --progressBarSuccessColor: var(--successColor);
+  --progressBarDangerColor: var(--dangerColor);
+  --progressBarWarningColor: var(--warningColor);
+  --calendarColorImpairedPattern: repeating-linear-gradient(90deg, transparent, transparent 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
+  --calendarColorImpairedDiagonalPattern: repeating-linear-gradient(45deg, transparent, transparent 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
+  --calendarColorImpairedFullColorPattern: repeating-linear-gradient(90deg, var(--calendarColorImpairedFullColorGradient), var(--calendarColorImpairedFullColorGradient) 5px, transparent 5px, transparent 10px);
+  --calendarColorImpairedFullColorDiagonalPattern: repeating-linear-gradient(45deg, var(--calendarColorImpairedFullColorGradient), var(--calendarColorImpairedFullColorGradient) 5px, transparent 5px, transparent 10px);
+  --progressBarDangerPattern: repeating-linear-gradient(90deg, color-mix(in oklab, var(--progressBarDangerColor) 95%, oklch(0% 0 0)), color-mix(in oklab, var(--progressBarDangerColor) 95%, oklch(0% 0 0)) 5px, color-mix(in oklab, var(--progressBarDangerColor) 85%, oklch(0% 0 0)) 5px, color-mix(in oklab, var(--progressBarDangerColor) 85%, oklch(0% 0 0)) 10px);
+  --progressBarWarningPattern: repeating-linear-gradient(45deg, var(--progressBarWarningColor), var(--progressBarWarningColor) 5px, color-mix(in oklab, var(--progressBarWarningColor) 85%, oklch(100% 0 0)) 5px, color-mix(in oklab, var(--progressBarWarningColor) 85%, oklch(100% 0 0)) 10px);
+}
 
-  --dangerColor:     oklch(62.1% 0.170 48);
-  --successColor:    oklch(62.0% 0.130 165);  /* Bluish green   #009E73 */
-  --warningColor:    oklch(75.3% 0.158 77);
-  --infoColor:       oklch(73.5% 0.117 236);
-  --primaryColor:    oklch(73.5% 0.117 236);
-  --accent:          oklch(73.5% 0.117 236);
-  --pink:            oklch(67.9% 0.118 346);  /* Reddish purple #CC79A7 */
-
+[data-theme=dark][data-color-impaired] {
   --progressBarPrimaryColor: color-mix(in oklab, var(--accent) 80%, oklch(0% 0 0));
   --progressBarSuccessColor: color-mix(in oklab, var(--successColor) 80%, oklch(0% 0 0));
   --progressBarDangerColor: color-mix(in oklab, var(--dangerColor) 80%, oklch(0% 0 0));
   --progressBarWarningColor: color-mix(in oklab, var(--warningColor) 80%, oklch(0% 0 0));
-  --calendarDownloadedColor: var(--successColor);
-  --calendarOnAirColor: var(--statusAiring);
-  --calendarMissingColor: var(--dangerColor);
-  --calendarUnairedColor: var(--statusUnaired);
-
-  --alertDangerBorderColor:      color-mix(in oklch, var(--dangerColor) 30%, transparent);
-  --alertSuccessBorderColor:     color-mix(in oklch, var(--successColor) 30%, transparent);
-  --alertWarningBorderColor:     color-mix(in oklch, var(--warningColor) 30%, transparent);
-  --alertDangerBackgroundColor:  color-mix(in oklch, var(--dangerColor) 8%, transparent);
-  --alertSuccessBackgroundColor: color-mix(in oklch, var(--successColor) 8%, transparent);
-  --alertWarningBackgroundColor: color-mix(in oklch, var(--warningColor) 8%, transparent);
 }
 
-[data-theme=dark][data-color-impaired] {
-  --statusMissing:   oklch(68% 0.170 48);    /* Vermillion     */
-  --statusAiring:    oklch(78% 0.117 236);   /* Sky blue       */
-  --statusUpcoming:  oklch(82% 0.158 77);    /* Orange         */
-  --statusGrabbing:  oklch(73% 0.118 346);   /* Reddish purple */
-
-  --dangerColor:     oklch(68% 0.170 48);
-  --successColor:    oklch(70% 0.130 165);   /* Bluish green   */
-  --warningColor:    oklch(82% 0.158 77);
-  --infoColor:       oklch(78% 0.117 236);
-  --primaryColor:    oklch(78% 0.117 236);
-  --accent:          oklch(78% 0.117 236);
-  --pink:            oklch(73% 0.118 346);   /* Reddish purple */
-
-  --alertDangerBorderColor:      color-mix(in oklch, var(--dangerColor) 30%, transparent);
-  --alertSuccessBorderColor:     color-mix(in oklch, var(--successColor) 30%, transparent);
-  --alertWarningBorderColor:     color-mix(in oklch, var(--warningColor) 30%, transparent);
-  --alertDangerBackgroundColor:  color-mix(in oklch, var(--dangerColor) 8%, transparent);
-  --alertSuccessBackgroundColor: color-mix(in oklch, var(--successColor) 8%, transparent);
-  --alertWarningBackgroundColor: color-mix(in oklch, var(--warningColor) 8%, transparent);
-}

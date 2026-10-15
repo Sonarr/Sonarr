@@ -18,7 +18,10 @@ function LegendItem(props: LegendItemProps) {
   const { name, tooltip, fullColorEvents, status, icon, kind } = props;
 
   return (
-    <div className={styles.legendItem} title={tooltip}>
+    <div
+      className={classNames(styles.legendItem, status && styles[status])}
+      title={tooltip}
+    >
       <span className={styles.indicator}>
         {icon ? (
           <Icon

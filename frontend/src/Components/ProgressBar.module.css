@@ -24,6 +24,7 @@
 
 .danger {
   background-color: var(--progressBarDangerColor);
+  background-image: var(--progressBarDangerPattern);
 }
 
 .success {
@@ -36,6 +37,7 @@
 
 .warning {
   background-color: var(--progressBarWarningColor);
+  background-image: var(--progressBarWarningPattern);
 }
 
 .info {

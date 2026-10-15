@@ -139,6 +139,7 @@
 }
 
 .unmonitored {
+  background-image: var(--calendarColorImpairedDiagonalPattern);
   color: var(--inkMuted);
 
   &::before {
@@ -148,6 +149,7 @@
 
   &:global(.fullColor) {
     background-color: color-mix(in oklch, var(--inkMuted) 20%, transparent);
+    background-image: var(--calendarColorImpairedFullColorDiagonalPattern);
 
     &:hover {
       background-color: color-mix(in oklch, var(--inkMuted) 30%, transparent);
@@ -156,12 +158,15 @@
 }
 
 .onAir {
+  background-image: var(--calendarColorImpairedPattern);
+
   &::before {
     background-color: var(--calendarOnAirColor);
   }
 
   &:global(.fullColor) {
     background-color: color-mix(in oklch, var(--calendarOnAirColor) 20%, transparent);
+    background-image: var(--calendarColorImpairedFullColorPattern);
 
     &:hover {
       background-color: color-mix(in oklch, var(--calendarOnAirColor) 30%, transparent);
@@ -170,12 +175,15 @@
 }
 
 .missing {
+  background-image: var(--calendarColorImpairedPattern);
+
   &::before {
     background-color: var(--calendarMissingColor);
   }
 
   &:global(.fullColor) {
     background-color: color-mix(in oklch, var(--calendarMissingColor) 20%, transparent);
+    background-image: var(--calendarColorImpairedFullColorPattern);
 
     &:hover {
       background-color: color-mix(in oklch, var(--calendarMissingColor) 30%, transparent);
@@ -184,12 +192,15 @@
 }
 
 .unaired {
+  background-image: var(--calendarColorImpairedPattern);
+
   &::before {
     background-color: var(--calendarUnairedColor);
   }
 
   &:global(.fullColor) {
     background-color: color-mix(in oklch, var(--calendarUnairedColor) 16%, transparent);
+    background-image: var(--calendarColorImpairedFullColorPattern);
 
     &:hover {
       background-color: color-mix(in oklch, var(--calendarUnairedColor) 26%, transparent);

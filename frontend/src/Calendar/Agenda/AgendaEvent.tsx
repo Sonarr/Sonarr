@@ -100,7 +100,7 @@ function AgendaEvent(props: AgendaEventProps) {
   }, []);
 
   return (
-    <div className={styles.event}>
+    <div className={classNames(styles.event, styles[statusStyle])}>
       <Link
         className={styles.underlay}
         aria-label={eventLabel}
