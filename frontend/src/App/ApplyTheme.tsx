@@ -4,7 +4,7 @@ import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 
 function ApplyTheme() {
   const theme = useTheme();
-  const { enableColorImpairedMode } = useUiSettingsValues();
+  const { enableColorImpairedMode, headerColor } = useUiSettingsValues();
 
   useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -18,6 +18,14 @@ function ApplyTheme() {
       delete document.documentElement.dataset.colorImpaired;
     }
   }, [enableColorImpairedMode]);
+
+  useLayoutEffect(() => {
+    if (headerColor === 'gradient') {
+      document.documentElement.dataset.headerColor = headerColor;
+    } else {
+      delete document.documentElement.dataset.headerColor;
+    }
+  }, [headerColor]);
 
   return null;
 }

@@ -14,6 +14,7 @@ export interface UiSettingsModel {
   timeZone: string;
   firstDayOfWeek: number;
   enableColorImpairedMode: boolean;
+  headerColor: 'fullColor' | 'gradient';
   calendarWeekColumnHeader: string;
   uiLanguage: number;
 }

@@ -60,6 +60,7 @@ function PageHeader() {
       <div className={styles.sidebarToggleContainer}>
         <IconButton
           id="sidebar-toggle-button"
+          className={styles.sidebarToggle}
           name={icons.NAVBAR_COLLAPSE}
           aria-label={translate('Menu')}
           onPress={handleSidebarToggle}
