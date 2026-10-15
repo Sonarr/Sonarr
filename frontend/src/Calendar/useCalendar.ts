@@ -58,7 +58,7 @@ interface CalendarStore {
   time: Moment;
   dates: string[];
   dayCount: number;
-  searchMissingCommandId?: number;
+  searchMissingEpisodeIds?: number[];
 }
 
 const calendarStore = create<CalendarStore>(() => ({
@@ -191,8 +191,12 @@ export const useCalendarRange = () => {
   };
 };
 
-export const useCalendarSearchMissingCommandId = () => {
-  return calendarStore((state) => state.searchMissingCommandId);
+export const useCalendarSearchMissingEpisodeIds = () => {
+  return calendarStore((state) => state.searchMissingEpisodeIds);
+};
+
+export const setCalendarSearchMissingEpisodeIds = (episodeIds: number[]) => {
+  calendarStore.setState({ searchMissingEpisodeIds: episodeIds });
 };
 
 export const setCalendarDayCount = (dayCount: number) => {
