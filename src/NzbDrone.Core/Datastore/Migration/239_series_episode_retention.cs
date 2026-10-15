@@ -3,7 +3,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(237)]
+    [Migration(239)]
     public class series_episode_retention : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
