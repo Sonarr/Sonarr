@@ -90,6 +90,7 @@
           "align-items",
           "align-self",
           "justify-content",
+          "place-content",
           "flex",
           "flex-direction",
           "flex-order",
