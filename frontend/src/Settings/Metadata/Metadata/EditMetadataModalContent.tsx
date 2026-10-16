@@ -85,7 +85,7 @@ function EditMetadataModalContent({
           ) : null}
 
           <FormRow>
-            <FormLabel name="enable">{translate('Enable')}</FormLabel>
+            <FormLabel>{translate('Enable')}</FormLabel>
             <FormInputHelpText text={translate('EnableMetadataHelpText')} />
             <FormInput
               type={inputTypes.CHECK}

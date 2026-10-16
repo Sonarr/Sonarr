@@ -3,7 +3,7 @@ import React, { ForwardedRef, forwardRef, ReactNode } from 'react';
 import { useModalContext } from './ModalContext';
 import styles from './ModalHeader.module.css';
 
-interface ModalHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ModalHeaderProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: ReactNode;
   subtitle?: ReactNode;
 }
@@ -11,12 +11,12 @@ interface ModalHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
 const ModalHeader = forwardRef(
   (
     { className, children, subtitle, ...otherProps }: ModalHeaderProps,
-    ref: ForwardedRef<HTMLDivElement>
+    ref: ForwardedRef<HTMLHeadingElement>
   ) => {
     const { headerId } = useModalContext();
 
     return (
-      <div
+      <h2
         ref={ref}
         id={headerId}
         className={classNames(styles.modalHeader, className)}
@@ -24,7 +24,7 @@ const ModalHeader = forwardRef(
       >
         {children}
         {subtitle ? <span className={styles.subtitle}>{subtitle}</span> : null}
-      </div>
+      </h2>
     );
   }
 );

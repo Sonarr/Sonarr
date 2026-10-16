@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React, { ReactNode } from 'react';
+import { useFormRow } from './FormRowContext';
 import styles from './FormLabel.module.css';
 
 interface FormLabelProps {
@@ -12,6 +13,7 @@ interface FormLabelProps {
 }
 
 function FormLabel(props: FormLabelProps) {
+  const formRow = useFormRow();
   const {
     children,
     className = styles.label,
@@ -28,7 +30,7 @@ function FormLabel(props: FormLabelProps) {
         hasError && errorClassName,
         isAdvanced && styles.isAdvanced
       )}
-      htmlFor={name}
+      htmlFor={formRow?.id ?? name}
     >
       {children}
     </label>

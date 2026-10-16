@@ -10,6 +10,7 @@ import FloatInput, { FloatInputProps } from './FloatInput';
 import { FormInputButtonProps } from './FormInputButton';
 import { FormInputGroupProvider } from './FormInputGroupContext';
 import FormInputHelpText from './FormInputHelpText';
+import { useFormRow } from './FormRowContext';
 import KeyValueListInput, { KeyValueListInputProps } from './KeyValueListInput';
 import NumberInput, { NumberInputProps } from './NumberInput';
 import OAuthInput, { OAuthInputProps } from './OAuthInput';
@@ -184,12 +185,13 @@ export type FormInputProps<V, C extends InputType> = Omit<
 };
 
 function FormInput<T, C extends InputType>(props: FormInputProps<T, C>) {
+  const formRow = useFormRow();
   const {
     className = styles.inputGroup,
     containerClassName = styles.inputGroupContainer,
     inputClassName,
     type,
-    id = props.name,
+    id = formRow?.id ?? props.name,
     name,
     unit,
     buttons = [],

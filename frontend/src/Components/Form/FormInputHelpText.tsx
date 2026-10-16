@@ -3,6 +3,7 @@ import React from 'react';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
+import { useFormRow } from './FormRowContext';
 import styles from './FormInputHelpText.module.css';
 
 interface FormInputHelpTextProps {
@@ -13,6 +14,7 @@ interface FormInputHelpTextProps {
   isError?: boolean;
   isWarning?: boolean;
   isCheckInput?: boolean;
+  name?: string;
 }
 
 function FormInputHelpText({
@@ -23,20 +25,16 @@ function FormInputHelpText({
   isError = false,
   isWarning = false,
   isCheckInput = false,
+  name,
 }: FormInputHelpTextProps) {
+  const formRow = useFormRow();
+
   if (!text) {
     return null;
   }
 
-  return (
-    <div
-      className={classNames(
-        className,
-        isError && styles.isError,
-        isWarning && styles.isWarning,
-        isCheckInput && styles.isCheckInput
-      )}
-    >
+  const content = (
+    <>
       {text}
 
       {link ? (
@@ -52,7 +50,23 @@ function FormInputHelpText({
           title={tooltip}
         />
       ) : null}
-    </div>
+    </>
+  );
+
+  const inputName = formRow?.id ?? name;
+  const helpTextClassName = classNames(
+    className,
+    isError && styles.isError,
+    isWarning && styles.isWarning,
+    isCheckInput && styles.isCheckInput
+  );
+
+  return inputName && formRow?.type === 'check' ? (
+    <label className={helpTextClassName} htmlFor={inputName}>
+      {content}
+    </label>
+  ) : (
+    <div className={helpTextClassName}>{content}</div>
   );
 }
 

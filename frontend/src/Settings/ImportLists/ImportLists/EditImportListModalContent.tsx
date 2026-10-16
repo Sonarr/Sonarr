@@ -132,7 +132,7 @@ function EditImportListModalContent({
           </Alert>
 
           <FormRow>
-            <FormLabel name="name">{translate('Name')}</FormLabel>
+            <FormLabel>{translate('Name')}</FormLabel>
 
             <FormInput
               type={inputTypes.TEXT}
@@ -143,9 +143,7 @@ function EditImportListModalContent({
           </FormRow>
 
           <FormRow>
-            <FormLabel name="enableAutomaticAdd">
-              {translate('EnableAutomaticAdd')}
-            </FormLabel>
+            <FormLabel>{translate('EnableAutomaticAdd')}</FormLabel>
             <FormInputHelpText
               text={translate('EnableAutomaticAddSeriesHelpText')}
             />
@@ -158,7 +156,7 @@ function EditImportListModalContent({
           </FormRow>
 
           <FormRow>
-            <FormLabel name="searchForMissingEpisodes">
+            <FormLabel>
               {translate('ImportListSearchForMissingEpisodes')}
             </FormLabel>
             <FormInputHelpText
@@ -174,7 +172,7 @@ function EditImportListModalContent({
 
           <ModalSection title={translate('Series')}>
             <FormRow>
-              <FormLabel name="shouldMonitor">
+              <FormLabel>
                 {translate('Monitor')}
 
                 <Popover
@@ -196,7 +194,7 @@ function EditImportListModalContent({
             </FormRow>
 
             <FormRow>
-              <FormLabel name="monitorNewItems">
+              <FormLabel>
                 {translate('MonitorNewSeasons')}
                 <Popover
                   anchor={
@@ -219,9 +217,7 @@ function EditImportListModalContent({
             </FormRow>
 
             <FormRow>
-              <FormLabel name="rootFolderPath">
-                {translate('RootFolder')}
-              </FormLabel>
+              <FormLabel>{translate('RootFolder')}</FormLabel>
               <FormInputHelpText text={translate('ListRootFolderHelpText')} />
               <FormInput
                 type={inputTypes.ROOT_FOLDER_SELECT}
@@ -233,9 +229,7 @@ function EditImportListModalContent({
             </FormRow>
 
             <FormRow>
-              <FormLabel name="qualityProfileId">
-                {translate('QualityProfile')}
-              </FormLabel>
+              <FormLabel>{translate('QualityProfile')}</FormLabel>
               <FormInputHelpText
                 text={translate('ListQualityProfileHelpText')}
               />
@@ -248,7 +242,7 @@ function EditImportListModalContent({
             </FormRow>
 
             <FormRow>
-              <FormLabel name="language">{translate('Language')}</FormLabel>
+              <FormLabel>{translate('Language')}</FormLabel>
               <FormInputHelpText text={translate('ListLanguageHelpText')} />
               <FormInput
                 type={inputTypes.LANGUAGE_SELECT}
@@ -260,7 +254,7 @@ function EditImportListModalContent({
             </FormRow>
 
             <FormRow>
-              <FormLabel name="seriesType">
+              <FormLabel>
                 {translate('SeriesType')}
 
                 <Popover
@@ -282,9 +276,7 @@ function EditImportListModalContent({
             </FormRow>
 
             <FormRow>
-              <FormLabel name="seasonFolder">
-                {translate('SeasonFolder')}
-              </FormLabel>
+              <FormLabel>{translate('SeasonFolder')}</FormLabel>
 
               <FormInput
                 type={inputTypes.CHECK}
@@ -309,7 +301,7 @@ function EditImportListModalContent({
           })}
 
           <FormRow>
-            <FormLabel name="tags">{translate('SonarrTags')}</FormLabel>
+            <FormLabel>{translate('SonarrTags')}</FormLabel>
             <FormInputHelpText text={translate('ListTagsHelpText')} />
             <FormInput
               type={inputTypes.TAG}
@@ -320,7 +312,7 @@ function EditImportListModalContent({
           </FormRow>
 
           <FormRow>
-            <FormLabel name="tagExisting">{translate('TagExisting')}</FormLabel>
+            <FormLabel>{translate('TagExisting')}</FormLabel>
             <FormInputHelpText text={translate('TagExistingHelpText')} />
             <FormInputHelpText
               text={translate('TagExistingHelpTextWarning')}

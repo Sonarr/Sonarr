@@ -125,7 +125,7 @@ function EditDownloadClientModalContent({
           ) : null}
 
           <FormRow>
-            <FormLabel name="name">{translate('Name')}</FormLabel>
+            <FormLabel>{translate('Name')}</FormLabel>
 
             <FormInput
               type={inputTypes.TEXT}
@@ -136,7 +136,7 @@ function EditDownloadClientModalContent({
           </FormRow>
 
           <FormRow>
-            <FormLabel name="enable">{translate('Enable')}</FormLabel>
+            <FormLabel>{translate('Enable')}</FormLabel>
 
             <FormInput
               type={inputTypes.CHECK}
@@ -160,7 +160,7 @@ function EditDownloadClientModalContent({
           })}
 
           <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
-            <FormLabel name="priority">{translate('ClientPriority')}</FormLabel>
+            <FormLabel>{translate('ClientPriority')}</FormLabel>
 
             <FormInputHelpText
               text={translate('DownloadClientPriorityHelpText')}
@@ -177,7 +177,7 @@ function EditDownloadClientModalContent({
           </FormRow>
 
           <FormRow>
-            <FormLabel name="tags">{translate('Tags')}</FormLabel>
+            <FormLabel>{translate('Tags')}</FormLabel>
 
             <FormInputHelpText
               text={translate('DownloadClientSeriesTagHelpText')}
@@ -193,9 +193,7 @@ function EditDownloadClientModalContent({
 
           <ModalSection title={translate('CompletedDownloadHandling')}>
             <FormRow>
-              <FormLabel name="removeCompletedDownloads">
-                {translate('RemoveCompleted')}
-              </FormLabel>
+              <FormLabel>{translate('RemoveCompleted')}</FormLabel>
 
               <FormInputHelpText
                 text={translate('RemoveCompletedDownloadsHelpText')}
@@ -210,9 +208,7 @@ function EditDownloadClientModalContent({
             </FormRow>
 
             <FormRow>
-              <FormLabel name="removeFailedDownloads">
-                {translate('RemoveFailed')}
-              </FormLabel>
+              <FormLabel>{translate('RemoveFailed')}</FormLabel>
 
               <FormInputHelpText
                 text={translate('RemoveFailedDownloadsHelpText')}
