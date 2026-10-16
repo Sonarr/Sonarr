@@ -1,3 +1,4 @@
+using System.IO;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
@@ -63,8 +64,6 @@ namespace NzbDrone.Core.Test.Datastore
         {
             GivenFileExists(_databaseRestorePath);
             GivenFileExists(_databasePath);
-            GivenFileExists(_databasePath + ".pre-restore");
-            GivenFileExists(_databasePath + ".pre-restore-wal");
 
             Subject.Restore();
 
@@ -72,6 +71,24 @@ namespace NzbDrone.Core.Test.Datastore
             Mocker.GetMock<IDiskProvider>().Verify(v => v.DeleteFile(_databasePath + ".pre-restore-wal"), Times.Once());
             Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(_databasePath, _databasePath + ".pre-restore", false), Times.Once());
             Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(_databaseRestorePath, _databasePath, false), Times.Once());
+        }
+
+        [Test]
+        public void should_move_database_back_if_restore_fails()
+        {
+            GivenFileExists(_databaseRestorePath);
+            GivenFileExists(_databasePath);
+            GivenFileExists(_databasePath + "-wal");
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.MoveFile(_databasePath + "-wal", _databasePath + ".pre-restore-wal", false))
+                  .Throws(new IOException());
+
+            Assert.Throws<IOException>(() => Subject.Restore());
+
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(_databasePath + ".pre-restore", _databasePath, true), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(_databasePath + ".pre-restore-wal", _databasePath + "-wal", true), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(_databaseRestorePath, _databasePath, It.IsAny<bool>()), Times.Never());
         }
 
         [Test]

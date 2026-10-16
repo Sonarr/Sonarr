@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
@@ -16,6 +17,7 @@ namespace NzbDrone.Core.Datastore
 
     public class DatabaseRestorationService : IRestoreDatabase, IHandleAsync<ApplicationStartedEvent>
     {
+        private const string PreRestoreSuffix = ".pre-restore";
         private static readonly string[] DatabaseFileSuffixes = { "", "-shm", "-wal", "-journal" };
 
         private readonly IDiskProvider _diskProvider;
@@ -37,24 +39,21 @@ namespace NzbDrone.Core.Datastore
                 return;
             }
 
+            var dbPath = _appFolderInfo.GetDatabase();
+            var movedSuffixes = new List<string>();
+
             try
             {
                 Logger.Info("Restoring Database");
 
-                var dbPath = _appFolderInfo.GetDatabase();
-
                 foreach (var suffix in DatabaseFileSuffixes)
                 {
-                    var preRestorePath = dbPath + ".pre-restore" + suffix;
-
-                    if (_diskProvider.FileExists(preRestorePath))
-                    {
-                        _diskProvider.DeleteFile(preRestorePath);
-                    }
+                    _diskProvider.DeleteFile(dbPath + PreRestoreSuffix + suffix);
 
                     if (_diskProvider.FileExists(dbPath + suffix))
                     {
-                        _diskProvider.MoveFile(dbPath + suffix, preRestorePath);
+                        _diskProvider.MoveFile(dbPath + suffix, dbPath + PreRestoreSuffix + suffix);
+                        movedSuffixes.Add(suffix);
                     }
                 }
 
@@ -63,6 +62,12 @@ namespace NzbDrone.Core.Datastore
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to restore database");
+
+                foreach (var suffix in movedSuffixes)
+                {
+                    _diskProvider.MoveFile(dbPath + PreRestoreSuffix + suffix, dbPath + suffix, true);
+                }
+
                 throw;
             }
         }
@@ -73,12 +78,7 @@ namespace NzbDrone.Core.Datastore
 
             foreach (var suffix in DatabaseFileSuffixes)
             {
-                var preRestorePath = dbPath + ".pre-restore" + suffix;
-
-                if (_diskProvider.FileExists(preRestorePath))
-                {
-                    _diskProvider.DeleteFile(preRestorePath);
-                }
+                _diskProvider.DeleteFile(dbPath + PreRestoreSuffix + suffix);
             }
         }
     }
