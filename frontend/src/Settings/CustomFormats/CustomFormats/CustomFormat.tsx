@@ -104,7 +104,7 @@ function CustomFormat({
 
       {conditionCount ? (
         <div className={settingsCardStyles.labels}>
-          {specifications.map((specification) => {
+          {specifications.map((specification, index) => {
             if (!specification) {
               return null;
             }
@@ -121,7 +121,7 @@ function CustomFormat({
 
             return (
               <Label
-                key={specification.id}
+                key={index}
                 className={settingsCardStyles.truncatedLabel}
                 kind={kind}
                 dot={specification.required || specification.negate}
