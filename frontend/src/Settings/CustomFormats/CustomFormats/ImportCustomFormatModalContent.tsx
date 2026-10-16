@@ -161,7 +161,7 @@ function ImportCustomFormatModalContent({
 
           {!isSchemaLoading && !schemaError ? (
             <Form>
-              <FormRow size={sizes.MEDIUM}>
+              <FormRow size={sizes.MEDIUM} layout="stacked">
                 <FormLabel>{translate('CustomFormatJson')}</FormLabel>
                 <FormInput
                   key={0}

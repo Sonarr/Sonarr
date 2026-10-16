@@ -110,13 +110,15 @@ function EditCustomFormatModalContent({
         'includeCustomFormatWhenRenaming',
         imported.includeCustomFormatWhenRenaming
       );
-      updateValue('specifications', []);
-
-      imported.specifications.forEach((spec, index) => {
-        saveSpecification({ ...spec, id: index + 1 });
-      });
+      updateValue(
+        'specifications',
+        imported.specifications.map((spec, index) => ({
+          ...spec,
+          id: index + 1,
+        }))
+      );
     },
-    [updateValue, saveSpecification]
+    [updateValue]
   );
 
   const handleInputChange = useCallback(
