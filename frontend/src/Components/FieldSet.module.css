@@ -2,6 +2,10 @@
   margin-bottom: 48px;
 }
 
+.notice {
+  margin-bottom: 20px;
+}
+
 .fieldSet {
   display: flex;
   flex-direction: column;

@@ -1,8 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
+import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import usePrevious from 'Helpers/Hooks/usePrevious';
+import { kinds } from 'Helpers/Props';
 import {
   OnChildStateChange,
   SetChildSave,
@@ -66,6 +69,11 @@ function QualityDefinitions({
     <FieldSet
       legend={translate('QualityDefinitions')}
       caption={translate('QualityDefinitionsCaption')}
+      notice={
+        <Alert kind={kinds.INFO}>
+          <InlineMarkdown data={translate('QualityDefinitionsSizeNotice')} />
+        </Alert>
+      }
     >
       <PageSectionContent
         errorMessage={translate('QualityDefinitionsLoadError')}
