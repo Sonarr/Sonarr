@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
@@ -131,50 +133,46 @@ namespace NzbDrone.Core.Backup
         {
             if (backupFileName.EndsWith(".zip"))
             {
-                var restoredFile = false;
                 var temporaryPath = Path.Combine(_appFolderInfo.TempFolder, "sonarr_backup_restore");
 
-                _archiveService.Extract(backupFileName, temporaryPath);
+                DeleteRestoreFolder(temporaryPath);
 
-                var files = _diskProvider.GetFiles(temporaryPath, false);
-
-                foreach (var file in files.Where(IsDatabaseFile))
+                try
                 {
-                    ValidateDatabase(file);
-                }
+                    _archiveService.Extract(backupFileName, temporaryPath);
 
-                foreach (var file in files)
-                {
-                    if (Path.GetFileName(file).Equals("Config.xml", StringComparison.InvariantCultureIgnoreCase))
+                    var files = _diskProvider.GetFiles(temporaryPath, false).ToList();
+                    var configFiles = files.Where(IsConfigFile).ToList();
+                    var databaseFiles = files.Where(IsDatabaseFile).ToList();
+
+                    if (configFiles.Count == 0 && databaseFiles.Count == 0)
                     {
-                        RestoreConfigFile(file);
-                        restoredFile = true;
+                        throw new RestoreBackupFailedException(HttpStatusCode.NotFound, "Unable to restore database file from backup");
                     }
 
-                    if (IsDatabaseFile(file))
-                    {
-                        _diskProvider.MoveFile(file, _appFolderInfo.GetDatabaseRestore(), true);
-                        restoredFile = true;
-                    }
-                }
+                    configFiles.ForEach(ValidateConfigFile);
+                    databaseFiles.ForEach(ValidateDatabase);
 
-                if (!restoredFile)
+                    configFiles.ForEach(RestoreConfigFile);
+                    databaseFiles.ForEach(RestoreDatabase);
+                }
+                finally
                 {
-                    throw new RestoreBackupFailedException(HttpStatusCode.NotFound, "Unable to restore database file from backup");
+                    DeleteRestoreFolder(temporaryPath);
                 }
-
-                _diskProvider.DeleteFolder(temporaryPath, true);
 
                 return;
             }
 
             if (backupFileName.EndsWith(".xml"))
             {
+                ValidateConfigFile(backupFileName);
                 RestoreConfigFile(backupFileName);
 
                 return;
             }
 
+            ValidateDatabase(backupFileName);
             RestoreDatabase(backupFileName);
         }
 
@@ -230,9 +228,20 @@ namespace NzbDrone.Core.Backup
 
         private void RestoreDatabase(string file)
         {
-            ValidateDatabase(file);
-
             _diskProvider.MoveFile(file, _appFolderInfo.GetDatabaseRestore(), true);
+        }
+
+        private void DeleteRestoreFolder(string path)
+        {
+            if (_diskProvider.FolderExists(path))
+            {
+                _diskProvider.DeleteFolder(path, true);
+            }
+        }
+
+        private static bool IsConfigFile(string file)
+        {
+            return Path.GetFileName(file).Equals("Config.xml", StringComparison.InvariantCultureIgnoreCase);
         }
 
         private static bool IsDatabaseFile(string file)
@@ -248,6 +257,29 @@ namespace NzbDrone.Core.Backup
             if (!IsSqliteDatabase(file))
             {
                 throw new RestoreBackupFailedException(HttpStatusCode.BadRequest, "Backup database is not a valid SQLite database");
+            }
+        }
+
+        private void ValidateConfigFile(string file)
+        {
+            if (!IsValidConfigFile(file))
+            {
+                throw new RestoreBackupFailedException(HttpStatusCode.BadRequest, "Backup config file is not a valid config file");
+            }
+        }
+
+        private bool IsValidConfigFile(string file)
+        {
+            try
+            {
+                using (var stream = _diskProvider.OpenReadStream(file))
+                {
+                    return XDocument.Load(stream).Descendants(ConfigFileProvider.CONFIG_ELEMENT_NAME).Count() == 1;
+                }
+            }
+            catch (XmlException)
+            {
+                return false;
             }
         }
 

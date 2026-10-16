@@ -2,6 +2,7 @@ using System.IO;
 using System.Text;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -53,6 +54,13 @@ namespace NzbDrone.Core.Test.BackupTests
             return GivenFile(fileName, "<Config><Port>8989</Port></Config>");
         }
 
+        private void GivenExtractFolderExists()
+        {
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FolderExists(_extractPath))
+                  .Returns(true);
+        }
+
         private void GivenZipContents(params string[] files)
         {
             Mocker.GetMock<IDiskProvider>()
@@ -69,6 +77,18 @@ namespace NzbDrone.Core.Test.BackupTests
 
             Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(path, _configPath, true), Times.Once());
             Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(It.IsAny<string>(), _databaseRestorePath, It.IsAny<bool>()), Times.Never());
+        }
+
+        [TestCase("<Config><Port>8989")]
+        [TestCase("<Settings><Port>8989</Port></Settings>")]
+        [TestCase("SQLite format 3")]
+        public void should_not_restore_uploaded_xml_that_is_not_a_config_file(string contents)
+        {
+            var path = GivenFile("sonarr_backup_restore.xml", contents);
+
+            Assert.Throws<RestoreBackupFailedException>(() => Subject.Restore(path));
+
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()), Times.Never());
         }
 
         [Test]
@@ -138,6 +158,48 @@ namespace NzbDrone.Core.Test.BackupTests
             Assert.Throws<RestoreBackupFailedException>(() => Subject.Restore("sonarr_backup.zip"));
 
             Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()), Times.Never());
+        }
+
+        [Test]
+        public void should_not_restore_database_from_zip_when_config_is_invalid()
+        {
+            var config = GivenFile("config.xml", "not xml");
+            var database = GivenSqliteDatabase("sonarr.db");
+
+            GivenZipContents(config, database);
+
+            Assert.Throws<RestoreBackupFailedException>(() => Subject.Restore("sonarr_backup.zip"));
+
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()), Times.Never());
+        }
+
+        [Test]
+        public void should_delete_previously_extracted_files_before_extracting()
+        {
+            GivenExtractFolderExists();
+            GivenZipContents(GivenSqliteDatabase("sonarr.db"));
+
+            Mocker.GetMock<IArchiveService>()
+                  .Setup(s => s.Extract("sonarr_backup.zip", _extractPath))
+                  .Callback(() => Mocker.GetMock<IDiskProvider>().Verify(v => v.DeleteFolder(_extractPath, true), Times.Once()));
+
+            Subject.Restore("sonarr_backup.zip");
+
+            Mocker.GetMock<IArchiveService>().Verify(v => v.Extract("sonarr_backup.zip", _extractPath), Times.Once());
+        }
+
+        [Test]
+        public void should_delete_extracted_files_when_restore_fails()
+        {
+            GivenZipContents(GivenXmlFile("sonarr.db"));
+
+            Mocker.GetMock<IArchiveService>()
+                  .Setup(s => s.Extract("sonarr_backup.zip", _extractPath))
+                  .Callback(GivenExtractFolderExists);
+
+            Assert.Throws<RestoreBackupFailedException>(() => Subject.Restore("sonarr_backup.zip"));
+
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.DeleteFolder(_extractPath, true), Times.Once());
         }
     }
 }
