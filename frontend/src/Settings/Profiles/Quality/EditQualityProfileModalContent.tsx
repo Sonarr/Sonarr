@@ -1,6 +1,5 @@
 import { DragDropProvider } from '@dnd-kit/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormInput from 'Components/Form/FormInput';
@@ -298,7 +297,7 @@ function EditQualityProfileModalContent({
     setMode(newMode);
   }, []);
 
-  const handleFormatItemScoreChange = useDebouncedCallback(
+  const handleFormatItemScoreChange = useCallback(
     (formatId: number, score: number) => {
       const newFormatItems = formatItems.value.map((formatItem) => {
         if (formatItem.format === formatId) {
@@ -313,7 +312,7 @@ function EditQualityProfileModalContent({
 
       updateValue('formatItems', newFormatItems);
     },
-    1000
+    [formatItems, updateValue]
   );
 
   useEffect(() => {

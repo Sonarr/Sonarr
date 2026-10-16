@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
+import useDebounce from 'Helpers/Hooks/useDebounce';
 import { QualityProfileFormatItem as QualityProfileFormatItemModel } from 'Settings/Profiles/Quality/useQualityProfiles';
 import { Failure } from 'typings/pending';
 import translate from 'Utilities/String/translate';
@@ -23,6 +24,8 @@ function QualityProfileFormatItems({
   warnings = [],
   onQualityProfileFormatItemScoreChange,
 }: QualityProfileFormatItemsProps) {
+  const sortFormatItems = useDebounce(profileFormatItems, 1000);
+
   const order = useMemo(() => {
     const items = profileFormatItems.reduce<Record<number, number>>(
       (acc, cur, index) => {
@@ -32,16 +35,27 @@ function QualityProfileFormatItems({
       {}
     );
 
+    const sortScores = sortFormatItems.reduce<Record<number, number>>(
+      (acc, cur) => {
+        acc[cur.format] = cur.score;
+        return acc;
+      },
+      {}
+    );
+
     return [...profileFormatItems]
       .sort((a, b) => {
-        if (b.score !== a.score) {
-          return b.score - a.score;
+        const aScore = a.format in sortScores ? sortScores[a.format] : a.score;
+        const bScore = b.format in sortScores ? sortScores[b.format] : b.score;
+
+        if (bScore !== aScore) {
+          return bScore - aScore;
         }
 
         return a.name.localeCompare(b.name, undefined, { numeric: true });
       })
       .map((x) => items[x.format]);
-  }, [profileFormatItems]);
+  }, [profileFormatItems, sortFormatItems]);
 
   if (profileFormatItems.length < 1) {
     return (
