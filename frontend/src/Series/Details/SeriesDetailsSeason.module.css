@@ -238,6 +238,29 @@
   font-family: var(--editorialFontFamily);
 }
 
+@media (--breakpointMedium) {
+  .left {
+    max-width: 50%;
+  }
+
+  .seasonInfo {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .seasonStats {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .seasonTitle {
+    max-width: 100%;
+    font-size: 12px;
+  }
+}
+
 @media (--breakpointSmall) {
   .season {
     border-right: 0;
@@ -249,17 +272,6 @@
     flex: 1;
     min-width: 0;
     max-width: none;
-  }
-
-  .seasonInfo {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .seasonTitle {
-    max-width: 100%;
-    font-size: 12px;
   }
 
   .expandButton {
