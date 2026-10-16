@@ -33,10 +33,6 @@ function Page({ children }: PageProps) {
 
   const authenticationEnabled = authentication !== 'none';
 
-  const handleUpdatedModalClose = useCallback(() => {
-    setIsUpdatedModalOpen(false);
-  }, []);
-
   const handleResize = useCallback(() => {
     saveDimensions({
       width: window.innerWidth,
@@ -101,10 +97,7 @@ function Page({ children }: PageProps) {
         {children}
       </div>
 
-      <AppUpdatedModal
-        isOpen={isUpdatedModalOpen}
-        onModalClose={handleUpdatedModalClose}
-      />
+      <AppUpdatedModal isOpen={isUpdatedModalOpen} />
 
       <ConnectionLostModal isOpen={isConnectionLostModalOpen} />
 

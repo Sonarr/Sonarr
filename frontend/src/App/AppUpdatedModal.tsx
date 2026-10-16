@@ -4,11 +4,10 @@ import AppUpdatedModalContent from './AppUpdatedModalContent';
 
 interface AppUpdatedModalProps {
   isOpen: boolean;
-  onModalClose: (...args: unknown[]) => unknown;
 }
 
 function AppUpdatedModal(props: AppUpdatedModalProps) {
-  const { isOpen, onModalClose } = props;
+  const { isOpen } = props;
 
   const handleModalClose = useCallback(() => {
     location.reload();
@@ -18,7 +17,7 @@ function AppUpdatedModal(props: AppUpdatedModalProps) {
     <Modal
       isOpen={isOpen}
       closeOnBackgroundClick={false}
-      onModalClose={onModalClose}
+      onModalClose={handleModalClose}
     >
       <AppUpdatedModalContent onModalClose={handleModalClose} />
     </Modal>
