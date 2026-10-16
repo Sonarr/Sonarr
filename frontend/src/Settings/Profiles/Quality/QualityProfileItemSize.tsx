@@ -14,7 +14,7 @@ import { emptyItemFailures, ItemFailures } from './qualityProfileItemFailures';
 import styles from './QualityProfileItemSize.module.css';
 
 const MIN = 0;
-const MAX = 400;
+const MAX = 1000;
 const STEP_SIZE = 0.1;
 const MIN_DISTANCE = 3;
 const SLIDER_MAX = roundNumber(Math.pow(MAX, 1 / 1.1));
@@ -39,12 +39,12 @@ export interface QualityProfileItemSizeProps {
   onSizeChange: (props: SizeChanged) => void;
 }
 
-function trackRenderer(props: HTMLProps<HTMLDivElement>) {
-  return <div {...props} className={styles.track} />;
+function trackRenderer({ key, ...props }: HTMLProps<HTMLDivElement>) {
+  return <div key={key} {...props} className={styles.track} />;
 }
 
-function thumbRenderer(props: HTMLProps<HTMLDivElement>) {
-  return <div {...props} className={styles.thumb} />;
+function thumbRenderer({ key, ...props }: HTMLProps<HTMLDivElement>) {
+  return <div key={key} {...props} className={styles.thumb} />;
 }
 
 function getSliderValue(value: number | null, defaultValue: number): number {
