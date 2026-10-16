@@ -8,6 +8,12 @@
   margin: 0 5px;
 }
 
+.labelIconContainer {
+  display: inline-flex;
+  justify-content: center;
+  width: 1.25em;
+}
+
 .stateIconContainer {
   position: absolute;
   top: 50%;
