@@ -20,7 +20,6 @@ import {
 } from '@floating-ui/react';
 import classNames from 'classnames';
 import React, { useRef, useState } from 'react';
-import { useThemeColor } from 'Helpers/Hooks/useTheme';
 import { kinds } from 'Helpers/Props';
 import { Kind } from 'Helpers/Props/kinds';
 import { isMobile } from 'Utilities/browser';
@@ -57,11 +56,6 @@ function Tooltip(props: TooltipProps) {
     canFlip = true,
   } = props;
 
-  const arrowColor = useThemeColor(
-    kind === 'inverse'
-      ? 'popoverArrowBorderInverseColor'
-      : 'popoverArrowBorderColor'
-  );
   const [isOpen, setIsOpen] = useState(false);
   const isTooltipOpen = isOpen && !isDisabled;
 
@@ -123,7 +117,13 @@ function Tooltip(props: TooltipProps) {
       style={floatingStyles}
       {...getFloatingProps()}
     >
-      <FloatingArrow ref={arrowRef} context={context} fill={arrowColor} />
+      <FloatingArrow
+        ref={arrowRef}
+        className={classNames(styles.arrow, styles[kind])}
+        style={{ transform: 'translateY(-1px)' }}
+        context={context}
+        strokeWidth={1}
+      />
       <div className={classNames(styles.tooltip, styles[kind])}>
         <div className={bodyClassName}>{tooltip}</div>
       </div>
