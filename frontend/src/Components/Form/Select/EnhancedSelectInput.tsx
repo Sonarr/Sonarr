@@ -88,14 +88,11 @@ function nextIndex<T extends EnhancedSelectInputValue<V>, V>(
   return findIndex(selectedIndex, 1, values);
 }
 
-// A single character cycles through matches, like a native select
-function findTypeAheadIndex<T extends EnhancedSelectInputValue<V>, V>(
-  query: string,
-  selectedIndex: number,
+function findMatchIndex<T extends EnhancedSelectInputValue<V>, V>(
+  search: string,
+  start: number,
   values: T[]
 ) {
-  const start = query.length === 1 ? selectedIndex + 1 : selectedIndex;
-
   for (let i = 0; i < values.length; i++) {
     const index = (Math.max(start, 0) + i) % values.length;
     const option = values[index];
@@ -103,10 +100,32 @@ function findTypeAheadIndex<T extends EnhancedSelectInputValue<V>, V>(
     if (
       !option.isDisabled &&
       !option.isHidden &&
-      option.value.toLowerCase().startsWith(query)
+      option.value.toLowerCase().startsWith(search)
     ) {
       return index;
     }
+  }
+
+  return null;
+}
+
+// A single or repeated character cycles through matches, like a native select,
+// unless an option starts with the whole query (e.g. "ee")
+function findTypeAheadIndex<T extends EnhancedSelectInputValue<V>, V>(
+  query: string,
+  selectedIndex: number,
+  values: T[]
+) {
+  if (query.length > 1) {
+    const index = findMatchIndex(query, selectedIndex, values);
+
+    if (index !== null) {
+      return index;
+    }
+  }
+
+  if ([...query].every((c) => c === query[0])) {
+    return findMatchIndex(query[0], selectedIndex + 1, values);
   }
 
   return null;
