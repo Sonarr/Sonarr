@@ -17,13 +17,12 @@ import FormRow from 'Components/Form/FormRow';
 import { LanguageSelectInputOnChangeProps } from 'Components/Form/Select/LanguageSelectInput';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
-import SpinnerButton from 'Components/Link/SpinnerButton';
+import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
-import { getValidationFailures } from 'Helpers/Hooks/useApiMutation';
 import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
 import Language, { DEFAULT_LANGUAGE } from 'Language/Language';
 import { useLanguageById } from 'Language/useLanguages';
@@ -85,10 +84,7 @@ function AddNewSeriesModalContent({
   const { isAdding, addError, addSeries } = useAddSeries();
 
   const { settings, validationErrors, validationWarnings } = useMemo(() => {
-    return {
-      ...selectSettings(options, {}),
-      ...getValidationFailures(addError),
-    };
+    return selectSettings(options, {}, addError);
   }, [options, addError]);
 
   const [seriesType, setSeriesType] = useState<SeriesType>(
@@ -363,14 +359,15 @@ function AddNewSeriesModalContent({
         <div className={styles.actions}>
           <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
-          <SpinnerButton
+          <SpinnerErrorButton
             className={styles.addButton}
             kind={kinds.PRIMARY}
             isSpinning={isAdding}
+            error={addError}
             onPress={handleAddSeriesPress}
           >
             {translate('AddSeriesWithTitle', { title })}
-          </SpinnerButton>
+          </SpinnerErrorButton>
         </div>
       </ModalFooter>
     </ModalContent>
