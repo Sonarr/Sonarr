@@ -21,13 +21,11 @@
   margin-top: 10px;
 }
 
-@media (--breakpointLarge) {
-  .tableContainer {
-    overflow-x: auto;
-  }
+.tableContainer {
+  overflow-x: auto;
+}
 
-  .table {
-    min-width: 100%;
-    width: max-content;
-  }
+.table {
+  min-width: 100%;
+  width: max-content;
 }

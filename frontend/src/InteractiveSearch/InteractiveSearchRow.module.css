@@ -14,14 +14,8 @@
   composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
 
   flex: 1 1 auto;
-  min-width: 0;
-}
-
-@media (--breakpointLarge) {
-  .title {
-    min-width: 250px;
-    white-space: normal;
-  }
+  min-width: 250px;
+  white-space: normal;
 }
 
 .titleContent {
