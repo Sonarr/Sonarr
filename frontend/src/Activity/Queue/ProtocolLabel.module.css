@@ -1,20 +1,20 @@
 .torrent,
-.usenet,
+.usenet {
+  composes: label tinted from 'Components/Label.module.css';
+}
+
 .unknown {
   composes: label from 'Components/Label.module.css';
 }
 
-.torrent::before {
-  background-color: var(--torrentColor);
-  opacity: 1;
+.torrent {
+  --labelKindColor: var(--torrentColor);
 }
 
-.usenet::before {
-  background-color: var(--usenetColor);
-  opacity: 1;
+.usenet {
+  --labelKindColor: var(--usenetColor);
 }
 
-.unknown::before {
-  background-color: var(--inkMuted);
-  opacity: 0.5;
+.text {
+  translate: 0 -0.09em;
 }

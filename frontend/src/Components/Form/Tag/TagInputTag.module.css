@@ -7,30 +7,42 @@
 }
 
 .link {
+  min-width: 0;
   max-width: 100%;
+  line-height: 1;
 }
 
 .linkWithEdit {
-  max-width: calc(100% - 9px - 4px - 2px);
+  min-width: 0;
+  max-width: 100%;
+  line-height: 1;
 }
 
 .editContainer {
-  display: inline-block;
-  margin-left: 4px;
-  padding-left: 2px;
-  border-left: 1px solid var(--hairline);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 6px;
+  padding-left: 6px;
+  border-left: 1px solid color-mix(in oklch, currentColor 35%, transparent);
 }
 
 .editButton {
   composes: button from 'Components/Link/IconButton.module.css';
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
   width: 9px;
+  height: 13px;
 }
 
 .label {
   composes: label from 'Components/Label.module.css';
 
   display: flex;
+  padding: 4px 10px;
   max-width: 100%;
   letter-spacing: normal;
   font-size: 13px;

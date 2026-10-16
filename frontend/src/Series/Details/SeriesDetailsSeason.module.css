@@ -72,8 +72,6 @@
   padding: 4px 10px;
   border: none;
   border-radius: 999px;
-  background-color: var(--paperWarm);
-  color: var(--inkSoft);
   letter-spacing: 0.04em;
   font-weight: 500;
   font-size: 11px;
