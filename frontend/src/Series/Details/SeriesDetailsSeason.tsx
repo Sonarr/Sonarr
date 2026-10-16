@@ -25,9 +25,10 @@ import {
 import { getQueryKey, useToggleEpisodesMonitored } from 'Episode/useEpisode';
 import { useSeasonEpisodes } from 'Episode/useEpisodes';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import { align, icons, sortDirections, tooltipPositions } from 'Helpers/Props';
+import { align, icons, tooltipPositions } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
+import { manageEpisodesOptionsStore } from 'InteractiveImport/interactiveImportOptionsStore';
 import OrganizePreviewModal from 'Organize/OrganizePreviewModal';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import SeasonInteractiveSearchModal from 'Series/Search/SeasonInteractiveSearchModal';
@@ -538,8 +539,7 @@ function SeriesDetailsSeason({
         seasonNumber={seasonNumber}
         title={seasonNumberTitle}
         folder={path}
-        initialSortKey="relativePath"
-        initialSortDirection={sortDirections.DESCENDING}
+        optionsStore={manageEpisodesOptionsStore}
         showSeries={false}
         allowSeriesChange={false}
         showDelete={true}

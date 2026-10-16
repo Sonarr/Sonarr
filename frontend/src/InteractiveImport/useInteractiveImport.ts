@@ -7,7 +7,7 @@ import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import clientSideFilterAndSort from 'Utilities/Filter/clientSideFilterAndSort';
 import InteractiveImport from './InteractiveImport';
-import { useInteractiveImportOptions } from './interactiveImportOptionsStore';
+import { InteractiveImportOptionsStore } from './interactiveImportOptionsStore';
 import ReleaseType from './ReleaseType';
 
 const DEFAULT_ITEMS: InteractiveImport[] = [];
@@ -20,8 +20,11 @@ interface InteractiveImportParams {
   filterExistingFiles?: boolean;
 }
 
-const useInteractiveImport = (params: InteractiveImportParams) => {
-  const { sortKey, sortDirection } = useInteractiveImportOptions();
+const useInteractiveImport = (
+  params: InteractiveImportParams,
+  optionsStore: InteractiveImportOptionsStore
+) => {
+  const { sortKey, sortDirection } = optionsStore.useOptions();
 
   const { data, isFetching, isFetched, error, refetch } = useApiQuery<
     InteractiveImport[]

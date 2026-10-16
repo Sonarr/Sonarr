@@ -30,14 +30,9 @@ import Tooltip from 'Components/Tooltip/Tooltip';
 import useEpisodes from 'Episode/useEpisodes';
 import useEpisodeFiles from 'EpisodeFile/useEpisodeFiles';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import {
-  icons,
-  kinds,
-  sizes,
-  sortDirections,
-  tooltipPositions,
-} from 'Helpers/Props';
+import { icons, kinds, sizes, tooltipPositions } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
+import { manageEpisodesOptionsStore } from 'InteractiveImport/interactiveImportOptionsStore';
 import useCountryName from 'Internationalization/useCountryName';
 import OrganizePreviewModal from 'Organize/OrganizePreviewModal';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
@@ -961,8 +956,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
             seriesId={seriesId}
             title={title}
             folder={path}
-            initialSortKey="relativePath"
-            initialSortDirection={sortDirections.DESCENDING}
+            optionsStore={manageEpisodesOptionsStore}
             showSeries={false}
             allowSeriesChange={false}
             showDelete={true}
