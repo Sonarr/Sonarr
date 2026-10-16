@@ -1,6 +1,9 @@
 .container {
-  margin: 2px;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
   padding: 0 2px;
+  height: 18px;
   border: 1px solid;
   border-radius: 2px;
   white-space: nowrap;

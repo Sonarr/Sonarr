@@ -7,7 +7,7 @@
   composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
 
   flex: 0 0 auto;
-  width: 80px;
+  width: 98px;
 }
 
 .title {
@@ -26,9 +26,10 @@
 
 .titleContent {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   word-break: break-all;
+  gap: 8px;
 }
 
 .sceneMapping {
@@ -49,7 +50,6 @@
   composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
 
   flex: 0 0 auto;
-  text-align: center;
 }
 
 .quality {
@@ -98,7 +98,7 @@
 }
 
 .age {
-  width: 70px;
+  width: 90px;
 }
 
 .size {
