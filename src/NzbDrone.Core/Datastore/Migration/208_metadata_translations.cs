@@ -26,6 +26,10 @@ namespace NzbDrone.Core.Datastore.Migration
                 .WithColumn("Language").AsInt32();
 
             Create.Index().OnTable("SeriesTranslations").OnColumn("SeriesId");
+
+            Update.Table("Series")
+                .Set(new { LastInfoSync = "2026-01-01 00:00:00" })
+                .AllRows();
         }
     }
 }
