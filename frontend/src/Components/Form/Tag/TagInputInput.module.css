@@ -3,7 +3,7 @@
   display: flex;
   align-items: start;
   flex-wrap: wrap;
-  padding: 1px 16px;
+  padding: 2px 8px;
   min-height: 33px;
   cursor: default;
 }

@@ -1,7 +1,8 @@
 import React from 'react';
 import { useQueueDetailsForSeries } from 'Activity/Queue/Details/QueueDetailsProvider';
 import Label from 'Components/Label';
-import { kinds, sizes } from 'Helpers/Props';
+import { icons, kinds, sizes } from 'Helpers/Props';
+import { Kind } from 'Helpers/Props/kinds';
 
 function getEpisodeCountKind(
   monitored: boolean,
@@ -22,6 +23,19 @@ function getEpisodeCountKind(
   }
 
   return kinds.DANGER;
+}
+
+function getEpisodeCountIcon(kind: Kind) {
+  switch (kind) {
+    case kinds.PURPLE:
+      return icons.DOWNLOADING;
+    case kinds.SUCCESS:
+      return icons.CHECK;
+    case kinds.WARNING:
+      return icons.UNMONITORED;
+    default:
+      return icons.MISSING;
+  }
 }
 
 interface SeasonProgressLabelProps {
@@ -48,16 +62,19 @@ function SeasonProgressLabel({
     ? `${episodeFileCount} + ${newDownloads} / ${episodeCount}`
     : `${episodeFileCount} / ${episodeCount}`;
 
+  const kind = getEpisodeCountKind(
+    monitored,
+    episodeFileCount,
+    episodeCount,
+    queueDetails.count > 0
+  );
+
   return (
     <Label
       className={className}
-      kind={getEpisodeCountKind(
-        monitored,
-        episodeFileCount,
-        episodeCount,
-        queueDetails.count > 0
-      )}
+      kind={kind}
       size={sizes.LARGE}
+      icon={getEpisodeCountIcon(kind)}
     >
       <span>{text}</span>
     </Label>

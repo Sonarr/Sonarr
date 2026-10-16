@@ -91,7 +91,7 @@ function TagInput<T extends TagBase>({
   tags,
   tagList,
   allowNew = true,
-  kind = 'info',
+  kind = 'default',
   placeholder = '',
   delimiters = ['Tab', 'Enter', ' ', ','],
   minQueryLength = 1,

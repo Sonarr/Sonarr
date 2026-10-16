@@ -53,7 +53,7 @@ function TagInputTag<T extends TagBase>({
 
   return (
     <div className={styles.tag} tabIndex={-1}>
-      <Label className={styles.label} kind={kind}>
+      <Label className={styles.label} kind={kind} dot={false}>
         <Link
           className={canEdit ? styles.linkWithEdit : styles.link}
           tabIndex={-1}

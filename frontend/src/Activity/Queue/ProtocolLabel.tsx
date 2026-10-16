@@ -13,7 +13,7 @@ function ProtocolLabel({ protocol, ...otherProps }: ProtocolLabelProps) {
 
   return (
     <Label className={styles[protocol]} {...otherProps}>
-      {protocolName}
+      <span className={styles.text}>{protocolName}</span>
     </Label>
   );
 }
