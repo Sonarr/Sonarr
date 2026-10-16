@@ -164,11 +164,9 @@
   --popoverTitleBorderColor: var(--hairline);
   --popoverBodyBackgroundColor: var(--paper);
   --popoverShadowColor: oklch(0% 0 0 / 0.18);
-  --popoverArrowBorderColor: var(--paper);
   --popoverTitleBackgroundInverseColor: oklch(18% 0.014 260);
   --popoverTitleBorderInverseColor: oklch(32% 0.012 260);
   --popoverShadowInverseColor: oklch(0% 0 0 / 0.32);
-  --popoverArrowBorderInverseColor: oklch(18% 0.014 260 / 0.92);
 
   /* Calendar, series, progress */
   --calendarTodayBackgroundColor: oklch(94% 0.006 240);
@@ -388,11 +386,9 @@
   --popoverTitleBorderColor: oklch(36% 0.016 260);
   --popoverBodyBackgroundColor: oklch(29% 0.015 260);
   --popoverShadowColor: oklch(0% 0 0 / 0.32);
-  --popoverArrowBorderColor: oklch(29% 0.015 260);
   --popoverTitleBackgroundInverseColor: oklch(90% 0.007 260);
   --popoverTitleBorderInverseColor: oklch(66% 0.011 260);
   --popoverShadowInverseColor: oklch(0% 0 0 / 0.32);
-  --popoverArrowBorderInverseColor: oklch(90% 0.007 260 / 0.92);
 
   /* Calendar, series, progress */
   --calendarTodayBackgroundColor: var(--paperWarm);

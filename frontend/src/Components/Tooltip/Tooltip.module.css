@@ -7,6 +7,24 @@
   z-index: var(--popperZIndex);
 }
 
+.arrow {
+  z-index: 1;
+
+  &.default {
+    fill: var(--paperCard);
+    stroke: var(--paperCard);
+
+    path:first-child {
+      stroke: var(--hairlineStrong);
+    }
+  }
+
+  &.inverse {
+    fill: var(--ink);
+    stroke: var(--ink);
+  }
+}
+
 .tooltip {
   position: relative;
   display: flex;
