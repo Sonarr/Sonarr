@@ -3,6 +3,7 @@ import React, {
   FormEvent,
   KeyboardEvent,
   SyntheticEvent,
+  TouchEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -332,6 +333,17 @@ function SeriesSearchInput() {
     reset();
   }, [reset]);
 
+  const handleTouchEnd = useCallback((event: TouchEvent<HTMLInputElement>) => {
+    const input = event.currentTarget;
+
+    if (!event.cancelable || document.activeElement === input) {
+      return;
+    }
+
+    event.preventDefault();
+    input.focus({ preventScroll: true });
+  }, []);
+
   const handleSuggestionsFetchRequested = useCallback(
     ({ value }: { value: string }) => {
       isLoading.current = true;
@@ -372,6 +384,7 @@ function SeriesSearchInput() {
     onChange: handleChange,
     onKeyDown: handleKeyDown,
     onBlur: handleBlur,
+    onTouchEnd: handleTouchEnd,
   };
 
   const theme = {

@@ -100,6 +100,12 @@
 }
 
 @media (--breakpointSmall) {
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: var(--pageHeaderZIndex);
+  }
+
   .logoContainer {
     flex: 0 0 auto;
     padding-left: 16px;
