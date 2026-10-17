@@ -79,8 +79,6 @@ namespace NzbDrone.Common.Test
         [Test]
         public void should_treat_escaped_trailing_quote_as_literal()
         {
-            // A single backslash before the closing quote escapes it, so quoting continues to the end.
-            // This matches how .NET and the MSVC runtime have always parsed this input.
             var commandLine = "-data=\"c:\\users\\test\\\" -nobrowser";
 
             CommandLineArguments.Split(commandLine).Should().Equal("-data=c:\\users\\test\" -nobrowser");

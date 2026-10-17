@@ -5,14 +5,6 @@ namespace NzbDrone.Common.Processes
 {
     public static class CommandLineArguments
     {
-        // Splits a command line into individual arguments using the same rules .NET applies to
-        // ProcessStartInfo.Arguments on Linux/macOS (which in turn follow the MSVC CRT / CommandLineToArgvW rules),
-        // so passing the result to ProcessStartInfo.ArgumentList is equivalent to passing the original string:
-        //  - Arguments are separated by spaces or tabs outside of quotes
-        //  - Double quotes group characters and are removed; "" inside a quoted section is a literal quote
-        //  - 2n backslashes followed by a quote become n backslashes and the quote toggles quoting
-        //  - 2n+1 backslashes followed by a quote become n backslashes and a literal quote
-        //  - Backslashes not followed by a quote are literal
         public static List<string> Split(string commandLine)
         {
             var args = new List<string>();
