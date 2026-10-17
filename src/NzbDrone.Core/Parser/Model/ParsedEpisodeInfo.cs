@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Serialization;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Qualities;
@@ -15,15 +14,6 @@ namespace NzbDrone.Core.Parser.Model
         public SeriesTitleInfo SeriesTitleInfo { get; set; }
         public QualityModel Quality { get; set; }
         public List<int> SeasonNumbers { get; set; } = [];
-
-        // TODO: Remove this once `SeasonNumbers` replaces `SeasonNumber`
-        [JsonPropertyOrder(-1)]
-        public int? SeasonNumber
-        {
-            get => SeasonNumbers.Count > 0 ? SeasonNumbers[0] : null;
-            set => SeasonNumbers = value.HasValue ? [value.Value] : [];
-        }
-
         public int[] EpisodeNumbers { get; set; }
         public int[] AbsoluteEpisodeNumbers { get; set; }
         public decimal[] SpecialAbsoluteEpisodeNumbers { get; set; }
@@ -81,7 +71,7 @@ namespace NzbDrone.Core.Parser.Model
             {
                 return ((AirDate.IsNullOrWhiteSpace() &&
                        SeriesTitle.IsNullOrWhiteSpace() &&
-                       (EpisodeNumbers.Length == 0 || SeasonNumber == 0)) || (!SeriesTitle.IsNullOrWhiteSpace() && Special)) ||
+                       (EpisodeNumbers.Length == 0 || SeasonNumbers.FirstOrDefault(-1) == 0)) || (!SeriesTitle.IsNullOrWhiteSpace() && Special)) ||
                        (EpisodeNumbers.Length == 1 && EpisodeNumbers[0] == 0);
             }
 
@@ -94,7 +84,7 @@ namespace NzbDrone.Core.Parser.Model
         {
             get
             {
-                return SeasonNumber.HasValue && SeasonNumber != 0 && EpisodeNumbers.Length == 1 && EpisodeNumbers[0] == 0;
+                return SeasonNumbers.FirstOrDefault() != 0 && EpisodeNumbers.Length == 1 && EpisodeNumbers[0] == 0;
             }
 
             private set
@@ -141,12 +131,12 @@ namespace NzbDrone.Core.Parser.Model
                 }
                 else
                 {
-                    episodeString = SeasonNumber.HasValue ? string.Format("Season {0:00}", SeasonNumber) : "[Unknown Season]";
+                    episodeString = SeasonNumbers.Any() ? string.Format("Season {0:00}", SeasonNumbers.First()) : "[Unknown Season]";
                 }
             }
             else if (EpisodeNumbers != null && EpisodeNumbers.Any())
             {
-                episodeString = string.Format("S{0:00}E{1}", SeasonNumber, string.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))));
+                episodeString = string.Format("S{0:00}E{1}", SeasonNumbers.FirstOrDefault(), string.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))));
             }
             else if (AbsoluteEpisodeNumbers != null && AbsoluteEpisodeNumbers.Any())
             {
@@ -154,9 +144,9 @@ namespace NzbDrone.Core.Parser.Model
             }
             else if (Special)
             {
-                if (SeasonNumber.HasValue && SeasonNumber != 0)
+                if (SeasonNumbers.FirstOrDefault() != 0)
                 {
-                    episodeString = string.Format("[Unknown Season {0:00} Special]", SeasonNumber);
+                    episodeString = string.Format("[Unknown Season {0:00} Special]", SeasonNumbers.First());
                 }
                 else
                 {

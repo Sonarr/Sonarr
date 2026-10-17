@@ -10,6 +10,14 @@ namespace NzbDrone.Core.Test.ParserTests
     [TestFixture]
     public class DailyEpisodeParserFixture : CoreTest
     {
+        [Test]
+        public void should_parse_daily_episode_into_season_zero()
+        {
+            var result = Parser.Parser.ParseTitle("A.Late.Talk.Show.2010.10.11.Johnny.Knoxville.iTouch-MW");
+
+            result.SeasonNumbers.Should().Equal(0);
+        }
+
         [TestCase("Series Title 2011 04 18 Emma Roberts HDTV XviD BFF", "Series Title", 2011, 04, 18)]
         [TestCase("A Late Talk Show 2011 04 15 1080i HDTV DD5 1 MPEG2 TrollHD", "A Late Talk Show", 2011, 04, 15)]
         [TestCase("A.Late.Talk.Show.2010.10.11.Johnny.Knoxville.iTouch-MW", "A Late Talk Show", 2010, 10, 11)]
