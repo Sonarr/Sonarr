@@ -1,5 +1,11 @@
+import { CollisionDetector } from '@dnd-kit/abstract';
+import {
+  defaultCollisionDetection,
+  pointerIntersection,
+} from '@dnd-kit/collision';
 import { arrayMove, move } from '@dnd-kit/helpers';
 import { DragEndEvent, DragOverEvent } from '@dnd-kit/react';
+import { isSortable } from '@dnd-kit/react/sortable';
 import { useCallback, useMemo, useState } from 'react';
 import {
   QualityProfileGroup,
@@ -11,6 +17,11 @@ export const ROOT_CONTAINER = 'root';
 
 export const qualityKey = (id: number) => `q-${id}`;
 export const groupContainerKey = (id: number) => `g-${id}`;
+
+export const rootCollisionDetector: CollisionDetector = (input) =>
+  input.dragOperation.source?.type === 'group'
+    ? pointerIntersection(input)
+    : defaultCollisionDetection(input);
 
 type Board = Record<string, string[]>;
 
@@ -102,38 +113,20 @@ function fromBoard(
     .reverse();
 }
 
-function rootIndexOf(board: Board, id: string): number {
-  const root = board[ROOT_CONTAINER];
-  const direct = root.indexOf(id);
-
-  if (direct !== -1) {
-    return direct;
-  }
-
-  const containerKey = Object.keys(board).find(
-    (key) => key !== ROOT_CONTAINER && board[key].includes(id)
-  );
-
-  return containerKey ? root.indexOf(containerKey) : -1;
-}
-
 function moveGroup(board: Board, event: DragEndEvent): Board {
-  const { source, target } = event.operation;
+  const { source } = event.operation;
 
-  if (!source || !target) {
-    return board;
-  }
-
-  const from = rootIndexOf(board, String(source.id));
-  const to = rootIndexOf(board, String(target.id));
-
-  if (from === -1 || to === -1 || from === to) {
+  if (!isSortable(source) || source.initialIndex === source.index) {
     return board;
   }
 
   return {
     ...board,
-    [ROOT_CONTAINER]: arrayMove(board[ROOT_CONTAINER], from, to),
+    [ROOT_CONTAINER]: arrayMove(
+      board[ROOT_CONTAINER],
+      source.initialIndex,
+      source.index
+    ),
   };
 }
 

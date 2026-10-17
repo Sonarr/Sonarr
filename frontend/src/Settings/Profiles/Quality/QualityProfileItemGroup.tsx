@@ -14,7 +14,11 @@ import translate from 'Utilities/String/translate';
 import QualityProfileItem from './QualityProfileItem';
 import { ItemFailures } from './qualityProfileItemFailures';
 import { SizeChanged } from './QualityProfileItemSize';
-import { groupContainerKey, ROOT_CONTAINER } from './useQualityProfileDnd';
+import {
+  groupContainerKey,
+  ROOT_CONTAINER,
+  rootCollisionDetector,
+} from './useQualityProfileDnd';
 import { QualityProfileQualityItem } from './useQualityProfiles';
 import styles from './QualityProfileItemGroup.module.css';
 
@@ -53,6 +57,7 @@ function QualityProfileItemGroup({
     group: ROOT_CONTAINER,
     type: 'group',
     accept: ['quality', 'group'],
+    collisionDetector: rootCollisionDetector,
     collisionPriority:
       mode === 'editGroups' ? CollisionPriority.Low : CollisionPriority.Normal,
     disabled: mode === 'editSizes',
