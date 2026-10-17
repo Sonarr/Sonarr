@@ -477,6 +477,9 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
   useEffect(() => {
     if (isOpen) {
       onOpen?.();
+    } else {
+      clearTimeout(typeAheadTimeout.current);
+      typeAheadQuery.current = '';
     }
   }, [isOpen, onOpen]);
 
