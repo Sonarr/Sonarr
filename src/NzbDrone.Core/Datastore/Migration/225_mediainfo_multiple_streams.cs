@@ -44,7 +44,7 @@ public class mediainfo_multiple_streams : NzbDroneMigrationBase
 
     private void MigrateMediaInfoToMultipleStreams(IDbConnection conn, IDbTransaction tran)
     {
-        var existing = conn.Query<EpisodeFile224>("SELECT \"Id\", \"MediaInfo\" FROM \"EpisodeFiles\"");
+        var existing = conn.Query<EpisodeFile224>("SELECT \"Id\", \"MediaInfo\" FROM \"EpisodeFiles\"", buffered: false);
 
         foreach (var row in existing)
         {
