@@ -21,6 +21,8 @@ const ModalHeader = forwardRef(
         id={headerId}
         className={classNames(styles.modalHeader, className)}
         {...otherProps}
+        role="heading"
+        aria-level={2}
       >
         {children}
         {subtitle ? <span className={styles.subtitle}>{subtitle}</span> : null}

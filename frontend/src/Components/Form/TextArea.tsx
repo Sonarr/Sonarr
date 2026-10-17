@@ -10,6 +10,7 @@ import { InputChanged } from 'typings/inputs';
 import styles from './TextArea.module.css';
 
 export interface TextAreaProps {
+  id?: string;
   className?: string;
   readOnly?: boolean;
   autoFocus?: boolean;
@@ -25,6 +26,7 @@ export interface TextAreaProps {
 }
 
 function TextArea({
+  id,
   className = styles.input,
   readOnly = false,
   autoFocus = false,
@@ -119,6 +121,7 @@ function TextArea({
   return (
     <textarea
       ref={inputRef}
+      id={id}
       readOnly={readOnly}
       autoFocus={autoFocus}
       placeholder={placeholder}

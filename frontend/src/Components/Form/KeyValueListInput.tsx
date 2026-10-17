@@ -10,6 +10,7 @@ interface KeyValue {
 }
 
 export interface KeyValueListInputProps {
+  id?: string;
   className?: string;
   name: string;
   value: KeyValue[];
@@ -21,6 +22,7 @@ export interface KeyValueListInputProps {
 }
 
 function KeyValueListInput({
+  id,
   className = styles.inputContainer,
   name,
   value = [],
@@ -86,6 +88,7 @@ function KeyValueListInput({
       {[...value, { key: '', value: '' }].map((v, index) => (
         <KeyValueListInputItem
           key={index}
+          id={index === 0 ? id : undefined}
           index={index}
           keyValue={v.key}
           value={v.value}
