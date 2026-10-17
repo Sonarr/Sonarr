@@ -1,6 +1,6 @@
 import React from 'react';
+import getMediaLanguageNames from 'Language/getMediaLanguageNames';
 import useLanguageName from 'Language/useLanguageName';
-import translate from 'Utilities/String/translate';
 import { useEpisodeFile } from './EpisodeFileProvider';
 
 function formatLanguages(
@@ -11,15 +11,7 @@ function formatLanguages(
     return null;
   }
 
-  const splitLanguages = [...new Set(languages)].map((l) => {
-    const simpleLanguage = l.split('_')[0];
-
-    if (simpleLanguage === 'und') {
-      return translate('Unknown');
-    }
-
-    return getLanguageName(simpleLanguage);
-  });
+  const splitLanguages = getMediaLanguageNames(languages, getLanguageName);
 
   if (splitLanguages.length > 3) {
     return (

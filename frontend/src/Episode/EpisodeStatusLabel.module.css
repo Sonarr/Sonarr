@@ -1,0 +1,37 @@
+.downloaded,
+.downloading,
+.onAir,
+.missing,
+.unaired {
+  composes: label tinted from 'Components/Label.module.css';
+}
+
+.unmonitored {
+  composes: label from 'Components/Label.module.css';
+}
+
+.downloaded {
+  --labelKindColor: var(--calendarDownloadedColor);
+}
+
+.downloading {
+  --labelKindColor: var(--calendarDownloadingColor);
+}
+
+.onAir {
+  --labelKindColor: var(--calendarOnAirColor);
+}
+
+.missing {
+  --labelKindColor: var(--calendarMissingColor);
+}
+
+.unaired {
+  --labelKindColor: var(--calendarUnairedColor);
+}
+
+.progress {
+  composes: circularProgressBarContainer from 'Components/CircularProgressBar.module.css';
+
+  flex-shrink: 0;
+}

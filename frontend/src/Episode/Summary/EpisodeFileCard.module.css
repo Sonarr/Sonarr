@@ -1,0 +1,206 @@
+.card {
+  padding: 18px 20px;
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
+  background-color: var(--paperCard);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.fileInfo {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.fileName {
+  overflow-wrap: anywhere;
+
+  color: var(--ink);
+  font-size: 13px;
+  font-family: var(--monoSpaceFontFamily);
+  line-height: 1.5;
+}
+
+.folder {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+
+  margin-top: 6px;
+  min-width: 0;
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.folderIcon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+
+  height: 20px;
+}
+
+.folderPath {
+  overflow-wrap: anywhere;
+
+  min-width: 0;
+}
+
+.copyButton {
+  composes: button from 'Components/Link/ClipboardButton.module.css';
+
+  flex-shrink: 0;
+  padding: 0;
+  min-width: 20px;
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 4px;
+  background-color: transparent;
+  color: var(--inkMuted);
+
+  &:hover {
+    background-color: transparent;
+    color: var(--ink);
+  }
+
+  span {
+    display: inline-flex;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.actionButton {
+  composes: button from 'Components/Link/Button.module.css';
+
+  height: 28px;
+}
+
+.mediaInfoAnchor {
+  composes: button small outline default from 'Components/Link/Button.module.css';
+
+  height: 28px;
+  cursor: default;
+}
+
+.deleteButton {
+  composes: actionButton;
+
+  padding: 0;
+  width: 28px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  margin-top: 12px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+
+  padding: 2px 8px;
+  border-radius: 5px;
+  background-color: var(--paperWarm);
+  font-size: 12px;
+}
+
+.chipLabel {
+  color: var(--inkMuted);
+}
+
+.chipValue {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.revision {
+  color: var(--inkSoft);
+  font-weight: 400;
+}
+
+.cutoffIcon {
+  margin-left: 4px;
+  color: var(--inkMuted);
+}
+
+.formats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--borderColor);
+}
+
+.formatsLabel {
+  flex-shrink: 0;
+  color: var(--inkMuted);
+  font-size: 13px;
+}
+
+.formatList {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.scoreValue {
+  flex-shrink: 0;
+  color: var(--inkSoft);
+  font-weight: 600;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.positive {
+  color: var(--successColor);
+}
+
+.negative {
+  color: var(--dangerColor);
+}
+
+@media (--breakpointSmall) {
+  .card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header {
+    display: contents;
+  }
+
+  .actions {
+    order: 1;
+
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--borderColor);
+  }
+
+  .deleteButton {
+    margin-left: auto;
+  }
+
+  .formats {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+}

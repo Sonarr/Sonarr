@@ -1,33 +1,32 @@
-import React, { RefObject, useCallback, useState } from 'react';
+import React, { RefObject, useCallback, useMemo } from 'react';
 import CommandNames from 'Commands/CommandNames';
 import { useExecuteCommand } from 'Commands/useCommands';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import InteractiveSearch from 'InteractiveSearch/InteractiveSearch';
-import useReleases from 'InteractiveSearch/useReleases';
 import translate from 'Utilities/String/translate';
 import styles from './EpisodeSearch.module.css';
 
 interface EpisodeSearchProps {
   episodeId: number;
-  startInteractiveSearch: boolean;
+  isInteractiveSearchOpen: boolean;
+  filter: string;
   scrollerRef: RefObject<HTMLDivElement>;
+  onInteractiveSearchPress: () => void;
   onModalClose: () => void;
 }
 
 function EpisodeSearch({
   episodeId,
-  startInteractiveSearch,
+  isInteractiveSearchOpen,
+  filter,
   scrollerRef,
+  onInteractiveSearchPress,
   onModalClose,
 }: EpisodeSearchProps) {
   const executeCommand = useExecuteCommand();
-  const { isFetched } = useReleases({ episodeId }, { enabled: false });
-
-  const [isInteractiveSearchOpen, setIsInteractiveSearchOpen] = useState(
-    startInteractiveSearch || isFetched
-  );
+  const searchPayload = useMemo(() => ({ episodeId }), [episodeId]);
 
   const handleQuickSearchPress = useCallback(() => {
     executeCommand({
@@ -38,16 +37,12 @@ function EpisodeSearch({
     onModalClose();
   }, [episodeId, executeCommand, onModalClose]);
 
-  const handleInteractiveSearchPress = useCallback(() => {
-    setIsInteractiveSearchOpen(true);
-  }, []);
-
   if (isInteractiveSearchOpen) {
     return (
       <InteractiveSearch
-        type="episode"
-        searchPayload={{ episodeId }}
+        searchPayload={searchPayload}
         scrollerRef={scrollerRef}
+        filter={filter}
       />
     );
   }
@@ -71,7 +66,7 @@ function EpisodeSearch({
           className={styles.button}
           kind={kinds.PRIMARY}
           size={sizes.LARGE}
-          onPress={handleInteractiveSearchPress}
+          onPress={onInteractiveSearchPress}
         >
           <Icon className={styles.buttonIcon} name={icons.INTERACTIVE} />
 

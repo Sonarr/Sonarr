@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -6,6 +6,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { scrollDirections } from 'Helpers/Props';
 import InteractiveSearch from 'InteractiveSearch/InteractiveSearch';
+import InteractiveSearchFilters from 'InteractiveSearch/InteractiveSearchFilters';
 import { useClearReleasesOnUnmount } from 'InteractiveSearch/useReleases';
 import formatSeason from 'Season/formatSeason';
 import translate from 'Utilities/String/translate';
@@ -26,6 +27,12 @@ function SeasonInteractiveSearchModalContent({
 }: SeasonInteractiveSearchModalContentProps) {
   useClearReleasesOnUnmount({ seriesId, seasonNumber });
   const modalBodyRef = useRef<HTMLDivElement>(null);
+  const [filter, setFilter] = useState('');
+
+  const searchPayload = useMemo(
+    () => ({ seriesId, seasonNumber }),
+    [seriesId, seasonNumber]
+  );
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -38,13 +45,18 @@ function SeasonInteractiveSearchModalContent({
       </ModalHeader>
 
       <ModalBody ref={modalBodyRef} scrollDirection={scrollDirections.BOTH}>
+        <div className={styles.filterRow}>
+          <InteractiveSearchFilters
+            searchPayload={searchPayload}
+            filter={filter}
+            onFilterChange={setFilter}
+          />
+        </div>
+
         <InteractiveSearch
-          type="season"
-          searchPayload={{
-            seriesId,
-            seasonNumber,
-          }}
+          searchPayload={searchPayload}
           scrollerRef={modalBodyRef}
+          filter={filter}
         />
       </ModalBody>
 

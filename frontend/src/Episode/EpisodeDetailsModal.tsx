@@ -12,7 +12,6 @@ interface EpisodeDetailsModalProps {
   seriesId: number;
   episodeTitle: string;
   isSaving?: boolean;
-  showOpenSeriesButton?: boolean;
   selectedTab?: EpisodeDetailsTab;
   startInteractiveSearch?: boolean;
   onModalClose(): void;

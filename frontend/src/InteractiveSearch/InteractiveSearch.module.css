@@ -1,22 +1,3 @@
-.filterRow {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-
-  padding: 10px 0;
-  background-color: var(--modalBackgroundColor);
-}
-
-.filterInput {
-  flex: 0 1 250px;
-  min-width: 0;
-}
-
 .filteredMessage {
   margin-top: 10px;
 }
@@ -48,4 +29,8 @@
 .table {
   min-width: 100%;
   width: max-content;
+
+  > :first-child > div {
+    border-top: none;
+  }
 }

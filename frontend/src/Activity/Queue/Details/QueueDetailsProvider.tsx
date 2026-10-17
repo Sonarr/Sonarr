@@ -25,6 +25,8 @@ const QueueDetailsContext = createContext<ReadonlyArray<Queue> | undefined>(
   undefined
 );
 
+const HasQueueDetailsContext = createContext(false);
+
 export default function QueueDetailsProvider({
   children,
   ...filter
@@ -38,10 +40,33 @@ export default function QueueDetailsProvider({
   });
 
   return (
-    <QueueDetailsContext.Provider value={data}>
-      {children}
-    </QueueDetailsContext.Provider>
+    <HasQueueDetailsContext.Provider value={true}>
+      <QueueDetailsContext.Provider value={data}>
+        {children}
+      </QueueDetailsContext.Provider>
+    </HasQueueDetailsContext.Provider>
   );
+}
+
+export function EpisodeQueueDetailsProvider({
+  episodeIds,
+  children,
+}: PropsWithChildren<EpisodeDetails>) {
+  const hasQueueDetails = useContext(HasQueueDetailsContext);
+
+  if (hasQueueDetails) {
+    return <>{children}</>;
+  }
+
+  return (
+    <QueueDetailsProvider episodeIds={episodeIds}>
+      {children}
+    </QueueDetailsProvider>
+  );
+}
+
+export function useIsQueueDetailsLoaded() {
+  return useContext(QueueDetailsContext) !== undefined;
 }
 
 export function useQueueItemForEpisode(episodeId: number) {

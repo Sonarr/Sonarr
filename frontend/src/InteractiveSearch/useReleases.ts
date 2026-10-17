@@ -1,4 +1,4 @@
-import { hashKey, useQueryClient } from '@tanstack/react-query';
+import { hashKey, QueryClient, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { create } from 'zustand';
 import ModelBase from 'App/ModelBase';
@@ -25,8 +25,9 @@ import translate from 'Utilities/String/translate';
 import InteractiveSearchPayload from './InteractiveSearchPayload';
 import {
   getReleaseOption,
+  getSelectedFilterKeyOption,
   setReleaseOption,
-  useReleaseOptions,
+  useReleaseOption,
 } from './releaseOptionsStore';
 
 export interface ReleaseEpisode {
@@ -392,13 +393,11 @@ const useReleases = (
   { filter = '', enabled = true }: UseReleasesOptions = {}
 ) => {
   const customFilters = useCustomFiltersList('releases');
-  const { episodeSelectedFilterKey, seasonSelectedFilterKey } =
-    useReleaseOptions();
+  const selectedFilterKey = useReleaseOption(
+    getSelectedFilterKeyOption(payload)
+  );
 
   const { sortKey, sortDirection } = releaseStore();
-
-  const selectedFilterKey =
-    'seriesId' in payload ? seasonSelectedFilterKey : episodeSelectedFilterKey;
 
   const { data, queryKey, ...result } = useApiQuery<Release[]>({
     path: '/release',
@@ -480,6 +479,13 @@ const useReleases = (
 };
 
 export default useReleases;
+
+export const hasFetchedReleases = (
+  queryClient: QueryClient,
+  payload: InteractiveSearchPayload
+) => {
+  return queryClient.getQueryData(['/release', payload]) !== undefined;
+};
 
 export const useClearReleasesOnUnmount = (
   payload: InteractiveSearchPayload
