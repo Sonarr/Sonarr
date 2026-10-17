@@ -109,7 +109,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     absoluteEpisodeNumbers,
     episodeNumbers,
     isDaily,
-    seasonNumber,
+    seasonNumbers,
     quality,
   } = parsedInfo;
 
@@ -228,7 +228,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
             seasonNumber={mappedSeasonNumber}
             episodeNumbers={mappedEpisodeNumbers}
             absoluteEpisodeNumbers={mappedAbsoluteEpisodeNumbers}
-            sceneSeasonNumber={seasonNumber}
+            sceneSeasonNumber={seasonNumbers[0] ?? null}
             sceneEpisodeNumbers={episodeNumbers}
             sceneAbsoluteEpisodeNumbers={absoluteEpisodeNumbers}
             sceneMapping={sceneMapping}
