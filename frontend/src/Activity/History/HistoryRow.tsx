@@ -134,7 +134,6 @@ function HistoryRow(props: HistoryRowProps) {
                 episodeEntity={episodeEntities.EPISODES}
                 seriesId={series.id}
                 episodeTitle={episode.title}
-                showOpenSeriesButton={true}
               />
             </TableRowCell>
           );

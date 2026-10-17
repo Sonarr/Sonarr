@@ -11,7 +11,6 @@ interface EpisodeTitleLinkProps {
   episodeEntity: EpisodeEntity;
   episodeTitle: string;
   finaleType?: string;
-  showOpenSeriesButton: boolean;
 }
 
 function EpisodeTitleLink(props: EpisodeTitleLinkProps) {

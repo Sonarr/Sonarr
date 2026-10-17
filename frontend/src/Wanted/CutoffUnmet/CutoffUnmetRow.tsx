@@ -121,7 +121,6 @@ function CutoffUnmetRow({
                 seriesId={series.id}
                 episodeEntity="wanted.cutoffUnmet"
                 episodeTitle={title}
-                showOpenSeriesButton={true}
               />
             </TableRowCell>
           );
@@ -180,7 +179,6 @@ function CutoffUnmetRow({
               episodeNumber={episodeNumber}
               episodeTitle={title}
               episodeEntity="wanted.cutoffUnmet"
-              showOpenSeriesButton={true}
             />
           );
         }

@@ -8,28 +8,27 @@
 
 .metaItem {
   display: flex;
-  align-items: flex-start;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .metaLabel {
   color: var(--inkMuted);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-weight: 500;
-  font-size: 10px;
-  font-family: var(--monoSpaceFontFamily);
+  font-size: 13px;
 }
 
 .metaValue {
-  color: var(--inkSoft);
+  color: var(--ink);
   font-size: 14px;
+}
+
+.relative {
+  color: var(--inkMuted);
 }
 
 .overview {
   margin-bottom: 20px;
-  max-width: 80ch;
+  max-width: 100ch;
   color: var(--inkSoft);
   text-wrap: pretty;
   font-size: 14px;

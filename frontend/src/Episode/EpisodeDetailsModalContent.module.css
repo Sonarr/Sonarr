@@ -1,67 +1,91 @@
 .header {
+  padding-bottom: 6px !important;
   border-bottom: none !important;
   white-space: normal !important;
 }
 
-.scopeLine {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-
-  &::after {
-    flex: 1;
-    margin-left: 12px;
-    height: 1px;
-    background-color: var(--inputBorderColor);
-    content: "";
-    opacity: 0.5;
-  }
-}
-
 .scope {
-  display: inline-flex;
+  display: flex;
   align-items: baseline;
   gap: 10px;
 
-  flex: 0 1 auto;
   min-width: 0;
+  font-weight: 400;
+  font-size: 15px;
 }
 
 .scopeSeries {
-  flex: 0 1 auto;
   overflow: hidden;
   min-width: 0;
-  color: var(--inkSoft);
+  color: var(--accent);
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 14px;
-  font-family: var(--defaultFontFamily);
+  font-weight: 600;
+
+  &:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+}
+
+.scopeSeparator {
+  color: var(--inkFaint);
 }
 
 .scopeEpisode {
-  flex: 0 0 auto;
-  color: var(--accentDeep);
-  letter-spacing: 0.12em;
-  font-weight: 500;
-  font-size: 12px;
+  flex-shrink: 0;
+  color: var(--inkSoft);
   font-family: var(--monoSpaceFontFamily);
 }
 
-.titleRow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.episodeTitle {
+  margin-top: 6px;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.2;
 }
 
-.episodeTitle {
-  color: var(--ink);
-  letter-spacing: -0.018em;
-  font-weight: 600;
-  font-size: 20px;
+.labels {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin-top: 12px;
+}
+
+.monitoredToggle {
+  display: inline-flex;
+  border-radius: 999px;
+
+  &:global(.isDisabled) {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--inputFocusBoxShadowColor);
+  }
 }
 
 .tabs {
   margin-top: -32px;
+}
+
+.tabBar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  border-bottom: 1px solid var(--borderColor);
+  background-color: var(--modalBackgroundColor);
 }
 
 .tabList {
@@ -70,7 +94,15 @@
 
   margin: 0;
   padding: 0;
-  border-bottom: 1px solid var(--borderColor);
+}
+
+.tabFilters {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  input {
+    height: 32px;
+  }
 }
 
 .tab {
@@ -93,8 +125,22 @@
   margin-top: 20px;
 }
 
-.openSeriesButton {
-  composes: button from 'Components/Link/Button.module.css';
+@media (--breakpointSmall) {
+  .tabBar {
+    display: contents;
+  }
 
-  margin-right: auto;
+  .tabList {
+    border-bottom: 1px solid var(--borderColor);
+  }
+
+  .tabFilters {
+    position: sticky;
+    top: -1px;
+    z-index: 2;
+
+    padding: 11px 0 10px;
+    border-bottom: 1px solid var(--borderColor);
+    background-color: var(--modalBackgroundColor);
+  }
 }

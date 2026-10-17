@@ -1,0 +1,13 @@
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+
+  width: 100%;
+}
+
+.filterInput {
+  flex: 0 1 250px;
+  min-width: 0;
+}

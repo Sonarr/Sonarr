@@ -230,7 +230,6 @@ function AgendaEvent(props: AgendaEventProps) {
         episodeEntity={episodeEntities.CALENDAR}
         seriesId={series.id}
         episodeTitle={title}
-        showOpenSeriesButton={true}
         onModalClose={handleDetailsModalClose}
       />
     </div>

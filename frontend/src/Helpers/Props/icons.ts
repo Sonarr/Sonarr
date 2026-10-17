@@ -23,6 +23,7 @@ import {
   Circle,
   CircleAlert,
   CircleArrowDown,
+  CircleArrowUp,
   CircleCheck,
   CircleChevronLeft,
   CircleChevronRight,
@@ -235,6 +236,7 @@ export const UNGROUP = Ungroup;
 export const UNKNOWN = CircleHelp;
 export const UNMONITORED = BookmarkX;
 export const UPDATE = RefreshCcw;
+export const UPGRADE = CircleArrowUp;
 export const UNSAVED_SETTING = CircleDot;
 export const VIEW = Eye;
 export const WARNING = TriangleAlert;

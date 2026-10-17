@@ -8,6 +8,7 @@ import {
 } from 'Helpers/Hooks/useOptionsStore';
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
+import InteractiveSearchPayload from './InteractiveSearchPayload';
 
 export interface ReleaseOptions
   extends Omit<
@@ -126,3 +127,8 @@ export const setReleaseOptions = setOptions;
 export const useReleaseOption = useOption;
 export const getReleaseOption = getOption;
 export const setReleaseOption = setOption;
+
+export const getSelectedFilterKeyOption = (payload: InteractiveSearchPayload) =>
+  'seriesId' in payload
+    ? ('seasonSelectedFilterKey' as const)
+    : ('episodeSelectedFilterKey' as const);

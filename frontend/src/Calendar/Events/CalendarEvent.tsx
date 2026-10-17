@@ -241,7 +241,6 @@ function CalendarEvent(props: CalendarEventProps) {
         episodeEntity={episodeEntities.CALENDAR}
         seriesId={series.id}
         episodeTitle={title}
-        showOpenSeriesButton={true}
         onModalClose={handleDetailsModalClose}
       />
     </div>

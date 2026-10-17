@@ -161,7 +161,6 @@ function EpisodeRow({
                 episodeTitle={title}
                 episodeEntity="episodes"
                 finaleType={finaleType}
-                showOpenSeriesButton={false}
               />
             </TableRowCell>
           );
@@ -315,7 +314,6 @@ function EpisodeRow({
               seasonNumber={seasonNumber}
               episodeNumber={episodeNumber}
               episodeTitle={title}
-              showOpenSeriesButton={false}
             />
           );
         }

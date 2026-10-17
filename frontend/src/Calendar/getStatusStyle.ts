@@ -4,8 +4,8 @@ import { CalendarStatus } from 'typings/Calendar';
 function getStatusStyle(
   hasFile: boolean,
   downloading: boolean,
-  startTime: Moment,
-  endTime: Moment,
+  startTime: Moment | undefined,
+  endTime: Moment | undefined,
   isMonitored: boolean
 ): CalendarStatus {
   const currentTime = moment();
@@ -20,6 +20,10 @@ function getStatusStyle(
 
   if (!isMonitored) {
     return 'unmonitored';
+  }
+
+  if (!startTime || !endTime) {
+    return 'unaired';
   }
 
   if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {

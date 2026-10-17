@@ -28,7 +28,6 @@ export default function EpisodeTitleCellContent({
         seriesId={series.id}
         episodeTitle={episode.title}
         episodeEntity="episodes"
-        showOpenSeriesButton={true}
       />
     );
   }
@@ -53,7 +52,6 @@ export default function EpisodeTitleCellContent({
                   seriesId={series.id}
                   episodeTitle={episode.title}
                   episodeEntity="episodes"
-                  showOpenSeriesButton={true}
                 />
               </div>
             );
