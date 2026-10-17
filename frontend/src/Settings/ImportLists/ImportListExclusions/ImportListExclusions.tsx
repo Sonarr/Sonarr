@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
+import Button from 'Components/Link/Button';
 import Link from 'Components/Link/Link';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageSectionContent from 'Components/Page/PageSectionContent';
@@ -10,7 +11,7 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TablePager from 'Components/Table/TablePager';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
-import { icons, kinds } from 'Helpers/Props';
+import { icons, kinds, sizes } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import { CheckInputChanged } from 'typings/inputs';
 import { TableOptionsChangePayload } from 'typings/Table';
@@ -193,8 +194,10 @@ function ImportListExclusionsContent() {
           totalRecords={totalRecords}
           isFetching={isFetching}
           leftActions={
-            <Link
-              className={styles.deleteRow}
+            <Button
+              kind={kinds.DANGER}
+              size={sizes.SMALL}
+              outline={true}
               isDisabled={!anySelected || isDeleting}
               onPress={handleDeleteSelectedPress}
             >
@@ -204,7 +207,7 @@ function ImportListExclusionsContent() {
                 isSpinning={isDeleting}
               />
               {translate('DeleteSelected')}
-            </Link>
+            </Button>
           }
           onPageSelect={goToPage}
         />
