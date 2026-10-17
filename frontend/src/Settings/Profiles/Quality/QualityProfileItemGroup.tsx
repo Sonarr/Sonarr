@@ -170,7 +170,9 @@ function QualityProfileItemGroup({
         <div
           className={classNames(
             mode === 'editGroups' && styles.items,
-            mode === 'editGroups' && source && styles.isDragActive
+            mode === 'editGroups' &&
+              source?.type === 'quality' &&
+              styles.isDragActive
           )}
         >
           {items.map((subItem, subIndex) => {
