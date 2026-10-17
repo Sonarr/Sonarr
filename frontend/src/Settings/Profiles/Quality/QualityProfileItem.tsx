@@ -71,8 +71,7 @@ function QualityProfileItem({
       className={classNames(
         styles.qualityProfileItem,
         mode === 'editSizes' && styles.editSizes,
-        isDragging && styles.isDragging,
-        groupId && styles.isInGroup
+        isDragging && styles.isDragging
       )}
     >
       <label
@@ -105,7 +104,6 @@ function QualityProfileItem({
         <div
           className={classNames(
             styles.qualityName,
-            groupId && mode !== 'editSizes' && styles.isInGroup,
             !allowed && styles.notAllowed
           )}
         >
