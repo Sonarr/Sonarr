@@ -35,7 +35,9 @@ export default function useSettingsSave({
   useEffect(() => {
     bindShortcut(
       'saveSettings',
-      () => {
+      (e) => {
+        e.preventDefault();
+
         if (hasPendingChanges) {
           onSavePress?.();
         }

@@ -8,8 +8,8 @@
 .key {
   padding: 2px 4px;
   border-radius: 3px;
-  background-color: var(--defaultColor);
+  background-color: var(--textColor);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.25);
-  color: var(--white);
+  color: var(--modalBackgroundColor);
   font-size: 16px;
 }
