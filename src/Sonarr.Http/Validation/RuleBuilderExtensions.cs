@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Validators;
@@ -37,9 +38,9 @@ namespace Sonarr.Http.Validation
             return ruleBuilder.SetValidator(new RssSyncIntervalValidator());
         }
 
-        public static IRuleBuilderOptions<T, string> IsValidCertificate<T>(this IRuleBuilder<T, string> ruleBuilder)
+        public static IRuleBuilderOptions<T, string> IsValidCertificate<T>(this IRuleBuilder<T, string> ruleBuilder, Func<string, string> resolvePassword = null)
         {
-            return ruleBuilder.SetValidator(new CertificateValidator());
+            return ruleBuilder.SetValidator(new CertificateValidator(resolvePassword));
         }
     }
 }

@@ -1,4 +1,5 @@
 import { Failure, ValidationFailure } from 'typings/pending';
+import { QualityProfileItems } from './useQualityProfiles';
 
 const ITEM_REGEX = /^Items\[(\d+)\](?:\.Items\[(\d+)\])?\.(\w+)$/i;
 
@@ -108,4 +109,33 @@ export function getItemFailures(
   groupIndex: number | null = null
 ): ItemFailures {
   return map.get(itemFailuresKey(itemIndex, groupIndex)) ?? emptyItemFailures();
+}
+
+export function mapFailuresByQualityId(
+  items: QualityProfileItems,
+  itemFailures: ItemFailuresMap
+): Map<number, ItemFailures> {
+  const result = new Map<number, ItemFailures>();
+
+  items.forEach((item, itemIndex) => {
+    if ('id' in item) {
+      item.items.forEach((groupItem, groupIndex) => {
+        const failures = itemFailures.get(
+          itemFailuresKey(itemIndex, groupIndex)
+        );
+
+        if (failures) {
+          result.set(groupItem.quality.id, failures);
+        }
+      });
+    } else {
+      const failures = itemFailures.get(itemFailuresKey(itemIndex));
+
+      if (failures) {
+        result.set(item.quality.id, failures);
+      }
+    }
+  });
+
+  return result;
 }

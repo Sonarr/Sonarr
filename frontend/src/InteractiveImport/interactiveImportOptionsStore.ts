@@ -2,6 +2,7 @@ import {
   createOptionsStore,
   PageableOptions,
 } from 'Helpers/Hooks/useOptionsStore';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 import ImportMode from './ImportMode';
 
 export interface InteractiveImportOptions
@@ -81,31 +82,32 @@ export const COLUMNS = [
   },
 ];
 
-const {
-  useOptions,
-  useOption,
-  getOptions,
-  getOption,
-  setOptions,
-  setOption,
-  setSort,
-} = createOptionsStore<InteractiveImportOptions>(
-  'interactive_import_options',
-  () => {
+function createInteractiveImportOptionsStore(
+  name: string,
+  sortDirection: SortDirection
+) {
+  return createOptionsStore<InteractiveImportOptions>(name, () => {
     return {
       selectedFilterKey: 'all',
       sortKey: 'relativePath',
-      sortDirection: 'ascending',
+      sortDirection,
       importMode: 'chooseImportMode',
       columns: COLUMNS,
     };
-  }
-);
+  });
+}
 
-export const useInteractiveImportOptions = useOptions;
-export const getInteractiveImportOptions = getOptions;
-export const setInteractiveImportOptions = setOptions;
-export const useInteractiveImportOption = useOption;
-export const getInteractiveImportOption = getOption;
-export const setInteractiveImportOption = setOption;
-export const setInteractiveImportSort = setSort;
+export type InteractiveImportOptionsStore = ReturnType<
+  typeof createInteractiveImportOptionsStore
+>;
+
+export const interactiveImportOptionsStore =
+  createInteractiveImportOptionsStore(
+    'interactive_import_options',
+    'ascending'
+  );
+
+export const manageEpisodesOptionsStore = createInteractiveImportOptionsStore(
+  'manage_episodes_options',
+  'descending'
+);

@@ -114,10 +114,8 @@ const useRemovalOptions = () => {
   const { removalOptions } = useQueueOptions();
 
   return {
-    remove: removalOptions.removalMethod === 'removeFromClient',
-    changeCategory: removalOptions.removalMethod === 'changeCategory',
-    blocklist: removalOptions.blocklistMethod !== 'doNotBlocklist',
-    skipRedownload: removalOptions.blocklistMethod === 'blocklistOnly',
+    removalMethod: removalOptions.removalMethod,
+    blocklistMethod: removalOptions.blocklistMethod,
   };
 };
 

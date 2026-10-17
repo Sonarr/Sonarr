@@ -49,7 +49,15 @@ namespace NzbDrone.Core.Organizer
                 ImdbId = "tt12345",
                 TvdbId = 12345,
                 TvMazeId = 54321,
-                TmdbId = 11223
+                TmdbId = 11223,
+                Seasons = new List<Season>
+                {
+                    new Season
+                    {
+                        SeasonNumber = 1,
+                        Title = "Part 1"
+                    }
+                }
             };
 
             _dailySeries = new Series
@@ -60,7 +68,15 @@ namespace NzbDrone.Core.Organizer
                 ImdbId = "tt12345",
                 TvdbId = 12345,
                 TvMazeId = 54321,
-                TmdbId = 11223
+                TmdbId = 11223,
+                Seasons = new List<Season>
+                {
+                    new Season
+                    {
+                        SeasonNumber = 1,
+                        Title = "Part 1"
+                    }
+                }
             };
 
             _animeSeries = new Series
@@ -71,7 +87,15 @@ namespace NzbDrone.Core.Organizer
                 ImdbId = "tt12345",
                 TvdbId = 12345,
                 TvMazeId = 54321,
-                TmdbId = 11223
+                TmdbId = 11223,
+                Seasons = new List<Season>
+                {
+                    new Season
+                    {
+                        SeasonNumber = 1,
+                        Title = "Part 1"
+                    }
+                }
             };
 
             _episode1 = new Episode

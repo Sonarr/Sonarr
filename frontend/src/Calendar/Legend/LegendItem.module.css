@@ -1,0 +1,69 @@
+.legendItem {
+  display: flex;
+  align-items: center;
+  margin: 3px 0;
+  margin-right: 8px;
+  padding: 4px 8px;
+  width: 160px;
+  color: var(--inkSoft);
+  font-size: 12px;
+  font-family: var(--defaultFontFamily);
+  cursor: default;
+  gap: 8px;
+
+  &.unmonitored {
+    background-image: var(--calendarColorImpairedDiagonalPattern);
+  }
+
+  &.onAir,
+  &.missing,
+  &.unaired {
+    background-image: var(--calendarColorImpairedPattern);
+  }
+}
+
+.indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+}
+
+.bar {
+  width: 8px;
+  height: 15px;
+  border-radius: 2px;
+  background-color: var(--inkMuted);
+
+  &.downloaded {
+    background-color: var(--calendarDownloadedColor);
+  }
+
+  &.downloading {
+    background-color: var(--calendarDownloadingColor);
+  }
+
+  &.unmonitored {
+    background-color: var(--inkMuted);
+    opacity: 0.5;
+  }
+
+  &.onAir {
+    background-color: var(--calendarOnAirColor);
+  }
+
+  &.missing {
+    background-color: var(--calendarMissingColor);
+  }
+
+  &.unaired {
+    background-color: var(--calendarUnairedColor);
+  }
+}
+
+.icon {
+  &.fullColor {
+    filter: var(--calendarFullColorFilter);
+  }
+}

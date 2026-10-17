@@ -7,7 +7,7 @@ import padNumber from 'Utilities/Number/padNumber';
 import filterAlternateTitles from 'Utilities/Series/filterAlternateTitles';
 import translate from 'Utilities/String/translate';
 import SceneInfo from './SceneInfo';
-import styles from './EpisodeNumber.css';
+import styles from './EpisodeNumber.module.css';
 
 function getWarningMessage(
   unverifiedSceneNumbering: boolean,
@@ -77,12 +77,17 @@ function EpisodeNumber(props: EpisodeNumberProps) {
   );
 
   return (
-    <span>
+    <span className={styles.episodeNumber}>
       {hasSceneInformation ? (
         <Popover
           anchor={
             <span>
-              {showSeasonNumber && seasonNumber != null && <>{seasonNumber}x</>}
+              {showSeasonNumber && seasonNumber != null && (
+                <>
+                  {seasonNumber}
+                  <span className={styles.separator}>x</span>
+                </>
+              )}
 
               {showSeasonNumber ? padNumber(episodeNumber, 2) : episodeNumber}
 
@@ -109,7 +114,12 @@ function EpisodeNumber(props: EpisodeNumberProps) {
         />
       ) : (
         <span>
-          {showSeasonNumber && seasonNumber != null && <>{seasonNumber}x</>}
+          {showSeasonNumber && seasonNumber != null && (
+            <>
+              {seasonNumber}
+              <span className={styles.separator}>x</span>
+            </>
+          )}
 
           {showSeasonNumber ? padNumber(episodeNumber, 2) : episodeNumber}
 
@@ -123,7 +133,7 @@ function EpisodeNumber(props: EpisodeNumberProps) {
 
       {warningMessage ? (
         <Icon
-          className={styles.warning}
+          titleWrapperClassName={styles.warning}
           name={icons.WARNING}
           kind={kinds.WARNING}
           title={warningMessage}

@@ -1,0 +1,5 @@
+.markAsFailedButton {
+  composes: button from 'Components/Link/Button.module.css';
+
+  margin-right: auto;
+}

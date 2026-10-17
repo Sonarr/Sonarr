@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -10,7 +10,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds, scrollDirections } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import styles from './SelectReleaseGroupModalContent.css';
+import styles from './SelectReleaseGroupModalContent.module.css';
 
 interface SelectReleaseGroupModalContentProps {
   releaseGroup: string;
@@ -47,17 +47,16 @@ function SelectReleaseGroupModalContent(
         scrollDirection={scrollDirections.NONE}
       >
         <Form>
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('ReleaseGroup')}</FormLabel>
-
-            <FormInputGroup
+            <FormInput
               type={inputTypes.TEXT}
               name="releaseGroup"
               value={releaseGroup}
               autoFocus={true}
               onChange={onReleaseGroupChange}
             />
-          </FormGroup>
+          </FormRow>
         </Form>
       </ModalBody>
 

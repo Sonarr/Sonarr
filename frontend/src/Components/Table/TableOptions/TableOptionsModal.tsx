@@ -1,12 +1,11 @@
-import _ from 'lodash';
-import { HTML5toTouch } from 'rdndmb-html5-to-touch';
-import React, { useCallback, useEffect, useState } from 'react';
-import { DndProvider } from 'react-dnd-multi-backend';
+import { move } from '@dnd-kit/helpers';
+import { DragDropProvider, DragEndEvent, DragOverEvent } from '@dnd-kit/react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Button from 'Components/Link/Button';
 import Modal from 'Components/Modal/Modal';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -19,7 +18,7 @@ import { TableOptionsChangePayload } from 'typings/Table';
 import translate from 'Utilities/String/translate';
 import Column from '../Column';
 import TableOptionsColumn from './TableOptionsColumn';
-import styles from './TableOptionsModal.css';
+import styles from './TableOptionsModal.module.css';
 
 export interface TableOptionsModalProps {
   isOpen: boolean;
@@ -44,21 +43,18 @@ function TableOptionsModal({
 }: TableOptionsModalProps) {
   const [pageSize, setPageSize] = useState(propsPageSize);
   const [pageSizeError, setPageSizeError] = useState<string | null>(null);
-  const [dragIndex, setDragIndex] = useState<number | null>(null);
-  const [dropIndex, setDropIndex] = useState<number | null>(null);
+  const [localColumnNames, setLocalColumnNames] = useState<string[] | null>(
+    null
+  );
 
   const hasPageSize = !!propsPageSize;
-  const isDragging = dropIndex !== null;
-  const isDraggingUp =
-    isDragging &&
-    dropIndex != null &&
-    dragIndex != null &&
-    dropIndex < dragIndex;
-  const isDraggingDown =
-    isDragging &&
-    dropIndex != null &&
-    dragIndex != null &&
-    dropIndex > dragIndex;
+  const columnsByName = useMemo(
+    () => new Map(columns.map((column) => [column.name, column])),
+    [columns]
+  );
+  const displayedColumns = localColumnNames
+    ? localColumnNames.map((name) => columnsByName.get(name)!)
+    : columns;
 
   const handlePageSizeChange = useCallback(
     ({ value }: InputChanged<number | null>) => {
@@ -100,28 +96,31 @@ function TableOptionsModal({
     [columns, onTableOptionChange]
   );
 
-  const handleColumnDragMove = useCallback(
-    (newDragIndex: number, newDropIndex: number) => {
-      setDropIndex(newDropIndex);
-      setDragIndex(newDragIndex);
+  const handleDragStart = useCallback(() => {
+    setLocalColumnNames(columns.map((column) => column.name));
+  }, [columns]);
+
+  const handleDragOver = useCallback((event: DragOverEvent) => {
+    setLocalColumnNames((current) =>
+      current ? move(current, event) : current
+    );
+  }, []);
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      setLocalColumnNames((current) => {
+        if (current && !event.canceled) {
+          const newColumnNames = move(current, event);
+
+          onTableOptionChange({
+            columns: newColumnNames.map((name) => columnsByName.get(name)!),
+          });
+        }
+
+        return null;
+      });
     },
-    []
-  );
-
-  const handleColumnDragEnd = useCallback(
-    (didDrop: boolean) => {
-      if (didDrop && dragIndex !== null && dropIndex !== null) {
-        const newColumns = [...columns];
-        const items = newColumns.splice(dragIndex, 1);
-        newColumns.splice(dropIndex, 0, items[0]);
-
-        onTableOptionChange({ columns: newColumns });
-      }
-
-      setDragIndex(null);
-      setDropIndex(null);
-    },
-    [dragIndex, dropIndex, columns, onTableOptionChange]
+    [columnsByName, onTableOptionChange]
   );
 
   useEffect(() => {
@@ -129,83 +128,80 @@ function TableOptionsModal({
   }, [propsPageSize]);
 
   return (
-    <DndProvider options={HTML5toTouch}>
-      <Modal isOpen={isOpen} onModalClose={onModalClose}>
-        {isOpen ? (
-          <ModalContent onModalClose={onModalClose}>
-            <ModalHeader>{translate('TableOptions')}</ModalHeader>
+    <Modal isOpen={isOpen} onModalClose={onModalClose}>
+      {isOpen ? (
+        <ModalContent onModalClose={onModalClose}>
+          <ModalHeader>{translate('TableOptions')}</ModalHeader>
 
-            <ModalBody>
-              <Form>
-                {hasPageSize ? (
-                  <FormGroup>
-                    <FormLabel>{translate('TablePageSize')}</FormLabel>
+          <ModalBody>
+            <Form>
+              {hasPageSize ? (
+                <FormRow>
+                  <FormLabel>{translate('TablePageSize')}</FormLabel>
 
-                    <FormInputGroup
-                      type={inputTypes.NUMBER}
-                      name="pageSize"
-                      value={pageSize || 0}
-                      helpText={translate('TablePageSizeHelpText')}
-                      errors={
-                        pageSizeError ? [{ message: pageSizeError }] : undefined
-                      }
-                      onChange={handlePageSizeChange}
-                    />
-                  </FormGroup>
-                ) : null}
+                  <FormInputHelpText
+                    text={translate('TablePageSizeHelpText')}
+                  />
+                  {pageSizeError ? (
+                    <FormInputHelpText text={pageSizeError} isError={true} />
+                  ) : null}
+                  <FormInput
+                    type={inputTypes.NUMBER}
+                    name="pageSize"
+                    value={pageSize || 0}
+                    onChange={handlePageSizeChange}
+                  />
+                </FormRow>
+              ) : null}
 
-                {OptionsComponent ? (
-                  <OptionsComponent onTableOptionChange={onTableOptionChange} />
-                ) : null}
+              {OptionsComponent ? (
+                <OptionsComponent onTableOptionChange={onTableOptionChange} />
+              ) : null}
 
-                {canModifyColumns ? (
-                  <FormGroup>
-                    <FormLabel>{translate('TableColumns')}</FormLabel>
+              {canModifyColumns ? (
+                <div className={styles.columnsSection}>
+                  <FormLabel>{translate('TableColumns')}</FormLabel>
+                  <FormInputHelpText text={translate('TableColumnsHelpText')} />
 
-                    <div>
-                      <FormInputHelpText
-                        text={translate('TableColumnsHelpText')}
-                      />
+                  <DragDropProvider
+                    onDragStart={handleDragStart}
+                    onDragOver={handleDragOver}
+                    onDragEnd={handleDragEnd}
+                  >
+                    <div className={styles.columns}>
+                      {displayedColumns.map((column, index) => {
+                        const {
+                          name,
+                          label,
+                          columnLabel,
+                          isVisible,
+                          isModifiable = 'enabled',
+                        } = column;
 
-                      <div className={styles.columns}>
-                        {columns.map((column, index) => {
-                          const {
-                            name,
-                            label,
-                            columnLabel,
-                            isVisible,
-                            isModifiable = 'enabled',
-                          } = column;
-
-                          return (
-                            <TableOptionsColumn
-                              key={name}
-                              name={name}
-                              label={columnLabel ?? label}
-                              isVisible={isVisible}
-                              isModifiable={isModifiable}
-                              index={index}
-                              isDraggingUp={isDraggingUp}
-                              isDraggingDown={isDraggingDown}
-                              onVisibleChange={handleVisibleChange}
-                              onColumnDragMove={handleColumnDragMove}
-                              onColumnDragEnd={handleColumnDragEnd}
-                            />
-                          );
-                        })}
-                      </div>
+                        return (
+                          <TableOptionsColumn
+                            key={name}
+                            name={name}
+                            label={columnLabel ?? label}
+                            isVisible={isVisible}
+                            isModifiable={isModifiable}
+                            index={index}
+                            onVisibleChange={handleVisibleChange}
+                          />
+                        );
+                      })}
                     </div>
-                  </FormGroup>
-                ) : null}
-              </Form>
-            </ModalBody>
-            <ModalFooter>
-              <Button onPress={onModalClose}>{translate('Close')}</Button>
-            </ModalFooter>
-          </ModalContent>
-        ) : null}
-      </Modal>
-    </DndProvider>
+                  </DragDropProvider>
+                </div>
+              ) : null}
+            </Form>
+          </ModalBody>
+          <ModalFooter>
+            <Button onPress={onModalClose}>{translate('Close')}</Button>
+          </ModalFooter>
+        </ModalContent>
+      ) : null}
+    </Modal>
   );
 }
 

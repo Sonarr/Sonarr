@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import Alert from 'Components/Alert';
 import { kinds } from 'Helpers/Props';
 import { ValidationError, ValidationWarning } from 'typings/pending';
-import styles from './Form.css';
+import styles from './Form.module.css';
 
 export interface FormProps {
   id?: string;

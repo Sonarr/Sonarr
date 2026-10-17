@@ -2,6 +2,8 @@ import Column from 'Components/Table/Column';
 import { createOptionsStore } from 'Helpers/Hooks/useOptionsStore';
 import translate from 'Utilities/String/translate';
 
+export type ShowStatusMode = 'deleted' | 'continuing' | 'upcoming' | 'ended';
+
 export interface SeriesOptions {
   selectedFilterKey: string | number;
   sortKey: string;
@@ -16,6 +18,7 @@ export interface SeriesOptions {
     showQualityProfile: boolean;
     showTags: boolean;
     showSearchAction: boolean;
+    showStatuses: ShowStatusMode[];
   };
   overviewOptions: {
     detailedProgressBar: boolean;
@@ -50,16 +53,17 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
       secondarySortDirection: 'ascending',
       view: 'posters',
       posterOptions: {
-        detailedProgressBar: false,
+        detailedProgressBar: true,
         size: 'large',
         showTitle: false,
         showMonitored: true,
         showQualityProfile: true,
         showTags: false,
         showSearchAction: false,
+        showStatuses: ['deleted'],
       },
       overviewOptions: {
-        detailedProgressBar: false,
+        detailedProgressBar: true,
         size: 'medium',
         showMonitored: true,
         showNetwork: true,
@@ -248,6 +252,18 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
         {
           name: 'monitorNewItems',
           label: () => translate('MonitorNewSeasons'),
+          isSortable: true,
+          isVisible: false,
+        },
+        {
+          name: 'language',
+          label: () => translate('Language'),
+          isSortable: true,
+          isVisible: false,
+        },
+        {
+          name: 'seasonType',
+          label: () => translate('SeasonType'),
           isSortable: true,
           isVisible: false,
         },

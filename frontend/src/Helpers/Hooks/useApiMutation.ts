@@ -49,14 +49,14 @@ export default useApiMutation;
 export function getValidationFailures(
   error?: ApiError | null
 ): ValidationFailures {
-  if (!error || error.statusCode !== 400) {
+  if (!error || error.statusCode !== 400 || !Array.isArray(error.statusBody)) {
     return {
       errors: [],
       warnings: [],
     };
   }
 
-  return ((error.statusBody ?? []) as ValidationFailure[]).reduce(
+  return (error.statusBody as ValidationFailure[]).reduce(
     (acc: ValidationFailures, failure: ValidationFailure) => {
       if (failure.isWarning) {
         acc.warnings.push(failure as ValidationWarning);

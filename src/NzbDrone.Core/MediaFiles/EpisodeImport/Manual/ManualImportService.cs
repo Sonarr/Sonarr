@@ -87,7 +87,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
             var items = seriesFiles.Select(episodeFile => MapItem(episodeFile, series, directoryInfo.Name, episodes)).ToList();
 
-            if (!seasonNumber.HasValue)
+            if (!seasonNumber.HasValue && directoryInfo.Exists)
             {
                 var mediaFiles = _diskScanService.FilterPaths(series.Path, _diskScanService.GetVideoFiles(series.Path)).ToList();
                 var unmappedFiles = MediaFileService.FilterExistingFiles(mediaFiles, seriesFiles, series);
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             {
                 var trackedDownload = _trackedDownloadService.Find(downloadId);
 
-                if (trackedDownload == null)
+                if (trackedDownload?.ImportItem == null)
                 {
                     return new List<ManualImportItem>();
                 }

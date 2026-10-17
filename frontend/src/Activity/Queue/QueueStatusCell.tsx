@@ -6,7 +6,7 @@ import {
   StatusMessage,
 } from 'typings/Queue';
 import QueueStatus from './QueueStatus';
-import styles from './QueueStatusCell.css';
+import styles from './QueueStatusCell.module.css';
 
 interface QueueStatusCellProps {
   sourceTitle: string;

@@ -11,3 +11,7 @@ interface Window {
     isProduction: boolean;
   };
 }
+
+interface ImportMeta {
+  glob: (pattern: string, options: { eager: true }) => unknown;
+}

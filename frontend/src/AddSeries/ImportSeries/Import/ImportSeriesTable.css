@@ -1,7 +1,0 @@
-.row {
-  transition: background-color 500ms;
-
-  &:hover {
-    background-color: var(--tableRowHoverBackgroundColor);
-  }
-}

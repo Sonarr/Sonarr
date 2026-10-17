@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -71,17 +71,16 @@ function SelectReleaseTypeModalContent(
 
       <ModalBody>
         <Form>
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('ReleaseType')}</FormLabel>
-
-            <FormInputGroup
+            <FormInput
               type={inputTypes.SELECT}
               name="releaseType"
               value={releaseType}
               values={options}
               onChange={handleReleaseTypeChange}
             />
-          </FormGroup>
+          </FormRow>
         </Form>
       </ModalBody>
 

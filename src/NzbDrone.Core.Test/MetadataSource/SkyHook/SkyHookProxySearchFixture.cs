@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.MetadataSource.SkyHook;
 using NzbDrone.Core.Test.Framework;
@@ -34,7 +35,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         [TestCase("tvdbid: 78804 ", "Doctor Who (2005)")]
         public void successful_search(string title, string expected)
         {
-            var result = Subject.SearchForNewSeries(title);
+            var result = Subject.SearchForNewSeries(title, Language.English);
 
             result.Should().NotBeEmpty();
 
@@ -46,7 +47,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         [TestCase("tt0496424", "30 Rock")]
         public void should_search_by_imdb(string title, string expected)
         {
-            var result = Subject.SearchForNewSeriesByImdbId(title);
+            var result = Subject.SearchForNewSeriesByImdbId(title, Language.English);
 
             result.Should().NotBeEmpty();
 
@@ -58,11 +59,11 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         [TestCase("4565se")]
         public void should_not_search_by_imdb_if_invalid(string title)
         {
-            var result = Subject.SearchForNewSeriesByImdbId(title);
+            var result = Subject.SearchForNewSeriesByImdbId(title, Language.English);
             result.Should().BeEmpty();
 
             Mocker.GetMock<ISearchForNewSeries>()
-                  .Verify(v => v.SearchForNewSeries(It.IsAny<string>()), Times.Never());
+                  .Verify(v => v.SearchForNewSeries(It.IsAny<string>(), It.IsAny<Language>()), Times.Never());
 
             ExceptionVerification.IgnoreWarns();
         }
@@ -75,7 +76,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         [TestCase("adjalkwdjkalwdjklawjdlKAJD")]
         public void no_search_result(string term)
         {
-            var result = Subject.SearchForNewSeries(term);
+            var result = Subject.SearchForNewSeries(term, Language.English);
             result.Should().BeEmpty();
 
             ExceptionVerification.IgnoreWarns();
@@ -93,7 +94,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
 
             Mocker.GetMock<ISeriesService>().Setup(c => c.FindByTvdbId(tvdbId)).Returns(existingSeries);
 
-            var result = Subject.SearchForNewSeries("tvdbid: " + tvdbId);
+            var result = Subject.SearchForNewSeries("tvdbid: " + tvdbId, Language.English);
 
             result.Should().Contain(existingSeries);
             result.Should().ContainSingle(c => c.TvdbId == tvdbId);

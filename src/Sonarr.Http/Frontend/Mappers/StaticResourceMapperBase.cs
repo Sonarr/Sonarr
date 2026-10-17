@@ -50,7 +50,7 @@ namespace Sonarr.Http.Frontend.Mappers
                 return Task.FromResult<IActionResult>(null);
             }
 
-            if (_diskProvider.FileExists(filePath, _caseSensitive))
+            if (FileExists(filePath))
             {
                 if (!_mimeTypeProvider.TryGetContentType(filePath, out var contentType))
                 {
@@ -66,6 +66,11 @@ namespace Sonarr.Http.Frontend.Mappers
             _logger.Warn("File {0} not found", filePath);
 
             return Task.FromResult<IActionResult>(null);
+        }
+
+        protected virtual bool FileExists(string filePath)
+        {
+            return _diskProvider.FileExists(filePath, _caseSensitive);
         }
 
         protected virtual Stream GetContentStream(HttpContext context, string filePath)

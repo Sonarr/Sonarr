@@ -3,7 +3,7 @@ import React, { SyntheticEvent, useCallback, useMemo } from 'react';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import styles from './MonitorToggleButton.css';
+import styles from './MonitorToggleButton.module.css';
 
 interface MonitorToggleButtonProps {
   className?: string;
@@ -24,8 +24,6 @@ function MonitorToggleButton(props: MonitorToggleButtonProps) {
     onPress,
     ...otherProps
   } = props;
-
-  const iconName = monitored ? icons.MONITORED : icons.UNMONITORED;
 
   const title = useMemo(() => {
     if (isDisabled) {
@@ -51,7 +49,8 @@ function MonitorToggleButton(props: MonitorToggleButtonProps) {
   return (
     <SpinnerIconButton
       className={classNames(className, isDisabled && styles.isDisabled)}
-      name={iconName}
+      name={icons.MONITORED}
+      filled={monitored}
       size={size}
       title={title}
       aria-label={title}

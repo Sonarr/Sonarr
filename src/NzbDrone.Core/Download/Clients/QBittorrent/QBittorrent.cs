@@ -378,6 +378,16 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             Proxy.RemoveTorrent(item.DownloadId.ToLower(), deleteData, Settings);
         }
 
+        public override IEnumerable<DownloadClientFile> GetFiles(DownloadClientItem item)
+        {
+            return Proxy.GetTorrentFiles(item.DownloadId.ToLower(), Settings)
+                        .Select(f => new DownloadClientFile
+                        {
+                            RelativePath = f.Name
+                        })
+                        .ToList();
+        }
+
         public override DownloadClientItem GetImportItem(DownloadClientItem item, DownloadClientItem previousImportAttempt)
         {
             // On API version >= 2.6.1 this is already set correctly

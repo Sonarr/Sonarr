@@ -8,7 +8,7 @@ import { SeriesStatus } from 'Series/Series';
 import { getSeriesStatusDetails } from 'Series/SeriesStatus';
 import { useToggleSeriesMonitored } from 'Series/useSeries';
 import translate from 'Utilities/String/translate';
-import styles from './SeriesStatusCell.css';
+import styles from './SeriesStatusCell.module.css';
 
 interface SeriesStatusCellProps {
   className: string;
@@ -59,7 +59,7 @@ function SeriesStatusCell({
               : translate('SeriesIsUnmonitored')
           }
         >
-          <Icon name={monitored ? icons.MONITORED : icons.UNMONITORED} />
+          <Icon name={icons.MONITORED} filled={monitored} />
         </StatusIndicator>
       )}
 

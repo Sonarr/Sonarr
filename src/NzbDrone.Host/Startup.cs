@@ -329,6 +329,7 @@ namespace NzbDrone.Host
             app.UseForwardedHeaders();
             app.UseHostFiltering();
             app.UseMiddleware<LoggingMiddleware>();
+            app.UseMiddleware<ViteDevMiddleware>(configFileProvider.UrlBase);
             app.UsePathBase(new PathString(configFileProvider.UrlBase));
             app.UseExceptionHandler(new ExceptionHandlerOptions
             {

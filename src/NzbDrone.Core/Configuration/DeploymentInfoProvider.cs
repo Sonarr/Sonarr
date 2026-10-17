@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Configuration
         public DeploymentInfoProvider(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider)
         {
             var bin = appFolderInfo.StartUpFolder;
-            var packageInfoPath = Path.Combine(bin, "..", "package_info");
+            var packageInfoPath = Path.GetFullPath(Path.Combine(bin, "..", "package_info"));
             var releaseInfoPath = Path.Combine(bin, "release_info");
 
             PackageUpdateMechanism = UpdateMechanism.BuiltIn;

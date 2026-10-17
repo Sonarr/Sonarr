@@ -19,6 +19,7 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
     private const string PrivateValue = "********";
 
     private readonly IConfigFileProvider _configFileProvider;
+    private readonly IConfigService _configService;
     private readonly IUserService _userService;
 
     public GeneralSettingsController(IConfigFileProvider configFileProvider,
@@ -29,6 +30,7 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
         : base(configFileProvider, configService)
     {
         _configFileProvider = configFileProvider;
+        _configService = configService;
         _userService = userService;
 
         SharedValidator.RuleFor(c => c.BindAddress)
@@ -106,7 +108,7 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
             .NotEmpty()
             .IsValidPath()
             .SetValidator(new FileExistsValidator(diskProvider))
-            .IsValidCertificate()
+            .IsValidCertificate(p => p == PrivateValue ? _configFileProvider.SslCertPassword : p)
             .When(c => c.EnableSsl);
 
         SharedValidator.RuleFor(c => c.SslKeyPath)
@@ -120,6 +122,7 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
         SharedValidator.RuleFor(c => c.Branch).NotEmpty().WithMessage("Branch name is required, 'main' is the default");
         SharedValidator.RuleFor(c => c.UpdateScriptPath).IsValidPath().When(c => c.UpdateMechanism == UpdateMechanism.Script);
 
+        SharedValidator.RuleFor(c => c.BackupFolder).ContainsNoPathTraversal();
         SharedValidator.RuleFor(c => c.BackupFolder).IsValidPath().When(c => Path.IsPathRooted(c.BackupFolder));
         SharedValidator.RuleFor(c => c.BackupInterval).InclusiveBetween(1, 7);
         SharedValidator.RuleFor(c => c.BackupRetention).InclusiveBetween(1, 90);
@@ -127,19 +130,12 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
 
     private bool IsMatchingPassword(GeneralSettingsResource resource)
     {
-        var user = _userService.FindUser();
-
-        if (user != null && user.Password == resource.Password)
+        if (resource.Password == PrivateValue)
         {
             return true;
         }
 
-        if (resource.Password == resource.PasswordConfirmation)
-        {
-            return true;
-        }
-
-        return false;
+        return resource.Password == resource.PasswordConfirmation;
     }
 
     protected override GeneralSettingsResource ToResource(IConfigFileProvider configFile, IConfigService model)
@@ -149,11 +145,13 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
         var user = _userService.FindUser();
 
         resource.Username = user?.Username ?? string.Empty;
-        resource.Password = user?.Password ?? string.Empty;
+        resource.Password = user?.Password.IsNotNullOrWhiteSpace() == true ? PrivateValue : string.Empty;
         resource.PasswordConfirmation = string.Empty;
 
-        // Prevent the OIDC client secret from being exposed
+        // Prevent secrets from being exposed
         resource.OidcClientSecret = configFile.OidcClientSecret.IsNullOrWhiteSpace() ? string.Empty : PrivateValue;
+        resource.SslCertPassword = resource.SslCertPassword.IsNullOrWhiteSpace() ? string.Empty : PrivateValue;
+        resource.ProxyPassword = resource.ProxyPassword.IsNullOrWhiteSpace() ? string.Empty : PrivateValue;
 
         return resource;
     }
@@ -164,13 +162,23 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
 
         if (resource.Username.IsNotNullOrWhiteSpace() && resource.Password.IsNotNullOrWhiteSpace())
         {
-            _userService.Upsert(resource.Username, resource.Password);
+            _userService.Upsert(resource.Username, resource.Password == PrivateValue ? null : resource.Password);
         }
 
         // Don't persist the OIDC client secret placeholder
         if (resource.OidcClientSecret == PrivateValue)
         {
             resource.OidcClientSecret = _configFileProvider.OidcClientSecret;
+        }
+
+        if (resource.SslCertPassword == PrivateValue)
+        {
+            resource.SslCertPassword = _configFileProvider.SslCertPassword;
+        }
+
+        if (resource.ProxyPassword == PrivateValue)
+        {
+            resource.ProxyPassword = _configService.ProxyPassword;
         }
 
         return base.SaveSettings(resource);

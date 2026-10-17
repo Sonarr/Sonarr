@@ -1,0 +1,19 @@
+.interval {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 150px;
+}
+
+.lastExecution,
+.lastDuration,
+.nextExecution {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 180px;
+}
+
+.actions {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 20px;
+}

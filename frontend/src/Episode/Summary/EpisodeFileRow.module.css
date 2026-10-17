@@ -1,0 +1,30 @@
+.size {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 100px;
+}
+
+.languages,
+.quality {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 100px;
+}
+
+.customFormats {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 175px;
+}
+
+.customFormatScore {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 65px;
+}
+
+.actions {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 60px;
+}

@@ -10,7 +10,7 @@ import { icons, kinds, sizes } from 'Helpers/Props';
 import isBefore from 'Utilities/Date/isBefore';
 import translate from 'Utilities/String/translate';
 import EpisodeQuality from './EpisodeQuality';
-import styles from './EpisodeStatus.css';
+import styles from './EpisodeStatus.module.css';
 
 interface EpisodeStatusProps {
   episodeId: number;
@@ -102,7 +102,7 @@ function EpisodeStatus({
 
     return (
       <StatusIndicator className={styles.center} label={label} title={label}>
-        <Icon name={icons.UNMONITORED} kind={kinds.DISABLED} />
+        <Icon name={icons.MONITORED} kind={kinds.DISABLED} size={14} />
       </StatusIndicator>
     );
   }

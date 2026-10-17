@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import Label from 'Components/Label';
 import { kinds } from 'Helpers/Props';
 import getFinaleTypeName from './getFinaleTypeName';
-import styles from './FinaleType.css';
+import styles from './FinaleType.module.css';
 
 interface SeriesStatusCellProps {
   finaleType: string;

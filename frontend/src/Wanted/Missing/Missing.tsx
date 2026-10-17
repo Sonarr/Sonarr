@@ -9,13 +9,16 @@ import FilterMenu from 'Components/Menu/FilterMenu';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
+import PageMessage from 'Components/Page/PageMessage';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
-import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
+import TableOptionsModal from 'Components/Table/TableOptions/TableOptionsModal';
 import TablePager from 'Components/Table/TablePager';
 import Episode from 'Episode/Episode';
 import { useToggleEpisodesMonitored } from 'Episode/useEpisode';
@@ -192,6 +195,16 @@ function MissingContent() {
     [goToPage]
   );
 
+  const [isTableOptionsModalOpen, setIsTableOptionsModalOpen] = useState(false);
+
+  const handleTableOptionsPress = useCallback(() => {
+    setIsTableOptionsModalOpen(true);
+  }, []);
+
+  const handleTableOptionsModalClose = useCallback(() => {
+    setIsTableOptionsModalOpen(false);
+  }, []);
+
   useEffect(() => {
     const repopulate = () => {
       refetch();
@@ -212,56 +225,65 @@ function MissingContent() {
     <QueueDetailsProvider episodeIds={episodeIds}>
       <PageContent title={translate('Missing')}>
         <PageToolbar>
-          <PageToolbarSection>
-            <PageToolbarButton
-              label={
-                anySelected
-                  ? translate('SearchSelected')
-                  : translate('SearchAll')
-              }
-              iconName={icons.SEARCH}
-              isDisabled={isSearchingForEpisodes}
-              isSpinning={isSearchingForEpisodes}
-              onPress={
-                anySelected ? handleSearchSelectedPress : handleSearchAllPress
-              }
-            />
+          <ToolbarItem
+            id="search"
+            priority={1}
+            groupId="left-a"
+            label={
+              anySelected ? translate('SearchSelected') : translate('SearchAll')
+            }
+            iconName={icons.SEARCH}
+            isDisabled={isSearchingForEpisodes}
+            isSpinning={isSearchingForEpisodes}
+            onPress={
+              anySelected ? handleSearchSelectedPress : handleSearchAllPress
+            }
+          />
 
+          <OverflowDivider groupId="left-a">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
-            <PageToolbarButton
-              label={
-                isShowingMonitored
-                  ? translate('UnmonitorSelected')
-                  : translate('MonitorSelected')
-              }
-              iconName={icons.MONITORED}
-              isDisabled={!anySelected}
-              isSpinning={isToggling}
-              onPress={handleToggleSelectedPress}
-            />
+          <ToolbarItem
+            id="toggle-monitored"
+            priority={1}
+            groupId="left-b"
+            label={
+              isShowingMonitored
+                ? translate('UnmonitorSelected')
+                : translate('MonitorSelected')
+            }
+            iconName={icons.MONITORED}
+            isDisabled={!anySelected}
+            isSpinning={isToggling}
+            onPress={handleToggleSelectedPress}
+          />
 
+          <OverflowDivider groupId="left-b">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
-            <PageToolbarButton
-              label={translate('ManualImport')}
-              iconName={icons.INTERACTIVE}
-              onPress={handleInteractiveImportPress}
-            />
-          </PageToolbarSection>
+          <ToolbarItem
+            id="manual-import"
+            priority={1}
+            groupId="left-c"
+            label={translate('ManualImport')}
+            iconName={icons.INTERACTIVE}
+            onPress={handleInteractiveImportPress}
+          />
 
-          <PageToolbarSection alignContent={align.RIGHT}>
-            <TableOptionsModalWrapper
-              columns={columns}
-              pageSize={pageSize}
-              onTableOptionChange={handleTableOptionChange}
-            >
-              <PageToolbarButton
-                label={translate('Options')}
-                iconName={icons.TABLE}
-              />
-            </TableOptionsModalWrapper>
+          <PageToolbarSpacer />
 
+          <ToolbarItem
+            id="options"
+            priority={2}
+            groupId="right"
+            label={translate('Options')}
+            iconName={icons.TABLE}
+            onPress={handleTableOptionsPress}
+          />
+
+          <ToolbarItem id="filter" pinned={true}>
             <FilterMenu
               alignMenu={align.RIGHT}
               selectedFilterKey={selectedFilterKey}
@@ -270,10 +292,15 @@ function MissingContent() {
               filterModalConnectorComponent={MissingFilterModal}
               onFilterSelect={handleFilterSelect}
             />
-          </PageToolbarSection>
+          </ToolbarItem>
         </PageToolbar>
 
         <PageContentBody>
+          <PageHeading
+            scope={translate('Wanted')}
+            title={translate('Missing')}
+          />
+
           {isFetching && isLoading ? <LoadingIndicator /> : null}
 
           {!isFetching && error ? (
@@ -281,7 +308,7 @@ function MissingContent() {
           ) : null}
 
           {!isLoading && !error && !records.length ? (
-            <Alert kind={kinds.INFO}>{translate('MissingNoItems')}</Alert>
+            <PageMessage>{translate('MissingNoItems')}</PageMessage>
           ) : null}
 
           {!isLoading && !error && !!records.length ? (
@@ -343,6 +370,14 @@ function MissingContent() {
         <InteractiveImportModal
           isOpen={isInteractiveImportModalOpen}
           onModalClose={handleInteractiveImportModalClose}
+        />
+
+        <TableOptionsModal
+          isOpen={isTableOptionsModalOpen}
+          columns={columns}
+          pageSize={pageSize}
+          onTableOptionChange={handleTableOptionChange}
+          onModalClose={handleTableOptionsModalClose}
         />
       </PageContent>
     </QueueDetailsProvider>

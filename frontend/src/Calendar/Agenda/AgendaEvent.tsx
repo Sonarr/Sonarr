@@ -4,6 +4,7 @@ import React, { useCallback, useState } from 'react';
 import { useQueueItemForEpisode } from 'Activity/Queue/Details/QueueDetailsProvider';
 import { useCalendarOptions } from 'Calendar/calendarOptionsStore';
 import CalendarEventQueueDetails from 'Calendar/Events/CalendarEventQueueDetails';
+import getCalendarStatusLabel from 'Calendar/Events/getCalendarStatusLabel';
 import getStatusStyle from 'Calendar/getStatusStyle';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
@@ -12,12 +13,14 @@ import episodeEntities from 'Episode/episodeEntities';
 import getFinaleTypeName from 'Episode/getFinaleTypeName';
 import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
 import { icons, kinds } from 'Helpers/Props';
+import SeriesPoster from 'Series/SeriesPoster';
 import { useSingleSeries } from 'Series/useSeries';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
+import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
-import styles from './AgendaEvent.css';
+import styles from './AgendaEvent.module.css';
 
 interface AgendaEventProps {
   id: number;
@@ -33,7 +36,6 @@ interface AgendaEventProps {
   finaleType?: string;
   hasFile: boolean;
   grabbed?: boolean;
-  showDate: boolean;
 }
 
 function AgendaEvent(props: AgendaEventProps) {
@@ -51,16 +53,15 @@ function AgendaEvent(props: AgendaEventProps) {
     finaleType,
     hasFile,
     grabbed,
-    showDate,
   } = props;
 
   const series = useSingleSeries(seriesId)!;
   const episodeFile = useEpisodeFile(episodeFileId);
   const queueItem = useQueueItemForEpisode(id);
-  const { timeFormat, longDateFormat, enableColorImpairedMode } =
-    useUiSettingsValues();
+  const { longDateFormat, timeFormat } = useUiSettingsValues();
 
   const {
+    showCoverArt,
     showEpisodeInformation,
     showFinaleIcon,
     showSpecialIcon,
@@ -82,6 +83,13 @@ function AgendaEvent(props: AgendaEventProps) {
   );
   const missingAbsoluteNumber =
     series.seriesType === 'anime' && seasonNumber > 0 && !absoluteEpisodeNumber;
+  const eventLabel = translate('CalendarOpenEpisodeDetails', {
+    series: series.title,
+    episode: `${seasonNumber}x${padNumber(episodeNumber, 2)}`,
+    title,
+    airDate: formatDateTime(airDateUtc, longDateFormat, timeFormat),
+    status: getCalendarStatusLabel(statusStyle),
+  });
 
   const handlePress = useCallback(() => {
     setIsDetailsModalOpen(true);
@@ -92,21 +100,25 @@ function AgendaEvent(props: AgendaEventProps) {
   }, []);
 
   return (
-    <div className={styles.event}>
-      <Link className={styles.underlay} onPress={handlePress} />
+    <div className={classNames(styles.event, styles[statusStyle])}>
+      <Link
+        className={styles.underlay}
+        aria-label={eventLabel}
+        onPress={handlePress}
+      />
+
+      {showCoverArt ? (
+        <SeriesPoster
+          className={styles.cover}
+          images={series.images}
+          title={series.title}
+          size={250}
+          lazy={false}
+        />
+      ) : null}
 
       <div className={styles.overlay}>
-        <div className={styles.date}>
-          {showDate && startTime.format(longDateFormat)}
-        </div>
-
-        <div
-          className={classNames(
-            styles.eventWrapper,
-            styles[statusStyle],
-            enableColorImpairedMode && 'colorImpaired'
-          )}
-        >
+        <div className={classNames(styles.eventWrapper, styles[statusStyle])}>
           <div className={styles.time}>
             {formatTime(airDateUtc, timeFormat)} -{' '}
             {formatTime(endTime.toISOString(), timeFormat, {
@@ -136,6 +148,7 @@ function AgendaEvent(props: AgendaEventProps) {
             <Icon
               className={styles.statusIcon}
               name={icons.WARNING}
+              kind={kinds.WARNING}
               title={translate('EpisodeMissingAbsoluteNumber')}
             />
           ) : null}
@@ -144,6 +157,7 @@ function AgendaEvent(props: AgendaEventProps) {
             <Icon
               className={styles.statusIcon}
               name={icons.WARNING}
+              kind={kinds.WARNING}
               title={translate('SceneNumberNotVerified')}
             />
           ) : null}
@@ -167,7 +181,7 @@ function AgendaEvent(props: AgendaEventProps) {
           episodeFile.qualityCutoffNotMet ? (
             <Icon
               className={styles.statusIcon}
-              name={icons.EPISODE_FILE}
+              name={icons.CUTOFF_NOT_MET}
               kind={kinds.WARNING}
               title={translate('QualityCutoffNotMet')}
             />
@@ -176,7 +190,7 @@ function AgendaEvent(props: AgendaEventProps) {
           {episodeNumber === 1 && seasonNumber > 0 && (
             <Icon
               className={styles.statusIcon}
-              name={icons.INFO}
+              name={icons.PREMIERE}
               kind={kinds.INFO}
               title={
                 seasonNumber === 1
@@ -189,8 +203,12 @@ function AgendaEvent(props: AgendaEventProps) {
           {showFinaleIcon && finaleType ? (
             <Icon
               className={styles.statusIcon}
-              name={icons.INFO}
-              kind={kinds.WARNING}
+              name={
+                finaleType === 'series'
+                  ? icons.FINALE_SERIES
+                  : icons.FINALE_SEASON
+              }
+              kind={finaleType === 'series' ? kinds.DANGER : kinds.WARNING}
               title={getFinaleTypeName(finaleType)}
             />
           ) : null}
@@ -198,7 +216,7 @@ function AgendaEvent(props: AgendaEventProps) {
           {showSpecialIcon && (episodeNumber === 0 || seasonNumber === 0) ? (
             <Icon
               className={styles.statusIcon}
-              name={icons.INFO}
+              name={icons.SPECIAL}
               kind={kinds.PINK}
               title={translate('Special')}
             />

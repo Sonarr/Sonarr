@@ -1,0 +1,20 @@
+.languages,
+.quality {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 100px;
+}
+
+.indexer {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 80px;
+}
+
+.actions {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 70px;
+  text-align: right;
+  white-space: nowrap;
+}

@@ -1,0 +1,35 @@
+.level {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 20px;
+}
+
+.info {
+  color: var(--infoColor);
+}
+
+.debug {
+  color: var(--inkMuted);
+}
+
+.trace {
+  color: var(--inkFaint);
+}
+
+.warn {
+  color: var(--warningColor);
+}
+
+.error {
+  color: var(--dangerColor);
+}
+
+.fatal {
+  color: var(--purple);
+}
+
+.actions {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 45px;
+}

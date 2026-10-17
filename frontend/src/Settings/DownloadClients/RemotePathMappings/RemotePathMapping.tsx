@@ -6,7 +6,7 @@ import { icons, kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import EditRemotePathMappingModal from './EditRemotePathMappingModal';
 import { useDeleteRemotePathMapping } from './useRemotePathMappings';
-import styles from './RemotePathMapping.css';
+import styles from './RemotePathMapping.module.css';
 
 interface RemotePathMappingProps {
   id: number;

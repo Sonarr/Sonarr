@@ -556,6 +556,15 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Should().BeEquivalentTo(new[] { Language.Russian, Language.Georgian });
         }
 
+        [TestCase("Title.the.Series.2025.S01.Irish.1080p.WEB-DL.h264-RlsGrp")]
+        [TestCase("Title.the.Series.2025.S01.Gaeilge.1080p.WEB-DL.h264-RlsGrp")]
+        [TestCase("Title the Series 2025 S01 Irish 1080p WEB DL h264-RlsGrp")]
+        public void should_parse_language_irish(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().Contain(Language.Irish);
+        }
+
         [TestCase("The Boys S02 Eng Fre Ger Ita Por Spa 2160p WEBMux HDR10Plus HDR HEVC DDP SGF")]
         public void should_parse_language_english_french_german_italian_portuguese_spanish(string postTitle)
         {

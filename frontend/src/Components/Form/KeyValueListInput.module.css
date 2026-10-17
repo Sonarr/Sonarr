@@ -1,0 +1,20 @@
+.inputContainer {
+  composes: input from 'Components/Form/Input.module.css';
+
+  position: relative;
+  min-height: 35px;
+  height: auto;
+
+  &.isFocused {
+    outline: 0;
+    border-color: var(--inputFocusBorderColor);
+  }
+}
+
+.hasError {
+  composes: hasError from 'Components/Form/Input.module.css';
+}
+
+.hasWarning {
+  composes: hasWarning from 'Components/Form/Input.module.css';
+}

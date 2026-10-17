@@ -342,5 +342,27 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
             result.OutputRootFolders.Should().NotBeNull();
             result.OutputRootFolders.First().Should().Be(@"D:\Downloads\Finished\deluge".AsOsAgnostic());
         }
+
+        [Test]
+        public void should_attempt_deluge_reconnect_after_failure()
+        {
+            _downloading.Hash = null;
+            GivenTorrents(new List<DelugeTorrent> { _downloading });
+            Subject.GetItems();
+            Mocker.GetMock<IDelugeProxy>()
+                  .Verify(v => v.ReconnectToDaemon(It.IsAny<DelugeSettings>()), Times.Once());
+            Subject.GetItems();
+            Mocker.GetMock<IDelugeProxy>()
+                  .Verify(v => v.ReconnectToDaemon(It.IsAny<DelugeSettings>()), Times.Once());
+
+            _queued.Hash = "VALID_HASH";
+            _queued.Name = "Valid Title";
+            GivenTorrents(new List<DelugeTorrent> { _queued });
+            Subject.GetItems();
+            GivenTorrents(new List<DelugeTorrent> { _downloading });
+            Subject.GetItems();
+            Mocker.GetMock<IDelugeProxy>()
+                  .Verify(v => v.ReconnectToDaemon(It.IsAny<DelugeSettings>()), Times.Exactly(2));
+        }
     }
 }

@@ -36,6 +36,8 @@ namespace NzbDrone.Core.Download
         private readonly IEpisodeService _episodeService;
         private readonly IMediaFileService _mediaFileService;
         private readonly IRejectedImportService _rejectedImportService;
+        private readonly IRejectedFileExtensionService _rejectedFileExtensionService;
+        private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly Logger _logger;
 
         public CompletedDownloadService(IEventAggregator eventAggregator,
@@ -48,6 +50,8 @@ namespace NzbDrone.Core.Download
                                         IEpisodeService episodeService,
                                         IMediaFileService mediaFileService,
                                         IRejectedImportService rejectedImportService,
+                                        IRejectedFileExtensionService rejectedFileExtensionService,
+                                        IProvideDownloadClient downloadClientProvider,
                                         Logger logger)
         {
             _eventAggregator = eventAggregator;
@@ -60,6 +64,8 @@ namespace NzbDrone.Core.Download
             _episodeService = episodeService;
             _mediaFileService = mediaFileService;
             _rejectedImportService = rejectedImportService;
+            _rejectedFileExtensionService = rejectedFileExtensionService;
+            _downloadClientProvider = downloadClientProvider;
             _logger = logger;
         }
 
@@ -159,6 +165,11 @@ namespace NzbDrone.Core.Download
 
             if (importResults.Empty())
             {
+                if (ProcessRejectedDownloadClientFiles(trackedDownload))
+                {
+                    return;
+                }
+
                 trackedDownload.Warn("No files found are eligible for import in {0}", outputPath);
 
                 return;
@@ -282,12 +293,63 @@ namespace NzbDrone.Core.Download
             return false;
         }
 
+        private bool ProcessRejectedDownloadClientFiles(TrackedDownload trackedDownload)
+        {
+            var files = GetDownloadClientFiles(trackedDownload);
+
+            if (files.Empty())
+            {
+                return false;
+            }
+
+            var rejection = _rejectedFileExtensionService.GetRejection(files.Select(f => f.RelativePath));
+
+            if (rejection == null)
+            {
+                return false;
+            }
+
+            _logger.Debug("Download '{0}' has no files to import, but the download client reports a rejected file: {1}", trackedDownload.DownloadItem.Title, rejection.Message);
+
+            var importResult = new ImportResult(new ImportDecision(null, rejection), rejection.Message);
+
+            if (!_rejectedImportService.Process(trackedDownload, importResult))
+            {
+                return false;
+            }
+
+            if (trackedDownload.State != TrackedDownloadState.FailedPending)
+            {
+                SetStateToImportBlocked(trackedDownload);
+            }
+
+            return true;
+        }
+
+        private List<DownloadClientFile> GetDownloadClientFiles(TrackedDownload trackedDownload)
+        {
+            try
+            {
+                var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
+
+                return downloadClient.GetFiles(trackedDownload.DownloadItem).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug(ex, "Unable to get files for download '{0}' from download client", trackedDownload.DownloadItem.Title);
+
+                return new List<DownloadClientFile>();
+            }
+        }
+
         private void SetStateToImportBlocked(TrackedDownload trackedDownload)
         {
             trackedDownload.State = TrackedDownloadState.ImportBlocked;
 
             if (!trackedDownload.HasNotifiedManualInteractionRequired)
             {
+                _logger.Warn("Import blocked for '{0}': {1}", trackedDownload.DownloadItem.Title, trackedDownload.StatusMessages.SelectMany(m => m.Messages).ConcatToString("; "));
+
                 var grabbedHistories = _historyService.FindByDownloadId(trackedDownload.DownloadItem.DownloadId).Where(h => h.EventType == EpisodeHistoryEventType.Grabbed).ToList();
 
                 trackedDownload.HasNotifiedManualInteractionRequired = true;

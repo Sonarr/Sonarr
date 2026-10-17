@@ -15,6 +15,7 @@ export interface LanguageSelectInputProps {
   className?: string;
   name: string;
   value: number | string | Language;
+  modalTitle?: string;
   includeNoChange?: boolean;
   includeNoChangeDisabled?: boolean;
   includeMixed?: boolean;
@@ -78,19 +79,23 @@ export default function LanguageSelectInput({
     (payload: LanguageSelectInputOnChangeProps) => {
       if (typeof value === 'number') {
         onChange(payload);
-      } else {
-        const language = items.find((i) => i.id === payload.value);
-
-        onChange({
-          ...payload,
-          value: language
-            ? {
-                id: language.id,
-                name: language.name,
-              }
-            : ({ id: payload.value } as Language),
-        });
+        return;
       }
+
+      const language = items.find((i) => i.id === payload.value);
+
+      if (!language) {
+        onChange(payload);
+        return;
+      }
+
+      onChange({
+        ...payload,
+        value: {
+          id: language.id,
+          name: language.name,
+        },
+      });
     },
     [value, items, onChange]
   );

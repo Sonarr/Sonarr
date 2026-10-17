@@ -1,0 +1,20 @@
+.descriptionList {
+  composes: descriptionList from 'Components/DescriptionList/DescriptionList.module.css';
+
+  margin-right: 10px;
+}
+
+.title {
+  composes: title from 'Components/DescriptionList/DescriptionListItemTitle.module.css';
+
+  width: 80px;
+}
+
+.description {
+  margin-left: 100px;
+}
+
+.comment {
+  color: var(--darkGray);
+  font-size: var(--smallFontSize);
+}

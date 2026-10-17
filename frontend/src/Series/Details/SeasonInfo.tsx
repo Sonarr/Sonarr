@@ -3,7 +3,7 @@ import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
 import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
-import styles from './SeasonInfo.css';
+import styles from './SeasonInfo.module.css';
 
 interface SeasonInfoProps {
   totalEpisodeCount: number;
@@ -19,7 +19,7 @@ function SeasonInfo({
   sizeOnDisk,
 }: SeasonInfoProps) {
   return (
-    <DescriptionList>
+    <DescriptionList className={styles.descriptionList}>
       <DescriptionListItem
         titleClassName={styles.title}
         descriptionClassName={styles.description}

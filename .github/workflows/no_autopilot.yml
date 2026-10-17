@@ -9,6 +9,10 @@ on:
       - synchronize
       - ready_for_review
 
+concurrency:
+  group: pr-labels-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
 jobs:
   check:
     name: Flag suspected AI-authored PRs
@@ -125,18 +129,20 @@ jobs:
               }
             }
 
-            const isLabeled = (pr.labels || []).some((l) => l.name === "autopilot");
+            const common = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+            };
+
+            const currentLabels = await github.paginate(github.rest.issues.listLabelsOnIssue, common);
+            const isLabeled = currentLabels.some((l) => l.name === "autopilot");
 
             if (reasons.length === 0) {
               core.info("No autopilot checks failed.");
 
               if (isLabeled && context.payload.action === "ready_for_review") {
-                await github.rest.issues.removeLabel({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: pr.number,
-                  name: "autopilot",
-                });
+                await github.rest.issues.removeLabel({ ...common, name: "autopilot" });
               }
 
               return;
@@ -144,22 +150,19 @@ jobs:
 
             core.info(`Flagging PR #${pr.number}:\n- ${reasons.join("\n- ")}`);
 
-            await github.rest.issues.addLabels({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: pr.number,
-              labels: ["autopilot"],
-            });
+            await github.rest.issues.addLabels({ ...common, labels: ["autopilot"] });
 
-            if (!isLabeled) {
-              const contributing = `https://github.com/${context.repo.owner}/${context.repo.repo}/blob/v5-develop/CONTRIBUTING.md`;
+            const flaggedMessage = "this PR has been flagged as likely AI-authored";
+            const comments = await github.paginate(github.rest.issues.listComments, common);
+            const alreadyCommented = comments.some((c) => (c.body || "").includes(flaggedMessage));
+
+            if (!alreadyCommented) {
+              const contributing = `https://github.com/${context.repo.owner}/${context.repo.repo}/blob/develop/CONTRIBUTING.md`;
 
               await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: pr.number,
+                ...common,
                 body: [
-                  `:robot: @${pr.user.login}, this PR has been flagged as likely AI-authored without sufficient human review, it has been converted to a draft, and labeled \`autopilot\`.`,
+                  `:robot: @${pr.user.login}, ${flaggedMessage} without sufficient human review, it has been converted to a draft, and labeled \`autopilot\`.`,
                   "",
                   `Every submission to this project requires human ownership and review. Please read [CONTRIBUTING.md](${contributing}), review the changes yourself, fill out the PR template honestly in your own words, and mark the PR as ready for review when it reflects genuine human review.`,
                   "",

@@ -14,14 +14,14 @@ function TableOptionsModalWrapper({
   children,
   ...otherProps
 }: TableOptionsModalWrapperProps) {
-  const [isTableOptionsModalOpen, setIsTableOptionsModalOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleTableOptionsPress = useCallback(() => {
-    setIsTableOptionsModalOpen(true);
+    setIsOpen(true);
   }, []);
 
   const handleTableOptionsModalClose = useCallback(() => {
-    setIsTableOptionsModalOpen(false);
+    setIsOpen(false);
   }, []);
 
   return (
@@ -32,7 +32,7 @@ function TableOptionsModalWrapper({
 
       <TableOptionsModal
         {...otherProps}
-        isOpen={isTableOptionsModalOpen}
+        isOpen={isOpen}
         columns={columns}
         onModalClose={handleTableOptionsModalClose}
       />

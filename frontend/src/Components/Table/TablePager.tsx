@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 import SelectInput, { SelectInputOption } from 'Components/Form/SelectInput';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
@@ -7,9 +7,10 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import { icons } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import styles from './TablePager.css';
+import styles from './TablePager.module.css';
 
 interface TablePagerProps {
+  leftActions?: ReactNode;
   page?: number;
   totalPages?: number;
   totalRecords?: number;
@@ -22,6 +23,7 @@ interface TablePagerProps {
 }
 
 function TablePager({
+  leftActions,
   page,
   totalPages,
   totalRecords = 0,
@@ -95,6 +97,7 @@ function TablePager({
   return (
     <div className={styles.pager}>
       <div className={styles.loadingContainer}>
+        {leftActions}
         {isFetching ? (
           <LoadingIndicator className={styles.loading} size={20} />
         ) : null}

@@ -1,0 +1,19 @@
+.additionalInfo {
+  flex-grow: 1;
+  color: var(--inkMuted);
+}
+
+.steps {
+  margin-top: 20px;
+}
+
+.step {
+  display: flex;
+  margin-bottom: 10px;
+  font-size: var(--largeFontSize);
+  line-height: 20px;
+}
+
+.stepState {
+  margin-right: 8px;
+}

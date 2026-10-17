@@ -13,7 +13,7 @@ import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import { useSingleSeries } from 'Series/useSeries';
 import { SelectStateInputProps } from 'typings/props';
-import styles from './MissingRow.css';
+import styles from './MissingRow.module.css';
 
 interface MissingRowProps {
   id: number;

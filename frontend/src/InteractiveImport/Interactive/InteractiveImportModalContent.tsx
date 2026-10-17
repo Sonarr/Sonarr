@@ -28,7 +28,6 @@ import {
 } from 'EpisodeFile/useEpisodeFiles';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { align, icons, kinds, scrollDirections } from 'Helpers/Props';
-import { SortDirection } from 'Helpers/Props/sortDirections';
 import SelectEpisodeModal from 'InteractiveImport/Episode/SelectEpisodeModal';
 import { SelectedEpisode } from 'InteractiveImport/Episode/SelectEpisodeModalContent';
 import ImportMode from 'InteractiveImport/ImportMode';
@@ -37,9 +36,8 @@ import InteractiveImport, {
   InteractiveImportCommandOptions,
 } from 'InteractiveImport/InteractiveImport';
 import {
-  setInteractiveImportOption,
-  setInteractiveImportSort,
-  useInteractiveImportOptions,
+  InteractiveImportOptionsStore,
+  interactiveImportOptionsStore,
 } from 'InteractiveImport/interactiveImportOptionsStore';
 import SelectLanguageModal from 'InteractiveImport/Language/SelectLanguageModal';
 import SelectQualityModal from 'InteractiveImport/Quality/SelectQualityModal';
@@ -62,7 +60,7 @@ import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import translate from 'Utilities/String/translate';
 import InteractiveImportRow from './InteractiveImportRow';
-import styles from './InteractiveImportModalContent.css';
+import styles from './InteractiveImportModalContent.module.css';
 
 type SelectType =
   | 'select'
@@ -89,7 +87,7 @@ const COLUMNS = [
   },
   {
     name: 'series',
-    label: () => translate('Series'),
+    label: () => translate('SeriesSingular'),
     isSortable: true,
     isVisible: true,
   },
@@ -214,8 +212,7 @@ export interface InteractiveImportModalContentProps {
   folder?: string;
   sortKey?: string;
   sortDirection?: string;
-  initialSortKey?: string;
-  initialSortDirection?: string;
+  optionsStore?: InteractiveImportOptionsStore;
   modalTitle: string;
   onModalClose(): void;
 }
@@ -234,8 +231,7 @@ function InteractiveImportModalContentInner(
     showImportMode = true,
     title,
     folder,
-    initialSortKey,
-    initialSortDirection,
+    optionsStore = interactiveImportOptionsStore,
     modalTitle,
     onModalClose,
   } = props;
@@ -251,15 +247,18 @@ function InteractiveImportModalContentInner(
     error,
     data,
     originalItems,
-  } = useInteractiveImport({
-    downloadIds,
-    seriesId,
-    seasonNumber,
-    folder,
-    filterExistingFiles,
-  });
+  } = useInteractiveImport(
+    {
+      downloadIds,
+      seriesId,
+      seasonNumber,
+      folder,
+      filterExistingFiles,
+    },
+    optionsStore
+  );
 
-  const { sortKey, sortDirection, importMode } = useInteractiveImportOptions();
+  const { sortKey, sortDirection, importMode } = optionsStore.useOptions();
 
   const { updateInteractiveImportItem } = useUpdateInteractiveImportItem();
   const { updateInteractiveImportItems } = useUpdateInteractiveImportItems();
@@ -397,22 +396,6 @@ function InteractiveImportModalContentInner(
 
     return options;
   }, [allowSeriesChange, items, selectedIds]);
-
-  useEffect(
-    () => {
-      if (initialSortKey) {
-        const sortDirection: SortDirection =
-          (initialSortDirection as SortDirection) || 'ascending';
-
-        setInteractiveImportSort({
-          sortKey: initialSortKey,
-          sortDirection,
-        });
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
 
   useEffect(() => {
     if (!isDeleting && previousIsDeleting && !deleteError) {
@@ -647,16 +630,16 @@ function InteractiveImportModalContentInner(
 
   const handleSetInteractiveImportMode = useCallback(
     ({ importMode }: { importMode: ImportMode }) => {
-      setInteractiveImportOption('importMode', importMode);
+      optionsStore.setOption('importMode', importMode);
     },
-    []
+    [optionsStore]
   );
 
   const handleSortPress = useCallback<SortCallback>(
     (sortKey, sortDirection) => {
-      setInteractiveImportSort({ sortKey, sortDirection });
+      optionsStore.setSort({ sortKey, sortDirection });
     },
-    []
+    [optionsStore]
   );
 
   const handleFilterExistingFilesChange = useCallback(
@@ -1081,14 +1064,24 @@ function InteractiveImportModalContent(
 ) {
   const filterExistingFiles = filterExistingFilesStore((state) => state);
 
-  const { downloadIds, seriesId, seasonNumber, folder } = props;
-  const { data } = useInteractiveImport({
+  const {
     downloadIds,
     seriesId,
     seasonNumber,
     folder,
-    filterExistingFiles,
-  });
+    optionsStore = interactiveImportOptionsStore,
+  } = props;
+
+  const { data } = useInteractiveImport(
+    {
+      downloadIds,
+      seriesId,
+      seasonNumber,
+      folder,
+      filterExistingFiles,
+    },
+    optionsStore
+  );
 
   return (
     <SelectProvider<InteractiveImport> items={data}>

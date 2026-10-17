@@ -1,6 +1,6 @@
 import React from 'react';
 import Link, { LinkProps } from 'Components/Link/Link';
-import styles from './Card.css';
+import styles from './Card.module.css';
 
 interface CardProps
   extends Pick<LinkProps, 'aria-label' | 'onPress' | 'title'> {

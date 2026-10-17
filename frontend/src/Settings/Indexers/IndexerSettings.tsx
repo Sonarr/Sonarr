@@ -1,10 +1,14 @@
 import React, { useCallback, useRef, useState } from 'react';
-import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageHeading from 'Components/Page/PageHeading';
+import { OverflowDivider } from 'Components/Page/Toolbar/Overflow';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
+import SectionHeading from 'Components/SectionHeading';
+import StatusIndicator from 'Components/StatusIndicator';
 import { icons } from 'Helpers/Props';
-import SettingsToolbar from 'Settings/SettingsToolbar';
+import settingsStyles from 'Settings/Settings.module.css';
+import SettingsPage from 'Settings/SettingsPage';
 import {
   SaveCallback,
   SettingsStateChange,
@@ -16,7 +20,12 @@ import IndexerOptions from './Options/IndexerOptions';
 import { useTestAllIndexers } from './useIndexers';
 
 function IndexerSettings() {
-  const { isTestingAllIndexers, testAllIndexers } = useTestAllIndexers();
+  const {
+    isTestingAllIndexers,
+    testAllIndexers,
+    testAllResults,
+    testAllError,
+  } = useTestAllIndexers();
 
   const saveOptions = useRef<() => void>();
 
@@ -53,46 +62,87 @@ function IndexerSettings() {
     testAllIndexers();
   }, [testAllIndexers]);
 
+  let testStatusLabel: string | undefined = undefined;
+
+  if (isTestingAllIndexers) {
+    testStatusLabel = translate('TestingAllIndexers');
+  } else if (testAllResults) {
+    testStatusLabel = translate('IndexerTestAllCompleted');
+  } else if (testAllError) {
+    testStatusLabel = translate('IndexerTestAllFailed');
+  }
+
   return (
-    <PageContent title={translate('IndexerSettings')}>
-      <SettingsToolbar
-        isSaving={isSaving}
-        hasPendingChanges={hasPendingChanges}
-        additionalButtons={
-          <>
+    <SettingsPage
+      title={translate('IndexerSettings')}
+      isSaving={isSaving}
+      hasPendingChanges={hasPendingChanges}
+      toolbarChildren={
+        <>
+          <OverflowDivider groupId="extras">
             <PageToolbarSeparator />
+          </OverflowDivider>
 
-            <PageToolbarButton
-              label={translate('TestAllIndexers')}
-              iconName={icons.TEST}
-              isSpinning={isTestingAllIndexers}
-              onPress={handleTestAllIndexersPress}
-            />
+          <ToolbarItem
+            id="test-all"
+            priority={1}
+            groupId="extras"
+            label={translate('TestAllIndexers')}
+            iconName={icons.TEST}
+            isSpinning={isTestingAllIndexers}
+            onPress={handleTestAllIndexersPress}
+          />
 
-            <PageToolbarButton
-              label={translate('ManageIndexers')}
-              iconName={icons.MANAGE}
-              onPress={handleManageIndexersPress}
-            />
-          </>
-        }
-        onSavePress={handleSavePress}
-      />
-
+          <ToolbarItem
+            id="manage"
+            priority={1}
+            groupId="extras"
+            label={translate('ManageIndexers')}
+            iconName={icons.MANAGE}
+            onPress={handleManageIndexersPress}
+          />
+        </>
+      }
+      onSavePress={handleSavePress}
+    >
       <PageContentBody>
-        <Indexers />
+        {testStatusLabel ? (
+          <StatusIndicator
+            label={testStatusLabel}
+            role={testAllError ? 'alert' : 'status'}
+            aria-atomic={true}
+          >
+            <span />
+          </StatusIndicator>
+        ) : null}
 
-        <IndexerOptions
-          setChildSave={handleSetChildSave}
-          onChildStateChange={handleChildStateChange}
-        />
+        <div className={settingsStyles.section}>
+          <PageHeading
+            scope={translate('Settings')}
+            title={translate('Indexers')}
+          />
 
-        <ManageIndexersModal
-          isOpen={isManageIndexersModalOpen}
-          onModalClose={handleManageIndexersModalClose}
-        />
+          <div className={settingsStyles.pageSection}>
+            <SectionHeading
+              title={translate('Indexers')}
+              description={translate('IndexersSectionDescription')}
+            />
+
+            <Indexers testResults={testAllResults} />
+          </div>
+
+          <IndexerOptions
+            setChildSave={handleSetChildSave}
+            onChildStateChange={handleChildStateChange}
+          />
+
+          <ManageIndexersModal
+            isOpen={isManageIndexersModalOpen}
+            onModalClose={handleManageIndexersModalClose}
+          />
+        </div>
       </PageContentBody>
-    </PageContent>
+    </SettingsPage>
   );
 }
 

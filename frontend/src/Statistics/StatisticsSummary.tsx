@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './StatisticsSummary.css';
+import styles from './StatisticsSummary.module.css';
 
 export interface SummaryItem {
   label: string;

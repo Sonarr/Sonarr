@@ -1,0 +1,52 @@
+.day {
+  position: relative;
+  overflow: hidden;
+  padding: 6px 6px 8px;
+  border-bottom: 1px solid var(--calendarBorderColor);
+  border-left: 1px solid var(--calendarBorderColor);
+  background-color: var(--pageBackground);
+  vertical-align: top;
+}
+
+.isSingleDay {
+  width: 100%;
+}
+
+.noEvents {
+  padding: 32px 0;
+  color: var(--inkMuted);
+  text-align: center;
+  font-size: 15px;
+  font-family: var(--defaultFontFamily);
+}
+
+.dayOfMonth {
+  display: flex;
+  align-items: baseline;
+  padding: 2px 4px 8px;
+  color: var(--inkSoft);
+  font-weight: 500;
+  font-size: 14px;
+  font-family: var(--defaultFontFamily);
+}
+
+.isTodayCell {
+  scroll-margin-top: var(--calendarStickyHeight, 0);
+
+  border-left: 1px solid var(--calendarTodayColor);
+  background-color: var(--calendarTodayBackgroundColor);
+}
+
+.isToday {
+  color: var(--accentDeep);
+  font-weight: 600;
+}
+
+.isDifferentMonth {
+  color: var(--inkMuted);
+  opacity: 0.4;
+}
+
+.fullDate {
+  @add-mixin visuallyHidden;
+}

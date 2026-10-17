@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+}
+
+.info {
+  margin-left: 30px;
+}
+
+.image {
+  width: 213px;
+  height: 123px;
+}

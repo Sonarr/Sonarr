@@ -116,7 +116,10 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<Series>("Series").RegisterModel()
                   .Ignore(s => s.RootFolderPath)
+                  .Ignore(s => s.Translations)
                   .HasOne(s => s.QualityProfile, s => s.QualityProfileId);
+
+            Mapper.Entity<SeriesTranslation>("SeriesTranslations").RegisterModel();
 
             Mapper.Entity<EpisodeFile>("EpisodeFiles").RegisterModel()
                   .HasOne(f => f.Series, f => f.SeriesId)

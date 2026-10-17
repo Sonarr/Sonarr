@@ -23,7 +23,6 @@ rm -rf $outputFolder
 rm -rf $testPackageFolder
 
 slnFile=src/Sonarr.sln
-outputFile=src/Sonarr.Api.V5/openapi.json
 platform=Posix
 
 if [ "$PLATFORM" = "Windows" ]; then
@@ -38,20 +37,31 @@ dotnet clean $slnFile -c Release
 dotnet msbuild -restore $slnFile -p:Configuration=Debug -p:Platform=$platform -p:RuntimeIdentifiers=$RUNTIME -t:PublishAllRids
 
 dotnet new tool-manifest
-dotnet tool install --version 10.2.3 Swashbuckle.AspNetCore.Cli
+dotnet tool install --version 10.3.0 Swashbuckle.AspNetCore.Cli
 
-# Remove the openapi.json file so we can check if it was created
-rm $outputFile
+generateDocs() {
+  local version=$1
+  local outputFile=$2
 
-dotnet tool run swagger tofile --output ./src/Sonarr.Api.V5/openapi.json "$outputFolder/$FRAMEWORK/$RUNTIME/$application" v5 &
+  # Remove the openapi.json file so we can check if it was created
+  rm -f $outputFile
 
-sleep 45
+  dotnet tool run swagger tofile --output ./$outputFile "$outputFolder/$FRAMEWORK/$RUNTIME/$application" $version &
+  local pid=$!
 
-kill %1
+  sleep 45
 
-if [ ! -f $outputFile ]; then
-  echo "$outputFile not found, check logs for errors"
-  exit 1
-fi
+  pkill -f "_tofile --output ./$outputFile" || true
+  kill $pid || true
+  wait $pid || true
+
+  if [ ! -f $outputFile ]; then
+    echo "$outputFile not found, check logs for errors"
+    exit 1
+  fi
+}
+
+generateDocs v3 src/Sonarr.Api.V3/openapi.json
+generateDocs v5 src/Sonarr.Api.V5/openapi.json
 
 exit 0

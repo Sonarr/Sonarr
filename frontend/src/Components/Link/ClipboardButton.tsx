@@ -6,7 +6,7 @@ import StatusIndicator from 'Components/StatusIndicator';
 import { icons, kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import { ButtonProps } from './Button';
-import styles from './ClipboardButton.css';
+import styles from './ClipboardButton.module.css';
 
 export interface ClipboardButtonProps extends Omit<ButtonProps, 'children'> {
   value: string;
@@ -56,6 +56,24 @@ export default function ClipboardButton({
     }
   }, [value]);
 
+  const isError = state === 'error';
+  const clipboardIcon = <Icon name={icons.CLIPBOARD} aria-hidden={true} />;
+
+  const stateIndicator = state ? (
+    <StatusIndicator
+      className={label ? undefined : styles.stateIconContainer}
+      label={translate(isError ? 'CopyToClipboardError' : 'CopiedToClipboard')}
+      role={isError ? 'alert' : 'status'}
+      aria-atomic={true}
+    >
+      <Icon
+        name={isError ? icons.DANGER : icons.CHECK}
+        kind={isError ? kinds.DANGER : kinds.SUCCESS}
+        aria-hidden={true}
+      />
+    </StatusIndicator>
+  ) : null;
+
   return (
     <FormInputButton
       className={className}
@@ -64,29 +82,21 @@ export default function ClipboardButton({
       onClick={handleClick}
       {...otherProps}
     >
-      <span className={state ? styles.showStateIcon : undefined}>
-        {state ? (
-          <StatusIndicator
-            className={styles.stateIconContainer}
-            label={translate(
-              state === 'error' ? 'CopyToClipboardError' : 'CopiedToClipboard'
-            )}
-            role={state === 'error' ? 'alert' : 'status'}
-            aria-atomic={true}
-          >
-            <Icon
-              name={state === 'error' ? icons.DANGER : icons.CHECK}
-              kind={state === 'error' ? kinds.DANGER : kinds.SUCCESS}
-              aria-hidden={true}
-            />
-          </StatusIndicator>
-        ) : null}
+      {label ? (
+        <>
+          <span className={styles.buttonText}>{label}</span>
 
-        <span className={styles.clipboardIconContainer}>
-          {label ? <span className={styles.buttonText}>{label}</span> : null}
-          <Icon name={icons.CLIPBOARD} aria-hidden={true} />
+          <span className={styles.labelIconContainer}>
+            {stateIndicator ?? clipboardIcon}
+          </span>
+        </>
+      ) : (
+        <span className={state ? styles.showStateIcon : undefined}>
+          {stateIndicator}
+
+          <span className={styles.clipboardIconContainer}>{clipboardIcon}</span>
         </span>
-      </span>
+      )}
     </FormInputButton>
   );
 }

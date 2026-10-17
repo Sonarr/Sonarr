@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.SkyHook;
 using NzbDrone.Core.Test.Framework;
@@ -27,7 +28,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         [TestCase(266189, "The Blacklist")]
         public void should_be_able_to_get_series_detail(int tvdbId, string title)
         {
-            var details = Subject.GetSeriesInfo(tvdbId);
+            var details = Subject.GetSeriesInfo(tvdbId, Language.English, SeasonType.Official);
 
             ValidateSeries(details.Item1);
             ValidateEpisodes(details.Item2);
@@ -38,15 +39,15 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         [Test]
         public void getting_details_of_invalid_series()
         {
-            Assert.Throws<SeriesNotFoundException>(() => Subject.GetSeriesInfo(int.MaxValue));
+            Assert.Throws<SeriesNotFoundException>(() => Subject.GetSeriesInfo(int.MaxValue, Language.English, SeasonType.Official));
         }
 
         [Test]
         public void should_not_have_period_at_start_of_title_slug()
         {
-            var details = Subject.GetSeriesInfo(79099);
+            var details = Subject.GetSeriesInfo(79099, Language.English, SeasonType.Official);
 
-            details.Item1.TitleSlug.Should().Be("dothack");
+            details.Item1.TitleSlug.Should().NotStartWith(".");
         }
 
         private void ValidateSeries(Series series)

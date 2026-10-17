@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
 import ClipboardButton from 'Components/Link/ClipboardButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -11,7 +10,7 @@ import { kinds } from 'Helpers/Props';
 import Field from 'typings/Field';
 import translate from 'Utilities/String/translate';
 import { useCustomFormat, useCustomFormats } from './useCustomFormats';
-import styles from './ExportCustomFormatModalContent.css';
+import styles from './ExportCustomFormatModalContent.module.css';
 
 const omittedProperties = ['id', 'implementationName', 'infoLink'];
 
@@ -56,9 +55,9 @@ function ExportCustomFormatModalContent({
           {isLoading ? <LoadingIndicator /> : null}
 
           {!isLoading && error ? (
-            <Alert kind={kinds.DANGER}>
+            <p className={styles.error}>
               {translate('CustomFormatsLoadError')}
-            </Alert>
+            </p>
           ) : null}
 
           {!isLoading && !error ? (

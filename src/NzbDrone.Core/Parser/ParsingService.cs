@@ -233,6 +233,19 @@ namespace NzbDrone.Core.Parser
             {
                 remoteEpisode.Series = series;
 
+                // Non-official order doesn't support remapped season numbers, clearing it out
+                if (series.SeasonType != SeasonType.Official)
+                {
+                    if (parsedEpisodeInfo.SeasonNumber.HasValue)
+                    {
+                        remoteEpisode.MappedSeasonNumber = parsedEpisodeInfo.SeasonNumber;
+                    }
+
+                    remoteEpisode.SceneMapping = null;
+
+                    sceneSource = false;
+                }
+
                 if (remoteEpisode.MappedSeasonNumber.HasValue &&
                     ValidateParsedEpisodeInfo.ValidateForSeriesType(parsedEpisodeInfo, series))
                 {
@@ -277,6 +290,17 @@ namespace NzbDrone.Core.Parser
         {
             if (parsedEpisodeInfo.FullSeason)
             {
+                if (parsedEpisodeInfo.IsMultiSeason)
+                {
+                    // Scene numbering is per-season, so it isn't meaningful for a pack spanning
+                    // multiple seasons; apply the scene-mapping offset (if any) to every season instead.
+                    var offset = mappedSeasonNumber - parsedEpisodeInfo.SeasonNumbers.FirstOrDefault();
+
+                    return parsedEpisodeInfo.SeasonNumbers
+                        .SelectMany(seasonNumber => _episodeService.GetEpisodesBySeason(series.Id, seasonNumber + offset))
+                        .ToList();
+                }
+
                 if (series.UseSceneNumbering && sceneSource)
                 {
                     var episodes = _episodeService.GetEpisodesBySceneSeason(series.Id, mappedSeasonNumber);
@@ -443,6 +467,12 @@ namespace NzbDrone.Core.Parser
 
             if (searchCriteria != null)
             {
+                if (searchCriteria.Series.CleanOriginalTitle.IsNotNullOrWhiteSpace() &&
+                    searchCriteria.Series.CleanOriginalTitle == parsedEpisodeInfo.SeriesTitle.CleanSeriesTitle())
+                {
+                    return new FindSeriesResult(searchCriteria.Series, SeriesMatchType.Title);
+                }
+
                 if (searchCriteria.Series.CleanTitle == parsedEpisodeInfo.SeriesTitle.CleanSeriesTitle())
                 {
                     return new FindSeriesResult(searchCriteria.Series, SeriesMatchType.Title);

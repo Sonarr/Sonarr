@@ -9,7 +9,7 @@ import {
 } from 'typings/Queue';
 import translate from 'Utilities/String/translate';
 import QueueStatus from './QueueStatus';
-import styles from './QueueDetails.css';
+import styles from './QueueDetails.module.css';
 
 interface QueueDetailsProps {
   title: string;
@@ -59,6 +59,7 @@ function QueueDetails(props: QueueDetailsProps) {
       <Popover
         className={styles.progressBarContainer}
         anchor={progressBar!}
+        accessibleLabel={`${state} - ${progress.toFixed(1)}% ${title}`}
         title={`${state} - ${progress.toFixed(1)}%`}
         body={<div>{title}</div>}
         position="bottom-start"

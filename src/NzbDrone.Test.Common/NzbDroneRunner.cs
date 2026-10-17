@@ -21,6 +21,7 @@ namespace NzbDrone.Test.Common
         private readonly IProcessProvider _processProvider;
         private readonly IRestClient _restClient;
         private Process _nzbDroneProcess;
+        private bool _enableAuth;
 
         public string AppData { get; private set; }
         public string ApiKey { get; private set; }
@@ -38,6 +39,7 @@ namespace NzbDrone.Test.Common
 
         public void Start(bool enableAuth = false)
         {
+            _enableAuth = enableAuth;
             AppData = Path.Combine(TestContext.CurrentContext.TestDirectory, "_intg_" + TestBase.GetUID());
             Directory.CreateDirectory(AppData);
 
@@ -137,6 +139,11 @@ namespace NzbDrone.Test.Common
         private void Start(string outputSonarrConsoleExe)
         {
             StringDictionary envVars = new();
+            if (!_enableAuth)
+            {
+                envVars.Add("Sonarr__Auth__Method", "None");
+            }
+
             if (PostgresOptions?.Host != null)
             {
                 envVars.Add("Sonarr__Postgres__Host", PostgresOptions.Host);
@@ -192,16 +199,14 @@ namespace NzbDrone.Test.Common
 
         public static void EnsureUiContent()
         {
-            // Writes a dummy CSS file for testing static resources. Only needed for release
-            // builds because debug builds include the proper UI files. Called once per test
-            // assembly via a SetUpFixture so parallel fixtures don't race on the shared file.
+            // Writes a dummy CSS file for testing static resources, since neither debug nor
+            // release builds ship one as part of running the integration tests. Called once
+            // per test assembly via a SetUpFixture so parallel fixtures don't race on the
+            // shared file.
 
-            if (BuildInfo.IsDebug)
-            {
-                return;
-            }
-
-            var contentDirectory = Path.Combine(TestContext.CurrentContext.TestDirectory, "bin", "UI", "Content");
+            var contentDirectory = BuildInfo.IsDebug
+                ? Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "..", "_output", "UI", "Content")
+                : Path.Combine(TestContext.CurrentContext.TestDirectory, "bin", "UI", "Content");
             var stylesPath = Path.Combine(contentDirectory, "styles.css");
 
             Directory.CreateDirectory(contentDirectory);

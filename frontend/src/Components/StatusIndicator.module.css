@@ -1,0 +1,7 @@
+.status {
+  display: inline-flex;
+}
+
+.label {
+  @add-mixin visuallyHidden;
+}

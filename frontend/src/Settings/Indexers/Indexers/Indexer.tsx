@@ -1,18 +1,24 @@
 import React, { useCallback, useState } from 'react';
 import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
-import Card from 'Components/Card';
 import Label from 'Components/Label';
-import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import SettingsCard from 'Components/SettingsCard/SettingsCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.module.css';
+import SettingsCardAction from 'Components/SettingsCard/SettingsCardAction';
+import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
 import TagList from 'Components/TagList';
-import { icons, kinds } from 'Helpers/Props';
+import { icons, kinds, sizes } from 'Helpers/Props';
+import {
+  getProviderTestStatusLabel,
+  ProviderTestStatus,
+} from 'Settings/ProviderTestAllResult';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import { IndexerModel, useDeleteIndexer } from '../useIndexers';
 import EditIndexerModal from './EditIndexerModal';
-import styles from './Indexer.css';
 
 interface IndexerProps extends IndexerModel {
+  testStatus?: ProviderTestStatus;
   showPriority: boolean;
   onCloneIndexerPress: (id: number) => void;
 }
@@ -28,6 +34,7 @@ function Indexer({
   supportsRss,
   supportsSearch,
   priority,
+  testStatus,
   showPriority,
   onCloneIndexerPress,
 }: IndexerProps) {
@@ -63,54 +70,68 @@ function Indexer({
     onCloneIndexerPress(id);
   }, [id, onCloneIndexerPress]);
 
-  return (
-    <Card
-      className={styles.indexer}
-      overlayContent={true}
-      aria-label={translate('EditIndexerName', { name })}
-      onPress={handleEditIndexerPress}
-    >
-      <div className={styles.nameContainer}>
-        <div className={styles.name}>{name}</div>
+  const enabled = enableRss || enableAutomaticSearch || enableInteractiveSearch;
+  const testStatusLabel = testStatus
+    ? getProviderTestStatusLabel(testStatus)
+    : undefined;
 
-        <IconButton
-          className={styles.cloneButton}
+  return (
+    <SettingsCard
+      name={name}
+      aria-label={
+        testStatusLabel
+          ? translate('EditIndexerNameWithTestStatus', {
+              name,
+              testStatus: testStatusLabel,
+            })
+          : translate('EditIndexerName', { name })
+      }
+      actions={
+        <SettingsCardAction
           title={translate('CloneIndexer')}
           aria-label={translate('CloneIndexer')}
           name={icons.CLONE}
           onPress={handleCloneIndexerPress}
         />
-      </div>
+      }
+      onPress={handleEditIndexerPress}
+    >
+      <SettingsCardStatus
+        dot={enabled ? 'active' : 'muted'}
+        segments={[
+          translate(enabled ? 'Enabled' : 'Disabled'),
+          showPriority ? (
+            <>
+              {translate('Priority')} {priority}
+            </>
+          ) : null,
+          testStatusLabel,
+        ]}
+      />
 
-      <div className={styles.enabled}>
-        <ProtocolLabel protocol={protocol} />
+      <div className={settingsCardStyles.labels}>
+        <ProtocolLabel protocol={protocol} size={sizes.MEDIUM} />
 
         {supportsRss && enableRss ? (
-          <Label kind={kinds.SUCCESS}>{translate('Rss')}</Label>
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
+            {translate('Rss')}
+          </Label>
         ) : null}
 
         {supportsSearch && enableAutomaticSearch ? (
-          <Label kind={kinds.SUCCESS}>{translate('AutomaticSearch')}</Label>
-        ) : null}
-
-        {supportsSearch && enableInteractiveSearch ? (
-          <Label kind={kinds.SUCCESS}>{translate('InteractiveSearch')}</Label>
-        ) : null}
-
-        {showPriority ? (
-          <Label kind={kinds.DEFAULT}>
-            {translate('Priority')}: {priority}
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
+            {translate('AutomaticSearch')}
           </Label>
         ) : null}
 
-        {!enableRss && !enableAutomaticSearch && !enableInteractiveSearch ? (
-          <Label kind={kinds.DISABLED} outline={true}>
-            {translate('Disabled')}
+        {supportsSearch && enableInteractiveSearch ? (
+          <Label dot={false} kind={kinds.DEFAULT} size={sizes.MEDIUM}>
+            {translate('InteractiveSearch')}
           </Label>
         ) : null}
       </div>
 
-      <TagList tags={tags} tagList={tagList} />
+      {tags.length > 0 ? <TagList tags={tags} tagList={tagList} /> : null}
 
       <EditIndexerModal
         id={id}
@@ -128,7 +149,7 @@ function Indexer({
         onConfirm={handleConfirmDeleteIndexer}
         onCancel={handleDeleteIndexerModalClose}
       />
-    </Card>
+    </SettingsCard>
   );
 }
 

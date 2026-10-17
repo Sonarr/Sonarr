@@ -1,0 +1,6 @@
+.intro {
+  margin-bottom: 16px;
+  max-width: 70ch;
+  color: var(--inkMuted);
+  font-size: 13px;
+}

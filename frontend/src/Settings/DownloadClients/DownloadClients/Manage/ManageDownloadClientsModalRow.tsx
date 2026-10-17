@@ -12,7 +12,7 @@ import { kinds } from 'Helpers/Props';
 import { DownloadClientModel } from 'Settings/DownloadClients/DownloadClients/useDownloadClients';
 import { SelectStateInputProps } from 'typings/props';
 import translate from 'Utilities/String/translate';
-import styles from './ManageDownloadClientsModalRow.css';
+import styles from './ManageDownloadClientsModalRow.module.css';
 
 interface ManageDownloadClientsModalRowProps {
   id: number;

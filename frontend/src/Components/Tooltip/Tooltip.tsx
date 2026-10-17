@@ -9,6 +9,7 @@ import {
   Placement,
   safePolygon,
   shift,
+  size,
   useClick,
   useDismiss,
   useFloating,
@@ -19,11 +20,12 @@ import {
 } from '@floating-ui/react';
 import classNames from 'classnames';
 import React, { useRef, useState } from 'react';
-import { useThemeColor } from 'Helpers/Hooks/useTheme';
 import { kinds } from 'Helpers/Props';
 import { Kind } from 'Helpers/Props/kinds';
 import { isMobile } from 'Utilities/browser';
-import styles from './Tooltip.css';
+import styles from './Tooltip.module.css';
+
+const VIEWPORT_PADDING = 10;
 
 export interface TooltipProps {
   accessibleLabel?: string;
@@ -33,6 +35,7 @@ export interface TooltipProps {
   tooltip: string | React.ReactNode;
   contentRole?: 'dialog' | 'tooltip';
   isAnchorFocusable?: boolean;
+  isDisabled?: boolean;
   kind?: Extract<Kind, 'default' | 'inverse'>;
   position?: Placement;
   canFlip?: boolean;
@@ -47,33 +50,41 @@ function Tooltip(props: TooltipProps) {
     tooltip,
     contentRole = 'tooltip',
     isAnchorFocusable = true,
+    isDisabled = false,
     kind = kinds.DEFAULT,
     position,
     canFlip = true,
   } = props;
 
-  const arrowColor = useThemeColor(
-    kind === 'inverse'
-      ? 'popoverArrowBorderInverseColor'
-      : 'popoverArrowBorderColor'
-  );
   const [isOpen, setIsOpen] = useState(false);
+  const isTooltipOpen = isOpen && !isDisabled;
 
   const arrowRef = useRef(null);
 
   const { refs, context, floatingStyles } = useFloating({
     middleware: [
+      offset({ mainAxis: 10 }),
+      flip({
+        crossAxis: canFlip ? 'alignment' : false,
+        mainAxis: canFlip,
+        fallbackAxisSideDirection: 'start',
+        padding: VIEWPORT_PADDING,
+      }),
+      shift({ padding: VIEWPORT_PADDING }),
+      size({
+        padding: VIEWPORT_PADDING,
+        apply({ availableWidth, availableHeight, elements }) {
+          Object.assign(elements.floating.style, {
+            maxWidth: `${Math.max(0, availableWidth)}px`,
+            maxHeight: `${Math.max(0, availableHeight)}px`,
+          });
+        },
+      }),
       arrow({
         element: arrowRef,
       }),
-      flip({
-        crossAxis: canFlip,
-        mainAxis: canFlip,
-      }),
-      offset({ mainAxis: 10 }),
-      shift(),
     ],
-    open: isOpen,
+    open: isTooltipOpen,
     placement: position,
     whileElementsMounted: autoUpdate,
     onOpenChange: setIsOpen,
@@ -106,7 +117,13 @@ function Tooltip(props: TooltipProps) {
       style={floatingStyles}
       {...getFloatingProps()}
     >
-      <FloatingArrow ref={arrowRef} context={context} fill={arrowColor} />
+      <FloatingArrow
+        ref={arrowRef}
+        className={classNames(styles.arrow, styles[kind])}
+        style={{ transform: 'translateY(-1px)' }}
+        context={context}
+        strokeWidth={1}
+      />
       <div className={classNames(styles.tooltip, styles[kind])}>
         <div className={bodyClassName}>{tooltip}</div>
       </div>
@@ -126,7 +143,7 @@ function Tooltip(props: TooltipProps) {
       >
         {anchor}
       </span>
-      {isOpen ? (
+      {isTooltipOpen ? (
         <FloatingPortal id="portal-root">
           {contentRole === 'dialog' ? (
             <FloatingFocusManager

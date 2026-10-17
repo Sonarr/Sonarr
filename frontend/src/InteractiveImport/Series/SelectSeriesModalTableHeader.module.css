@@ -1,0 +1,18 @@
+.title {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.module.css';
+
+  flex: 4 0 140px;
+}
+
+.year {
+  composes: headerCell  from 'Components/Table/VirtualTableHeaderCell.module.css';
+
+  flex: 0 0 70px;
+}
+
+.imdbId,
+.tvdbId {
+  composes: headerCell  from 'Components/Table/VirtualTableHeaderCell.module.css';
+
+  flex: 0 0 110px;
+}

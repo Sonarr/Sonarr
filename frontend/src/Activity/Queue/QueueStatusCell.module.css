@@ -1,0 +1,9 @@
+.status {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  width: 30px;
+}
+
+.noMessages {
+  margin-bottom: 10px;
+}

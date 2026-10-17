@@ -1,0 +1,15 @@
+.headerRow {
+  height: 0;
+}
+
+.headerCell {
+  overflow: hidden;
+  padding: 0;
+  height: 0;
+  border: 0;
+  line-height: 0;
+}
+
+.headerLabel {
+  @add-mixin visuallyHidden;
+}

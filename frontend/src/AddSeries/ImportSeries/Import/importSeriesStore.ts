@@ -1,9 +1,30 @@
 import { useEffect } from 'react';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
-import { useAddSeriesOptions } from 'AddSeries/addSeriesOptionsStore';
+import {
+  useAddSeriesLanguage,
+  useAddSeriesOptions,
+} from 'AddSeries/addSeriesOptionsStore';
+import { createOptionsStore } from 'Helpers/Hooks/useOptionsStore';
+import Language from 'Language/Language';
 import { UnmappedFolder } from 'RootFolder/useRootFolders';
 import Series, { SeriesMonitor, SeriesType } from 'Series/Series';
+
+interface ImportSeriesViewOptions {
+  compactRows: boolean;
+}
+
+const viewOptions = createOptionsStore<ImportSeriesViewOptions>(
+  'import_series_view_options',
+  () => {
+    return {
+      compactRows: false,
+    };
+  }
+);
+
+export const useImportSeriesViewOption = viewOptions.useOption;
+export const setImportSeriesViewOption = viewOptions.setOption;
 
 export interface UnamppedFolderItem extends UnmappedFolder {
   id: string;
@@ -11,11 +32,13 @@ export interface UnamppedFolderItem extends UnmappedFolder {
 
 export interface ImportSeriesItem {
   id: string;
+  language: Language;
   monitor: SeriesMonitor;
   path: string;
   qualityProfileId: number;
   relativePath: string;
   seasonFolder: boolean;
+  seasonType: string;
   selectedSeries?: Series;
   seriesType: SeriesType;
   name: string;
@@ -41,6 +64,7 @@ export const useEnsureImportSeriesItems = (
 ) => {
   const { monitor, qualityProfileId, seriesType, seasonFolder } =
     useAddSeriesOptions();
+  const language = useAddSeriesLanguage();
 
   useEffect(() => {
     unmappedFolders.forEach((unmappedFolder) => {
@@ -53,10 +77,12 @@ export const useEnsureImportSeriesItems = (
 
       const newItem: ImportSeriesItem = {
         ...unmappedFolder,
+        language,
         monitor,
         qualityProfileId,
         seriesType,
         seasonFolder,
+        seasonType: 'official',
         hasSearched: false,
       };
 
@@ -67,7 +93,14 @@ export const useEnsureImportSeriesItems = (
         },
       }));
     });
-  }, [unmappedFolders, monitor, qualityProfileId, seriesType, seasonFolder]);
+  }, [
+    unmappedFolders,
+    language,
+    monitor,
+    qualityProfileId,
+    seriesType,
+    seasonFolder,
+  ]);
 };
 
 export const updateImportSeriesItem = (
@@ -128,10 +161,18 @@ export const stopProcessing = () => {
   importSeriesStore.setState({ isProcessing: false, lookupQueue: [] });
 };
 
-export const addToLookupQueue = (id: string) => {
-  importSeriesStore.setState((state) => ({
-    lookupQueue: [...state.lookupQueue, id],
-  }));
+export const addToLookupQueue = (id: string, addToStart = false) => {
+  importSeriesStore.setState((state) => {
+    if (state.lookupQueue.includes(id)) {
+      return state;
+    }
+
+    return {
+      lookupQueue: addToStart
+        ? [id, ...state.lookupQueue]
+        : [...state.lookupQueue, id],
+    };
+  });
 };
 
 export const removeFromLookupQueue = (id: string) => {
@@ -144,8 +185,14 @@ export const useIsCurrentLookupQueueItem = (id: string) => {
   return importSeriesStore((state) => state.lookupQueue[0] === id);
 };
 
-export const useIsCurrentedItemQueued = (id: string) => {
+export const useIsCurrentItemQueued = (id: string) => {
   return importSeriesStore((state) => state.lookupQueue.includes(id));
+};
+
+export const useHasSearchedItems = () => {
+  return importSeriesStore((state) =>
+    Object.values(state.items).some((item) => item.hasSearched)
+  );
 };
 
 export const useLookupQueueHasItems = () => {

@@ -1,8 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
+import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import usePrevious from 'Helpers/Hooks/usePrevious';
+import { kinds } from 'Helpers/Props';
 import {
   OnChildStateChange,
   SetChildSave,
@@ -10,7 +13,7 @@ import {
 import translate from 'Utilities/String/translate';
 import QualityDefinition from './QualityDefinition';
 import { useManageQualityDefinitions } from './useQualityDefinitions';
-import styles from './QualityDefinitions.css';
+import styles from './QualityDefinitions.module.css';
 
 interface QualityDefinitionsProps {
   isResettingQualityDefinitions: boolean;
@@ -63,7 +66,15 @@ function QualityDefinitions({
   ]);
 
   return (
-    <FieldSet legend={translate('QualityDefinitions')}>
+    <FieldSet
+      legend={translate('QualityDefinitions')}
+      caption={translate('QualityDefinitionsCaption')}
+      notice={
+        <Alert kind={kinds.INFO}>
+          <InlineMarkdown data={translate('QualityDefinitionsSizeNotice')} />
+        </Alert>
+      }
+    >
       <PageSectionContent
         errorMessage={translate('QualityDefinitionsLoadError')}
         isFetching={isFetching}
@@ -71,8 +82,8 @@ function QualityDefinitions({
         error={error}
       >
         <div className={styles.header}>
-          <div className={styles.quality}>{translate('Quality')}</div>
-          <div className={styles.title}>{translate('Title')}</div>
+          <div className={styles.headerQuality}>{translate('Quality')}</div>
+          <div className={styles.headerTitle}>{translate('Title')}</div>
         </div>
 
         <div className={styles.definitions}>

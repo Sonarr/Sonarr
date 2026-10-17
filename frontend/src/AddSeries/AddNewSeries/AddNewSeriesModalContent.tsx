@@ -10,26 +10,31 @@ import SeriesTypePopoverContent from 'AddSeries/SeriesTypePopoverContent';
 import { useAppDimension } from 'App/appStore';
 import CheckInput from 'Components/Form/CheckInput';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
+import { LanguageSelectInputOnChangeProps } from 'Components/Form/Select/LanguageSelectInput';
 import Icon from 'Components/Icon';
-import SpinnerButton from 'Components/Link/SpinnerButton';
+import Button from 'Components/Link/Button';
+import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
-import { getValidationFailures } from 'Helpers/Hooks/useApiMutation';
 import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
+import Language, { DEFAULT_LANGUAGE } from 'Language/Language';
+import { useLanguageById } from 'Language/useLanguages';
 import { SeriesType } from 'Series/Series';
 import SeriesPoster from 'Series/SeriesPoster';
+import { useMetadataSourceSettingsValues } from 'Settings/MetadataSource/useMetadataSourceSettings';
 import { useIsWindows } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import selectSettings from 'Utilities/selectSettings';
 import translate from 'Utilities/String/translate';
 import { useAddSeries } from './useAddSeries';
-import styles from './AddNewSeriesModalContent.css';
+import styles from './AddNewSeriesModalContent.module.css';
 
 export interface AddNewSeriesModalContentProps {
   series: AddSeries;
@@ -42,24 +47,56 @@ function AddNewSeriesModalContent({
   initialSeriesType,
   onModalClose,
 }: AddNewSeriesModalContentProps) {
-  const { title, year, overview, images, folder } = series;
+  const {
+    title: lookupTitle,
+    originalTitle,
+    year,
+    overview: lookupOverview,
+    images,
+    seasonTypes,
+    translations,
+    folder: originalFolder,
+    folders,
+  } = series;
   const options = useAddSeriesOptions();
+  const { preferredMetadataLanguage } = useMetadataSourceSettingsValues();
+  const resolvedLanguage = useLanguageById(preferredMetadataLanguage);
+  const [language, setLanguage] = useState<Language>(
+    resolvedLanguage ?? DEFAULT_LANGUAGE
+  );
+
+  useEffect(() => {
+    if (resolvedLanguage) {
+      setLanguage(resolvedLanguage);
+    }
+  }, [resolvedLanguage]);
+
+  const handleLanguageChange = useCallback(
+    ({ value }: LanguageSelectInputOnChangeProps) => {
+      setLanguage(value as Language);
+    },
+    []
+  );
+
   const isSmallScreen = useAppDimension('isSmallScreen');
   const isWindows = useIsWindows();
 
   const { isAdding, addError, addSeries } = useAddSeries();
 
   const { settings, validationErrors, validationWarnings } = useMemo(() => {
-    return {
-      ...selectSettings(options, {}),
-      ...getValidationFailures(addError),
-    };
+    return selectSettings(options, {}, addError);
   }, [options, addError]);
 
   const [seriesType, setSeriesType] = useState<SeriesType>(
     initialSeriesType === 'standard'
       ? settings.seriesType.value
       : initialSeriesType
+  );
+  const [seasonType, setSeasonType] = useState(
+    () =>
+      seasonTypes.find((s) => s.type === 'official')?.type ??
+      seasonTypes[0]?.type ??
+      'official'
   );
 
   const {
@@ -73,9 +110,23 @@ function AddNewSeriesModalContent({
     tags,
   } = settings;
 
+  const translation = translations.find((t) => t.language.id === language.id);
+  const title = translation?.title ?? originalTitle ?? lookupTitle;
+  const overview = translation?.overview ?? lookupOverview;
+  const folder =
+    folders.find((f) => f.language.id === language.id)?.folder ??
+    originalFolder;
+
   const handleInputChange = useCallback(
     ({ name, value }: InputChanged<string | number | boolean | number[]>) => {
       setAddSeriesOption(name as keyof AddSeriesOptions, value);
+    },
+    []
+  );
+
+  const handleSeasonTypeChange = useCallback(
+    ({ value }: InputChanged<string>) => {
+      setSeasonType(value);
     },
     []
   );
@@ -98,13 +149,17 @@ function AddNewSeriesModalContent({
       },
       qualityProfileId: qualityProfileId.value,
       seriesType,
+      seasonType,
+      language,
       seasonFolder: seasonFolder.value,
       tags: tags.value,
     });
   }, [
     series,
     seriesType,
+    seasonType,
     rootFolderPath,
+    language,
     monitor,
     qualityProfileId,
     seasonFolder,
@@ -131,29 +186,30 @@ function AddNewSeriesModalContent({
       <ModalBody>
         <div className={styles.container}>
           {isSmallScreen ? null : (
-            <div className={styles.poster}>
-              <SeriesPoster
-                className={styles.poster}
-                images={images}
-                size={250}
-                title={title}
-              />
-            </div>
+            <SeriesPoster
+              className={styles.poster}
+              images={images}
+              size={250}
+              lazy={false}
+              title={title}
+            />
           )}
 
           <div className={styles.info}>
-            {overview ? (
-              <div className={styles.overview}>{overview}</div>
-            ) : null}
+            {overview ? <p className={styles.intro}>{overview}</p> : null}
 
             <Form
               validationErrors={validationErrors}
               validationWarnings={validationWarnings}
             >
-              <FormGroup>
+              <FormRow>
                 <FormLabel>{translate('RootFolder')}</FormLabel>
-
-                <FormInputGroup
+                <FormInputHelpText
+                  text={translate('AddNewSeriesRootFolderHelpText', {
+                    folder,
+                  })}
+                />
+                <FormInput
                   type={inputTypes.ROOT_FOLDER_SELECT}
                   name="rootFolderPath"
                   valueOptions={{
@@ -164,15 +220,23 @@ function AddNewSeriesModalContent({
                     seriesFolder: folder,
                     isWindows,
                   }}
-                  helpText={translate('AddNewSeriesRootFolderHelpText', {
-                    folder,
-                  })}
                   onChange={handleInputChange}
                   {...rootFolderPath}
                 />
-              </FormGroup>
+              </FormRow>
 
-              <FormGroup>
+              <FormRow>
+                <FormLabel>{translate('Tags')}</FormLabel>
+
+                <FormInput
+                  type={inputTypes.TAG}
+                  name="tags"
+                  onChange={handleInputChange}
+                  {...tags}
+                />
+              </FormRow>
+
+              <FormRow>
                 <FormLabel>
                   {translate('Monitor')}
 
@@ -186,26 +250,37 @@ function AddNewSeriesModalContent({
                   />
                 </FormLabel>
 
-                <FormInputGroup
+                <FormInput
                   type={inputTypes.MONITOR_EPISODES_SELECT}
                   name="monitor"
                   onChange={handleInputChange}
                   {...monitor}
                 />
-              </FormGroup>
+              </FormRow>
 
-              <FormGroup>
+              <FormRow>
+                <FormLabel>{translate('SeasonFolder')}</FormLabel>
+
+                <FormInput
+                  type={inputTypes.CHECK}
+                  name="seasonFolder"
+                  onChange={handleInputChange}
+                  {...seasonFolder}
+                />
+              </FormRow>
+
+              <FormRow>
                 <FormLabel>{translate('QualityProfile')}</FormLabel>
 
-                <FormInputGroup
+                <FormInput
                   type={inputTypes.QUALITY_PROFILE_SELECT}
                   name="qualityProfileId"
                   onChange={handleQualityProfileIdChange}
                   {...qualityProfileId}
                 />
-              </FormGroup>
+              </FormRow>
 
-              <FormGroup>
+              <FormRow>
                 <FormLabel>
                   {translate('SeriesType')}
 
@@ -218,82 +293,82 @@ function AddNewSeriesModalContent({
                     position={tooltipPositions.RIGHT}
                   />
                 </FormLabel>
-
-                <FormInputGroup
+                <FormInputHelpText text={translate('SeriesTypesHelpText')} />
+                <FormInput
                   type={inputTypes.SERIES_TYPE_SELECT}
                   name="seriesType"
                   onChange={handleInputChange}
                   {...seriesTypeSetting}
                   value={seriesType}
-                  helpText={translate('SeriesTypesHelpText')}
                 />
-              </FormGroup>
+              </FormRow>
 
-              <FormGroup>
-                <FormLabel>{translate('SeasonFolder')}</FormLabel>
+              <FormRow>
+                <FormLabel>{translate('Language')}</FormLabel>
 
-                <FormInputGroup
-                  type={inputTypes.CHECK}
-                  name="seasonFolder"
-                  onChange={handleInputChange}
-                  {...seasonFolder}
+                <FormInputHelpText text={translate('SeriesLanguageHelpText')} />
+                <FormInput
+                  type={inputTypes.LANGUAGE_SELECT}
+                  name="language"
+                  value={language}
+                  includeAny={false}
+                  onChange={handleLanguageChange}
                 />
-              </FormGroup>
+              </FormRow>
 
-              <FormGroup>
-                <FormLabel>{translate('Tags')}</FormLabel>
+              <FormRow>
+                <FormLabel>{translate('SeasonType')}</FormLabel>
 
-                <FormInputGroup
-                  type={inputTypes.TAG}
-                  name="tags"
-                  onChange={handleInputChange}
-                  {...tags}
+                <FormInputHelpText text={translate('SeasonTypeHelpText')} />
+                <FormInput
+                  type={inputTypes.SEASON_TYPE_SELECT}
+                  name="seasonType"
+                  value={seasonType}
+                  seasonTypes={seasonTypes}
+                  includeNoChange={false}
+                  includeMixed={false}
+                  onChange={handleSeasonTypeChange}
                 />
-              </FormGroup>
+              </FormRow>
             </Form>
           </div>
         </div>
       </ModalBody>
 
       <ModalFooter className={styles.modalFooter}>
-        <div>
-          <label className={styles.searchLabelContainer}>
-            <span className={styles.searchLabel}>
-              {translate('AddNewSeriesSearchForMissingEpisodes')}
-            </span>
+        <div className={styles.searchOptions}>
+          <span className={styles.searchLabel}>{translate('Search')}</span>
 
-            <CheckInput
-              containerClassName={styles.searchInputContainer}
-              className={styles.searchInput}
-              name="searchForMissingEpisodes"
-              onChange={handleInputChange}
-              {...searchForMissingEpisodes}
-            />
-          </label>
+          <CheckInput
+            containerClassName={styles.searchOption}
+            name="searchForMissingEpisodes"
+            helpText={translate('Missing')}
+            onChange={handleInputChange}
+            {...searchForMissingEpisodes}
+          />
 
-          <label className={styles.searchLabelContainer}>
-            <span className={styles.searchLabel}>
-              {translate('AddNewSeriesSearchForCutoffUnmetEpisodes')}
-            </span>
-
-            <CheckInput
-              containerClassName={styles.searchInputContainer}
-              className={styles.searchInput}
-              name="searchForCutoffUnmetEpisodes"
-              onChange={handleInputChange}
-              {...searchForCutoffUnmetEpisodes}
-            />
-          </label>
+          <CheckInput
+            containerClassName={styles.searchOption}
+            name="searchForCutoffUnmetEpisodes"
+            helpText={translate('CutoffUnmet')}
+            onChange={handleInputChange}
+            {...searchForCutoffUnmetEpisodes}
+          />
         </div>
 
-        <SpinnerButton
-          className={styles.addButton}
-          kind={kinds.SUCCESS}
-          isSpinning={isAdding}
-          onPress={handleAddSeriesPress}
-        >
-          {translate('AddSeriesWithTitle', { title })}
-        </SpinnerButton>
+        <div className={styles.actions}>
+          <Button onPress={onModalClose}>{translate('Cancel')}</Button>
+
+          <SpinnerErrorButton
+            className={styles.addButton}
+            kind={kinds.PRIMARY}
+            isSpinning={isAdding}
+            error={addError}
+            onPress={handleAddSeriesPress}
+          >
+            {translate('AddSeriesWithTitle', { title })}
+          </SpinnerErrorButton>
+        </div>
       </ModalFooter>
     </ModalContent>
   );

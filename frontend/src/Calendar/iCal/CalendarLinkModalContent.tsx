@@ -1,9 +1,10 @@
 import React, { FocusEvent, useCallback, useMemo, useState } from 'react';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
+import FormInput from 'Components/Form/FormInput';
 import FormInputButton from 'Components/Form/FormInputButton';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import ClipboardButton from 'Components/Link/ClipboardButton';
@@ -11,7 +12,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
-import { icons, inputTypes, kinds, sizes } from 'Helpers/Props';
+import { icons, inputTypes, kinds } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 
@@ -80,63 +81,64 @@ function CalendarLinkModalContent({
 
       <ModalBody>
         <Form>
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('IncludeUnmonitored')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('ICalIncludeUnmonitoredEpisodesHelpText')}
+            />
+            <FormInput
               type={inputTypes.CHECK}
               name="unmonitored"
               value={unmonitored}
-              helpText={translate('ICalIncludeUnmonitoredEpisodesHelpText')}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('SeasonPremieresOnly')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('ICalSeasonPremieresOnlyHelpText')}
+            />
+            <FormInput
               type={inputTypes.CHECK}
               name="premieresOnly"
               value={premieresOnly}
-              helpText={translate('ICalSeasonPremieresOnlyHelpText')}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('ICalShowAsAllDayEvents')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('ICalShowAsAllDayEventsHelpText')}
+            />
+            <FormInput
               type={inputTypes.CHECK}
               name="asAllDay"
               value={asAllDay}
-              helpText={translate('ICalShowAsAllDayEventsHelpText')}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Tags')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('ICalTagsSeriesHelpText')} />
+            <FormInput
               type={inputTypes.SERIES_TAG}
               name="tags"
               value={tags}
-              helpText={translate('ICalTagsSeriesHelpText')}
               onChange={handleInputChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup size={sizes.LARGE}>
+          <FormRow>
             <FormLabel>{translate('ICalFeed')}</FormLabel>
-
-            <FormInputGroup
+            <FormInputHelpText text={translate('ICalFeedHelpText')} />
+            <FormInput
               type={inputTypes.TEXT}
               name="iCalHttpUrl"
               value={iCalHttpUrl}
               readOnly={true}
-              helpText={translate('ICalFeedHelpText')}
               buttons={[
                 <ClipboardButton
                   key="copy"
@@ -157,7 +159,7 @@ function CalendarLinkModalContent({
               onChange={handleInputChange}
               onFocus={handleLinkFocus}
             />
-          </FormGroup>
+          </FormRow>
         </Form>
       </ModalBody>
 

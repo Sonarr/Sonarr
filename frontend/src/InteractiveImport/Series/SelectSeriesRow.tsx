@@ -1,7 +1,7 @@
 import React from 'react';
 import Label from 'Components/Label';
 import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
-import styles from './SelectSeriesRow.css';
+import styles from './SelectSeriesRow.module.css';
 
 interface SelectSeriesRowProps {
   title: string;

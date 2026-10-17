@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         public override string Name => "Newznab";
 
         public override DownloadProtocol Protocol => DownloadProtocol.Usenet;
+        public override IEnumerable<FailDownloads> DefaultFailDownloads => [FailDownloads.Executables, FailDownloads.PotentiallyDangerous];
         public override int PageSize => GetProviderPageSize();
 
         public Newznab(INewznabCapabilitiesProvider capabilitiesProvider, IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger, ILocalizationService localizationService)
@@ -168,7 +169,10 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             try
             {
-                return Math.Min(100, Math.Max(_capabilitiesProvider.GetCapabilities(Settings).DefaultPageSize, _capabilitiesProvider.GetCapabilities(Settings).MaxPageSize));
+                return Math.Clamp(
+                    _capabilitiesProvider.GetCapabilities(Settings).DefaultPageSize,
+                    Math.Min(100, _capabilitiesProvider.GetCapabilities(Settings).MaxPageSize),
+                    _capabilitiesProvider.GetCapabilities(Settings).MaxPageSize);
             }
             catch
             {

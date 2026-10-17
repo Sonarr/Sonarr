@@ -6,12 +6,14 @@ import * as calendarViews from 'Calendar/calendarViews';
 import CalendarEvent from 'Calendar/Events/CalendarEvent';
 import CalendarEventGroup from 'Calendar/Events/CalendarEventGroup';
 import useCalendar, { useCalendarTime } from 'Calendar/useCalendar';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import {
   CalendarEvent as CalendarEventModel,
   CalendarEventGroup as CalendarEventGroupModel,
   CalendarItem,
 } from 'typings/Calendar';
-import styles from './CalendarDay.css';
+import translate from 'Utilities/String/translate';
+import styles from './CalendarDay.module.css';
 
 function sort(items: (CalendarEventModel | CalendarEventGroupModel)[]) {
   return items.sort((a, b) => {
@@ -97,8 +99,10 @@ function CalendarDay({
   const view = useCalendarOption('view');
   const time = useCalendarTime();
   const events = useCalendarEvents(date);
+  const { longDateFormat } = useUiSettingsValues();
+  const momentDate = moment(date);
 
-  const ref = React.useRef<HTMLDivElement>(null);
+  const ref = React.useRef<HTMLTableCellElement>(null);
 
   React.useEffect(() => {
     if (isTodaysDate && view === calendarViews.MONTH && ref.current) {
@@ -107,11 +111,12 @@ function CalendarDay({
   }, [time, isTodaysDate, view]);
 
   return (
-    <div
+    <td
       ref={ref}
       className={classNames(
         styles.day,
-        view === calendarViews.DAY && styles.isSingleDay
+        view === calendarViews.DAY && styles.isSingleDay,
+        isTodaysDate && styles.isTodayCell
       )}
     >
       {view === calendarViews.MONTH && (
@@ -123,9 +128,20 @@ function CalendarDay({
               styles.isDifferentMonth
           )}
         >
-          {moment(date).date()}
+          <time
+            dateTime={momentDate.format('YYYY-MM-DD')}
+            aria-current={isTodaysDate ? 'date' : undefined}
+          >
+            <span className={styles.fullDate}>
+              {momentDate.format(longDateFormat)}
+            </span>
+            <span aria-hidden={true}>{momentDate.date()}</span>
+          </time>
         </div>
       )}
+      {!events.length && view === calendarViews.DAY ? (
+        <div className={styles.noEvents}>{translate('NoEpisodesAiring')}</div>
+      ) : null}
       <div>
         {events.map((event) => {
           if (event.isGroup) {
@@ -150,7 +166,7 @@ function CalendarDay({
           );
         })}
       </div>
-    </div>
+    </td>
   );
 }
 

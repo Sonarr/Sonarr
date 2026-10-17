@@ -14,7 +14,7 @@ import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
 import ParseResult from './ParseResult';
 import useParse from './useParse';
-import styles from './ParseModalContent.css';
+import styles from './ParseModalContent.module.css';
 
 interface ParseModalContentProps {
   onModalClose: () => void;

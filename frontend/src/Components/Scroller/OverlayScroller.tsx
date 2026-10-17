@@ -2,7 +2,7 @@ import React, { ComponentPropsWithoutRef, useCallback, useRef } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { ScrollDirection } from 'Helpers/Props/scrollDirections';
 import { OnScroll } from './Scroller';
-import styles from './OverlayScroller.css';
+import styles from './OverlayScroller.module.css';
 
 const SCROLLBAR_SIZE = 10;
 

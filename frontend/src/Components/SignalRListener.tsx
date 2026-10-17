@@ -95,6 +95,11 @@ function SignalRListener() {
 
     const { name, body, version = 0 } = message;
 
+    if (name === 'version') {
+      setVersion({ version: body.version });
+      return;
+    }
+
     if (version < 5) {
       return;
     }
@@ -286,11 +291,6 @@ function SignalRListener() {
       queryClient.invalidateQueries({ queryKey: ['/tag'] });
       queryClient.invalidateQueries({ queryKey: ['/tag/detail'] });
 
-      return;
-    }
-
-    if (name === 'version') {
-      setVersion({ version: body.version });
       return;
     }
 

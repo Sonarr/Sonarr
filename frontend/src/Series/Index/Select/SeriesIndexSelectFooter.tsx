@@ -19,7 +19,7 @@ import EditSeriesModal from './Edit/EditSeriesModal';
 import OrganizeSeriesModal from './Organize/OrganizeSeriesModal';
 import ChangeMonitoringModal from './SeasonPass/ChangeMonitoringModal';
 import TagsModal from './Tags/TagsModal';
-import styles from './SeriesIndexSelectFooter.css';
+import styles from './SeriesIndexSelectFooter.module.css';
 
 interface SavePayload {
   monitored?: boolean;
@@ -96,13 +96,14 @@ function SeriesIndexSelectFooter() {
   }, [setIsTagsModalOpen]);
 
   const onApplyTagsPress = useCallback(
-    (tags: number[], _applyTags: string) => {
+    (tags: number[], applyTags: string) => {
       setIsSavingTags(true);
       setIsTagsModalOpen(false);
 
       saveSeriesEditor({
         seriesIds,
         tags,
+        applyTags,
       });
     },
     [seriesIds, saveSeriesEditor]

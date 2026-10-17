@@ -12,7 +12,7 @@ import { kinds } from 'Helpers/Props';
 import { IndexerModel } from 'Settings/Indexers/useIndexers';
 import { SelectStateInputProps } from 'typings/props';
 import translate from 'Utilities/String/translate';
-import styles from './ManageIndexersModalRow.css';
+import styles from './ManageIndexersModalRow.module.css';
 
 interface ManageIndexersModalRowProps {
   id: number;

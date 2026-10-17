@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './PageContentFooter.css';
+import styles from './PageContentFooter.module.css';
 
 interface PageContentFooterProps {
   className?: string;

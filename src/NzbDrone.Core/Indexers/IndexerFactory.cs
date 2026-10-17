@@ -42,6 +42,16 @@ namespace NzbDrone.Core.Indexers
             return base.Active().Where(c => c.Enable).ToList();
         }
 
+        public override IEnumerable<IndexerDefinition> GetDefaultDefinitions()
+        {
+            return base.GetDefaultDefinitions().Select(SetDefaultFailDownloads);
+        }
+
+        public override IEnumerable<IndexerDefinition> GetPresetDefinitions(IndexerDefinition providerDefinition)
+        {
+            return base.GetPresetDefinitions(providerDefinition).Select(SetDefaultFailDownloads);
+        }
+
         public override void SetProviderCharacteristics(IIndexer provider, IndexerDefinition definition)
         {
             base.SetProviderCharacteristics(provider, definition);
@@ -95,30 +105,32 @@ namespace NzbDrone.Core.Indexers
         public IndexerDefinition ResolveIndexer(int? id, string name)
         {
             var all = All();
-            var clientByName = name.IsNullOrWhiteSpace() ? null : all.FirstOrDefault(c => c.Name.EqualsIgnoreCase(name));
-            var clientById = id is > 0 ? all.FirstOrDefault(c => c.Id == id.Value) : null;
+            var indexerByName = name.IsNullOrWhiteSpace() ? null : all.FirstOrDefault(c => c.Name.EqualsIgnoreCase(name));
+            var indexerById = id is > 0 ? all.FirstOrDefault(c => c.Id == id.Value) : null;
 
-            if (id is > 0 && clientById == null)
+            if (id is > 0 && indexerById == null)
             {
                 throw new ResolveIndexerException("Indexer with ID '{0}' could not be found", id.Value);
             }
 
-            if (name.IsNotNullOrWhiteSpace() && clientByName == null)
+            if (name.IsNotNullOrWhiteSpace() && indexerByName == null)
             {
-                throw new ResolveIndexerException("Indexer with name '{0}' could not be found", name);
+                _logger.Warn("Indexer with name '{0}' could not be found", name);
+
+                return null;
             }
 
-            if (clientByName == null && clientById == null)
+            if (indexerByName == null && indexerById == null)
             {
                 return null;
             }
 
-            if (clientByName != null && clientById != null && clientByName.Id != clientById.Id)
+            if (indexerByName != null && indexerById != null && indexerByName.Id != indexerById.Id)
             {
                 throw new ResolveIndexerException("Indexer with name '{0}' does not match indexer with ID '{1}'", name, id.Value);
             }
 
-            return clientById ?? clientByName;
+            return indexerById ?? indexerByName;
         }
 
         private IEnumerable<IIndexer> FilterBlockedIndexers(IEnumerable<IIndexer> indexers)
@@ -156,6 +168,15 @@ namespace NzbDrone.Core.Indexers
             }
 
             return result;
+        }
+
+        private IndexerDefinition SetDefaultFailDownloads(IndexerDefinition definition)
+        {
+            var provider = _providers.First(v => v.GetType().Name == definition.Implementation);
+
+            ((IIndexerSettings)definition.Settings).FailDownloads = [.. provider.DefaultFailDownloads.Select(f => (int)f)];
+
+            return definition;
         }
     }
 }

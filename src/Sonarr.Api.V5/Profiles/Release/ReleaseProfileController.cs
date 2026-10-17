@@ -47,6 +47,8 @@ public class ReleaseProfileController : RestController<ReleaseProfileResource>
             }
         });
 
+        SharedValidator.RuleFor(d => d.AirDateGracePeriod).NotNull();
+
         SharedValidator.RuleFor(d => d.Tags.Intersect(d.ExcludedTags))
             .Empty()
             .WithName("ExcludedTags")

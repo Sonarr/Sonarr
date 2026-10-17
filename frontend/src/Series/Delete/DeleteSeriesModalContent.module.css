@@ -1,0 +1,22 @@
+.pathContainer {
+  margin-bottom: 20px;
+}
+
+.pathIcon {
+  margin-right: 8px;
+}
+
+.folderPath {
+  font-weight: 600;
+  font-family: var(--defaultFontFamily);
+}
+
+.deleteFilesMessage {
+  margin-top: 20px;
+  color: var(--dangerColor);
+
+  .deleteCount {
+    margin-top: 20px;
+    color: var(--warningColor);
+  }
+}

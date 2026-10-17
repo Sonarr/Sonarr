@@ -1,0 +1,214 @@
+.event {
+  position: relative;
+  margin: 3px 0;
+  padding: 6px 8px 6px 20px;
+  border-radius: 8px;
+  color: var(--ink);
+  font-family: var(--defaultFontFamily);
+  transition: background-color var(--transitionSmooth);
+
+  &:hover {
+    background-color: var(--paperCard);
+  }
+
+  &::before {
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 8px;
+    width: 4px;
+    border-radius: 2px;
+    background-color: var(--inkMuted);
+    content: "";
+  }
+}
+
+.underlay {
+  @add-mixin cover;
+}
+
+.overlay {
+  @add-mixin linkOverlay;
+
+  position: relative;
+  overflow-x: hidden;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.episodeInfo {
+  display: flex;
+  align-items: center;
+  margin-top: 3px;
+  color: var(--inkMuted);
+  font-size: 12px;
+  gap: 8px;
+}
+
+.seriesTitle,
+.episodeTitle {
+  @add-mixin truncate;
+  flex: 1 0 1px;
+}
+
+.seriesTitle {
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  font-weight: 550;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.episodeTitle {
+  color: var(--inkSoft);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.absoluteEpisodeNumber {
+  margin-left: 3px;
+}
+
+.statusContainer {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 4px;
+
+  & > span {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &:global(.fullColor) {
+    filter: var(--calendarFullColorFilter);
+  }
+}
+
+.statusIcon {
+  cursor: default;
+  pointer-events: all;
+}
+
+.airTime {
+  margin-top: 3px;
+  color: var(--inkMuted);
+  letter-spacing: 0.02em;
+  font-size: 11px;
+  font-family: var(--monoSpaceFontFamily);
+}
+
+.downloaded {
+  &::before {
+    background-color: var(--calendarDownloadedColor);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--calendarDownloadedColor) 16%, transparent);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--calendarDownloadedColor) 26%, transparent);
+    }
+  }
+}
+
+.downloading {
+  &::before {
+    background-color: var(--calendarDownloadingColor);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--calendarDownloadingColor) 16%, transparent);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--calendarDownloadingColor) 26%, transparent);
+    }
+  }
+}
+
+.unmonitored {
+  background-image: var(--calendarColorImpairedDiagonalPattern);
+  color: var(--inkMuted);
+
+  &::before {
+    background-color: var(--inkMuted);
+    opacity: 0.5;
+  }
+
+  & .seriesTitle {
+    color: var(--inkSoft);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--inkMuted) 20%, transparent);
+    background-image: var(--calendarColorImpairedFullColorDiagonalPattern);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--inkMuted) 30%, transparent);
+    }
+  }
+}
+
+.onAir {
+  background-image: var(--calendarColorImpairedPattern);
+
+  &::before {
+    background-color: var(--calendarOnAirColor);
+    animation: nowPulse 1.5s ease-in-out infinite;
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--calendarOnAirColor) 20%, transparent);
+    background-image: var(--calendarColorImpairedFullColorPattern);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--calendarOnAirColor) 30%, transparent);
+    }
+  }
+}
+
+@keyframes nowPulse {
+  0% { opacity: 1; }
+
+  50% { opacity: 0.4; }
+
+  100% { opacity: 1; }
+}
+
+.missing {
+  background-image: var(--calendarColorImpairedPattern);
+
+  &::before {
+    background-color: var(--calendarMissingColor);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--calendarMissingColor) 20%, transparent);
+    background-image: var(--calendarColorImpairedFullColorPattern);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--calendarMissingColor) 30%, transparent);
+    }
+  }
+}
+
+.unaired {
+  background-image: var(--calendarColorImpairedPattern);
+
+  &::before {
+    background-color: var(--calendarUnairedColor);
+  }
+
+  &:global(.fullColor) {
+    background-color: color-mix(in oklch, var(--calendarUnairedColor) 16%, transparent);
+    background-image: var(--calendarColorImpairedFullColorPattern);
+
+    &:hover {
+      background-color: color-mix(in oklch, var(--calendarUnairedColor) 26%, transparent);
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -22,7 +22,7 @@ import EpisodeHistory from './History/EpisodeHistory';
 import EpisodeSearch from './Search/EpisodeSearch';
 import SeasonEpisodeNumber from './SeasonEpisodeNumber';
 import EpisodeSummary from './Summary/EpisodeSummary';
-import styles from './EpisodeDetailsModalContent.css';
+import styles from './EpisodeDetailsModalContent.module.css';
 
 const TABS: EpisodeDetailsTab[] = ['details', 'history', 'search'];
 
@@ -50,6 +50,7 @@ function EpisodeDetailsModalContent({
   onModalClose,
 }: EpisodeDetailsModalContentProps) {
   const [currentlySelectedTab, setCurrentlySelectedTab] = useState(selectedTab);
+  const modalBodyRef = useRef<HTMLDivElement>(null);
 
   const {
     title: seriesTitle,
@@ -96,33 +97,37 @@ function EpisodeDetailsModalContent({
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>
-        <MonitorToggleButton
-          monitored={monitored}
-          size={18}
-          isDisabled={!seriesMonitored}
-          isSaving={isToggling}
-          onPress={handleMonitorEpisodePress}
-        />
+      <ModalHeader className={styles.header}>
+        <div className={styles.scopeLine}>
+          <span className={styles.scope}>
+            <span className={styles.scopeSeries}>{seriesTitle}</span>
 
-        <span className={styles.seriesTitle}>{seriesTitle}</span>
+            <span className={styles.scopeEpisode}>
+              <SeasonEpisodeNumber
+                seasonNumber={seasonNumber}
+                episodeNumber={episodeNumber}
+                absoluteEpisodeNumber={absoluteEpisodeNumber}
+                airDate={airDate}
+                seriesType={seriesType}
+              />
+            </span>
+          </span>
+        </div>
 
-        <span className={styles.separator}>-</span>
+        <div className={styles.titleRow}>
+          <MonitorToggleButton
+            monitored={monitored}
+            size={18}
+            isDisabled={!seriesMonitored}
+            isSaving={isToggling}
+            onPress={handleMonitorEpisodePress}
+          />
 
-        <SeasonEpisodeNumber
-          seasonNumber={seasonNumber}
-          episodeNumber={episodeNumber}
-          absoluteEpisodeNumber={absoluteEpisodeNumber}
-          airDate={airDate}
-          seriesType={seriesType}
-        />
-
-        <span className={styles.separator}>-</span>
-
-        {episodeTitle}
+          <span className={styles.episodeTitle}>{episodeTitle}</span>
+        </div>
       </ModalHeader>
 
-      <ModalBody>
+      <ModalBody ref={modalBodyRef}>
         <Tabs
           className={styles.tabs}
           selectedIndex={TABS.indexOf(currentlySelectedTab)}
@@ -164,6 +169,7 @@ function EpisodeDetailsModalContent({
             <EpisodeSearch
               episodeId={episodeId}
               startInteractiveSearch={startInteractiveSearch}
+              scrollerRef={modalBodyRef}
               onModalClose={onModalClose}
             />
           </TabPanel>

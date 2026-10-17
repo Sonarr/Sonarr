@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import CommandNames from 'Commands/CommandNames';
 import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
@@ -6,12 +6,13 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageHeading from 'Components/Page/PageHeading';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
+import PageToolbarSpacer from 'Components/Page/Toolbar/PageToolbarSpacer';
+import ToolbarItem from 'Components/Page/Toolbar/ToolbarItem';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
-import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
+import TableOptionsModal from 'Components/Table/TableOptions/TableOptionsModal';
 import TablePager from 'Components/Table/TablePager';
 import { align, icons, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
@@ -88,39 +89,52 @@ function LogsTable() {
     });
   }, [executeCommand, goToPage, refetch]);
 
+  const [isTableOptionsModalOpen, setIsTableOptionsModalOpen] = useState(false);
+
+  const handleTableOptionsPress = useCallback(() => {
+    setIsTableOptionsModalOpen(true);
+  }, []);
+
+  const handleTableOptionsModalClose = useCallback(() => {
+    setIsTableOptionsModalOpen(false);
+  }, []);
+
   return (
     <PageContent title={translate('Logs')}>
       <PageToolbar>
-        <PageToolbarSection>
-          <PageToolbarButton
-            label={translate('Refresh')}
-            iconName={icons.REFRESH}
-            spinningName={icons.REFRESH}
-            isSpinning={isFetching}
-            onPress={handleRefreshPress}
-          />
+        <ToolbarItem
+          id="refresh"
+          priority={1}
+          groupId="left"
+          label={translate('Refresh')}
+          iconName={icons.REFRESH}
+          spinningName={icons.REFRESH}
+          isSpinning={isFetching}
+          onPress={handleRefreshPress}
+        />
 
-          <PageToolbarButton
-            label={translate('Clear')}
-            iconName={icons.CLEAR}
-            isSpinning={isClearLogExecuting}
-            onPress={handleClearLogsPress}
-          />
-        </PageToolbarSection>
+        <ToolbarItem
+          id="clear"
+          priority={1}
+          groupId="left"
+          label={translate('Clear')}
+          iconName={icons.CLEAR}
+          isSpinning={isClearLogExecuting}
+          onPress={handleClearLogsPress}
+        />
 
-        <PageToolbarSection alignContent={align.RIGHT}>
-          <TableOptionsModalWrapper
-            canModifyColumns={false}
-            columns={columns}
-            pageSize={pageSize}
-            onTableOptionChange={handleTableOptionChange}
-          >
-            <PageToolbarButton
-              label={translate('Options')}
-              iconName={icons.TABLE}
-            />
-          </TableOptionsModalWrapper>
+        <PageToolbarSpacer />
 
+        <ToolbarItem
+          id="options"
+          priority={2}
+          groupId="right"
+          label={translate('Options')}
+          iconName={icons.TABLE}
+          onPress={handleTableOptionsPress}
+        />
+
+        <ToolbarItem id="filter" pinned={true}>
           <FilterMenu
             alignMenu={align.RIGHT}
             selectedFilterKey={selectedFilterKey}
@@ -128,10 +142,12 @@ function LogsTable() {
             customFilters={[]}
             onFilterSelect={handleFilterSelect}
           />
-        </PageToolbarSection>
+        </ToolbarItem>
       </PageToolbar>
 
       <PageContentBody>
+        <PageHeading scope={translate('System')} title={translate('Events')} />
+
         {isLoading ? <LoadingIndicator /> : null}
 
         {isFetched && !error && !records.length ? (
@@ -167,6 +183,15 @@ function LogsTable() {
           </div>
         ) : null}
       </PageContentBody>
+
+      <TableOptionsModal
+        isOpen={isTableOptionsModalOpen}
+        canModifyColumns={false}
+        columns={columns}
+        pageSize={pageSize}
+        onTableOptionChange={handleTableOptionChange}
+        onModalClose={handleTableOptionsModalClose}
+      />
     </PageContent>
   );
 }

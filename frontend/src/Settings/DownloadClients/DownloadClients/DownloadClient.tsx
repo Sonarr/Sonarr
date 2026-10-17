@@ -1,17 +1,21 @@
 import React, { useCallback, useState } from 'react';
 import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
-import Card from 'Components/Card';
-import Label from 'Components/Label';
-import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import SettingsCard from 'Components/SettingsCard/SettingsCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.module.css';
+import SettingsCardAction from 'Components/SettingsCard/SettingsCardAction';
+import SettingsCardStatus from 'Components/SettingsCard/SettingsCardStatus';
 import TagList from 'Components/TagList';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
-import { icons, kinds } from 'Helpers/Props';
+import { icons, kinds, sizes } from 'Helpers/Props';
+import {
+  getProviderTestStatusLabel,
+  ProviderTestStatus,
+} from 'Settings/ProviderTestAllResult';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import EditDownloadClientModal from './EditDownloadClientModal';
 import { useDeleteDownloadClient } from './useDownloadClients';
-import styles from './DownloadClient.css';
 
 interface DownloadClientProps {
   id: number;
@@ -20,6 +24,7 @@ interface DownloadClientProps {
   enable: boolean;
   priority: number;
   tags: number[];
+  testStatus?: ProviderTestStatus;
   onCloneDownloadClientPress: (id: number) => void;
 }
 
@@ -30,6 +35,7 @@ function DownloadClient({
   enable,
   priority,
   tags,
+  testStatus,
   onCloneDownloadClientPress,
 }: DownloadClientProps) {
   const tagList = useTagList();
@@ -65,44 +71,45 @@ function DownloadClient({
     onCloneDownloadClientPress(id);
   }, [id, onCloneDownloadClientPress]);
 
-  return (
-    <Card
-      className={styles.downloadClient}
-      overlayContent={true}
-      aria-label={translate('EditDownloadClientName', { name })}
-      onPress={handleEditDownloadClientPress}
-    >
-      <div className={styles.nameContainer}>
-        <div className={styles.name}>{name}</div>
+  const testStatusLabel = testStatus
+    ? getProviderTestStatusLabel(testStatus)
+    : undefined;
 
-        <IconButton
-          className={styles.cloneButton}
+  return (
+    <SettingsCard
+      name={name}
+      aria-label={
+        testStatusLabel
+          ? translate('EditDownloadClientNameWithTestStatus', {
+              name,
+              testStatus: testStatusLabel,
+            })
+          : translate('EditDownloadClientName', { name })
+      }
+      actions={
+        <SettingsCardAction
           title={translate('CloneDownloadClient')}
           aria-label={translate('CloneDownloadClient')}
           name={icons.CLONE}
           onPress={handleCloneDownloadClientPress}
         />
+      }
+      onPress={handleEditDownloadClientPress}
+    >
+      <SettingsCardStatus
+        dot={enable ? 'active' : 'muted'}
+        segments={[
+          translate(enable ? 'Enabled' : 'Disabled'),
+          priority > 1 ? translate('PrioritySettings', { priority }) : null,
+          testStatusLabel,
+        ]}
+      />
+
+      <div className={settingsCardStyles.labels}>
+        <ProtocolLabel protocol={protocol} size={sizes.MEDIUM} />
       </div>
 
-      <div className={styles.enabled}>
-        <ProtocolLabel protocol={protocol} />
-
-        {enable ? (
-          <Label kind={kinds.SUCCESS}>{translate('Enabled')}</Label>
-        ) : (
-          <Label kind={kinds.DISABLED} outline={true}>
-            {translate('Disabled')}
-          </Label>
-        )}
-
-        {priority > 1 ? (
-          <Label kind={kinds.DISABLED} outline={true}>
-            {translate('PrioritySettings', { priority })}
-          </Label>
-        ) : null}
-      </div>
-
-      <TagList tags={tags} tagList={tagList} />
+      {tags.length > 0 ? <TagList tags={tags} tagList={tagList} /> : null}
 
       <EditDownloadClientModal
         id={id}
@@ -120,7 +127,7 @@ function DownloadClient({
         onConfirm={handleConfirmDeleteDownloadClient}
         onCancel={handleDeleteDownloadClientModalClose}
       />
-    </Card>
+    </SettingsCard>
   );
 }
 

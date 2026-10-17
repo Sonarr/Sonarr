@@ -1,19 +1,31 @@
-import React, { useCallback, useState } from 'react';
-import Card from 'Components/Card';
-import FieldSet from 'Components/FieldSet';
-import Icon from 'Components/Icon';
+import React, { useCallback, useMemo, useState } from 'react';
 import PageSectionContent from 'Components/Page/PageSectionContent';
-import { icons } from 'Helpers/Props';
+import SectionHeading from 'Components/SectionHeading';
+import AddCard from 'Components/SettingsCard/AddCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.module.css';
+import {
+  getProviderTestStatus,
+  ProviderTestAllResult,
+} from 'Settings/ProviderTestAllResult';
+import settingsStyles from 'Settings/Settings.module.css';
 import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import AddImportListModal from './AddImportListModal';
 import EditImportListModal from './EditImportListModal';
 import ImportList from './ImportList';
 import { useSortedImportLists } from './useImportLists';
-import styles from './ImportLists.css';
 
-function ImportLists() {
+interface ImportListsProps {
+  testResults?: ProviderTestAllResult[];
+}
+
+function ImportLists({ testResults }: ImportListsProps) {
   const { isFetching, isFetched, data, error } = useSortedImportLists();
+
+  const testResultById = useMemo(
+    () => new Map(testResults?.map((result) => [result.id, result])),
+    [testResults]
+  );
 
   const [isAddImportListModalOpen, setIsAddImportListModalOpen] =
     useState(false);
@@ -53,33 +65,38 @@ function ImportLists() {
   }, []);
 
   return (
-    <FieldSet legend={translate('ImportLists')}>
+    <div className={settingsStyles.pageSection}>
+      <SectionHeading
+        title={translate('ImportLists')}
+        description={translate('ImportListsSectionDescription')}
+      />
+
       <PageSectionContent
         errorMessage={translate('ImportListsLoadError')}
         error={error}
         isFetching={isFetching}
         isPopulated={isFetched}
       >
-        <div className={styles.lists}>
+        <div className={settingsCardStyles.grid}>
           {data.map((item) => {
             return (
               <ImportList
                 key={item.id}
                 {...item}
+                testStatus={
+                  testResults
+                    ? getProviderTestStatus(testResultById.get(item.id))
+                    : undefined
+                }
                 onCloneImportListPress={handleCloneImportListPress}
               />
             );
           })}
 
-          <Card
-            className={styles.addList}
-            aria-label={translate('AddImportList')}
+          <AddCard
+            label={translate('AddImportList')}
             onPress={handleAddImportListPress}
-          >
-            <div className={styles.center}>
-              <Icon name={icons.ADD} size={45} />
-            </div>
-          </Card>
+          />
         </div>
 
         <AddImportListModal
@@ -95,7 +112,7 @@ function ImportLists() {
           onModalClose={handleEditImportListModalClose}
         />
       </PageSectionContent>
-    </FieldSet>
+    </div>
   );
 }
 

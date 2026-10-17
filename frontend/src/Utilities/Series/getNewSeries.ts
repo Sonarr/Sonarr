@@ -1,3 +1,4 @@
+import Language from 'Language/Language';
 import Series, {
   MonitorNewItems,
   SeriesMonitor,
@@ -6,11 +7,13 @@ import Series, {
 
 interface NewSeriesPayload {
   rootFolderPath: string;
+  language: Language;
   monitor: SeriesMonitor;
   monitorNewItems: MonitorNewItems;
   qualityProfileId: number;
   seriesType: SeriesType;
   seasonFolder: boolean;
+  seasonType: string;
   tags: number[];
   searchForMissingEpisodes?: boolean;
   searchForCutoffUnmetEpisodes?: boolean;
@@ -23,6 +26,8 @@ function getNewSeries(series: Series, payload: NewSeriesPayload) {
     monitorNewItems,
     qualityProfileId,
     seriesType,
+    seasonType,
+    language,
     seasonFolder,
     tags,
     searchForMissingEpisodes = false,
@@ -41,6 +46,8 @@ function getNewSeries(series: Series, payload: NewSeriesPayload) {
   series.qualityProfileId = qualityProfileId;
   series.rootFolderPath = rootFolderPath;
   series.seriesType = seriesType;
+  series.seasonType = seasonType;
+  series.language = language;
   series.seasonFolder = seasonFolder;
   series.tags = tags;
 

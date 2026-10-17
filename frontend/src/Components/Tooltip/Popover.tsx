@@ -1,6 +1,6 @@
 import React from 'react';
 import Tooltip, { TooltipProps } from './Tooltip';
-import styles from './Popover.css';
+import styles from './Popover.module.css';
 
 interface PopoverProps extends Omit<TooltipProps, 'tooltip' | 'bodyClassName'> {
   title: string;
@@ -13,11 +13,11 @@ function Popover({ title, body, ...otherProps }: PopoverProps) {
       {...otherProps}
       bodyClassName={styles.tooltipBody}
       tooltip={
-        <div>
+        <>
           <div className={styles.title}>{title}</div>
 
           <div className={styles.body}>{body}</div>
-        </div>
+        </>
       }
     />
   );

@@ -14,13 +14,13 @@ namespace NzbDrone.Core.Parser.Model
         public string SeriesTitle { get; set; }
         public SeriesTitleInfo SeriesTitleInfo { get; set; }
         public QualityModel Quality { get; set; }
-        public int[] SeasonNumbers { get; set; } = [];
+        public List<int> SeasonNumbers { get; set; } = [];
 
         // TODO: Remove this once `SeasonNumbers` replaces `SeasonNumber`
         [JsonPropertyOrder(-1)]
         public int? SeasonNumber
         {
-            get => SeasonNumbers.Length > 0 ? SeasonNumbers[0] : null;
+            get => SeasonNumbers.Count > 0 ? SeasonNumbers[0] : null;
             set => SeasonNumbers = value.HasValue ? [value.Value] : [];
         }
 
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Parser.Model
         public List<Language> Languages { get; set; }
         public bool FullSeason { get; set; }
         public bool IsPartialSeason { get; set; }
-        public bool IsMultiSeason => SeasonNumbers.Length > 1;
+        public bool IsMultiSeason => SeasonNumbers.Count > 1;
         public bool IsSeasonExtra { get; set; }
         public bool IsSeasonTitle { get; set; }
         public bool IsSplitEpisode { get; set; }

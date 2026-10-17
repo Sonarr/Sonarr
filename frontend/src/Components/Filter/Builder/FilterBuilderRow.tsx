@@ -27,7 +27,7 @@ import SeriesFilterBuilderRowValue from './SeriesFilterBuilderRowValue';
 import SeriesStatusFilterBuilderRowValue from './SeriesStatusFilterBuilderRowValue';
 import SeriesTypeFilterBuilderRowValue from './SeriesTypeFilterBuilderRowValue';
 import TagFilterBuilderRowValue from './TagFilterBuilderRowValue';
-import styles from './FilterBuilderRow.css';
+import styles from './FilterBuilderRow.module.css';
 
 function getselectedFilterBuilderProp<T>(
   filterBuilderProps: FilterBuilderProp<T>[],

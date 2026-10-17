@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { InputChanged } from 'typings/inputs';
 import TextInput, { TextInputProps } from './TextInput';
@@ -44,6 +50,7 @@ function NumberInput({
   min,
   max,
   onChange,
+  onBlur,
   ...otherProps
 }: NumberInputProps) {
   const [value, setValue] = useState(
@@ -54,39 +61,41 @@ function NumberInput({
 
   const handleChange = useCallback(
     ({ name, value: newValue }: InputChanged<string>) => {
-      const parsedValue = parseValue(newValue, isFloat, min, max);
-
-      setValue(parsedValue == null ? '' : parsedValue.toString());
+      setValue(newValue);
 
       onChange({
         name,
-        value: parsedValue,
+        value: parseValue(newValue, isFloat, undefined, undefined),
         isFloat,
       });
     },
-    [isFloat, min, max, onChange, setValue]
+    [isFloat, onChange, setValue]
   );
 
   const handleFocus = useCallback(() => {
     isFocused.current = true;
   }, []);
 
-  const handleBlur = useCallback(() => {
-    const parsedValue = parseValue(value, isFloat, min, max);
-    const stringValue = parsedValue == null ? '' : parsedValue.toString();
+  const handleBlur = useCallback(
+    (event: SyntheticEvent) => {
+      const parsedValue = parseValue(value, isFloat, min, max);
+      const stringValue = parsedValue == null ? '' : parsedValue.toString();
 
-    if (stringValue !== value) {
-      setValue(stringValue);
-    }
+      if (stringValue !== value) {
+        setValue(stringValue);
+      }
 
-    onChange({
-      name,
-      value: parsedValue,
-      isFloat,
-    });
+      onChange({
+        name,
+        value: parsedValue,
+        isFloat,
+      });
 
-    isFocused.current = false;
-  }, [name, value, isFloat, min, max, onChange]);
+      isFocused.current = false;
+      onBlur?.(event);
+    },
+    [name, value, isFloat, min, max, onChange, onBlur]
+  );
 
   useEffect(() => {
     if (

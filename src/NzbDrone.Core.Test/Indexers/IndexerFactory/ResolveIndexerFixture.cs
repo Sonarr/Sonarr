@@ -5,6 +5,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Indexer
 {
@@ -32,9 +33,13 @@ namespace NzbDrone.Core.Test.Indexer
         }
 
         [Test]
-        public void should_throw_if_indexer_with_name_cannot_be_found()
+        public void should_return_null_if_indexer_with_name_cannot_be_found()
         {
-            Assert.Throws<ResolveIndexerException>(() => Subject.ResolveIndexer(null, "Not a Real Client"));
+            var result = Subject.ResolveIndexer(null, "Not a Real Client");
+
+            result.Should().BeNull();
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

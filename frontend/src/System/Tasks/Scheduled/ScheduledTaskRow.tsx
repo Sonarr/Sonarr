@@ -11,7 +11,7 @@ import formatDate from 'Utilities/Date/formatDate';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatTimeSpan from 'Utilities/Date/formatTimeSpan';
 import translate from 'Utilities/String/translate';
-import styles from './ScheduledTaskRow.css';
+import styles from './ScheduledTaskRow.module.css';
 
 interface ScheduledTaskRowProps {
   id: number;
@@ -51,7 +51,7 @@ function ScheduledTaskRow({
     return moment
       .duration(interval, 'minutes')
       .humanize()
-      .replace(/an?(?=\s)/, '1');
+      .replace(/^an?(?=\s)/, '1');
   }, [interval]);
 
   const { lastExecutionTime, nextExecutionTime } = useMemo(() => {

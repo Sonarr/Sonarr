@@ -40,7 +40,7 @@ import QueueStatusCell from './QueueStatusCell';
 import RemoveQueueItemModal from './RemoveQueueItemModal';
 import TimeLeftCell from './TimeLeftCell';
 import { useGrabQueueItem, useRemoveQueueItem } from './useQueue';
-import styles from './QueueRow.css';
+import styles from './QueueRow.module.css';
 
 interface QueueRowProps {
   id: number;
@@ -210,7 +210,7 @@ function QueueRow(props: QueueRowProps) {
                   title={series.title}
                 />
               ) : (
-                title
+                <span className={styles.unmatchedTitle}>{title}</span>
               )}
             </TableRowCell>
           );
@@ -394,7 +394,7 @@ function QueueRow(props: QueueRowProps) {
               {showInteractiveImport ? (
                 <IconButton
                   name={icons.INTERACTIVE}
-                  aria-label={translate('InteractiveSearch')}
+                  aria-label={translate('InteractiveImport')}
                   onPress={handleInteractiveImportPress}
                 />
               ) : null}

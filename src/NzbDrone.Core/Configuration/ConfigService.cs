@@ -375,11 +375,25 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("EnableColorImpairedMode", value); }
         }
 
+        public string HeaderColor
+        {
+            get { return GetValue("HeaderColor", "fullColor"); }
+
+            set { SetValue("HeaderColor", value); }
+        }
+
         public int UILanguage
         {
             get { return GetValueInt("UILanguage", (int)Language.English); }
 
             set { SetValue("UILanguage", value); }
+        }
+
+        public int PreferredMetadataLanguage
+        {
+            get { return GetValueInt("PreferredMetadataLanguage", (int)Language.English); }
+
+            set { SetValue("PreferredMetadataLanguage", value); }
         }
 
         public bool CleanupMetadataImages

@@ -9,7 +9,7 @@ import { align, icons, kinds } from 'Helpers/Props';
 import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import { useRestart, useShutdown } from 'System/useSystem';
 import translate from 'Utilities/String/translate';
-import styles from './PageHeaderActionsMenu.css';
+import styles from './PageHeaderActionsMenu.module.css';
 
 interface PageHeaderActionsMenuProps {
   onKeyboardShortcutsPress(): void;
@@ -36,7 +36,11 @@ function PageHeaderActionsMenu(props: PageHeaderActionsMenuProps) {
     <div>
       <Menu alignMenu={align.RIGHT}>
         <MenuButton className={styles.menuButton} aria-label="Menu Button">
-          <Icon name={icons.INTERACTIVE} title={translate('Menu')} />
+          <Icon
+            name={icons.INTERACTIVE}
+            title={translate('Menu')}
+            titleWrapperClassName={styles.menuButtonIcon}
+          />
         </MenuButton>
 
         <MenuContent>

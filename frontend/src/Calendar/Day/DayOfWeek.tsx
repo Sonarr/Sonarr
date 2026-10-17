@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import React from 'react';
 import * as calendarViews from 'Calendar/calendarViews';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
-import styles from './DayOfWeek.css';
+import styles from './DayOfWeek.module.css';
 
 interface DayOfWeekProps {
   date: string;

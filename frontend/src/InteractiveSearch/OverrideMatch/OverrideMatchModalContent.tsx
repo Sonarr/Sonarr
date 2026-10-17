@@ -26,7 +26,7 @@ import { useEnabledDownloadClients } from 'Settings/DownloadClients/DownloadClie
 import translate from 'Utilities/String/translate';
 import SelectDownloadClientModal from './DownloadClient/SelectDownloadClientModal';
 import OverrideMatchData from './OverrideMatchData';
-import styles from './OverrideMatchModalContent.css';
+import styles from './OverrideMatchModalContent.module.css';
 
 type SelectType =
   | 'select'
@@ -231,7 +231,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
         <DescriptionList>
           <DescriptionListItem
             className={styles.item}
-            title={translate('Series')}
+            title={translate('SeriesSingular')}
             data={
               <OverrideMatchData
                 value={series?.title}

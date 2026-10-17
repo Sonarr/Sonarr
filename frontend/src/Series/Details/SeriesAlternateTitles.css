@@ -1,8 +1,0 @@
-.alternateTitle {
-  white-space: nowrap;
-}
-
-.comment {
-  color: var(--darkGray);
-  font-size: $smallFontSize;
-}

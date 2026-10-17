@@ -140,7 +140,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                         continue;
                     }
 
-                    if (fileEpisodeInfo.SeasonNumber == localEpisode.FileEpisodeInfo.SeasonNumber &&
+                    if (fileEpisodeInfo.SeasonNumbers.SequenceEqual(localEpisode.FileEpisodeInfo.SeasonNumbers) &&
                         fileEpisodeInfo.EpisodeNumbers.SequenceEqual(localEpisode.FileEpisodeInfo.EpisodeNumbers))
                     {
                         matchingFiles.Add(file);

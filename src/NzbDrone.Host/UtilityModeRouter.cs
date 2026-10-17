@@ -52,8 +52,17 @@ namespace NzbDrone.Host
                         else
                         {
                             _remoteAccessAdapter.MakeAccessible(true);
+                            _appFolderFactory.Register();
                             _serviceProvider.Install(ServiceProvider.SERVICE_NAME);
                             _serviceProvider.SetPermissions(ServiceProvider.SERVICE_NAME);
+
+                            var permissionsSet = _appFolderFactory.SetPermissions();
+                            permissionsSet &= _appFolderFactory.SetServicePermissions();
+
+                            if (permissionsSet)
+                            {
+                                _appFolderFactory.RemoveEveryonePermissions();
+                            }
 
                             // Start the service and exit.
                             // Ensures that there isn't an instance of Sonarr already running that the service account cannot stop.
@@ -82,7 +91,18 @@ namespace NzbDrone.Host
                     {
                         _logger.Debug("Register URL selected");
                         _remoteAccessAdapter.MakeAccessible(false);
-                        _appFolderFactory.SetPermissions();
+
+                        var permissionsSet = _appFolderFactory.SetPermissions();
+
+                        if (OsInfo.IsWindows && _serviceProvider.ServiceExist(ServiceProvider.SERVICE_NAME))
+                        {
+                            permissionsSet &= _appFolderFactory.SetServicePermissions();
+                        }
+
+                        if (permissionsSet)
+                        {
+                            _appFolderFactory.RemoveEveryonePermissions();
+                        }
 
                         break;
                     }

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import Link from 'Components/Link/Link';
 import translate from 'Utilities/String/translate';
-import styles from './SelectSeasonRow.css';
+import styles from './SelectSeasonRow.module.css';
 
 interface SelectSeasonRowProps {
   seasonNumber: number;

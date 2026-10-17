@@ -1,9 +1,10 @@
 import { uniq } from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
 import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Label from 'Components/Label';
 import Button from 'Components/Link/Button';
@@ -15,7 +16,7 @@ import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import { useImportListsData } from 'Settings/ImportLists/ImportLists/useImportLists';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
-import styles from './TagsModalContent.css';
+import styles from './TagsModalContent.module.css';
 
 interface TagsModalContentProps {
   ids: number[];
@@ -91,36 +92,37 @@ function TagsModalContent(props: TagsModalContentProps) {
 
       <ModalBody>
         <Form>
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Tags')}</FormLabel>
 
-            <FormInputGroup
+            <FormInput
               type={inputTypes.TAG}
               name="tags"
               value={tags}
               onChange={onTagsChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('ApplyTags')}</FormLabel>
 
-            <FormInputGroup
+            <FormInputHelpText
+              text={translate('ApplyTagsHelpTextHowToApplyImportLists')}
+            />
+            <FormInputHelpText text={translate('ApplyTagsHelpTextAdd')} />
+            <FormInputHelpText text={translate('ApplyTagsHelpTextRemove')} />
+            <FormInputHelpText text={translate('ApplyTagsHelpTextReplace')} />
+
+            <FormInput
               type={inputTypes.SELECT}
               name="applyTags"
               value={applyTags}
               values={applyTagsOptions}
-              helpTexts={[
-                translate('ApplyTagsHelpTextHowToApplyImportLists'),
-                translate('ApplyTagsHelpTextAdd'),
-                translate('ApplyTagsHelpTextRemove'),
-                translate('ApplyTagsHelpTextReplace'),
-              ]}
               onChange={onApplyTagsChange}
             />
-          </FormGroup>
+          </FormRow>
 
-          <FormGroup>
+          <FormRow>
             <FormLabel>{translate('Result')}</FormLabel>
 
             <div className={styles.result}>
@@ -175,7 +177,7 @@ function TagsModalContent(props: TagsModalContentProps) {
                   );
                 })}
             </div>
-          </FormGroup>
+          </FormRow>
         </Form>
       </ModalBody>
 

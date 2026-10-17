@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
@@ -59,25 +58,16 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     return DownloadSpecDecision.Reject(DownloadRejectionReason.BeforeAirDate, "No air date available");
                 }
 
-                var adjustedAirDate = airDate.Value.AddDays(gracePeriod);
+                var adjustedAirDate = airDate.Value.AddHours(gracePeriod);
 
                 if (releaseDate < adjustedAirDate)
                 {
-                    return DownloadSpecDecision.Reject(DownloadRejectionReason.BeforeAirDate, "Release date {0} is before adjusted air date of {1} (Air Date: {2}. Grace period {3} days)", releaseDate, adjustedAirDate, airDate, gracePeriod);
+                    return DownloadSpecDecision.Reject(DownloadRejectionReason.BeforeAirDate, "Release date {0} is before adjusted air date of {1} (Air Date: {2}. Grace period {3} hours)", releaseDate, adjustedAirDate, airDate, gracePeriod);
                 }
             }
 
             _logger.Debug("All episodes within air date limitations, allowing");
             return DownloadSpecDecision.Accept();
-        }
-
-        private ReleaseProfile FindBestProfile(List<ReleaseProfile> releaseProfiles)
-        {
-            return releaseProfiles
-                .OrderBy(p => p.AirDateRestriction ? 0 : 1)
-                .ThenBy(p => p.AirDateGracePeriod)
-                .ThenBy(p => p.AirDateRestriction ? 0 : 1)
-                .FirstOrDefault();
         }
     }
 }

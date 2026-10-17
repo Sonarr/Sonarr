@@ -3,7 +3,6 @@ import React, { useCallback, useMemo } from 'react';
 import { useSelect } from 'App/Select/SelectContext';
 import CommandNames from 'Commands/CommandNames';
 import { useExecuteCommand } from 'Commands/useCommands';
-import Alert from 'Components/Alert';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -14,7 +13,7 @@ import { icons, kinds } from 'Helpers/Props';
 import Series from 'Series/Series';
 import useSeries from 'Series/useSeries';
 import translate from 'Utilities/String/translate';
-import styles from './OrganizeSeriesModalContent.css';
+import styles from './OrganizeSeriesModalContent.module.css';
 
 export interface OrganizeSeriesModalContentProps {
   onModalClose: () => void;
@@ -60,10 +59,10 @@ function OrganizeSeriesModalContent({
       </ModalHeader>
 
       <ModalBody>
-        <Alert>
+        <p className={styles.intro}>
           {translate('OrganizeSelectedSeriesModalAlert')}
           <Icon className={styles.renameIcon} name={icons.ORGANIZE} />
-        </Alert>
+        </p>
 
         <div className={styles.message}>
           {translate('OrganizeSelectedSeriesModalConfirmation', {

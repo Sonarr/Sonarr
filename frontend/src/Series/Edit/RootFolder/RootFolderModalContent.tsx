@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import FormGroup from 'Components/Form/FormGroup';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInput from 'Components/Form/FormInput';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import FormRow from 'Components/Form/FormRow';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -20,6 +21,7 @@ export interface RootFolderUpdated {
 
 export interface RootFolderModalContentProps {
   seriesId: number;
+  languageId: number;
   rootFolderPath: string;
   onSavePress(change: RootFolderUpdated): void;
   onModalClose(): void;
@@ -30,13 +32,16 @@ interface SeriesFolder {
 }
 
 function RootFolderModalContent(props: RootFolderModalContentProps) {
-  const { seriesId, onSavePress, onModalClose } = props;
+  const { seriesId, languageId, onSavePress, onModalClose } = props;
   const isWindows = useIsWindows();
 
   const [rootFolderPath, setRootFolderPath] = useState(props.rootFolderPath);
 
   const { isLoading, data } = useApiQuery<SeriesFolder>({
     path: `/series/${seriesId}/folder`,
+    queryParams: {
+      language: languageId,
+    },
   });
 
   const onInputChange = useCallback(({ value }: InputChanged<string>) => {
@@ -57,10 +62,10 @@ function RootFolderModalContent(props: RootFolderModalContentProps) {
       <ModalHeader>{translate('UpdateSeriesPath')}</ModalHeader>
 
       <ModalBody>
-        <FormGroup>
+        <FormRow>
           <FormLabel>{translate('RootFolder')}</FormLabel>
-
-          <FormInputGroup
+          <FormInputHelpText text={translate('SeriesEditRootFolderHelpText')} />
+          <FormInput
             type={inputTypes.ROOT_FOLDER_SELECT}
             name="rootFolderPath"
             value={rootFolderPath}
@@ -72,10 +77,9 @@ function RootFolderModalContent(props: RootFolderModalContentProps) {
               seriesFolder: data?.folder,
               isWindows,
             }}
-            helpText={translate('SeriesEditRootFolderHelpText')}
             onChange={onInputChange}
           />
-        </FormGroup>
+        </FormRow>
       </ModalBody>
 
       <ModalFooter>

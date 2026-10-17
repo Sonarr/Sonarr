@@ -19,7 +19,7 @@ import { CheckInputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import OrganizePreviewRow from './OrganizePreviewRow';
 import useOrganizePreview, { OrganizePreviewModel } from './useOrganizePreview';
-import styles from './OrganizePreviewModalContent.css';
+import styles from './OrganizePreviewModalContent.module.css';
 
 function getValue(allSelected: boolean, allUnselected: boolean) {
   if (allSelected) {

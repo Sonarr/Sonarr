@@ -140,9 +140,18 @@ namespace NzbDrone.Common.Extensions
 
         private static readonly Regex WindowsPathWithDriveRegex = new Regex(@"^[a-zA-Z]:\\", RegexOptions.Compiled);
 
+        private static readonly Regex WindowsPathTraversalRegex = new Regex(@"\.(?=[\\/]|$)", RegexOptions.Compiled);
+
+        private static readonly Regex PathTraversalRegex = new Regex(@"(?:^|/)\.{1,2}(?=/|$)", RegexOptions.Compiled);
+
         public static bool IsPathValid(this string path, PathValidationType validationType)
         {
             if (string.IsNullOrWhiteSpace(path) || path.ContainsInvalidPathChars())
+            {
+                return false;
+            }
+
+            if (path.ContainsPathTraversal())
             {
                 return false;
             }
@@ -179,6 +188,21 @@ namespace NzbDrone.Common.Extensions
             }
 
             return IsPathValidForWindows(path);
+        }
+
+        public static bool ContainsPathTraversal(this string path)
+        {
+            if (path.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            if (OsInfo.IsWindows)
+            {
+                return WindowsPathTraversalRegex.IsMatch(path);
+            }
+
+            return PathTraversalRegex.IsMatch(path);
         }
 
         public static bool ContainsInvalidPathChars(this string text)
@@ -328,6 +352,13 @@ namespace NzbDrone.Common.Extensions
         public static string GetConfigPath(this IAppFolderInfo appFolderInfo)
         {
             return Path.Combine(GetAppDataPath(appFolderInfo), APP_CONFIG_FILE);
+        }
+
+        public static string GetUiFolder(this IAppFolderInfo appFolderInfo)
+        {
+            return BuildInfo.IsDebug
+                ? Path.GetFullPath(Path.Combine(appFolderInfo.StartUpFolder, "..", "UI"))
+                : Path.Combine(appFolderInfo.StartUpFolder, "UI");
         }
 
         public static string GetMediaCoverPath(this IAppFolderInfo appFolderInfo)

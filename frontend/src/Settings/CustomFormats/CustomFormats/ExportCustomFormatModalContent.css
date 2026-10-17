@@ -1,5 +1,0 @@
-.button {
-  composes: button from '~Components/Link/Button.css';
-
-  position: relative;
-}

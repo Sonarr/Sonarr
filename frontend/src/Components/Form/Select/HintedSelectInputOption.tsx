@@ -3,7 +3,7 @@ import React from 'react';
 import EnhancedSelectInputOption, {
   EnhancedSelectInputOptionProps,
 } from './EnhancedSelectInputOption';
-import styles from './HintedSelectInputOption.css';
+import styles from './HintedSelectInputOption.module.css';
 
 interface HintedSelectInputOptionProps
   extends Omit<EnhancedSelectInputOptionProps, 'isSelected'> {

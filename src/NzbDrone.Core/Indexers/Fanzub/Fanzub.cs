@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using System.Collections.Generic;
+using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
@@ -11,6 +12,7 @@ namespace NzbDrone.Core.Indexers.Fanzub
         public override string Name => "Fanzub";
 
         public override DownloadProtocol Protocol => DownloadProtocol.Usenet;
+        public override IEnumerable<FailDownloads> DefaultFailDownloads => [FailDownloads.Executables, FailDownloads.PotentiallyDangerous];
 
         public Fanzub(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger, ILocalizationService localizationService)
             : base(httpClient, indexerStatusService, configService, parsingService, logger, localizationService)

@@ -1,15 +1,15 @@
 import React from 'react';
 import HeartRating from 'Components/HeartRating';
-import SeriesTagList from 'Components/SeriesTagList';
 import useCountryName from 'Internationalization/useCountryName';
 import Language from 'Language/Language';
+import SeriesIndexTags from 'Series/Index/SeriesIndexTags';
 import { Ratings } from 'Series/Series';
 import { QualityProfileModel } from 'Settings/Profiles/Quality/useQualityProfiles';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
-import styles from './SeriesIndexPosterInfo.css';
+import styles from './SeriesIndexPosterInfo.module.css';
 
 interface SeriesIndexPosterInfoProps {
   originalCountry?: string;
@@ -147,9 +147,7 @@ function SeriesIndexPosterInfo(props: SeriesIndexPosterInfoProps) {
   if (!showTags && sortKey === 'tags' && tags.length) {
     return (
       <div className={styles.tags}>
-        <div className={styles.tagsList}>
-          <SeriesTagList tags={tags} />
-        </div>
+        <SeriesIndexTags tags={tags} />
       </div>
     );
   }

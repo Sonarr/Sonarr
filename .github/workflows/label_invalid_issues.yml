@@ -7,6 +7,10 @@ on:
       - reopened
       - edited
 
+concurrency:
+  group: issue-labels-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
 jobs:
   validate:
     name: Validate issue and apply/clear waiting-for-info label
@@ -89,12 +93,6 @@ jobs:
             const hasFeature =
               sectionBody(body, "Describe the solution you'd like") !== null;
 
-            if ((issue.labels || []).length === 0) {
-              reasons.push(
-                "The issue has no labels, which usually means it was created without using an issue template."
-              );
-            }
-
             if (!hasBug && !hasFeature) {
               reasons.push(
                 "The issue body does not follow either the Bug Report or Feature Request template."
@@ -154,12 +152,28 @@ jobs:
               }
             }
 
-            const alreadyLabeled = (issue.labels || []).some((l) => l.name === "waiting-for-info");
+            const templatesUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/issues/new/choose`;
             const common = {
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issue.number,
             };
+
+            const currentLabels = await github.paginate(github.rest.issues.listLabelsOnIssue, common);
+            const alreadyLabeled = currentLabels.some((l) => l.name === "waiting-for-info");
+            const createdWithoutTemplate = currentLabels.length === 0;
+
+            const notes = [];
+
+            if (createdWithoutTemplate) {
+              core.info(`Issue #${issue.number} has no labels, adding needs-triage`);
+
+              await github.rest.issues.addLabels({ ...common, labels: ["needs-triage"] });
+
+              notes.push(
+                `This issue was created without using one of the [issue templates](${templatesUrl}) (for example via the API or \`gh\` CLI), so we've added the \`needs-triage\` label for you. In the future, please open issues by selecting one of the templates on the [new issue](${templatesUrl}) page instead.`
+              );
+            }
 
             if (reasons.length > 0) {
               core.info(`Flagging issue #${issue.number}:\n- ${reasons.join("\n- ")}`);
@@ -167,31 +181,33 @@ jobs:
               await github.rest.issues.addLabels({ ...common, labels: ["waiting-for-info"] });
 
               if (!alreadyLabeled) {
-                const templatesUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/issues/new/choose`;
-                await github.rest.issues.createComment({
-                  ...common,
-                  body: [
-                    `:wave: @${issue.user.login}, this issue looks incomplete:`,
+                notes.push(
+                  [
+                    "This issue looks incomplete:",
                     "",
                     ...reasons.map((r) => `- ${r}`),
                     "",
-                    `Please edit the issue to address the points above using the [issue templates](${templatesUrl}). It will be closed automatically in 7 days if it is not updated.`,
-                  ].join("\n"),
-                });
+                    `Please edit this issue to address the points above, following the [issue templates](${templatesUrl}). **Do not close this issue and open a new one**, duplicates will be closed. It will be closed automatically in 7 days if it is not updated.`,
+                  ].join("\n")
+                );
               }
-              return;
-            }
-
-            if (alreadyLabeled) {
+            } else if (alreadyLabeled) {
               core.info(`Clearing waiting-for-info label from issue #${issue.number}`);
 
               await github.rest.issues
                 .removeLabel({ ...common, name: "waiting-for-info" })
                 .catch((e) => {
                   if (e.status !== 404) {
-                  throw e;
+                    throw e;
                   }
 
                   core.info(`removeLabel skipped: ${e.message}`);
                 });
+            }
+
+            if (notes.length > 0) {
+              await github.rest.issues.createComment({
+                ...common,
+                body: [`:wave: @${issue.user.login}`, ...notes].join("\n\n"),
+              });
             }

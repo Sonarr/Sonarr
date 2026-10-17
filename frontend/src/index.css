@@ -8,7 +8,7 @@ body {
   background-color: var(--pageBackground);
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media (--breakpointSmall) {
   body {
     overflow-y: auto;
   }

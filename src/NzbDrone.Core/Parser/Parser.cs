@@ -93,6 +93,14 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^\[(?<subgroup>[^\]]+?)\][-_. ]?(?<title>[^]]+?)(?:[-_. ]{3}?(?<absoluteepisode>\d{2}(\.\d{1,2})?(?!-?\d+|-[a-z]+)))+(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>[(\[][0-9A-F]{8}[)\]])?(?:$|\.mkv)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Anime - [SubGroup] Multi-season pack
+                new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)[-_. ]+S(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:(?:-S?|[-_. ]{1,3}S)(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))){1,}",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                // Anime - [SubGroup] Partial season pack
+                new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)(?:\W+S(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))\W+(?:(?:(?:Part|Vol)\W?|(?<!\d+\W+)e|p)(?<seasonpart>\d{1,2}(?!\d+)))+)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 // Anime - [SubGroup] Title with trailing number Absolute Episode Number
                 new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>[^-]+?)(?:(?<![-_. ]|\b[0]\d+) - )(?:[-_. ]?(?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+)))+(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>[(\[][0-9A-F]{8}[)\]])?(?:$|\.mkv)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -1125,15 +1133,15 @@ namespace NzbDrone.Core.Parser
                     }
                 }
 
-                var distinctSeasons = seasons.Distinct().OrderBy(s => s).ToArray();
+                var distinctSeasons = seasons.Distinct().OrderBy(s => s).ToList();
 
-                if (distinctSeasons.Length is 1 or > 2)
+                if (distinctSeasons.Count is 1 or > 2)
                 {
                     result.SeasonNumbers = distinctSeasons;
                 }
-                else if (distinctSeasons.Length == 2)
+                else if (distinctSeasons.Count == 2)
                 {
-                    result.SeasonNumbers = Enumerable.Range(distinctSeasons.First(), distinctSeasons.Last() - distinctSeasons.First() + 1).ToArray();
+                    result.SeasonNumbers = Enumerable.Range(distinctSeasons.First(), distinctSeasons.Last() - distinctSeasons.First() + 1).ToList();
                 }
                 else if (!result.AbsoluteEpisodeNumbers.Any() && result.EpisodeNumbers.Any())
                 {
@@ -1200,8 +1208,8 @@ namespace NzbDrone.Core.Parser
                     throw new InvalidDateException("Invalid date found: {0}-{1}-{2}", airYear, airmonth, airday);
                 }
 
-                // Check if episode is in the future (most likely a parse error)
-                if (airDate > DateTime.Now.AddDays(1).Date)
+                // Allow early releases, but reject dates too far in the future (most likely a parse error)
+                if (airDate > DateTime.Now.AddDays(14).Date)
                 {
                     throw new InvalidDateException("Invalid date found: {0}", airDate);
                 }

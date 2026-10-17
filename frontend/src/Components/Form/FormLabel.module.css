@@ -1,0 +1,18 @@
+.label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--inkSoft);
+  letter-spacing: 0;
+  font-weight: 500;
+  font-size: 13px;
+  font-family: var(--defaultFontFamily);
+  line-height: 1.4;
+}
+
+.hasError {
+  color: var(--dangerColor);
+}
+
+.isAdvanced {
+  color: var(--advancedFormLabelColor);
+}

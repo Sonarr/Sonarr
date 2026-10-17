@@ -3,14 +3,12 @@ name: Build
 on:
   push:
     branches:
-      - v5-develop
-      - v5-main
+      - develop
     paths-ignore:
       - "src/Sonarr.Api.*/openapi.json"
   pull_request:
     branches:
-      - v5-develop
-      - v5-redesign
+      - develop
     paths-ignore:
       - "src/NzbDrone.Core/Localization/Core/**"
       - "src/Sonarr.Api.*/openapi.json"
@@ -114,7 +112,10 @@ jobs:
           run: yarn stylelint -f github
 
         - name: Build
-          run: yarn build --env production
+          run: yarn build
+
+      - name: Typecheck
+        run: yarn typecheck
 
       - name: Publish UI Artifact
         uses: actions/upload-artifact@v7
@@ -211,7 +212,7 @@ jobs:
           binary_path: ${{ matrix.binary_path }}
 
   deploy:
-    if: ${{ github.ref_name == 'v5-develop-final' || github.ref_name == 'v5-main-final' }}
+    if: ${{ github.ref_name == 'develop' }}
     needs:
       [
         prepare,
@@ -243,7 +244,7 @@ jobs:
         integration_test,
         deploy,
       ]
-    if: ${{ !cancelled() && (github.ref_name == 'v5-develop-final' || github.ref_name == 'v5-main-final') }}
+    if: ${{ !cancelled() && github.ref_name == 'develop' }}
     env:
       STATUS: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
     runs-on: ubuntu-latest

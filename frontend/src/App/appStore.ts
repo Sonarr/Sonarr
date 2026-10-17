@@ -1,19 +1,18 @@
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
+import dimensions from 'Styles/Variables/dimensions';
 import getQueryPath from 'Utilities/Fetch/getQueryPath';
 import fetchJson from 'Utilities/requestAction';
 
 function getDimensions(width: number, height: number) {
-  const dimensions = {
+  return {
     width,
     height,
-    isExtraSmallScreen: width <= 480,
-    isSmallScreen: width <= 768,
-    isMediumScreen: width <= 992,
-    isLargeScreen: width <= 1200,
+    isExtraSmallScreen: width <= dimensions.breakpointExtraSmall,
+    isSmallScreen: width <= dimensions.breakpointSmall,
+    isMediumScreen: width <= dimensions.breakpointMedium,
+    isLargeScreen: width <= dimensions.breakpointLarge,
   };
-
-  return dimensions;
 }
 
 interface Dimensions {

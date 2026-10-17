@@ -8,7 +8,7 @@ import { icons, kinds } from 'Helpers/Props';
 import { SelectStateInputProps } from 'typings/props';
 import translate from 'Utilities/String/translate';
 import Icon from '../../Components/Icon';
-import styles from './SelectEpisodeRow.css';
+import styles from './SelectEpisodeRow.module.css';
 
 function getWarningMessage(
   unverifiedSceneNumbering: boolean,

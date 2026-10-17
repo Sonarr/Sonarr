@@ -1,18 +1,23 @@
-import React, { useCallback, useState } from 'react';
-import Card from 'Components/Card';
-import FieldSet from 'Components/FieldSet';
-import Icon from 'Components/Icon';
+import React, { useCallback, useMemo, useState } from 'react';
 import PageSectionContent from 'Components/Page/PageSectionContent';
-import { icons } from 'Helpers/Props';
+import AddCard from 'Components/SettingsCard/AddCard';
+import settingsCardStyles from 'Components/SettingsCard/SettingsCard.module.css';
+import {
+  getProviderTestStatus,
+  ProviderTestAllResult,
+} from 'Settings/ProviderTestAllResult';
 import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
 import { useSortedIndexers } from '../useIndexers';
 import AddIndexerModal from './AddIndexerModal';
 import EditIndexerModal from './EditIndexerModal';
 import Indexer from './Indexer';
-import styles from './Indexers.css';
 
-function Indexers() {
+interface IndexersProps {
+  testResults?: ProviderTestAllResult[];
+}
+
+function Indexers({ testResults }: IndexersProps) {
   const { isFetching, isFetched, data, error } = useSortedIndexers();
 
   const [isAddIndexerModalOpen, setIsAddIndexerModalOpen] = useState(false);
@@ -20,6 +25,10 @@ function Indexers() {
   const [cloneIndexerId, setCloneIndexerId] = useState<number | null>(null);
 
   const showPriority = data.some((index) => index.priority !== 25);
+  const testResultById = useMemo(
+    () => new Map(testResults?.map((result) => [result.id, result])),
+    [testResults]
+  );
 
   const [selectedSchema, setSelectedSchema] = useState<
     SelectedSchema | undefined
@@ -51,50 +60,48 @@ function Indexers() {
   }, []);
 
   return (
-    <FieldSet legend={translate('Indexers')}>
-      <PageSectionContent
-        errorMessage={translate('IndexersLoadError')}
-        error={error}
-        isFetching={isFetching}
-        isPopulated={isFetched}
-      >
-        <div className={styles.indexers}>
-          {data.map((item) => {
-            return (
-              <Indexer
-                key={item.id}
-                {...item}
-                showPriority={showPriority}
-                onCloneIndexerPress={handleCloneIndexerPress}
-              />
-            );
-          })}
+    <PageSectionContent
+      errorMessage={translate('IndexersLoadError')}
+      error={error}
+      isFetching={isFetching}
+      isPopulated={isFetched}
+    >
+      <div className={settingsCardStyles.grid}>
+        {data.map((item) => {
+          return (
+            <Indexer
+              key={item.id}
+              {...item}
+              testStatus={
+                testResults
+                  ? getProviderTestStatus(testResultById.get(item.id))
+                  : undefined
+              }
+              showPriority={showPriority}
+              onCloneIndexerPress={handleCloneIndexerPress}
+            />
+          );
+        })}
 
-          <Card
-            className={styles.addIndexer}
-            aria-label={translate('AddIndexer')}
-            onPress={handleAddIndexerPress}
-          >
-            <div className={styles.center}>
-              <Icon name={icons.ADD} size={45} />
-            </div>
-          </Card>
-        </div>
-
-        <AddIndexerModal
-          isOpen={isAddIndexerModalOpen}
-          onIndexerSelect={handleIndexerSelect}
-          onModalClose={handleAddIndexerModalClose}
+        <AddCard
+          label={translate('AddIndexer')}
+          onPress={handleAddIndexerPress}
         />
+      </div>
 
-        <EditIndexerModal
-          isOpen={isEditIndexerModalOpen}
-          cloneId={cloneIndexerId ?? undefined}
-          selectedSchema={selectedSchema}
-          onModalClose={handleEditIndexerModalClose}
-        />
-      </PageSectionContent>
-    </FieldSet>
+      <AddIndexerModal
+        isOpen={isAddIndexerModalOpen}
+        onIndexerSelect={handleIndexerSelect}
+        onModalClose={handleAddIndexerModalClose}
+      />
+
+      <EditIndexerModal
+        isOpen={isEditIndexerModalOpen}
+        cloneId={cloneIndexerId ?? undefined}
+        selectedSchema={selectedSchema}
+        onModalClose={handleEditIndexerModalClose}
+      />
+    </PageSectionContent>
   );
 }
 

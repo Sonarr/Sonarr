@@ -1,23 +1,27 @@
-import React, { HTMLProps, useCallback, useState } from 'react';
+import React, { HTMLProps, useCallback, useRef, useState } from 'react';
 import ReactSlider from 'react-slider';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import NumberInput from 'Components/Form/NumberInput';
-import Label from 'Components/Label';
 import Popover from 'Components/Tooltip/Popover';
-import { kinds, tooltipPositions } from 'Helpers/Props';
+import { tooltipPositions } from 'Helpers/Props';
 import QualityDefinitionLimits from 'Settings/Quality/Definition/QualityDefinitionLimits';
 import { InputChanged } from 'typings/inputs';
 import { Failure } from 'typings/pending';
 import formatBytes from 'Utilities/Number/formatBytes';
 import roundNumber from 'Utilities/Number/roundNumber';
 import translate from 'Utilities/String/translate';
-import { emptyItemFailures, ItemFailures } from './qualityProfileItemFailures';
-import styles from './QualityProfileItemSize.css';
+import {
+  emptyItemFailures,
+  ItemFailures,
+  SizeField,
+} from './qualityProfileItemFailures';
+import styles from './QualityProfileItemSize.module.css';
 
 const MIN = 0;
-const MAX = 400;
+const MAX = 1000;
 const STEP_SIZE = 0.1;
 const MIN_DISTANCE = 3;
+const SIZE_GAP = 5;
 const SLIDER_MAX = roundNumber(Math.pow(MAX, 1 / 1.1));
 const SLIDER_PREFERRED_DEFAULT = SLIDER_MAX - MIN_DISTANCE;
 
@@ -31,6 +35,11 @@ export interface SizeChanged extends SizeProps {
   qualityId: number;
 }
 
+interface PendingSizeChange {
+  field: SizeField;
+  sizes: SizeProps;
+}
+
 export interface QualityProfileItemSizeProps {
   id: number;
   minSize: number | null;
@@ -40,12 +49,12 @@ export interface QualityProfileItemSizeProps {
   onSizeChange: (props: SizeChanged) => void;
 }
 
-function trackRenderer(props: HTMLProps<HTMLDivElement>) {
-  return <div {...props} className={styles.track} />;
+function trackRenderer({ key, ...props }: HTMLProps<HTMLDivElement>) {
+  return <div key={key} {...props} className={styles.track} />;
 }
 
-function thumbRenderer(props: HTMLProps<HTMLDivElement>) {
-  return <div {...props} className={styles.thumb} />;
+function thumbRenderer({ key, ...props }: HTMLProps<HTMLDivElement>) {
+  return <div key={key} {...props} className={styles.thumb} />;
 }
 
 function getSliderValue(value: number | null, defaultValue: number): number {
@@ -53,6 +62,78 @@ function getSliderValue(value: number | null, defaultValue: number): number {
     value != null && value > 0 ? Math.pow(value, 1 / 1.1) : defaultValue;
 
   return roundNumber(sliderValue);
+}
+
+function getSliderSizes({
+  minSize,
+  preferredSize,
+  maxSize,
+}: SizeProps): SizeProps {
+  return {
+    minSize: getSliderValue(minSize, MIN),
+    preferredSize: getSliderValue(preferredSize, SLIDER_PREFERRED_DEFAULT),
+    maxSize: getSliderValue(maxSize, SLIDER_MAX),
+  };
+}
+
+function adjustSizes(field: SizeField, sizes: SizeProps): SizeProps {
+  const { minSize, preferredSize, maxSize } = sizes;
+
+  if (field === 'minSize') {
+    const floor = roundNumber((minSize ?? MIN) + SIZE_GAP);
+    const newPreferredSize =
+      preferredSize == null ? null : Math.max(preferredSize, floor);
+
+    return {
+      minSize,
+      preferredSize: newPreferredSize,
+      maxSize:
+        maxSize == null
+          ? null
+          : Math.max(
+              maxSize,
+              roundNumber((newPreferredSize ?? floor) + SIZE_GAP)
+            ),
+    };
+  }
+
+  if (field === 'maxSize') {
+    if (maxSize == null) {
+      return sizes;
+    }
+
+    const ceiling = roundNumber(maxSize - SIZE_GAP);
+    const newPreferredSize =
+      preferredSize == null ? null : Math.min(preferredSize, ceiling);
+
+    return {
+      minSize:
+        minSize == null
+          ? null
+          : Math.min(
+              minSize,
+              roundNumber((newPreferredSize ?? ceiling) - SIZE_GAP)
+            ),
+      preferredSize: newPreferredSize,
+      maxSize,
+    };
+  }
+
+  if (preferredSize == null) {
+    return sizes;
+  }
+
+  return {
+    minSize:
+      minSize == null
+        ? null
+        : Math.min(minSize, roundNumber(preferredSize - SIZE_GAP)),
+    preferredSize,
+    maxSize:
+      maxSize == null
+        ? null
+        : Math.max(maxSize, roundNumber(preferredSize + SIZE_GAP)),
+  };
 }
 
 function renderFailures(failures: Failure[], isError: boolean) {
@@ -77,11 +158,9 @@ export default function QualityProfileItemSize({
   failures = emptyItemFailures(),
   onSizeChange,
 }: QualityProfileItemSizeProps) {
-  const [sizes, setSizes] = useState<SizeProps>({
-    minSize: getSliderValue(minSize, MIN),
-    preferredSize: getSliderValue(preferredSize, SLIDER_PREFERRED_DEFAULT),
-    maxSize: getSliderValue(maxSize, SLIDER_MAX),
-  });
+  const [sizes, setSizes] = useState<SizeProps>(
+    getSliderSizes({ minSize, preferredSize, maxSize })
+  );
 
   const handleSliderChange = useCallback(
     ([sliderMinSize, sliderPreferredSize, sliderMaxSize]: [
@@ -111,74 +190,71 @@ export default function QualityProfileItemSize({
     [id, setSizes, onSizeChange]
   );
 
-  const handleMinSizeChange = useCallback(
-    ({ value }: InputChanged<number>) => {
-      setSizes({
-        minSize: value,
-        preferredSize: sizes.preferredSize,
-        maxSize: sizes.maxSize,
-      });
+  const pendingChange = useRef<PendingSizeChange | null>(null);
+
+  const handleInputChange = useCallback(
+    (field: SizeField, value: number | null) => {
+      const newSizes = { minSize, preferredSize, maxSize, [field]: value };
+
+      pendingChange.current = { field, sizes: newSizes };
+      setSizes(getSliderSizes(newSizes));
 
       onSizeChange?.({
         qualityId: id,
-        minSize: value,
-        preferredSize: sizes.preferredSize,
-        maxSize: sizes.maxSize,
+        ...newSizes,
       });
     },
-    [id, sizes, setSizes, onSizeChange]
+    [id, minSize, preferredSize, maxSize, setSizes, onSizeChange]
+  );
+
+  const handleInputBlur = useCallback(() => {
+    if (!pendingChange.current) {
+      return;
+    }
+
+    const { field, sizes: newSizes } = pendingChange.current;
+    const adjustedSizes = adjustSizes(field, newSizes);
+
+    pendingChange.current = null;
+    setSizes(getSliderSizes(adjustedSizes));
+
+    onSizeChange?.({
+      qualityId: id,
+      ...adjustedSizes,
+    });
+  }, [id, setSizes, onSizeChange]);
+
+  const handleMinSizeChange = useCallback(
+    ({ value }: InputChanged<number | null>) => {
+      handleInputChange('minSize', value);
+    },
+    [handleInputChange]
   );
 
   const handlePreferredSizeChange = useCallback(
-    ({ value }: InputChanged<number>) => {
-      setSizes({
-        minSize: sizes.minSize,
-        preferredSize: value,
-        maxSize: sizes.maxSize,
-      });
-
-      onSizeChange?.({
-        qualityId: id,
-        minSize: sizes.minSize,
-        preferredSize: value,
-        maxSize: sizes.maxSize,
-      });
+    ({ value }: InputChanged<number | null>) => {
+      handleInputChange('preferredSize', value);
     },
-    [id, sizes, setSizes, onSizeChange]
+    [handleInputChange]
   );
 
   const handleMaxSizeChange = useCallback(
-    ({ value }: InputChanged<number>) => {
-      setSizes({
-        minSize: sizes.minSize,
-        preferredSize: sizes.preferredSize,
-        maxSize: value,
-      });
-
-      onSizeChange?.({
-        qualityId: id,
-        minSize: sizes.minSize,
-        preferredSize: sizes.preferredSize,
-        maxSize: value,
-      });
+    ({ value }: InputChanged<number | null>) => {
+      handleInputChange('maxSize', value);
     },
-    [id, sizes, setSizes, onSizeChange]
+    [handleInputChange]
   );
 
   const handleAfterSliderChange = useCallback(() => {
-    setSizes({
-      minSize: getSliderValue(minSize, MIN),
-      maxSize: getSliderValue(maxSize, SLIDER_MAX),
-      preferredSize: getSliderValue(preferredSize, SLIDER_PREFERRED_DEFAULT),
-    });
+    setSizes(getSliderSizes({ minSize, preferredSize, maxSize }));
   }, [minSize, maxSize, preferredSize, setSizes]);
 
-  const minBytes = (sizes.minSize ?? 0) * 1024 * 1024;
+  const minBytes = (minSize ?? 0) * 1024 * 1024;
   const minSixty = `${formatBytes(minBytes * 60)}/${translate(
     'HourShorthand'
   )}`;
 
-  const preferredBytes = (sizes.preferredSize ?? 0) * 1024 * 1024;
+  const preferredBytes = (preferredSize ?? 0) * 1024 * 1024;
   const preferredSixty = preferredBytes
     ? `${formatBytes(preferredBytes * 60)}/${translate('HourShorthand')}`
     : translate('Unlimited');
@@ -220,10 +296,30 @@ export default function QualityProfileItemSize({
         onAfterChange={handleAfterSliderChange}
       />
 
-      <div className={styles.sizes}>
-        <div>
+      <div className={styles.grid}>
+        <div className={styles.column}>
+          <span className={styles.caption}>{translate('Minimum')}</span>
+
+          <div className={styles.field}>
+            <NumberInput
+              className={styles.sizeInput}
+              name={`${id}.min`}
+              value={minSize ?? MIN}
+              min={MIN}
+              max={MAX - SIZE_GAP * 2}
+              step={0.1}
+              isFloat={true}
+              onChange={handleMinSizeChange}
+              onBlur={handleInputBlur}
+            />
+
+            <span className={styles.unit}>
+              MiB/{translate('MinuteShorthand')}
+            </span>
+          </div>
+
           <Popover
-            anchor={<Label kind={kinds.INFO}>{minSixty}</Label>}
+            anchor={<span className={styles.human}>{minSixty}</span>}
             title={translate('MinimumLimits')}
             body={
               <QualityDefinitionLimits
@@ -235,9 +331,29 @@ export default function QualityProfileItemSize({
           />
         </div>
 
-        <div>
+        <div className={styles.column}>
+          <span className={styles.caption}>{translate('Preferred')}</span>
+
+          <div className={styles.field}>
+            <NumberInput
+              className={styles.sizeInput}
+              name={`${id}.preferred`}
+              value={preferredSize ?? MAX - 5}
+              min={MIN + SIZE_GAP}
+              max={MAX - SIZE_GAP}
+              step={0.1}
+              isFloat={true}
+              onChange={handlePreferredSizeChange}
+              onBlur={handleInputBlur}
+            />
+
+            <span className={styles.unit}>
+              MiB/{translate('MinuteShorthand')}
+            </span>
+          </div>
+
           <Popover
-            anchor={<Label kind={kinds.SUCCESS}>{preferredSixty}</Label>}
+            anchor={<span className={styles.human}>{preferredSixty}</span>}
             title={translate('PreferredSize')}
             body={
               <QualityDefinitionLimits
@@ -249,9 +365,29 @@ export default function QualityProfileItemSize({
           />
         </div>
 
-        <div>
+        <div className={styles.column}>
+          <span className={styles.caption}>{translate('Maximum')}</span>
+
+          <div className={styles.field}>
+            <NumberInput
+              className={styles.sizeInput}
+              name={`${id}.max`}
+              value={maxSize ?? MAX}
+              min={MIN + SIZE_GAP * 2}
+              max={MAX}
+              step={0.1}
+              isFloat={true}
+              onChange={handleMaxSizeChange}
+              onBlur={handleInputBlur}
+            />
+
+            <span className={styles.unit}>
+              MiB/{translate('MinuteShorthand')}
+            </span>
+          </div>
+
           <Popover
-            anchor={<Label kind={kinds.WARNING}>{maxSixty}</Label>}
+            anchor={<span className={styles.human}>{maxSixty}</span>}
             title={translate('MaximumLimits')}
             body={
               <QualityDefinitionLimits
@@ -261,64 +397,6 @@ export default function QualityProfileItemSize({
             }
             position={tooltipPositions.BOTTOM}
           />
-        </div>
-      </div>
-
-      <div className={styles.megabytesPerMinuteContainer}>
-        <div className={styles.megabytesPerMinute}>
-          <NumberInput
-            className={styles.sizeInput}
-            name={`${id}.min`}
-            value={minSize ?? MIN}
-            min={MIN}
-            max={preferredSize ? preferredSize - 5 : MAX - 5}
-            step={0.1}
-            isFloat={true}
-            // @ts-expect-error - Typings are too loose
-            onChange={handleMinSizeChange}
-          />
-          <Label kind={kinds.INFO}>
-            {translate('Minimum')} MiB/
-            {translate('MinuteShorthand')}
-          </Label>
-        </div>
-
-        <div className={styles.megabytesPerMinute}>
-          <NumberInput
-            className={styles.sizeInput}
-            name={`${id}.preferred`}
-            value={preferredSize ?? MAX - 5}
-            min={MIN}
-            max={maxSize ? maxSize - 5 : MAX - 5}
-            step={0.1}
-            isFloat={true}
-            // @ts-expect-error - Typings are too loose
-            onChange={handlePreferredSizeChange}
-          />
-
-          <Label kind={kinds.SUCCESS}>
-            {translate('Preferred')} MiB/
-            {translate('MinuteShorthand')}
-          </Label>
-        </div>
-
-        <div className={styles.megabytesPerMinute}>
-          <NumberInput
-            className={styles.sizeInput}
-            name={`${id}.max`}
-            value={maxSize ?? MAX}
-            min={(preferredSize ?? 0) + STEP_SIZE}
-            max={MAX}
-            step={0.1}
-            isFloat={true}
-            // @ts-expect-error - Typings are too loose
-            onChange={handleMaxSizeChange}
-          />
-
-          <Label kind={kinds.WARNING}>
-            {translate('Maximum')} MiB/
-            {translate('MinuteShorthand')}
-          </Label>
         </div>
       </div>
 

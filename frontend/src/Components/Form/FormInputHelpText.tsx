@@ -3,11 +3,11 @@ import React from 'react';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
-import styles from './FormInputHelpText.css';
+import styles from './FormInputHelpText.module.css';
 
 interface FormInputHelpTextProps {
   className?: string;
-  text: string;
+  text?: string;
   link?: string;
   tooltip?: string;
   isError?: boolean;
@@ -24,6 +24,10 @@ function FormInputHelpText({
   isWarning = false,
   isCheckInput = false,
 }: FormInputHelpTextProps) {
+  if (!text) {
+    return null;
+  }
+
   return (
     <div
       className={classNames(
@@ -43,7 +47,7 @@ function FormInputHelpText({
 
       {!link && tooltip ? (
         <Icon
-          containerClassName={styles.details}
+          titleWrapperClassName={styles.details}
           name={icons.INFO}
           title={tooltip}
         />

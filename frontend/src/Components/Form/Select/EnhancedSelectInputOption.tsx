@@ -4,7 +4,7 @@ import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
 import CheckInput from '../CheckInput';
-import styles from './EnhancedSelectInputOption.css';
+import styles from './EnhancedSelectInputOption.module.css';
 
 function handleCheckPress() {
   // CheckInput requires a handler. Swallow the change event because onPress will already handle it via event propagation.
@@ -15,6 +15,7 @@ export interface EnhancedSelectInputOptionProps {
   id: string | number;
   depth?: number;
   isSelected: boolean;
+  isFocused?: boolean;
   isDisabled?: boolean;
   isHidden?: boolean;
   isMultiSelect?: boolean;
@@ -28,6 +29,7 @@ function EnhancedSelectInputOption({
   id,
   depth = 0,
   isSelected,
+  isFocused = false,
   isDisabled = false,
   isHidden = false,
   isMultiSelect = false,
@@ -49,6 +51,7 @@ function EnhancedSelectInputOption({
       className={classNames(
         className,
         isSelected && !isMultiSelect && styles.isSelected,
+        isFocused && styles.isFocused,
         isDisabled && !isMultiSelect && styles.isDisabled,
         isHidden && styles.isHidden,
         isMobile && styles.isMobile
@@ -74,7 +77,7 @@ function EnhancedSelectInputOption({
 
       {isMobile && (
         <div className={styles.iconContainer}>
-          <Icon name={isSelected ? icons.CHECK_CIRCLE : icons.CIRCLE_OUTLINE} />
+          <Icon name={isSelected ? icons.CHECK_CIRCLE : icons.CIRCLE} />
         </div>
       )}
     </Link>

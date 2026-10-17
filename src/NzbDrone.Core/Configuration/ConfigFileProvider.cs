@@ -52,7 +52,6 @@ namespace NzbDrone.Core.Configuration
         string SslCertPassword { get; }
         string UrlBase { get; }
         string TrustedNetworks { get; }
-        string UiFolder { get; }
         string InstanceName { get; }
         bool UpdateAutomatically { get; }
         UpdateMechanism UpdateMechanism { get; }
@@ -223,15 +222,21 @@ namespace NzbDrone.Core.Configuration
                 if (enabled)
                 {
                     SetValue("AuthenticationMethod", AuthenticationType.Forms);
+
                     return AuthenticationType.Forms;
                 }
 
-                var value = Enum.TryParse<AuthenticationType>(_authOptions.Method, out var enumValue)
-                    ? enumValue
-                    : GetValueEnum("AuthenticationMethod", AuthenticationType.None);
+                if (Enum.TryParse<AuthenticationType>(_authOptions.Method, out var enumValue))
+                {
+#pragma warning disable CS0618 // Type or member is obsolete
+                    return enumValue == AuthenticationType.Basic ? AuthenticationType.Forms : enumValue;
+#pragma warning restore CS0618 // Type or member is obsolete
+                }
+
+                var value = GetValueEnum("AuthenticationMethod", AuthenticationType.Forms);
 
 #pragma warning disable CS0618 // Type or member is obsolete
-                if (value == AuthenticationType.Basic)
+                if (value is AuthenticationType.Basic or AuthenticationType.None)
 #pragma warning restore CS0618 // Type or member is obsolete
                 {
                     SetValue("AuthenticationMethod", AuthenticationType.Forms);
@@ -305,8 +310,6 @@ namespace NzbDrone.Core.Configuration
         }
 
         public string TrustedNetworks => _serverOptions.TrustedNetworks ?? GetValue("TrustedNetworks", string.Empty);
-
-        public string UiFolder => BuildInfo.IsDebug ? Path.Combine("..", "UI") : "UI";
 
         public string InstanceName
         {

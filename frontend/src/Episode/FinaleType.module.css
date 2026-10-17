@@ -1,0 +1,5 @@
+.label {
+  composes: label from 'Components/Label.module.css';
+
+  margin-left: 10px;
+}

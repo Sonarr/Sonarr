@@ -11,7 +11,7 @@ import {
 import getIndexOfFirstCharacter from 'Utilities/Array/getIndexOfFirstCharacter';
 import SeriesIndexRow from './SeriesIndexRow';
 import SeriesIndexTableHeader from './SeriesIndexTableHeader';
-import styles from './SeriesIndexTable.css';
+import styles from './SeriesIndexTable.module.css';
 
 interface RowItemData {
   items: Series[];
@@ -73,7 +73,7 @@ function SeriesIndexTable({
   const listRef = useRef<FixedSizeList<RowItemData>>(null);
 
   const rowHeight = useMemo(() => {
-    return showBanners ? 70 : 38;
+    return showBanners ? 72 : 48;
   }, [showBanners]);
 
   useEffect(() => {

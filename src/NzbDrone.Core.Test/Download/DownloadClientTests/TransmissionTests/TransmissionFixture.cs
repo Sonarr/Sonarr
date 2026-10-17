@@ -95,8 +95,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         }
 
         [Test]
-        public async Task Download_with_category_should_force_directory()
+        public async Task Download_with_category_on_v3_should_force_directory()
         {
+            Mocker.GetMock<ITransmissionProxy>()
+                .Setup(v => v.GetClientVersion(It.IsAny<TransmissionSettings>(), It.IsAny<bool>()))
+                .Returns("3.0.6");
+
             GivenTvCategory();
             GivenSuccessfulDownload();
 
@@ -111,8 +115,66 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         }
 
         [Test]
-        public async Task Download_with_category_should_not_have_double_slashes()
+        public void should_not_allow_category_and_directory_on_v3()
         {
+            Mocker.GetMock<ITransmissionProxy>()
+                .Setup(v => v.GetClientVersion(It.IsAny<TransmissionSettings>(), It.IsAny<bool>()))
+                .Returns("3.0.6");
+
+            GivenTvCategory();
+            GivenTvDirectory();
+
+            Subject.Test().IsValid.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_allow_category_and_directory_on_v4()
+        {
+            GivenTvCategory();
+            GivenTvDirectory();
+
+            Subject.Test().IsValid.Should().BeTrue();
+        }
+
+        [Test]
+        public async Task Download_with_category_on_v4_should_not_force_directory()
+        {
+            GivenTvCategory();
+            GivenSuccessfulDownload();
+
+            var remoteEpisode = CreateRemoteEpisode();
+
+            var id = await Subject.Download(remoteEpisode, CreateIndexer());
+
+            id.Should().NotBeNullOrEmpty();
+
+            Mocker.GetMock<ITransmissionProxy>()
+                .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), null, It.IsAny<TransmissionSettings>()), Times.Once());
+        }
+
+        [Test]
+        public async Task Download_with_directory_and_category_on_v4_should_use_directory()
+        {
+            GivenTvDirectory();
+            GivenTvCategory();
+            GivenSuccessfulDownload();
+
+            var remoteEpisode = CreateRemoteEpisode();
+
+            var id = await Subject.Download(remoteEpisode, CreateIndexer());
+
+            id.Should().NotBeNullOrEmpty();
+
+            Mocker.GetMock<ITransmissionProxy>()
+                .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), @"C:/Downloads/Finished/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
+        }
+
+        [Test]
+        public async Task Download_with_category_on_v3_should_not_have_double_slashes()
+        {
+            Mocker.GetMock<ITransmissionProxy>()
+                .Setup(v => v.GetClientVersion(It.IsAny<TransmissionSettings>(), It.IsAny<bool>()))
+                .Returns("3.0.6");
             GivenTvCategory();
             GivenSuccessfulDownload();
 

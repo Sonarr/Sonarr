@@ -10,12 +10,11 @@ using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Core.Tv.Events;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
@@ -41,8 +40,8 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
     private readonly IAddSeriesService _addSeriesService;
     private readonly ISeriesStatisticsService _seriesStatisticsService;
     private readonly ISceneMappingService _sceneMappingService;
+    private readonly ISeriesTranslationService _seriesTranslationService;
     private readonly IMapCoversToLocal _coverMapper;
-    private readonly IManageCommandQueue _commandQueueManager;
     private readonly IRootFolderService _rootFolderService;
 
     private readonly LockByIdPool _seriesLockPool = new();
@@ -52,8 +51,8 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
                         IAddSeriesService addSeriesService,
                         ISeriesStatisticsService seriesStatisticsService,
                         ISceneMappingService sceneMappingService,
+                        ISeriesTranslationService seriesTranslationService,
                         IMapCoversToLocal coverMapper,
-                        IManageCommandQueue commandQueueManager,
                         IRootFolderService rootFolderService,
                         RootFolderValidator rootFolderValidator,
                         MappedNetworkDriveValidator mappedNetworkDriveValidator,
@@ -63,16 +62,17 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
                         SystemFolderValidator systemFolderValidator,
                         QualityProfileExistsValidator qualityProfileExistsValidator,
                         RootFolderExistsValidator rootFolderExistsValidator,
-                        SeriesFolderAsRootFolderValidator seriesFolderAsRootFolderValidator)
+                        SeriesFolderAsRootFolderValidator seriesFolderAsRootFolderValidator,
+                        SeriesSeasonTypeValidator seriesSeasonTypeValidator)
         : base(signalRBroadcaster)
     {
         _seriesService = seriesService;
         _addSeriesService = addSeriesService;
         _seriesStatisticsService = seriesStatisticsService;
         _sceneMappingService = sceneMappingService;
+        _seriesTranslationService = seriesTranslationService;
 
         _coverMapper = coverMapper;
-        _commandQueueManager = commandQueueManager;
         _rootFolderService = rootFolderService;
 
         SharedValidator.RuleFor(s => s.Path).Cascade(CascadeMode.Stop)
@@ -103,6 +103,14 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
             .ValidId()
             .SetValidator(qualityProfileExistsValidator);
 
+        SharedValidator.RuleFor(s => s.Language).Cascade(CascadeMode.Stop)
+            .NotNull()
+            .Must(l => IsoLanguages.Get(l!) != null)
+            .WithMessage("Invalid Language value");
+
+        SharedValidator.RuleFor(s => s.SeasonType).NotEmpty();
+        PutValidator.RuleFor(s => s.SeasonType).SetValidator(seriesSeasonTypeValidator);
+
         PostValidator.RuleFor(s => s.Title).NotEmpty();
         PostValidator.RuleFor(s => s.TvdbId).GreaterThan(0).SetValidator(seriesExistsValidator);
     }
@@ -127,6 +135,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
         MapCoversToLocal(seriesResources.ToArray());
         LinkSeriesStatistics(seriesResources, seriesStats.ToDictionary(x => x.SeriesId));
         PopulateAlternateTitles(seriesResources);
+        PopulateTranslations(seriesResources);
         seriesResources.ForEach(LinkRootFolderPath);
 
         return TypedResults.Ok(seriesResources);
@@ -196,26 +205,12 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
     public Results<Accepted<SeriesResource>, NotFound> UpdateSeries([FromBody] SeriesResource seriesResource, [FromQuery] bool moveFiles = false)
     {
         var series = _seriesService.GetSeries(seriesResource.Id);
-
-        if (moveFiles)
-        {
-            var sourcePath = series.Path;
-            var destinationPath = seriesResource.Path;
-
-            _commandQueueManager.Push(new MoveSeriesCommand
-            {
-                SeriesId = series.Id,
-                SourcePath = sourcePath,
-                DestinationPath = destinationPath
-            },
-                trigger: CommandTrigger.Manual);
-        }
+        var sourcePath = series.Path;
+        var destinationPath = seriesResource.Path;
 
         var model = seriesResource.ToModel(series);
 
-        _seriesService.UpdateSeries(model);
-
-        BroadcastResourceChange(ModelAction.Updated, seriesResource);
+        _seriesService.UpdateSeries(model, sourcePath, destinationPath, moveFiles);
 
         return TypedAccepted(seriesResource.Id);
     }
@@ -264,6 +259,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
         MapCoversToLocal(resource);
         FetchAndLinkSeriesStatistics(resource);
         PopulateAlternateTitles(resource);
+        PopulateTranslations(resource);
         LinkRootFolderPath(resource);
 
         return resource;
@@ -309,6 +305,32 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
                 season.Statistics = seriesStatistics.SeasonStatistics?.SingleOrDefault(s => s.SeasonNumber == season.SeasonNumber)?.ToResource();
             }
         }
+    }
+
+    private void PopulateTranslations(List<SeriesResource> resources)
+    {
+        var translations = _seriesTranslationService.GetTranslations()
+            .GroupBy(t => t.SeriesId)
+            .ToDictionary(g => g.Key, g => g.ToList());
+
+        foreach (var resource in resources)
+        {
+            if (translations.TryGetValue(resource.Id, out var seriesTranslations))
+            {
+                resource.Translations = seriesTranslations
+                    .Select(t => new SeriesTranslationResource
+                    {
+                        Language = t.Language,
+                        Title = t.Title
+                    })
+                    .ToList();
+            }
+        }
+    }
+
+    private void PopulateTranslations(SeriesResource resource)
+    {
+        resource.Translations = _seriesTranslationService.GetTranslations(resource.Id).ToResource();
     }
 
     private void PopulateAlternateTitles(List<SeriesResource> resources)

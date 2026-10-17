@@ -1,0 +1,9 @@
+.filterMenu {
+  composes: menu from './Menu.module.css';
+}
+
+@media (--breakpointSmall) {
+  .filterMenu {
+    margin-right: 10px;
+  }
+}

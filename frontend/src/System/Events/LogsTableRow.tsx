@@ -7,7 +7,7 @@ import TableRowButton from 'Components/Table/TableRowButton';
 import { icons } from 'Helpers/Props';
 import { LogEventLevel } from 'typings/LogEvent';
 import LogsTableDetailsModal from './LogsTableDetailsModal';
-import styles from './LogsTableRow.css';
+import styles from './LogsTableRow.module.css';
 
 interface LogsTableRowProps {
   level: LogEventLevel;

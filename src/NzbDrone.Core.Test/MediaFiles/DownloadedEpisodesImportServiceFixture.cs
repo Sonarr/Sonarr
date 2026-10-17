@@ -48,6 +48,8 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true, null, ImportMode.Auto))
                   .Returns(new List<ImportResult>());
 
+            Mocker.SetConstant<IRejectedFileExtensionService>(Mocker.Resolve<RejectedFileExtensionService>());
+
             var downloadItem = Builder<DownloadClientItem>.CreateNew()
                 .With(v => v.DownloadId = "sab1")
                 .With(v => v.Status = DownloadItemStatus.Downloading)

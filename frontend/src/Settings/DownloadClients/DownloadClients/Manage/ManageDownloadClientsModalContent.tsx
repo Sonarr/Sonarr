@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
-import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -30,7 +29,7 @@ import translate from 'Utilities/String/translate';
 import ManageDownloadClientsEditModal from './Edit/ManageDownloadClientsEditModal';
 import ManageDownloadClientsModalRow from './ManageDownloadClientsModalRow';
 import TagsModal from './Tags/TagsModal';
-import styles from './ManageDownloadClientsModalContent.css';
+import styles from './ManageDownloadClientsModalContent.module.css';
 
 const COLUMNS: Column[] = [
   {
@@ -202,7 +201,9 @@ function ManageDownloadClientsModalContentInner({
         {error ? <div>{errorMessage}</div> : null}
 
         {isFetched && !error && !data.length ? (
-          <Alert kind={kinds.INFO}>{translate('NoDownloadClientsFound')}</Alert>
+          <p className={styles.filteredMessage}>
+            {translate('NoDownloadClientsFound')}
+          </p>
         ) : null}
 
         {isFetched && !!data.length && !isFetching ? (

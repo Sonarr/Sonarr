@@ -1,0 +1,20 @@
+.torrent,
+.usenet {
+  composes: label tinted from 'Components/Label.module.css';
+}
+
+.unknown {
+  composes: label from 'Components/Label.module.css';
+}
+
+.torrent {
+  --labelKindColor: var(--torrentColor);
+}
+
+.usenet {
+  --labelKindColor: var(--usenetColor);
+}
+
+.text {
+  translate: 0 -0.09em;
+}

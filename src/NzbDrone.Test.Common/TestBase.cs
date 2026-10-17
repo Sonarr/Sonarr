@@ -70,7 +70,7 @@ namespace NzbDrone.Test.Common
             }
         }
 
-        private string VirtualPath
+        protected string VirtualPath
         {
             get
             {

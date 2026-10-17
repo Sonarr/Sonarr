@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useApiMutation from 'Helpers/Hooks/useApiMutation';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import Backup from 'typings/Backup';
+import getQueryPath from 'Utilities/Fetch/getQueryPath';
 
 const useBackups = () => {
   const result = useApiQuery<Backup[]>({
@@ -76,7 +77,7 @@ export const useRestoreBackupUpload = () => {
   >({
     mutationFn: async (formData: FormData) => {
       const response = await fetch(
-        `${window.Sonarr.urlBase}/api/v5/system/backup/restore/upload`,
+        getQueryPath('/system/backup/restore/upload'),
         {
           method: 'POST',
           headers: {

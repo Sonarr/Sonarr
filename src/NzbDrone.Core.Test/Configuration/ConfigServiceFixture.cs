@@ -5,6 +5,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Languages;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Configuration
@@ -48,6 +49,22 @@ namespace NzbDrone.Core.Test.Configuration
             var interval = Subject.RssSyncInterval;
             interval.Should().Be(15);
             Mocker.GetMock<IConfigRepository>().Verify(c => c.Insert(It.IsAny<Config>()), Times.Never());
+        }
+
+        [Test]
+        public void PreferredMetadataLanguage_should_default_to_english()
+        {
+            Subject.PreferredMetadataLanguage.Should().Be((int)Language.English);
+        }
+
+        [Test]
+        public void PreferredMetadataLanguage_should_store_value()
+        {
+            var value = (int)Language.French;
+
+            Subject.PreferredMetadataLanguage = value;
+
+            AssertUpsert("PreferredMetadataLanguage", value);
         }
 
         private void AssertUpsert(string key, object value)

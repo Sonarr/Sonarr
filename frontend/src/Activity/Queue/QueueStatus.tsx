@@ -9,7 +9,7 @@ import {
   StatusMessage,
 } from 'typings/Queue';
 import translate from 'Utilities/String/translate';
-import styles from './QueueStatus.css';
+import styles from './QueueStatus.module.css';
 
 function getDetailedPopoverBody(statusMessages: StatusMessage[]) {
   return (

@@ -28,6 +28,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.SceneNumbering
             _series = Builder<Series>.CreateNew()
                 .With(v => v.TvdbId = 10)
                 .With(v => v.UseSceneNumbering = false)
+                .With(v => v.SeasonType = SeasonType.Official)
                 .BuildNew();
 
             _theXemSeriesIds = new List<int> { 120 };

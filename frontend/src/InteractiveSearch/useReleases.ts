@@ -322,10 +322,16 @@ const SORT_PREDICATES = {
 
   languages: (item: Release, _direction: SortDirection) => {
     if (item.languages.length > 1) {
-      return 10000;
+      return translate('MultiLanguages');
     }
 
-    return item.languages[0]?.id ?? 0;
+    const language = item.languages[0];
+
+    if (!language || language.id === 0) {
+      return '\uffff';
+    }
+
+    return language.name;
   },
 
   peers: (item: Release, _direction: SortDirection) => {
@@ -376,7 +382,15 @@ const releaseStore = create<ReleaseStore>(() => ({
 const DEFAULT_RELEASES: Release[] = [];
 const THIRTY_MINUTES = 30 * 60 * 1000;
 
-const useReleases = (payload: InteractiveSearchPayload) => {
+interface UseReleasesOptions {
+  filter?: string;
+  enabled?: boolean;
+}
+
+const useReleases = (
+  payload: InteractiveSearchPayload,
+  { filter = '', enabled = true }: UseReleasesOptions = {}
+) => {
   const customFilters = useCustomFiltersList('releases');
   const { episodeSelectedFilterKey, seasonSelectedFilterKey } =
     useReleaseOptions();
@@ -392,6 +406,7 @@ const useReleases = (payload: InteractiveSearchPayload) => {
       ...payload,
     },
     queryOptions: {
+      enabled,
       // Cache and stale times set to 30 minutes
       staleTime: THIRTY_MINUTES,
       gcTime: THIRTY_MINUTES,
@@ -401,22 +416,30 @@ const useReleases = (payload: InteractiveSearchPayload) => {
     },
   });
 
-  const { data: filteredData, totalItems } = useMemo(
-    () =>
-      clientSideFilterAndSort<Release, typeof FILTER_PREDICATES>(
-        data ?? DEFAULT_RELEASES,
-        {
-          selectedFilterKey,
-          filters: FILTERS,
-          filterPredicates: FILTER_PREDICATES,
-          customFilters,
-          sortKey,
-          sortDirection,
-          sortPredicates: SORT_PREDICATES,
-        }
-      ),
-    [data, selectedFilterKey, customFilters, sortKey, sortDirection]
-  );
+  const { data: filteredData, totalItems } = useMemo(() => {
+    const { data: sortedData, totalItems } = clientSideFilterAndSort<
+      Release,
+      typeof FILTER_PREDICATES
+    >(data ?? DEFAULT_RELEASES, {
+      selectedFilterKey,
+      filters: FILTERS,
+      filterPredicates: FILTER_PREDICATES,
+      customFilters,
+      sortKey,
+      sortDirection,
+      sortPredicates: SORT_PREDICATES,
+    });
+
+    const trimmedFilter = filter.trim().toLowerCase();
+
+    const filteredData = trimmedFilter
+      ? sortedData.filter((item) =>
+          item.release.title.toLowerCase().includes(trimmedFilter)
+        )
+      : sortedData;
+
+    return { data: filteredData, totalItems };
+  }, [data, selectedFilterKey, customFilters, sortKey, sortDirection, filter]);
 
   useEffect(() => {
     if (!data) {

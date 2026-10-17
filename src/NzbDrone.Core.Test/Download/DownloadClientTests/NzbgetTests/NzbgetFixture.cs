@@ -10,6 +10,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Test.Common;
 
@@ -338,6 +339,26 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             var items = Subject.GetItems();
 
             items.First().Status.Should().Be(DownloadItemStatus.Failed);
+        }
+
+        [Test]
+        public void should_pass_script_status_to_history_message()
+        {
+            Dictionary<string, object> tokens = null;
+
+            Mocker.GetMock<ILocalizationService>()
+                  .Setup(s => s.GetLocalizedString("NzbgetHistoryItemMessage", It.IsAny<Dictionary<string, object>>()))
+                  .Callback<string, Dictionary<string, object>>((_, t) => tokens = t)
+                  .Returns("message");
+
+            _completed.ScriptStatus = "WARNING";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            Subject.GetItems();
+
+            tokens.Should().Contain("scriptStatus", "WARNING");
         }
 
         [Test]

@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { hideMessage, MessageType } from 'App/messagesStore';
 import Icon, { IconName } from 'Components/Icon';
 import { icons } from 'Helpers/Props';
-import styles from './Message.css';
+import styles from './Message.module.css';
 
 interface MessageProps {
   id: number;

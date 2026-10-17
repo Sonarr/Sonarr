@@ -7,7 +7,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import { CustomFilter as CustomFilterModel } from 'Filters/Filter';
 import translate from 'Utilities/String/translate';
 import CustomFilter from './CustomFilter';
-import styles from './CustomFiltersModalContent.css';
+import styles from './CustomFiltersModalContent.module.css';
 
 interface CustomFiltersModalContentProps {
   customFilters: CustomFilterModel[];
@@ -29,17 +29,21 @@ function CustomFiltersModalContent({
       <ModalHeader>{translate('CustomFilters')}</ModalHeader>
 
       <ModalBody>
-        {customFilters.map((customFilter) => {
-          return (
-            <CustomFilter
-              key={customFilter.id}
-              id={customFilter.id}
-              label={customFilter.label}
-              dispatchSetFilter={dispatchSetFilter}
-              onEditPress={onEditCustomFilter}
-            />
-          );
-        })}
+        {customFilters.length > 0 ? (
+          <div className={styles.bordered}>
+            {customFilters.map((customFilter) => {
+              return (
+                <CustomFilter
+                  key={customFilter.id}
+                  id={customFilter.id}
+                  label={customFilter.label}
+                  dispatchSetFilter={dispatchSetFilter}
+                  onEditPress={onEditCustomFilter}
+                />
+              );
+            })}
+          </div>
+        ) : null}
 
         <div className={styles.addButtonContainer}>
           <Button onPress={onAddCustomFilter}>

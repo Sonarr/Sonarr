@@ -10,7 +10,7 @@ import { kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import SeriesDeleteList from '../SeriesDeleteList';
 import useSelectedSeriesStats from '../useSelectedSeriesStats';
-import styles from './DeleteSeriesFilesModalContent.css';
+import styles from './DeleteSeriesFilesModalContent.module.css';
 
 export interface DeleteSeriesFilesModalContentProps {
   onModalClose(): void;
