@@ -1,4 +1,5 @@
 .status {
+  position: relative;
   display: inline-flex;
 }
 
