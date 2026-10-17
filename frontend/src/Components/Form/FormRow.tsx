@@ -23,7 +23,6 @@ interface FormRowProps extends ComponentPropsWithoutRef<'div'> {
 
 interface FormInputDetails {
   id?: string;
-  name?: string;
   type?: string;
 }
 
@@ -45,14 +44,13 @@ function getFormInputDetails(children: ReactNode): FormInputDetails {
     if (child.props.name) {
       details = {
         id: child.props.id,
-        name: child.props.name,
         type: child.props.type,
       };
     }
 
     const childDetails = getFormInputDetails(child.props.children);
 
-    if (childDetails.name) {
+    if (childDetails.type) {
       details = childDetails;
     }
   });
@@ -75,7 +73,7 @@ function FormRow({
     return null;
   }
 
-  const { id: inputId, name, type } = getFormInputDetails(children);
+  const { id: inputId, type } = getFormInputDetails(children);
   const id = type ? inputId ?? generatedId : undefined;
 
   return (
@@ -83,7 +81,7 @@ function FormRow({
       className={classNames(className, styles[size], styles[layout])}
       {...otherProps}
     >
-      <FormRowProvider id={id} name={name} type={type}>
+      <FormRowProvider id={id} type={type}>
         {children}
       </FormRowProvider>
     </div>

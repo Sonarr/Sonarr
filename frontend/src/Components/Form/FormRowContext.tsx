@@ -2,7 +2,6 @@ import React, { createContext, PropsWithChildren, useContext } from 'react';
 
 interface FormRowContextValue {
   id?: string;
-  name?: string;
   type?: string;
 }
 
@@ -12,18 +11,12 @@ const FormRowContext = createContext<FormRowContextValue | undefined>(
 
 interface FormRowProviderProps extends PropsWithChildren {
   id?: string;
-  name?: string;
   type?: string;
 }
 
-export function FormRowProvider({
-  id,
-  name,
-  type,
-  children,
-}: FormRowProviderProps) {
+export function FormRowProvider({ id, type, children }: FormRowProviderProps) {
   return (
-    <FormRowContext.Provider value={{ id, name, type }}>
+    <FormRowContext.Provider value={{ id, type }}>
       {children}
     </FormRowContext.Provider>
   );

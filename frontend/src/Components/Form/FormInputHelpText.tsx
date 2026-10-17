@@ -14,7 +14,6 @@ interface FormInputHelpTextProps {
   isError?: boolean;
   isWarning?: boolean;
   isCheckInput?: boolean;
-  name?: string;
 }
 
 function FormInputHelpText({
@@ -25,7 +24,6 @@ function FormInputHelpText({
   isError = false,
   isWarning = false,
   isCheckInput = false,
-  name,
 }: FormInputHelpTextProps) {
   const formRow = useFormRow();
 
@@ -53,7 +51,7 @@ function FormInputHelpText({
     </>
   );
 
-  const inputName = formRow?.id ?? name;
+  const inputId = formRow?.id;
   const helpTextClassName = classNames(
     className,
     isError && styles.isError,
@@ -61,8 +59,8 @@ function FormInputHelpText({
     isCheckInput && styles.isCheckInput
   );
 
-  return inputName && formRow?.type === 'check' ? (
-    <label className={helpTextClassName} htmlFor={inputName}>
+  return inputId && formRow?.type === 'check' && !isError && !isWarning ? (
+    <label className={helpTextClassName} htmlFor={inputId}>
       {content}
     </label>
   ) : (
