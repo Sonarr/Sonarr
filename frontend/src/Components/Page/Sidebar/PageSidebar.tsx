@@ -26,7 +26,6 @@ import Messages from './Messages/Messages';
 import PageSidebarItem from './PageSidebarItem';
 import styles from './PageSidebar.module.css';
 
-const HEADER_HEIGHT = dimensions.headerHeight;
 const SIDEBAR_WIDTH = dimensions.sidebarWidth;
 
 interface SidebarItem {
@@ -327,7 +326,7 @@ function PageSidebar() {
         className={styles.sidebar}
         scrollDirection="vertical"
         style={{
-          height: `${window.innerHeight - HEADER_HEIGHT}px`,
+          height: `calc(${window.innerHeight}px - var(--headerHeight))`,
         }}
       >
         <div>
