@@ -219,17 +219,16 @@ namespace NzbDrone.Core.Update
             var processId = _processProvider.GetCurrentProcess().Id.ToString();
             var executingApplication = _runtimeInfo.ExecutingApplication;
 
-            var baseArgs = new List<string>
+            var args = new List<string>
             {
                 processId,
                 updateSandboxFolder.TrimEnd(Path.DirectorySeparatorChar),
                 executingApplication
             };
 
-            var preservedArgs = _processProvider.ParseCommandLineArguments(_startupContext.PreservedArguments);
-            baseArgs.AddRange(preservedArgs ?? new List<string>());
+            args.AddRange(_startupContext.PreservedArguments);
 
-            return baseArgs;
+            return args;
         }
 
         private void EnsureAppDataSafety()

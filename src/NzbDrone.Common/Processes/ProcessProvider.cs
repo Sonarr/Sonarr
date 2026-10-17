@@ -29,7 +29,6 @@ namespace NzbDrone.Common.Processes
         Process Start(string path, IEnumerable<string> args = null, StringDictionary environmentVariables = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null);
         Process SpawnNewProcess(string path, IEnumerable<string> args = null, StringDictionary environmentVariables = null, bool noWindow = false);
         ProcessOutput StartAndCapture(string path, IEnumerable<string> args = null, StringDictionary environmentVariables = null);
-        List<string> ParseCommandLineArguments(string commandLine);
     }
 
     public class ProcessProvider : IProcessProvider
@@ -302,47 +301,6 @@ namespace NzbDrone.Common.Processes
                 _logger.Debug("Killing process: {0} [{1}]", processInfo.Id, processInfo.ProcessName);
                 Kill(processInfo.Id);
             }
-        }
-
-        public List<string> ParseCommandLineArguments(string commandLine)
-        {
-            var args = new List<string>();
-            if (string.IsNullOrWhiteSpace(commandLine))
-            {
-                return args;
-            }
-
-            var inQuotes = false;
-            var currentArg = new System.Text.StringBuilder();
-
-            for (var i = 0; i < commandLine.Length; i++)
-            {
-                var c = commandLine[i];
-
-                if (c == '\"')
-                {
-                    inQuotes = !inQuotes;
-                }
-                else if (char.IsWhiteSpace(c) && !inQuotes)
-                {
-                    if (currentArg.Length > 0)
-                    {
-                        args.Add(currentArg.ToString());
-                        currentArg.Clear();
-                    }
-                }
-                else
-                {
-                    currentArg.Append(c);
-                }
-            }
-
-            if (currentArg.Length > 0)
-            {
-                args.Add(currentArg.ToString());
-            }
-
-            return args;
         }
 
         private ProcessInfo ConvertToProcessInfo(Process process)
