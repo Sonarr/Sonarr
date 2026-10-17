@@ -10,6 +10,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalSection from 'Components/ModalSection';
 import settingsCardStyles from 'Components/SettingsCard/SettingsCard.module.css';
 import { kinds } from 'Helpers/Props';
+import SeriesTitleLink from 'Series/SeriesTitleLink';
 import useSeries from 'Series/useSeries';
 import { useDownloadClientsWithIds } from 'Settings/DownloadClients/DownloadClients/useDownloadClients';
 import { useImportListsWithIds } from 'Settings/ImportLists/ImportLists/useImportLists';
@@ -106,7 +107,14 @@ function TagDetailsModalContent({
         {series.length ? (
           <ModalSection title={translate('Series')}>
             {series.map((item) => {
-              return <div key={item.id}>{item.title}</div>;
+              return (
+                <div key={item.id}>
+                  <SeriesTitleLink
+                    titleSlug={item.titleSlug}
+                    title={item.title}
+                  />
+                </div>
+              );
             })}
           </ModalSection>
         ) : null}
