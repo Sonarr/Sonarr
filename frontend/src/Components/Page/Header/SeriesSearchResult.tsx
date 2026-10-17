@@ -4,6 +4,7 @@ import { kinds } from 'Helpers/Props';
 import SeriesPoster from 'Series/SeriesPoster';
 import { Tag } from 'Tags/useTags';
 import { SuggestedSeries } from './SeriesSearchInput';
+import SeriesSearchSuggestionLink from './SeriesSearchSuggestionLink';
 import styles from './SeriesSearchResult.module.css';
 
 interface Match {
@@ -19,6 +20,7 @@ function SeriesSearchResult(props: SeriesSearchResultProps) {
   const {
     match,
     title,
+    titleSlug,
     images,
     alternateTitles,
     tvdbId,
@@ -38,7 +40,10 @@ function SeriesSearchResult(props: SeriesSearchResultProps) {
   }
 
   return (
-    <div className={styles.result}>
+    <SeriesSearchSuggestionLink
+      className={styles.result}
+      to={`/series/${titleSlug}`}
+    >
       <SeriesPoster
         className={styles.poster}
         images={images}
@@ -79,7 +84,7 @@ function SeriesSearchResult(props: SeriesSearchResultProps) {
           </div>
         ) : null}
       </div>
-    </div>
+    </SeriesSearchSuggestionLink>
   );
 }
 
