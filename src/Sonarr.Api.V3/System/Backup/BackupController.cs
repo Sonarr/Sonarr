@@ -112,11 +112,15 @@ namespace Sonarr.Api.V3.System.Backup
 
             var path = Path.Combine(_appFolderInfo.TempFolder, $"sonarr_backup_restore{extension}");
 
-            _diskProvider.SaveStream(file.OpenReadStream(), path);
-            _backupService.Restore(path);
-
-            // Cleanup restored file
-            _diskProvider.DeleteFile(path);
+            try
+            {
+                _diskProvider.SaveStream(file.OpenReadStream(), path);
+                _backupService.Restore(path);
+            }
+            finally
+            {
+                _diskProvider.DeleteFile(path);
+            }
 
             return new
             {
