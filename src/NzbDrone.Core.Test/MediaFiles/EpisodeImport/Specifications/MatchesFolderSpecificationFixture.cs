@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         {
             _localEpisode = Builder<LocalEpisode>.CreateNew()
                                                  .With(l => l.Path = @"C:\Test\Unsorted\Series.Title.S01E01.720p.HDTV-Sonarr\S01E05.mkv".AsOsAgnostic())
+                                                 .With(l => l.Series = Builder<Series>.CreateNew().Build())
                                                  .With(l => l.FileEpisodeInfo =
                                                      Builder<ParsedEpisodeInfo>.CreateNew()
                                                                                .With(p => p.EpisodeNumbers = [5])
@@ -41,7 +42,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 
         private void GivenEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, int[] episodeNumbers)
         {
-            var seasonNumber = parsedEpisodeInfo.SeasonNumber.Value;
+            var seasonNumber = parsedEpisodeInfo.SeasonNumbers.First();
 
             var episodes = episodeNumbers.Select(n =>
                 Builder<Episode>.CreateNew()
@@ -281,6 +282,44 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenEpisodes(_localEpisode.FolderEpisodeInfo, [1, 2, 3, 4, 5]);
 
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_only_look_up_folder_episodes_once_for_files_in_the_same_folder()
+        {
+            GivenEpisodes(_localEpisode.FileEpisodeInfo, [1]);
+            GivenEpisodes(_localEpisode.FolderEpisodeInfo, [1]);
+
+            var otherLocalEpisode = Builder<LocalEpisode>.CreateNew()
+                                                         .With(l => l.Series = _localEpisode.Series)
+                                                         .With(l => l.FileEpisodeInfo = _localEpisode.FileEpisodeInfo)
+                                                         .With(l => l.FolderEpisodeInfo = _localEpisode.FolderEpisodeInfo)
+                                                         .Build();
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(otherLocalEpisode, null).Accepted.Should().BeTrue();
+
+            Mocker.GetMock<IParsingService>()
+                  .Verify(s => s.GetEpisodes(_localEpisode.FolderEpisodeInfo, It.IsAny<Series>(), true, null), Times.Once());
+        }
+
+        [Test]
+        public void should_look_up_folder_episodes_again_for_a_different_series()
+        {
+            GivenEpisodes(_localEpisode.FileEpisodeInfo, [1]);
+            GivenEpisodes(_localEpisode.FolderEpisodeInfo, [1]);
+
+            var otherLocalEpisode = Builder<LocalEpisode>.CreateNew()
+                                                         .With(l => l.Series = Builder<Series>.CreateNew().With(s => s.Id = _localEpisode.Series.Id + 1).Build())
+                                                         .With(l => l.FileEpisodeInfo = _localEpisode.FileEpisodeInfo)
+                                                         .With(l => l.FolderEpisodeInfo = _localEpisode.FolderEpisodeInfo)
+                                                         .Build();
+
+            Subject.IsSatisfiedBy(_localEpisode, null);
+            Subject.IsSatisfiedBy(otherLocalEpisode, null);
+
+            Mocker.GetMock<IParsingService>()
+                  .Verify(s => s.GetEpisodes(_localEpisode.FolderEpisodeInfo, It.IsAny<Series>(), true, null), Times.Exactly(2));
         }
     }
 }
