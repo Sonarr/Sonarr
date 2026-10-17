@@ -209,8 +209,8 @@ namespace NzbDrone.Core.Notifications
 
         public void Handle(DownloadCompletedEvent message)
         {
-            var series = message.TrackedDownload.RemoteEpisode.Series;
-            var episodes = message.TrackedDownload.RemoteEpisode.Episodes;
+            var series = message.Series;
+            var episodes = message.Episodes;
             var parsedEpisodeInfo = message.TrackedDownload.RemoteEpisode.ParsedEpisodeInfo;
 
             var downloadMessage = new ImportCompleteMessage
