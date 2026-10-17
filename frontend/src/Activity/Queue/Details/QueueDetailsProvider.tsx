@@ -91,10 +91,14 @@ export function useQueueDetailsForSeries(
           return acc;
         }
 
-        if (
-          seasonNumber != null &&
-          !item.seasonNumbers?.includes(seasonNumber)
-        ) {
+        if (seasonNumber != null) {
+          const season = item.seasons?.find(
+            (s) => s.seasonNumber === seasonNumber
+          );
+
+          acc.count += season?.episodeCount ?? 0;
+          acc.episodesWithFiles += season?.episodesWithFilesCount ?? 0;
+
           return acc;
         }
 

@@ -109,7 +109,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     absoluteEpisodeNumbers,
     episodeNumbers,
     isDaily,
-    seasonNumber,
+    seasonNumbers,
     quality,
   } = parsedInfo;
 
@@ -160,6 +160,12 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
       decision.rejections.findIndex((r) => r.reason === 'blocklisted') >= 0
     );
   }, [decision]);
+
+  const mappedSeasonNumbers = useMemo(() => {
+    return [...new Set(mappedEpisodeInfo.map((e) => e.seasonNumber))].sort(
+      (a, b) => a - b
+    );
+  }, [mappedEpisodeInfo]);
 
   const handleGrabPress = useCallback(() => {
     if (downloadAllowed) {
@@ -225,10 +231,10 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           <Link to={infoUrl}>{title}</Link>
           <ReleaseSceneIndicator
             className={styles.sceneMapping}
-            seasonNumber={mappedSeasonNumber}
+            seasonNumbers={mappedSeasonNumbers}
             episodeNumbers={mappedEpisodeNumbers}
             absoluteEpisodeNumbers={mappedAbsoluteEpisodeNumbers}
-            sceneSeasonNumber={seasonNumber}
+            sceneSeasonNumbers={seasonNumbers}
             sceneEpisodeNumbers={episodeNumbers}
             sceneAbsoluteEpisodeNumbers={absoluteEpisodeNumbers}
             sceneMapping={sceneMapping}

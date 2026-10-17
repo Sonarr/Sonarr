@@ -14,8 +14,6 @@ namespace NzbDrone.Core.Queue
     {
         public Series Series { get; set; }
 
-        public int? SeasonNumber { get; set; }
-
         [Obsolete]
         public Episode Episode { get; set; }
 
