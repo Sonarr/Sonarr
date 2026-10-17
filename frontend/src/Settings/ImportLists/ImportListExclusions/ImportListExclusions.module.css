@@ -10,29 +10,3 @@
 
   margin-top: 10px;
 }
-
-.deleteRow {
-  composes: addRow from 'Settings/Settings.module.css';
-
-  padding: 0 14px;
-  height: 30px;
-  border-style: solid;
-  border-color: var(--dangerColor);
-  border-radius: 8px;
-  color: var(--dangerColor);
-  white-space: nowrap;
-
-  &:hover {
-    border-color: var(--dangerColor);
-    background-color: color-mix(in oklch, var(--dangerColor) 12%, transparent);
-    color: var(--dangerColor);
-  }
-
-  &:global(.isDisabled) {
-    opacity: 0.5;
-
-    &:hover {
-      background-color: transparent;
-    }
-  }
-}
