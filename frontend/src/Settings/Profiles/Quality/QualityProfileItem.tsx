@@ -9,7 +9,11 @@ import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import { ItemFailures } from './qualityProfileItemFailures';
 import QualityProfileItemSize, { SizeChanged } from './QualityProfileItemSize';
-import { qualityKey, ROOT_CONTAINER } from './useQualityProfileDnd';
+import {
+  qualityKey,
+  ROOT_CONTAINER,
+  rootCollisionDetector,
+} from './useQualityProfileDnd';
 import styles from './QualityProfileItem.module.css';
 
 interface QualityProfileItemProps {
@@ -51,6 +55,8 @@ function QualityProfileItem({
     group: containerId,
     type: 'quality',
     accept: containerId === ROOT_CONTAINER ? undefined : ['quality'],
+    collisionDetector:
+      containerId === ROOT_CONTAINER ? rootCollisionDetector : undefined,
     disabled: mode === 'editSizes',
   });
 
