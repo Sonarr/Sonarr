@@ -2,8 +2,8 @@
   /* Surfaces */
   --paper: oklch(97% 0.010 260);
   --pageBackground: var(--paper);
-  --paperWarm: oklch(88% 0.014 260);
-  --paperCard: oklch(94% 0.011 260);
+  --paperWarm: oklch(92% 0.012 260);
+  --paperCard: oklch(95% 0.010 260);
   --hairline: oklch(84% 0.012 260);
   --hairlineStrong: oklch(76% 0.014 260);
 
