@@ -1,0 +1,105 @@
+.body {
+  composes: innerModalBody from 'Components/Modal/ModalBody.module.css';
+}
+
+.intro {
+  margin: 0 0 12px;
+  color: var(--inkMuted);
+  line-height: 1.5;
+}
+
+.settingRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 88px;
+
+  align-items: start;
+  padding: 14px 0;
+  gap: 24px;
+}
+
+.settingRow + .settingRow {
+  border-top: 1px solid var(--borderColor);
+}
+
+.settingLabel {
+  composes: label from 'Components/Form/FormLabel.module.css';
+
+  margin-bottom: 4px;
+  padding-top: 8px;
+}
+
+.helpText {
+  margin: 0;
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.policyNote {
+  margin: 6px 0 20px;
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.preview {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--borderColor);
+}
+
+.sectionTitle {
+  margin: 0 0 16px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.previewHeading {
+  margin: 16px 0 8px;
+  color: var(--inkSoft);
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.previewList {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.previewList > li + li {
+  margin-top: 10px;
+}
+
+.filePath {
+  margin-bottom: 2px;
+  overflow-wrap: anywhere;
+}
+
+.footer {
+  composes: modalFooter from 'Components/Modal/ModalFooter.module.css';
+
+  flex-wrap: wrap;
+}
+
+.closeButton {
+  composes: button from 'Components/Link/Button.module.css';
+
+  margin-right: auto;
+}
+
+@media (--breakpointSmall) {
+  .settingRow {
+    grid-template-columns: minmax(0, 1fr) 64px;
+    gap: 16px;
+  }
+
+  .footer {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .closeButton {
+    margin-right: 0;
+  }
+}
