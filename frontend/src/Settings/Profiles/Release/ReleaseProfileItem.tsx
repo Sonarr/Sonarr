@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Label from 'Components/Label';
 import MiddleTruncate from 'Components/MiddleTruncate';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
@@ -45,6 +45,10 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
 
   const [isDeleteModalOpen, setDeleteModalOpen, setDeleteModalClosed] =
     useModalOpenState(false);
+
+  const handleConfirmDelete = useCallback(() => {
+    deleteReleaseProfile();
+  }, [deleteReleaseProfile]);
 
   const indexers = useMemo(
     () => indexerList.filter((i) => indexerIds.includes(i.id)),
@@ -135,7 +139,7 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
         })}
         confirmLabel={translate('Delete')}
         isSpinning={isDeleting}
-        onConfirm={deleteReleaseProfile}
+        onConfirm={handleConfirmDelete}
         onCancel={setDeleteModalClosed}
       />
     </SettingsCard>
