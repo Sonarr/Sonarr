@@ -757,18 +757,20 @@ interface SaveSeriesEditorPayload {
   applyTags?: string;
 }
 
-export const useSaveSeries = (moveFiles?: boolean) => {
+export const useSaveSeries = () => {
   const queryClient = useQueryClient();
 
   const { mutate, isPending, error } = useApiMutation<
     Series,
-    SaveSeriesRequest
+    SaveSeriesRequest,
+    { data: SaveSeriesRequest; moveFiles: boolean }
   >({
     path: '/series',
-    queryParams: {
-      moveFiles,
-    },
     method: 'PUT',
+    getRequest: ({ data, moveFiles }) => ({
+      body: data,
+      queryParams: { moveFiles },
+    }),
     mutationOptions: {
       onSuccess: (updatedSeries) => {
         queryClient.setQueryData<Series[]>(['/series'], (oldSeries) => {
@@ -792,18 +794,24 @@ export const useSaveSeries = (moveFiles?: boolean) => {
   });
 
   const saveSeries = useCallback(
-    ({
-      alternateTitles,
-      images,
-      seasons,
-      seasonTypes,
-      statistics,
-      translations,
-      ...payload
-    }: SaveSeriesPayload) => {
+    (
+      {
+        alternateTitles,
+        images,
+        seasons,
+        seasonTypes,
+        statistics,
+        translations,
+        ...payload
+      }: SaveSeriesPayload,
+      moveFiles = false
+    ) => {
       mutate({
-        ...payload,
-        seasons: seasons?.map(({ statistics, ...season }) => season),
+        data: {
+          ...payload,
+          seasons: seasons?.map(({ statistics, ...season }) => season),
+        },
+        moveFiles,
       });
     },
     [mutate]

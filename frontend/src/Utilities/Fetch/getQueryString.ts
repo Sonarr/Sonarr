@@ -49,7 +49,7 @@ const getQueryString = (queryParams?: QueryParams) => {
 
   const paramsString = searchParams.toString();
 
-  return `?${paramsString}`;
+  return paramsString ? `?${paramsString}` : '';
 };
 
 export default getQueryString;
