@@ -4,6 +4,9 @@ import SystemStatus from 'typings/SystemStatus';
 const useSystemStatus = () => {
   const result = useApiQuery<SystemStatus>({
     path: '/system/status',
+    queryOptions: {
+      staleTime: 30 * 1000,
+    },
   });
 
   return {
