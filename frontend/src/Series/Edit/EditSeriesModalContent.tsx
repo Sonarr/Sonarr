@@ -77,7 +77,7 @@ function EditSeriesModalContent({
   );
   const [isConfirmMoveModalOpen, setIsConfirmMoveModalOpen] = useState(false);
 
-  const { saveSeries, isSaving, saveError } = useSaveSeries(isPathChanging);
+  const { saveSeries, isSaving, saveError } = useSaveSeries();
   const wasSaving = usePrevious(isSaving);
 
   const { settings, ...otherSettings } = useMemo(() => {
@@ -164,10 +164,13 @@ function EditSeriesModalContent({
   const handleMoveSeriesPress = useCallback(() => {
     setIsConfirmMoveModalOpen(false);
 
-    saveSeries({
-      ...series,
-      ...pendingChanges,
-    });
+    saveSeries(
+      {
+        ...series,
+        ...pendingChanges,
+      },
+      true
+    );
   }, [series, pendingChanges, saveSeries]);
 
   useEffect(() => {

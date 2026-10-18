@@ -14,18 +14,32 @@ import getQueryPath from 'Utilities/Fetch/getQueryPath';
 import getQueryString, { QueryParams } from 'Utilities/Fetch/getQueryString';
 import { ValidationFailures } from 'Utilities/selectSettings';
 
-interface MutationOptions<T, TData>
-  extends Omit<FetchJsonOptions<TData>, 'method'> {
-  method: 'POST' | 'PUT' | 'DELETE';
-  mutationOptions?: Omit<UseMutationOptions<T, ApiError, TData>, 'mutationFn'>;
+interface MutationRequest<TData> {
+  body?: TData;
   queryParams?: QueryParams;
 }
 
-function useApiMutation<T, TData>(options: MutationOptions<T, TData>) {
+interface MutationOptions<T, TData, TVariables = TData>
+  extends Omit<FetchJsonOptions<TData>, 'method'> {
+  method: 'POST' | 'PUT' | 'DELETE';
+  mutationOptions?: Omit<
+    UseMutationOptions<T, ApiError, TVariables>,
+    'mutationFn'
+  >;
+  queryParams?: QueryParams;
+  getRequest?: (variables: TVariables) => MutationRequest<TData>;
+}
+
+function useApiMutation<T, TData, TVariables = TData>(
+  options: MutationOptions<T, TData, TVariables>
+) {
   const requestOptions = useMemo(() => {
+    const { mutationOptions, queryParams, getRequest, ...otherOptions } =
+      options;
+
     return {
-      ...options,
-      path: getQueryPath(options.path) + getQueryString(options.queryParams),
+      ...otherOptions,
+      path: getQueryPath(options.path),
       headers: {
         ...options.headers,
         'X-Api-Key': window.Sonarr.apiKey,
@@ -34,12 +48,19 @@ function useApiMutation<T, TData>(options: MutationOptions<T, TData>) {
     };
   }, [options]);
 
-  return useMutation<T, ApiError, TData>({
+  return useMutation<T, ApiError, TVariables>({
     ...options.mutationOptions,
-    mutationFn: async (data?: TData) => {
+    mutationFn: async (variables: TVariables) => {
       const { path, ...otherOptions } = requestOptions;
+      const { body, queryParams } = options.getRequest
+        ? options.getRequest(variables)
+        : { body: variables as unknown as TData, queryParams: undefined };
 
-      return fetchJson<T, TData>({ path, ...otherOptions, body: data });
+      return fetchJson<T, TData>({
+        ...otherOptions,
+        path: path + getQueryString({ ...options.queryParams, ...queryParams }),
+        body,
+      });
     },
   });
 }
