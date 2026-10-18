@@ -66,6 +66,9 @@ export const useQualityProfilesData = () => {
 export const useQualityProfiles = () => {
   return useProviderSettings<QualityProfileModel>({
     path: PATH,
+    queryOptions: {
+      staleTime: 30 * 1000,
+    },
   });
 };
 
