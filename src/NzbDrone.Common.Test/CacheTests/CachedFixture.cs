@@ -80,6 +80,15 @@ namespace NzbDrone.Common.Test.CacheTests
         }
 
         [Test]
+        public void values_should_not_include_expired_items()
+        {
+            _cachedString.Set("Expired", "Old", TimeSpan.FromMilliseconds(-1));
+            _cachedString.Set("Fresh", "New");
+
+            _cachedString.Values.Should().BeEquivalentTo(new[] { "New" });
+        }
+
+        [Test]
         [Platform(Exclude = "MacOsX")]
         public void should_honor_ttl()
         {
