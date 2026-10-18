@@ -305,25 +305,17 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
         public void Handle(EpisodeInfoRefreshedEvent message)
         {
-            var needsToUpdate = false;
+            var removedEpisodeIds = message.Removed.Select(e => e.Id).ToHashSet();
 
-            foreach (var episode in message.Removed)
+            var cachedItems = _cache.Values.Where(t =>
+                                        t.RemoteEpisode?.Episodes != null &&
+                                        t.RemoteEpisode.Episodes.Any(e => removedEpisodeIds.Contains(e.Id)))
+                                    .ToList();
+
+            if (cachedItems.Any())
             {
-                var cachedItems = _cache.Values.Where(t =>
-                                            t.RemoteEpisode?.Episodes != null &&
-                                            t.RemoteEpisode.Episodes.Any(e => e.Id == episode.Id))
-                                        .ToList();
-
-                if (cachedItems.Any())
-                {
-                    needsToUpdate = true;
-                }
-
                 cachedItems.ForEach(UpdateCachedItem);
-            }
 
-            if (needsToUpdate)
-            {
                 _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()));
             }
         }
@@ -362,10 +354,13 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
         public void Handle(SeriesBulkEditedEvent message)
         {
+            var seriesIds = message.Series.Select(s => s.Id).ToHashSet();
+            var tvdbIds = message.Series.Select(s => s.TvdbId).ToHashSet();
+
             var cachedItems = _cache.Values
                 .Where(t =>
                     t.RemoteEpisode?.Series != null &&
-                    message.Series.Any(s => s.Id == t.RemoteEpisode.Series.Id || s.TvdbId == t.RemoteEpisode.Series.TvdbId))
+                    (seriesIds.Contains(t.RemoteEpisode.Series.Id) || tvdbIds.Contains(t.RemoteEpisode.Series.TvdbId)))
                 .ToList();
 
             if (cachedItems.Any())
@@ -378,10 +373,13 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
         public void Handle(SeriesDeletedEvent message)
         {
+            var seriesIds = message.Series.Select(s => s.Id).ToHashSet();
+            var tvdbIds = message.Series.Select(s => s.TvdbId).ToHashSet();
+
             var cachedItems = _cache.Values
                 .Where(t =>
                     t.RemoteEpisode?.Series != null &&
-                    message.Series.Any(s => s.Id == t.RemoteEpisode.Series.Id || s.TvdbId == t.RemoteEpisode.Series.TvdbId))
+                    (seriesIds.Contains(t.RemoteEpisode.Series.Id) || tvdbIds.Contains(t.RemoteEpisode.Series.TvdbId)))
                 .ToList();
 
             if (cachedItems.Any())
