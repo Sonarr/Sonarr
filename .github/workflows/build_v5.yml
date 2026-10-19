@@ -212,7 +212,7 @@ jobs:
           binary_path: ${{ matrix.binary_path }}
 
   deploy:
-    if: ${{ github.ref_name == 'develop' }}
+    if: ${{ github.repository == 'Sonarr/Sonarr' && github.ref_name == 'develop' }}
     needs:
       [
         prepare,
@@ -244,7 +244,7 @@ jobs:
         integration_test,
         deploy,
       ]
-    if: ${{ !cancelled() && github.ref_name == 'develop' }}
+    if: ${{ !cancelled() && github.repository == 'Sonarr/Sonarr' && github.ref_name == 'develop' }}
     env:
       STATUS: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
     runs-on: ubuntu-latest
