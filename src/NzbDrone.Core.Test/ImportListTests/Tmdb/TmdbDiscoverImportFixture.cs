@@ -21,7 +21,7 @@ public class TmdbDiscoverImportFixture : CoreTest<TmdbDiscoverImport>
     }
 
     [Test]
-    public void PresetsShouldBeValidAndNamedWithoutDates()
+    public void should_be_valid_and_named_without_dates_for_presets()
     {
         var presets = Subject.DefaultDefinitions.ToArray();
 
@@ -36,7 +36,7 @@ public class TmdbDiscoverImportFixture : CoreTest<TmdbDiscoverImport>
     }
 
     [Test]
-    public void OnTheAirPresetShouldResolveDatesRelativeToToday()
+    public void should_resolve_dates_relative_to_today_for_on_the_air_preset()
     {
         var preset = (TmdbDiscoverSettings)Subject.DefaultDefinitions.Single(p => p.Name == "On The Air").Settings;
         preset.AuthToken = "token";

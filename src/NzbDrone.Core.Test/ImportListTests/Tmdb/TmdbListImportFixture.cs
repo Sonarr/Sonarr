@@ -32,7 +32,7 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
     }
 
     [Test]
-    public void StartOauthShouldReturnApprovalUrlAndRequestToken()
+    public void should_return_approval_url_and_request_token_for_start_oauth()
     {
         GivenResponse("""{ "success": true, "statusCode": 1, "requestToken": "abc" }""");
 
@@ -44,7 +44,7 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
     }
 
     [Test]
-    public void StartOauthShouldThrowWhenNotSuccessful()
+    public void should_throw_when_not_successful_for_start_oauth()
     {
         GivenResponse("""{ "success": false, "statusCode": 7, "statusMessage": "Invalid API key" }""");
 
@@ -54,18 +54,18 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
     }
 
     [Test]
-    public void GetOauthTokenShouldReturnAccessToken()
+    public void should_return_access_token_for_get_oauth_token()
     {
         GivenResponse("""{ "success": true, "accountId": "acc", "accessToken": "tok" }""");
 
         var result = Subject.RequestAction("getOAuthToken", Query("requestToken", "abc"));
 
-        result.Should().BeOfType<AccessTokenResource>()
-            .Which.Should().Match<AccessTokenResource>(r => r.AccessToken == "tok" && r.AccountId == "acc");
+        result.GetType().GetProperty("accountId")!.GetValue(result).Should().Be("acc");
+        result.GetType().GetProperty("authToken")!.GetValue(result).Should().Be("tok");
     }
 
     [Test]
-    public void GetOauthTokenShouldThrowWhenNotSuccessful()
+    public void should_throw_when_not_successful_for_get_oauth_token()
     {
         GivenResponse("""{ "success": false, "statusMessage": "Request token not approved" }""");
 
@@ -75,13 +75,13 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
     }
 
     [Test]
-    public void UnknownActionShouldReturnEmptyObject()
+    public void should_return_empty_object_for_unknown_action()
     {
         Subject.RequestAction("nope", new Dictionary<string, string>()).Should().NotBeNull();
     }
 
     [Test]
-    public void GetAccountListsShouldReturnNonePlusListsWithIntegerValues()
+    public void should_return_none_plus_lists_with_integer_values_for_get_account_lists()
     {
         GivenResponse("""{ "results": [ { "id": 11, "name": "A", "number_of_items": 3 }, { "id": 12, "name": "B", "number_of_items": 4 } ] }""");
 
@@ -95,7 +95,7 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
     }
 
     [Test]
-    public void GetAccountListsShouldReturnOnlyNoneWithoutAuthentication()
+    public void should_return_only_none_without_authentication_for_get_account_lists()
     {
         Subject.Definition = new ImportListDefinition { Settings = new TmdbListSettings() };
 
@@ -106,7 +106,7 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
     }
 
     [Test]
-    public void StartOauthShouldThrowBadRequestWhenCallbackUrlIsMissing()
+    public void should_throw_bad_request_when_callback_url_is_missing_for_start_oauth()
     {
         var action = () => Subject.RequestAction("startOAuth", new Dictionary<string, string>());
 
@@ -114,7 +114,7 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
     }
 
     [Test]
-    public void GetOauthTokenShouldThrowBadRequestWhenRequestTokenIsMissing()
+    public void should_throw_bad_request_when_request_token_is_missing_for_get_oauth_token()
     {
         var action = () => Subject.RequestAction("getOAuthToken", new Dictionary<string, string>());
 
@@ -122,7 +122,20 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
     }
 
     [Test]
-    public void GetAccountListsShouldReturnOnlyNoneWhenResultsMissing()
+    public void should_return_only_none_when_request_fails_for_get_account_lists()
+    {
+        Mocker.GetMock<IHttpClient>()
+            .Setup(c => c.Execute(It.IsAny<HttpRequest>()))
+            .Throws(new HttpException(new HttpResponse(new HttpRequest("http://localhost"), new HttpHeader(), string.Empty, HttpStatusCode.Unauthorized)));
+
+        var result = Subject.RequestAction("getAccountLists", new Dictionary<string, string>());
+
+        var options = (List<FieldSelectOption<int>>)result.GetType().GetProperty("options")!.GetValue(result)!;
+        options.Should().ContainSingle().Which.Value.Should().Be(0);
+    }
+
+    [Test]
+    public void should_return_only_none_when_results_missing_for_get_account_lists()
     {
         GivenResponse("{}");
 
@@ -133,7 +146,7 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
     }
 
     [Test]
-    public void GetAccountListsShouldFetchNextPageOnlyWhenPageIsFull()
+    public void should_fetch_next_page_only_when_page_is_full_for_get_account_lists()
     {
         var fullPage = "{ \"results\": [" + string.Join(",", Enumerable.Range(1, 20).Select(i => $"{{ \"id\": {i}, \"name\": \"L{i}\", \"number_of_items\": 1 }}")) + "] }";
         const string shortPage = """{ "results": [ { "id": 99, "name": "Last", "number_of_items": 1 } ] }""";

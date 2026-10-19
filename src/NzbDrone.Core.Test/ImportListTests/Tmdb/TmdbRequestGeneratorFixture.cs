@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.ImportListTests.Tmdb;
 public class TmdbRequestGeneratorFixture : CoreTest
 {
     [Test]
-    public void DiscoverShouldRequestDiscoverTvWithBearerTokenAndJsonAccept()
+    public void should_request_discover_tv_with_bearer_token_and_json_accept_for_discover()
     {
         var requests = Requests(new TmdbDiscoverRequestGenerator(DiscoverSettings(), 1));
 
@@ -27,7 +27,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void DiscoverShouldRequestOneRequestPerPage()
+    public void should_request_one_request_per_page_for_discover()
     {
         var requests = Requests(new TmdbDiscoverRequestGenerator(DiscoverSettings(), 3));
 
@@ -36,7 +36,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void DiscoverShouldSendLowercaseBooleanForIncludeNullFirstAirDates()
+    public void should_send_lowercase_boolean_for_include_null_first_air_dates_for_discover()
     {
         var settings = DiscoverSettings();
         settings.IncludeNullFirstAirDates = true;
@@ -51,7 +51,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void DiscoverShouldJoinGenresWithPipeForOr()
+    public void should_join_genres_with_pipe_for_or_for_discover()
     {
         var settings = DiscoverSettings();
         settings.WithGenreTypes = [(int)TmdbDiscoverGenreType.Comedy, (int)TmdbDiscoverGenreType.Drama];
@@ -61,7 +61,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void DiscoverShouldJoinNetworksWithPipeForOr()
+    public void should_join_networks_with_pipe_for_or_for_discover()
     {
         var settings = DiscoverSettings();
         settings.WithNetworks = ["213", "49"];
@@ -71,7 +71,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void DiscoverShouldNotSendGenresOrNetworksWhenEmpty()
+    public void should_not_send_genres_or_networks_when_empty_for_discover()
     {
         var query = Query(Requests(new TmdbDiscoverRequestGenerator(DiscoverSettings(), 1))[0]);
 
@@ -82,7 +82,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void DiscoverShouldSendLowercaseOriginalLanguage()
+    public void should_send_lowercase_original_language_for_discover()
     {
         var settings = DiscoverSettings();
         settings.OriginalLanguage = (int)TmdbLanguage.Ja;
@@ -92,7 +92,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void DiscoverShouldResolveAirDatesRelativeToTodayAtRequestTime()
+    public void should_resolve_air_dates_relative_to_today_at_request_time_for_discover()
     {
         var settings = DiscoverSettings();
         settings.AirDateMinimumDays = -3;
@@ -106,7 +106,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void DiscoverShouldSendZeroDayOffsetsAsToday()
+    public void should_send_zero_day_offsets_as_today_for_discover()
     {
         var settings = DiscoverSettings();
         settings.AirDateMinimumDays = 0;
@@ -119,7 +119,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void DiscoverShouldSendOptionalFiltersWhenSet()
+    public void should_send_optional_filters_when_set_for_discover()
     {
         var settings = DiscoverSettings();
         settings.VoteAverageMinimum = "7.5";
@@ -147,7 +147,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     [TestCase(TmdbDiscoverSortByType.VoteAverageDesc, "vote_average.desc")]
     [TestCase(TmdbDiscoverSortByType.VoteCountAsc, "vote_count.asc")]
     [TestCase(TmdbDiscoverSortByType.VoteCountDesc, "vote_count.desc")]
-    public void DiscoverShouldMapSortByType(TmdbDiscoverSortByType sortBy, string expected)
+    public void should_map_sort_by_type_for_discover(TmdbDiscoverSortByType sortBy, string expected)
     {
         var settings = DiscoverSettings();
         settings.SortByType = (int)sortBy;
@@ -160,7 +160,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     [TestCase(TmdbAccountListType.Rated, "/4/account/acc123/tv/rated")]
     [TestCase(TmdbAccountListType.Recommended, "/4/account/acc123/tv/recommendations")]
     [TestCase(TmdbAccountListType.Watchlist, "/4/account/acc123/tv/watchlist")]
-    public void AccountShouldUseEndpointForListType(TmdbAccountListType type, string path)
+    public void should_use_endpoint_for_list_type_for_account(TmdbAccountListType type, string path)
     {
         var settings = new TmdbAccountSettings { AuthToken = "token", AccountId = "acc123", AccountListType = (int)type };
 
@@ -172,7 +172,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void ListShouldUseListIdWhenProvided()
+    public void should_use_list_id_when_provided_for_list()
     {
         var settings = new TmdbListSettings { AuthToken = "token", ListId = 42 };
 
@@ -180,7 +180,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void ListShouldUseAccountListIdWhenSelected()
+    public void should_use_account_list_id_when_selected_for_list()
     {
         var settings = new TmdbListSettings { AuthToken = "token", AccountListId = 77 };
 
@@ -188,7 +188,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void ListShouldUseListIdWhenAccountListIsNone()
+    public void should_use_list_id_when_account_list_is_none_for_list()
     {
         var settings = new TmdbListSettings { AuthToken = "token", ListId = 42, AccountListId = 0 };
 
@@ -196,7 +196,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void PersonShouldRequestTvCreditsOnce()
+    public void should_request_tv_credits_once_for_person()
     {
         var settings = new TmdbPersonSettings { AuthToken = "token", PersonId = 9 };
 
@@ -208,7 +208,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void DiscoverShouldNotThrowWhenGenresAndNetworksAreNull()
+    public void should_not_throw_when_genres_and_networks_are_null_for_discover()
     {
         var settings = DiscoverSettings();
         settings.WithGenreTypes = null;
@@ -221,7 +221,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void DiscoverShouldTrimOptionalStringFilters()
+    public void should_trim_optional_string_filters_for_discover()
     {
         var settings = DiscoverSettings();
         settings.VoteAverageMinimum = " 7.5 ";
@@ -230,7 +230,7 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void AccountShouldEscapeAccountIdInPath()
+    public void should_escape_account_id_in_path_for_account()
     {
         var settings = new TmdbAccountSettings { AuthToken = "token", AccountId = "a/b c" };
 
