@@ -31,6 +31,7 @@ import ArrayElement from 'typings/Helpers/ArrayElement';
 import { EnhancedSelectInputChanged, InputChanged } from 'typings/inputs';
 import { isMobile as isMobileUtil } from 'Utilities/browser';
 import * as keyCodes from 'Utilities/Constants/keyCodes';
+import { useFormInputGroup } from '../FormInputGroupContext';
 import TextInput from '../TextInput';
 import HintedSelectInputOption from './HintedSelectInputOption';
 import HintedSelectInputSelectedValue from './HintedSelectInputSelectedValue';
@@ -195,6 +196,7 @@ export interface EnhancedSelectInputProps<
 function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
   props: EnhancedSelectInputProps<T, V>
 ) {
+  const formInputGroup = useFormInputGroup();
   const {
     id,
     className = styles.enhancedSelect,
@@ -535,6 +537,8 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
         ) : (
           <Link
             id={id}
+            aria-describedby={formInputGroup?.describedBy}
+            aria-invalid={formInputGroup?.hasError || undefined}
             className={classNames(
               className,
               hasError && styles.hasError,

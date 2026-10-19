@@ -63,6 +63,8 @@ function OAuthInput({
     <div>
       <SpinnerErrorButton
         id={id}
+        aria-describedby={formInputActions?.describedBy}
+        aria-invalid={formInputActions?.hasError || undefined}
         isSpinning={authorizing}
         error={error}
         onPress={handlePress}
