@@ -45,7 +45,7 @@ public class TmdbParserFixture : CoreTest
         """;
 
     [Test]
-    public void ListShouldParseTvItemsAndSkipMovies()
+    public void should_parse_tv_items_and_skip_movies_for_list()
     {
         var items = new TmdbListParser().ParseResponse(Response(PagedJson)).Where(i => i != null).ToList();
 
@@ -54,7 +54,7 @@ public class TmdbParserFixture : CoreTest
     }
 
     [Test]
-    public void DiscoverShouldParseResults()
+    public void should_parse_results_for_discover()
     {
         var items = new TmdbDiscoverParser().ParseResponse(Response(PagedJson)).Where(i => i != null).ToList();
 
@@ -62,7 +62,7 @@ public class TmdbParserFixture : CoreTest
     }
 
     [Test]
-    public void AccountShouldParseResults()
+    public void should_parse_results_for_account()
     {
         var items = new TmdbAccountParser().ParseResponse(Response(PagedJson)).Where(i => i != null).ToList();
 
@@ -70,7 +70,7 @@ public class TmdbParserFixture : CoreTest
     }
 
     [Test]
-    public void ShouldReturnEmptyForEmptyResults()
+    public void should_return_empty_for_empty_results()
     {
         new TmdbListParser().ParseResponse(Response("""{ "results": [] }""")).Should().BeEmpty();
     }
@@ -79,7 +79,7 @@ public class TmdbParserFixture : CoreTest
     [TestCase(HttpStatusCode.NotFound)]
     [TestCase(HttpStatusCode.TooManyRequests)]
     [TestCase(HttpStatusCode.InternalServerError)]
-    public void ShouldThrowOnUnexpectedStatusCode(HttpStatusCode status)
+    public void should_throw_on_unexpected_status_code(HttpStatusCode status)
     {
         var action = () => new TmdbListParser().ParseResponse(Response("{}", status));
 
@@ -87,7 +87,7 @@ public class TmdbParserFixture : CoreTest
     }
 
     [Test]
-    public void ShouldThrowOnHtmlResponse()
+    public void should_throw_on_html_response()
     {
         var action = () => new TmdbListParser().ParseResponse(Response("<html></html>", contentType: "text/html"));
 
@@ -95,7 +95,7 @@ public class TmdbParserFixture : CoreTest
     }
 
     [Test]
-    public void PersonShouldParseCastOnly()
+    public void should_parse_cast_only_for_person()
     {
         var items = PersonParser(true).ParseResponse(Response(CreditsJson));
 
@@ -103,7 +103,7 @@ public class TmdbParserFixture : CoreTest
     }
 
     [Test]
-    public void PersonShouldParseSelectedCrewDepartmentsOnly()
+    public void should_parse_selected_crew_departments_only_for_person()
     {
         var items = PersonParser(false, TmdbDepartmentType.Directing, TmdbDepartmentType.Writing).ParseResponse(Response(CreditsJson));
 
@@ -111,7 +111,7 @@ public class TmdbParserFixture : CoreTest
     }
 
     [Test]
-    public void PersonShouldCombineCastAndCrew()
+    public void should_combine_cast_and_crew_for_person()
     {
         var items = PersonParser(true, TmdbDepartmentType.Directing).ParseResponse(Response(CreditsJson));
 
@@ -119,7 +119,7 @@ public class TmdbParserFixture : CoreTest
     }
 
     [Test]
-    public void PersonShouldMatchCostumeAndMakeUpDepartment()
+    public void should_match_costume_and_make_up_department_for_person()
     {
         var items = PersonParser(false, TmdbDepartmentType.CostumeMakeup).ParseResponse(Response(CreditsJson));
 
@@ -127,7 +127,7 @@ public class TmdbParserFixture : CoreTest
     }
 
     [Test]
-    public void PersonShouldMatchVisualEffectsDepartment()
+    public void should_match_visual_effects_department_for_person()
     {
         var items = PersonParser(false, TmdbDepartmentType.VisualEffects).ParseResponse(Response(CreditsJson));
 
@@ -135,19 +135,19 @@ public class TmdbParserFixture : CoreTest
     }
 
     [Test]
-    public void PersonShouldHandleMissingCastAndCrew()
+    public void should_handle_missing_cast_and_crew_for_person()
     {
         PersonParser(true, TmdbDepartmentType.Directing).ParseResponse(Response("""{ "id": 9 }""")).Should().BeEmpty();
     }
 
     [Test]
-    public void PersonShouldHandleEmptyCastAndCrew()
+    public void should_handle_empty_cast_and_crew_for_person()
     {
         PersonParser(true, TmdbDepartmentType.Directing).ParseResponse(Response("""{ "id": 9, "cast": [], "crew": [] }""")).Should().BeEmpty();
     }
 
     [Test]
-    public void ListShouldReturnNullEntriesForNonTvItemsSoPagingCountsFullPages()
+    public void should_return_null_entries_for_non_tv_items_so_paging_counts_full_pages_for_list()
     {
         var items = new TmdbListParser().ParseResponse(Response(PagedJson));
 
@@ -156,7 +156,7 @@ public class TmdbParserFixture : CoreTest
     }
 
     [Test]
-    public void ParsersShouldReturnEmptyWhenResultsIsMissingOrNull()
+    public void should_return_empty_when_results_is_missing_or_null_for_parsers()
     {
         foreach (var json in new[] { "{}", """{ "results": null }""" })
         {
@@ -167,7 +167,7 @@ public class TmdbParserFixture : CoreTest
     }
 
     [Test]
-    public void PersonShouldHandleNullDepartmentSelection()
+    public void should_handle_null_department_selection_for_person()
     {
         var parser = new TmdbPersonParser(new TmdbPersonSettings { IncludingCastCredits = true, IncludeDepartmentTypes = null });
 
