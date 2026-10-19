@@ -42,7 +42,8 @@ public class TmdbListImport(ISonarrCloudRequestBuilder requestBuilder,
 
     public override IImportListRequestGenerator GetRequestGenerator()
     {
-        return new TmdbListRequestGenerator(Settings, 10);
+        // Paging already stops at the last page, so 50 pages of 20 matches MaxNumResultsPerQuery (1000).
+        return new TmdbListRequestGenerator(Settings, 50);
     }
 
     private List<FieldSelectOption<int>> GetAccountListOptions()
@@ -63,28 +64,36 @@ public class TmdbListImport(ISonarrCloudRequestBuilder requestBuilder,
             .Resource($"4/account/{Uri.EscapeDataString(Settings.AccountId)}/lists")
             .SetHeader("Authorization", $"Bearer {Settings.AuthToken}");
 
-        for (var i = 1; i <= maxPages; i++)
+        try
         {
-            builder.AddQueryParam("page", i, true);
-            var request = new ImportListRequest(builder.Build());
-
-            var response = FetchImportListResponse(request);
-            var resource = STJson.Deserialize<TmdbPagedResource<TmdbAccountListResource>>(response.Content);
-
-            var results = resource.Results ?? [];
-
-            options.AddRange(results
-                .Select(r => new FieldSelectOption<int>
-                {
-                    Name = r.Name,
-                    Value = r.Id,
-                    Hint = $"(Id: {r.Id}, Items: {r.NumberOfItems})"
-                }));
-
-            if (results.Count < PageSize || results.Count >= MaxNumResultsPerQuery)
+            for (var i = 1; i <= maxPages; i++)
             {
-                break;
+                builder.AddQueryParam("page", i, true);
+                var request = new ImportListRequest(builder.Build());
+
+                var response = FetchImportListResponse(request);
+                var resource = STJson.Deserialize<TmdbPagedResource<TmdbAccountListResource>>(response.Content);
+
+                var results = resource.Results ?? [];
+
+                options.AddRange(results
+                    .Select(r => new FieldSelectOption<int>
+                    {
+                        Name = r.Name,
+                        Value = r.Id,
+                        Hint = $"(Id: {r.Id}, Items: {r.NumberOfItems})"
+                    }));
+
+                if (results.Count < PageSize)
+                {
+                    break;
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            // An expired token or a TMDb outage shouldn't turn the options request into a 500.
+            _logger.Warn(ex, "Unable to fetch TMDb account lists");
         }
 
         return options;

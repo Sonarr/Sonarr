@@ -215,7 +215,7 @@ namespace NzbDrone.Core.ImportLists
                 var generator = GetRequestGenerator();
                 var releases = FetchPage(generator.GetListItems().GetAllTiers().First().First(), parser);
 
-                if (releases.Empty())
+                if (!releases.Any(IsValidItem))
                 {
                     return new NzbDroneValidationFailure(string.Empty,
                                "No results were returned from your import list, please check your settings and the log for details.")

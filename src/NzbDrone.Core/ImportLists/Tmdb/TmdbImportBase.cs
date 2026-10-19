@@ -110,7 +110,11 @@ public abstract class TmdbImportBase<TSettings>(ISonarrCloudRequestBuilder reque
             throw new NzbDroneClientException(HttpStatusCode.BadGateway, "TMDb access token failed: {0}", resource.StatusMessage);
         }
 
-        return resource;
+        return new
+        {
+            accountId = resource.AccountId,
+            authToken = resource.AccessToken
+        };
     }
 
     private IEnumerable<ProviderDefinition> GetPresetDefinitions()

@@ -34,7 +34,7 @@ public partial class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<T
         RuleFor(c => c.WithCompanies).Matches(AndOrDelimitedIdsRegex())
             .When(c => c.WithCompanies.IsNotNullOrWhiteSpace());
 
-        RuleForEach(c => c.WithNetworks).Must(id => int.TryParse(id, out var idInt) && idInt > 0)
+        RuleForEach(c => c.WithNetworks).Must(id => int.TryParse(id, NumberStyles.None, CultureInfo.InvariantCulture, out var idInt) && idInt > 0)
             .WithMessage("Must be a valid network id.");
     }
 
@@ -48,7 +48,7 @@ public partial class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<T
             return;
         }
 
-        if (!float.TryParse(voteAverage, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var voteAverageParsed) || !float.IsFinite(voteAverageParsed))
+        if (!float.TryParse(voteAverage, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out var voteAverageParsed) || !float.IsFinite(voteAverageParsed))
         {
             context.AddFailure("Must be a valid single-precision floating-point number.");
             return;

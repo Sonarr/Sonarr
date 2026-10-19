@@ -9,9 +9,9 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.ImportLists;
-using NzbDrone.Core.ImportLists.Tmdb;
 using NzbDrone.Core.ImportLists.Tmdb.List;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ImportListTests.Tmdb;
 
@@ -132,6 +132,8 @@ public class TmdbListImportFixture : CoreTest<TmdbListImport>
 
         var options = (List<FieldSelectOption<int>>)result.GetType().GetProperty("options")!.GetValue(result)!;
         options.Should().ContainSingle().Which.Value.Should().Be(0);
+
+        ExceptionVerification.ExpectedWarns(1);
     }
 
     [Test]

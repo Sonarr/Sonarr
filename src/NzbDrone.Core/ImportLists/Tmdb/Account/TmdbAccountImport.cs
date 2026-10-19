@@ -26,6 +26,7 @@ public class TmdbAccountImport(ISonarrCloudRequestBuilder requestBuilder,
 
     public override IImportListRequestGenerator GetRequestGenerator()
     {
-        return new TmdbAccountRequestGenerator(Settings, 10);
+        // Paging already stops at the last page, so 50 pages of 20 matches MaxNumResultsPerQuery (1000).
+        return new TmdbAccountRequestGenerator(Settings, 50);
     }
 }
