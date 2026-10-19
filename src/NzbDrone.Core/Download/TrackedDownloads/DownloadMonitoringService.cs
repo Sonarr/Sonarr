@@ -8,6 +8,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.ThingiProvider.Events;
 
 namespace NzbDrone.Core.Download.TrackedDownloads
 {
@@ -17,7 +18,9 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                                              IHandle<EpisodeImportedEvent>,
                                              IHandle<ManualInteractionRequiredEvent>,
                                              IHandle<DownloadsProcessedEvent>,
-                                             IHandle<TrackedDownloadsRemovedEvent>
+                                             IHandle<TrackedDownloadsRemovedEvent>,
+                                             IHandle<ProviderUpdatedEvent<IDownloadClient>>,
+                                             IHandle<ProviderDeletedEvent<IDownloadClient>>
     {
         private readonly IDownloadClientStatusService _downloadClientStatusService;
         private readonly IDownloadClientFactory _downloadClientFactory;
@@ -178,6 +181,16 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         }
 
         public void Handle(EpisodeImportedEvent message)
+        {
+            _refreshDebounce.Execute();
+        }
+
+        public void Handle(ProviderUpdatedEvent<IDownloadClient> message)
+        {
+            _refreshDebounce.Execute();
+        }
+
+        public void Handle(ProviderDeletedEvent<IDownloadClient> message)
         {
             _refreshDebounce.Execute();
         }
