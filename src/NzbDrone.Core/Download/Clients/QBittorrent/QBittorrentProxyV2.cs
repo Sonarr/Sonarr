@@ -242,7 +242,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         private string GetSeedingTimeLimitParameterName(QBittorrentSettings settings)
         {
-            if ((QBittorrentSeedTimeType)settings.SeedTimeType != QBittorrentSeedTimeType.Inactive)
+            if ((QBittorrentSeedTimeType)settings.SeedTimeType == QBittorrentSeedTimeType.Total)
             {
                 return "seedingTimeLimit";
             }

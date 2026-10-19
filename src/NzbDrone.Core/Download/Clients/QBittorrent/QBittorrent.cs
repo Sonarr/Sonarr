@@ -652,13 +652,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         private ValidationFailure TestSeedTimeTypeSupport()
         {
-            if ((QBittorrentSeedTimeType)Settings.SeedTimeType != QBittorrentSeedTimeType.Inactive)
-            {
-                return null;
-            }
-
             // inactiveSeedingTimeLimit was added in api v2.9.2 (qBittorrent 4.6.0)
-            if (Proxy.GetApiVersion(Settings) < new Version(2, 9, 2))
+            if ((QBittorrentSeedTimeType)Settings.SeedTimeType == QBittorrentSeedTimeType.Inactive && Proxy.GetApiVersion(Settings) < new Version(2, 9, 2))
             {
                 return new NzbDroneValidationFailure(nameof(Settings.SeedTimeType), _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationInactiveSeedTimeUnsupported"))
                 {
