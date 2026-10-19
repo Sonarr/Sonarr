@@ -53,8 +53,8 @@ function Statistics() {
       ? roundNumber((data.downloadedEpisodeCount / wantedEpisodeCount) * 100)
       : 0;
 
-    const averageSizePerEpisode = data.totalEpisodeCount
-      ? data.sizeOnDisk / data.totalEpisodeCount
+    const averageSizePerEpisode = data.episodeFileCount
+      ? data.sizeOnDisk / data.episodeFileCount
       : 0;
 
     return [
