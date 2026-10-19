@@ -346,10 +346,10 @@ public enum TmdbLanguage
     [FieldOption(Label = "Navajo", Hint = "nv")]
     Nv = 112,
 
-    [FieldOption(Label = "Ndebele", Hint = "nr")]
+    [FieldOption(Label = "South Ndebele", Hint = "nr")]
     Nr = 113,
 
-    [FieldOption(Label = "Ndebele", Hint = "nd")]
+    [FieldOption(Label = "North Ndebele", Hint = "nd")]
     Nd = 114,
 
     [FieldOption(Label = "Ndonga", Hint = "ng")]
