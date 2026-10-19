@@ -5,7 +5,14 @@ import Column from 'Components/Table/Column';
 import { createPersist } from 'Helpers/createPersist';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 
-const deepMerge = createDeepMerge({ all: true });
+const deepMerge = createDeepMerge({
+  all: true,
+  mergeArray: ({ clone }) => {
+    return (_target, source) => {
+      return clone(source);
+    };
+  },
+});
 
 type TSettingsWithoutColumns = object;
 
