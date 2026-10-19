@@ -103,7 +103,7 @@
   composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
 
   flex: 0 0 auto;
-  width: 75px;
+  width: 130px;
 }
 
 .download {
