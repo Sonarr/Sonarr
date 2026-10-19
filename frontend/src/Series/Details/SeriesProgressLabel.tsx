@@ -25,7 +25,7 @@ function getEpisodeCountKind(
   return kinds.DANGER;
 }
 
-function getEpisodeCountIcon(kind: Kind) {
+function getEpisodeCountIcon(kind: Kind, episodeCount: number) {
   switch (kind) {
     case kinds.PURPLE:
       return icons.DOWNLOADING;
@@ -34,7 +34,7 @@ function getEpisodeCountIcon(kind: Kind) {
     case kinds.WARNING:
       return icons.UNMONITORED;
     default:
-      return icons.MISSING;
+      return episodeCount === 0 ? icons.NOT_AIRED : icons.MISSING;
   }
 }
 
@@ -72,7 +72,7 @@ function SeriesProgressLabel({
       className={className}
       kind={kind}
       size={sizes.LARGE}
-      icon={getEpisodeCountIcon(kind)}
+      icon={getEpisodeCountIcon(kind, episodeCount)}
     >
       <span>{text}</span>
     </Label>

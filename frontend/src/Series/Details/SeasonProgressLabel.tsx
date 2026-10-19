@@ -22,6 +22,10 @@ function getEpisodeCountKind(
     return kinds.WARNING;
   }
 
+  if (episodeCount === 0) {
+    return kinds.DEFAULT;
+  }
+
   return kinds.DANGER;
 }
 
@@ -33,6 +37,8 @@ function getEpisodeCountIcon(kind: Kind) {
       return icons.CHECK;
     case kinds.WARNING:
       return icons.UNMONITORED;
+    case kinds.DEFAULT:
+      return icons.NOT_AIRED;
     default:
       return icons.MISSING;
   }
