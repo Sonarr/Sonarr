@@ -221,12 +221,15 @@ function FormInput<T, C extends InputType>(props: FormInputProps<T, C>) {
   const checkInput = type === inputTypes.CHECK;
   const hasError = !!errors.length;
   const hasWarning = !hasError && !!warnings.length;
+  const describedBy = formRow?.descriptionIds.join(' ') || undefined;
   const buttonsArray = React.Children.toArray(buttons);
   const lastButtonIndex = buttonsArray.length - 1;
   const hasButton = !!buttonsArray.length;
 
   return (
     <FormInputGroupProvider
+      describedBy={describedBy}
+      hasError={hasError}
       setClientErrors={setClientErrors}
       setClientWarnings={setClientWarnings}
     >

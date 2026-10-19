@@ -4,6 +4,7 @@ import Icon from 'Components/Icon';
 import { icons } from 'Helpers/Props';
 import { Kind } from 'Helpers/Props/kinds';
 import { CheckInputChanged } from 'typings/inputs';
+import { useFormInputGroup } from './FormInputGroupContext';
 import FormInputHelpText from './FormInputHelpText';
 import styles from './CheckInput.module.css';
 
@@ -28,6 +29,7 @@ export interface CheckInputProps {
 }
 
 function CheckInput(props: CheckInputProps) {
+  const formInputGroup = useFormInputGroup();
   const {
     id,
     ariaLabel,
@@ -113,6 +115,8 @@ function CheckInput(props: CheckInputProps) {
           id={id}
           name={name}
           aria-label={ariaLabel}
+          aria-describedby={formInputGroup?.describedBy}
+          aria-invalid={formInputGroup?.hasError || undefined}
           checked={isChecked}
           disabled={isDisabled}
           onChange={handleChange}

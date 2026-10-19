@@ -1,8 +1,18 @@
-import React, { createContext, PropsWithChildren, useContext } from 'react';
+import React, {
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 
 interface FormRowContextValue {
   id?: string;
   type?: string;
+  descriptionIds: string[];
+  addDescriptionId: (id: string) => void;
+  removeDescriptionId: (id: string) => void;
 }
 
 const FormRowContext = createContext<FormRowContextValue | undefined>(
@@ -15,10 +25,34 @@ interface FormRowProviderProps extends PropsWithChildren {
 }
 
 export function FormRowProvider({ id, type, children }: FormRowProviderProps) {
+  const [descriptionIds, setDescriptionIds] = useState<string[]>([]);
+
+  const addDescriptionId = useCallback((descriptionId: string) => {
+    setDescriptionIds((currentIds) => {
+      return currentIds.includes(descriptionId)
+        ? currentIds
+        : [...currentIds, descriptionId];
+    });
+  }, []);
+
+  const removeDescriptionId = useCallback((descriptionId: string) => {
+    setDescriptionIds((currentIds) => {
+      return currentIds.filter((currentId) => currentId !== descriptionId);
+    });
+  }, []);
+
+  const value = useMemo(() => {
+    return {
+      id,
+      type,
+      descriptionIds,
+      addDescriptionId,
+      removeDescriptionId,
+    };
+  }, [id, type, descriptionIds, addDescriptionId, removeDescriptionId]);
+
   return (
-    <FormRowContext.Provider value={{ id, type }}>
-      {children}
-    </FormRowContext.Provider>
+    <FormRowContext.Provider value={value}>{children}</FormRowContext.Provider>
   );
 }
 

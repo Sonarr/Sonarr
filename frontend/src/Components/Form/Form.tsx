@@ -20,7 +20,7 @@ function Form({
   return (
     <div id={id}>
       {validationErrors.length || validationWarnings.length ? (
-        <div className={styles.validationFailures}>
+        <div className={styles.validationFailures} role="alert">
           {validationErrors.map((error, index) => {
             return (
               <Alert key={index} kind={kinds.DANGER}>

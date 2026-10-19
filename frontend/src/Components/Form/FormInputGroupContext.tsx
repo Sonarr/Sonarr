@@ -3,6 +3,8 @@ import { ValidationError, ValidationWarning } from 'typings/pending';
 import type { ValidationMessage } from './FormInput';
 
 interface FormInputGroupProviderProps extends PropsWithChildren {
+  describedBy?: string;
+  hasError: boolean;
   setClientErrors: (errors: (ValidationMessage | ValidationError)[]) => void;
   setClientWarnings: (
     warnings: (ValidationMessage | ValidationWarning)[]
@@ -10,6 +12,8 @@ interface FormInputGroupProviderProps extends PropsWithChildren {
 }
 
 interface FormInputGroupContextProps {
+  describedBy?: string;
+  hasError: boolean;
   setClientErrors: (errors: (ValidationMessage | ValidationError)[]) => void;
   setClientWarnings: (
     warnings: (ValidationMessage | ValidationWarning)[]
@@ -21,16 +25,20 @@ const FormInputGroupContext = createContext<
 >(undefined);
 
 export function FormInputGroupProvider({
+  describedBy,
+  hasError,
   setClientErrors,
   setClientWarnings,
   children,
 }: FormInputGroupProviderProps) {
   const value = useMemo(() => {
     return {
+      describedBy,
+      hasError,
       setClientErrors,
       setClientWarnings,
     };
-  }, [setClientErrors, setClientWarnings]);
+  }, [describedBy, hasError, setClientErrors, setClientWarnings]);
 
   return (
     <FormInputGroupContext.Provider value={value}>
