@@ -43,5 +43,16 @@ namespace NzbDrone.Integration.Test
 
             response.StatusCode.Should().Be(HttpStatusCode.NotAcceptable);
         }
+
+        [Test]
+        public void should_have_version_header_on_error_response()
+        {
+            var request = new RestRequest("episodefile?seriesId=99999");
+
+            var response = RestClient.Execute(request);
+
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            response.Headers.Should().Contain(h => h.Name == "X-Application-Version");
+        }
     }
 }

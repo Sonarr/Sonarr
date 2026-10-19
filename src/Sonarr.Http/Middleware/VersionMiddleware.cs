@@ -9,20 +9,25 @@ namespace Sonarr.Http.Middleware
     {
         private const string VERSIONHEADER = "X-Application-Version";
 
+        private static readonly string Version = BuildInfo.Version.ToString();
+
         private readonly RequestDelegate _next;
-        private readonly string _version;
 
         public VersionMiddleware(RequestDelegate next)
         {
             _next = next;
-            _version = BuildInfo.Version.ToString();
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (context.Request.IsApiRequest() && !context.Response.Headers.ContainsKey(VERSIONHEADER))
+            if (context.Request.IsApiRequest())
             {
-                context.Response.Headers[VERSIONHEADER] = _version;
+                context.Response.OnStarting(() =>
+                {
+                    context.Response.Headers[VERSIONHEADER] = Version;
+
+                    return Task.CompletedTask;
+                });
             }
 
             await _next(context);
