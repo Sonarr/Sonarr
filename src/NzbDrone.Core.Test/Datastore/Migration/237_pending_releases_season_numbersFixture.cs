@@ -68,6 +68,15 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         }
 
         [Test]
+        public void should_keep_season_number_of_special_episode_remapped_from_title()
+        {
+            var result = MigratePendingRelease("{\"seriesTitle\":\"Series Title\",\"seasonNumber\":0,\"episodeNumbers\":[3]}", "Series.Title.S02E00.Special.Episode.1080p.WEB-DL.x264-RlsGrp");
+
+            result["seasonNumbers"].Values<int>().Should().Equal(0);
+            result["episodeNumbers"].Values<int>().Should().Equal(3);
+        }
+
+        [Test]
         public void should_set_empty_season_numbers_when_season_number_is_null()
         {
             var result = MigratePendingRelease("{\"seriesTitle\":\"Series Title\",\"seasonNumber\":null,\"airDate\":\"2026-01-01\"}");

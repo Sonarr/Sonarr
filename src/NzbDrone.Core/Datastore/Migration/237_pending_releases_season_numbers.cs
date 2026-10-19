@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         {
                             var parsedSeasonNumbers = Parser.Parser.ParseTitle(title)?.SeasonNumbers;
 
-                            if (parsedSeasonNumbers is { Count: > 0 })
+                            if (parsedSeasonNumbers is { Count: > 0 } && parsedSeasonNumbers[0] == seasonNumber.Value<int?>())
                             {
                                 parsedEpisodeInfo["seasonNumbers"] = new JArray(parsedSeasonNumbers);
                             }
