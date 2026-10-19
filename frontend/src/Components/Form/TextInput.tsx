@@ -13,6 +13,7 @@ import { FileInputChanged, InputChanged } from 'typings/inputs';
 import styles from './TextInput.module.css';
 
 export interface CommonTextInputProps {
+  id?: string;
   className?: string;
   readOnly?: boolean;
   autoFocus?: boolean;
@@ -45,6 +46,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps | FileInputProps>(
   (
     {
       className = styles.input,
+      id,
       type = 'text',
       readOnly = false,
       autoFocus = false,
@@ -160,6 +162,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps | FileInputProps>(
     return (
       <input
         ref={combinedRef}
+        id={id}
         type={type}
         readOnly={readOnly}
         autoFocus={autoFocus}

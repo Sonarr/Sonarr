@@ -6,6 +6,7 @@ import { getValidationFailures } from 'Utilities/selectSettings';
 import { useFormInputGroup } from './FormInputGroupContext';
 
 export interface OAuthInputProps {
+  id?: string;
   label?: string;
   name: string;
   provider: string;
@@ -15,6 +16,7 @@ export interface OAuthInputProps {
 }
 
 function OAuthInput({
+  id,
   label = 'Start OAuth',
   name,
   provider,
@@ -60,6 +62,7 @@ function OAuthInput({
   return (
     <div>
       <SpinnerErrorButton
+        id={id}
         isSpinning={authorizing}
         error={error}
         onPress={handlePress}

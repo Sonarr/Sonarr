@@ -61,6 +61,7 @@ export interface ReplacementTag<T extends TagBase> {
 }
 
 export interface TagInputProps<T extends TagBase> {
+  id?: string;
   className?: string;
   inputContainerClassName?: string;
   name: string;

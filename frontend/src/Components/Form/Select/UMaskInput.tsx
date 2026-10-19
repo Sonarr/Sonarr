@@ -71,6 +71,7 @@ function formatPermissions(permissions: number) {
 }
 
 export interface UMaskInputProps {
+  id?: string;
   name: string;
   value: string;
   hasError?: boolean;
@@ -80,7 +81,7 @@ export interface UMaskInputProps {
   onBlur?: (event: SyntheticEvent) => void;
 }
 
-function UMaskInput({ name, value, onChange }: UMaskInputProps) {
+function UMaskInput({ id, name, value, onChange }: UMaskInputProps) {
   const valueNum = parseInt(value, 8);
   const umaskNum = 0o777 & ~valueNum;
   const umask = umaskNum.toString(8).padStart(4, '0');
@@ -99,6 +100,7 @@ function UMaskInput({ name, value, onChange }: UMaskInputProps) {
       <div className={styles.inputWrapper}>
         <div className={styles.inputUnitWrapper}>
           <EnhancedSelectInput
+            id={id}
             name={name}
             value={value}
             values={values}

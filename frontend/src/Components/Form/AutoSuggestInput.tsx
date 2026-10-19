@@ -28,6 +28,7 @@ import styles from './AutoSuggestInput.module.css';
 interface AutoSuggestInputProps<T>
   extends Omit<AutosuggestPropsBase<T>, 'renderInputComponent' | 'inputProps'> {
   forwardedRef?: MutableRefObject<Autosuggest<T> | null>;
+  id?: string;
   className?: string;
   inputContainerClassName?: string;
   name: string;
@@ -60,6 +61,7 @@ function AutoSuggestInput<T = any>(props: AutoSuggestInputProps<T>) {
   const {
     // TODO: forwaredRef should be replaces with React.forwardRef
     forwardedRef,
+    id,
     className = styles.input,
     inputContainerClassName = styles.inputContainer,
     name,
@@ -175,6 +177,7 @@ function AutoSuggestInput<T = any>(props: AutoSuggestInputProps<T>) {
   );
 
   const inputProps = {
+    id,
     className: classNames(
       className,
       hasError && styles.hasError,

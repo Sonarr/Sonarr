@@ -12,6 +12,7 @@ interface ChangeEvent<T = Element> extends SyntheticEvent<T, MouseEvent> {
 }
 
 export interface CheckInputProps {
+  id?: string;
   ariaLabel?: string;
   className?: string;
   containerClassName?: string;
@@ -28,6 +29,7 @@ export interface CheckInputProps {
 
 function CheckInput(props: CheckInputProps) {
   const {
+    id,
     ariaLabel,
     className = styles.input,
     containerClassName = styles.container,
@@ -108,6 +110,7 @@ function CheckInput(props: CheckInputProps) {
           ref={inputRef}
           className={styles.checkbox}
           type="checkbox"
+          id={id}
           name={name}
           aria-label={ariaLabel}
           checked={isChecked}
