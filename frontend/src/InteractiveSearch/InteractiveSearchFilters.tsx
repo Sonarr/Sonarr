@@ -9,6 +9,7 @@ import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import InteractiveSearchFilterModal from './InteractiveSearchFilterModal';
 import InteractiveSearchPayload from './InteractiveSearchPayload';
+import InteractiveSearchSortMenu from './InteractiveSearchSortMenu';
 import {
   getSelectedFilterKeyOption,
   setReleaseOption,
@@ -58,6 +59,8 @@ function InteractiveSearchFilters({
           onChange={handleFilterChange}
         />
       </div>
+
+      <InteractiveSearchSortMenu />
 
       <FilterMenu
         alignMenu={align.RIGHT}

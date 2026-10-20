@@ -4,6 +4,7 @@ import { kinds } from 'Helpers/Props';
 import { QualityModel } from 'Quality/Quality';
 import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
+import styles from './EpisodeQuality.module.css';
 
 function getTooltip(
   title: string,
@@ -91,7 +92,7 @@ function EpisodeQuality(props: EpisodeQualityProps) {
   }
 
   return (
-    <span>
+    <span className={styles.quality}>
       <Label
         className={className}
         kind={isCutoffNotMet ? kinds.INVERSE : kinds.DEFAULT}

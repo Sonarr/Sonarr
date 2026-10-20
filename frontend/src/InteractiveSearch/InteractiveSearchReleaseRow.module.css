@@ -1,0 +1,87 @@
+.row {
+  display: flex;
+  align-items: center;
+  padding: 12px calc(var(--columnRowPadding) - 1px);
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
+  background-color: var(--cardBackgroundColor);
+  color: var(--ink);
+  gap: var(--columnGap);
+}
+
+.release {
+  composes: release from './InteractiveSearchColumns.module.css';
+}
+
+.title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  overflow-wrap: anywhere;
+  gap: 8px;
+}
+
+.sceneMapping {
+  flex-shrink: 0;
+}
+
+.details {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 4px;
+  gap: 6px;
+}
+
+.indexer {
+  min-width: 0;
+  color: var(--inkMuted);
+  overflow-wrap: anywhere;
+}
+
+.quality {
+  composes: quality from './InteractiveSearchColumns.module.css';
+}
+
+.score {
+  composes: score from './InteractiveSearchColumns.module.css';
+
+  font-weight: bold;
+  cursor: default;
+}
+
+.size {
+  composes: size from './InteractiveSearchColumns.module.css';
+
+  white-space: nowrap;
+}
+
+.age {
+  composes: age from './InteractiveSearchColumns.module.css';
+
+  white-space: nowrap;
+}
+
+.peers {
+  composes: peers from './InteractiveSearchColumns.module.css';
+}
+
+.actions {
+  composes: actions from './InteractiveSearchColumns.module.css';
+}
+
+.quality,
+.score,
+.size,
+.age,
+.peers {
+  display: flex;
+  align-items: center;
+}
+
+.qualityLabel {
+  composes: label from 'Components/Label.module.css';
+
+  white-space: normal;
+  overflow-wrap: anywhere;
+}

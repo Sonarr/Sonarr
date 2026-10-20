@@ -1,0 +1,48 @@
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.actionButton {
+  composes: link from 'Components/Link/Link.module.css';
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--borderColor);
+  border-radius: 8px;
+
+  &:hover {
+    color: var(--iconButtonHoverColor);
+  }
+
+  &:global(.isDisabled) {
+    color: var(--iconButtonDisabledColor);
+  }
+}
+
+.manualDownloadContent {
+  position: relative;
+  display: inline-block;
+  width: 22px;
+  height: 20.39px;
+  vertical-align: middle;
+  line-height: 20.39px;
+}
+
+.interactiveIcon {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  text-align: center;
+}
+
+.downloadIcon {
+  position: absolute;
+  top: 7px;
+  left: 8px;
+  text-align: center;
+}

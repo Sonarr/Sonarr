@@ -21,10 +21,14 @@
   justify-content: center;
 }
 
-.indicatorContainer {
+.indicator {
   position: absolute;
-  top: -4px;
-  right: -4px;
+  top: -2px;
+  right: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent);
 }
 
 .label {
