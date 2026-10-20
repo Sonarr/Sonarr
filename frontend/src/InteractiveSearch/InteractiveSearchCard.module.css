@@ -1,0 +1,78 @@
+.card {
+  padding: 12px 14px;
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
+  background-color: var(--cardBackgroundColor);
+  color: var(--ink);
+}
+
+.title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  overflow-wrap: anywhere;
+  gap: 8px;
+}
+
+.sceneMapping {
+  flex-shrink: 0;
+}
+
+.details {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  gap: 8px 10px;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  min-width: 0;
+  gap: 6px;
+}
+
+.score {
+  font-weight: bold;
+  cursor: default;
+}
+
+.age,
+.size {
+  white-space: nowrap;
+}
+
+.separator {
+  color: var(--inkMuted);
+}
+
+.source {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 6px;
+}
+
+.indexer {
+  overflow: hidden;
+  min-width: 0;
+  color: var(--inkMuted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actions {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding-left: 4px;
+}
+
+.qualityLabel {
+  composes: label from 'Components/Label.module.css';
+
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
