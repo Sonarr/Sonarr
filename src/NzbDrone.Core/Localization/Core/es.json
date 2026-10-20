@@ -1991,7 +1991,7 @@
     "RescanSeriesFolderAfterRefresh": "Volver a escanear la carpeta de series tras actualizar",
     "Reset": "Reiniciar",
     "ResetAPIKey": "Restablecer clave API",
-    "ResetAPIKeyMessageText": "¿Estás seguro que quieres restablecer tu clave API? La interfaz de usuario será recargada una vez la clave API haya sida restablecida.",
+    "ResetAPIKeyMessageText": "¿Estás seguro que quieres restablecer tu clave API? La interfaz de usuario se recargará una vez que la clave API haya sido restablecida.",
     "ResetDefinitionTitlesHelpText": "Restablecer títulos de definición también como valores",
     "ResetDefinitions": "Restablecer definiciones",
     "ResetQualityDefinitions": "Restablecer definiciones de calidad",

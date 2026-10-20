@@ -1991,7 +1991,7 @@
     "RescanSeriesFolderAfterRefresh": "Verificar novamente a pasta da série após a atualização",
     "Reset": "Redefinir",
     "ResetAPIKey": "Redefinir chave de API",
-    "ResetAPIKeyMessageText": "Tem certeza de que deseja redefinir sua chave de API? A IU será recarregada assim que a chave de API for redefinida.",
+    "ResetAPIKeyMessageText": "Tem certeza de que deseja redefinir sua chave de API? A interface do usuário será recarregada assim que a chave de API for redefinida.",
     "ResetDefinitionTitlesHelpText": "Redefinir títulos de definição e valores",
     "ResetDefinitions": "Redefinir definições",
     "ResetQualityDefinitions": "Redefinir Definições de Qualidade",
