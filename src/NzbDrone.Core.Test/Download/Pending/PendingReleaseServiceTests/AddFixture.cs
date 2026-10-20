@@ -9,6 +9,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Qualities;
@@ -204,12 +205,18 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         {
             Mocker.GetMock<IPendingReleaseRepository>()
                 .Verify(v => v.Insert(It.IsAny<PendingRelease>()), Times.Once());
+
+            Mocker.GetMock<IEventAggregator>()
+                .Verify(v => v.PublishEvent(It.IsAny<PendingReleasesUpdatedEvent>()), Times.Exactly(2));
         }
 
         private void VerifyNoInsert()
         {
             Mocker.GetMock<IPendingReleaseRepository>()
                 .Verify(v => v.Insert(It.IsAny<PendingRelease>()), Times.Never());
+
+            Mocker.GetMock<IEventAggregator>()
+                .Verify(v => v.PublishEvent(It.IsAny<PendingReleasesUpdatedEvent>()), Times.Exactly(2));
         }
     }
 }
