@@ -24,6 +24,7 @@ export const useCommands = () => {
     path: '/command',
     queryOptions: {
       refetchInterval: COMMAND_REFETCH_INTERVAL,
+      staleTime: 30 * 1000,
     },
   });
 
@@ -126,7 +127,11 @@ export const useCommand = (
 ) => {
   const { data: commands } = useCommands();
 
+  const constraintsKey = JSON.stringify(constraints);
+
   return useMemo(() => {
+    const constraints = JSON.parse(constraintsKey) as Partial<CommandBody>;
+
     return commands.findLast((command) => {
       if (command.name !== commandName) {
         return false;
@@ -151,7 +156,7 @@ export const useCommand = (
         }
       );
     });
-  }, [commands, commandName, constraints]);
+  }, [commands, commandName, constraintsKey]);
 };
 
 export const useCommandExecuting = (

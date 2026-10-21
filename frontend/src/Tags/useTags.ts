@@ -20,6 +20,7 @@ const useTags = () => {
     path: '/tag',
     queryOptions: {
       gcTime: Infinity,
+      staleTime: 30 * 1000,
     },
   });
 
