@@ -7,10 +7,11 @@ import { SortDirection } from 'Helpers/Props/sortDirections';
 
 const deepMerge = createDeepMerge({
   all: true,
-  mergeArray:
-    ({ clone }) =>
-    (_target, source) =>
-      clone(source),
+  mergeArray: ({ clone }) => {
+    return (_target, source) => {
+      return clone(source);
+    };
+  },
 });
 
 type TSettingsWithoutColumns = object;
