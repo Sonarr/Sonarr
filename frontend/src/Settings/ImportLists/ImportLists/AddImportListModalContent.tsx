@@ -19,6 +19,12 @@ export interface AddImportListModalContentProps {
   onModalClose: () => void;
 }
 
+function getListGroupTitle(typeOfList: string) {
+  return translate('TypeOfList', {
+    typeOfList: typeOfList === 'tmdb' ? 'TMDb' : titleCase(typeOfList),
+  });
+}
+
 function AddImportListModalContent({
   onImportListSelect,
   onModalClose,
@@ -65,7 +71,7 @@ function AddImportListModalContent({
             {Object.keys(listGroups).map((key) => (
               <div key={key} className={styles.group}>
                 <h3 className={styles.groupHeading}>
-                  {translate('TypeOfList', { typeOfList: titleCase(key) })}
+                  {getListGroupTitle(key)}
                 </h3>
 
                 {listGroups[key].map((list) => (

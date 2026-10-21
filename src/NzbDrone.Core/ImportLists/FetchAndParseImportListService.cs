@@ -95,7 +95,7 @@ namespace NzbDrone.Core.ImportLists
 
             Task.WaitAll(taskList.ToArray());
 
-            result.Series = result.Series.DistinctBy(r => new { r.TvdbId, r.ImdbId, r.Title }).ToList();
+            result.Series = result.Series.DistinctBy(r => new { r.TvdbId, r.TmdbId, r.ImdbId, r.Title }).ToList();
 
             _logger.Debug("Found {0} total reports from {1} lists", result.Series.Count, importLists.Count);
 
