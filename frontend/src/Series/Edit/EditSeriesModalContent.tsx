@@ -268,6 +268,14 @@ function EditSeriesModalContent({
             <FormLabel>{translate('SeasonType')}</FormLabel>
 
             <FormInputHelpText text={translate('SeasonTypeHelpText')} />
+            <FormInputHelpText
+              text={
+                !seasonTypes.length || episodeFileCount > 0
+                  ? translate('SeasonTypeHelpTextWarning')
+                  : undefined
+              }
+              isWarning={true}
+            />
             <FormInput
               type={inputTypes.SEASON_TYPE_SELECT}
               name="seasonType"

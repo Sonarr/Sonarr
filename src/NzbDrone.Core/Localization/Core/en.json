@@ -2098,6 +2098,7 @@
   "SeasonsMonitoredStatus": "Seasons Monitored",
   "SeasonType": "Episode Order",
   "SeasonTypeHelpText": "Choose the season/episode order for series that have alternate orders. For example DVD or Netflix order",
+  "SeasonTypeHelpTextWarning": "Episode ordering can be changed only when there are no episode files present in the series folder",
   "SecretToken": "Secret Token",
   "Security": "Security",
   "SecurityCaption": "Configure authentication and API access",
