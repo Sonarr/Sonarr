@@ -199,7 +199,12 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Debug("Executing external script: {0}", _configService.ScriptImportPath);
 
-            var processOutput = _processProvider.StartAndCapture(_configService.ScriptImportPath, $"\"{sourcePath}\" \"{destinationFilePath}\"", environmentVariables);
+            var arguments = new[] { sourcePath, destinationFilePath };
+
+            var processOutput = _processProvider.StartAndCapture(
+                _configService.ScriptImportPath,
+                arguments,
+                environmentVariables);
 
             _logger.Debug("Script Output: \r\n{0}", string.Join("\r\n", processOutput.Lines));
 
