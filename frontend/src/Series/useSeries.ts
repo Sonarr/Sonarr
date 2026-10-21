@@ -971,10 +971,12 @@ export const useUpdateSeriesMonitor = (
             return oldSeries;
           }
 
+          const updatedSeriesById = new Map(
+            variables.series.map((s) => [s.id, s])
+          );
+
           return oldSeries.map((series) => {
-            const updatedSeries = variables.series.find(
-              (s) => s.id === series.id
-            );
+            const updatedSeries = updatedSeriesById.get(series.id);
 
             if (!updatedSeries) {
               return series;
@@ -1027,10 +1029,12 @@ export const useSaveSeriesEditor = () => {
             return oldSeries;
           }
 
+          const updatedSeriesById = new Map(
+            updatedSeries.map((updated) => [updated.id, updated])
+          );
+
           return oldSeries.map((series) => {
-            const updatedSeriesData = updatedSeries.find(
-              (updated) => updated.id === series.id
-            );
+            const updatedSeriesData = updatedSeriesById.get(series.id);
 
             if (updatedSeriesData) {
               const {
