@@ -11523,11 +11523,6 @@
             },
             "nullable": true
           },
-          "seasonNumber": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
           "episodeNumbers": {
             "type": "array",
             "items": {
@@ -11647,11 +11642,6 @@
           },
           "fullSeason": {
             "type": "boolean"
-          },
-          "seasonNumber": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
           },
           "seasonNumbers": {
             "type": "array",
