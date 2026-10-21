@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
-            result.SeasonNumber.Should().Be(1);
+            result.SeasonNumbers.Should().Equal(1);
             result.EpisodeNumbers.First().Should().Be(episodeNumber);
             result.SeriesTitle.Should().Be(title);
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
-            result.SeasonNumber.Should().Be(1);
+            result.SeasonNumbers.Should().Equal(1);
             result.EpisodeNumbers.First().Should().Be(episodeNumber);
             result.SeriesTitle.Should().Be(title);
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
