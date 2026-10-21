@@ -117,7 +117,7 @@ function EpisodeRow({
             <TableRowCell key={name} className={styles.monitored}>
               <MonitorToggleButton
                 monitored={monitored}
-                isDisabled={!seriesMonitored}
+                isDisabled={!seriesMonitored && !monitored}
                 isSaving={isSaving}
                 size={14}
                 onPress={handleMonitorEpisodePress}
