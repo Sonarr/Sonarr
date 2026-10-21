@@ -118,7 +118,7 @@ function EpisodeDetailsModalContent({
           <MonitorToggleButton
             monitored={monitored}
             size={18}
-            isDisabled={!seriesMonitored}
+            isDisabled={!seriesMonitored && !monitored}
             isSaving={isToggling}
             onPress={handleMonitorEpisodePress}
           />
