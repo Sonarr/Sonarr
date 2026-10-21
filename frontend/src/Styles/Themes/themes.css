@@ -51,7 +51,6 @@
   --themeAlternateBlue: oklch(50% 0.130 215);
   --themeRed: oklch(58% 0.165 28);
   --themeDarkColor: oklch(18% 0.014 260);
-  --themeLightColor: oklch(32% 0.012 260);
   --pageFooterBackground: var(--paperWarm);
   --torrentColor: oklch(70% 0.120 175);
   --usenetColor: oklch(68% 0.130 265);
@@ -194,6 +193,7 @@
   /* Sit on artwork, so theme-independent: no dark-block override */
   --seriesOverlayBackdrop: oklch(15% 0.008 260 / 0.82);
   --seriesOverlayInk: oklch(90% 0.007 260);
+  --posterSelectBackgroundColor: oklch(32% 0.012 260);
 
   --searchIconContainerBackgroundColor: var(--paper);
   --collapseButtonBackgroundColor: var(--paper);
@@ -273,7 +273,6 @@
   --themeAlternateBlue: oklch(70% 0.130 215);
   --themeRed: oklch(62% 0.150 28);
   --themeDarkColor: oklch(27% 0.014 260);
-  --themeLightColor: oklch(29% 0.015 260);
   --pageFooterBackground: oklch(0% 0 0 / 0.25);
   --torrentColor: oklch(74% 0.135 175);
   --usenetColor: oklch(70% 0.150 265);

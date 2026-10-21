@@ -14,7 +14,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: var(--defaultColor);
+  background-color: var(--posterSelectBackgroundColor);
 }
 
 .icon {
@@ -31,10 +31,6 @@
 
 .checkButton {
   &:hover {
-    .selected {
-      color: var(--white);
-    }
-
     .unselected {
       color: var(--sonarrBlue);
     }
