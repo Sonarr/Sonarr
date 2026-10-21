@@ -442,7 +442,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
 
         if (name === 'averageSizePerEpisode') {
           const averageSize =
-            totalEpisodeCount > 0 ? sizeOnDisk / totalEpisodeCount : 0;
+            episodeFileCount > 0 ? sizeOnDisk / episodeFileCount : 0;
 
           return (
             <VirtualTableRowCell key={name} className={styles[name]}>
