@@ -488,6 +488,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
         public void Execute(ManualImportCommand message)
         {
+            if (message.Files == null || message.Files.Empty())
+            {
+                _logger.Debug("Manual import command received without files, skipping import");
+                return;
+            }
+
             _logger.ProgressTrace("Manually importing {0} files using mode {1}", message.Files.Count, message.ImportMode);
 
             var imported = new List<ImportResult>();
