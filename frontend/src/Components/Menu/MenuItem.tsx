@@ -14,6 +14,7 @@ function MenuItem({
   className = styles.menuItem,
   children,
   isDisabled = false,
+  role = 'menuitem',
   onPress,
   ...otherProps
 }: MenuItemProps) {
@@ -31,6 +32,7 @@ function MenuItem({
     <Link
       className={classNames(className, isDisabled && styles.isDisabled)}
       isDisabled={isDisabled}
+      role={role}
       onPress={handlePress}
       {...otherProps}
     >

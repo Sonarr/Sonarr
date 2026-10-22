@@ -112,21 +112,20 @@ function Calendar() {
       {!isFetching && error ? (
         <Alert kind={kinds.DANGER}>{translate('CalendarLoadError')}</Alert>
       ) : null}
-      {!error && !isLoading && view === 'agenda' ? (
-        <div className={styles.calendarContent}>
-          <div className={styles.sticky}>
+      {!error && !isLoading ? (
+        <div
+          ref={view === 'agenda' ? undefined : contentRef}
+          className={styles.calendarContent}
+        >
+          <div
+            ref={view === 'agenda' ? undefined : stickyRef}
+            className={styles.sticky}
+          >
             <CalendarHeader />
+            {view === 'agenda' ? null : <DaysOfWeek />}
           </div>
-          <Agenda />
-        </div>
-      ) : null}
-      {!error && !isLoading && view !== 'agenda' ? (
-        <div ref={contentRef} className={styles.calendarContent}>
-          <div ref={stickyRef} className={styles.sticky}>
-            <CalendarHeader />
-            <DaysOfWeek />
-          </div>
-          <CalendarDays />
+
+          {view === 'agenda' ? <Agenda /> : <CalendarDays />}
         </div>
       ) : null}
     </div>

@@ -111,7 +111,7 @@
     color: var(--ink);
   }
 
-  &:global(.isDisabled) {
+  &[aria-pressed=true] {
     background-color: var(--paperWarm);
     color: var(--accent);
   }

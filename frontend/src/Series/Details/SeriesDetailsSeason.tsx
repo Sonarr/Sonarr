@@ -154,6 +154,37 @@ function SeriesDetailsSeason({
     seasonNumber === 0
       ? translate('Specials')
       : translate('SeasonNumberToken', { seasonNumber });
+  const seasonActionsLabel = translate('SeasonActions', {
+    season: seasonNumberTitle,
+  });
+  const showEpisodesLabel = translate('ShowEpisodesForSeason', {
+    season: seasonNumberTitle,
+  });
+  const hideEpisodesLabel = translate('HideEpisodesForSeason', {
+    season: seasonNumberTitle,
+  });
+  const monitorSeasonLabel = translate(
+    monitored ? 'StopMonitoringSeason' : 'MonitorSeason',
+    { season: seasonNumberTitle }
+  );
+  const searchSeasonLabel = translate('SearchForMonitoredEpisodesInSeason', {
+    season: seasonNumberTitle,
+  });
+  const noMonitoredEpisodesLabel = translate('NoMonitoredEpisodesInSeason', {
+    season: seasonNumberTitle,
+  });
+  const interactiveSearchLabel = translate('InteractiveSearchForSeason', {
+    season: seasonNumberTitle,
+  });
+  const previewRenameLabel = translate('PreviewRenameForSeason', {
+    season: seasonNumberTitle,
+  });
+  const manageEpisodesLabel = translate('ManageEpisodeFilesForSeason', {
+    season: seasonNumberTitle,
+  });
+  const historyLabel = translate('ViewHistoryForSeason', {
+    season: seasonNumberTitle,
+  });
 
   const handleMonitorSeasonPress = useCallback(
     (value: boolean) => {
@@ -285,6 +316,7 @@ function SeriesDetailsSeason({
             isDisabled={!seriesMonitored}
             isSaving={isTogglingSeasonMonitored}
             size={24}
+            title={monitorSeasonLabel}
             onPress={handleMonitorSeasonPress}
           />
 
@@ -337,13 +369,15 @@ function SeriesDetailsSeason({
           </div>
         </div>
 
-        <Link className={styles.expandButton} onPress={handleExpandPress}>
+        <Link
+          className={styles.expandButton}
+          aria-label={isExpanded ? hideEpisodesLabel : showEpisodesLabel}
+          onPress={handleExpandPress}
+        >
           <Icon
             className={styles.expandButtonIcon}
             name={isExpanded ? icons.COLLAPSE : icons.EXPAND}
-            title={
-              isExpanded ? translate('HideEpisodes') : translate('ShowEpisodes')
-            }
+            title={isExpanded ? hideEpisodesLabel : showEpisodesLabel}
             size={24}
           />
           {isSmallScreen ? null : <span>&nbsp;</span>}
@@ -355,7 +389,10 @@ function SeriesDetailsSeason({
             alignMenu={align.RIGHT}
             enforceMaxHeight={false}
           >
-            <MenuButton className={styles.actionsMenuButton}>
+            <MenuButton
+              className={styles.actionsMenuButton}
+              aria-label={seasonActionsLabel}
+            >
               <Icon name={icons.ACTIONS} size={22} />
             </MenuButton>
 
@@ -363,6 +400,11 @@ function SeriesDetailsSeason({
               <MenuItem
                 isDisabled={
                   isSearching || !hasMonitoredEpisodes || !seriesMonitored
+                }
+                aria-label={
+                  hasMonitoredEpisodes && seriesMonitored
+                    ? searchSeasonLabel
+                    : noMonitoredEpisodesLabel
                 }
                 onPress={handleSearchPress}
               >
@@ -377,6 +419,7 @@ function SeriesDetailsSeason({
 
               <MenuItem
                 isDisabled={!totalEpisodeCount}
+                aria-label={interactiveSearchLabel}
                 onPress={handleInteractiveSearchPress}
               >
                 <Icon
@@ -389,6 +432,7 @@ function SeriesDetailsSeason({
 
               <MenuItem
                 isDisabled={!episodeFileCount}
+                aria-label={previewRenameLabel}
                 onPress={handleOrganizePress}
               >
                 <Icon className={styles.actionMenuIcon} name={icons.ORGANIZE} />
@@ -398,6 +442,7 @@ function SeriesDetailsSeason({
 
               <MenuItem
                 isDisabled={!episodeFileCount}
+                aria-label={manageEpisodesLabel}
                 onPress={handleManageEpisodesPress}
               >
                 <Icon
@@ -410,6 +455,7 @@ function SeriesDetailsSeason({
 
               <MenuItem
                 isDisabled={!totalEpisodeCount}
+                aria-label={historyLabel}
                 onPress={handleHistoryPress}
               >
                 <Icon className={styles.actionMenuIcon} name={icons.HISTORY} />
@@ -425,8 +471,13 @@ function SeriesDetailsSeason({
               name={icons.SEARCH}
               title={
                 hasMonitoredEpisodes && seriesMonitored
-                  ? translate('SearchForMonitoredEpisodesSeason')
-                  : translate('NoMonitoredEpisodesSeason')
+                  ? searchSeasonLabel
+                  : noMonitoredEpisodesLabel
+              }
+              aria-label={
+                hasMonitoredEpisodes && seriesMonitored
+                  ? searchSeasonLabel
+                  : noMonitoredEpisodesLabel
               }
               size={20}
               isSpinning={isSearching}
@@ -439,8 +490,8 @@ function SeriesDetailsSeason({
             <IconButton
               className={styles.actionButton}
               name={icons.INTERACTIVE}
-              title={translate('InteractiveSearchSeason')}
-              aria-label={translate('InteractiveSearchSeason')}
+              title={interactiveSearchLabel}
+              aria-label={interactiveSearchLabel}
               size={20}
               isDisabled={!totalEpisodeCount}
               onPress={handleInteractiveSearchPress}
@@ -449,8 +500,8 @@ function SeriesDetailsSeason({
             <IconButton
               className={styles.actionButton}
               name={icons.ORGANIZE}
-              title={translate('PreviewRenameSeason')}
-              aria-label={translate('PreviewRenameSeason')}
+              title={previewRenameLabel}
+              aria-label={previewRenameLabel}
               size={20}
               isDisabled={!episodeFileCount}
               onPress={handleOrganizePress}
@@ -459,8 +510,8 @@ function SeriesDetailsSeason({
             <IconButton
               className={styles.actionButton}
               name={icons.EPISODE_FILE}
-              title={translate('ManageEpisodesSeason')}
-              aria-label={translate('ManageEpisodesSeason')}
+              title={manageEpisodesLabel}
+              aria-label={manageEpisodesLabel}
               size={20}
               isDisabled={!episodeFileCount}
               onPress={handleManageEpisodesPress}
@@ -469,8 +520,8 @@ function SeriesDetailsSeason({
             <IconButton
               className={styles.actionButton}
               name={icons.HISTORY}
-              title={translate('HistorySeason')}
-              aria-label={translate('HistorySeason')}
+              title={historyLabel}
+              aria-label={historyLabel}
               size={20}
               isDisabled={!totalEpisodeCount}
               onPress={handleHistoryPress}
@@ -517,8 +568,8 @@ function SeriesDetailsSeason({
                 iconClassName={styles.collapseButtonIcon}
                 name={icons.COLLAPSE}
                 size={20}
-                title={translate('HideEpisodes')}
-                aria-label={translate('HideEpisodes')}
+                title={hideEpisodesLabel}
+                aria-label={hideEpisodesLabel}
                 onPress={handleExpandPress}
               />
             </div>
