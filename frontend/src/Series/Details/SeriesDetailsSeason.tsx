@@ -355,7 +355,10 @@ function SeriesDetailsSeason({
             alignMenu={align.RIGHT}
             enforceMaxHeight={false}
           >
-            <MenuButton className={styles.actionsMenuButton}>
+            <MenuButton
+              className={styles.actionsMenuButton}
+              aria-label={translate('Actions')}
+            >
               <Icon name={icons.ACTIONS} size={22} />
             </MenuButton>
 

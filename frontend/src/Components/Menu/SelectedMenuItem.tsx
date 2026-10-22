@@ -25,7 +25,12 @@ function SelectedMenuItem({
   }, [name, onPress]);
 
   return (
-    <MenuItem {...otherProps} onPress={handlePress}>
+    <MenuItem
+      {...otherProps}
+      role="menuitemradio"
+      aria-checked={isSelected}
+      onPress={handlePress}
+    >
       <div className={styles.item}>
         {children}
 

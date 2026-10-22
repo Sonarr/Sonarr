@@ -104,6 +104,7 @@ function CalendarHeader() {
           <Link
             className={styles.navButton}
             isDisabled={view === 'agenda'}
+            aria-label={translate('PagerGoToPreviousPage')}
             onPress={handlePreviousPress}
           >
             <Icon name={icons.PAGE_PREVIOUS} />
@@ -112,6 +113,7 @@ function CalendarHeader() {
           <Link
             className={styles.navButton}
             isDisabled={view === 'agenda'}
+            aria-label={translate('PagerGoToNextPage')}
             onPress={handleNextPress}
           >
             <Icon name={icons.PAGE_NEXT} />
@@ -144,7 +146,7 @@ function CalendarHeader() {
 
           {isLargeScreen ? (
             <Menu className={styles.viewMenu} alignMenu={align.RIGHT}>
-              <MenuButton>
+              <MenuButton aria-label={translate('View')}>
                 <Icon name={icons.VIEW} size={22} />
               </MenuButton>
 
