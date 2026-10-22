@@ -8,7 +8,7 @@ const useSeriesHistory = (
   seasonNumber: number | undefined
 ) => {
   const { data, ...result } = useApiQuery<History[]>({
-    path: '/history/series',
+    path: seasonNumber === undefined ? '/history/series' : '/history/season',
     queryParams: {
       seriesId,
       seasonNumber,
