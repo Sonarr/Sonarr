@@ -16,7 +16,7 @@ function ViewMenuItem({
   const isSelected = name === selectedView;
 
   return (
-    <SelectedMenuItem name={name} isSelected={isSelected} {...otherProps} />
+    <SelectedMenuItem {...otherProps} name={name} isSelected={isSelected} />
   );
 }
 
