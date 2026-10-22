@@ -8,7 +8,7 @@ interface SelectEpisodeModalProps {
   isOpen: boolean;
   selectedIds: number[] | string[];
   seriesId?: number;
-  seasonNumber?: number;
+  seasonNumbers?: number[];
   selectedDetails?: string;
   isAnime: boolean;
   modalTitle: string;
@@ -21,7 +21,7 @@ function SelectEpisodeModal(props: SelectEpisodeModalProps) {
     isOpen,
     selectedIds,
     seriesId,
-    seasonNumber,
+    seasonNumbers,
     selectedDetails,
     isAnime,
     modalTitle,
@@ -34,7 +34,7 @@ function SelectEpisodeModal(props: SelectEpisodeModalProps) {
       <SelectEpisodeModalContent
         selectedIds={selectedIds}
         seriesId={seriesId}
-        seasonNumber={seasonNumber}
+        seasonNumbers={seasonNumbers}
         selectedDetails={selectedDetails}
         isAnime={isAnime}
         modalTitle={modalTitle}

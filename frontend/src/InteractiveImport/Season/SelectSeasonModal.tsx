@@ -6,19 +6,31 @@ interface SelectSeasonModalProps {
   isOpen: boolean;
   modalTitle: string;
   seriesId?: number;
-  onSeasonSelect(seasonNumber: number): void;
+  selectedSeasonNumbers?: number[];
+  onSeasonSelect?(seasonNumber: number): void;
+  onSeasonsSelect?(seasonNumbers: number[]): void;
   onModalClose(): void;
 }
 
 function SelectSeasonModal(props: SelectSeasonModalProps) {
-  const { isOpen, modalTitle, seriesId, onSeasonSelect, onModalClose } = props;
+  const {
+    isOpen,
+    modalTitle,
+    seriesId,
+    selectedSeasonNumbers,
+    onSeasonSelect,
+    onSeasonsSelect,
+    onModalClose,
+  } = props;
 
   return (
     <Modal isOpen={isOpen} onModalClose={onModalClose}>
       <SelectSeasonModalContent
         modalTitle={modalTitle}
         seriesId={seriesId}
+        selectedSeasonNumbers={selectedSeasonNumbers}
         onSeasonSelect={onSeasonSelect}
+        onSeasonsSelect={onSeasonsSelect}
         onModalClose={onModalClose}
       />
     </Modal>

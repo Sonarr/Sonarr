@@ -2122,6 +2122,8 @@
   "SelectRow": "Select row",
   "SelectSeason": "Select Season",
   "SelectSeasonModalTitle": "{modalTitle} - Select Season",
+  "SelectSeasons": "Select Season(s)",
+  "SelectSeasonsModalTitle": "{modalTitle} - Select Season(s)",
   "SelectSeries": "Select Series",
   "SendAnonymousUsageData": "Send Anonymous Usage Data",
   "Separator": "Separator",

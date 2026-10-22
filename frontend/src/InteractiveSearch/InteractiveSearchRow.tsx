@@ -94,7 +94,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     customFormats,
     sceneMapping,
     mappedSeriesId,
-    mappedSeasonNumber,
     mappedEpisodeNumbers,
     mappedAbsoluteEpisodeNumbers,
     mappedEpisodeInfo,
@@ -403,7 +402,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
         indexerId={indexerId}
         guid={guid}
         seriesId={mappedSeriesId}
-        seasonNumber={mappedSeasonNumber}
         episodes={mappedEpisodeInfo}
         languages={languages}
         quality={quality}
