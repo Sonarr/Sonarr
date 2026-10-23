@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import React from 'react';
-import Link from 'Components/Link/Link';
+import Link, { LinkProps } from 'Components/Link/Link';
 import styles from './MenuButton.module.css';
 
-export interface MenuButtonProps {
+export interface MenuButtonProps extends Omit<LinkProps, 'onPress'> {
   className?: string;
   children: React.ReactNode;
   isDisabled?: boolean;
