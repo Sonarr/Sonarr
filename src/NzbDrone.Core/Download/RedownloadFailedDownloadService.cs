@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Configuration;
@@ -58,25 +59,34 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
-            var seasonNumber = _episodeService.GetEpisode(message.EpisodeIds.First()).SeasonNumber;
-            var episodesInSeason = _episodeService.GetEpisodesBySeason(message.SeriesId, seasonNumber);
+            var remainingEpisodeIds = new List<int>();
 
-            if (message.EpisodeIds.Count == episodesInSeason.Count)
+            foreach (var season in _episodeService.GetEpisodes(message.EpisodeIds).GroupBy(e => e.SeasonNumber))
             {
-                _logger.Debug("Failed download was entire season, searching again");
+                var episodesInSeason = _episodeService.GetEpisodesBySeason(message.SeriesId, season.Key);
 
-                _commandQueueManager.Push(new SeasonSearchCommand
+                if (season.Count() == episodesInSeason.Count)
                 {
-                    SeriesId = message.SeriesId,
-                    SeasonNumber = seasonNumber
-                });
+                    _logger.Debug("Failed download contains entire season {0}, searching again", season.Key);
 
-                return;
+                    _commandQueueManager.Push(new SeasonSearchCommand
+                    {
+                        SeriesId = message.SeriesId,
+                        SeasonNumber = season.Key
+                    });
+
+                    continue;
+                }
+
+                remainingEpisodeIds.AddRange(season.Select(e => e.Id));
             }
 
-            _logger.Debug("Failed download contains multiple episodes, probably a double episode, searching again");
+            if (remainingEpisodeIds.Any())
+            {
+                _logger.Debug("Failed download contains multiple episodes, probably a double episode, searching again");
 
-            _commandQueueManager.Push(new EpisodeSearchCommand(message.EpisodeIds));
+                _commandQueueManager.Push(new EpisodeSearchCommand(remainingEpisodeIds));
+            }
         }
     }
 }

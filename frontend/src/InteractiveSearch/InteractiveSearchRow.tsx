@@ -94,7 +94,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     customFormats,
     sceneMapping,
     mappedSeriesId,
-    mappedSeasonNumber,
     mappedEpisodeNumbers,
     mappedAbsoluteEpisodeNumbers,
     mappedEpisodeInfo,
@@ -161,6 +160,12 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     );
   }, [decision]);
 
+  const mappedSeasonNumbers = useMemo(() => {
+    return [...new Set(mappedEpisodeInfo.map((e) => e.seasonNumber))].sort(
+      (a, b) => a - b
+    );
+  }, [mappedEpisodeInfo]);
+
   const handleGrabPress = useCallback(() => {
     if (downloadAllowed) {
       grabRelease({
@@ -225,10 +230,10 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           <Link to={infoUrl}>{title}</Link>
           <ReleaseSceneIndicator
             className={styles.sceneMapping}
-            seasonNumber={mappedSeasonNumber}
+            seasonNumbers={mappedSeasonNumbers}
             episodeNumbers={mappedEpisodeNumbers}
             absoluteEpisodeNumbers={mappedAbsoluteEpisodeNumbers}
-            sceneSeasonNumber={seasonNumbers[0] ?? null}
+            sceneSeasonNumbers={seasonNumbers}
             sceneEpisodeNumbers={episodeNumbers}
             sceneAbsoluteEpisodeNumbers={absoluteEpisodeNumbers}
             sceneMapping={sceneMapping}
@@ -397,7 +402,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
         indexerId={indexerId}
         guid={guid}
         seriesId={mappedSeriesId}
-        seasonNumber={mappedSeasonNumber}
         episodes={mappedEpisodeInfo}
         languages={languages}
         quality={quality}
