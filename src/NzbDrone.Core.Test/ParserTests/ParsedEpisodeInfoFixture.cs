@@ -49,6 +49,7 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
         [TestCase(new[] { 1, 2, 3 }, "Season 01-03")]
+        [TestCase(new[] { 1, 3, 5 }, "Seasons 01, 03, 05")]
         [TestCase(new[] { 2 }, "Season 02")]
         [TestCase(new int[0], "[Unknown Season]")]
         public void should_format_full_season(int[] seasonNumbers, string expected)

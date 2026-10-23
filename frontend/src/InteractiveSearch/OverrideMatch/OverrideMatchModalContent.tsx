@@ -20,9 +20,11 @@ import SelectSeriesModal from 'InteractiveImport/Series/SelectSeriesModal';
 import { ReleaseEpisode, useGrabRelease } from 'InteractiveSearch/useReleases';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
+import formatSeasonNumbers from 'Season/formatSeasonNumbers';
 import Series from 'Series/Series';
 import { useSingleSeries } from 'Series/useSeries';
 import { useEnabledDownloadClients } from 'Settings/DownloadClients/DownloadClients/useDownloadClients';
+import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
 import SelectDownloadClientModal from './DownloadClient/SelectDownloadClientModal';
 import OverrideMatchData from './OverrideMatchData';
@@ -42,7 +44,6 @@ export interface OverrideMatchModalContentProps {
   title: string;
   guid: string;
   seriesId?: number;
-  seasonNumber?: number;
   episodes: ReleaseEpisode[];
   languages: Language[];
   quality: QualityModel;
@@ -67,7 +68,11 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
   } = props;
 
   const [seriesId, setSeriesId] = useState(props.seriesId);
-  const [seasonNumber, setSeasonNumber] = useState(props.seasonNumber);
+  const [seasonNumbers, setSeasonNumbers] = useState(() =>
+    [...new Set(props.episodes.map((e) => e.seasonNumber))].sort(
+      (a, b) => a - b
+    )
+  );
   const [episodes, setEpisodes] = useState(props.episodes);
   const [languages, setLanguages] = useState(props.languages);
   const [quality, setQuality] = useState(props.quality);
@@ -85,13 +90,11 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
     return episodes.map((episode) => {
       return (
         <div key={episode.id}>
-          {episode.episodeNumber}
-
+          {episode.seasonNumber}x{padNumber(episode.episodeNumber, 2)}
           {series?.seriesType === 'anime' &&
           episode.absoluteEpisodeNumber != null
             ? ` (${episode.absoluteEpisodeNumber})`
             : ''}
-
           {` - ${episode.title}`}
         </div>
       );
@@ -109,24 +112,24 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
   const onSeriesSelect = useCallback(
     (s: Series) => {
       setSeriesId(s.id);
-      setSeasonNumber(undefined);
+      setSeasonNumbers([]);
       setEpisodes([]);
       setSelectModalOpen(null);
     },
-    [setSeriesId, setSeasonNumber, setEpisodes, setSelectModalOpen]
+    [setSeriesId, setSeasonNumbers, setEpisodes, setSelectModalOpen]
   );
 
   const onSelectSeasonPress = useCallback(() => {
     setSelectModalOpen('season');
   }, [setSelectModalOpen]);
 
-  const onSeasonSelect = useCallback(
-    (s: number) => {
-      setSeasonNumber(s);
+  const onSeasonsSelect = useCallback(
+    (s: number[]) => {
+      setSeasonNumbers(s);
       setEpisodes([]);
       setSelectModalOpen(null);
     },
-    [setSeasonNumber, setEpisodes, setSelectModalOpen]
+    [setSeasonNumbers, setEpisodes, setSelectModalOpen]
   );
 
   const onSelectEpisodePress = useCallback(() => {
@@ -245,7 +248,11 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
             title={translate('SeasonNumber')}
             data={
               <OverrideMatchData
-                value={seasonNumber}
+                value={
+                  seasonNumbers.length > 1
+                    ? formatSeasonNumbers(seasonNumbers)
+                    : seasonNumbers[0]
+                }
                 isDisabled={!series}
                 onPress={onSelectSeasonPress}
               />
@@ -258,7 +265,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
             data={
               <OverrideMatchData
                 value={episodeInfo}
-                isDisabled={!series || isNaN(Number(seasonNumber))}
+                isDisabled={!series || !seasonNumbers.length}
                 onPress={onSelectEpisodePress}
               />
             }
@@ -339,7 +346,8 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
         isOpen={selectModalOpen === 'season'}
         modalTitle={modalTitle}
         seriesId={seriesId}
-        onSeasonSelect={onSeasonSelect}
+        selectedSeasonNumbers={seasonNumbers}
+        onSeasonsSelect={onSeasonsSelect}
         onModalClose={onSelectModalClose}
       />
 
@@ -348,7 +356,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
         selectedIds={[guid]}
         seriesId={seriesId}
         isAnime={series?.seriesType === 'anime'}
-        seasonNumber={seasonNumber}
+        seasonNumbers={seasonNumbers}
         selectedDetails={title}
         modalTitle={modalTitle}
         onEpisodesSelect={onEpisodesSelect}

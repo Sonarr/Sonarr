@@ -581,7 +581,7 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
         selectedIds={[id]}
         seriesId={series?.id}
         isAnime={isAnime}
-        seasonNumber={seasonNumber}
+        seasonNumbers={seasonNumber == null ? undefined : [seasonNumber]}
         selectedDetails={relativePath}
         modalTitle={modalTitle}
         onEpisodesSelect={onEpisodesSelect}
