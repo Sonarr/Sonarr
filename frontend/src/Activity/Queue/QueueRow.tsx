@@ -203,7 +203,7 @@ function QueueRow(props: QueueRowProps) {
 
         if (name === 'series.sortTitle') {
           return (
-            <TableRowCell key={name}>
+            <TableRowCell key={name} className={styles.series}>
               {series ? (
                 <SeriesTitleLink
                   titleSlug={series.titleSlug}
