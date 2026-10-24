@@ -1,3 +1,9 @@
+.series {
+  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+
+  min-width: 200px;
+}
+
 .quality {
   composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
 
