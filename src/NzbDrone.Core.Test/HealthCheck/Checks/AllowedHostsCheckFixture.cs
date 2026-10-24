@@ -75,6 +75,30 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             ExceptionVerification.ExpectedWarns(1);
         }
 
+        [TestCase("0.0.0.0")]
+        [TestCase("::")]
+        [TestCase("[::]")]
+        [TestCase("0.0.0.0, [::]")]
+        public void should_return_warning_when_allowed_hosts_only_contains_bind_addresses(string allowedHosts)
+        {
+            GivenAllowedHosts(allowedHosts);
+            GivenAuthenticationRequired(AuthenticationRequiredType.DisabledForLocalAddresses);
+
+            Subject.Check().ShouldBeWarning();
+
+            ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [TestCase("sonarr.local, 0.0.0.0")]
+        [TestCase("[::], sonarr.local")]
+        public void should_return_ok_when_allowed_hosts_contains_bind_addresses_and_host_names(string allowedHosts)
+        {
+            GivenAllowedHosts(allowedHosts);
+            GivenAuthenticationRequired(AuthenticationRequiredType.DisabledForLocalAddresses);
+
+            Subject.Check().ShouldBeOk();
+        }
+
         [Test]
         public void should_return_warning_when_allowed_hosts_is_whitespace()
         {

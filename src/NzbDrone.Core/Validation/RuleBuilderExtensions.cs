@@ -64,7 +64,9 @@ namespace NzbDrone.Core.Validation
 
                                   return hosts.Any() && hosts.All(AllowedHostsParser.IsValidHost);
                               })
-                              .WithMessage("Must be a comma separated list of host names or IP addresses only, without a protocol or port");
+                              .WithMessage("Must be a comma separated list of host names or IP addresses only, without a protocol or port")
+                              .Must(x => !AllowedHostsParser.Parse(x).Any(AllowedHostsParser.IsBindAddress))
+                              .WithMessage("0.0.0.0 and [::] are not host names, leave empty to allow all hosts");
         }
 
         public static IRuleBuilderOptions<T, string> ValidRootUrl<T>(this IRuleBuilder<T, string> ruleBuilder)
