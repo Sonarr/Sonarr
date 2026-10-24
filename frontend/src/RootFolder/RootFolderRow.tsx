@@ -144,6 +144,7 @@ function RootFolderRow(props: RootFolderRowProps) {
           title={translate('RemoveRootFolder')}
           aria-label={translate('RemoveRootFolder')}
           name={icons.REMOVE}
+          size={14}
           onPress={handleDeletePress}
         />
       </div>
