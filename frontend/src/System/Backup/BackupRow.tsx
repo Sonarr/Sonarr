@@ -98,6 +98,7 @@ function BackupRow({ id, type, name, path, size, time }: BackupRowProps) {
           title={translate('RestoreBackup')}
           aria-label={translate('RestoreBackup')}
           name={icons.RESTORE}
+          size={14}
           onPress={handleRestorePress}
         />
 
@@ -105,6 +106,7 @@ function BackupRow({ id, type, name, path, size, time }: BackupRowProps) {
           title={translate('DeleteBackup')}
           aria-label={translate('DeleteBackup')}
           name={icons.DELETE}
+          size={14}
           onPress={handleDeletePress}
         />
       </TableRowCell>

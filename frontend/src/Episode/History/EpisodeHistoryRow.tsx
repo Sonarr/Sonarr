@@ -112,7 +112,7 @@ function EpisodeHistoryRow({
 
       <TableRowCell className={styles.actions}>
         <Popover
-          anchor={<Icon name={icons.INFO} />}
+          anchor={<Icon name={icons.INFO} size={16} />}
           title={getTitle(eventType)}
           body={
             <HistoryDetails
@@ -130,7 +130,7 @@ function EpisodeHistoryRow({
             title={translate('MarkAsFailed')}
             aria-label={translate('MarkAsFailed')}
             name={icons.REMOVE}
-            size={14}
+            size={16}
             onPress={handleMarkAsFailedPress}
           />
         )}

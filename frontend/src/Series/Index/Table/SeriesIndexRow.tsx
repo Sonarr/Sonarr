@@ -581,6 +581,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
                 name={icons.REFRESH}
                 title={translate('RefreshSeries')}
                 isSpinning={isRefreshingSeries}
+                size={14}
                 onPress={onRefreshPress}
               />
 
@@ -589,6 +590,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
                   name={icons.SEARCH}
                   title={translate('SearchForMonitoredEpisodes')}
                   isSpinning={isSearchingSeries}
+                  size={14}
                   onPress={onSearchPress}
                 />
               ) : null}
@@ -597,6 +599,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
                 name={icons.EDIT}
                 title={translate('EditSeries')}
                 aria-label={translate('EditSeries')}
+                size={14}
                 onPress={onEditSeriesPress}
               />
             </VirtualTableRowCell>

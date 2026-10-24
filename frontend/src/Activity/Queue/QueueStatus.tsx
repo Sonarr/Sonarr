@@ -142,7 +142,7 @@ function QueueStatus(props: QueueStatusProps) {
 
   return (
     <Popover
-      anchor={<Icon name={iconName} kind={iconKind} />}
+      anchor={<Icon name={iconName} kind={iconKind} size={16} />}
       accessibleLabel={title}
       title={title}
       body={
