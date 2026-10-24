@@ -152,6 +152,8 @@ function CalendarLinkModalContent({
                   to={iCalWebCalUrl}
                   target="_blank"
                   noRouter={true}
+                  title={translate('SubscribeToICalFeed')}
+                  aria-label={translate('SubscribeToICalFeed')}
                 >
                   <Icon name={icons.CALENDAR_O} />
                 </FormInputButton>,

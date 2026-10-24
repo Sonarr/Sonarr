@@ -1,6 +1,5 @@
 import React from 'react';
-import Icon from 'Components/Icon';
-import Link from 'Components/Link/Link';
+import IconButton from 'Components/Link/IconButton';
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import styles from './ModalContent.module.css';
@@ -22,9 +21,14 @@ function ModalContent({
   return (
     <div className={className} {...otherProps}>
       {showCloseButton && (
-        <Link className={styles.closeButton} onPress={onModalClose}>
-          <Icon name={icons.CLOSE} size={18} title={translate('Close')} />
-        </Link>
+        <IconButton
+          className={styles.closeButton}
+          name={icons.CLOSE}
+          size={18}
+          title={translate('Close')}
+          aria-label={translate('Close')}
+          onPress={onModalClose}
+        />
       )}
 
       {children}

@@ -1,9 +1,10 @@
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useRef } from 'react';
-import Icon from 'Components/Icon';
+import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
 import useExistingSeries from 'Series/useExistingSeries';
+import translate from 'Utilities/String/translate';
 import ImportSeriesTitle from './ImportSeriesTitle';
 import styles from './ImportSeriesSearchResult.module.css';
 
@@ -63,16 +64,15 @@ function ImportSeriesSearchResult({
       </div>
 
       <div className={styles.tvdbLinkCell} role="gridcell">
-        <Link
+        <IconButton
           className={styles.tvdbLink}
+          iconClassName={styles.tvdbLinkIcon}
+          name={icons.EXTERNAL_LINK}
+          size={16}
           to={`https://www.thetvdb.com/?tab=series&id=${tvdbId}`}
-        >
-          <Icon
-            className={styles.tvdbLinkIcon}
-            name={icons.EXTERNAL_LINK}
-            size={16}
-          />
-        </Link>
+          title={translate('ViewSeriesOnTvdb', { title })}
+          aria-label={translate('ViewSeriesOnTvdb', { title })}
+        />
       </div>
     </div>
   );
