@@ -138,7 +138,6 @@ export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
           }
         );
 
-        // Paged lists (wanted) are keyed by page/filter, so refetch to drop toggled rows
         queryClient.invalidateQueries({ queryKey });
       },
     },
