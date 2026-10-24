@@ -9,13 +9,22 @@ public class CleansingClefLogLayout : CompactJsonLayout
 {
     protected override void RenderFormattedMessage(LogEventInfo logEvent, StringBuilder target)
     {
-        base.RenderFormattedMessage(logEvent, target);
-
-        if (RuntimeInfo.IsProduction)
+        if (!RuntimeInfo.IsProduction)
         {
-            var result = CleanseLogMessage.Cleanse(target.ToString());
-            target.Clear();
-            target.Append(result);
+            base.RenderFormattedMessage(logEvent, target);
+
+            return;
         }
+
+        var result = CleanseLogMessage.Cleanse(logEvent, RenderUncleansed);
+        target.Append(result);
+    }
+
+    private string RenderUncleansed(LogEventInfo logEvent)
+    {
+        var builder = new StringBuilder();
+        base.RenderFormattedMessage(logEvent, builder);
+
+        return builder.ToString();
     }
 }

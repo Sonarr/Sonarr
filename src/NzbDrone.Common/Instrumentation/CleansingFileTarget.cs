@@ -8,7 +8,7 @@ namespace NzbDrone.Common.Instrumentation
     {
         protected override void RenderFormattedMessage(LogEventInfo logEvent, StringBuilder target)
         {
-            var result = CleanseLogMessage.Cleanse(Layout.Render(logEvent));
+            var result = CleanseLogMessage.Cleanse(logEvent, Layout.Render);
             target.Append(result);
         }
     }
