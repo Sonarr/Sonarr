@@ -137,6 +137,8 @@ export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
             });
           }
         );
+
+        queryClient.invalidateQueries({ queryKey });
       },
     },
   });
