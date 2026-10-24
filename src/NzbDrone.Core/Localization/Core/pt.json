@@ -760,5 +760,6 @@
     "SeriesLoadError": "Não foi possível carregar a Série",
     "SeriesMatchType": "Tipo de correspondência da série",
     "SeriesMonitoring": "Monitorização da Série",
+    "SeriesMovePending": "À espera de {appName} para mover o {path}",
     "UpdateMechanismHelpText": "Use o atualizador do {appName} ou um script"
 }
