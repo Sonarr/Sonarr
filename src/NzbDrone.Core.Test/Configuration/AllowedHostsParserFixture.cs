@@ -83,5 +83,23 @@ namespace NzbDrone.Core.Test.Configuration
         {
             AllowedHostsParser.IsValidHost(host).Should().BeFalse();
         }
+
+        [TestCase("0.0.0.0")]
+        [TestCase("::")]
+        [TestCase("[::]")]
+        public void should_be_bind_address(string host)
+        {
+            AllowedHostsParser.Parse(host).Should().ContainSingle().Which.Should().Match(h => AllowedHostsParser.IsBindAddress(h));
+        }
+
+        [TestCase("*")]
+        [TestCase("sonarr.local")]
+        [TestCase("*.example.com")]
+        [TestCase("192.168.1.5")]
+        [TestCase("[::1]")]
+        public void should_not_be_bind_address(string host)
+        {
+            AllowedHostsParser.IsBindAddress(host).Should().BeFalse();
+        }
     }
 }

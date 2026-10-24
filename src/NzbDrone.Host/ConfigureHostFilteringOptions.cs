@@ -28,6 +28,14 @@ namespace NzbDrone.Host
         public void Configure(HostFilteringOptions options)
         {
             var allowedHosts = AllowedHostsParser.Parse(_configFileProvider.AllowedHosts);
+            var bindAddresses = allowedHosts.Where(AllowedHostsParser.IsBindAddress).ToList();
+
+            if (bindAddresses.Any())
+            {
+                _logger.Warn("Ignoring {0} in Allowed Hosts, bind addresses are not host names", string.Join(", ", bindAddresses));
+
+                allowedHosts = allowedHosts.Except(bindAddresses).ToList();
+            }
 
             options.AllowEmptyHosts = true;
 
