@@ -81,7 +81,7 @@ function HistoryEventTypeCell({ eventType, data }: HistoryEventTypeCellProps) {
 
   return (
     <TableRowCell className={styles.cell} title={tooltip}>
-      <Icon name={iconName} kind={iconKind} />
+      <Icon name={iconName} kind={iconKind} size={16} />
     </TableRowCell>
   );
 }

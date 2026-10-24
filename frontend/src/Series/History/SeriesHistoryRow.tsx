@@ -161,7 +161,6 @@ function SeriesHistoryRow({
             title={translate('MarkAsFailed')}
             aria-label={translate('MarkAsFailed')}
             name={icons.REMOVE}
-            size={14}
             onPress={handleMarkAsFailedPress}
           />
         ) : null}

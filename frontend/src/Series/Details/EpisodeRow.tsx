@@ -119,7 +119,6 @@ function EpisodeRow({
                 monitored={monitored}
                 isDisabled={!seriesMonitored}
                 isSaving={isSaving}
-                size={14}
                 onPress={handleMonitorEpisodePress}
               />
             </TableRowCell>
@@ -284,7 +283,7 @@ function EpisodeRow({
             <TableRowCell key={name} className={styles.indexerFlags}>
               {episodeFile?.indexerFlags ? (
                 <Popover
-                  anchor={<Icon name={icons.FLAG} kind="default" size={14} />}
+                  anchor={<Icon name={icons.FLAG} kind="default" />}
                   title={translate('IndexerFlags')}
                   body={
                     <IndexerFlags indexerFlags={episodeFile?.indexerFlags} />

@@ -15,7 +15,7 @@ export default function IconButton({
   iconClassName,
   name,
   kind,
-  size = 12,
+  size = 14,
   isSpinning,
   filled,
   ...otherProps

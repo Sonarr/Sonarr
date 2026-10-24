@@ -10,7 +10,6 @@ function TableOptionsButton({ onPress }: Pick<LinkProps, 'onPress'>) {
     <IconButton
       className={styles.button}
       name={icons.ADVANCED_SETTINGS}
-      size={14}
       title={translate('TableOptions')}
       aria-label={translate('TableOptions')}
       onPress={onPress}
