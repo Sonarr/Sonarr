@@ -666,11 +666,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                   ) : null}
 
                   {ratings.value ? (
-                    <HeartRating
-                      rating={ratings.value}
-                      votes={ratings.votes}
-                      iconSize={14}
-                    />
+                    <HeartRating rating={ratings.value} votes={ratings.votes} />
                   ) : null}
 
                   {genres.length ? (

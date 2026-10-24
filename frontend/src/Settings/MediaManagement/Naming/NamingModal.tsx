@@ -579,7 +579,7 @@ function NamingModal(props: NamingModalProps) {
           </div>
 
           <div className={styles.instruction}>
-            <Icon name={icons.INFO} size={14} />
+            <Icon name={icons.INFO} />
             <span>{translate('NamingTokenSelectHelpText')}</span>
           </div>
 

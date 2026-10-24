@@ -84,7 +84,7 @@ function SeriesDetailsPath({ path, pendingPath }: SeriesDetailsPathProps) {
         anchor={
           <span className={styles.path}>
             <span className={styles.icon}>
-              <Icon name={icons.FOLDER} size={14} aria-hidden={true} />
+              <Icon name={icons.FOLDER} aria-hidden={true} />
             </span>
 
             <span className={styles.text}>{path}</span>
@@ -122,7 +122,6 @@ function SeriesDetailsPath({ path, pendingPath }: SeriesDetailsPathProps) {
             <Icon
               name={state === 'error' ? icons.DANGER : icons.CHECK}
               kind={state === 'error' ? kinds.DANGER : kinds.SUCCESS}
-              size={14}
               aria-hidden={true}
             />
           </StatusIndicator>
@@ -131,13 +130,11 @@ function SeriesDetailsPath({ path, pendingPath }: SeriesDetailsPathProps) {
             <Icon
               className={styles.folderIcon}
               name={icons.FOLDER}
-              size={14}
               aria-hidden={true}
             />
             <Icon
               className={styles.copyIcon}
               name={icons.CLIPBOARD}
-              size={14}
               aria-hidden={true}
             />
           </span>
