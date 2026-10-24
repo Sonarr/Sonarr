@@ -38,7 +38,7 @@ namespace Sonarr.Http.Authentication
 
         [HttpGet("login/sso")]
         [ProducesResponseType(StatusCodes.Status302Found)]
-        public Results<RedirectHttpResult, ChallengeHttpResult> LoginSso([FromQuery] string returnUrl = null)
+        public Results<RedirectHttpResult, ChallengeHttpResult> LoginSso([FromQuery] string returnUrl = null, [FromQuery] bool rememberMe = false)
         {
             if (_configFileProvider.AuthenticationMethod != AuthenticationType.Oidc)
             {
@@ -53,7 +53,11 @@ namespace Sonarr.Http.Authentication
             }
 
             return TypedResults.Challenge(
-                new AuthenticationProperties { RedirectUri = GetRedirectUrl(returnUrl) },
+                new AuthenticationProperties
+                {
+                    RedirectUri = GetRedirectUrl(returnUrl),
+                    IsPersistent = rememberMe
+                },
                 [nameof(AuthenticationType.Oidc)]);
         }
 
@@ -87,7 +91,7 @@ namespace Sonarr.Http.Authentication
 
             var authProperties = new AuthenticationProperties
             {
-                IsPersistent = resource.RememberMe == "on"
+                IsPersistent = resource.RememberMe
             };
 
             try
