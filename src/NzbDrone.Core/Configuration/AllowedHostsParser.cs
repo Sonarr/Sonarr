@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Configuration
     public static class AllowedHostsParser
     {
         private static readonly char[] Separators = { ',', ';' };
+        private static readonly string[] BindAddresses = { "0.0.0.0", "[::]" };
 
         public static List<string> Parse(string value)
         {
@@ -35,6 +36,11 @@ namespace NzbDrone.Core.Configuration
             }
 
             return Uri.CheckHostName(host) != UriHostNameType.Unknown;
+        }
+
+        public static bool IsBindAddress(string host)
+        {
+            return BindAddresses.Contains(host);
         }
 
         private static string Normalize(string host)
