@@ -225,6 +225,7 @@ function HistoryRow(props: HistoryRowProps) {
               <IconButton
                 name={icons.INFO}
                 aria-label={translate('Details')}
+                size={16}
                 onPress={handleDetailsPress}
               />
             </TableRowCell>

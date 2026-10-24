@@ -143,7 +143,7 @@ function SeriesHistoryRow({
 
       <TableRowCell className={styles.actions}>
         <Popover
-          anchor={<Icon name={icons.INFO} />}
+          anchor={<Icon name={icons.INFO} size={16} />}
           title={title}
           body={
             <HistoryDetails
@@ -161,7 +161,7 @@ function SeriesHistoryRow({
             title={translate('MarkAsFailed')}
             aria-label={translate('MarkAsFailed')}
             name={icons.REMOVE}
-            size={14}
+            size={16}
             onPress={handleMarkAsFailedPress}
           />
         ) : null}

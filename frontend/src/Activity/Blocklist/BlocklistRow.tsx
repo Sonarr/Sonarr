@@ -140,6 +140,7 @@ function BlocklistRow({
               <IconButton
                 name={icons.INFO}
                 aria-label={translate('Details')}
+                size={16}
                 onPress={handleDetailsPress}
               />
 
@@ -149,6 +150,7 @@ function BlocklistRow({
                 name={icons.REMOVE}
                 kind={kinds.DANGER}
                 isSpinning={isRemoving}
+                size={16}
                 onPress={handleRemovePress}
               />
             </TableRowCell>

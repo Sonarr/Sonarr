@@ -395,6 +395,7 @@ function QueueRow(props: QueueRowProps) {
                 <IconButton
                   name={icons.INTERACTIVE}
                   aria-label={translate('InteractiveImport')}
+                  size={16}
                   onPress={handleInteractiveImportPress}
                 />
               ) : null}
@@ -413,6 +414,7 @@ function QueueRow(props: QueueRowProps) {
                 title={translate('RemoveFromQueue')}
                 name={icons.REMOVE}
                 isSpinning={isRemoving}
+                size={16}
                 onPress={handleRemoveQueueItemPress}
               />
             </TableRowCell>
