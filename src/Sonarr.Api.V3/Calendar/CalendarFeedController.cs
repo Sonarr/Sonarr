@@ -77,7 +77,7 @@ namespace Sonarr.Api.V3.Calendar
 
                 if (asAllDay)
                 {
-                    occurrence.Start = new CalDateTime(episode.AirDateUtc.Value.ToLocalTime(), false);
+                    occurrence.Start = new CalDateTime(episode.AirDateUtc.Value, false);
                 }
                 else
                 {
