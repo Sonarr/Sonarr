@@ -4,6 +4,7 @@ import { useSelect } from 'App/Select/SelectContext';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
+import getSeriesPath from 'Utilities/Series/getSeriesPath';
 import styles from './SeriesIndexPosterSelect.module.css';
 
 interface SeriesIndexPosterSelectProps {
@@ -21,7 +22,13 @@ function SeriesIndexPosterSelect({
   const onSelectPress = useCallback(
     (event: SyntheticEvent<HTMLElement, PointerEvent>) => {
       if (event.nativeEvent.ctrlKey || event.nativeEvent.metaKey) {
-        window.open(`${window.Sonarr.urlBase}/series/${titleSlug}`, '_blank');
+        window.open(
+          `${window.Sonarr.urlBase}${getSeriesPath({
+            id: seriesId,
+            titleSlug,
+          })}`,
+          '_blank'
+        );
         return;
       }
 

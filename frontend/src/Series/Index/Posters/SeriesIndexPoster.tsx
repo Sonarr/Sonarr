@@ -18,6 +18,7 @@ import SeriesPoster from 'Series/SeriesPoster';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
+import getSeriesPath from 'Utilities/Series/getSeriesPath';
 import translate from 'Utilities/String/translate';
 import useSeriesIndexItem from '../useSeriesIndexItem';
 import SeriesIndexPosterInfo from './SeriesIndexPosterInfo';
@@ -144,7 +145,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
     sizeOnDisk = 0,
   } = statistics;
 
-  const link = `/series/${titleSlug}`;
+  const link = getSeriesPath({ id: seriesId, titleSlug });
 
   const elementStyle = {
     width: `${posterWidth}px`,

@@ -88,13 +88,6 @@ namespace NzbDrone.Core.Tv
                         continue;
                     }
 
-                    var duplicateSlug = seriesToAdd.FirstOrDefault(f => f.TitleSlug == series.TitleSlug);
-                    if (duplicateSlug != null)
-                    {
-                        _logger.Debug("TVDB ID {0} was not added due to validation failure: Duplicate Slug {1} used by series {2}", s.TvdbId, s.TitleSlug, duplicateSlug.TvdbId);
-                        continue;
-                    }
-
                     seriesToAdd.Add(series);
                 }
                 catch (ValidationException ex)

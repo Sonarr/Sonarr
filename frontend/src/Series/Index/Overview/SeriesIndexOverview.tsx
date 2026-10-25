@@ -12,6 +12,7 @@ import SeriesIndexActions from 'Series/Index/SeriesIndexActions';
 import { SeriesStatus, Statistics } from 'Series/Series';
 import { useSeriesOverviewOptions } from 'Series/seriesOptionsStore';
 import SeriesPoster from 'Series/SeriesPoster';
+import getSeriesPath from 'Utilities/Series/getSeriesPath';
 import translate from 'Utilities/String/translate';
 import useSeriesIndexItem from '../useSeriesIndexItem';
 import { ROW_BORDER, ROW_VERTICAL_PADDING } from './overviewLayout';
@@ -142,7 +143,7 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
     sizeOnDisk = 0,
   } = statistics;
 
-  const link = `/series/${titleSlug}`;
+  const link = getSeriesPath({ id: seriesId, titleSlug });
 
   const elementStyle = {
     width: `${posterWidth}px`,
