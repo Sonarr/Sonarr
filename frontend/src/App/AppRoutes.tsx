@@ -67,6 +67,11 @@ export function appRouteElements() {
         element={<Navigate to="/series" replace={true} />}
       />
 
+      <Route
+        path="/series/:titleSlug/:seriesId"
+        element={<SeriesDetailsPage />}
+      />
+
       <Route path="/series/:titleSlug" element={<SeriesDetailsPage />} />
 
       <Route path="/statistics" element={<Statistics />} />

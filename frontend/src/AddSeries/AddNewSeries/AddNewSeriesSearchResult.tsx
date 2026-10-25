@@ -13,6 +13,7 @@ import SeriesGenres from 'Series/SeriesGenres';
 import SeriesPoster from 'Series/SeriesPoster';
 import useExistingSeries from 'Series/useExistingSeries';
 import { useMetadataSourceSettingsValues } from 'Settings/MetadataSource/useMetadataSourceSettings';
+import getSeriesPath from 'Utilities/Series/getSeriesPath';
 import translate from 'Utilities/String/translate';
 import AddNewSeriesModal from './AddNewSeriesModal';
 import styles from './AddNewSeriesSearchResult.module.css';
@@ -39,7 +40,6 @@ interface AddNewSeriesSearchResultProps {
 function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
   const {
     tvdbId,
-    titleSlug,
     title: lookupTitle,
     originalTitle,
     year,
@@ -80,7 +80,7 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
   }, []);
 
   const linkProps = isExistingSeries
-    ? { to: `/series/${titleSlug}` }
+    ? { to: getSeriesPath(series) }
     : { onPress: handlePress };
   let seasons = translate('OneSeason');
 

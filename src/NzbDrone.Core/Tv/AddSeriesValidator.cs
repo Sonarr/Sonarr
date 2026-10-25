@@ -13,16 +13,13 @@ namespace NzbDrone.Core.Tv
     {
         public AddSeriesValidator(RootFolderValidator rootFolderValidator,
                                   SeriesPathValidator seriesPathValidator,
-                                  SeriesAncestorValidator seriesAncestorValidator,
-                                  SeriesTitleSlugValidator seriesTitleSlugValidator)
+                                  SeriesAncestorValidator seriesAncestorValidator)
         {
             RuleFor(c => c.Path).Cascade(CascadeMode.Stop)
                 .IsValidPath()
                                 .SetValidator(rootFolderValidator)
                                 .SetValidator(seriesPathValidator)
                                 .SetValidator(seriesAncestorValidator);
-
-            RuleFor(c => c.TitleSlug).SetValidator(seriesTitleSlugValidator);
         }
     }
 }

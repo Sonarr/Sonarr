@@ -21,6 +21,7 @@ import { useSeriesTableOptions } from 'Series/seriesOptionsStore';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import { SelectStateInputProps } from 'typings/props';
 import formatBytes from 'Utilities/Number/formatBytes';
+import getSeriesPath from 'Utilities/Series/getSeriesPath';
 import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
 import SeriesIndexProgressBar from '../ProgressBar/SeriesIndexProgressBar';
@@ -201,7 +202,10 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
               )}
             >
               {showBanners ? (
-                <Link className={styles.link} to={`/series/${titleSlug}`}>
+                <Link
+                  className={styles.link}
+                  to={getSeriesPath({ id: seriesId, titleSlug })}
+                >
                   <SeriesBanner
                     className={styles.bannerImage}
                     images={images}
@@ -217,7 +221,11 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
                   ) : null}
                 </Link>
               ) : (
-                <SeriesTitleLink titleSlug={titleSlug} title={title} />
+                <SeriesTitleLink
+                  seriesId={seriesId}
+                  titleSlug={titleSlug}
+                  title={title}
+                />
               )}
             </VirtualTableRowCell>
           );
