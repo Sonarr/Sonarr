@@ -86,6 +86,7 @@ function EpisodeRow({
   onMonitorEpisodePress,
 }: EpisodeRowProps) {
   const {
+    title: seriesTitle,
     useSceneNumbering,
     monitored: seriesMonitored,
     seriesType,
@@ -310,6 +311,9 @@ function EpisodeRow({
               episodeId={id}
               episodeEntity="episodes"
               seriesId={seriesId}
+              seriesTitle={seriesTitle}
+              seasonNumber={seasonNumber}
+              episodeNumber={episodeNumber}
               episodeTitle={title}
               showOpenSeriesButton={false}
             />
