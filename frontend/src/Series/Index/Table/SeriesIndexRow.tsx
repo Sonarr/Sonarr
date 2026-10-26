@@ -5,15 +5,12 @@ import CommandNames from 'Commands/CommandNames';
 import { useExecuteCommand } from 'Commands/useCommands';
 import CheckInput from 'Components/Form/CheckInput';
 import HeartRating from 'Components/HeartRating';
-import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
-import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
 import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
 import VirtualTableSelectCell from 'Components/Table/Cells/VirtualTableSelectCell';
 import Column from 'Components/Table/Column';
 import getReleaseTypeName from 'Episode/getReleaseTypeName';
-import { icons } from 'Helpers/Props';
 import useCountryName from 'Internationalization/useCountryName';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
@@ -27,6 +24,7 @@ import formatBytes from 'Utilities/Number/formatBytes';
 import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
 import SeriesIndexProgressBar from '../ProgressBar/SeriesIndexProgressBar';
+import SeriesIndexActions from '../SeriesIndexActions';
 import useSeriesIndexItem from '../useSeriesIndexItem';
 import hasGrowableColumns from './hasGrowableColumns';
 import SeasonsCell from './SeasonsCell';
@@ -577,27 +575,14 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
         if (name === 'actions') {
           return (
             <VirtualTableRowCell key={name} className={styles[name]}>
-              <SpinnerIconButton
-                name={icons.REFRESH}
-                title={translate('RefreshSeries')}
-                isSpinning={isRefreshingSeries}
-                onPress={onRefreshPress}
-              />
-
-              {showSearchAction ? (
-                <SpinnerIconButton
-                  name={icons.SEARCH}
-                  title={translate('SearchForMonitoredEpisodes')}
-                  isSpinning={isSearchingSeries}
-                  onPress={onSearchPress}
-                />
-              ) : null}
-
-              <IconButton
-                name={icons.EDIT}
-                title={translate('EditSeries')}
-                aria-label={translate('EditSeries')}
-                onPress={onEditSeriesPress}
+              <SeriesIndexActions
+                title={title}
+                showSearchAction={showSearchAction}
+                isRefreshingSeries={isRefreshingSeries}
+                isSearchingSeries={isSearchingSeries}
+                onRefreshPress={onRefreshPress}
+                onSearchPress={onSearchPress}
+                onEditSeriesPress={onEditSeriesPress}
               />
             </VirtualTableRowCell>
           );
