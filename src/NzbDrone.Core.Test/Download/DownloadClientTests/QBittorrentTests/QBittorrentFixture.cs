@@ -160,6 +160,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
                 .Returns(files);
         }
 
+        private void GivenApiVersion(Version version)
+        {
+            Mocker.GetMock<IQBittorrentProxy>()
+                .Setup(v => v.GetApiVersion(It.IsAny<QBittorrentSettings>()))
+                .Returns(version);
+        }
+
         [Test]
         public void error_item_should_have_required_properties()
         {
@@ -491,6 +498,118 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             var result = Subject.GetImportItem(item, null);
 
             result.OutputPath.FullPath.Should().Be(torrent.ContentPath);
+        }
+
+        [TestCase("pausedUP")]
+        [TestCase("stoppedUP")]
+        public void should_use_root_path_when_qbit_created_a_subfolder(string state)
+        {
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = "Droned.S01E01",
+                Size = 1000,
+                Progress = 1.0,
+                Eta = 8640000,
+                State = state,
+                Label = "",
+                SavePath = @"C:\Torrents".AsOsAgnostic(),
+                ContentPath = @"C:\Torrents\Droned.S01E01\Droned.S01E01.rar".AsOsAgnostic(),
+                RootPath = @"C:\Torrents\Droned.S01E01".AsOsAgnostic()
+            };
+
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+            GivenApiVersion(new Version(2, 11, 2));
+
+            var item = Subject.GetItems().Single();
+
+            item.Status.Should().Be(DownloadItemStatus.Completed);
+            item.OutputPath.FullPath.Should().Be(torrent.RootPath);
+        }
+
+        [TestCase(null, "pausedUP")]
+        [TestCase("", "pausedUP")]
+        [TestCase(null, "stoppedUP")]
+        [TestCase("", "stoppedUP")]
+        public void should_use_content_path_when_root_path_is_missing(string rootPath, string state)
+        {
+            // "Don't create subfolder" leaves root_path empty. A single-file torrent then
+            // reports content_path as the file sitting in the save directory.
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = "Droned.S01E01.rar",
+                Size = 1000,
+                Progress = 1.0,
+                Eta = 8640000,
+                State = state,
+                Label = "",
+                SavePath = @"C:\Torrents".AsOsAgnostic(),
+                ContentPath = @"C:\Torrents\Droned.S01E01.rar".AsOsAgnostic(),
+                RootPath = rootPath
+            };
+
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+            GivenApiVersion(new Version(2, 11, 2));
+
+            var item = Subject.GetItems().Single();
+
+            item.Status.Should().Be(DownloadItemStatus.Completed);
+            item.OutputPath.FullPath.Should().Be(torrent.ContentPath);
+        }
+
+        [TestCase("pausedUP")]
+        [TestCase("stoppedUP")]
+        public void should_ignore_root_path_before_api_2_11_2(string state)
+        {
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = "Droned.S01E01",
+                Size = 1000,
+                Progress = 1.0,
+                Eta = 8640000,
+                State = state,
+                Label = "",
+                SavePath = @"C:\Torrents".AsOsAgnostic(),
+                ContentPath = @"C:\Torrents\Droned.S01E01\Droned.S01E01.rar".AsOsAgnostic(),
+                RootPath = @"C:\Torrents\Droned.S01E01".AsOsAgnostic()
+            };
+
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+            GivenApiVersion(new Version(2, 6, 1));
+
+            var item = Subject.GetItems().Single();
+
+            item.Status.Should().Be(DownloadItemStatus.Completed);
+            item.OutputPath.FullPath.Should().Be(torrent.ContentPath);
+        }
+
+        [Test]
+        public void should_warn_when_stripped_multifile_content_path_is_the_save_path()
+        {
+            var savePath = @"C:\Torrents".AsOsAgnostic();
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = "Droned.S01",
+                Size = 1000,
+                Progress = 1.0,
+                Eta = 8640000,
+                State = "stoppedUP",
+                Label = "",
+                SavePath = savePath,
+                ContentPath = savePath,
+                RootPath = ""
+            };
+
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+            GivenApiVersion(new Version(2, 11, 2));
+
+            var item = Subject.GetItems().Single();
+
+            item.Status.Should().Be(DownloadItemStatus.Warning);
+            item.OutputPath.IsEmpty.Should().BeTrue();
         }
 
         [Test]
