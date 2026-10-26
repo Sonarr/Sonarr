@@ -82,5 +82,6 @@
 @media (--breakpointSmall) {
   :root {
     --headerHeight: 48px;
+    --modalBodyPadding: 15px;
   }
 }

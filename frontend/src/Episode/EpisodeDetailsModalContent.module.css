@@ -126,6 +126,10 @@
 }
 
 @media (--breakpointSmall) {
+  .tabs {
+    margin-top: -17px;
+  }
+
   .tabBar {
     display: contents;
   }
