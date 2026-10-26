@@ -116,7 +116,8 @@ namespace Sonarr.Api.V3.CustomFormats
         }
 
         [HttpGet("schema")]
-        public object GetTemplates()
+        [Produces("application/json")]
+        public List<CustomFormatSpecificationSchema> GetTemplates()
         {
             var schema = _specifications.OrderBy(x => x.Order).Select(x => x.ToSchema()).ToList();
 
