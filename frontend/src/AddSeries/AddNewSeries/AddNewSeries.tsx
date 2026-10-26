@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import TextInput from 'Components/Form/TextInput';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
+import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
@@ -95,12 +96,13 @@ function AddNewSeries() {
             />
 
             {term ? (
-              <Button
+              <IconButton
                 className={styles.clearLookupButton}
+                name={icons.REMOVE}
+                title={translate('ClearSeriesSearch')}
+                aria-label={translate('ClearSeriesSearch')}
                 onPress={handleClearSeriesLookupPress}
-              >
-                <Icon name={icons.REMOVE} size={14} />
-              </Button>
+              />
             ) : null}
           </div>
         </div>

@@ -233,6 +233,8 @@ function SecuritySettings({
             <FormInputButton
               key="reset"
               kind={kinds.DANGER}
+              title={translate('ResetAPIKey')}
+              aria-label={translate('ResetAPIKey')}
               onPress={handleResetApiKeyPress}
             >
               <Icon name={icons.REFRESH} isSpinning={isResettingApiKey} />
