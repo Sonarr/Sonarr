@@ -10,7 +10,6 @@ public abstract class MediaInfoStreamResource
 public sealed class MediaInfoAudioStreamResource : MediaInfoStreamResource
 {
     public string? Codec { get; set; }
-    public string? CodecId { get; set; }
     public string? Profile { get; set; }
     public long Bitrate { get; set; }
     public decimal Channels { get; set; }
@@ -34,7 +33,6 @@ public static class MediaInfoAudioStreamResourceMapper
         {
             Language = model.Language,
             Codec = MediaInfoFormatter.FormatAudioCodec(model, sceneName),
-            CodecId = model.CodecId,
             Profile = model.Profile,
             Bitrate = model.Bitrate,
             Channels = MediaInfoFormatter.FormatAudioChannels(model),
