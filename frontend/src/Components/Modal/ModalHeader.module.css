@@ -17,3 +17,9 @@
   color: var(--inkMuted);
   font-weight: 400;
 }
+
+@media (--breakpointSmall) {
+  .modalHeader {
+    padding-left: 15px;
+  }
+}
