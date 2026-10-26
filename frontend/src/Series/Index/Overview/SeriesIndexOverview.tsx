@@ -2,15 +2,13 @@ import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';
 import CommandNames from 'Commands/CommandNames';
 import { useExecuteCommand } from 'Commands/useCommands';
-import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
-import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import useMeasure from 'Helpers/Hooks/useMeasure';
-import { icons } from 'Helpers/Props';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
 import SeriesIndexProgressBar from 'Series/Index/ProgressBar/SeriesIndexProgressBar';
 import SeriesIndexPosterSelect from 'Series/Index/Select/SeriesIndexPosterSelect';
+import SeriesIndexActions from 'Series/Index/SeriesIndexActions';
 import { SeriesStatus, Statistics } from 'Series/Series';
 import { useSeriesOverviewOptions } from 'Series/seriesOptionsStore';
 import SeriesPoster from 'Series/SeriesPoster';
@@ -209,30 +207,15 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
             </Link>
 
             <div className={styles.actions}>
-              <SpinnerIconButton
+              <SeriesIndexActions
+                title={title}
                 className={styles.action}
-                name={icons.REFRESH}
-                title={translate('RefreshSeries')}
-                isSpinning={isRefreshingSeries}
-                onPress={onRefreshPress}
-              />
-
-              {overviewOptions.showSearchAction ? (
-                <SpinnerIconButton
-                  className={styles.action}
-                  name={icons.SEARCH}
-                  title={translate('SearchForMonitoredEpisodes')}
-                  isSpinning={isSearchingSeries}
-                  onPress={onSearchPress}
-                />
-              ) : null}
-
-              <IconButton
-                className={styles.action}
-                name={icons.EDIT}
-                title={translate('EditSeries')}
-                aria-label={translate('EditSeries')}
-                onPress={onEditSeriesPress}
+                showSearchAction={overviewOptions.showSearchAction}
+                isRefreshingSeries={isRefreshingSeries}
+                isSearchingSeries={isSearchingSeries}
+                onRefreshPress={onRefreshPress}
+                onSearchPress={onSearchPress}
+                onEditSeriesPress={onEditSeriesPress}
               />
             </div>
           </div>
