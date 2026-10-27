@@ -1,4 +1,4 @@
-﻿using NzbDrone.Core.Annotations;
+using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.ImportLists.Tmdb;
 

@@ -1114,7 +1114,6 @@
   "ImportListsTmdbSettingsWithGenreTypesHelpText": "Filter series by genre",
   "ImportListsTmdbSettingsWithKeywords": "Keyword IDs",
   "ImportListsTmdbSettingsWithNetworks": "Network IDs",
-  "ImportListsTmdbSettingsWithNetworksHelpText": "TMDb network ids to filter by. Multiple ids are sent pipe-separated (OR); TMDb only documents a single id, so this is best-effort",
   "ImportListsTraktSettingsAdditionalParameters": "Additional Parameters",
   "ImportListsTraktSettingsAdditionalParametersHelpText": "Additional Trakt API parameters",
   "ImportListsTraktSettingsAuthenticateWithTrakt": "Authenticate with Trakt",

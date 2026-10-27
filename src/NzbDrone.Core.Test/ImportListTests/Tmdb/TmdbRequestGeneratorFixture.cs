@@ -61,10 +61,10 @@ public class TmdbRequestGeneratorFixture : CoreTest
     }
 
     [Test]
-    public void should_join_networks_with_pipe_for_or_for_discover()
+    public void should_send_delimited_networks_for_discover()
     {
         var settings = DiscoverSettings();
-        settings.WithNetworks = ["213", "49"];
+        settings.WithNetworks = "213|49";
 
         Query(Requests(new TmdbDiscoverRequestGenerator(settings, 1))[0])
             .Should().Contain("with_networks=213%7C49");

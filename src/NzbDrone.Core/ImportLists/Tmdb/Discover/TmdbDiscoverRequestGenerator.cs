@@ -92,15 +92,11 @@ public class TmdbDiscoverRequestGenerator(TmdbDiscoverSettings settings, int max
             builder.AddQueryParam("with_genres", string.Join('|', settings.WithGenreTypes));
         }
 
-        if (settings.WithNetworks?.Any() == true)
-        {
-            builder.AddQueryParam("with_networks", string.Join('|', settings.WithNetworks));
-        }
-
         AddAirDateQueryParam(builder, "air_date.gte", settings.AirDateMinimumDays);
         AddAirDateQueryParam(builder, "air_date.lte", settings.AirDateMaximumDays);
         AddOrSkipQueryParam(builder, "vote_average.gte", settings.VoteAverageMinimum);
         AddOrSkipQueryParam(builder, "vote_count.gte", settings.VoteCountMinimum);
+        AddOrSkipQueryParam(builder, "with_networks", settings.WithNetworks);
         AddOrSkipQueryParam(builder, "with_companies", settings.WithCompanies);
         AddOrSkipQueryParam(builder, "with_keywords", settings.WithKeywords);
 

@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.ImportLists.Tmdb.Account;

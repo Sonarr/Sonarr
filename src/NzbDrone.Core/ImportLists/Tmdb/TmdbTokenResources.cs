@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace NzbDrone.Core.ImportLists.Tmdb;
 
@@ -27,6 +27,4 @@ public class AccessTokenResource
 
     public string AccessToken { get; init; }
 
-    [JsonIgnore]
-    public string AuthToken => AccessToken;
 }

@@ -1,4 +1,4 @@
-﻿using NLog;
+using NLog;
 using NzbDrone.Common.Cloud;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
@@ -26,7 +26,6 @@ public class TmdbAccountImport(ISonarrCloudRequestBuilder requestBuilder,
 
     public override IImportListRequestGenerator GetRequestGenerator()
     {
-        // Paging already stops at the last page, so 50 pages of 20 matches MaxNumResultsPerQuery (1000).
         return new TmdbAccountRequestGenerator(Settings, 50);
     }
 }

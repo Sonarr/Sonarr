@@ -34,8 +34,8 @@ public partial class TmdbDiscoverSettingsValidator : TmdbSettingsBaseValidator<T
         RuleFor(c => c.WithCompanies).Matches(AndOrDelimitedIdsRegex())
             .When(c => c.WithCompanies.IsNotNullOrWhiteSpace());
 
-        RuleForEach(c => c.WithNetworks).Must(id => int.TryParse(id, NumberStyles.None, CultureInfo.InvariantCulture, out var idInt) && idInt > 0)
-            .WithMessage("Must be a valid network id.");
+        RuleFor(c => c.WithNetworks).Matches(AndOrDelimitedIdsRegex())
+            .When(c => c.WithNetworks.IsNotNullOrWhiteSpace());
     }
 
     [GeneratedRegex(@"^\d+(?:[,|]\d+)*$")]
@@ -110,8 +110,8 @@ public class TmdbDiscoverSettings() : TmdbSettingsBase<TmdbDiscoverSettings>(Val
     [FieldDefinition(9, Label = "ImportListsTmdbSettingsWithCompanies", HelpText = "ImportListsTmdbSettingsAndOrDelimitedIdsHelpText", Type = FieldType.Textbox)]
     public string WithCompanies { get; set; }
 
-    [FieldDefinition(10, Label = "ImportListsTmdbSettingsWithNetworks", HelpText = "ImportListsTmdbSettingsWithNetworksHelpText", Type = FieldType.Tag)]
-    public IEnumerable<string> WithNetworks { get; set; } = [];
+    [FieldDefinition(10, Label = "ImportListsTmdbSettingsWithNetworks", HelpText = "ImportListsTmdbSettingsAndOrDelimitedIdsHelpText", Type = FieldType.Textbox)]
+    public string WithNetworks { get; set; }
 
     [FieldDefinition(11, Label = "ImportListsTmdbSettingsIncludeNullFirstAirDates", HelpText = "ImportListsTmdbSettingsIncludeNullFirstAirDatesHelpText", Type = FieldType.Checkbox, Advanced = true)]
     public bool IncludeNullFirstAirDates { get; set; }

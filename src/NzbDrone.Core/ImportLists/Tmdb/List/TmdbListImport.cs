@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -42,7 +42,6 @@ public class TmdbListImport(ISonarrCloudRequestBuilder requestBuilder,
 
     public override IImportListRequestGenerator GetRequestGenerator()
     {
-        // Paging already stops at the last page, so 50 pages of 20 matches MaxNumResultsPerQuery (1000).
         return new TmdbListRequestGenerator(Settings, 50);
     }
 

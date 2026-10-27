@@ -162,6 +162,7 @@ public class TmdbSettingsFixture : CoreTest
         var settings = Discover();
         settings.WithKeywords = value;
         settings.WithCompanies = value;
+        settings.WithNetworks = value;
         settings.Validate().IsValid.Should().BeTrue();
     }
 
@@ -177,31 +178,10 @@ public class TmdbSettingsFixture : CoreTest
         var companies = Discover();
         companies.WithCompanies = value;
         companies.Validate().IsValid.Should().BeFalse();
-    }
 
-    [Test]
-    public void should_reject_invalid_network_ids_for_discover()
-    {
-        var settings = Discover();
-        settings.WithNetworks = ["213", "abc"];
-        settings.Validate().IsValid.Should().BeFalse();
-
-        settings.WithNetworks = ["0"];
-        settings.Validate().IsValid.Should().BeFalse();
-
-        settings.WithNetworks = [" 213"];
-        settings.Validate().IsValid.Should().BeFalse();
-
-        settings.WithNetworks = ["+213"];
-        settings.Validate().IsValid.Should().BeFalse();
-    }
-
-    [Test]
-    public void should_accept_valid_network_ids_for_discover()
-    {
-        var settings = Discover();
-        settings.WithNetworks = ["213", "49"];
-        settings.Validate().IsValid.Should().BeTrue();
+        var networks = Discover();
+        networks.WithNetworks = value;
+        networks.Validate().IsValid.Should().BeFalse();
     }
 
     [Test]
