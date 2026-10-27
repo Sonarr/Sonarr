@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Notifications.Telegram
 {
     public interface ITelegramProxy
     {
-        void SendNotification(string title, string message, List<NotificationMetadataLink> links, TelegramSettings settings);
+        void SendNotification(TelegramMessage message, List<NotificationMetadataLink> links, TelegramSettings settings);
         ValidationFailure Test(TelegramSettings settings);
     }
 
@@ -36,33 +36,36 @@ namespace NzbDrone.Core.Notifications.Telegram
             _logger = logger;
         }
 
-        public void SendNotification(string title, string message, List<NotificationMetadataLink> links, TelegramSettings settings)
+        public void SendNotification(TelegramMessage message, List<NotificationMetadataLink> links, TelegramSettings settings)
         {
-            var text = new StringBuilder($"<b>{HttpUtility.HtmlEncode(title)}</b>\n");
+            // sendPhoto has no link preview to configure - the image is the attachment.
+            var resource = message.HasPhoto ? "bot{token}/sendPhoto" : "bot{token}/sendmessage";
 
-            text.AppendLine(HttpUtility.HtmlEncode(message));
-
-            foreach (var link in links)
-            {
-                text.AppendLine($"<a href=\"{link.Link}\">{HttpUtility.HtmlEncode(link.Label)}</a>");
-            }
-
-            var requestBuilder = new HttpRequestBuilder(URL).Resource("bot{token}/sendmessage").Post();
-
-            var request = requestBuilder.SetSegment("token", settings.BotToken)
-                                        .Accept(HttpAccept.Json)
-                                        .Build();
+            var request = new HttpRequestBuilder(URL).Resource(resource)
+                                                     .Post()
+                                                     .SetSegment("token", settings.BotToken)
+                                                     .Accept(HttpAccept.Json)
+                                                     .Build();
 
             request.Headers.ContentType = "application/json";
 
-            var payload = new TelegramPayload
-            {
-                ChatId = settings.ChatId,
-                Text = text.ToString(),
-                DisableNotification = settings.SendSilently,
-                MessageThreadId = settings.TopicId,
-                LinkPreviewOptions = new TelegramLinkPreviewOptions(links, settings)
-            };
+            object payload = message.HasPhoto
+                ? new TelegramPhotoPayload
+                {
+                    ChatId = settings.ChatId,
+                    Photo = message.Photo,
+                    Caption = message.Text,
+                    DisableNotification = settings.SendSilently,
+                    MessageThreadId = settings.TopicId
+                }
+                : new TelegramPayload
+                {
+                    ChatId = settings.ChatId,
+                    Text = message.Text,
+                    DisableNotification = settings.SendSilently,
+                    MessageThreadId = settings.TopicId,
+                    LinkPreviewOptions = new TelegramLinkPreviewOptions(links, settings)
+                };
 
             request.SetContent(payload.ToJson());
 
@@ -85,7 +88,7 @@ namespace NzbDrone.Core.Notifications.Telegram
                 var testMessageTitle = settings.IncludeAppNameInTitle ? brandedTitle : title;
                 testMessageTitle = settings.IncludeInstanceNameInTitle ? $"{testMessageTitle} - {_configFileProvider.InstanceName}" : testMessageTitle;
 
-                SendNotification(testMessageTitle, body, links, settings);
+                SendNotification(TelegramMessageBuilder.BuildSimpleMessage(testMessageTitle, body, links), links, settings);
             }
             catch (Exception ex)
             {
