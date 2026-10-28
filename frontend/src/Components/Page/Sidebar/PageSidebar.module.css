@@ -7,6 +7,10 @@
   transform: translateX(0);
 }
 
+.isCollapsed {
+  display: none;
+}
+
 .sidebarHeader {
   display: flex;
   align-items: center;
@@ -94,7 +98,7 @@
   background-color: var(--borderColor);
 }
 
-@media (--breakpointSmall) {
+@media (--sidebarOverlay) {
   .sidebarContainer {
     position: fixed;
     top: 0;
