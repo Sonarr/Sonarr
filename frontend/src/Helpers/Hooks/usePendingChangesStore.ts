@@ -1,3 +1,4 @@
+import { isEqual } from 'lodash';
 import { useCallback, useMemo, useState } from 'react';
 import { create, useStore } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
@@ -11,8 +12,17 @@ interface PendingChangesStore<T extends object> {
   pendingChanges: Partial<T>;
 }
 
+function areValuesEqual(value: unknown, originalValue: unknown) {
+  if (Array.isArray(value) && Array.isArray(originalValue)) {
+    return isEqual(new Set(value), new Set(originalValue));
+  }
+
+  return isEqual(value, originalValue);
+}
+
 export const usePendingChangesStore = <T extends object>(
-  initialPendingChanges: Partial<T>
+  initialPendingChanges: Partial<T>,
+  originalValues?: T
 ) => {
   // eslint-disable-next-line react/hook-use-state
   const [store] = useState(() => {
@@ -51,8 +61,16 @@ export const usePendingChangesStore = <T extends object>(
   );
 
   const hasPendingChanges = useMemo(() => {
-    return Object.keys(pendingChanges).length > 0;
-  }, [pendingChanges]);
+    const keys = Object.keys(pendingChanges) as (keyof T)[];
+
+    if (!originalValues) {
+      return keys.length > 0;
+    }
+
+    return keys.some(
+      (key) => !areValuesEqual(pendingChanges[key], originalValues[key])
+    );
+  }, [pendingChanges, originalValues]);
 
   return {
     store,
