@@ -11015,10 +11015,6 @@
             "type": "string",
             "nullable": true
           },
-          "codecId": {
-            "type": "string",
-            "nullable": true
-          },
           "profile": {
             "type": "string",
             "nullable": true
