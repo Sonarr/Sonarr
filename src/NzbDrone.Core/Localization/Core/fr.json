@@ -1044,6 +1044,8 @@
     "ImportListsTraktSettingsPopularName": "Liste populaire de Trakt",
     "ImportListsTraktSettingsRating": "Evaluation",
     "ImportListsTraktSettingsRatingSeriesHelpText": "Filtrer les séries par plage de classement (0-100)",
+    "ImportListsTraktSettingsSmartList": "Liste intelligente Slug",
+    "ImportListsTraktSettingsSmartListHelpText": "Identifiant de la liste intelligente, par exemple my-list-1a2b3c4d5e6f7a8b (https://app.trakt.tv/lists/smart/view/my-list-1a2b3c4d5e6f7a8b). La liste doit être publique ou vous appartenir",
     "ImportListsTraktSettingsUserListName": "Utilisateur de Trakt",
     "ImportListsTraktSettingsUserListTypeCollection": "Liste des collections d'utilisateurs",
     "ImportListsTraktSettingsUserListTypeWatch": "Liste de surveillance des utilisateurs",
