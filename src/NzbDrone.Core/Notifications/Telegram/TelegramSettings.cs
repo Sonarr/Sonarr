@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Notifications.Telegram
             MetadataLinks = Enumerable.Empty<int>();
             LinkPreview = (int)MetadataLinkPreviewType.None;
             DetailedMessage = true;
-            Image = (int)TelegramImageType.Screenshot;
+            Image = (int)TelegramImageType.Fanart;
         }
 
         [FieldDefinition(0, Label = "NotificationsTelegramSettingsBotToken", Privacy = PrivacyLevel.ApiKey, HelpLink = "https://core.telegram.org/bots")]

@@ -45,6 +45,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Telegram
                 EpisodeNumber = 1,
                 Title = "Pilot",
                 AirDate = "2026-08-16",
+                Runtime = 47,
                 Overview = "After a fatal shooting, Green Lantern Hal Jordan and new recruit John Stewart set out to prove it was an extraterrestrial event.",
                 Images =
                 [
@@ -64,20 +65,29 @@ namespace NzbDrone.Core.Test.NotificationTests.Telegram
                 "\n" +
                 "<blockquote expandable>After a fatal shooting, Green Lantern Hal Jordan and new recruit John Stewart set out to prove it was an extraterrestrial event.</blockquote>\n" +
                 "\n" +
-                "7.8/10 · 16 Aug 2026\n" +
+                "2026-08-16 · 47 min\n" +
                 "<i>WEBDL-1080p Proper · 4.4 GB</i>\n" +
                 "<i>Trigger: Episode Downloaded</i>");
         }
 
         [Test]
-        public void ShouldPreferTheEpisodeScreenshot()
+        public void ShouldUseFanartByDefault()
         {
+            Build().Photo.Should().Be(Fanart);
+        }
+
+        [Test]
+        public void ShouldPreferTheEpisodeScreenshotWhenSelected()
+        {
+            _settings.Image = (int)TelegramImageType.Screenshot;
+
             Build().Photo.Should().Be(Screenshot);
         }
 
         [Test]
         public void ShouldFallBackToFanartWhenThereIsNoScreenshot()
         {
+            _settings.Image = (int)TelegramImageType.Screenshot;
             _episode.Images.Clear();
 
             Build().Photo.Should().Be(Fanart);
@@ -161,11 +171,11 @@ namespace NzbDrone.Core.Test.NotificationTests.Telegram
         }
 
         [Test]
-        public void ShouldOmitTheRatingWhenTheSeriesIsUnrated()
+        public void ShouldOmitTheRuntimeWhenItIsUnknown()
         {
-            _series.Ratings = new Ratings { Votes = 0, Value = 0m };
+            _episode.Runtime = 0;
 
-            Build().Text.Should().Contain("\n16 Aug 2026\n").And.NotContain("/10");
+            Build().Text.Should().Contain("\n2026-08-16\n").And.NotContain(" min");
         }
 
         [Test]
@@ -181,6 +191,18 @@ namespace NzbDrone.Core.Test.NotificationTests.Telegram
             _episode.Title = "<Pilot>";
 
             Build().Text.Should().StartWith("<b>Bob &amp; Ted · S01E01</b>\n<i>&lt;Pilot&gt;</i>");
+        }
+
+        [Test]
+        public void ShouldKeepTheRatingOnTheSeriesCard()
+        {
+            var message = TelegramMessageBuilder.BuildSeriesMessage("Series Added", _series, [], _settings);
+
+            message.Text.Should().Be(
+                "<b>Lanterns (2026)</b>\n" +
+                "\n" +
+                "7.8/10 · HBO\n" +
+                "<i>Trigger: Series Added</i>");
         }
 
         [System.Text.RegularExpressions.GeneratedRegex("<.*?>")]

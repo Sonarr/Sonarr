@@ -21,8 +21,6 @@ namespace NzbDrone.Core.Notifications.Telegram
         // An overview cut below this is more distracting than no overview at all.
         private const int MinOverviewLength = 60;
 
-        private const string AirDateFormat = "d MMM yyyy";
-
         public static TelegramMessage BuildSimpleMessage(string title, string message, IEnumerable<NotificationMetadataLink> links)
         {
             var text = new StringBuilder($"<b>{HttpUtility.HtmlEncode(title)}</b>\n");
@@ -47,7 +45,7 @@ namespace NzbDrone.Core.Notifications.Telegram
                 Heading = $"{series.Title} · {GetEpisodeIdentifier(series, episodes)}",
                 Subheading = episodes.Select(e => e.Title).Where(t => t.IsNotNullOrWhiteSpace()).Join(" + "),
                 Overview = first.Overview,
-                Facts = JoinFacts(FormatRating(series.Ratings), FormatAirDate(first)),
+                Facts = JoinFacts(FormatAirDate(first), FormatRuntime(first)),
                 FileFacts = JoinFacts(FormatQuality(series, quality), size > 0 ? size.Value.SizeSuffix() : null),
                 Trigger = trigger,
                 Links = links
@@ -139,14 +137,17 @@ namespace NzbDrone.Core.Notifications.Telegram
 
         private static string FormatAirDate(Episode episode)
         {
-            // AirDate is the series' own air date; AirDateUtc is the instant it aired,
-            // which can land on a different day for anything airing late evening.
-            if (DateTime.TryParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out var airDate))
+            if (episode.AirDate.IsNotNullOrWhiteSpace())
             {
-                return airDate.ToString(AirDateFormat, CultureInfo.InvariantCulture);
+                return episode.AirDate;
             }
 
-            return episode.AirDateUtc?.ToString(AirDateFormat, CultureInfo.InvariantCulture);
+            return episode.AirDateUtc?.ToString(Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture);
+        }
+
+        private static string FormatRuntime(Episode episode)
+        {
+            return episode.Runtime > 0 ? $"{episode.Runtime} min" : null;
         }
 
         private static string FormatQuality(Series series, QualityModel quality)
