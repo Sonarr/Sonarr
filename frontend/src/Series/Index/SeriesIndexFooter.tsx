@@ -1,13 +1,13 @@
 import React from 'react';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
-import useSeries from 'Series/useSeries';
+import { useSeriesIndex } from 'Series/useSeries';
 import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
 import styles from './SeriesIndexFooter.module.css';
 
 export default function SeriesIndexFooter() {
-  const { data: series } = useSeries();
+  const { data: series } = useSeriesIndex();
   const count = series.length;
   let episodes = 0;
   let episodeFiles = 0;
