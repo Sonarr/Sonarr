@@ -1,7 +1,7 @@
 import React, { type ReactNode } from 'react';
+import PendingChangesModal from 'Components/Modal/PendingChangesModal';
 import PageContent from 'Components/Page/PageContent';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
-import PendingChangesModal from './PendingChangesModal';
 import SettingsSaveItems from './SettingsSaveItems';
 import useSettingsSave from './useSettingsSave';
 

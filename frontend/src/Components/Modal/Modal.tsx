@@ -70,7 +70,16 @@ function Modal({
 }: ModalProps) {
   const backgroundRef = useRef<HTMLDivElement>(null);
   const isBackdropPressed = useRef(false);
+  const closeGuardRef = useRef<(() => void) | null>(null);
   const modalId = useId();
+
+  const setCloseGuard = useCallback((closeGuard: (() => void) | null) => {
+    closeGuardRef.current = closeGuard;
+  }, []);
+
+  const handleModalClose = useCallback(() => {
+    (closeGuardRef.current ?? onModalClose)();
+  }, [onModalClose]);
 
   const isTargetBackdrop = useCallback((event: TouchEvent | MouseEvent) => {
     const targetElement = findEventTarget(event);
@@ -96,12 +105,12 @@ function Modal({
         isTargetBackdrop(event) &&
         closeOnBackgroundClick
       ) {
-        onModalClose();
+        handleModalClose();
       }
 
       isBackdropPressed.current = false;
     },
-    [closeOnBackgroundClick, isTargetBackdrop, onModalClose]
+    [closeOnBackgroundClick, isTargetBackdrop, handleModalClose]
   );
 
   const handleKeyDown = useCallback(
@@ -111,11 +120,11 @@ function Modal({
           event.preventDefault();
           event.stopPropagation();
 
-          onModalClose();
+          handleModalClose();
         }
       }
     },
-    [modalId, onModalClose]
+    [modalId, handleModalClose]
   );
 
   useEffect(() => {
@@ -163,7 +172,7 @@ function Modal({
   const headerId = `${modalId}-header`;
 
   return ReactDOM.createPortal(
-    <ModalContext.Provider value={{ headerId }}>
+    <ModalContext.Provider value={{ headerId, setCloseGuard }}>
       <FocusLock disabled={false}>
         <div className={styles.modalContainer}>
           <div

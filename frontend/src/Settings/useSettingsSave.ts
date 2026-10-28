@@ -1,6 +1,6 @@
-import { useCallback, useEffect } from 'react';
-import { useBlocker } from 'react-router';
+import { useEffect } from 'react';
 import useKeyboardShortcuts from 'Helpers/Hooks/useKeyboardShortcuts';
+import useUnsavedChanges from 'Helpers/Hooks/useUnsavedChanges';
 
 interface UseSettingsSaveOptions {
   hasPendingChanges?: boolean;
@@ -22,15 +22,9 @@ export default function useSettingsSave({
   onSavePress,
 }: UseSettingsSaveOptions): UseSettingsSaveResult {
   const { bindShortcut, unbindShortcut } = useKeyboardShortcuts();
-  const blocker = useBlocker(() => !!hasPendingChanges);
-
-  const handleConfirmNavigation = useCallback(() => {
-    blocker.proceed?.();
-  }, [blocker]);
-
-  const handleCancelNavigation = useCallback(() => {
-    blocker.reset?.();
-  }, [blocker]);
+  const { pendingChangesModalProps } = useUnsavedChanges({
+    hasUnsavedChanges: hasPendingChanges,
+  });
 
   useEffect(() => {
     bindShortcut(
@@ -51,10 +45,6 @@ export default function useSettingsSave({
   }, [hasPendingChanges, bindShortcut, unbindShortcut, onSavePress]);
 
   return {
-    pendingChangesModalProps: {
-      isOpen: blocker.state === 'blocked',
-      onConfirm: handleConfirmNavigation,
-      onCancel: handleCancelNavigation,
-    },
+    pendingChangesModalProps,
   };
 }
