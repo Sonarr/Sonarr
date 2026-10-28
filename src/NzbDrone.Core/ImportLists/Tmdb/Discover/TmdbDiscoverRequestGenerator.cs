@@ -83,7 +83,6 @@ public class TmdbDiscoverRequestGenerator(TmdbDiscoverSettings settings, int max
 
         if (originalLanguage != TmdbLanguage.Any)
         {
-            // TMDb expects lowercase ISO 639-1 codes
             builder.AddQueryParam("with_original_language", originalLanguage.ToString().ToLowerInvariant());
         }
 

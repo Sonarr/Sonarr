@@ -1,13 +1,9 @@
-using System;
 using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.ImportLists.Tmdb.Discover;
 
 public enum TmdbDiscoverGenreType
 {
-    // CA1008 Obsolete keeps it out of the select options in SchemaBuilder.
-    [Obsolete("Placeholder, not a TMDb genre")]
-    None = 0,
     [FieldOption(Label = "ImportListsTmdbSettingsDiscoverGenreTypeActionAdventure")]
     ActionAdventure = 10759,
     [FieldOption(Label = "ImportListsTmdbSettingsDiscoverGenreTypeAnimation")]

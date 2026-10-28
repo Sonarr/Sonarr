@@ -32,7 +32,7 @@ public abstract class TmdbParserBase<TResponse> : IParseImportListResponse
     {
         ArgumentNullException.ThrowIfNull(resource);
 
-        // When MediaType is null/empty, it is implied to be a media type of "tv".
+        // When MediaType is null/empty, it is assumed to be "tv"
         if (resource.MediaType.IsNullOrWhiteSpace() || resource.MediaType == "tv")
         {
             return new ImportListItemInfo

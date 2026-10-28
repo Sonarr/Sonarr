@@ -26,5 +26,4 @@ public class AccessTokenResource
     public string AccountId { get; init; }
 
     public string AccessToken { get; init; }
-
 }

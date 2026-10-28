@@ -2,10 +2,7 @@ using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.ImportLists.Tmdb;
 
-// The numeric values are persisted in import list settings. Therefore, never reorder or reuse them
-// but assign the next unused number when adding a department (even if inserted alphabetically).
-// The member names are matched against the department name returned by TMDb (see TmdbPersonParser),
-// so don't rename them.
+// Numeric values are persisted in import list settings, never reorder or reuse them.
 public enum TmdbDepartmentType
 {
     [FieldOption(Label = "ImportListsTmdbSettingsDepartmentTypeArt")]

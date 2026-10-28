@@ -91,7 +91,6 @@ public class TmdbListImport(ISonarrCloudRequestBuilder requestBuilder,
         }
         catch (Exception ex)
         {
-            // An expired token or a TMDb outage shouldn't turn the options request into a 500.
             _logger.Warn(ex, "Unable to fetch TMDb account lists");
         }
 
