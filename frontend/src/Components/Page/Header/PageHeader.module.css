@@ -99,6 +99,16 @@
   fill: currentColor;
 }
 
+@media (--sidebarCollapsible) {
+  .logoContainer {
+    flex: 0 0 auto;
+  }
+
+  .sidebarToggleContainer {
+    display: flex;
+  }
+}
+
 @media (--breakpointSmall) {
   .header {
     position: sticky;
@@ -107,16 +117,11 @@
   }
 
   .logoContainer {
-    flex: 0 0 auto;
     padding-left: 16px;
   }
 
   .brandName {
     display: none;
-  }
-
-  .sidebarToggleContainer {
-    display: flex;
   }
 
   .donate {

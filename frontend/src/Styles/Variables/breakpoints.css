@@ -13,3 +13,7 @@
 @custom-media --breakpointSmallUp (min-width: 768px);
 
 @custom-media --breakpointMediumUp (min-width: 992px);
+
+@custom-media --sidebarCollapsible (max-width: 768px), (pointer: coarse);
+
+@custom-media --sidebarOverlay (max-width: 768px), (pointer: coarse) and (max-height: 500px);
