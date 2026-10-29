@@ -136,17 +136,6 @@ export const FILTERS: Filter[] = [
       },
     ],
   },
-  {
-    key: 'multi-season-pack',
-    label: () => translate('MultiSeasonPack'),
-    filters: [
-      {
-        key: 'multiSeason',
-        value: [true],
-        type: 'equal',
-      },
-    ],
-  },
 ];
 
 export const FILTER_BUILDER: FilterBuilderProp<Release>[] = [
