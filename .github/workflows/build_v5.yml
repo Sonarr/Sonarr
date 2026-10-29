@@ -81,7 +81,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Check out
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Build
         uses: ./.github/actions/build
@@ -96,7 +96,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Volta
         uses: volta-cli/action@v5
@@ -142,7 +142,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Check out
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Test
         uses: ./.github/actions/test
@@ -161,7 +161,7 @@ jobs:
         postgres-version: [16, 17, 18]
     steps:
       - name: Check out
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Test
         uses: ./.github/actions/test
@@ -198,7 +198,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Check out
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Test
         uses: ./.github/actions/test
