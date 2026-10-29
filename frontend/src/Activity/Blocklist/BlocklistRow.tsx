@@ -66,6 +66,11 @@ function BlocklistRow({
     return null;
   }
 
+  const detailsLabel = translate('DetailsForTitle', { title: sourceTitle });
+  const removeLabel = translate('RemoveFromBlocklistWithTitle', {
+    title: sourceTitle,
+  });
+
   return (
     <TableRow>
       <TableSelectCell
@@ -139,14 +144,15 @@ function BlocklistRow({
             <TableRowCell key={name} className={styles.actions}>
               <IconButton
                 name={icons.INFO}
-                aria-label={translate('Details')}
+                title={detailsLabel}
+                aria-label={detailsLabel}
                 size={16}
                 onPress={handleDetailsPress}
               />
 
               <IconButton
-                title={translate('RemoveFromBlocklist')}
-                aria-label={translate('RemoveFromBlocklist')}
+                title={removeLabel}
+                aria-label={removeLabel}
                 name={icons.REMOVE}
                 kind={kinds.DANGER}
                 isSpinning={isRemoving}
