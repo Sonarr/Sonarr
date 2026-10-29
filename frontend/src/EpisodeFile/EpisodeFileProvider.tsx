@@ -24,7 +24,7 @@ export default function EpisodeFileProvider({
   );
 }
 
-export function useEpisodeFile(id: number | undefined) {
+function useEpisodeFileFromContext(id: number | undefined) {
   const episodeFiles = useContext(EpisodeFileContext);
 
   return useMemo(() => {
@@ -34,6 +34,17 @@ export function useEpisodeFile(id: number | undefined) {
 
     return episodeFiles?.find((item) => item.id === id);
   }, [id, episodeFiles]);
+}
+
+export function useEpisodeFile(id: number | undefined) {
+  const hasEpisodeFileContext = !!useContext(EpisodeFileContext);
+  const contextEpisodeFile = useEpisodeFileFromContext(id);
+
+  const { data } = useEpisodeFiles({
+    episodeFileIds: id && !hasEpisodeFileContext ? [id] : [],
+  });
+
+  return contextEpisodeFile ?? data.find((item) => item.id === id);
 }
 
 export interface SeriesEpisodeFile {
