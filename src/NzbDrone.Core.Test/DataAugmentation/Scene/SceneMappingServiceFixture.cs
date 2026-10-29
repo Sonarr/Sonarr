@@ -376,6 +376,57 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
             Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva", 4).Should().Be(101);
         }
 
+        [Test]
+        public void should_find_scene_mapping_for_each_season_of_series()
+        {
+            var mappings = new List<SceneMapping>
+            {
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", SceneSeasonNumber = 1, SeasonNumber = 1, TvdbId = 100 },
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", SceneSeasonNumber = 2, SeasonNumber = 4, TvdbId = 100 }
+            };
+
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+
+            var result = Subject.FindSceneMappings("Amareto", "Amareto.S01-S03.720p.WEB-DL-Viva", 100, [1, 2, 3]);
+
+            result.Keys.Should().BeEquivalentTo([1, 2, 3]);
+            result[1].SeasonNumber.Should().Be(1);
+            result[2].SeasonNumber.Should().Be(4);
+            result[3].SeasonNumber.Should().Be(4);
+        }
+
+        [Test]
+        public void should_ignore_scene_mappings_for_other_series_when_finding_mapping_for_each_season()
+        {
+            var mappings = new List<SceneMapping>
+            {
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 100 },
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", SceneSeasonNumber = 3, SeasonNumber = 1, TvdbId = 101 }
+            };
+
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+
+            var result = Subject.FindSceneMappings("Amareto", "Amareto.S01-S03.720p.WEB-DL-Viva", 100, [1, 2, 3]);
+
+            result.Values.Should().OnlyContain(m => m.TvdbId == 100);
+        }
+
+        [Test]
+        public void should_not_throw_if_multiple_series_share_title_when_finding_mapping_for_each_season()
+        {
+            var mappings = new List<SceneMapping>
+            {
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 100 },
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 101 }
+            };
+
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+
+            var result = Subject.FindSceneMappings("Amareto", "Amareto.S01-S02.720p.WEB-DL-Viva", 101, [1, 2]);
+
+            result.Values.Should().OnlyContain(m => m.TvdbId == 101);
+        }
+
         private void AssertNoUpdate()
         {
             _provider1.Verify(c => c.GetSceneMappings(), Times.Once());

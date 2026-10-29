@@ -125,18 +125,7 @@ namespace NzbDrone.Core.Parser.Model
             }
             else if (FullSeason)
             {
-                if (IsMultiSeason && SeasonNumbers.Last() - SeasonNumbers.First() + 1 == SeasonNumbers.Count)
-                {
-                    episodeString = string.Format("Season {0:00}-{1:00}", SeasonNumbers.First(), SeasonNumbers.Last());
-                }
-                else if (IsMultiSeason)
-                {
-                    episodeString = string.Format("Seasons {0}", string.Join(", ", SeasonNumbers.Select(s => s.ToString("00"))));
-                }
-                else
-                {
-                    episodeString = SeasonNumbers.Any() ? string.Format("Season {0:00}", SeasonNumbers.First()) : "[Unknown Season]";
-                }
+                episodeString = SeasonNumbers.Any() ? SeasonNumbersFormatter.Format(SeasonNumbers, "00") : "[Unknown Season]";
             }
             else if (EpisodeNumbers != null && EpisodeNumbers.Any())
             {

@@ -1,8 +1,8 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Notifications;
+using NzbDrone.Core.Parser;
 
-namespace NzbDrone.Core.Test.NotificationTests
+namespace NzbDrone.Core.Test.ParserTests
 {
     [TestFixture]
     public class SeasonNumbersFormatterFixture
@@ -15,6 +15,14 @@ namespace NzbDrone.Core.Test.NotificationTests
         public void should_format_season_numbers(int[] seasonNumbers, string expected)
         {
             SeasonNumbersFormatter.Format(seasonNumbers).Should().Be(expected);
+        }
+
+        [TestCase(new[] { 2 }, "Season 02")]
+        [TestCase(new[] { 1, 2 }, "Seasons 01-02")]
+        [TestCase(new[] { 1, 3 }, "Seasons 01, 03")]
+        public void should_format_season_numbers_with_number_format(int[] seasonNumbers, string expected)
+        {
+            SeasonNumbersFormatter.Format(seasonNumbers, "00").Should().Be(expected);
         }
     }
 }

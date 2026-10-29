@@ -15,10 +15,6 @@ function formatReleaseNumber(
   episodeNumbers: number[] | undefined,
   absoluteEpisodeNumbers: number[] | undefined
 ) {
-  if (seasonNumbers.length > 1) {
-    return formatSeasonNumbers(seasonNumbers);
-  }
-
   if (episodeNumbers && episodeNumbers.length) {
     if (episodeNumbers.length > 1) {
       return `${seasonNumbers[0]}x${episodeNumbers[0]}-${
@@ -37,6 +33,10 @@ function formatReleaseNumber(
     }
 
     return absoluteEpisodeNumbers[0];
+  }
+
+  if (seasonNumbers.length > 1) {
+    return formatSeasonNumbers(seasonNumbers);
   }
 
   if (seasonNumbers.length === 1) {

@@ -233,7 +233,11 @@ function QueueRow(props: QueueRowProps) {
         if (name === 'episodes.title') {
           return (
             <TableRowCell key={name}>
-              <EpisodeTitleCellContent episodes={episodes} series={series} />
+              <EpisodeTitleCellContent
+                episodes={episodes}
+                isMultiSeason={seasons.length > 1}
+                series={series}
+              />
             </TableRowCell>
           );
         }
