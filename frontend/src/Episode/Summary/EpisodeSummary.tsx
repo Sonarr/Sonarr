@@ -1,9 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query';
 import moment from 'moment-timezone';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import Episode from 'Episode/Episode';
 import useEpisode, { EpisodeEntity } from 'Episode/useEpisode';
-import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
+import {
+  EpisodeFileContext,
+  useEpisodeFile,
+} from 'EpisodeFile/EpisodeFileProvider';
 import { useDeleteEpisodeFile } from 'EpisodeFile/useEpisodeFiles';
 import Series from 'Series/Series';
 import { useSingleSeries } from 'Series/useSeries';
@@ -39,6 +42,7 @@ function EpisodeSummary({
   const { shortDateFormat, showRelativeDates, timeFormat } =
     useUiSettingsValues();
 
+  const hasEpisodeFileContext = !!useContext(EpisodeFileContext);
   const episodeFile = useEpisodeFile(episodeFileId);
 
   const { deleteEpisodeFile } = useDeleteEpisodeFile(
@@ -53,10 +57,10 @@ function EpisodeSummary({
   const episodeFilePath = episodeFile?.path;
 
   useEffect(() => {
-    if (episodeFileId && !episodeFilePath) {
+    if (hasEpisodeFileContext && episodeFileId && !episodeFilePath) {
       queryClient.invalidateQueries({ queryKey: ['/episodeFile'] });
     }
-  }, [episodeFileId, episodeFilePath, queryClient]);
+  }, [hasEpisodeFileContext, episodeFileId, episodeFilePath, queryClient]);
 
   return (
     <div>
