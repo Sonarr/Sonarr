@@ -162,6 +162,7 @@ src/.idea/
 
 # API doc generation
 .config/
+dotnet-tools.json
 
 # Ignore Jetbrains IntelliJ Workspace Directories
 .idea/
