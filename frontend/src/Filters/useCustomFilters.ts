@@ -10,6 +10,9 @@ const DEFAULT_CUSTOM_FILTERS: CustomFilter[] = [];
 const useCustomFilters = () => {
   const result = useApiQuery<CustomFilter[]>({
     path: '/customFilter',
+    queryOptions: {
+      staleTime: 30 * 1000,
+    },
   });
 
   return {
