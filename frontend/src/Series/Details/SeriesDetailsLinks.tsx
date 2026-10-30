@@ -26,7 +26,7 @@ function SeriesDetailsLinks(props: SeriesDetailsLinksProps) {
     if (tvdbId) {
       validLinks.push({
         externalId: tvdbId,
-        name: 'The TVDB',
+        name: 'TheTVDB',
         url: `https://www.thetvdb.com/?tab=series&id=${tvdbId}`,
       });
     }
@@ -34,7 +34,7 @@ function SeriesDetailsLinks(props: SeriesDetailsLinksProps) {
     if (tvMazeId) {
       validLinks.push({
         externalId: tvMazeId,
-        name: 'TV Maze',
+        name: 'TVmaze',
         url: `https://www.tvmaze.com/shows/${tvMazeId}/_`,
       });
     }
@@ -43,7 +43,7 @@ function SeriesDetailsLinks(props: SeriesDetailsLinksProps) {
       validLinks.push(
         {
           externalId: imdbId,
-          name: 'IMDB',
+          name: 'IMDb',
           url: `https://imdb.com/title/${imdbId}/`,
         },
         {
