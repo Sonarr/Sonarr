@@ -122,6 +122,35 @@ namespace NzbDrone.Core.Test.ImportListTests
         }
 
         [Test]
+        public void should_not_deduplicate_items_with_same_title_but_different_tmdb_id()
+        {
+            var series = new List<ImportListItemInfo>
+            {
+                new() { Title = "Doctor Who", TvdbId = 0, TmdbId = 1 },
+                new() { Title = "Doctor Who", TvdbId = 0, TmdbId = 2 },
+                new() { Title = "Doctor Who", TvdbId = 0, TmdbId = 3 }
+            };
+
+            WithList(1, true, true, new ImportListFetchResult { Series = series });
+
+            Subject.Fetch().Series.Should().HaveCount(3);
+        }
+
+        [Test]
+        public void should_deduplicate_items_with_same_tmdb_id_and_title()
+        {
+            var series = new List<ImportListItemInfo>
+            {
+                new() { Title = "Doctor Who", TvdbId = 0, TmdbId = 1 },
+                new() { Title = "Doctor Who", TvdbId = 0, TmdbId = 1 }
+            };
+
+            WithList(1, true, true, new ImportListFetchResult { Series = series });
+
+            Subject.Fetch().Series.Should().HaveCount(1);
+        }
+
+        [Test]
         public void should_return_early_if_no_available_lists()
         {
             var listResult = Subject.Fetch();
