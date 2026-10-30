@@ -134,12 +134,14 @@ namespace NzbDrone.Core.Tv
 
             // build ordered list of series by position in the search string
             var query =
-                list.Select(series => new
-                {
-                    position = cleanTitle.IndexOf(series.CleanTitle),
-                    length = series.CleanTitle.Length,
-                    series = series
-                })
+                list.SelectMany(series => new[] { series.CleanTitle, series.CleanOriginalTitle }
+                    .Where(t => t.IsNotNullOrWhiteSpace())
+                    .Select(t => new
+                    {
+                        position = cleanTitle.IndexOf(t),
+                        length = t.Length,
+                        series = series
+                    }))
                     .Where(s => (s.position >= 0))
                     .ToList()
                     .OrderBy(s => s.position)
