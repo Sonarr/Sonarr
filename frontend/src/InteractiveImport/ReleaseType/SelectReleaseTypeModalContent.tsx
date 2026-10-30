@@ -37,6 +37,12 @@ const options = [
       return translate('SeasonPack');
     },
   },
+  {
+    key: 'multiSeasonPack',
+    get value() {
+      return translate('MultiSeasonPack');
+    },
+  },
 ];
 
 interface SelectReleaseTypeModalContentProps {
