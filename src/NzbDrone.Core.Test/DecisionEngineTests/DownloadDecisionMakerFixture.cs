@@ -346,6 +346,27 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
+        public void should_include_parsed_episode_info_when_exception_is_caught()
+        {
+            GivenSpecifications(_pass1);
+
+            Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<SearchCriteriaBase>()))
+                     .Throws<TestException>();
+
+            _reports = new List<ReleaseInfo>
+                {
+                    new ReleaseInfo { Title = "The.Office.S03E115.DVDRip.XviD-OSiTV" },
+                };
+
+            var result = Subject.GetRssDecision(_reports);
+
+            result.Should().HaveCount(1);
+            result.First().RemoteEpisode.ParsedEpisodeInfo.Should().NotBeNull();
+
+            ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
         public void should_return_unknown_series_rejection_if_series_title_is_an_alias_for_another_series()
         {
             GivenSpecifications(_pass1, _pass2, _pass3);
