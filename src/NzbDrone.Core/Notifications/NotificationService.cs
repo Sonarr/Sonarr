@@ -6,9 +6,11 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.HealthCheck;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
@@ -22,6 +24,7 @@ namespace NzbDrone.Core.Notifications
           IHandle<DownloadCompletedEvent>,
           IHandle<UntrackedDownloadCompletedEvent>,
           IHandle<SeriesRenamedEvent>,
+          IHandle<SeriesMovedEvent>,
           IHandle<SeriesAddCompletedEvent>,
           IHandle<SeriesDeletedEvent>,
           IHandle<EpisodeFileDeletedEvent>,
@@ -36,12 +39,14 @@ namespace NzbDrone.Core.Notifications
     {
         private readonly INotificationFactory _notificationFactory;
         private readonly INotificationStatusService _notificationStatusService;
+        private readonly IRootFolderService _rootFolderService;
         private readonly Logger _logger;
 
-        public NotificationService(INotificationFactory notificationFactory, INotificationStatusService notificationStatusService, Logger logger)
+        public NotificationService(INotificationFactory notificationFactory, INotificationStatusService notificationStatusService, IRootFolderService rootFolderService, Logger logger)
         {
             _notificationFactory = notificationFactory;
             _notificationStatusService = notificationStatusService;
+            _rootFolderService = rootFolderService;
             _logger = logger;
         }
 
@@ -295,13 +300,44 @@ namespace NzbDrone.Core.Notifications
 
         public void Handle(SeriesRenamedEvent message)
         {
+            NotifyOnRename(message.Series, message.RenamedFiles);
+        }
+
+        public void Handle(SeriesMovedEvent message)
+        {
+            if (message.SourcePath.PathEquals(message.DestinationPath))
+            {
+                return;
+            }
+
+            var sourceRoot = _rootFolderService.GetBestRootFolderPath(message.SourcePath);
+            var destinationRoot = _rootFolderService.GetBestRootFolderPath(message.DestinationPath);
+
+            if (!sourceRoot.PathEquals(destinationRoot))
+            {
+                return;
+            }
+
+            // Only the series folder changed, so there are no renamed episode files.
+            // Folder moves have no RenameCompletedEvent to flush media server queues.
+            NotifyOnRename(message.Series, new List<RenamedEpisodeFile>(), true);
+        }
+
+        private void NotifyOnRename(Series series, List<RenamedEpisodeFile> renamedFiles, bool processQueue = false)
+        {
             foreach (var notification in _notificationFactory.OnRenameEnabled())
             {
                 try
                 {
-                    if (ShouldHandleSeries(notification.Definition, message.Series))
+                    if (ShouldHandleSeries(notification.Definition, series))
                     {
-                        notification.OnRename(message.Series, message.RenamedFiles);
+                        notification.OnRename(series, renamedFiles);
+
+                        if (processQueue)
+                        {
+                            notification.ProcessQueue();
+                        }
+
                         _notificationStatusService.RecordSuccess(notification.Definition.Id);
                     }
                 }
