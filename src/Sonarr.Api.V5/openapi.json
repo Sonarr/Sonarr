@@ -10380,6 +10380,7 @@
           "plex",
           "trakt",
           "simkl",
+          "tmdb",
           "other",
           "advanced"
         ],
@@ -12078,11 +12079,10 @@
             },
             "nullable": true
           },
-          "seasonNumbers": {
+          "seasons": {
             "type": "array",
             "items": {
-              "type": "integer",
-              "format": "int32"
+              "$ref": "#/components/schemas/QueueSeasonResource"
             },
             "nullable": true
           },
@@ -12224,6 +12224,24 @@
               "$ref": "#/components/schemas/QueueResource"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "QueueSeasonResource": {
+        "type": "object",
+        "properties": {
+          "seasonNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "episodeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "episodesWithFilesCount": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -12747,7 +12765,8 @@
           "unknown",
           "singleEpisode",
           "multiEpisode",
-          "seasonPack"
+          "seasonPack",
+          "multiSeasonPack"
         ],
         "type": "string"
       },
