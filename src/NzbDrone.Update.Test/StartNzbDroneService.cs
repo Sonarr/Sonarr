@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
@@ -34,7 +36,7 @@ namespace NzbDrone.Update.Test
 
             Subject.Start(AppType.Service, targetFolder);
 
-            Mocker.GetMock<IProcessProvider>().Verify(c => c.SpawnNewProcess(targetProcess, "/" + StartupContext.NO_BROWSER, null, false), Times.Once());
+            Mocker.GetMock<IProcessProvider>().Verify(c => c.SpawnNewProcess(targetProcess, It.Is<IEnumerable<string>>(a => a.SequenceEqual(new[] { "/" + StartupContext.NO_BROWSER })), null, false), Times.Once());
 
             ExceptionVerification.ExpectedWarns(1);
         }
