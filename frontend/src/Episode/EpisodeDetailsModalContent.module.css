@@ -17,13 +17,13 @@
 .scopeSeries {
   overflow: hidden;
   min-width: 0;
-  color: var(--accent);
+  color: var(--accentDeep);
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 600;
 
   &:hover {
-    color: var(--accent);
+    color: var(--accentDeep);
     text-decoration: underline;
   }
 }

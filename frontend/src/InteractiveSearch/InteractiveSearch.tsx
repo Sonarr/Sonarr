@@ -16,23 +16,29 @@ import { kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
+import { COLUMN_STYLE, ROW_LAYOUT_MIN_WIDTH } from './InteractiveSearchColumns';
+import InteractiveSearchColumnsHeader from './InteractiveSearchColumnsHeader';
 import InteractiveSearchPayload from './InteractiveSearchPayload';
-import InteractiveSearchRow from './InteractiveSearchRow';
-import InteractiveSearchTableHeader from './InteractiveSearchTableHeader';
-import { useReleaseOptions } from './releaseOptionsStore';
-import useReleases, { Release, setReleaseSort } from './useReleases';
+import InteractiveSearchResult from './InteractiveSearchResult';
+import useReleases, {
+  FIXED_SORT_DIRECTIONS,
+  Release,
+  setReleaseSort,
+} from './useReleases';
 import styles from './InteractiveSearch.module.css';
 
-const ESTIMATED_ROW_HEIGHT = 35;
+const ESTIMATED_CARD_HEIGHT = 110;
+const ESTIMATED_ROW_HEIGHT = 85;
 
 interface RowItemData {
   items: Release[];
   searchPayload: InteractiveSearchPayload;
   setRowHeight: (index: number, height: number) => void;
+  isRowLayout: boolean;
 }
 
 function Row({ index, style, data }: ListChildComponentProps<RowItemData>) {
-  const { items, searchPayload, setRowHeight } = data;
+  const { items, searchPayload, setRowHeight, isRowLayout } = data;
 
   if (index >= items.length) {
     return null;
@@ -41,10 +47,11 @@ function Row({ index, style, data }: ListChildComponentProps<RowItemData>) {
   const item = items[index];
 
   return (
-    <InteractiveSearchRow
+    <InteractiveSearchResult
       key={`${item.release.indexerId}-${item.release.guid}`}
       index={index}
       style={style}
+      isRowLayout={isRowLayout}
       setRowHeight={setRowHeight}
       {...item}
       searchPayload={searchPayload}
@@ -63,8 +70,6 @@ function InteractiveSearch({
   scrollerRef,
   filter,
 }: InteractiveSearchProps) {
-  const { columns } = useReleaseOptions();
-
   const {
     isFetching,
     isFetched,
@@ -77,11 +82,21 @@ function InteractiveSearch({
 
   const listRef = useRef<VariableSizeList<RowItemData>>(null);
   const listOuterRef = useRef<HTMLDivElement>(null);
-  const tableContainerRef = useRef<HTMLDivElement>(null);
-  const scrollbarRef = useRef<HTMLDivElement>(null);
   const rowHeights = useRef<number[]>([]);
   const [measureRef, bounds] = useMeasure();
   const [viewportHeight, setViewportHeight] = useState(0);
+
+  const isRowLayout = bounds.width >= ROW_LAYOUT_MIN_WIDTH;
+  const measuredLayout = useRef(isRowLayout);
+
+  if (measuredLayout.current !== isRowLayout) {
+    measuredLayout.current = isRowLayout;
+    rowHeights.current = [];
+  }
+
+  const estimatedHeight = isRowLayout
+    ? ESTIMATED_ROW_HEIGHT
+    : ESTIMATED_CARD_HEIGHT;
 
   const setRowHeight = useCallback((index: number, height: number) => {
     if (rowHeights.current[index] === height) {
@@ -92,9 +107,12 @@ function InteractiveSearch({
     listRef.current?.resetAfterIndex(index);
   }, []);
 
-  const getRowHeight = useCallback((index: number) => {
-    return rowHeights.current[index] ?? ESTIMATED_ROW_HEIGHT;
-  }, []);
+  const getRowHeight = useCallback(
+    (index: number) => {
+      return rowHeights.current[index] ?? estimatedHeight;
+    },
+    [estimatedHeight]
+  );
 
   useLayoutEffect(() => {
     listRef.current?.resetAfterIndex(0);
@@ -146,32 +164,18 @@ function InteractiveSearch({
     };
   }, [scrollerRef]);
 
+  useLayoutEffect(() => {
+    listRef.current?.resetAfterIndex(0);
+  }, [isRowLayout]);
+
   const itemData = useMemo<RowItemData>(
-    () => ({ items: data, searchPayload, setRowHeight }),
-    [data, searchPayload, setRowHeight]
+    () => ({ items: data, searchPayload, setRowHeight, isRowLayout }),
+    [data, searchPayload, setRowHeight, isRowLayout]
   );
-
-  const handleTableScroll = useCallback(() => {
-    const tableContainer = tableContainerRef.current;
-    const scrollbar = scrollbarRef.current;
-
-    if (tableContainer && scrollbar) {
-      scrollbar.scrollLeft = tableContainer.scrollLeft;
-    }
-  }, []);
-
-  const handleScrollbarScroll = useCallback(() => {
-    const tableContainer = tableContainerRef.current;
-    const scrollbar = scrollbarRef.current;
-
-    if (tableContainer && scrollbar) {
-      tableContainer.scrollLeft = scrollbar.scrollLeft;
-    }
-  }, []);
 
   const handleSortPress = useCallback(
     (sortKey: string, sortDirection?: SortDirection) => {
-      setReleaseSort(sortKey, sortDirection);
+      setReleaseSort(sortKey, sortDirection ?? FIXED_SORT_DIRECTIONS[sortKey]);
     },
     []
   );
@@ -179,7 +183,7 @@ function InteractiveSearch({
   const errorMessage = getErrorMessage(error);
 
   return (
-    <div>
+    <div ref={measureRef} style={COLUMN_STYLE}>
       {isFetching ? <LoadingIndicator /> : null}
 
       {!isFetching && error ? (
@@ -207,48 +211,30 @@ function InteractiveSearch({
         </Alert>
       ) : null}
 
-      {!isFetching && !!data.length ? (
-        <div
-          ref={tableContainerRef}
-          className={styles.tableContainer}
-          onScroll={handleTableScroll}
-        >
-          <div ref={measureRef} className={styles.table}>
-            <InteractiveSearchTableHeader
-              columns={columns}
-              sortKey={sortKey}
-              sortDirection={sortDirection}
-              onSortPress={handleSortPress}
-            />
-
-            <VariableSizeList<RowItemData>
-              ref={listRef}
-              outerRef={listOuterRef}
-              style={{ width: '100%', height: '100%', overflow: 'visible' }}
-              width={bounds.width}
-              height={viewportHeight}
-              itemCount={data.length}
-              itemSize={getRowHeight}
-              estimatedItemSize={ESTIMATED_ROW_HEIGHT}
-              itemData={itemData}
-              overscanCount={20}
-            >
-              {Row}
-            </VariableSizeList>
-          </div>
-        </div>
+      {isRowLayout && !isFetching && !!data.length ? (
+        <InteractiveSearchColumnsHeader
+          sortKey={sortKey}
+          sortDirection={sortDirection}
+          onSortPress={handleSortPress}
+        />
       ) : null}
 
       {!isFetching && !!data.length ? (
-        <div
-          ref={scrollbarRef}
-          className={styles.scrollbar}
-          onScroll={handleScrollbarScroll}
-        >
-          <div
-            className={styles.scrollbarContent}
-            style={{ width: bounds.width }}
-          />
+        <div className={styles.results}>
+          <VariableSizeList<RowItemData>
+            ref={listRef}
+            outerRef={listOuterRef}
+            style={{ width: '100%', height: '100%', overflow: 'visible' }}
+            width={bounds.width}
+            height={viewportHeight}
+            itemCount={data.length}
+            itemSize={getRowHeight}
+            estimatedItemSize={estimatedHeight}
+            itemData={itemData}
+            overscanCount={20}
+          >
+            {Row}
+          </VariableSizeList>
         </div>
       ) : null}
 

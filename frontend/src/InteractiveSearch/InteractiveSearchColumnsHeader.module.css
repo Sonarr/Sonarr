@@ -1,0 +1,53 @@
+.header {
+  padding: 0 var(--columnRowPadding);
+
+  & > div {
+    gap: var(--columnGap);
+  }
+}
+
+.cell {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.module.css';
+
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.release {
+  composes: cell;
+  composes: release from './InteractiveSearchColumns.module.css';
+}
+
+.quality {
+  composes: cell;
+  composes: quality from './InteractiveSearchColumns.module.css';
+}
+
+.score {
+  composes: cell;
+  composes: score from './InteractiveSearchColumns.module.css';
+}
+
+.size {
+  composes: cell;
+  composes: size from './InteractiveSearchColumns.module.css';
+}
+
+.age {
+  composes: cell;
+  composes: age from './InteractiveSearchColumns.module.css';
+}
+
+.peers {
+  composes: cell;
+  composes: peers from './InteractiveSearchColumns.module.css';
+}
+
+.actions {
+  composes: cell;
+  composes: actions from './InteractiveSearchColumns.module.css';
+
+  justify-content: flex-start;
+  padding-left: calc(var(--columnActionsWidth) - (32px + 14px) / 2);
+  min-width: 0;
+}

@@ -1,7 +1,6 @@
 import React from 'react';
 import Icon, { IconName } from 'Components/Icon';
 import MenuButton from 'Components/Menu/MenuButton';
-import { icons } from 'Helpers/Props';
 import styles from './PageMenuButton.module.css';
 
 interface PageMenuButtonProps {
@@ -22,11 +21,7 @@ function PageMenuButton({
         <div className={styles.iconWrapper}>
           <Icon name={iconName} size={18} />
 
-          {showIndicator ? (
-            <span className={styles.indicatorContainer}>
-              <Icon name={icons.CIRCLE} size={9} />
-            </span>
-          ) : null}
+          {showIndicator ? <span className={styles.indicator} /> : null}
         </div>
 
         <div className={styles.label}>{text}</div>

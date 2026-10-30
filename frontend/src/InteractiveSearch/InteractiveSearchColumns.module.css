@@ -1,0 +1,30 @@
+.release {
+  flex: 1 1 0;
+  min-width: var(--columnReleaseMinWidth);
+}
+
+.quality {
+  flex: 0 0 var(--columnQualityWidth);
+}
+
+.score {
+  flex: 0 0 var(--columnScoreWidth);
+}
+
+.size {
+  flex: 0 0 var(--columnSizeWidth);
+}
+
+.age {
+  flex: 0 0 var(--columnAgeWidth);
+}
+
+.peers {
+  flex: 0 0 var(--columnPeersWidth);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  flex: 0 0 var(--columnActionsWidth);
+}
