@@ -190,10 +190,17 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     importResults.Add(new ImportResult(importDecision, "Failed to import episode, unable to move existing file to the Recycle Bin."));
                 }
+                catch (UnauthorizedAccessException e)
+                {
+                    _logger.Warn(e, "Couldn't import episode " + localEpisode);
+                    _eventAggregator.PublishEvent(new EpisodeImportFailedEvent(e, localEpisode, newDownload, downloadClientItem));
+
+                    importResults.Add(new ImportResult(importDecision, "Failed to import episode due to permission issues.", e.Message));
+                }
                 catch (Exception e)
                 {
                     _logger.Warn(e, "Couldn't import episode " + localEpisode);
-                    importResults.Add(new ImportResult(importDecision, "Failed to import episode"));
+                    importResults.Add(new ImportResult(importDecision, "Failed to import episode", e.Message));
                 }
             }
 
