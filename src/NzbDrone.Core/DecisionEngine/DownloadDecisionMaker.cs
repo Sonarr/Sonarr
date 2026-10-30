@@ -71,12 +71,13 @@ namespace NzbDrone.Core.DecisionEngine
             foreach (var report in reports)
             {
                 DownloadDecision decision = null;
+                ParsedEpisodeInfo parsedEpisodeInfo = null;
                 _logger.ProgressTrace("Processing release {0}/{1}", reportNumber, reports.Count);
                 _logger.Debug("Processing release '{0}' from '{1}'", report.Title, report.Indexer);
 
                 try
                 {
-                    var parsedEpisodeInfo = Parser.Parser.ParseTitle(report.Title);
+                    parsedEpisodeInfo = Parser.Parser.ParseTitle(report.Title);
 
                     if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode)
                     {
@@ -160,7 +161,19 @@ namespace NzbDrone.Core.DecisionEngine
                 {
                     _logger.Error(e, "Couldn't process release.");
 
-                    var remoteEpisode = new RemoteEpisode { Release = report, ReleaseSource = GetReleaseSource(pushedRelease, searchCriteria) };
+                    parsedEpisodeInfo ??= new ParsedEpisodeInfo
+                    {
+                        Languages = LanguageParser.ParseLanguages(report.Title),
+                        Quality = QualityParser.ParseQuality(report.Title)
+                    };
+
+                    var remoteEpisode = new RemoteEpisode
+                    {
+                        Release = report,
+                        ReleaseSource = GetReleaseSource(pushedRelease, searchCriteria),
+                        ParsedEpisodeInfo = parsedEpisodeInfo,
+                        Languages = parsedEpisodeInfo.Languages,
+                    };
 
                     decision = new DownloadDecision(remoteEpisode, new DownloadRejection(DownloadRejectionReason.Error, "Unexpected error processing release"));
                 }
