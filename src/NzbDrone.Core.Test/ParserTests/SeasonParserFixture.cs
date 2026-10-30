@@ -22,6 +22,10 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Confidential   Season 3", "Series Confidential", 3)]
         [TestCase("Series.S01.720p.WEBDL.DD5.1.H.264-NTb", "Series", 1)]
         [TestCase("Series.Makes.It.Right.S02.720p.HDTV.AAC5.1.x265-NOGRP", "Series Makes It Right", 2)]
+        [TestCase("Series Title S01 4K 2160p WEB-DL x265-GRP", "Series Title", 1)]
+        [TestCase("Series Title S01 S01 4K 2160p WEB-DL x265-GRP", "Series Title", 1)]
+        [TestCase("Series Title S01 2K WEB-DL x265-GRP", "Series Title", 1)]
+        [TestCase("Series Title S01 12K WEB-DL x265-GRP", "Series Title", 1)]
         [TestCase("My.Series.S2014.720p.HDTV.x264-ME", "My Series", 2014)]
         [TestCase("Series.Saison3.VOSTFR.HDTV.XviD-NOTAG", "Series", 3)]
         [TestCase("Series.SAISON.1.VFQ.PDTV.H264-ACC-ROLLED", "Series", 1)]
@@ -118,6 +122,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title S01 S04", "Series Title", new[] { 1, 2, 3, 4 })]
         [TestCase("[Group] Series Title S01-04 (BD 1080p) [Dual Audio]", "Series Title", new[] { 1, 2, 3, 4 })]
         [TestCase("[Group] Series Title S01-S04 (BD 1080p)", "Series Title", new[] { 1, 2, 3, 4 })]
+        [TestCase("Series Title S01-S03 4K 2160p WEB-DL x265-GRP", "Series Title", new[] { 1, 2, 3 })]
         public void should_parse_multi_season_release(string postTitle, string title, int[] expectedSeasons)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
