@@ -14,6 +14,36 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
     public class SeriesRepositoryFixture : DbTest<SeriesRepository, Series>
     {
         [Test]
+        public void should_persist_retention_defaults_and_policy_updates()
+        {
+            var series = new Series
+            {
+                TvdbId = 123,
+                Title = "Retention Test",
+                CleanTitle = "retentiontest",
+                SortTitle = "retention test",
+                TitleSlug = "retention-test",
+                Path = "/tv/Retention Test"
+            };
+            Subject.Insert(series);
+
+            var stored = Subject.Get(series.Id);
+            stored.RetentionEnabled.Should().BeFalse();
+            stored.RetentionKeepEpisodes.Should().Be(5);
+            stored.RetentionIncludeSpecials.Should().BeFalse();
+
+            stored.RetentionEnabled = true;
+            stored.RetentionKeepEpisodes = 7;
+            stored.RetentionIncludeSpecials = true;
+            Subject.Update(stored);
+
+            var updated = Subject.Get(series.Id);
+            updated.RetentionEnabled.Should().BeTrue();
+            updated.RetentionKeepEpisodes.Should().Be(7);
+            updated.RetentionIncludeSpecials.Should().BeTrue();
+        }
+
+        [Test]
         public void should_lazyload_quality_profile()
         {
             var profile = new QualityProfile
