@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Notifications.Webhook
         [FieldDefinition(3, Label = "Password", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]
         public string Password { get; set; }
 
-        [FieldDefinition(4, Label = "NotificationsSettingsWebhookHeaders", Type = FieldType.KeyValueList, Advanced = true)]
+        [FieldDefinition(4, Label = "NotificationsSettingsWebhookHeaders", Type = FieldType.KeyValueList)]
         public IEnumerable<KeyValuePair<string, string>> Headers { get; set; }
 
         public override NzbDroneValidationResult Validate()

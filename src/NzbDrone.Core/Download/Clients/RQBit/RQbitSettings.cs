@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Download.Clients.RQBit
         [FieldToken(TokenField.HelpText, "DownloadClientRQbitSettingsUseSslHelpText")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true)]
+        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox)]
         [FieldToken(TokenField.HelpText, "DownloadClientRQbitSettingsUrlBaseHelpText")]
         public string UrlBase { get; set; }
 

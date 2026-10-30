@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Notifications.Ntfy
         [FieldDefinition(7, Label = "NotificationsNtfySettingsClickUrl", Type = FieldType.Url, HelpText = "NotificationsNtfySettingsClickUrlHelpText")]
         public string ClickUrl { get; set; }
 
-        [FieldDefinition(8, Label = "NotificationsNtfySettingsHeaders", Type = FieldType.KeyValueList, Advanced = true)]
+        [FieldDefinition(8, Label = "NotificationsNtfySettingsHeaders", Type = FieldType.KeyValueList)]
         public IEnumerable<KeyValuePair<string, string>> Headers { get; set; }
 
         public override NzbDroneValidationResult Validate()

@@ -76,16 +76,16 @@ namespace NzbDrone.Core.Notifications.Discord
         [FieldDefinition(2, Label = "NotificationsDiscordSettingsAvatar", HelpText = "NotificationsDiscordSettingsAvatarHelpText", Type = FieldType.Textbox)]
         public string Avatar { get; set; }
 
-        [FieldDefinition(3, Label = "NotificationsDiscordSettingsAuthor", Advanced = true, HelpText = "NotificationsDiscordSettingsAuthorHelpText", Type = FieldType.Textbox)]
+        [FieldDefinition(3, Label = "NotificationsDiscordSettingsAuthor", HelpText = "NotificationsDiscordSettingsAuthorHelpText", Type = FieldType.Textbox)]
         public string Author { get; set; }
 
-        [FieldDefinition(4, Label = "NotificationsDiscordSettingsOnGrabFields", Advanced = true, SelectOptions = typeof(DiscordGrabFieldType), HelpText = "NotificationsDiscordSettingsOnGrabFieldsHelpText", Type = FieldType.Select)]
+        [FieldDefinition(4, Label = "NotificationsDiscordSettingsOnGrabFields", SelectOptions = typeof(DiscordGrabFieldType), HelpText = "NotificationsDiscordSettingsOnGrabFieldsHelpText", Type = FieldType.Select)]
         public IEnumerable<int> GrabFields { get; set; }
 
-        [FieldDefinition(5, Label = "NotificationsDiscordSettingsOnImportFields", Advanced = true, SelectOptions = typeof(DiscordImportFieldType), HelpText = "NotificationsDiscordSettingsOnImportFieldsHelpText", Type = FieldType.Select)]
+        [FieldDefinition(5, Label = "NotificationsDiscordSettingsOnImportFields", SelectOptions = typeof(DiscordImportFieldType), HelpText = "NotificationsDiscordSettingsOnImportFieldsHelpText", Type = FieldType.Select)]
         public IEnumerable<int> ImportFields { get; set; }
 
-        [FieldDefinition(6, Label = "NotificationsDiscordSettingsOnManualInteractionFields", Advanced = true, SelectOptions = typeof(DiscordManualInteractionFieldType), HelpText = "NotificationsDiscordSettingsOnManualInteractionFieldsHelpText", Type = FieldType.Select)]
+        [FieldDefinition(6, Label = "NotificationsDiscordSettingsOnManualInteractionFields", SelectOptions = typeof(DiscordManualInteractionFieldType), HelpText = "NotificationsDiscordSettingsOnManualInteractionFieldsHelpText", Type = FieldType.Select)]
         public IEnumerable<int> ManualInteractionFields { get; set; }
 
         public override NzbDroneValidationResult Validate()

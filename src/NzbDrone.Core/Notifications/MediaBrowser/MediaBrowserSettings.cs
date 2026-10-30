@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Notifications.Emby
         [FieldToken(TokenField.HelpText, "UseSsl", "serviceName", "Emby/Jellyfin")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true, HelpText = "ConnectionSettingsUrlBaseHelpText")]
+        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, HelpText = "ConnectionSettingsUrlBaseHelpText")]
         [FieldToken(TokenField.HelpText, "UrlBase", "connectionName", "Emby/Jellyfin")]
         [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]/mediabrowser")]
         public string UrlBase { get; set; }
@@ -52,11 +52,11 @@ namespace NzbDrone.Core.Notifications.Emby
         [FieldDefinition(6, Label = "NotificationsSettingsUpdateLibrary", HelpText = "NotificationsEmbySettingsUpdateLibraryHelpText", Type = FieldType.Checkbox)]
         public bool UpdateLibrary { get; set; }
 
-        [FieldDefinition(7, Label = "NotificationsSettingsUpdateMapPathsFrom", HelpText = "NotificationsSettingsUpdateMapPathsFromSeriesHelpText", Type = FieldType.Textbox, Advanced = true)]
+        [FieldDefinition(7, Label = "NotificationsSettingsUpdateMapPathsFrom", HelpText = "NotificationsSettingsUpdateMapPathsFromSeriesHelpText", Type = FieldType.Textbox)]
         [FieldToken(TokenField.HelpText, "NotificationsSettingsUpdateMapPathsFrom", "serviceName", "Emby/Jellyfin")]
         public string MapFrom { get; set; }
 
-        [FieldDefinition(8, Label = "NotificationsSettingsUpdateMapPathsTo", HelpText = "NotificationsSettingsUpdateMapPathsToSeriesHelpText", Type = FieldType.Textbox, Advanced = true)]
+        [FieldDefinition(8, Label = "NotificationsSettingsUpdateMapPathsTo", HelpText = "NotificationsSettingsUpdateMapPathsToSeriesHelpText", Type = FieldType.Textbox)]
         [FieldToken(TokenField.HelpText, "NotificationsSettingsUpdateMapPathsTo", "serviceName", "Emby/Jellyfin")]
         public string MapTo { get; set; }
 

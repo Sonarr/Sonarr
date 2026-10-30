@@ -159,7 +159,7 @@ function EditDownloadClientModalContent({
             );
           })}
 
-          <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+          <FormRow>
             <FormLabel>{translate('ClientPriority')}</FormLabel>
 
             <FormInputHelpText

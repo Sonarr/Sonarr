@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         [FieldToken(TokenField.HelpText, "UseSsl", "clientName", "Deluge")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientDelugeSettingsUrlBaseHelpText")]
+        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, HelpText = "DownloadClientDelugeSettingsUrlBaseHelpText")]
         [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]/json")]
         public string UrlBase { get; set; }
 
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         [FieldDefinition(5, Label = "Category", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsCategoryHelpText")]
         public string TvCategory { get; set; }
 
-        [FieldDefinition(6, Label = "PostImportCategory", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientSettingsPostImportCategoryHelpText")]
+        [FieldDefinition(6, Label = "PostImportCategory", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsPostImportCategoryHelpText")]
         public string TvImportedCategory { get; set; }
 
         [FieldDefinition(7, Label = "DownloadClientSettingsRecentPriority", Type = FieldType.Select, SelectOptions = typeof(DelugePriority), HelpText = "DownloadClientSettingsRecentPriorityEpisodeHelpText")]
@@ -60,10 +60,10 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         [FieldDefinition(9, Label = "DownloadClientSettingsAddPaused", Type = FieldType.Checkbox)]
         public bool AddPaused { get; set; }
 
-        [FieldDefinition(10, Label = "DownloadClientDelugeSettingsDirectory", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientDelugeSettingsDirectoryHelpText")]
+        [FieldDefinition(10, Label = "DownloadClientDelugeSettingsDirectory", Type = FieldType.Textbox, HelpText = "DownloadClientDelugeSettingsDirectoryHelpText")]
         public string DownloadDirectory { get; set; }
 
-        [FieldDefinition(11, Label = "DownloadClientDelugeSettingsDirectoryCompleted", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientDelugeSettingsDirectoryCompletedHelpText")]
+        [FieldDefinition(11, Label = "DownloadClientDelugeSettingsDirectoryCompleted", Type = FieldType.Textbox, HelpText = "DownloadClientDelugeSettingsDirectoryCompletedHelpText")]
         public string CompletedDirectory { get; set; }
 
         public override NzbDroneValidationResult Validate()

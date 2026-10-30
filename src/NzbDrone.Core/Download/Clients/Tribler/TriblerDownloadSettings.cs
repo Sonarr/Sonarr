@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         [FieldDefinition(3, Label = "UseSsl", Type = FieldType.Checkbox, HelpText = "DownloadClientSettingsUseSslHelpText")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(4, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientSettingsUrlBaseHelpText")]
+        [FieldDefinition(4, Label = "UrlBase", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsUrlBaseHelpText")]
         [FieldToken(TokenField.HelpText, "UrlBase", "clientName", "Tribler")]
         [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]")]
         public string UrlBase { get; set; }
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         [FieldDefinition(6, Label = "Category", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsCategoryHelpText")]
         public string TvCategory { get; set; }
 
-        [FieldDefinition(7, Label = "Directory", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientTriblerSettingsDirectoryHelpText")]
+        [FieldDefinition(7, Label = "Directory", Type = FieldType.Textbox, HelpText = "DownloadClientTriblerSettingsDirectoryHelpText")]
         public string TvDirectory { get; set; }
 
         [FieldDefinition(8, Label = "DownloadClientTriblerSettingsAnonymityLevel", Type = FieldType.Number, HelpText = "DownloadClientTriblerSettingsAnonymityLevelHelpText")]

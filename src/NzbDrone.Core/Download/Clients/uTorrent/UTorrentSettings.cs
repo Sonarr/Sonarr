@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         [FieldToken(TokenField.HelpText, "UseSsl", "clientName", "uTorrent")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientSettingsUrlBaseHelpText")]
+        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsUrlBaseHelpText")]
         [FieldToken(TokenField.HelpText, "UrlBase", "clientName", "uTorrent")]
         [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]/api")]
         public string UrlBase { get; set; }
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         [FieldDefinition(6, Label = "Category", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsCategoryHelpText")]
         public string TvCategory { get; set; }
 
-        [FieldDefinition(7, Label = "PostImportCategory", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientSettingsPostImportCategoryHelpText")]
+        [FieldDefinition(7, Label = "PostImportCategory", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsPostImportCategoryHelpText")]
         public string TvImportedCategory { get; set; }
 
         [FieldDefinition(8, Label = "DownloadClientSettingsRecentPriority", Type = FieldType.Select, SelectOptions = typeof(UTorrentPriority), HelpText = "DownloadClientSettingsRecentPriorityEpisodeHelpText")]

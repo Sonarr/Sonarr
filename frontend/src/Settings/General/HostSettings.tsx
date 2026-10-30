@@ -109,7 +109,7 @@ function HostSettings({
           {...allowedHosts}
         />
       </FormRow>
-      <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+      <FormRow>
         <FormLabel>{translate('InstanceName')}</FormLabel>
         <FormInputHelpText text={translate('InstanceNameHelpText')} />
         <FormInputHelpText
