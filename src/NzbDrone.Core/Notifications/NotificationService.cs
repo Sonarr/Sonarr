@@ -8,6 +8,7 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.HealthCheck;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
@@ -61,6 +62,11 @@ namespace NzbDrone.Core.Notifications
                 return $"{series.Title} - {episode.AirDate} - {episode.Title} [{qualityString}]";
             }
 
+            if (episodes.Select(e => e.SeasonNumber).Distinct().Count() > 1)
+            {
+                return GetFullSeasonMessage(series, episodes, quality);
+            }
+
             var episodeNumbers = string.Concat(episodes.Select(e => $"x{e.EpisodeNumber:00}"));
 
             var episodeTitles = string.Join(" + ", episodes.Select(e => e.Title));
@@ -68,11 +74,11 @@ namespace NzbDrone.Core.Notifications
             return $"{series.Title} - {episodes.First().SeasonNumber}{episodeNumbers} - {episodeTitles} [{qualityString}]";
         }
 
-        private string GetFullSeasonMessage(Series series, int seasonNumber, QualityModel quality)
+        private string GetFullSeasonMessage(Series series, List<Episode> episodes, QualityModel quality)
         {
             var qualityString = GetQualityString(series, quality);
 
-            return $"{series.Title} - Season {seasonNumber} [{qualityString}]";
+            return $"{series.Title} - {SeasonNumbersFormatter.Format(episodes.Select(e => e.SeasonNumber))} [{qualityString}]";
         }
 
         private string GetQualityString(Series series, QualityModel quality)
@@ -216,7 +222,7 @@ namespace NzbDrone.Core.Notifications
             var downloadMessage = new ImportCompleteMessage
             {
                 Message = parsedEpisodeInfo.FullSeason
-                    ? GetFullSeasonMessage(series, episodes.First().SeasonNumber, parsedEpisodeInfo.Quality)
+                    ? GetFullSeasonMessage(series, episodes, parsedEpisodeInfo.Quality)
                     : GetMessage(series, episodes, parsedEpisodeInfo.Quality),
                 Series = series,
                 Episodes = episodes,
@@ -260,7 +266,7 @@ namespace NzbDrone.Core.Notifications
             var downloadMessage = new ImportCompleteMessage
             {
                 Message = parsedEpisodeInfo.FullSeason
-                    ? GetFullSeasonMessage(series, episodes.First().SeasonNumber, parsedEpisodeInfo.Quality)
+                    ? GetFullSeasonMessage(series, episodes, parsedEpisodeInfo.Quality)
                     : GetMessage(series, episodes, parsedEpisodeInfo.Quality),
                 Series = series,
                 Episodes = episodes,

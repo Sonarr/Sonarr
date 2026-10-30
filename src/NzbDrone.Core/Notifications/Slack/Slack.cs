@@ -6,6 +6,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Notifications.Slack.Payloads;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
 
@@ -281,6 +282,13 @@ namespace NzbDrone.Core.Notifications.Slack
                 var episode = episodes.First();
 
                 return $"{series.Title} - {episode.AirDate} - {episode.Title}";
+            }
+
+            var seasonNumbers = episodes.Select(e => e.SeasonNumber).Distinct().Order().ToList();
+
+            if (seasonNumbers.Count > 1)
+            {
+                return $"{series.Title} - {SeasonNumbersFormatter.Format(seasonNumbers)}";
             }
 
             var episodeNumbers = string.Concat(episodes.Select(e => $"x{e.EpisodeNumber:00}"));

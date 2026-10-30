@@ -18,6 +18,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         int? FindTvdbId(string sceneTitle, string releaseTitle, int sceneSeasonNumber);
         List<SceneMapping> FindByTvdbId(int tvdbId);
         SceneMapping FindSceneMapping(string sceneTitle, string releaseTitle, int sceneSeasonNumber);
+        Dictionary<int, SceneMapping> FindSceneMappings(string sceneTitle, string releaseTitle, int tvdbId, IEnumerable<int> sceneSeasonNumbers);
         int? GetSceneSeasonNumber(string seriesTitle, string releaseTitle);
     }
 
@@ -122,6 +123,35 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             }
 
             throw new InvalidSceneMappingException(mappings, releaseTitle);
+        }
+
+        public Dictionary<int, SceneMapping> FindSceneMappings(string seriesTitle, string releaseTitle, int tvdbId, IEnumerable<int> sceneSeasonNumbers)
+        {
+            var result = new Dictionary<int, SceneMapping>();
+
+            if (seriesTitle.IsNullOrWhiteSpace())
+            {
+                return result;
+            }
+
+            var mappings = FindMappings(seriesTitle, releaseTitle)?.Where(v => v.TvdbId == tvdbId).ToList();
+
+            if (mappings == null || mappings.Empty())
+            {
+                return result;
+            }
+
+            foreach (var sceneSeasonNumber in sceneSeasonNumbers)
+            {
+                var mapping = FilterSceneMappings(mappings, sceneSeasonNumber).FirstOrDefault();
+
+                if (mapping != null)
+                {
+                    result[sceneSeasonNumber] = mapping;
+                }
+            }
+
+            return result;
         }
 
         public int? GetSceneSeasonNumber(string seriesTitle, string releaseTitle)

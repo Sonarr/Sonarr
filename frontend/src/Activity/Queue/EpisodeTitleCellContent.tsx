@@ -3,16 +3,19 @@ import Popover from 'Components/Tooltip/Popover';
 import Episode from 'Episode/Episode';
 import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import Series from 'Series/Series';
+import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
 import styles from './EpisodeTitleCellContent.module.css';
 
 interface EpisodeTitleCellContentProps {
   episodes: Episode[];
+  isMultiSeason: boolean;
   series?: Series;
 }
 
 export default function EpisodeTitleCellContent({
   episodes,
+  isMultiSeason,
   series,
 }: EpisodeTitleCellContentProps) {
   if (episodes.length === 0 || !series) {
@@ -44,7 +47,12 @@ export default function EpisodeTitleCellContent({
             return (
               <div key={episode.id} className={styles.row}>
                 <div className={styles.episodeNumber}>
-                  {episode.episodeNumber}
+                  {isMultiSeason
+                    ? `${episode.seasonNumber}x${padNumber(
+                        episode.episodeNumber,
+                        2
+                      )}`
+                    : episode.episodeNumber}
                 </div>
 
                 <EpisodeTitleLink

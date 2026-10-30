@@ -2,3 +2,7 @@
   padding: 8px;
   border-bottom: 1px solid var(--borderColor);
 }
+
+.selectIcon {
+  margin-right: 8px;
+}

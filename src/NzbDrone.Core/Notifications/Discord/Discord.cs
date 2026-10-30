@@ -10,6 +10,7 @@ using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Notifications.Discord.Payloads;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
 
@@ -725,6 +726,13 @@ namespace NzbDrone.Core.Notifications.Discord
                 var episode = episodes.First();
 
                 return $"{series.Title} - {episode.AirDate} - {episode.Title}".Replace("`", "\\`");
+            }
+
+            var seasonNumbers = episodes.Select(e => e.SeasonNumber).Distinct().Order().ToList();
+
+            if (seasonNumbers.Count > 1)
+            {
+                return $"{series.Title} - {SeasonNumbersFormatter.Format(seasonNumbers)}".Replace("`", "\\`");
             }
 
             var episodeNumbers = string.Concat(episodes.Select(e => $"x{e.EpisodeNumber:00}"));
