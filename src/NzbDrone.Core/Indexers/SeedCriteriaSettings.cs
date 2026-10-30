@@ -61,16 +61,16 @@ namespace NzbDrone.Core.Indexers
         [FieldDefinition(0, Type = FieldType.Number, Label = "IndexerSettingsSeedRatio", HelpText = "IndexerSettingsSeedRatioHelpText")]
         public double? SeedRatio { get; set; }
 
-        [FieldDefinition(1, Type = FieldType.Number, Label = "IndexerSettingsSeedTime", Unit = "minutes", HelpText = "IndexerSettingsSeedTimeHelpText", Advanced = true)]
+        [FieldDefinition(1, Type = FieldType.Number, Label = "IndexerSettingsSeedTime", Unit = "minutes", HelpText = "IndexerSettingsSeedTimeHelpText")]
         public int? SeedTime { get; set; }
 
-        [FieldDefinition(2, Type = FieldType.Select, Label = "IndexerSettingsSeasonPackSeedGoal", SelectOptions = typeof(SeasonPackSeedGoal), HelpText = "IndexerSettingsSeasonPackSeedGoalHelpText", Advanced = true)]
+        [FieldDefinition(2, Type = FieldType.Select, Label = "IndexerSettingsSeasonPackSeedGoal", SelectOptions = typeof(SeasonPackSeedGoal), HelpText = "IndexerSettingsSeasonPackSeedGoalHelpText")]
         public int SeasonPackSeedGoal { get; set; }
 
-        [FieldDefinition(3, Type = FieldType.Number, Label = "IndexerSettingsSeasonPackSeedRatio", HelpText = "IndexerSettingsSeasonPackSeedRatioHelpText", Advanced = true)]
+        [FieldDefinition(3, Type = FieldType.Number, Label = "IndexerSettingsSeasonPackSeedRatio", HelpText = "IndexerSettingsSeasonPackSeedRatioHelpText")]
         public double? SeasonPackSeedRatio { get; set; }
 
-        [FieldDefinition(4, Type = FieldType.Number, Label = "IndexerSettingsSeasonPackSeedTime", Unit = "minutes", HelpText = "IndexerSettingsSeasonPackSeedTimeHelpText", Advanced = true)]
+        [FieldDefinition(4, Type = FieldType.Number, Label = "IndexerSettingsSeasonPackSeedTime", Unit = "minutes", HelpText = "IndexerSettingsSeasonPackSeedTimeHelpText")]
         public int? SeasonPackSeedTime { get; set; }
     }
 }

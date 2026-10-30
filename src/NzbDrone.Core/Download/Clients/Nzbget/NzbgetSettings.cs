@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         [FieldToken(TokenField.HelpText, "UseSsl", "clientName", "NZBGet")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientSettingsUrlBaseHelpText")]
+        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsUrlBaseHelpText")]
         [FieldToken(TokenField.HelpText, "UrlBase", "clientName", "NZBGet")]
         [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]/jsonrpc")]
         public string UrlBase { get; set; }

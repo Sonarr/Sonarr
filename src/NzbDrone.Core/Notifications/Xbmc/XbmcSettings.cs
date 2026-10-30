@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         [FieldToken(TokenField.HelpText, "UseSsl", "serviceName", "Kodi")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true, HelpText = "ConnectionSettingsUrlBaseHelpText")]
+        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, HelpText = "ConnectionSettingsUrlBaseHelpText")]
         [FieldToken(TokenField.HelpText, "UrlBase", "connectionName", "Kodi")]
         [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]/kodi")]
         public string UrlBase { get; set; }

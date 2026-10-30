@@ -40,19 +40,19 @@ namespace NzbDrone.Core.Indexers.IPTorrents
         [FieldDefinition(0, Label = "IndexerIPTorrentsSettingsFeedUrl", HelpText = "IndexerIPTorrentsSettingsFeedUrlHelpText")]
         public string BaseUrl { get; set; }
 
-        [FieldDefinition(1, Type = FieldType.Number, Label = "IndexerSettingsMinimumSeeders", HelpText = "IndexerSettingsMinimumSeedersHelpText", Advanced = true)]
+        [FieldDefinition(1, Type = FieldType.Number, Label = "IndexerSettingsMinimumSeeders", HelpText = "IndexerSettingsMinimumSeedersHelpText")]
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(2)]
         public SeedCriteriaSettings SeedCriteria { get; set; } = new();
 
-        [FieldDefinition(3, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText", Advanced = true)]
+        [FieldDefinition(3, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText")]
         public bool RejectBlocklistedTorrentHashesWhileGrabbing { get; set; }
 
         [FieldDefinition(4, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectTorrentFilesWithBlockedExtensions", HelpText = "IndexerSettingsRejectTorrentFilesWithBlockedExtensionsHelpText")]
         public bool RejectTorrentFilesWithBlockedExtensionsWhileGrabbing { get; set; }
 
-        [FieldDefinition(5, Type = FieldType.Select, SelectOptions = typeof(RealLanguageFieldConverter), Label = "IndexerSettingsMultiLanguageRelease", HelpText = "IndexerSettingsMultiLanguageReleaseHelpText", Advanced = true)]
+        [FieldDefinition(5, Type = FieldType.Select, SelectOptions = typeof(RealLanguageFieldConverter), Label = "IndexerSettingsMultiLanguageRelease", HelpText = "IndexerSettingsMultiLanguageReleaseHelpText")]
         public IEnumerable<int> MultiLanguages { get; set; }
 
         [FieldDefinition(6, Type = FieldType.Select, SelectOptions = typeof(FailDownloads), Label = "IndexerSettingsFailDownloads", HelpText = "IndexerSettingsFailDownloadsHelpText")]

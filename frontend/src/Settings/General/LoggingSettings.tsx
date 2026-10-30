@@ -6,7 +6,6 @@ import FormLabel from 'Components/Form/FormLabel';
 import FormRow from 'Components/Form/FormRow';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import { inputTypes } from 'Helpers/Props';
-import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
 import translate from 'Utilities/String/translate';
@@ -44,8 +43,6 @@ function LoggingSettings({
   logSizeLimit,
   onInputChange,
 }: LoggingSettingsProps) {
-  const showAdvancedSettings = useShowAdvancedSettings();
-
   return (
     <FieldSet
       legend={translate('Logging')}
@@ -69,7 +66,7 @@ function LoggingSettings({
           {...logLevel}
         />
       </FormRow>
-      <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+      <FormRow>
         <FormLabel>{translate('LogSizeLimit')}</FormLabel>
         <FormInputHelpText text={translate('LogSizeLimitHelpText')} />
         <FormInput

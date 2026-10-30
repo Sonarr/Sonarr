@@ -47,13 +47,13 @@ namespace NzbDrone.Core.Notifications.Pushover
         [FieldDefinition(5, Label = "NotificationsPushoverSettingsExpire", Type = FieldType.Textbox, HelpText = "NotificationsPushoverSettingsExpireHelpText")]
         public int Expire { get; set; }
 
-        [FieldDefinition(6, Label = "NotificationsPushoverSettingsTtl", Type = FieldType.Textbox, HelpText = "NotificationsPushoverSettingsTtlHelpText", Advanced = true)]
+        [FieldDefinition(6, Label = "NotificationsPushoverSettingsTtl", Type = FieldType.Textbox, HelpText = "NotificationsPushoverSettingsTtlHelpText")]
         public int Ttl { get; set; }
 
         [FieldDefinition(7, Label = "NotificationsPushoverSettingsSound", Type = FieldType.Textbox, HelpText = "NotificationsPushoverSettingsSoundHelpText", HelpLink = "https://pushover.net/api#sounds")]
         public string Sound { get; set; }
 
-        [FieldDefinition(8, Label = "NotificationsPushoverSettingsEncryptionKey", Privacy = PrivacyLevel.ApiKey, HelpText = "NotificationsPushoverSettingsEncryptionKeyHelpText", HelpLink = "https://pushover.net/api#e2ee", Advanced = true)]
+        [FieldDefinition(8, Label = "NotificationsPushoverSettingsEncryptionKey", Privacy = PrivacyLevel.ApiKey, HelpText = "NotificationsPushoverSettingsEncryptionKeyHelpText", HelpLink = "https://pushover.net/api#e2ee")]
         public string EncryptionKey { get; set; }
 
         public bool IsValid => !string.IsNullOrWhiteSpace(UserKey) && Priority >= -1 && Priority <= 2;

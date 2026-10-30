@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Indexers.FileList
         [FieldDefinition(1, Label = "IndexerSettingsPasskey", Privacy = PrivacyLevel.ApiKey)]
         public string Passkey { get; set; }
 
-        [FieldDefinition(2, Type = FieldType.Select, SelectOptions = typeof(RealLanguageFieldConverter), Label = "IndexerSettingsMultiLanguageRelease", HelpText = "IndexerSettingsMultiLanguageReleaseHelpText", Advanced = true)]
+        [FieldDefinition(2, Type = FieldType.Select, SelectOptions = typeof(RealLanguageFieldConverter), Label = "IndexerSettingsMultiLanguageRelease", HelpText = "IndexerSettingsMultiLanguageReleaseHelpText")]
         public IEnumerable<int> MultiLanguages { get; set; }
 
         [FieldDefinition(3, Label = "IndexerSettingsApiUrl", Advanced = true, HelpText = "IndexerSettingsApiUrlHelpText")]
@@ -68,13 +68,13 @@ namespace NzbDrone.Core.Indexers.FileList
         [FieldDefinition(5, Label = "IndexerSettingsAnimeCategories", Type = FieldType.Select, SelectOptions = typeof(FileListCategories), HelpText = "IndexerSettingsAnimeCategoriesHelpText")]
         public IEnumerable<int> AnimeCategories { get; set; }
 
-        [FieldDefinition(6, Type = FieldType.Number, Label = "IndexerSettingsMinimumSeeders", HelpText = "IndexerSettingsMinimumSeedersHelpText", Advanced = true)]
+        [FieldDefinition(6, Type = FieldType.Number, Label = "IndexerSettingsMinimumSeeders", HelpText = "IndexerSettingsMinimumSeedersHelpText")]
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(7)]
         public SeedCriteriaSettings SeedCriteria { get; set; } = new();
 
-        [FieldDefinition(8, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText", Advanced = true)]
+        [FieldDefinition(8, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText")]
         public bool RejectBlocklistedTorrentHashesWhileGrabbing { get; set; }
 
         [FieldDefinition(9, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectTorrentFilesWithBlockedExtensions", HelpText = "IndexerSettingsRejectTorrentFilesWithBlockedExtensionsHelpText")]

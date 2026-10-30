@@ -12,7 +12,6 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import useDebounce from 'Helpers/Hooks/useDebounce';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
-import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import NamingModal, { NamingModalOptions } from './NamingModal';
@@ -32,7 +31,6 @@ interface NamingProps {
 }
 
 function Naming({ setChildSave, onChildStateChange }: NamingProps) {
-  const advancedSettings = useShowAdvancedSettings();
   const {
     settings,
     updateSetting,
@@ -403,11 +401,7 @@ function Naming({ setChildSave, onChildStateChange }: NamingProps) {
             </>
           ) : null}
 
-          <FormRow
-            advancedSettings={advancedSettings}
-            isAdvanced={true}
-            size={sizes.MEDIUM}
-          >
+          <FormRow size={sizes.MEDIUM}>
             <FormLabel>{translate('SeriesFolderFormat')}</FormLabel>
 
             <FormInputHelpText text={translate('SeriesFolderFormatHelpText')} />
@@ -463,11 +457,7 @@ function Naming({ setChildSave, onChildStateChange }: NamingProps) {
             />
           </FormRow>
 
-          <FormRow
-            advancedSettings={advancedSettings}
-            isAdvanced={true}
-            size={sizes.MEDIUM}
-          >
+          <FormRow size={sizes.MEDIUM}>
             <FormLabel>{translate('SpecialsFolderFormat')}</FormLabel>
 
             {specialsFolderFormatHelpTexts.map((text, index) => (
