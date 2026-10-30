@@ -59,10 +59,10 @@ namespace NzbDrone.Core.Notifications.Email
         [FieldDefinition(6, Label = "NotificationsEmailSettingsRecipientAddress", HelpText = "NotificationsEmailSettingsRecipientAddressHelpText")]
         public IEnumerable<string> To { get; set; }
 
-        [FieldDefinition(7, Label = "NotificationsEmailSettingsCcAddress", HelpText = "NotificationsEmailSettingsCcAddressHelpText", Advanced = true)]
+        [FieldDefinition(7, Label = "NotificationsEmailSettingsCcAddress", HelpText = "NotificationsEmailSettingsCcAddressHelpText")]
         public IEnumerable<string> Cc { get; set; }
 
-        [FieldDefinition(8, Label = "NotificationsEmailSettingsBccAddress", HelpText = "NotificationsEmailSettingsBccAddressHelpText", Advanced = true)]
+        [FieldDefinition(8, Label = "NotificationsEmailSettingsBccAddress", HelpText = "NotificationsEmailSettingsBccAddressHelpText")]
         public IEnumerable<string> Bcc { get; set; }
 
         public override NzbDroneValidationResult Validate()

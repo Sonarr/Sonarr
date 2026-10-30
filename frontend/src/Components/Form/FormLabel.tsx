@@ -20,7 +20,7 @@ function FormLabel(props: FormLabelProps) {
     errorClassName = styles.hasError,
     name,
     hasError,
-    isAdvanced = false,
+    isAdvanced = formRow?.isAdvanced ?? false,
   } = props;
 
   return (

@@ -10,6 +10,7 @@ import React, {
 interface FormRowContextValue {
   id?: string;
   type?: string;
+  isAdvanced: boolean;
   descriptionIds: string[];
   addDescriptionId: (id: string) => void;
   removeDescriptionId: (id: string) => void;
@@ -22,9 +23,15 @@ const FormRowContext = createContext<FormRowContextValue | undefined>(
 interface FormRowProviderProps extends PropsWithChildren {
   id?: string;
   type?: string;
+  isAdvanced?: boolean;
 }
 
-export function FormRowProvider({ id, type, children }: FormRowProviderProps) {
+export function FormRowProvider({
+  id,
+  type,
+  isAdvanced = false,
+  children,
+}: FormRowProviderProps) {
   const [descriptionIds, setDescriptionIds] = useState<string[]>([]);
 
   const addDescriptionId = useCallback((descriptionId: string) => {
@@ -45,11 +52,19 @@ export function FormRowProvider({ id, type, children }: FormRowProviderProps) {
     return {
       id,
       type,
+      isAdvanced,
       descriptionIds,
       addDescriptionId,
       removeDescriptionId,
     };
-  }, [id, type, descriptionIds, addDescriptionId, removeDescriptionId]);
+  }, [
+    id,
+    type,
+    isAdvanced,
+    descriptionIds,
+    addDescriptionId,
+    removeDescriptionId,
+  ]);
 
   return (
     <FormRowContext.Provider value={value}>{children}</FormRowContext.Provider>

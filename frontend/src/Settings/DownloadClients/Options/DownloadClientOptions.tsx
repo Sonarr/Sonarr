@@ -69,7 +69,7 @@ function DownloadClientOptions({
         </Alert>
       ) : null}
 
-      {hasSettings && isFetched && !error && showAdvancedSettings ? (
+      {hasSettings && isFetched && !error ? (
         <FieldSet
           legend={translate('CompletedDownloadHandling')}
           caption={translate('CompletedDownloadHandlingCaption')}
@@ -90,7 +90,7 @@ function DownloadClientOptions({
               />
             </FormRow>
 
-            <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+            <FormRow>
               <FormLabel>{translate('AutoRedownloadFailed')}</FormLabel>
 
               <FormInputHelpText
@@ -106,10 +106,7 @@ function DownloadClientOptions({
             </FormRow>
 
             {settings.autoRedownloadFailed.value ? (
-              <FormRow
-                advancedSettings={showAdvancedSettings}
-                isAdvanced={true}
-              >
+              <FormRow>
                 <FormLabel>
                   {translate('AutoRedownloadFailedFromInteractiveSearch')}
                 </FormLabel>

@@ -63,10 +63,10 @@ namespace NzbDrone.Core.Download.Clients.Flood
         [FieldDefinition(7, Label = "Tags", Type = FieldType.Tag, HelpText = "DownloadClientFloodSettingsTagsHelpText")]
         public IEnumerable<string> Tags { get; set; }
 
-        [FieldDefinition(8, Label = "DownloadClientFloodSettingsPostImportTags", Type = FieldType.Tag, HelpText = "DownloadClientFloodSettingsPostImportTagsHelpText", Advanced = true)]
+        [FieldDefinition(8, Label = "DownloadClientFloodSettingsPostImportTags", Type = FieldType.Tag, HelpText = "DownloadClientFloodSettingsPostImportTagsHelpText")]
         public IEnumerable<string> PostImportTags { get; set; }
 
-        [FieldDefinition(9, Label = "DownloadClientFloodSettingsAdditionalTags", Type = FieldType.Select, SelectOptions = typeof(AdditionalTags), HelpText = "DownloadClientFloodSettingsAdditionalTagsHelpText", Advanced = true)]
+        [FieldDefinition(9, Label = "DownloadClientFloodSettingsAdditionalTags", Type = FieldType.Select, SelectOptions = typeof(AdditionalTags), HelpText = "DownloadClientFloodSettingsAdditionalTagsHelpText")]
         public IEnumerable<int> AdditionalTags { get; set; }
 
         [FieldDefinition(10, Label = "DownloadClientFloodSettingsStartOnAdd", Type = FieldType.Checkbox)]

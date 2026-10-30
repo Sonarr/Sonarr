@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
         [FieldDefinition(5, Label = "DownloadClientFreeboxSettingsAppToken", Type = FieldType.Password, Privacy = PrivacyLevel.Password, HelpText = "DownloadClientFreeboxSettingsAppTokenHelpText")]
         public string AppToken { get; set; }
 
-        [FieldDefinition(6, Label = "Destination", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientSettingsDestinationHelpText")]
+        [FieldDefinition(6, Label = "Destination", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsDestinationHelpText")]
         public string DestinationDirectory { get; set; }
 
         [FieldDefinition(7, Label = "Category", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsCategorySubFolderHelpText")]

@@ -210,7 +210,7 @@ function EditIndexerModalContent({
             );
           })}
 
-          <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+          <FormRow>
             <FormLabel>{translate('IndexerPriority')}</FormLabel>
 
             <FormInputHelpText text={translate('IndexerPriorityHelpText')} />
@@ -225,7 +225,7 @@ function EditIndexerModalContent({
             />
           </FormRow>
 
-          <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+          <FormRow>
             <FormLabel>{translate('MaximumSingleEpisodeAge')}</FormLabel>
 
             <FormInputHelpText
@@ -242,7 +242,7 @@ function EditIndexerModalContent({
             />
           </FormRow>
 
-          <FormRow advancedSettings={showAdvancedSettings} isAdvanced={true}>
+          <FormRow>
             <FormLabel>{translate('DownloadClient')}</FormLabel>
 
             <FormInputHelpText

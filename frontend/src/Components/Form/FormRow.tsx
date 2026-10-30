@@ -81,7 +81,7 @@ function FormRow({
       className={classNames(className, styles[size], styles[layout])}
       {...otherProps}
     >
-      <FormRowProvider id={id} type={type}>
+      <FormRowProvider id={id} type={type} isAdvanced={isAdvanced}>
         {children}
       </FormRowProvider>
     </div>
