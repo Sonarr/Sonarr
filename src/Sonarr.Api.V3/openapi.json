@@ -9681,6 +9681,7 @@
           "plex",
           "trakt",
           "simkl",
+          "tmdb",
           "other",
           "advanced"
         ],
@@ -11818,7 +11819,8 @@
           "unknown",
           "singleEpisode",
           "multiEpisode",
-          "seasonPack"
+          "seasonPack",
+          "multiSeasonPack"
         ],
         "type": "string"
       },
