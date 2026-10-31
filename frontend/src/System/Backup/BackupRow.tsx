@@ -29,6 +29,9 @@ function BackupRow({ id, type, name, path, size, time }: BackupRowProps) {
   const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
     useState(false);
 
+  const restoreLabel = translate('RestoreBackupWithName', { name });
+  const deleteLabel = translate('DeleteBackupWithName', { name });
+
   const { iconClassName, iconTooltip } = useMemo(() => {
     if (type === 'manual') {
       return {
@@ -95,15 +98,15 @@ function BackupRow({ id, type, name, path, size, time }: BackupRowProps) {
 
       <TableRowCell className={styles.actions}>
         <IconButton
-          title={translate('RestoreBackup')}
-          aria-label={translate('RestoreBackup')}
+          title={restoreLabel}
+          aria-label={restoreLabel}
           name={icons.RESTORE}
           onPress={handleRestorePress}
         />
 
         <IconButton
-          title={translate('DeleteBackup')}
-          aria-label={translate('DeleteBackup')}
+          title={deleteLabel}
+          aria-label={deleteLabel}
           name={icons.DELETE}
           onPress={handleDeletePress}
         />
@@ -119,7 +122,7 @@ function BackupRow({ id, type, name, path, size, time }: BackupRowProps) {
       <ConfirmModal
         isOpen={isConfirmDeleteModalOpen}
         kind={kinds.DANGER}
-        title={translate('DeleteBackup')}
+        title={deleteLabel}
         message={translate('DeleteBackupMessageText', {
           name,
         })}

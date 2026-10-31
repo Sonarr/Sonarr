@@ -37,9 +37,9 @@ function ScheduledTaskRow({
   const { showRelativeDates, longDateFormat, shortDateFormat, timeFormat } =
     useUiSettingsValues();
   const command = useCommand(taskName);
-
   const [time, setTime] = useState(Date.now());
 
+  const runLabel = translate('RunTaskWithName', { name });
   const isQueued = !!(command && command.status === 'queued');
   const isExecuting = isCommandExecuting(command);
   const isDisabled = interval === 0;
@@ -140,7 +140,8 @@ function ScheduledTaskRow({
         <SpinnerIconButton
           name={icons.REFRESH}
           spinningName={icons.REFRESH}
-          aria-label={translate('Run')}
+          title={runLabel}
+          aria-label={runLabel}
           isSpinning={isExecuting}
           onPress={handleExecutePress}
         />
