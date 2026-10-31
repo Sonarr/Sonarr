@@ -162,19 +162,19 @@ namespace NzbDrone.Core.MediaFiles
         private List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, ImportMode importMode, DownloadClientItem downloadClientItem)
         {
             var cleanedUpName = GetCleanedUpFolderName(directoryInfo.Name);
-            var series = _parsingService.GetSeries(cleanedUpName);
+            var seriesMatch = _parsingService.GetSeriesMatch(cleanedUpName);
 
-            if (series == null)
+            if (seriesMatch.Series == null)
             {
                 _logger.Debug("Unknown Series {0}", cleanedUpName);
 
                 return new List<ImportResult>
                        {
-                           UnknownSeriesResult("Unknown Series")
+                           UnknownSeriesResult("Unknown Series", seriesMatch.AmbiguousSeries)
                        };
             }
 
-            return ProcessFolder(directoryInfo, importMode, series, downloadClientItem);
+            return ProcessFolder(directoryInfo, importMode, seriesMatch.Series, downloadClientItem);
         }
 
         private List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, ImportMode importMode, Series series, DownloadClientItem downloadClientItem)
@@ -239,19 +239,19 @@ namespace NzbDrone.Core.MediaFiles
 
         private List<ImportResult> ProcessFile(FileInfo fileInfo, ImportMode importMode, DownloadClientItem downloadClientItem)
         {
-            var series = _parsingService.GetSeries(Path.GetFileNameWithoutExtension(fileInfo.Name));
+            var seriesMatch = _parsingService.GetSeriesMatch(Path.GetFileNameWithoutExtension(fileInfo.Name));
 
-            if (series == null)
+            if (seriesMatch.Series == null)
             {
                 _logger.Debug("Unknown Series for file: {0}", fileInfo.Name);
 
                 return new List<ImportResult>
                        {
-                           UnknownSeriesResult(string.Format("Unknown Series for file: {0}", fileInfo.Name), fileInfo.FullName)
+                           UnknownSeriesResult(string.Format("Unknown Series for file: {0}", fileInfo.Name), seriesMatch.AmbiguousSeries, fileInfo.FullName)
                        };
             }
 
-            return ProcessFile(fileInfo, importMode, series, downloadClientItem);
+            return ProcessFile(fileInfo, importMode, seriesMatch.Series, downloadClientItem);
         }
 
         private List<ImportResult> ProcessFile(FileInfo fileInfo, ImportMode importMode, Series series, DownloadClientItem downloadClientItem)
@@ -344,9 +344,17 @@ namespace NzbDrone.Core.MediaFiles
             return new ImportResult(new ImportDecision(new LocalEpisode { Path = videoFile }, new ImportRejection(ImportRejectionReason.FileLocked, "Locked file, try again later")), "Locked file, try again later");
         }
 
-        private ImportResult UnknownSeriesResult(string message, string videoFile = null)
+        private ImportResult UnknownSeriesResult(string message, List<Series> ambiguousSeries, string videoFile = null)
         {
             var localEpisode = videoFile == null ? null : new LocalEpisode { Path = videoFile };
+
+            if (ambiguousSeries.IsAmbiguous())
+            {
+                var multipleSeriesMessage = ambiguousSeries.ToAmbiguousSeriesMessage();
+                var errorMessage = videoFile == null ? multipleSeriesMessage : $"{multipleSeriesMessage} (file: {Path.GetFileName(videoFile)})";
+
+                return new ImportResult(new ImportDecision(localEpisode, new ImportRejection(ImportRejectionReason.MultipleSeries, multipleSeriesMessage)), errorMessage);
+            }
 
             return new ImportResult(new ImportDecision(localEpisode, new ImportRejection(ImportRejectionReason.UnknownSeries, "Unknown Series")), message);
         }

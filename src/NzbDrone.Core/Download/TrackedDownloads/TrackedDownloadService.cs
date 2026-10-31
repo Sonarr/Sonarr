@@ -193,17 +193,13 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                     trackedDownload.RemoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(trackedDownload.RemoteEpisode, downloadItem.TotalSize);
                 }
 
+                WarnIfAmbiguous(trackedDownload);
+
                 // Track it so it can be displayed in the queue even though we can't determine which series it is for
                 if (trackedDownload.RemoteEpisode == null)
                 {
                     _logger.Trace("No Episode found for download '{0}'", trackedDownload.DownloadItem.Title);
                 }
-            }
-            catch (MultipleSeriesFoundException e)
-            {
-                _logger.Debug(e, "Found multiple series for " + downloadItem.Title);
-
-                trackedDownload.Warn("Unable to import automatically, found multiple series: {0}", string.Join(", ", e.Series));
             }
             catch (Exception e)
             {
@@ -269,6 +265,16 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             trackedDownload.RemoteEpisode = parsedEpisodeInfo == null ? null : _parsingService.Map(parsedEpisodeInfo, 0, 0, null);
 
             _aggregationService.Augment(trackedDownload.RemoteEpisode);
+
+            WarnIfAmbiguous(trackedDownload);
+        }
+
+        private static void WarnIfAmbiguous(TrackedDownload trackedDownload)
+        {
+            if (trackedDownload.RemoteEpisode is { Series: null } && trackedDownload.RemoteEpisode.AmbiguousSeries.IsAmbiguous())
+            {
+                trackedDownload.Warn("Unable to import automatically. {0}", trackedDownload.RemoteEpisode.AmbiguousSeries.ToAmbiguousSeriesMessage());
+            }
         }
 
         private static TrackedDownloadState GetStateFromHistory(DownloadHistoryEventType eventType)
@@ -325,7 +331,8 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             var cachedItems = _cache.Values
                 .Where(t =>
                     t.RemoteEpisode?.Series == null ||
-                    message.Series?.TvdbId == t.RemoteEpisode.Series.TvdbId)
+                    message.Series?.TvdbId == t.RemoteEpisode.Series.TvdbId ||
+                    SharesTitle(t.RemoteEpisode, message.Series))
                 .ToList();
 
             if (cachedItems.Any())
@@ -341,7 +348,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             var cachedItems = _cache.Values
                 .Where(t =>
                     t.RemoteEpisode?.Series != null &&
-                    (t.RemoteEpisode.Series.Id == message.Series?.Id || t.RemoteEpisode.Series.TvdbId == message.Series?.TvdbId))
+                    t.RemoteEpisode.Series.Id == message.Series?.Id)
                 .ToList();
 
             if (cachedItems.Any())
@@ -355,12 +362,11 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         public void Handle(SeriesBulkEditedEvent message)
         {
             var seriesIds = message.Series.Select(s => s.Id).ToHashSet();
-            var tvdbIds = message.Series.Select(s => s.TvdbId).ToHashSet();
 
             var cachedItems = _cache.Values
                 .Where(t =>
                     t.RemoteEpisode?.Series != null &&
-                    (seriesIds.Contains(t.RemoteEpisode.Series.Id) || tvdbIds.Contains(t.RemoteEpisode.Series.TvdbId)))
+                    seriesIds.Contains(t.RemoteEpisode.Series.Id))
                 .ToList();
 
             if (cachedItems.Any())
@@ -374,12 +380,12 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         public void Handle(SeriesDeletedEvent message)
         {
             var seriesIds = message.Series.Select(s => s.Id).ToHashSet();
-            var tvdbIds = message.Series.Select(s => s.TvdbId).ToHashSet();
 
             var cachedItems = _cache.Values
                 .Where(t =>
-                    t.RemoteEpisode?.Series != null &&
-                    (seriesIds.Contains(t.RemoteEpisode.Series.Id) || tvdbIds.Contains(t.RemoteEpisode.Series.TvdbId)))
+                    t.RemoteEpisode != null &&
+                    ((t.RemoteEpisode.Series != null && seriesIds.Contains(t.RemoteEpisode.Series.Id)) ||
+                     (t.RemoteEpisode.AmbiguousSeries?.Any(a => seriesIds.Contains(a.Id)) ?? false)))
                 .ToList();
 
             if (cachedItems.Any())
@@ -388,6 +394,18 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
                 _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()));
             }
+        }
+
+        private static bool SharesTitle(RemoteEpisode remoteEpisode, Series series)
+        {
+            var cleanTitle = remoteEpisode.ParsedEpisodeInfo?.SeriesTitle?.CleanSeriesTitle();
+
+            if (cleanTitle.IsNullOrWhiteSpace() || series == null)
+            {
+                return false;
+            }
+
+            return cleanTitle == series.CleanTitle || cleanTitle == series.CleanOriginalTitle;
         }
     }
 }

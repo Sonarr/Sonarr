@@ -249,14 +249,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             }
             else
             {
-                try
-                {
-                    series = _parsingService.GetSeries(directoryInfo.Name);
-                }
-                catch (MultipleSeriesFoundException e)
-                {
-                    _logger.Warn(e, "Unable to find series from title");
-                }
+                series = _parsingService.GetSeries(directoryInfo.Name);
             }
 
             if (downloadId.IsNotNullOrWhiteSpace())
@@ -308,14 +301,20 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 var trackedDownload = GetTrackedDownload(downloadId);
                 var relativeFile = baseFolder.GetRelativePath(file);
 
+                var candidateMatches = new List<List<Series>>();
+
                 if (series == null)
                 {
-                    series = _parsingService.GetSeries(relativeFile.Split('\\', '/')[0]);
+                    var folderMatch = _parsingService.GetSeriesMatch(relativeFile.Split('\\', '/')[0]);
+                    series = folderMatch.Series;
+                    candidateMatches.Add(folderMatch.AmbiguousSeries);
                 }
 
                 if (series == null)
                 {
-                    series = _parsingService.GetSeries(relativeFile);
+                    var fileMatch = _parsingService.GetSeriesMatch(relativeFile);
+                    series = fileMatch.Series;
+                    candidateMatches.Add(fileMatch.AmbiguousSeries);
                 }
 
                 if (trackedDownload != null && series == null)
@@ -329,9 +328,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
                     if (relativeParseInfo != null)
                     {
-                        series = _seriesService.FindByTitle(relativeParseInfo.SeriesTitle);
+                        var titleMatches = _seriesService.FindAllByTitle(relativeParseInfo.SeriesTitle);
+
+                        if (titleMatches.Count == 1)
+                        {
+                            series = titleMatches.First();
+                        }
+
+                        candidateMatches.Add(titleMatches);
                     }
                 }
+
+                candidateMatches.Add(trackedDownload?.RemoteEpisode?.AmbiguousSeries);
 
                 if (series == null)
                 {
@@ -342,8 +350,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     localEpisode.Languages = LanguageParser.ParseLanguages(file);
                     localEpisode.Size = _diskProvider.GetFileSize(file);
 
-                    return MapItem(new ImportDecision(localEpisode,
-                        new ImportRejection(ImportRejectionReason.UnknownSeries, "Unknown Series")),
+                    var ambiguousSeries = candidateMatches.FirstOrDefault(c => c.IsAmbiguous());
+
+                    var rejection = ambiguousSeries != null
+                        ? new ImportRejection(ImportRejectionReason.MultipleSeries, ambiguousSeries.ToAmbiguousSeriesMessage())
+                        : new ImportRejection(ImportRejectionReason.UnknownSeries, "Unknown Series");
+
+                    return MapItem(new ImportDecision(localEpisode, rejection),
                         rootFolder,
                         downloadId,
                         null);

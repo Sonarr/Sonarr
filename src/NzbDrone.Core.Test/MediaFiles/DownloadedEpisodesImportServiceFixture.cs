@@ -32,6 +32,10 @@ namespace NzbDrone.Core.Test.MediaFiles
         [SetUp]
         public void Setup()
         {
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.GetSeriesMatch(It.IsAny<string>()))
+                  .Returns(new FindSeriesResult(null, SeriesMatchType.Unknown));
+
             Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(It.IsAny<string>(), It.IsAny<bool>()))
                   .Returns(_videoFiles);
 
@@ -70,8 +74,8 @@ namespace NzbDrone.Core.Test.MediaFiles
         private void GivenValidSeries()
         {
             Mocker.GetMock<IParsingService>()
-                  .Setup(s => s.GetSeries(It.IsAny<string>()))
-                  .Returns(Builder<Series>.CreateNew().Build());
+                  .Setup(s => s.GetSeriesMatch(It.IsAny<string>()))
+                  .Returns(new FindSeriesResult(Builder<Series>.CreateNew().Build(), SeriesMatchType.Title));
         }
 
         private void GivenSuccessfulImport()
@@ -102,7 +106,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
 
-            Mocker.GetMock<IParsingService>().Verify(c => c.GetSeries("foldername"), Times.Once());
+            Mocker.GetMock<IParsingService>().Verify(c => c.GetSeriesMatch("foldername"), Times.Once());
         }
 
         [Test]
@@ -121,7 +125,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_skip_if_no_series_found()
         {
-            Mocker.GetMock<IParsingService>().Setup(c => c.GetSeries("foldername")).Returns((Series)null);
+            Mocker.GetMock<IParsingService>().Setup(c => c.GetSeriesMatch("foldername")).Returns(new FindSeriesResult((Series)null, SeriesMatchType.Title));
 
             Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
 
@@ -236,10 +240,10 @@ namespace NzbDrone.Core.Test.MediaFiles
             Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
 
             Mocker.GetMock<IParsingService>()
-                .Verify(v => v.GetSeries(folderName), Times.Once());
+                .Verify(v => v.GetSeriesMatch(folderName), Times.Once());
 
             Mocker.GetMock<IParsingService>()
-                .Verify(v => v.GetSeries(It.Is<string>(s => s.StartsWith(prefix))), Times.Never());
+                .Verify(v => v.GetSeriesMatch(It.Is<string>(s => s.StartsWith(prefix))), Times.Never());
         }
 
         [Test]
@@ -365,7 +369,7 @@ namespace NzbDrone.Core.Test.MediaFiles
             Subject.ProcessPath(folderName).Should().BeEmpty();
 
             Mocker.GetMock<IParsingService>()
-                .Verify(v => v.GetSeries(It.IsAny<string>()), Times.Never());
+                .Verify(v => v.GetSeriesMatch(It.IsAny<string>()), Times.Never());
 
             ExceptionVerification.ExpectedErrors(1);
         }

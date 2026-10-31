@@ -562,5 +562,107 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
 
             Subject.TrackDownload(client, item);
         }
+
+        private void GivenTrackedDownloadForSeries(Series series, List<Series> ambiguousSeries = null)
+        {
+            GivenDownloadHistory();
+
+            var remoteEpisode = new RemoteEpisode
+                                {
+                                    Series = series,
+                                    AmbiguousSeries = ambiguousSeries ?? [],
+                                    Episodes = [new Episode { Id = 4 }],
+                                    ParsedEpisodeInfo = new ParsedEpisodeInfo
+                                                        {
+                                                            SeriesTitle = "TV Series",
+                                                            SeasonNumbers = [1],
+                                                            EpisodeNumbers = new[] { 1 }
+                                                        },
+                                    MappedSeasonNumber = 1
+                                };
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), null))
+                  .Returns(remoteEpisode);
+
+            Mocker.GetMock<IHistoryService>()
+                  .Setup(s => s.FindByDownloadId(It.IsAny<string>()))
+                  .Returns([]);
+
+            var client = new DownloadClientDefinition
+            {
+                Id = 1,
+                Protocol = DownloadProtocol.Torrent
+            };
+
+            var item = new DownloadClientItem
+            {
+                Title = "TV Series - S01E01",
+                DownloadId = "12345",
+                DownloadClientInfo = new DownloadClientItemClientInfo
+                                     {
+                                         Id = 1,
+                                         Type = "Blackhole",
+                                         Name = "Blackhole Client",
+                                         Protocol = DownloadProtocol.Torrent
+                                     }
+            };
+
+            Subject.TrackDownload(client, item);
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), null))
+                  .Returns(new RemoteEpisode { Episodes = [] });
+        }
+
+        [Test]
+        public void should_refresh_ambiguous_tracked_download_when_one_of_its_series_is_deleted()
+        {
+            var series = new Series { Id = 5, TvdbId = 81189 };
+            var otherSeries = new Series { Id = 6, TvdbId = 81190 };
+
+            GivenTrackedDownloadForSeries(null, [series, otherSeries]);
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), null))
+                  .Returns(new RemoteEpisode { Series = series, Episodes = [] });
+
+            Subject.Handle(new SeriesDeletedEvent([otherSeries], false, false));
+
+            Subject.GetTrackedDownloads().First().RemoteEpisode.Series.Should().Be(series);
+        }
+
+        [Test]
+        public void should_refresh_tracked_download_when_added_series_shares_its_title()
+        {
+            var series = new Series { Id = 5, TvdbId = 81189, CleanTitle = "tvseries" };
+            var addedSeries = new Series { Id = 6, TvdbId = 81190, CleanTitle = "tvseries" };
+
+            GivenTrackedDownloadForSeries(series);
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), null))
+                  .Returns(new RemoteEpisode { AmbiguousSeries = [series, addedSeries], Episodes = [] });
+
+            Subject.Handle(new SeriesAddedEvent(addedSeries));
+
+            var trackedDownload = Subject.GetTrackedDownloads().First();
+
+            trackedDownload.RemoteEpisode.Series.Should().BeNull();
+            trackedDownload.StatusMessages.Should().ContainSingle();
+        }
+
+        [Test]
+        public void should_not_refresh_tracked_download_when_added_series_has_a_different_title()
+        {
+            var series = new Series { Id = 5, TvdbId = 81189, CleanTitle = "tvseries" };
+            var addedSeries = new Series { Id = 6, TvdbId = 81190, CleanTitle = "othertvseries" };
+
+            GivenTrackedDownloadForSeries(series);
+
+            Subject.Handle(new SeriesAddedEvent(addedSeries));
+
+            Subject.GetTrackedDownloads().First().RemoteEpisode.Series.Should().Be(series);
+        }
     }
 }

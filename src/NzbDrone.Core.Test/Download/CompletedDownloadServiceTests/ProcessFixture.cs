@@ -56,8 +56,8 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
                   .Returns(new List<EpisodeHistory>());
 
             Mocker.GetMock<IParsingService>()
-                  .Setup(s => s.GetSeries("Drone.S01E01.HDTV"))
-                  .Returns(remoteEpisode.Series);
+                  .Setup(s => s.GetSeriesMatch("Drone.S01E01.HDTV"))
+                  .Returns(new FindSeriesResult(remoteEpisode.Series, SeriesMatchType.Title));
         }
 
         private RemoteEpisode BuildRemoteEpisode()
@@ -79,8 +79,8 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
         private void GivenSeriesMatch()
         {
             Mocker.GetMock<IParsingService>()
-                  .Setup(s => s.GetSeries(It.IsAny<string>()))
-                  .Returns(_trackedDownload.RemoteEpisode.Series);
+                  .Setup(s => s.GetSeriesMatch(It.IsAny<string>()))
+                  .Returns(new FindSeriesResult(_trackedDownload.RemoteEpisode.Series, SeriesMatchType.Title));
         }
 
         private void GivenABadlyNamedDownload()
@@ -95,12 +95,12 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
                   });
 
             Mocker.GetMock<IParsingService>()
-                  .Setup(s => s.GetSeries(It.IsAny<string>()))
-                  .Returns((Series)null);
+                  .Setup(s => s.GetSeriesMatch(It.IsAny<string>()))
+                  .Returns(new FindSeriesResult((Series)null, SeriesMatchType.Title));
 
             Mocker.GetMock<IParsingService>()
-                  .Setup(s => s.GetSeries("Droned S01E01"))
-                  .Returns(BuildRemoteEpisode().Series);
+                  .Setup(s => s.GetSeriesMatch("Droned S01E01"))
+                  .Returns(new FindSeriesResult(BuildRemoteEpisode().Series, SeriesMatchType.Title));
         }
 
         [TestCase(DownloadItemStatus.Downloading)]
@@ -171,8 +171,8 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
         public void should_not_process_when_there_is_a_title_mismatch()
         {
             Mocker.GetMock<IParsingService>()
-                  .Setup(s => s.GetSeries("Drone.S01E01.HDTV"))
-                  .Returns((Series)null);
+                  .Setup(s => s.GetSeriesMatch("Drone.S01E01.HDTV"))
+                  .Returns(new FindSeriesResult((Series)null, SeriesMatchType.Title));
 
             Subject.Check(_trackedDownload);
 

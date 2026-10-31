@@ -38,5 +38,34 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
 
             Subject.FindByTitleInexact("Kaguya Railgun 1080p").Should().Be(second);
         }
+
+        [Test]
+        public void should_return_longest_match_when_multiple_series_match()
+        {
+            var longest = new Series { Id = 2, Title = "Show Extra", CleanTitle = "showextra" };
+
+            GivenSeries(new Series { Id = 1, Title = "Show", CleanTitle = "show" }, longest);
+
+            Subject.FindByTitleInexact("Show.Extra.Special.Title").Should().Be(longest);
+        }
+
+        [Test]
+        public void should_return_series_when_its_title_and_original_title_are_the_same()
+        {
+            var match = new Series { Id = 2, Title = "Show Extra", CleanTitle = "showextra", CleanOriginalTitle = "showextra" };
+
+            GivenSeries(new Series { Id = 1, Title = "Show", CleanTitle = "show" }, match);
+
+            Subject.FindByTitleInexact("Show.Extra.Special.Title").Should().Be(match);
+        }
+
+        [Test]
+        public void should_return_null_when_multiple_series_match_equally()
+        {
+            GivenSeries(new Series { Id = 1, Title = "Show", CleanTitle = "show" },
+                        new Series { Id = 2, Title = "Show", CleanTitle = "show" });
+
+            Subject.FindByTitleInexact("Show.Special.Title").Should().BeNull();
+        }
     }
 }

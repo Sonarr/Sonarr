@@ -382,5 +382,20 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             result.Should().HaveCount(1);
             result.First().Rejections.First().Message.Should().Contain("12345");
         }
+
+        [Test]
+        public void should_return_multiple_series_rejection_if_title_matches_multiple_series()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+
+            _remoteEpisode.Series = null;
+            _remoteEpisode.AmbiguousSeries = new List<Series> { new Series { Title = "Series A" }, new Series { Title = "Series B" } };
+
+            var result = Subject.GetRssDecision(_reports);
+
+            result.Should().HaveCount(1);
+            result.First().Rejections.First().Reason.Should().Be(DownloadRejectionReason.MultipleSeries);
+            result.First().Rejections.First().Message.Should().Contain("Series A").And.Contain("Series B");
+        }
     }
 }

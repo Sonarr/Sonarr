@@ -1,4 +1,5 @@
-﻿using NzbDrone.Core.Tv;
+﻿using System.Collections.Generic;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Parser.Model
 {
@@ -6,6 +7,7 @@ namespace NzbDrone.Core.Parser.Model
     {
         public Series Series { get; set; }
         public SeriesMatchType MatchType { get; set; }
+        public List<Series> AmbiguousSeries { get; set; } = new List<Series>();
 
         public FindSeriesResult(Series series, SeriesMatchType matchType)
         {
