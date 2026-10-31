@@ -43,12 +43,12 @@ import { Image, SeriesStatus, Statistics } from 'Series/Series';
 import SeriesGenres from 'Series/SeriesGenres';
 import SeriesPoster from 'Series/SeriesPoster';
 import { getSeriesStatusDetails } from 'Series/SeriesStatus';
-import useSeries, {
+import {
+  useSeriesIndex,
   useSingleSeries,
   useToggleSeriesMonitored,
 } from 'Series/useSeries';
 import QualityProfileName from 'Settings/Profiles/Quality/QualityProfileName';
-import sortByProp from 'Utilities/Array/sortByProp';
 import { findCommand, isCommandExecuting } from 'Utilities/Command';
 import formatBytes from 'Utilities/Number/formatBytes';
 import {
@@ -105,7 +105,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   const series = useSingleSeries(seriesId);
   const { toggleSeriesMonitored, isTogglingSeriesMonitored } =
     useToggleSeriesMonitored(seriesId);
-  const { data: allSeries } = useSeries();
+  const { data: allSeries } = useSeriesIndex();
 
   const monitored = series?.monitored ?? false;
 
@@ -187,10 +187,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   }, [seriesId, commands]);
 
   const { nextSeries, previousSeries } = useMemo(() => {
-    const sortedSeries = [...allSeries].sort(sortByProp('sortTitle'));
-    const seriesIndex = sortedSeries.findIndex(
-      (series) => series.id === seriesId
-    );
+    const seriesIndex = allSeries.findIndex((series) => series.id === seriesId);
 
     if (seriesIndex === -1) {
       return {
@@ -199,9 +196,9 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
       };
     }
 
-    const nextSeries = sortedSeries[seriesIndex + 1] ?? sortedSeries[0];
+    const nextSeries = allSeries[seriesIndex + 1] ?? allSeries[0];
     const previousSeries =
-      sortedSeries[seriesIndex - 1] ?? sortedSeries[sortedSeries.length - 1];
+      allSeries[seriesIndex - 1] ?? allSeries[allSeries.length - 1];
 
     return {
       nextSeries: {
