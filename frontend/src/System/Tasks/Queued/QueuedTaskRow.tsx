@@ -165,6 +165,7 @@ export default function QueuedTaskRow(props: QueuedTaskRowProps) {
   }, [queued, started, ended, showRelativeDates, shortDateFormat, setTimes]);
 
   const { queuedAt, startedAt, endedAt } = times;
+  const cancelLabel = translate('CancelTaskWithName', { name: commandName });
 
   let triggerIcon = icons.QUICK;
 
@@ -218,8 +219,8 @@ export default function QueuedTaskRow(props: QueuedTaskRowProps) {
       <TableRowCell className={styles.actions}>
         {status === 'queued' && (
           <IconButton
-            title={translate('RemovedFromTaskQueue')}
-            aria-label={translate('RemovedFromTaskQueue')}
+            title={cancelLabel}
+            aria-label={cancelLabel}
             name={icons.REMOVE}
             onPress={openCancelConfirmModal}
           />
@@ -229,7 +230,7 @@ export default function QueuedTaskRow(props: QueuedTaskRowProps) {
       <ConfirmModal
         isOpen={isCancelConfirmModalOpen}
         kind={kinds.DANGER}
-        title={translate('Cancel')}
+        title={cancelLabel}
         message={translate('CancelPendingTask')}
         confirmLabel={translate('YesCancel')}
         cancelLabel={translate('NoLeaveIt')}
