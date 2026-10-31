@@ -127,6 +127,30 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
             names[1].Should().Contain(@"""Name"":""S01E%""");
         }
 
+        [Test]
+        public void should_search_each_season_of_a_multi_season_search()
+        {
+            var criteria = new SeasonSearchCriteria
+            {
+                Series = _series,
+                SceneTitles = new List<string> { "Series Title" },
+                SeasonNumber = 1,
+                Episodes = new List<Episode>
+                {
+                    new Episode { SeasonNumber = 1, EpisodeNumber = 1 },
+                    new Episode { SeasonNumber = 2, EpisodeNumber = 1 }
+                }
+            };
+
+            var names = QueriedNames(Subject.GetSearchRequests(criteria), 0);
+
+            names.Should().HaveCount(4);
+            names[0].Should().Contain(@"""Name"":""Season 1%""");
+            names[1].Should().Contain(@"""Name"":""S01E%""");
+            names[2].Should().Contain(@"""Name"":""Season 2%""");
+            names[3].Should().Contain(@"""Name"":""S02E%""");
+        }
+
         [TestCase(99, "S01E%99")]
         [TestCase(100, "S01E100")]
         public void should_search_for_three_digit_episode_number_for_anime(int episodeNumber, string expected)
