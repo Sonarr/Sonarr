@@ -250,6 +250,31 @@ namespace NzbDrone.Core.Test.ImportListTests
             }
         }
 
+        [Test]
+        public void should_not_add_tags_from_another_list_to_other_series_from_the_same_list()
+        {
+            WithList(1, true);
+            WithList(2, true);
+
+            _importLists[0].Definition.Tags = new HashSet<int> { 1 };
+            _importLists[1].Definition.Tags = new HashSet<int> { 2 };
+
+            _importListFetch.Series = new List<ImportListItemInfo>
+            {
+                new ImportListItemInfo { ImportListId = 1, Title = "Series A", TvdbId = 1 },
+                new ImportListItemInfo { ImportListId = 1, Title = "Series B", TvdbId = 2 },
+                new ImportListItemInfo { ImportListId = 2, Title = "Series A", TvdbId = 1 }
+            };
+
+            Subject.Execute(_commandAll);
+
+            Mocker.GetMock<IAddSeriesService>()
+                  .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 2 &&
+                                                                    t.Single(s => s.TvdbId == 1).Tags.SetEquals(new[] { 1, 2 }) &&
+                                                                    t.Single(s => s.TvdbId == 2).Tags.SetEquals(new[] { 1 })),
+                                           It.IsAny<bool>()));
+        }
+
         private void WithList(int id, bool enabledAuto, int lastSyncHoursOffset = 0, bool pendingRemovals = true, DateTime? disabledTill = null)
         {
             var importListDefinition = new ImportListDefinition { Id = id, EnableAutomaticAdd = enabledAuto };

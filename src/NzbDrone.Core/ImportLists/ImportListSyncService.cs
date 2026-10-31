@@ -263,7 +263,7 @@ namespace NzbDrone.Core.ImportLists
                         Language = importList.Language,
                         SeasonFolder = importList.SeasonFolder,
                         Seasons = item.Seasons,
-                        Tags = importList.Tags,
+                        Tags = new HashSet<int>(importList.Tags),
                         AddOptions = new AddSeriesOptions
                         {
                             SearchForMissingEpisodes = importList.SearchForMissingEpisodes,

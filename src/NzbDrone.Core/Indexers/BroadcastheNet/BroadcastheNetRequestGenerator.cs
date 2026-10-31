@@ -71,6 +71,8 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             {
                 foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
                 {
+                    parameters = parameters.Clone();
+
                     parameters.Category = "Season";
                     parameters.Name = $"Season {seasonNumber}%";
 
@@ -186,6 +188,8 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             {
                 foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
                 {
+                    parameters = parameters.Clone();
+
                     parameters.Category = "Season";
                     parameters.Name = $"Season {seasonNumber}%";
 

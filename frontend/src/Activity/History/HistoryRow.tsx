@@ -104,6 +104,7 @@ function HistoryRow(props: HistoryRowProps) {
           return (
             <TableRowCell key={name}>
               <SeriesTitleLink
+                seriesId={series.id}
                 titleSlug={series.titleSlug}
                 title={series.title}
               />

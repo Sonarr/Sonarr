@@ -212,6 +212,7 @@ function QueueRow(props: QueueRowProps) {
             <TableRowCell key={name} className={styles.series}>
               {series ? (
                 <SeriesTitleLink
+                  seriesId={series.id}
                   titleSlug={series.titleSlug}
                   title={series.title}
                 />

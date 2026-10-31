@@ -110,6 +110,7 @@ function TagDetailsModalContent({
               return (
                 <div key={item.id}>
                   <SeriesTitleLink
+                    seriesId={item.id}
                     titleSlug={item.titleSlug}
                     title={item.title}
                   />
