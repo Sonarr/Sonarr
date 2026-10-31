@@ -62,7 +62,7 @@ function ImportSeriesSelectSeries({
   const importSeriesItem = useImportSeriesItem(id);
   const { selectedSeries, name } = importSeriesItem ?? {};
   const language = usePreferredMetadataLanguage();
-  const isExistingSeries = useExistingSeries(selectedSeries?.tvdbId);
+  const existingSeries = useExistingSeries(selectedSeries?.tvdbId);
 
   const [term, setTerm] = useState(name);
   const [editText, setEditText] = useState('');
@@ -235,7 +235,7 @@ function ImportSeriesSelectSeries({
   const hasWarning =
     !!error ||
     (isFetched && !selectedSeries) ||
-    (!!selectedSeries && isExistingSeries);
+    (!!selectedSeries && !!existingSeries);
 
   let warningTitle = translate('Existing');
 

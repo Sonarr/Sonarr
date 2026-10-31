@@ -27,7 +27,7 @@ function ImportSeriesSearchResult({
   isHighlighted,
   onPress,
 }: ImportSeriesSearchResultProps) {
-  const isExistingSeries = useExistingSeries(tvdbId);
+  const existingSeries = useExistingSeries(tvdbId);
 
   const rowRef = useRef<HTMLDivElement>(null);
 
@@ -58,7 +58,7 @@ function ImportSeriesSearchResult({
             title={title}
             year={year}
             network={network}
-            isExistingSeries={isExistingSeries}
+            isExistingSeries={!!existingSeries}
           />
         </Link>
       </div>
