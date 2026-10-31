@@ -6,10 +6,10 @@ function useExistingSeries(tvdbId: number | undefined) {
 
   return useMemo(() => {
     if (tvdbId == null) {
-      return false;
+      return undefined;
     }
 
-    return series.some((s) => s.tvdbId === tvdbId);
+    return series.find((s) => s.tvdbId === tvdbId);
   }, [tvdbId, series]);
 }
 
