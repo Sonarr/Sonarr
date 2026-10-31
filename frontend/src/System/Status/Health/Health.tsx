@@ -114,8 +114,12 @@ function Health() {
                       <IconButton
                         name={icons.WIKI}
                         to={item.wikiUrl}
-                        title={translate('ReadTheWikiForMoreInformation')}
-                        aria-label={translate('ReadTheWikiForMoreInformation')}
+                        title={translate('ReadTheWikiForHealthIssue', {
+                          message: item.message,
+                        })}
+                        aria-label={translate('ReadTheWikiForHealthIssue', {
+                          message: item.message,
+                        })}
                       />
 
                       <HealthItemLink source={source} />
@@ -124,7 +128,8 @@ function Health() {
                       source === 'IndexerLongTermStatusCheck' ? (
                         <SpinnerIconButton
                           name={icons.TEST}
-                          title={translate('TestAll')}
+                          title={translate('TestAllIndexers')}
+                          aria-label={translate('TestAllIndexers')}
                           isSpinning={isTestingAllIndexers}
                           onPress={handleTestAllIndexersPress}
                         />
@@ -134,7 +139,8 @@ function Health() {
                       source === 'DownloadClientStatusCheck' ? (
                         <SpinnerIconButton
                           name={icons.TEST}
-                          title={translate('TestAll')}
+                          title={translate('TestAllClients')}
+                          aria-label={translate('TestAllClients')}
                           isSpinning={isTestingAllDownloadClients}
                           onPress={handleTestAllDownloadClientsPress}
                         />
