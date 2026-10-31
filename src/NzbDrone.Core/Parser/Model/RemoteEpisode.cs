@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Parser.Model
         public SceneMapping SceneMapping { get; set; }
         public int? MappedSeasonNumber { get; set; }
         public Series Series { get; set; }
+        public List<Series> AmbiguousSeries { get; set; } = new List<Series>();
         public List<Episode> Episodes { get; set; }
         public bool EpisodeRequested { get; set; }
         public bool DownloadAllowed { get; set; }

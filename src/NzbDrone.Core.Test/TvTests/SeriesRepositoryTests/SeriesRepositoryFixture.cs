@@ -82,5 +82,21 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
             found.Should().HaveCount(2);
             found.Select(x => x.CleanTitle).Should().BeEquivalentTo(new[] { "crown", "crownextralong" });
         }
+
+        [Test]
+        public void should_find_all_series_with_an_ambiguous_title()
+        {
+            var series = Builder<Series>.CreateListOfSize(2)
+                .All()
+                .With(a => a.Id = 0)
+                .With(a => a.CleanTitle = "breakingbad")
+                .With(a => a.Year = 2008)
+                .BuildList();
+
+            Subject.InsertMany(series);
+
+            Subject.FindAllByTitle("breakingbad").Should().HaveCount(2);
+            Subject.FindAllByTitle("breakingbad", 2008).Should().HaveCount(2);
+        }
     }
 }

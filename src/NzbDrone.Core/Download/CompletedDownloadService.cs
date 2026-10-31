@@ -98,13 +98,22 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
-            var series = _parsingService.GetSeries(trackedDownload.DownloadItem.Title);
+            var seriesMatch = _parsingService.GetSeriesMatch(trackedDownload.DownloadItem.Title);
+            var series = seriesMatch.Series;
 
             if (series == null)
             {
                 if (historyItem != null)
                 {
                     series = _seriesService.GetSeries(historyItem.SeriesId);
+                }
+
+                if (series == null && seriesMatch.AmbiguousSeries.IsAmbiguous())
+                {
+                    trackedDownload.Warn("Unable to import automatically. {0}", seriesMatch.AmbiguousSeries.ToAmbiguousSeriesMessage());
+                    SetStateToImportBlocked(trackedDownload);
+
+                    return;
                 }
 
                 if (series == null)

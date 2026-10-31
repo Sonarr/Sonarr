@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Parser
     public interface IParsingService
     {
         Series GetSeries(string title);
+        FindSeriesResult GetSeriesMatch(string title);
         RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvdbId, int tvRageId, string imdbId, SearchCriteriaBase searchCriteria = null);
         RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, Series series);
         RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int seriesId, IEnumerable<int> episodeIds);
@@ -42,37 +43,60 @@ namespace NzbDrone.Core.Parser
 
         public Series GetSeries(string title)
         {
+            return GetSeriesMatch(title).Series;
+        }
+
+        public FindSeriesResult GetSeriesMatch(string title)
+        {
+            var ambiguousSeries = new List<Series>();
+            var result = FindSeriesByTitle(title, ambiguousSeries);
+
+            if (result.Series == null && ambiguousSeries.Any())
+            {
+                _logger.Debug("Title {0} matches multiple series: {1}", title, string.Join(", ", ambiguousSeries));
+                result.AmbiguousSeries = ambiguousSeries;
+            }
+
+            return result;
+        }
+
+        private FindSeriesResult FindSeriesByTitle(string title, List<Series> ambiguousSeries)
+        {
             var parsedEpisodeInfo = Parser.ParseTitle(title);
 
             if (parsedEpisodeInfo == null)
             {
-                return _seriesService.FindByTitle(title);
+                return CreateResult(SelectTitleMatch(_seriesService.FindAllByTitle(title), ambiguousSeries), SeriesMatchType.Title);
             }
 
             var tvdbId = _sceneMappingService.FindTvdbId(parsedEpisodeInfo.SeriesTitle, parsedEpisodeInfo.ReleaseTitle, parsedEpisodeInfo.SeasonNumbers.FirstOrDefault(-1));
 
             if (tvdbId.HasValue)
             {
-                return _seriesService.FindByTvdbId(tvdbId.Value);
+                return CreateResult(_seriesService.FindByTvdbId(tvdbId.Value), SeriesMatchType.Alias);
             }
 
-            var series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitle);
+            var series = SelectTitleMatch(_seriesService.FindAllByTitle(parsedEpisodeInfo.SeriesTitle), ambiguousSeries);
 
             if (series == null && parsedEpisodeInfo.SeriesTitleInfo.AllTitles != null)
             {
-                series = GetSeriesByAllTitles(parsedEpisodeInfo);
+                series = GetSeriesByAllTitles(parsedEpisodeInfo, ambiguousSeries);
             }
 
             if (series == null)
             {
-                series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear,
-                                                    parsedEpisodeInfo.SeriesTitleInfo.Year);
+                series = SelectTitleMatch(_seriesService.FindAllByTitle(parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear, parsedEpisodeInfo.SeriesTitleInfo.Year), ambiguousSeries);
             }
 
-            return series;
+            return CreateResult(series, SeriesMatchType.Title);
         }
 
-        private Series GetSeriesByAllTitles(ParsedEpisodeInfo parsedEpisodeInfo)
+        private static FindSeriesResult CreateResult(Series series, SeriesMatchType matchType)
+        {
+            return new FindSeriesResult(series, series == null ? SeriesMatchType.Unknown : matchType);
+        }
+
+        private Series GetSeriesByAllTitles(ParsedEpisodeInfo parsedEpisodeInfo, List<Series> ambiguousSeries)
         {
             var year = parsedEpisodeInfo.SeriesTitleInfo.Year;
             Series foundSeries = null;
@@ -85,18 +109,18 @@ namespace NzbDrone.Core.Parser
 
                 if (year > 0)
                 {
-                    series = _seriesService.FindByTitle(title, year);
+                    series = SelectTitleMatch(_seriesService.FindAllByTitle(title, year), ambiguousSeries);
 
                     // Fall back to title + year being part of the title, this will allow
                     // matching series with the same name that include the year in the title.
                     if (series == null)
                     {
-                        series = _seriesService.FindByTitle($"{title} {year}");
+                        series = SelectTitleMatch(_seriesService.FindAllByTitle($"{title} {year}"), ambiguousSeries);
                     }
                 }
                 else
                 {
-                    series = _seriesService.FindByTitle(title);
+                    series = SelectTitleMatch(_seriesService.FindAllByTitle(title), ambiguousSeries);
                 }
 
                 var tvdbId = series?.TvdbId;
@@ -205,6 +229,7 @@ namespace NzbDrone.Core.Parser
                 {
                     series = seriesMatch.Series;
                     remoteEpisode.SeriesMatchType = seriesMatch.MatchType;
+                    remoteEpisode.AmbiguousSeries = seriesMatch.AmbiguousSeries;
                 }
             }
 
@@ -347,12 +372,12 @@ namespace NzbDrone.Core.Parser
 
             if (series == null && tvRageId > 0)
             {
-                series = _seriesService.FindByTvRageId(tvRageId);
+                series = FindSeriesByTvRageId(tvRageId, parsedEpisodeInfo?.SeriesTitle);
             }
 
             if (series == null && imdbId.IsNotNullOrWhiteSpace())
             {
-                series = _seriesService.FindByImdbId(imdbId);
+                series = FindSeriesByImdbId(imdbId, parsedEpisodeInfo?.SeriesTitle);
             }
 
             if (series == null)
@@ -561,8 +586,9 @@ namespace NzbDrone.Core.Parser
                 }
             }
 
+            var ambiguousSeries = new List<Series>();
             var matchType = SeriesMatchType.Unknown;
-            series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitle);
+            series = SelectTitleMatch(_seriesService.FindAllByTitle(parsedEpisodeInfo.SeriesTitle), ambiguousSeries);
 
             if (series != null)
             {
@@ -571,13 +597,13 @@ namespace NzbDrone.Core.Parser
 
             if (series == null && parsedEpisodeInfo.SeriesTitleInfo.AllTitles != null)
             {
-                series = GetSeriesByAllTitles(parsedEpisodeInfo);
+                series = GetSeriesByAllTitles(parsedEpisodeInfo, ambiguousSeries);
                 matchType = SeriesMatchType.Title;
             }
 
             if (series == null && parsedEpisodeInfo.SeriesTitleInfo.Year > 0)
             {
-                series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear, parsedEpisodeInfo.SeriesTitleInfo.Year);
+                series = SelectTitleMatch(_seriesService.FindAllByTitle(parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear, parsedEpisodeInfo.SeriesTitleInfo.Year), ambiguousSeries);
                 matchType = SeriesMatchType.Title;
 
                 if (series == null)
@@ -606,7 +632,7 @@ namespace NzbDrone.Core.Parser
 
             if (series == null && tvRageId > 0 && tvdbId <= 0)
             {
-                series = _seriesService.FindByTvRageId(tvRageId);
+                series = FindSeriesByTvRageId(tvRageId, parsedEpisodeInfo?.SeriesTitle, ambiguousSeries);
 
                 if (series != null)
                 {
@@ -623,7 +649,7 @@ namespace NzbDrone.Core.Parser
 
             if (series == null && imdbId.IsNotNullOrWhiteSpace() && tvdbId <= 0)
             {
-                series = _seriesService.FindByImdbId(imdbId);
+                series = FindSeriesByImdbId(imdbId, parsedEpisodeInfo?.SeriesTitle, ambiguousSeries);
 
                 if (series != null)
                 {
@@ -638,6 +664,12 @@ namespace NzbDrone.Core.Parser
                 }
             }
 
+            if (series == null && ambiguousSeries.Any())
+            {
+                _logger.Debug("Unable to select a series for {0}, matches multiple series: {1}", parsedEpisodeInfo.SeriesTitle, string.Join(", ", ambiguousSeries));
+                return new FindSeriesResult(null, SeriesMatchType.Unknown) { AmbiguousSeries = ambiguousSeries };
+            }
+
             if (series == null)
             {
                 _logger.Debug("No matching series {0}", parsedEpisodeInfo.SeriesTitle);
@@ -645,6 +677,59 @@ namespace NzbDrone.Core.Parser
             }
 
             return new FindSeriesResult(series, matchType);
+        }
+
+        private Series FindSeriesByTvRageId(int tvRageId, string seriesTitle, List<Series> ambiguousSeries = null)
+        {
+            return SelectSeries(_seriesService.FindByTvRageId(tvRageId), seriesTitle, ambiguousSeries);
+        }
+
+        private Series FindSeriesByImdbId(string imdbId, string seriesTitle, List<Series> ambiguousSeries = null)
+        {
+            return SelectSeries(_seriesService.FindByImdbId(imdbId), seriesTitle, ambiguousSeries);
+        }
+
+        private Series SelectSeries(List<Series> matches, string seriesTitle, List<Series> ambiguousSeries)
+        {
+            if (matches.Count <= 1)
+            {
+                return matches.FirstOrDefault();
+            }
+
+            var cleanTitle = seriesTitle?.CleanSeriesTitle();
+
+            if (cleanTitle.IsNotNullOrWhiteSpace())
+            {
+                var titleMatches = matches.Where(s => s.CleanTitle == cleanTitle || s.CleanOriginalTitle == cleanTitle).ToList();
+
+                if (titleMatches.Count == 1)
+                {
+                    return titleMatches.First();
+                }
+            }
+
+            _logger.Debug("ID matches multiple series ({0}), unable to select one for '{1}'", string.Join(", ", matches), seriesTitle);
+
+            AddAmbiguousSeries(matches, ambiguousSeries);
+
+            return null;
+        }
+
+        private static Series SelectTitleMatch(List<Series> titleMatches, List<Series> ambiguousSeries)
+        {
+            if (titleMatches.Count == 1)
+            {
+                return titleMatches.First();
+            }
+
+            AddAmbiguousSeries(titleMatches, ambiguousSeries);
+
+            return null;
+        }
+
+        private static void AddAmbiguousSeries(List<Series> matches, List<Series> ambiguousSeries)
+        {
+            ambiguousSeries?.AddRange(matches.Where(s => ambiguousSeries.All(a => a.Id != s.Id)));
         }
 
         private Episode GetDailyEpisode(Series series, string airDate, int? part, SearchCriteriaBase searchCriteria)

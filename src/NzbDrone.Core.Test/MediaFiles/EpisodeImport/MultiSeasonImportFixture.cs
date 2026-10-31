@@ -94,8 +94,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                   .Returns(new Dictionary<int, SceneMapping>());
 
             Mocker.GetMock<ISeriesService>()
-                  .Setup(s => s.FindByTitle(It.IsAny<string>()))
-                  .Returns(_series);
+                  .Setup(s => s.FindAllByTitle(It.IsAny<string>()))
+                  .Returns(new List<Series> { _series });
 
             Mocker.GetMock<IHistoryService>()
                   .Setup(s => s.FindByDownloadId(It.IsAny<string>()))

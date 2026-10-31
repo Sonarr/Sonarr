@@ -105,7 +105,11 @@ namespace NzbDrone.Core.DecisionEngine
                         {
                             var matchingTvdbId = _sceneMappingService.FindTvdbId(parsedEpisodeInfo.SeriesTitle, parsedEpisodeInfo.ReleaseTitle, parsedEpisodeInfo.SeasonNumbers.FirstOrDefault(-1));
 
-                            if (matchingTvdbId.HasValue)
+                            if (remoteEpisode.AmbiguousSeries.IsAmbiguous())
+                            {
+                                decision = new DownloadDecision(remoteEpisode, new DownloadRejection(DownloadRejectionReason.MultipleSeries, remoteEpisode.AmbiguousSeries.ToAmbiguousSeriesMessage()));
+                            }
+                            else if (matchingTvdbId.HasValue)
                             {
                                 decision = new DownloadDecision(remoteEpisode, new DownloadRejection(DownloadRejectionReason.MatchesAnotherSeries, $"{parsedEpisodeInfo.SeriesTitle} matches an alias for series with TVDB ID: {matchingTvdbId}"));
                             }

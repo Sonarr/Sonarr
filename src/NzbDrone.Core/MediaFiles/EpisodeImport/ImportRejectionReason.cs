@@ -38,5 +38,6 @@ public enum ImportRejectionReason
     NotRevisionUpgrade,
     NotCustomFormatUpgrade,
     NotCustomFormatUpgradeAfterRename,
-    MultiSeason
+    MultiSeason,
+    MultipleSeries
 }

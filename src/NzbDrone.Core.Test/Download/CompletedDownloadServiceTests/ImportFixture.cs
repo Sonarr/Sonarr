@@ -61,8 +61,8 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
                   .Returns(new EpisodeHistory());
 
             Mocker.GetMock<IParsingService>()
-                  .Setup(s => s.GetSeries("Drone.S01E01.HDTV"))
-                  .Returns(remoteEpisode.Series);
+                  .Setup(s => s.GetSeriesMatch("Drone.S01E01.HDTV"))
+                  .Returns(new FindSeriesResult(remoteEpisode.Series, SeriesMatchType.Title));
 
             Mocker.GetMock<IHistoryService>()
                   .Setup(s => s.FindByDownloadId(It.IsAny<string>()))
@@ -98,12 +98,12 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
                .Returns(new EpisodeHistory() { SourceTitle = "Droned S01E01" });
 
             Mocker.GetMock<IParsingService>()
-               .Setup(s => s.GetSeries(It.IsAny<string>()))
-               .Returns((Series)null);
+               .Setup(s => s.GetSeriesMatch(It.IsAny<string>()))
+               .Returns(new FindSeriesResult((Series)null, SeriesMatchType.Title));
 
             Mocker.GetMock<IParsingService>()
-                .Setup(s => s.GetSeries("Droned S01E01"))
-                .Returns(BuildRemoteEpisode().Series);
+                .Setup(s => s.GetSeriesMatch("Droned S01E01"))
+                .Returns(new FindSeriesResult(BuildRemoteEpisode().Series, SeriesMatchType.Title));
         }
 
         private List<Episode> GivenMultiSeasonDownload()
@@ -133,8 +133,8 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
         private void GivenSeriesMatch()
         {
             Mocker.GetMock<IParsingService>()
-                  .Setup(s => s.GetSeries(It.IsAny<string>()))
-                  .Returns(_trackedDownload.RemoteEpisode.Series);
+                  .Setup(s => s.GetSeriesMatch(It.IsAny<string>()))
+                  .Returns(new FindSeriesResult(_trackedDownload.RemoteEpisode.Series, SeriesMatchType.Title));
         }
 
         [Test]
