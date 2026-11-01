@@ -1,7 +1,7 @@
 .row {
   display: flex;
   align-items: center;
-  padding: 12px calc(var(--columnRowPadding) - 1px);
+  padding: 8px calc(var(--columnRowPadding) - 1px);
   border: 1px solid var(--borderColor);
   border-radius: 12px;
   background-color: var(--cardBackgroundColor);
