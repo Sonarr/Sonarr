@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
 import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
+import Label from 'Components/Label';
 import Link from 'Components/Link/Link';
 import Tooltip from 'Components/Tooltip/Tooltip';
 import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
-import { tooltipPositions } from 'Helpers/Props';
+import { kinds, tooltipPositions } from 'Helpers/Props';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatAge from 'Utilities/Number/formatAge';
@@ -17,6 +18,18 @@ import ReleaseStatusIcons from './ReleaseStatusIcons';
 import ReleaseTitle from './ReleaseTitle';
 import { Release } from './useReleases';
 import styles from './InteractiveSearchCard.module.css';
+
+function getScoreKind(score: number) {
+  if (score > 0) {
+    return kinds.SUCCESS;
+  }
+
+  if (score < 0) {
+    return kinds.DANGER;
+  }
+
+  return kinds.DEFAULT;
+}
 
 interface InteractiveSearchCardProps extends Release {
   actions: React.ReactNode;
@@ -106,7 +119,11 @@ function InteractiveSearchCard(props: InteractiveSearchCardProps) {
           {customFormatScoreText ? (
             <Tooltip
               className={styles.score}
-              anchor={customFormatScoreText}
+              anchor={
+                <Label kind={getScoreKind(customFormatScore)} dot={false}>
+                  {customFormatScoreText}
+                </Label>
+              }
               tooltip={<EpisodeFormats formats={customFormats} />}
               position={tooltipPositions.BOTTOM}
             />

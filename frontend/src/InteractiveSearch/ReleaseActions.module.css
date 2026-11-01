@@ -10,8 +10,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border: 1px solid var(--borderColor);
   border-radius: 8px;
 
