@@ -22,7 +22,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
-            var deletedSeries = _seriesService.GetAllSeries().Where(v => v.Status == SeriesStatusType.Deleted).ToList();
+            var deletedSeries = _seriesService.GetSeriesByStatus(SeriesStatusType.Deleted);
 
             if (deletedSeries.Empty())
             {

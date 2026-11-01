@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Tv
         Series FindByPath(string path);
         void DeleteSeries(List<int> seriesIds, bool deleteFiles, bool addImportListExclusion);
         List<Series> GetAllSeries();
+        List<Series> GetSeriesByStatus(SeriesStatusType status);
         Dictionary<int, int> AllSeriesTvdbIds();
         Dictionary<int, string> GetAllSeriesPaths();
         Dictionary<int, List<int>> GetAllSeriesTags();
@@ -188,6 +189,11 @@ namespace NzbDrone.Core.Tv
         public List<Series> GetAllSeries()
         {
             return _seriesRepository.All().ToList();
+        }
+
+        public List<Series> GetSeriesByStatus(SeriesStatusType status)
+        {
+            return _seriesRepository.FindByStatus(status);
         }
 
         public Dictionary<int, int> AllSeriesTvdbIds()
