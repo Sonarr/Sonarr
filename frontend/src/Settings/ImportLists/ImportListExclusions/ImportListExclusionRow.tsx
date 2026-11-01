@@ -59,6 +59,8 @@ function ImportListExclusionRow({
     setDeleteImportListExclusionModalClosed,
   ] = useModalOpenState(false);
 
+  const editLabel = translate('EditImportListExclusionWithTitle', { title });
+
   const handleDeletePress = useCallback(() => {
     deleteImportListExclusion();
   }, [deleteImportListExclusion]);
@@ -77,7 +79,8 @@ function ImportListExclusionRow({
       <TableRowCell className={styles.actions}>
         <IconButton
           name={icons.EDIT}
-          aria-label={translate('Edit')}
+          title={editLabel}
+          aria-label={editLabel}
           onPress={setEditImportListExclusionModalOpen}
         />
       </TableRowCell>
