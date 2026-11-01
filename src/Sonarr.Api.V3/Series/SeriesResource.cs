@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
@@ -113,8 +112,7 @@ namespace Sonarr.Api.V3.Series
                        Network = model.Network,
                        AirTime = model.AirTime,
 
-                       // JsonClone
-                       Images = model.Images.JsonClone(),
+                       Images = model.Images?.Select(i => new MediaCover(i.CoverType, i.RemoteUrl) { Url = i.Url }).ToList(),
 
                        SeasonType = model.SeasonType,
                        Seasons = model.Seasons.ToResource(includeSeasonImages),
