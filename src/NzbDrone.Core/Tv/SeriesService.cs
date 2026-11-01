@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Tv
     {
         Series GetSeries(int seriesId);
         List<Series> GetSeries(IEnumerable<int> seriesIds);
+        List<Series> FindSeries(IEnumerable<int> seriesIds);
         Series AddSeries(Series newSeries);
         List<Series> AddSeries(List<Series> newSeries);
         Series FindByTvdbId(int tvdbId);
@@ -78,6 +79,11 @@ namespace NzbDrone.Core.Tv
         public List<Series> GetSeries(IEnumerable<int> seriesIds)
         {
             return _seriesRepository.Get(seriesIds).ToList();
+        }
+
+        public List<Series> FindSeries(IEnumerable<int> seriesIds)
+        {
+            return _seriesRepository.FindByIds(seriesIds.ToList());
         }
 
         public Series AddSeries(Series newSeries)

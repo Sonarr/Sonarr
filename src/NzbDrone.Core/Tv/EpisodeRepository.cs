@@ -151,7 +151,8 @@ namespace NzbDrone.Core.Tv
 
         public List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate, bool includeUnmonitored, bool includeSpecials)
         {
-            var builder = Builder().Where<Episode>(rg => rg.AirDateUtc >= startDate && rg.AirDateUtc <= endDate);
+            var builder = Builder().Where<Episode>(rg => rg.AirDateUtc >= startDate && rg.AirDateUtc <= endDate)
+                .Join<Episode, Series>((l, r) => l.SeriesId == r.Id);
 
             if (!includeSpecials)
             {
@@ -161,7 +162,6 @@ namespace NzbDrone.Core.Tv
             if (!includeUnmonitored)
             {
                 builder = builder.Where<Episode>(e => e.Monitored == true)
-                    .Join<Episode, Series>((l, r) => l.SeriesId == r.Id)
                     .Where<Series>(e => e.Monitored == true);
             }
 
