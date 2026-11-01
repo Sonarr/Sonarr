@@ -9,8 +9,7 @@
 .cell {
   composes: headerCell from 'Components/Table/VirtualTableHeaderCell.module.css';
 
-  padding-right: 0;
-  padding-left: 0;
+  padding: 8px 0;
 }
 
 .release {
@@ -48,6 +47,6 @@
   composes: actions from './InteractiveSearchColumns.module.css';
 
   justify-content: flex-start;
-  padding-left: calc(var(--columnActionsWidth) - (32px + 14px) / 2);
+  padding-left: calc(var(--columnActionsWidth) - (28px + 14px) / 2);
   min-width: 0;
 }

@@ -1,5 +1,5 @@
 .card {
-  padding: 12px 14px;
+  padding: 8px 12px;
   border: 1px solid var(--borderColor);
   border-radius: 12px;
   background-color: var(--cardBackgroundColor);
@@ -22,7 +22,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  margin-top: 8px;
+  margin-top: 6px;
   gap: 8px 10px;
 }
 
@@ -35,8 +35,7 @@
 }
 
 .score {
-  font-weight: bold;
-  cursor: default;
+  display: inline-flex;
 }
 
 .age,
