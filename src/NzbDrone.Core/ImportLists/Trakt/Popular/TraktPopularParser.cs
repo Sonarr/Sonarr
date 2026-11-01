@@ -25,8 +25,8 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
 
             var traktSeries = _settings.TraktListType switch
             {
-                (int)TraktPopularListType.Popular => STJson.Deserialize<List<TraktSeriesResource>>(importResponse.Content),
-                _ => STJson.Deserialize<List<TraktResponse>>(importResponse.Content).SelectList(c => c.Show)
+                (int)TraktPopularListType.Popular => STJson.Deserialize<List<TraktSeriesResource>>(importResponse.HttpResponse.ResponseData),
+                _ => STJson.Deserialize<List<TraktResponse>>(importResponse.HttpResponse.ResponseData).SelectList(c => c.Show)
             };
 
             // no series were returned

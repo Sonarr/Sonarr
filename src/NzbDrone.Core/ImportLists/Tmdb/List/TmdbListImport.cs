@@ -71,7 +71,7 @@ public class TmdbListImport(ISonarrCloudRequestBuilder requestBuilder,
                 var request = new ImportListRequest(builder.Build());
 
                 var response = FetchImportListResponse(request);
-                var resource = STJson.Deserialize<TmdbPagedResource<TmdbAccountListResource>>(response.Content);
+                var resource = STJson.Deserialize<TmdbPagedResource<TmdbAccountListResource>>(response.HttpResponse.ResponseData);
 
                 var results = resource.Results ?? [];
 
