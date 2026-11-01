@@ -84,7 +84,7 @@ namespace NzbDrone.Common.Serializer
             var lineNumber = ex.LineNumber == 0 ? 0 : (ex.LineNumber - 1);
             var linePosition = ex.LinePosition;
 
-            var lines = json.Split('\n');
+            var lines = json.Split('\n', lineNumber + 2);
             if (lineNumber >= 0 && lineNumber < lines.Length &&
                 linePosition >= 0 && linePosition < lines[lineNumber].Length)
             {
