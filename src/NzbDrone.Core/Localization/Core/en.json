@@ -686,6 +686,7 @@
   "EditDownloadClientNameWithTestStatus": "Edit Download Client, {name}, {testStatus}",
   "EditGroups": "Edit Groups",
   "EditImportListExclusion": "Edit Import List Exclusion",
+  "EditImportListExclusionWithTitle": "Edit Import List Exclusion, {title}",
   "EditImportListImplementation": "Edit Import List - {implementationName}",
   "EditImportListName": "Edit Import List, {name}",
   "EditImportListNameWithTestStatus": "Edit Import List, {name}, {testStatus}",
