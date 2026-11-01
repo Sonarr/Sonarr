@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -16,6 +17,8 @@ namespace NzbDrone.Common.Serializer
         {
             SerializerSettings = GetSerializerSettings();
             Serializer = JsonSerializer.Create(SerializerSettings);
+
+            Serializer.CheckAdditionalContent = true;
         }
 
         public static JsonSerializerSettings GetSerializerSettings()
@@ -46,6 +49,21 @@ namespace NzbDrone.Common.Serializer
             catch (JsonReaderException ex)
             {
                 throw DetailedJsonReaderException(ex, json);
+            }
+        }
+
+        public static T Deserialize<T>(byte[] data, Encoding encoding)
+            where T : new()
+        {
+            using var jsonReader = new JsonTextReader(new StreamReader(new MemoryStream(data), encoding));
+
+            try
+            {
+                return Serializer.Deserialize<T>(jsonReader);
+            }
+            catch (JsonReaderException ex)
+            {
+                throw DetailedJsonReaderException(ex, encoding.GetString(data));
             }
         }
 
