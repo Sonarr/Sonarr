@@ -106,7 +106,7 @@ namespace NzbDrone.Common.Http
         public HttpResponse(HttpResponse response)
             : base(response.Request, response.Headers, response.ResponseData, response.StatusCode, response.Version)
         {
-            _resource = new Lazy<T>(() => Json.Deserialize<T>(response.Content));
+            _resource = new Lazy<T>(() => Json.Deserialize<T>(ResponseData, Headers.GetEncodingFromContentType()));
         }
 
         public T Resource => _resource.Value;

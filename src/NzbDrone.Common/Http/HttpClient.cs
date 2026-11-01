@@ -167,7 +167,7 @@ namespace NzbDrone.Common.Http
                 response = interceptor.PostResponse(response);
             }
 
-            if (request.LogResponseContent && response.ResponseData != null)
+            if (request.LogResponseContent && response.ResponseData != null && _logger.IsTraceEnabled)
             {
                 _logger.Trace("Response content ({0} bytes): {1}", response.ResponseData.Length, response.Content);
             }
