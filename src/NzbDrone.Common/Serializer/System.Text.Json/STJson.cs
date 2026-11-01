@@ -38,7 +38,13 @@ namespace NzbDrone.Common.Serializer
         }
 
         public static T Deserialize<T>(string json)
-        where T : new()
+            where T : new()
+        {
+            return JsonSerializer.Deserialize<T>(json, SerializerSettings);
+        }
+
+        public static T Deserialize<T>(ReadOnlySpan<byte> json)
+            where T : new()
         {
             return JsonSerializer.Deserialize<T>(json, SerializerSettings);
         }
@@ -54,7 +60,7 @@ namespace NzbDrone.Common.Serializer
         }
 
         public static bool TryDeserialize<T>(string json, out T result)
-        where T : new()
+            where T : new()
         {
             try
             {
@@ -63,7 +69,22 @@ namespace NzbDrone.Common.Serializer
             }
             catch (JsonException)
             {
-                result = default(T);
+                result = default;
+                return false;
+            }
+        }
+
+        public static bool TryDeserialize<T>(ReadOnlySpan<byte> json, out T result)
+            where T : new()
+        {
+            try
+            {
+                result = Deserialize<T>(json);
+                return true;
+            }
+            catch (JsonException)
+            {
+                result = default;
                 return false;
             }
         }
@@ -75,25 +96,17 @@ namespace NzbDrone.Common.Serializer
 
         public static void Serialize<TModel>(TModel model, Stream outputStream, JsonSerializerOptions options = null)
         {
-            if (options == null)
-            {
-                options = SerializerSettings;
-            }
+            options ??= SerializerSettings;
 
             // Cast to object to get all properties written out
             // https://github.com/dotnet/corefx/issues/38650
-            using (var writer = new Utf8JsonWriter(outputStream, options: WriterOptions))
-            {
-                JsonSerializer.Serialize(writer, (object)model, options);
-            }
+            using var writer = new Utf8JsonWriter(outputStream, options: WriterOptions);
+            JsonSerializer.Serialize(writer, (object)model, options);
         }
 
         public static Task SerializeAsync<TModel>(TModel model, Stream outputStream, JsonSerializerOptions options = null)
         {
-            if (options == null)
-            {
-                options = SerializerSettings;
-            }
+            options ??= SerializerSettings;
 
             return JsonSerializer.SerializeAsync(outputStream, (object)model, options);
         }

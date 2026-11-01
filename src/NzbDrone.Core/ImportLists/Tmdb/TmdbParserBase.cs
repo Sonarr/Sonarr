@@ -22,7 +22,7 @@ public abstract class TmdbParserBase<TResponse> : IParseImportListResponse
             return results;
         }
 
-        var resource = STJson.Deserialize<TResponse>(importListResponse.Content);
+        var resource = STJson.Deserialize<TResponse>(importListResponse.HttpResponse.ResponseData);
         results.AddRange(ParseResponse(resource));
 
         return results;

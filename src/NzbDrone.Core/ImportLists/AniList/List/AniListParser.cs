@@ -31,7 +31,7 @@ namespace NzbDrone.Core.ImportLists.AniList.List
                 return result;
             }
 
-            var jsonResponse = STJson.Deserialize<MediaPageResponse>(importListResponse.Content);
+            var jsonResponse = STJson.Deserialize<MediaPageResponse>(importListResponse.HttpResponse.ResponseData);
 
             if (jsonResponse?.Data?.Page?.MediaList == null)
             {

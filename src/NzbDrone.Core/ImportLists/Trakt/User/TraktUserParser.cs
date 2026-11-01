@@ -31,7 +31,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
 
             if (_settings.TraktListType == (int)TraktUserListType.UserWatchedList)
             {
-                var jsonWatchedResponse = STJson.Deserialize<List<TraktWatchedResponse>>(_importResponse.Content);
+                var jsonWatchedResponse = STJson.Deserialize<List<TraktWatchedResponse>>(_importResponse.HttpResponse.ResponseData);
 
                 switch (_settings.TraktWatchedListType)
                 {
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
             }
             else
             {
-                traktSeries = STJson.Deserialize<List<TraktResponse>>(_importResponse.Content).SelectList(c => c.Show);
+                traktSeries = STJson.Deserialize<List<TraktResponse>>(_importResponse.HttpResponse.ResponseData).SelectList(c => c.Show);
             }
 
             // no series were returned
