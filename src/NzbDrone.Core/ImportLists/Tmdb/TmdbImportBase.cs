@@ -75,7 +75,7 @@ public abstract class TmdbImportBase<TSettings>(ISonarrCloudRequestBuilder reque
             .Build();
 
         var response = _httpClient.Execute(request);
-        var resource = STJson.Deserialize<RequestTokenResource>(response.Content);
+        var resource = STJson.Deserialize<RequestTokenResource>(response.ResponseData);
 
         if (!resource.IsSuccess || resource.RequestToken.IsNullOrWhiteSpace())
         {
@@ -103,7 +103,7 @@ public abstract class TmdbImportBase<TSettings>(ISonarrCloudRequestBuilder reque
             .Build();
 
         var response = _httpClient.Execute(request);
-        var resource = STJson.Deserialize<AccessTokenResource>(response.Content);
+        var resource = STJson.Deserialize<AccessTokenResource>(response.ResponseData);
 
         if (!resource.IsSuccess)
         {
