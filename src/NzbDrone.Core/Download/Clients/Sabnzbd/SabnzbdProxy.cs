@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
@@ -124,9 +124,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 request.AddQueryParam("category", settings.TvCategory);
             }
 
-            var response = ProcessRequest(request, settings);
-
-            return Json.Deserialize<SabnzbdQueue>(JObject.Parse(response).SelectToken("queue").ToString());
+            return ProcessRequest<SabnzbdQueueResponse>(request, settings).Queue;
         }
 
         public SabnzbdHistory GetHistory(int start, int limit, SabnzbdSettings settings)
@@ -140,9 +138,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 request.AddQueryParam("category", settings.TvCategory);
             }
 
-            var response = ProcessRequest(request, settings);
-
-            return Json.Deserialize<SabnzbdHistory>(JObject.Parse(response).SelectToken("history").ToString());
+            return ProcessRequest<SabnzbdHistoryResponse>(request, settings).History;
         }
 
         public string RetryDownload(string id, SabnzbdSettings settings)
@@ -186,6 +182,40 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         private string ProcessRequest(HttpRequestBuilder requestBuilder, SabnzbdSettings settings)
         {
+            var response = ExecuteRequest(requestBuilder, settings);
+
+            CheckForError(response);
+
+            return response.Content;
+        }
+
+        private T ProcessRequest<T>(HttpRequestBuilder requestBuilder, SabnzbdSettings settings)
+            where T : SabnzbdJsonError, new()
+        {
+            var response = ExecuteRequest(requestBuilder, settings);
+
+            T result;
+
+            try
+            {
+                result = new HttpResponse<T>(response).Resource;
+            }
+            catch (JsonException)
+            {
+                CheckForError(response);
+                throw;
+            }
+
+            if (result.Failed)
+            {
+                throw new DownloadClientException("Error response received from SABnzbd: {0}", result.Error);
+            }
+
+            return result;
+        }
+
+        private HttpResponse ExecuteRequest(HttpRequestBuilder requestBuilder, SabnzbdSettings settings)
+        {
             var httpRequest = requestBuilder.Build();
 
             HttpResponse response;
@@ -214,9 +244,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 throw new DownloadClientUnavailableException("Unable to connect to SABnzbd, {0}", ex, ex.Message);
             }
 
-            CheckForError(response);
-
-            return response.Content;
+            return response;
         }
 
         private void CheckForError(HttpResponse response)
