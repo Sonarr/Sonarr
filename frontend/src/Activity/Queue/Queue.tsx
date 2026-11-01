@@ -1,5 +1,4 @@
 import React, {
-  ReactElement,
   useCallback,
   useEffect,
   useMemo,
@@ -46,6 +45,11 @@ import {
   setQueueSort,
   useQueueOptions,
 } from './queueOptionsStore';
+import {
+  forceRefreshQueue,
+  refreshQueue,
+  setQueueRefreshBlocked,
+} from './queueRefresh';
 import QueueRow from './QueueRow';
 import RemoveQueueItemModal from './RemoveQueueItemModal';
 import useQueueStatus from './Status/useQueueStatus';
@@ -65,9 +69,9 @@ function QueueContent() {
     error,
     isFetching,
     isLoading,
+    isPlaceholderData,
     page,
     goToPage,
-    refetch,
   } = useQueue();
 
   const { columns, pageSize, sortKey, sortDirection, selectedFilterKey } =
@@ -87,8 +91,9 @@ function QueueContent() {
   const {
     isFetching: isEpisodesFetching,
     isFetched: isEpisodesFetched,
+    isPlaceholderData: isEpisodesPlaceholderData,
     error: episodesError,
-  } = useEpisodes({ episodeIds });
+  } = useEpisodes({ episodeIds }, { keepPreviousData: true });
 
   const customFilters = useCustomFiltersList('queue');
 
@@ -96,8 +101,7 @@ function QueueContent() {
     CommandNames.RefreshMonitoredDownloads
   );
 
-  const shouldBlockRefresh = useRef(false);
-  const currentQueue = useRef<ReactElement | null>(null);
+  const manualRefreshState = useRef<'idle' | 'requested' | 'executing'>('idle');
 
   const { allSelected, allUnselected, selectAll, unselectAll, useSelectedIds } =
     useSelect<QueueModel>();
@@ -123,6 +127,8 @@ function QueueContent() {
     [records, selectedIds]
   );
 
+  const [isQueueRowModalOpen, setIsQueueRowModalOpen] = useState(false);
+
   const [isConfirmRemoveModalOpen, setIsConfirmRemoveModalOpen] =
     useState(false);
 
@@ -136,6 +142,7 @@ function QueueContent() {
   const isAllPopulated =
     !isLoading &&
     (isEpisodesFetched ||
+      isEpisodesPlaceholderData ||
       !records.length ||
       records.every((e) => !e.episodeIds?.length));
   const hasError = error || episodesError;
@@ -143,6 +150,14 @@ function QueueContent() {
   const disableSelectedActions = selectedCount === 0;
   const disableImportSelected =
     selectedCount === 0 || completedDownloadIds.length === 0;
+
+  const isRefreshBlocked =
+    selectedCount > 0 ||
+    isQueueRowModalOpen ||
+    isConfirmRemoveModalOpen ||
+    isInteractiveImportDownloadIds.length > 0 ||
+    isRemoving ||
+    isGrabbing;
 
   const handleSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
@@ -156,13 +171,15 @@ function QueueContent() {
   );
 
   const handleRefreshPress = useCallback(() => {
+    manualRefreshState.current = 'requested';
+
     executeCommand({
       name: CommandNames.RefreshMonitoredDownloads,
     });
   }, [executeCommand]);
 
   const handleQueueRowModalOpenOrClose = useCallback((isOpen: boolean) => {
-    shouldBlockRefresh.current = isOpen;
+    setIsQueueRowModalOpen(isOpen);
   }, []);
 
   const handleGrabSelectedPress = useCallback(() => {
@@ -170,28 +187,23 @@ function QueueContent() {
   }, [selectedIds, grabQueueItems]);
 
   const handleRemoveSelectedPress = useCallback(() => {
-    shouldBlockRefresh.current = true;
     setIsConfirmRemoveModalOpen(true);
   }, [setIsConfirmRemoveModalOpen]);
 
   const handleRemoveSelectedConfirmed = useCallback(() => {
-    shouldBlockRefresh.current = false;
     removeQueueItems({ ids: selectedIds });
     setIsConfirmRemoveModalOpen(false);
   }, [selectedIds, removeQueueItems]);
 
   const handleConfirmRemoveModalClose = useCallback(() => {
-    shouldBlockRefresh.current = false;
     setIsConfirmRemoveModalOpen(false);
   }, []);
 
   const handleImportSelectedPress = useCallback(() => {
-    shouldBlockRefresh.current = true;
     setIsInteractiveImportDownloadIds(completedDownloadIds);
   }, [completedDownloadIds]);
 
   const handleImportSelectedModalClose = useCallback(() => {
-    shouldBlockRefresh.current = false;
     setIsInteractiveImportDownloadIds([]);
   }, []);
 
@@ -234,78 +246,32 @@ function QueueContent() {
   }, []);
 
   useEffect(() => {
-    const repopulate = () => {
-      refetch();
-    };
+    setQueueRefreshBlocked(isRefreshBlocked);
+  }, [isRefreshBlocked]);
 
-    registerPagePopulator(repopulate);
+  useEffect(() => {
+    if (isRefreshMonitoredDownloadsExecuting) {
+      if (manualRefreshState.current === 'requested') {
+        manualRefreshState.current = 'executing';
+      }
+
+      return;
+    }
+
+    if (manualRefreshState.current === 'executing') {
+      manualRefreshState.current = 'idle';
+      forceRefreshQueue();
+    }
+  }, [isRefreshMonitoredDownloadsExecuting]);
+
+  useEffect(() => {
+    registerPagePopulator(refreshQueue);
 
     return () => {
-      unregisterPagePopulator(repopulate);
+      unregisterPagePopulator(refreshQueue);
+      setQueueRefreshBlocked(false);
     };
-  }, [refetch]);
-
-  if (!shouldBlockRefresh.current) {
-    currentQueue.current = (
-      <PageContentBody>
-        <PageHeading scope={translate('Activity')} title={translate('Queue')} />
-
-        {isRefreshing && !isAllPopulated ? <LoadingIndicator /> : null}
-
-        {!isRefreshing && hasError ? (
-          <Alert kind={kinds.DANGER}>{translate('QueueLoadError')}</Alert>
-        ) : null}
-
-        {isAllPopulated && !hasError && !records.length ? (
-          <PageMessage>
-            {selectedFilterKey !== 'all' && count > 0
-              ? translate('QueueFilterHasNoItems')
-              : translate('QueueIsEmpty')}
-          </PageMessage>
-        ) : null}
-
-        {isAllPopulated && !hasError && !!records.length ? (
-          <div>
-            <Table
-              selectAll={true}
-              allSelected={allSelected}
-              allUnselected={allUnselected}
-              columns={columns}
-              pageSize={pageSize}
-              sortKey={sortKey}
-              sortDirection={sortDirection}
-              onTableOptionChange={handleTableOptionChange}
-              onSelectAllChange={handleSelectAllChange}
-              onSortPress={handleSortPress}
-            >
-              <TableBody>
-                {records.map((item) => {
-                  return (
-                    <QueueRow
-                      key={item.id}
-                      columns={columns}
-                      {...item}
-                      onQueueRowModalOpenOrClose={
-                        handleQueueRowModalOpenOrClose
-                      }
-                    />
-                  );
-                })}
-              </TableBody>
-            </Table>
-
-            <TablePager
-              page={page}
-              totalPages={totalPages}
-              totalRecords={totalRecords}
-              isFetching={isFetching}
-              onPageSelect={goToPage}
-            />
-          </div>
-        ) : null}
-      </PageContentBody>
-    );
-  }
+  }, []);
 
   return (
     <PageContent title={translate('Queue')}>
@@ -316,7 +282,7 @@ function QueueContent() {
           groupId="left-a"
           label={translate('Refresh')}
           iconName={icons.REFRESH}
-          isSpinning={isRefreshing}
+          isSpinning={isLoading || isRefreshMonitoredDownloadsExecuting}
           onPress={handleRefreshPress}
         />
 
@@ -383,7 +349,63 @@ function QueueContent() {
         </ToolbarItem>
       </PageToolbar>
 
-      {currentQueue.current}
+      <PageContentBody>
+        <PageHeading scope={translate('Activity')} title={translate('Queue')} />
+
+        {isRefreshing && !isAllPopulated ? <LoadingIndicator /> : null}
+
+        {!isRefreshing && hasError && !records.length ? (
+          <Alert kind={kinds.DANGER}>{translate('QueueLoadError')}</Alert>
+        ) : null}
+
+        {isAllPopulated && !hasError && !records.length ? (
+          <PageMessage>
+            {selectedFilterKey !== 'all' && count > 0
+              ? translate('QueueFilterHasNoItems')
+              : translate('QueueIsEmpty')}
+          </PageMessage>
+        ) : null}
+
+        {isAllPopulated && !!records.length ? (
+          <div>
+            <Table
+              selectAll={true}
+              allSelected={allSelected}
+              allUnselected={allUnselected}
+              columns={columns}
+              pageSize={pageSize}
+              sortKey={sortKey}
+              sortDirection={sortDirection}
+              onTableOptionChange={handleTableOptionChange}
+              onSelectAllChange={handleSelectAllChange}
+              onSortPress={handleSortPress}
+            >
+              <TableBody>
+                {records.map((item) => {
+                  return (
+                    <QueueRow
+                      key={item.id}
+                      columns={columns}
+                      {...item}
+                      onQueueRowModalOpenOrClose={
+                        handleQueueRowModalOpenOrClose
+                      }
+                    />
+                  );
+                })}
+              </TableBody>
+            </Table>
+
+            <TablePager
+              page={page}
+              totalPages={totalPages}
+              totalRecords={totalRecords}
+              isFetching={isFetching && isPlaceholderData}
+              onPageSelect={goToPage}
+            />
+          </div>
+        ) : null}
+      </PageContentBody>
 
       <RemoveQueueItemModal
         isOpen={isConfirmRemoveModalOpen}

@@ -5,6 +5,7 @@ import {
 } from '@microsoft/signalr';
 import { QueryKey, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
+import { throttledRefreshQueue } from 'Activity/Queue/queueRefresh';
 import { setAppValue, setVersion } from 'App/appStore';
 import ModelBase from 'App/ModelBase';
 import Command from 'Commands/Command';
@@ -237,7 +238,7 @@ function SignalRListener() {
     }
 
     if (name === 'queue') {
-      queryClient.invalidateQueries({ queryKey: ['/queue'] });
+      throttledRefreshQueue();
       return;
     }
 
