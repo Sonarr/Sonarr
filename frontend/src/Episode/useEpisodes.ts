@@ -1,3 +1,4 @@
+import { keepPreviousData } from '@tanstack/react-query';
 import { useEffect, useMemo } from 'react';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import clientSideFilterAndSort from 'Utilities/Filter/clientSideFilterAndSort';
@@ -31,7 +32,14 @@ export type EpisodeFilter =
   | EpisodeIds
   | EpisodeFileId;
 
-const useEpisodes = (params: EpisodeFilter) => {
+interface UseEpisodesOptions {
+  keepPreviousData?: boolean;
+}
+
+const useEpisodes = (
+  params: EpisodeFilter,
+  options: UseEpisodesOptions = {}
+) => {
   const setQueryKey = !('isSelection' in params);
 
   const { isPlaceholderData, queryKey, ...result } = useApiQuery<Episode[]>({
@@ -48,6 +56,7 @@ const useEpisodes = (params: EpisodeFilter) => {
         ('seriesId' in params && params.seriesId !== undefined) ||
         ('episodeIds' in params && params.episodeIds?.length > 0) ||
         ('episodeFileId' in params && params.episodeFileId !== undefined),
+      placeholderData: options.keepPreviousData ? keepPreviousData : undefined,
     },
   });
 
@@ -59,6 +68,7 @@ const useEpisodes = (params: EpisodeFilter) => {
 
   return {
     ...result,
+    isPlaceholderData,
     queryKey,
     data: result.data ?? DEFAULT_EPISODES,
   };
