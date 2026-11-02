@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.IO;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -30,6 +32,14 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         private void GivenFileName(string fileName)
         {
             _localEpisode.FileEpisodeInfo = Parser.Parser.ParseTitle(fileName);
+        }
+
+        private void GivenAnimeFileInFolder(string path, Episode episode)
+        {
+            _localEpisode.Series.SeriesType = SeriesTypes.Anime;
+            _localEpisode.Path = path.AsOsAgnostic();
+            _localEpisode.Episodes = new List<Episode> { episode };
+            GivenFileName(Path.GetFileNameWithoutExtension(_localEpisode.Path));
         }
 
         [Test]
@@ -100,6 +110,34 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         {
             _localEpisode.Series.SeriesType = SeriesTypes.Anime;
             GivenFileName("[RlsGrp] Series Title - 05 [1080p]");
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [TestCase(@"C:\Test\Series.Title.S01-S03\[RlsGrp] Series Title S2 [BD 1080p]\[RlsGrp] Series Title - 05 [1080p].mkv")]
+        [TestCase(@"C:\Test\Series.Title.S01-S03\Season 2\[RlsGrp] Series Title - 05 [1080p].mkv")]
+        public void should_reject_absolute_numbered_anime_file_mapped_outside_its_season_folder(string path)
+        {
+            GivenAnimeFileInFolder(path, new Episode { SeasonNumber = 1, EpisodeNumber = 5 });
+
+            var result = Subject.IsSatisfiedBy(_localEpisode, null);
+
+            result.Accepted.Should().BeFalse();
+            result.Reason.Should().Be(ImportRejectionReason.MultiSeason);
+        }
+
+        [Test]
+        public void should_accept_absolute_numbered_anime_file_mapped_to_its_season_folder()
+        {
+            GivenAnimeFileInFolder(@"C:\Test\Series.Title.S01-S03\Season 2\[RlsGrp] Series Title - 17 [1080p].mkv", new Episode { SeasonNumber = 2, EpisodeNumber = 5 });
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_accept_absolute_numbered_anime_file_mapped_to_its_scene_season_folder()
+        {
+            GivenAnimeFileInFolder(@"C:\Test\Series.Title.S01-S03\Season 2\[RlsGrp] Series Title - 17 [1080p].mkv", new Episode { SeasonNumber = 1, EpisodeNumber = 17, SceneSeasonNumber = 2 });
 
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }

@@ -699,6 +699,25 @@ namespace NzbDrone.Core.Parser
             return simpleTitle;
         }
 
+        public static int? ParseSeasonFolder(string folderName)
+        {
+            var seasonMatch = SeasonFolderRegex.Match(folderName);
+
+            if (seasonMatch.Success && seasonMatch.Groups["season"].Success)
+            {
+                return ParseNumber(seasonMatch.Groups["season"].Value);
+            }
+
+            var folderInfo = ParseTitle(folderName);
+
+            if (folderInfo is { FullSeason: true, SeasonNumbers.Count: 1 })
+            {
+                return folderInfo.SeasonNumbers.First();
+            }
+
+            return null;
+        }
+
         public static ParsedEpisodeInfo ParseTitle(string title)
         {
             try

@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Download;
@@ -25,14 +26,32 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             var isMultiSeasonPack = (localEpisode.DownloadClientEpisodeInfo?.IsMultiSeason ?? false) ||
                                     (localEpisode.FolderEpisodeInfo?.IsMultiSeason ?? false);
 
-            if (!isMultiSeasonPack || HasOwnSeason(localEpisode.FileEpisodeInfo, localEpisode.Series))
+            if (!isMultiSeasonPack)
             {
                 return ImportSpecDecision.Accept();
             }
 
-            _logger.Debug("File in multi-season pack has no season number of its own, unable to tell which season it belongs to");
+            if (!HasOwnSeason(localEpisode.FileEpisodeInfo, localEpisode.Series))
+            {
+                _logger.Debug("File in multi-season pack has no season number of its own, unable to tell which season it belongs to");
 
-            return ImportSpecDecision.Reject(ImportRejectionReason.MultiSeason, "Unable to determine season of file in multi-season pack. Review file name or manually import");
+                return ImportSpecDecision.Reject(ImportRejectionReason.MultiSeason, "Unable to determine season of file in multi-season pack. Review file name or manually import");
+            }
+
+            if (IsAbsoluteOnly(localEpisode.FileEpisodeInfo))
+            {
+                // Packs often restart absolute numbering each season, so the folder is the only hint of which season the file belongs to
+                var folderSeason = Parser.Parser.ParseSeasonFolder(Path.GetFileName(Path.GetDirectoryName(localEpisode.Path)));
+
+                if (folderSeason.HasValue && !localEpisode.Episodes.All(e => e.SeasonNumber == folderSeason || e.SceneSeasonNumber == folderSeason))
+                {
+                    _logger.Debug("File in multi-season pack is in a season {0} folder, but its absolute episode number maps to a different season", folderSeason);
+
+                    return ImportSpecDecision.Reject(ImportRejectionReason.MultiSeason, "File is in a season {0} folder, but its absolute episode number maps to a different season. Manually import", folderSeason);
+                }
+            }
+
+            return ImportSpecDecision.Accept();
         }
 
         private static bool HasOwnSeason(ParsedEpisodeInfo fileEpisodeInfo, Series series)
@@ -47,12 +66,17 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return true;
             }
 
-            if (fileEpisodeInfo.IsAbsoluteNumbering && fileEpisodeInfo.EpisodeNumbers.Length == 0)
+            if (IsAbsoluteOnly(fileEpisodeInfo))
             {
                 return series.SeriesType == SeriesTypes.Anime;
             }
 
             return fileEpisodeInfo.SeasonNumbers.Any() && !fileEpisodeInfo.IsMiniSeries;
+        }
+
+        private static bool IsAbsoluteOnly(ParsedEpisodeInfo fileEpisodeInfo)
+        {
+            return fileEpisodeInfo.IsAbsoluteNumbering && fileEpisodeInfo.EpisodeNumbers.Length == 0;
         }
     }
 }
