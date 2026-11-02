@@ -13,24 +13,29 @@ import {
   setSeriesDeleteOptions,
   useSeriesDeleteOptions,
 } from 'Series/seriesOptionsStore';
-import { useBulkDeleteSeries } from 'Series/useSeries';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import SeriesDeleteList from './SeriesDeleteList';
 import useSelectedSeriesStats from './useSelectedSeriesStats';
 import styles from './DeleteSeriesModalContent.module.css';
 
+export interface DeleteSeriesPayload {
+  deleteFiles: boolean;
+  addImportListExclusion: boolean;
+}
+
 export interface DeleteSeriesModalContentProps {
+  onDeletePress(payload: DeleteSeriesPayload): void;
   onModalClose(): void;
 }
 
 function DeleteSeriesModalContent({
+  onDeletePress,
   onModalClose,
 }: DeleteSeriesModalContentProps) {
   const { addImportListExclusion } = useSeriesDeleteOptions();
-  const { bulkDeleteSeries } = useBulkDeleteSeries();
   const [deleteFiles, setDeleteFiles] = useState(false);
-  const { series, seriesIds, totalEpisodeFileCount, totalSizeOnDisk } =
+  const { series, totalEpisodeFileCount, totalSizeOnDisk } =
     useSelectedSeriesStats();
 
   const onDeleteFilesChange = useCallback(
@@ -52,21 +57,11 @@ function DeleteSeriesModalContent({
   const onDeleteSeriesConfirmed = useCallback(() => {
     setDeleteFiles(false);
 
-    bulkDeleteSeries({
-      seriesIds,
+    onDeletePress({
       deleteFiles,
       addImportListExclusion,
     });
-
-    onModalClose();
-  }, [
-    deleteFiles,
-    addImportListExclusion,
-    setDeleteFiles,
-    seriesIds,
-    bulkDeleteSeries,
-    onModalClose,
-  ]);
+  }, [deleteFiles, addImportListExclusion, setDeleteFiles, onDeletePress]);
 
   return (
     <ModalContent onModalClose={onModalClose}>

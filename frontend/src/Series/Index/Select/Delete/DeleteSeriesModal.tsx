@@ -8,12 +8,17 @@ interface DeleteSeriesModalProps extends DeleteSeriesModalContentProps {
   isOpen: boolean;
 }
 
-function DeleteSeriesModal(props: DeleteSeriesModalProps) {
-  const { isOpen, onModalClose } = props;
-
+function DeleteSeriesModal({
+  isOpen,
+  onDeletePress,
+  onModalClose,
+}: DeleteSeriesModalProps) {
   return (
     <Modal isOpen={isOpen} onModalClose={onModalClose}>
-      <DeleteSeriesModalContent onModalClose={onModalClose} />
+      <DeleteSeriesModalContent
+        onDeletePress={onDeletePress}
+        onModalClose={onModalClose}
+      />
     </Modal>
   );
 }
