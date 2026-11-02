@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title S01 4K 2160p WEB-DL x265-GRP", "Series Title", 1)]
         [TestCase("Series Title S01 S01 4K 2160p WEB-DL x265-GRP", "Series Title", 1)]
         [TestCase("Series Title S01 2K WEB-DL x265-GRP", "Series Title", 1)]
-        [TestCase("Series Title S01 12K WEB-DL x265-GRP", "Series Title", 1)]
+        [TestCase("Series 10K Title S01 WEB-DL x265-GRP", "Series 10K Title", 1)]
         [TestCase("My.Series.S2014.720p.HDTV.x264-ME", "My Series", 2014)]
         [TestCase("Series.Saison3.VOSTFR.HDTV.XviD-NOTAG", "Series", 3)]
         [TestCase("Series.SAISON.1.VFQ.PDTV.H264-ACC-ROLLED", "Series", 1)]
