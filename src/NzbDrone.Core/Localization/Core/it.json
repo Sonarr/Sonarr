@@ -290,7 +290,7 @@
     "CustomFormatHelpText": "{appName} valuta ogni release usando la somma dei punteggi dei corrispondenti formati personalizzati. Se una nuova versione migliorasse il punteggio, con una qualità uguale o migliore, {appName} lo prenderà.",
     "CustomFormatJson": "Formato Personalizzato JSON",
     "CustomFormatScore": "Punteggio Formato Personalizzato",
-    "CustomFormatUnknownCondition": "Condizione del Formato Personalizzato sconosciuta '{0}'",
+    "CustomFormatUnknownCondition": "Condizione del Formato Personalizzato sconosciuta '{implementation}'",
     "CustomFormatUnknownConditionOption": "Opzione sconosciuta '{key}' per la condizione '{implementation}'",
     "CustomFormats": "Formati Personalizzati",
     "CustomFormatsLoadError": "Impossibile a caricare Formati Personalizzati",
