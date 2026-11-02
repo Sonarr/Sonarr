@@ -56,6 +56,7 @@ import { QualityModel } from 'Quality/Quality';
 import Series from 'Series/Series';
 import { SortCallback } from 'typings/callbacks';
 import { CheckInputChanged } from 'typings/inputs';
+import formatBytes from 'Utilities/Number/formatBytes';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import translate from 'Utilities/String/translate';
@@ -396,6 +397,24 @@ function InteractiveImportModalContentInner(
 
     return options;
   }, [allowSeriesChange, items, selectedIds]);
+
+  const { totalDeleteEpisodeFileCount, totalDeleteEpisodeFileSize } =
+    useMemo(() => {
+      return items.reduce(
+        (acc, item) => {
+          if (selectedIds.indexOf(item.id) > -1 && item.episodeFileId) {
+            acc.totalDeleteEpisodeFileCount++;
+            acc.totalDeleteEpisodeFileSize += item.size;
+          }
+
+          return acc;
+        },
+        {
+          totalDeleteEpisodeFileCount: 0,
+          totalDeleteEpisodeFileSize: 0,
+        }
+      );
+    }, [items, selectedIds]);
 
   useEffect(() => {
     if (!isDeleting && previousIsDeleting && !deleteError) {
@@ -1054,7 +1073,18 @@ function InteractiveImportModalContentInner(
         isOpen={isConfirmDeleteModalOpen}
         kind={kinds.DANGER}
         title={translate('DeleteSelectedEpisodeFiles')}
-        message={translate('DeleteSelectedEpisodeFilesHelpText')}
+        message={
+          <>
+            <div>{translate('DeleteSelectedEpisodeFilesHelpText')}</div>
+
+            <div className={styles.deleteFilesMessage}>
+              {translate('DeleteSelectedEpisodeFilesCount', {
+                episodeFileCount: totalDeleteEpisodeFileCount,
+                size: formatBytes(totalDeleteEpisodeFileSize),
+              })}
+            </div>
+          </>
+        }
         confirmLabel={translate('Delete')}
         onConfirm={handleConfirmDelete}
         onCancel={handleConfirmDeleteModalClose}

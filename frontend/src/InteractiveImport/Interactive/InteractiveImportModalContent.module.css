@@ -52,6 +52,11 @@
   color: var(--dangerColor);
 }
 
+.deleteFilesMessage {
+  margin-top: 20px;
+  color: var(--warningColor);
+}
+
 @media (--breakpointSmall) {
   .footer {
     .leftButtons,
