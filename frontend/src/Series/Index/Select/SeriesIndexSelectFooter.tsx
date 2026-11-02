@@ -14,6 +14,7 @@ import {
 } from 'Series/useSeries';
 import translate from 'Utilities/String/translate';
 import DeleteSeriesModal from './Delete/DeleteSeriesModal';
+import { DeleteSeriesPayload } from './Delete/DeleteSeriesModalContent';
 import DeleteSeriesFilesModal from './Delete/Files/DeleteSeriesFilesModal';
 import EditSeriesModal from './Edit/EditSeriesModal';
 import OrganizeSeriesModal from './Organize/OrganizeSeriesModal';
@@ -34,7 +35,8 @@ function SeriesIndexSelectFooter() {
   const { saveSeriesEditor, isSavingSeriesEditor } = useSaveSeriesEditor();
   const { updateSeriesMonitor, isUpdatingSeriesMonitor } =
     useUpdateSeriesMonitor();
-  const { isBulkDeleting, bulkDeleteError } = useBulkDeleteSeries();
+  const { bulkDeleteSeries, isBulkDeleting, bulkDeleteError } =
+    useBulkDeleteSeries();
   const isDeleteFilesCommandExecuting = useCommandExecuting(
     CommandNames.DeleteSeriesFiles
   );
@@ -137,6 +139,18 @@ function SeriesIndexSelectFooter() {
   const onDeleteModalClose = useCallback(() => {
     setIsDeleteModalOpen(false);
   }, []);
+
+  const onDeleteSeriesPress = useCallback(
+    (payload: DeleteSeriesPayload) => {
+      setIsDeleteModalOpen(false);
+
+      bulkDeleteSeries({
+        ...payload,
+        seriesIds,
+      });
+    },
+    [seriesIds, bulkDeleteSeries]
+  );
 
   const onDeleteFilesPress = useCallback(() => {
     setIsDeleteFilesModalOpen(true);
@@ -250,6 +264,7 @@ function SeriesIndexSelectFooter() {
 
       <DeleteSeriesModal
         isOpen={isDeleteModalOpen}
+        onDeletePress={onDeleteSeriesPress}
         onModalClose={onDeleteModalClose}
       />
 
