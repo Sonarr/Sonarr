@@ -441,6 +441,7 @@
   "DeleteSelectedDownloadClients": "Delete Download Client(s)",
   "DeleteSelectedDownloadClientsMessageText": "Are you sure you want to delete {count} selected download client(s)?",
   "DeleteSelectedEpisodeFiles": "Delete Selected Episode Files",
+  "DeleteSelectedEpisodeFilesCount": "{episodeFileCount} episode files totaling {size}",
   "DeleteSelectedEpisodeFilesHelpText": "Are you sure you want to delete the selected episode files?",
   "DeleteSelectedImportListExclusionsMessageText": "Are you sure you want to delete the selected import list exclusions?",
   "DeleteSelectedImportLists": "Delete Import List(s)",
