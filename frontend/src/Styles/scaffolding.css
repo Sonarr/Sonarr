@@ -19,6 +19,7 @@ body {
   font-family: 'Inter', ui-sans-serif, system-ui, 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-variant-ligatures: none;
 }
 
 body {

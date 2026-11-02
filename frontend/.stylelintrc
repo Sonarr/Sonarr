@@ -233,6 +233,7 @@
           "font-smoothing",
           "-moz-osx-font-smoothing",
           "-webkit-font-smoothing",
+          "font-variant-ligatures",
           "src",
           "line-height",
           "opacity",
