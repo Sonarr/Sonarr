@@ -539,7 +539,7 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex PercentRegex = new Regex(@"(?<=\b\d+)%", RegexOptions.Compiled);
 
-        private static readonly RegexReplace SimpleTitleRegex = new RegexReplace(@"(?:(480|540|576|720|1080|1440|2160)[ip]|[xh][\W_]?26[456]|DD\W?5\W1|[<>?*]|848x480|1280x720|1920x1080|3840x2160|4096x2160|(?<![a-f0-9])(8|10)[ -]?(b(?![a-z0-9])|bit))\s*?",
+        private static readonly RegexReplace SimpleTitleRegex = new RegexReplace(@"(?:(480|540|576|720|1080|1440|2160)[ip]|(?<![a-z0-9])[248]k(?![a-z0-9])|[xh][\W_]?26[456]|DD\W?5\W1|[<>?*]|848x480|1280x720|1920x1080|3840x2160|4096x2160|(?<![a-f0-9])(8|10)[ -]?(b(?![a-z0-9])|bit))\s*?",
                                                                 string.Empty,
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -697,6 +697,25 @@ namespace NzbDrone.Core.Parser
             simpleTitle = ParserCommon.CleanTorrentSuffixRegex.Replace(simpleTitle);
 
             return simpleTitle;
+        }
+
+        public static int? ParseSeasonFolder(string folderName)
+        {
+            var seasonMatch = SeasonFolderRegex.Match(folderName);
+
+            if (seasonMatch.Success && seasonMatch.Groups["season"].Success)
+            {
+                return ParseNumber(seasonMatch.Groups["season"].Value);
+            }
+
+            var folderInfo = ParseTitle(folderName);
+
+            if (folderInfo is { FullSeason: true, SeasonNumbers.Count: 1 })
+            {
+                return folderInfo.SeasonNumbers.First();
+            }
+
+            return null;
         }
 
         public static ParsedEpisodeInfo ParseTitle(string title)
