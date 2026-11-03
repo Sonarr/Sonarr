@@ -108,7 +108,7 @@ namespace NzbDrone.Core.MediaFiles
                     var series = _seriesService.GetSeries(seriesId);
                     var mediaFiles = _mediaFileService.GetFilesBySeries(seriesId);
 
-                    _logger.ProgressDebug("{0}: Deleting episode files}", series.Title);
+                    _logger.ProgressDebug("{0}: Deleting episode files", series.Title);
 
                     if (mediaFiles.Count == 0)
                     {
