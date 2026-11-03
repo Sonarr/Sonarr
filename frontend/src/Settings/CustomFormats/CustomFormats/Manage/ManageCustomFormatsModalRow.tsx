@@ -35,6 +35,8 @@ function ManageCustomFormatsModalRow({
   const [isDeleteCustomFormatModalOpen, setIsDeleteCustomFormatModalOpen] =
     useState(false);
 
+  const editLabel = translate('EditCustomFormatName', { name });
+
   const handleSelectedChange = useCallback(
     ({ id, value, shiftKey }: SelectStateInputProps) => {
       toggleSelected({ id, isSelected: value, shiftKey });
@@ -80,7 +82,8 @@ function ManageCustomFormatsModalRow({
       <TableRowCell className={styles.actions}>
         <IconButton
           name={icons.EDIT}
-          aria-label={translate('Edit')}
+          title={editLabel}
+          aria-label={editLabel}
           onPress={handleEditCustomFormatModalOpen}
         />
       </TableRowCell>
