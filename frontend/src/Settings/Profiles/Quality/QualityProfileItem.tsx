@@ -2,12 +2,15 @@ import { useSortable } from '@dnd-kit/react/sortable';
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
 import CheckInput from 'Components/Form/CheckInput';
-import Icon from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
+import SortableHandle, {
+  SortableHandleOption,
+} from 'Components/Sortable/SortableHandle';
 import { icons } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import { ItemFailures } from './qualityProfileItemFailures';
+import type { QualityProfileMoveTarget } from './QualityProfileItems';
 import QualityProfileItemSize, { SizeChanged } from './QualityProfileItemSize';
 import {
   qualityKey,
@@ -28,9 +31,18 @@ interface QualityProfileItemProps {
   maxSize: number | null;
   preferredSize: number | null;
   failures?: ItemFailures;
+  isFirst: boolean;
+  isLast: boolean;
+  moveTargets: QualityProfileMoveTarget[];
   onCreateGroupPress?: (qualityId: number) => void;
   onItemAllowedChange: (qualityId: number, allowed: boolean) => void;
   onSizeChange: (change: SizeChanged) => void;
+  onMoveItem: (itemId: string, containerId: string, offset: number) => void;
+  onMoveItemTo: (
+    itemId: string,
+    sourceContainerId: string,
+    targetContainerId: string
+  ) => void;
 }
 
 function QualityProfileItem({
@@ -45,12 +57,18 @@ function QualityProfileItem({
   maxSize,
   preferredSize,
   failures,
+  isFirst,
+  isLast,
+  moveTargets,
   onCreateGroupPress,
   onItemAllowedChange,
   onSizeChange,
+  onMoveItem,
+  onMoveItemTo,
 }: QualityProfileItemProps) {
+  const itemId = qualityKey(qualityId);
   const { ref, handleRef, isDragging } = useSortable({
-    id: qualityKey(qualityId),
+    id: itemId,
     index,
     group: containerId,
     type: 'quality',
@@ -70,6 +88,36 @@ function QualityProfileItem({
   const handleCreateGroupPress = useCallback(() => {
     onCreateGroupPress?.(qualityId);
   }, [qualityId, onCreateGroupPress]);
+
+  const moveOptions: SortableHandleOption[] = [
+    {
+      isDisabled: isFirst,
+      label: translate('MoveItemUp', { item: name }),
+      onPress: () => onMoveItem(itemId, containerId, -1),
+    },
+    {
+      isDisabled: isLast,
+      label: translate('MoveItemDown', { item: name }),
+      onPress: () => onMoveItem(itemId, containerId, 1),
+    },
+    ...(containerId === ROOT_CONTAINER
+      ? []
+      : [
+          {
+            label: translate('MoveItemOutsideGroup', { item: name }),
+            onPress: () => onMoveItemTo(itemId, containerId, ROOT_CONTAINER),
+          },
+        ]),
+    ...moveTargets
+      .filter((target) => target.id !== containerId)
+      .map((target) => ({
+        label: translate('MoveItemTo', {
+          item: name,
+          destination: target.name,
+        }),
+        onPress: () => onMoveItemTo(itemId, containerId, target.id),
+      })),
+  ];
 
   return (
     <div
@@ -131,13 +179,12 @@ function QualityProfileItem({
       ) : null}
 
       {mode === 'editSizes' ? null : (
-        <div ref={handleRef} className={styles.dragHandle}>
-          <Icon
-            className={styles.dragIcon}
-            title={translate('CreateGroup')}
-            name={icons.REORDER}
-          />
-        </div>
+        <SortableHandle
+          className={styles.dragHandle}
+          handleRef={handleRef}
+          label={name}
+          options={moveOptions}
+        />
       )}
     </div>
   );
