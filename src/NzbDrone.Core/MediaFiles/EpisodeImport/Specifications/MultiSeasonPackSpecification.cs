@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
@@ -41,7 +42,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             if (IsAbsoluteOnly(localEpisode.FileEpisodeInfo))
             {
                 // Packs often restart absolute numbering each season, so the folder is the only hint of which season the file belongs to
-                var folderSeason = Parser.Parser.ParseSeasonFolder(Path.GetFileName(Path.GetDirectoryName(localEpisode.Path)));
+                var folderSeason = GetFolderSeason(localEpisode.Path);
 
                 if (folderSeason.HasValue && !localEpisode.Episodes.All(e => e.SeasonNumber == folderSeason || e.SceneSeasonNumber == folderSeason))
                 {
@@ -72,6 +73,36 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             }
 
             return fileEpisodeInfo.SeasonNumbers.Any() && !fileEpisodeInfo.IsMiniSeries;
+        }
+
+        private static int? GetFolderSeason(string path)
+        {
+            var folder = Path.GetDirectoryName(path);
+
+            while (folder.IsNotNullOrWhiteSpace())
+            {
+                var folderName = Path.GetFileName(folder);
+
+                if (folderName.IsNotNullOrWhiteSpace())
+                {
+                    var season = Parser.Parser.ParseSeasonFolder(folderName);
+
+                    if (season.HasValue)
+                    {
+                        return season;
+                    }
+
+                    // Stop at the pack's own folder, anything above it is unrelated to the file
+                    if (Parser.Parser.ParseTitle(folderName)?.IsMultiSeason == true)
+                    {
+                        return null;
+                    }
+                }
+
+                folder = Path.GetDirectoryName(folder);
+            }
+
+            return null;
         }
 
         private static bool IsAbsoluteOnly(ParsedEpisodeInfo fileEpisodeInfo)

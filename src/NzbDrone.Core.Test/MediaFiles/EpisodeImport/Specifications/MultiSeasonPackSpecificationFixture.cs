@@ -116,6 +116,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 
         [TestCase(@"C:\Test\Series.Title.S01-S03\[RlsGrp] Series Title S2 [BD 1080p]\[RlsGrp] Series Title - 05 [1080p].mkv")]
         [TestCase(@"C:\Test\Series.Title.S01-S03\Season 2\[RlsGrp] Series Title - 05 [1080p].mkv")]
+        [TestCase(@"C:\Test\Series.Title.S01-S03\Season 2\Disc 1\[RlsGrp] Series Title - 05 [1080p].mkv")]
         public void should_reject_absolute_numbered_anime_file_mapped_outside_its_season_folder(string path)
         {
             GivenAnimeFileInFolder(path, new Episode { SeasonNumber = 1, EpisodeNumber = 5 });
@@ -138,6 +139,14 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         public void should_accept_absolute_numbered_anime_file_mapped_to_its_scene_season_folder()
         {
             GivenAnimeFileInFolder(@"C:\Test\Series.Title.S01-S03\Season 2\[RlsGrp] Series Title - 17 [1080p].mkv", new Episode { SeasonNumber = 1, EpisodeNumber = 17, SceneSeasonNumber = 2 });
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_not_look_for_season_folder_above_the_pack()
+        {
+            GivenAnimeFileInFolder(@"C:\Season 2\Series.Title.S01-S03\Disc 1\[RlsGrp] Series Title - 05 [1080p].mkv", new Episode { SeasonNumber = 1, EpisodeNumber = 5 });
 
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
