@@ -86,9 +86,9 @@ namespace NzbDrone.Core.Tv
 
                 _logger.ProgressInfo("{0} moved successfully to {1}", series.Title, destinationPath);
 
-                UpdatePath(series.Id, destinationPath);
+                var updatedSeries = UpdatePath(series.Id, destinationPath);
 
-                _eventAggregator.PublishEvent(new SeriesMovedEvent(series, sourcePath, destinationPath));
+                _eventAggregator.PublishEvent(new SeriesMovedEvent(updatedSeries, sourcePath, destinationPath));
             }
             catch (IOException ex)
             {
@@ -103,13 +103,13 @@ namespace NzbDrone.Core.Tv
             }
         }
 
-        private void UpdatePath(int seriesId, string path)
+        private Series UpdatePath(int seriesId, string path)
         {
             var series = _seriesService.GetSeries(seriesId);
 
             series.Path = path;
             series.PendingPath = null;
-            _seriesService.UpdateSeries(series);
+            return _seriesService.UpdateSeries(series);
         }
 
         public void Execute(MoveSeriesCommand message)
