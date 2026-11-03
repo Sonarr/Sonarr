@@ -2,10 +2,12 @@ import { useSortable } from '@dnd-kit/react/sortable';
 import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';
 import Card from 'Components/Card';
-import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import SortableHandle, {
+  SortableHandleOption,
+} from 'Components/Sortable/SortableHandle';
 import TagList from 'Components/TagList';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import { Tag } from 'Tags/useTags';
@@ -42,6 +44,9 @@ interface DelayProfileProps {
   torrentDelay: number;
   tags: number[];
   tagList: ReadonlyArray<Tag>;
+  isFirst: boolean;
+  isLast: boolean;
+  onMove: (id: number, offset: number) => void;
 }
 
 function DelayProfile({
@@ -54,6 +59,9 @@ function DelayProfile({
   torrentDelay,
   tags,
   tagList,
+  isFirst,
+  isLast,
+  onMove,
 }: DelayProfileProps) {
   const { deleteDelayProfile } = useDeleteDelayProfile(id);
 
@@ -80,6 +88,20 @@ function DelayProfile({
       preferredProtocol: titleCase(preferredProtocol),
     });
   }, [preferredProtocol, enableUsenet, enableTorrent]);
+
+  const itemLabel = translate('DelayProfileNumber', { number: index + 1 });
+  const moveOptions: SortableHandleOption[] = [
+    {
+      isDisabled: isFirst,
+      label: translate('MoveItemUp', { item: itemLabel }),
+      onPress: () => onMove(id, -1),
+    },
+    {
+      isDisabled: isLast,
+      label: translate('MoveItemDown', { item: itemLabel }),
+      onPress: () => onMove(id, 1),
+    },
+  ];
 
   const handleEditDelayProfilePress = useCallback(() => {
     setIsEditDelayProfileModalOpen(true);
@@ -117,9 +139,12 @@ function DelayProfile({
       >
         <div className={styles.colDrag}>
           {id === 1 ? null : (
-            <div ref={handleRef} className={styles.dragHandle}>
-              <Icon name={icons.REORDER} />
-            </div>
+            <SortableHandle
+              className={styles.dragHandle}
+              handleRef={handleRef}
+              label={itemLabel}
+              options={moveOptions}
+            />
           )}
         </div>
 

@@ -1,4 +1,4 @@
-import { move } from '@dnd-kit/helpers';
+import { arrayMove, move } from '@dnd-kit/helpers';
 import { DragDropProvider, DragEndEvent, DragOverEvent } from '@dnd-kit/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Form from 'Components/Form/Form';
@@ -123,6 +123,28 @@ function TableOptionsModal({
     [columnsByName, onTableOptionChange]
   );
 
+  const handleMoveColumn = useCallback(
+    (name: string, offset: number) => {
+      const index = displayedColumns.findIndex(
+        (column) => column.name === name
+      );
+      const nextIndex = index + offset;
+
+      if (
+        index === -1 ||
+        nextIndex < 0 ||
+        nextIndex >= displayedColumns.length
+      ) {
+        return;
+      }
+
+      onTableOptionChange({
+        columns: arrayMove(displayedColumns, index, nextIndex),
+      });
+    },
+    [displayedColumns, onTableOptionChange]
+  );
+
   useEffect(() => {
     setPageSize(propsPageSize);
   }, [propsPageSize]);
@@ -186,7 +208,10 @@ function TableOptionsModal({
                             isVisible={isVisible}
                             isModifiable={isModifiable}
                             index={index}
+                            isFirst={index === 0}
+                            isLast={index === displayedColumns.length - 1}
                             onVisibleChange={handleVisibleChange}
+                            onMove={handleMoveColumn}
                           />
                         );
                       })}

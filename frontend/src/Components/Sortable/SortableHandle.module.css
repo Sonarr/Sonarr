@@ -1,0 +1,25 @@
+.controls,
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--inkMuted);
+  touch-action: none;
+
+  &:hover {
+    color: var(--ink);
+  }
+}
+
+.controls > .button {
+  cursor: grab;
+}

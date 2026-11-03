@@ -1,4 +1,4 @@
-import { move } from '@dnd-kit/helpers';
+import { arrayMove, move } from '@dnd-kit/helpers';
 import { DragDropProvider, DragEndEvent, DragOverEvent } from '@dnd-kit/react';
 import React, { useCallback, useState } from 'react';
 import Icon from 'Components/Icon';
@@ -72,6 +72,23 @@ function DelayProfiles() {
     [reorderDelayProfile]
   );
 
+  const handleMove = useCallback(
+    (id: number, offset: number) => {
+      const index = items.findIndex((item) => item.id === id);
+      const nextIndex = index + offset;
+
+      if (index === -1 || nextIndex < 0 || nextIndex >= items.length) {
+        return;
+      }
+
+      const moved = arrayMove([...items], index, nextIndex);
+      const after = nextIndex > 0 ? moved[nextIndex - 1].id : undefined;
+
+      reorderDelayProfile({ id, after });
+    },
+    [items, reorderDelayProfile]
+  );
+
   return (
     <PageSectionContent
       errorMessage={translate('DelayProfilesLoadError')}
@@ -105,13 +122,23 @@ function DelayProfiles() {
                 key={item.id}
                 {...item}
                 index={index}
+                isFirst={index === 0}
+                isLast={index === displayedItems.length - 1}
                 tagList={tagList}
+                onMove={handleMove}
               />
             );
           })}
 
           {defaultProfile ? (
-            <DelayProfile {...defaultProfile} index={-1} tagList={tagList} />
+            <DelayProfile
+              {...defaultProfile}
+              index={-1}
+              isFirst={true}
+              isLast={true}
+              tagList={tagList}
+              onMove={handleMove}
+            />
           ) : null}
 
           <Link className={styles.addRow} onPress={handleAddDelayProfilePress}>

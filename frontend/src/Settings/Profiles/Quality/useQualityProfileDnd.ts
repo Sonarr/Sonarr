@@ -130,6 +130,45 @@ function moveGroup(board: Board, event: DragEndEvent): Board {
   };
 }
 
+function moveBoardItem(
+  board: Board,
+  containerId: string,
+  itemId: string,
+  offset: number
+): Board {
+  const container = board[containerId] ?? [];
+  const index = container.indexOf(itemId);
+  const nextIndex = index + offset;
+
+  if (index === -1 || nextIndex < 0 || nextIndex >= container.length) {
+    return board;
+  }
+
+  return {
+    ...board,
+    [containerId]: arrayMove(container, index, nextIndex),
+  };
+}
+
+function moveBoardItemToContainer(
+  board: Board,
+  sourceContainerId: string,
+  targetContainerId: string,
+  itemId: string
+): Board {
+  if (sourceContainerId === targetContainerId) {
+    return board;
+  }
+
+  return {
+    ...board,
+    [sourceContainerId]: (board[sourceContainerId] ?? []).filter(
+      (key) => key !== itemId
+    ),
+    [targetContainerId]: [...(board[targetContainerId] ?? []), itemId],
+  };
+}
+
 export default function useQualityProfileDnd(
   items: QualityProfileItems,
   onItemsChange: (items: QualityProfileItems) => void
@@ -171,5 +210,41 @@ export default function useQualityProfileDnd(
     [items, onItemsChange]
   );
 
-  return { displayItems, handleDragStart, handleDragOver, handleDragEnd };
+  const handleMoveItem = useCallback(
+    (itemId: string, containerId: string, offset: number) => {
+      const current = toBoard(items);
+      const next = moveBoardItem(current, containerId, itemId, offset);
+
+      if (next !== current) {
+        onItemsChange(fromBoard(next, items));
+      }
+    },
+    [items, onItemsChange]
+  );
+
+  const handleMoveItemTo = useCallback(
+    (itemId: string, sourceContainerId: string, targetContainerId: string) => {
+      const current = toBoard(items);
+      const next = moveBoardItemToContainer(
+        current,
+        sourceContainerId,
+        targetContainerId,
+        itemId
+      );
+
+      if (next !== current) {
+        onItemsChange(fromBoard(next, items));
+      }
+    },
+    [items, onItemsChange]
+  );
+
+  return {
+    displayItems,
+    handleDragStart,
+    handleDragOver,
+    handleDragEnd,
+    handleMoveItem,
+    handleMoveItemTo,
+  };
 }

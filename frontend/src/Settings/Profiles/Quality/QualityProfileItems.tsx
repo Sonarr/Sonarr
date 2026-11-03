@@ -8,10 +8,19 @@ import QualityProfileItem from './QualityProfileItem';
 import { ItemFailures } from './qualityProfileItemFailures';
 import QualityProfileItemGroup from './QualityProfileItemGroup';
 import { SizeChanged } from './QualityProfileItemSize';
-import { DisplayItem, ROOT_CONTAINER } from './useQualityProfileDnd';
+import {
+  DisplayItem,
+  groupContainerKey,
+  ROOT_CONTAINER,
+} from './useQualityProfileDnd';
 import styles from './QualityProfileItems.module.css';
 
 export type EditQualityProfileMode = 'default' | 'editGroups' | 'editSizes';
+
+export interface QualityProfileMoveTarget {
+  id: string;
+  name: string;
+}
 
 interface QualityProfileItemsProps {
   mode: EditQualityProfileMode;
@@ -26,6 +35,12 @@ interface QualityProfileItemsProps {
   onGroupAllowedChange: (id: number, allowed: boolean) => void;
   onItemGroupNameChange: (groupId: number, name: string) => void;
   onSizeChange: (sizeChange: SizeChanged) => void;
+  onMoveItem: (itemId: string, containerId: string, offset: number) => void;
+  onMoveItemTo: (
+    itemId: string,
+    sourceContainerId: string,
+    targetContainerId: string
+  ) => void;
 }
 
 interface ModeOption {
@@ -46,6 +61,8 @@ function QualityProfileItems({
   onGroupAllowedChange,
   onItemGroupNameChange,
   onSizeChange,
+  onMoveItem,
+  onMoveItemTo,
 }: QualityProfileItemsProps) {
   const modeOptions: ModeOption[] = useMemo(
     () => [
@@ -54,6 +71,21 @@ function QualityProfileItems({
       { key: 'editSizes', label: translate('Sizes') },
     ],
     []
+  );
+
+  const moveTargets = useMemo<QualityProfileMoveTarget[]>(
+    () =>
+      displayItems.flatMap((entry) =>
+        entry.kind === 'group'
+          ? [
+              {
+                id: groupContainerKey(entry.group.id),
+                name: entry.group.name,
+              },
+            ]
+          : []
+      ),
+    [displayItems]
   );
 
   const handleSelectMode = useCallback(
@@ -143,11 +175,16 @@ function QualityProfileItems({
                 allowed={entry.group.allowed}
                 items={entry.items}
                 failuresByQualityId={failuresByQualityId}
+                isFirst={index === 0}
+                isLast={index === displayItems.length - 1}
+                moveTargets={moveTargets}
                 onGroupAllowedChange={onGroupAllowedChange}
                 onItemAllowedChange={onItemAllowedChange}
                 onItemGroupNameChange={onItemGroupNameChange}
                 onDeleteGroupPress={onDeleteGroupPress}
                 onSizeChange={onSizeChange}
+                onMoveItem={onMoveItem}
+                onMoveItemTo={onMoveItemTo}
               />
             );
           }
@@ -168,9 +205,14 @@ function QualityProfileItems({
               maxSize={maxSize}
               preferredSize={preferredSize}
               failures={failuresByQualityId.get(quality.id)}
+              isFirst={index === 0}
+              isLast={index === displayItems.length - 1}
+              moveTargets={moveTargets}
               onCreateGroupPress={onCreateGroupPress}
               onItemAllowedChange={onItemAllowedChange}
               onSizeChange={onSizeChange}
+              onMoveItem={onMoveItem}
+              onMoveItemTo={onMoveItemTo}
             />
           );
         })}
