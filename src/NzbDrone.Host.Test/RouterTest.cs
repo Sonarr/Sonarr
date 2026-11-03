@@ -26,7 +26,7 @@ namespace NzbDrone.App.Test
             serviceProviderMock.Setup(c => c.SetPermissions(ServiceProvider.SERVICE_NAME));
 
             Mocker.GetMock<IProcessProvider>()
-                  .Setup(c => c.SpawnNewProcess("sc.exe", It.IsAny<string>(), null, true));
+                  .Setup(c => c.SpawnNewProcess("sc.exe", It.IsAny<string[]>(), null, true));
 
             Mocker.GetMock<IRuntimeInfo>().SetupGet(c => c.IsUserInteractive).Returns(true);
 

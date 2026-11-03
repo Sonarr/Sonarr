@@ -26,9 +26,9 @@ namespace NzbDrone.Common.Processes
         bool Exists(int processId);
         bool Exists(string processName);
         ProcessPriorityClass GetCurrentProcessPriority();
-        Process Start(string path, string args = null, StringDictionary environmentVariables = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null);
-        Process SpawnNewProcess(string path, string args = null, StringDictionary environmentVariables = null, bool noWindow = false);
-        ProcessOutput StartAndCapture(string path, string args = null, StringDictionary environmentVariables = null);
+        Process Start(string path, IEnumerable<string> args = null, StringDictionary environmentVariables = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null);
+        Process SpawnNewProcess(string path, IEnumerable<string> args = null, StringDictionary environmentVariables = null, bool noWindow = false);
+        ProcessOutput StartAndCapture(string path, IEnumerable<string> args = null, StringDictionary environmentVariables = null);
     }
 
     public class ProcessProvider : IProcessProvider
@@ -106,13 +106,13 @@ namespace NzbDrone.Common.Processes
             process.Start();
         }
 
-        public Process Start(string path, string args = null, StringDictionary environmentVariables = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null)
+        public Process Start(string path, IEnumerable<string> args = null, StringDictionary environmentVariables = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null)
         {
             (path, args) = GetPathAndArgs(path, args);
 
             var logger = LogManager.GetLogger(new FileInfo(path).Name);
 
-            var startInfo = new ProcessStartInfo(path, args)
+            var startInfo = new ProcessStartInfo(path)
             {
                 CreateNoWindow = true,
                 UseShellExecute = false,
@@ -122,6 +122,14 @@ namespace NzbDrone.Common.Processes
                 StandardOutputEncoding = Encoding.UTF8,
                 StandardErrorEncoding = Encoding.UTF8
             };
+
+            if (args != null)
+            {
+                foreach (var arg in args)
+                {
+                    startInfo.ArgumentList.Add(arg);
+                }
+            }
 
             if (environmentVariables != null)
             {
@@ -197,7 +205,7 @@ namespace NzbDrone.Common.Processes
             return process;
         }
 
-        public Process SpawnNewProcess(string path, string args = null, StringDictionary environmentVariables = null, bool noWindow = false)
+        public Process SpawnNewProcess(string path, IEnumerable<string> args = null, StringDictionary environmentVariables = null, bool noWindow = false)
         {
             (path, args) = GetPathAndArgs(path, args);
 
@@ -217,7 +225,7 @@ namespace NzbDrone.Common.Processes
             return process;
         }
 
-        public ProcessOutput StartAndCapture(string path, string args = null, StringDictionary environmentVariables = null)
+        public ProcessOutput StartAndCapture(string path, IEnumerable<string> args = null, StringDictionary environmentVariables = null)
         {
             var output = new ProcessOutput();
             var process = Start(path,
@@ -352,21 +360,29 @@ namespace NzbDrone.Common.Processes
             return processes;
         }
 
-        private (string Path, string Args) GetPathAndArgs(string path, string args)
+        private (string Path, IEnumerable<string> Args) GetPathAndArgs(string path, IEnumerable<string> args)
         {
+            var argList = args?.ToList() ?? new List<string>();
+
             if (OsInfo.IsWindows && path.EndsWith(".bat", StringComparison.InvariantCultureIgnoreCase))
             {
-                return ("cmd.exe", $"/c {path} {args}");
+                var newArgs = new List<string> { "/c", path };
+                newArgs.AddRange(argList);
+                return ("cmd.exe", newArgs);
             }
 
             if (OsInfo.IsWindows && path.EndsWith(".ps1", StringComparison.InvariantCultureIgnoreCase))
             {
-                return ("powershell.exe", $"-ExecutionPolicy Bypass -NoProfile -File {path} {args}");
+                var newArgs = new List<string> { "-ExecutionPolicy", "Bypass", "-NoProfile", "-File", path };
+                newArgs.AddRange(argList);
+                return ("powershell.exe", newArgs);
             }
 
             if (OsInfo.IsWindows && path.EndsWith(".py", StringComparison.InvariantCultureIgnoreCase))
             {
-                return ("python.exe", $"{path} {args}");
+                var newArgs = new List<string> { path };
+                newArgs.AddRange(argList);
+                return ("python.exe", newArgs);
             }
 
             return (path, args);
