@@ -56,8 +56,8 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             };
 
             Mocker.GetMock<ISeriesService>()
-                  .Setup(s => s.FindByTitle(It.IsAny<string>()))
-                  .Returns(_series);
+                  .Setup(s => s.FindAllByTitle(It.IsAny<string>()))
+                  .Returns(new List<Series> { _series });
 
             Mocker.GetMock<ISceneMappingService>()
                   .Setup(v => v.FindSceneMappings(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<IEnumerable<int>>()))

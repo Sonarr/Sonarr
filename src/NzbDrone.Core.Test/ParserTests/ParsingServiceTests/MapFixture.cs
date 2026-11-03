@@ -62,13 +62,29 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Mocker.GetMock<IEpisodeService>()
                   .Setup(s => s.GetEpisodeBySeries(It.IsAny<int>()))
                   .Returns(new List<Episode>());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.FindByTvRageId(It.IsAny<int>()))
+                  .Returns(new List<Series>());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.FindByImdbId(It.IsAny<string>()))
+                  .Returns(new List<Series>());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.FindAllByTitle(It.IsAny<string>()))
+                  .Returns(new List<Series>());
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.FindAllByTitle(It.IsAny<string>(), It.IsAny<int>()))
+                  .Returns(new List<Series>());
         }
 
         private void GivenMatchBySeriesTitle()
         {
             Mocker.GetMock<ISeriesService>()
-                  .Setup(s => s.FindByTitle(It.IsAny<string>()))
-                  .Returns(_series);
+                  .Setup(s => s.FindAllByTitle(It.IsAny<string>()))
+                  .Returns(new List<Series> { _series });
         }
 
         private void GivenMatchByTvdbId()
@@ -82,7 +98,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         {
             Mocker.GetMock<ISeriesService>()
                   .Setup(s => s.FindByTvRageId(It.IsAny<int>()))
-                  .Returns(_series);
+                  .Returns(new List<Series> { _series });
         }
 
         private void GivenParseResultSeriesDoesntMatchSearchCriteria()
@@ -98,7 +114,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId, _series.ImdbId);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.FindByTitle(It.IsAny<string>()), Times.Once());
+                  .Verify(v => v.FindAllByTitle(It.IsAny<string>()), Times.Once());
         }
 
         [Test]
@@ -148,7 +164,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId, _series.ImdbId, _singleEpisodeSearchCriteria);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.FindByTitle(It.IsAny<string>()), Times.Never());
+                  .Verify(v => v.FindAllByTitle(It.IsAny<string>()), Times.Never());
         }
 
         [Test]
@@ -159,7 +175,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Subject.Map(_parsedEpisodeInfo, 10, 10, null, _singleEpisodeSearchCriteria);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.FindByTitle(It.IsAny<string>()), Times.Once());
+                  .Verify(v => v.FindAllByTitle(It.IsAny<string>()), Times.Once());
         }
 
         [Test]
@@ -175,13 +191,13 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             };
 
             Mocker.GetMock<ISeriesService>()
-                  .Setup(s => s.FindByTitle(_parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear, _parsedEpisodeInfo.SeriesTitleInfo.Year))
-                  .Returns(_series);
+                  .Setup(s => s.FindAllByTitle(_parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear, _parsedEpisodeInfo.SeriesTitleInfo.Year))
+                  .Returns(new List<Series> { _series });
 
             Subject.Map(_parsedEpisodeInfo, 10, 10, null, _singleEpisodeSearchCriteria);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.FindByTitle(It.IsAny<string>(), It.IsAny<int>()), Times.Once());
+                  .Verify(v => v.FindAllByTitle(It.IsAny<string>(), It.IsAny<int>()), Times.Once());
         }
 
         [Test]
@@ -249,7 +265,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId, _series.ImdbId, _singleEpisodeSearchCriteria);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.FindByTitle(It.IsAny<string>()), Times.Never());
+                  .Verify(v => v.FindAllByTitle(It.IsAny<string>()), Times.Never());
         }
 
         [Test]
@@ -260,7 +276,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId, _series.ImdbId, _singleEpisodeSearchCriteria);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.FindByTitle(It.IsAny<string>()), Times.Never());
+                  .Verify(v => v.FindAllByTitle(It.IsAny<string>()), Times.Never());
         }
 
         [Test]
@@ -367,8 +383,8 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             _parsedEpisodeInfo.SeriesTitleInfo.Year = _series.Year;
 
             Mocker.GetMock<ISeriesService>()
-                .Setup(s => s.FindByTitle(title, _series.Year))
-                .Returns(_series);
+                .Setup(s => s.FindAllByTitle(title, _series.Year))
+                .Returns(new List<Series> { _series });
 
             var result = Subject.Map(_parsedEpisodeInfo, 0, 0, "", null);
 
@@ -389,8 +405,8 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             _parsedEpisodeInfo.SeriesTitleInfo.Year = _series.Year;
 
             Mocker.GetMock<ISeriesService>()
-                .Setup(s => s.FindByTitle($"{title} {_series.Year}"))
-                .Returns(_series);
+                .Setup(s => s.FindAllByTitle($"{title} {_series.Year}"))
+                .Returns(new List<Series> { _series });
 
             var result = Subject.Map(_parsedEpisodeInfo, 0, 0, "", null);
 
@@ -460,6 +476,111 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
             result.MappedSeasonNumber.Should().Be(1);
             result.SceneMapping.Should().BeNull();
+        }
+
+        [Test]
+        public void should_report_ambiguous_series_when_title_matches_multiple_series()
+        {
+            var otherSeries = Builder<Series>.CreateNew()
+                                             .With(s => s.Id = 2)
+                                             .Build();
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.FindAllByTitle(It.IsAny<string>()))
+                  .Returns(new List<Series> { _series, otherSeries });
+
+            var result = Subject.Map(_parsedEpisodeInfo, 0, 0, null);
+
+            result.Series.Should().BeNull();
+            result.AmbiguousSeries.Should().BeEquivalentTo(new[] { _series, otherSeries });
+        }
+
+        [Test]
+        public void should_match_by_id_when_title_matches_multiple_series()
+        {
+            var otherSeries = Builder<Series>.CreateNew()
+                                             .With(s => s.Id = 2)
+                                             .Build();
+
+            _series.TvdbId = 81189;
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.FindAllByTitle(It.IsAny<string>()))
+                  .Returns(new List<Series> { _series, otherSeries });
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.FindByTvdbId(81189))
+                  .Returns(_series);
+
+            var result = Subject.Map(_parsedEpisodeInfo, 81189, 0, null);
+
+            result.Series.Should().Be(_series);
+            result.SeriesMatchType.Should().Be(SeriesMatchType.Id);
+        }
+
+        [Test]
+        public void should_select_series_by_title_when_multiple_series_share_an_imdb_id()
+        {
+            var otherSeries = Builder<Series>.CreateNew()
+                                             .With(s => s.Id = 2)
+                                             .With(s => s.CleanTitle = "otherseries")
+                                             .Build();
+
+            _series.CleanTitle = "30stone";
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.FindByImdbId("tt0496424"))
+                  .Returns(new List<Series> { otherSeries, _series });
+
+            var result = Subject.Map(_parsedEpisodeInfo, 0, 0, "tt0496424");
+
+            result.Series.Should().Be(_series);
+        }
+
+        [Test]
+        public void should_report_ambiguous_series_when_multiple_series_share_an_imdb_id_and_title_does_not_match()
+        {
+            var series = Builder<Series>.CreateNew()
+                                        .With(s => s.Id = 2)
+                                        .With(s => s.CleanTitle = "seriesa")
+                                        .Build();
+
+            var otherSeries = Builder<Series>.CreateNew()
+                                             .With(s => s.Id = 3)
+                                             .With(s => s.CleanTitle = "seriesb")
+                                             .Build();
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.FindByImdbId("tt0496424"))
+                  .Returns(new List<Series> { series, otherSeries });
+
+            var result = Subject.Map(_parsedEpisodeInfo, 0, 0, "tt0496424");
+
+            result.Series.Should().BeNull();
+            result.AmbiguousSeries.Should().BeEquivalentTo(new[] { series, otherSeries });
+        }
+
+        [Test]
+        public void should_report_ambiguous_series_when_multiple_series_share_a_tvrage_id_and_title_does_not_match()
+        {
+            var series = Builder<Series>.CreateNew()
+                                        .With(s => s.Id = 2)
+                                        .With(s => s.CleanTitle = "seriesa")
+                                        .Build();
+
+            var otherSeries = Builder<Series>.CreateNew()
+                                             .With(s => s.Id = 3)
+                                             .With(s => s.CleanTitle = "seriesb")
+                                             .Build();
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.FindByTvRageId(12345))
+                  .Returns(new List<Series> { series, otherSeries });
+
+            var result = Subject.Map(_parsedEpisodeInfo, 0, 12345, null);
+
+            result.Series.Should().BeNull();
+            result.AmbiguousSeries.Should().BeEquivalentTo(new[] { series, otherSeries });
         }
     }
 }
