@@ -10,6 +10,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 {
     public class MultiSeasonPackSpecification : IImportDecisionEngineSpecification
     {
+        private const int MaxFolderDepth = 3;
+
         private readonly Logger _logger;
 
         public MultiSeasonPackSpecification(Logger logger)
@@ -79,7 +81,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         {
             var folder = Path.GetDirectoryName(path);
 
-            while (folder.IsNotNullOrWhiteSpace())
+            for (var depth = 0; depth < MaxFolderDepth && folder.IsNotNullOrWhiteSpace(); depth++)
             {
                 var folderName = Path.GetFileName(folder);
 
