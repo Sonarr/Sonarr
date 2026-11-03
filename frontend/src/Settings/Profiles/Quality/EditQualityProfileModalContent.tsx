@@ -290,8 +290,14 @@ function EditQualityProfileModalContent({
     [updateValue]
   );
 
-  const { displayItems, handleDragStart, handleDragOver, handleDragEnd } =
-    useQualityProfileDnd(items?.value ?? [], handleItemsChange);
+  const {
+    displayItems,
+    handleDragStart,
+    handleDragOver,
+    handleDragEnd,
+    handleMoveItem,
+    handleMoveItemTo,
+  } = useQualityProfileDnd(items?.value ?? [], handleItemsChange);
 
   const handleChangeMode = useCallback((newMode: EditQualityProfileMode) => {
     setMode(newMode);
@@ -501,6 +507,8 @@ function EditQualityProfileModalContent({
                     onGroupAllowedChange={handleGroupAllowedChange}
                     onItemGroupNameChange={handleGroupNameChange}
                     onSizeChange={handleSizeChange}
+                    onMoveItem={handleMoveItem}
+                    onMoveItemTo={handleMoveItemTo}
                   />
                 </DragDropProvider>
               </div>
