@@ -176,11 +176,13 @@ function FilterBuilderRow<T>({
 
   const ValueComponent = getRowValueConnector(selectedFilterBuilderProp);
   const selectedFilterLabel = selectedFilterBuilderProp?.label;
+  const addFilterLabel = translate('AddFilterCondition');
+
   const filterLabel =
     typeof selectedFilterLabel === 'function'
       ? selectedFilterLabel()
       : selectedFilterLabel;
-  const addFilterLabel = translate('AddFilterCondition');
+
   const removeFilterLabel = filterLabel
     ? translate('RemoveFilterConditionWithName', {
         name: filterLabel,
