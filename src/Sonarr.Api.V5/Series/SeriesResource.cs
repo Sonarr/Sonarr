@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
@@ -82,7 +81,7 @@ public static class SeriesResourceMapper
             Overview = model.Overview,
             Network = model.Network,
             AirTime = model.AirTime,
-            Images = model.Images.JsonClone(),
+            Images = model.Images?.Select(i => new MediaCover(i.CoverType, i.RemoteUrl) { Url = i.Url }).ToList(),
             Language = model.Language ?? Language.English,
             SeasonType = model.SeasonType,
             Seasons = model.Seasons.ToResource(includeSeasonImages),

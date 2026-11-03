@@ -16,6 +16,8 @@ namespace NzbDrone.Core.Tv
         Series FindByTvRageId(int tvRageId);
         Series FindByImdbId(string imdbId);
         Series FindByPath(string path);
+        List<Series> FindByIds(List<int> ids);
+        List<Series> FindByStatus(SeriesStatusType status);
         Dictionary<int, int> AllSeriesTvdbIds();
         Dictionary<int, string> AllSeriesPaths();
         Dictionary<int, List<int>> AllSeriesTags();
@@ -84,6 +86,16 @@ namespace NzbDrone.Core.Tv
         {
             return Query(s => s.Path == path)
                         .FirstOrDefault();
+        }
+
+        public List<Series> FindByIds(List<int> ids)
+        {
+            return Query(s => ids.Contains(s.Id));
+        }
+
+        public List<Series> FindByStatus(SeriesStatusType status)
+        {
+            return Query(s => s.Status == status);
         }
 
         public Dictionary<int, int> AllSeriesTvdbIds()

@@ -36,7 +36,7 @@ namespace Sonarr.Api.V3.Calendar
             var startUse = start ?? DateTime.Today;
             var endUse = end ?? DateTime.Today.AddDays(2);
             var episodes = _episodeService.EpisodesBetweenDates(startUse, endUse, unmonitored, true);
-            var allSeries = _seriesService.GetAllSeries();
+            var seriesById = _seriesService.FindSeries(episodes.Select(e => e.SeriesId).Distinct()).ToDictionary(s => s.Id);
             var parsedTags = new List<int>();
             var result = new List<Episode>();
 
@@ -47,9 +47,7 @@ namespace Sonarr.Api.V3.Calendar
 
             foreach (var episode in episodes)
             {
-                var series = allSeries.SingleOrDefault(s => s.Id == episode.SeriesId);
-
-                if (series == null)
+                if (!seriesById.TryGetValue(episode.SeriesId, out var series))
                 {
                     continue;
                 }
@@ -58,6 +56,8 @@ namespace Sonarr.Api.V3.Calendar
                 {
                     continue;
                 }
+
+                episode.Series = series;
 
                 result.Add(episode);
             }
