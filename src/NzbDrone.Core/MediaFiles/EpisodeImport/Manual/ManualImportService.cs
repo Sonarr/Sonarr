@@ -195,7 +195,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 localEpisode.IndexerFlags = (IndexerFlags)indexerFlags;
                 localEpisode.ReleaseType = releaseType;
 
-                return MapItem(_importDecisionMaker.GetDecision(localEpisode, downloadClientItem), rootFolder, downloadId, null);
+                var decision = _importDecisionMaker.GetDecision(localEpisode, downloadClientItem);
+
+                // The user picked the episodes, so the season no longer has to come from the file name
+                var rejections = decision.Rejections.Where(r => r.Reason != ImportRejectionReason.MultiSeason).ToArray();
+
+                return MapItem(new ImportDecision(localEpisode, rejections), rootFolder, downloadId, null);
             }
 
             // This case will happen if the user selected a season, but didn't select the episodes in the season then changed the language or quality.

@@ -3,7 +3,9 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -49,7 +51,18 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_false_if_is_a_multi_season_release()
         {
-            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
+            var decision = Subject.IsSatisfiedBy(_remoteEpisode, new());
+
+            decision.Accepted.Should().BeFalse();
+            decision.Reason.Should().Be(DownloadRejectionReason.MultiSeason);
+        }
+
+        [Test]
+        public void should_return_false_if_is_a_multi_season_release_in_interactive_search()
+        {
+            var information = new ReleaseDecisionInformation(false, new SeasonSearchCriteria { SeasonNumber = 3, InteractiveSearch = true });
+
+            Subject.IsSatisfiedBy(_remoteEpisode, information).Accepted.Should().BeFalse();
         }
     }
 }
