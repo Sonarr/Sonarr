@@ -1,11 +1,14 @@
 using FluentValidation;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using Sonarr.Http;
+using Sonarr.Http.Authentication;
 using Sonarr.Http.Validation;
 
 namespace Sonarr.Api.V3.Config
 {
     [V3ApiController("config/indexer")]
+    [RequiresPermission(SonarrRole.Admin)]
     public class IndexerConfigController : ConfigController<IndexerConfigResource>
     {
         public IndexerConfigController(IConfigService configService)

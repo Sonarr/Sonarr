@@ -10,5 +10,8 @@ namespace NzbDrone.Core.Authentication
         public string Password { get; set; }
         public string Salt { get; set; }
         public int Iterations { get; set; }
+        public string OidcSubject { get; set; }
+        public string OidcGroups { get; set; }
+        public SonarrRole Role { get; set; } = SonarrRole.Admin;
     }
 }

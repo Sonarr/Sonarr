@@ -1,13 +1,16 @@
 using FluentValidation;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.ImportLists;
 using NzbDrone.Core.Validation;
 using Sonarr.Http;
+using Sonarr.Http.Authentication;
 
 namespace Sonarr.Api.V3.Config
 {
     [V3ApiController("config/importlist")]
 
+    [RequiresPermission(SonarrRole.Admin)]
     public class ImportListConfigController : ConfigController<ImportListConfigResource>
     {
         public ImportListConfigController(IConfigService configService)

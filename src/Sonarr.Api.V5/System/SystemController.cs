@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Internal;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Lifecycle;
 using Sonarr.Http;
+using Sonarr.Http.Authentication;
 using Sonarr.Http.Validation;
 
 namespace Sonarr.Api.V5.System;
@@ -55,6 +57,7 @@ public class SystemController : Controller
 
     [HttpGet("status")]
     [Produces("application/json")]
+    [RequiresPermission(SonarrRole.ReadOnly)]
     public Ok<SystemResource> GetStatus()
     {
         return TypedResults.Ok(new SystemResource
@@ -96,6 +99,7 @@ public class SystemController : Controller
     [HttpGet("routes")]
     [Produces("text/plain")]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [RequiresPermission(SonarrRole.Admin)]
     public ContentHttpResult GetRoutes()
     {
         using var sw = new StringWriter();
@@ -107,12 +111,14 @@ public class SystemController : Controller
 
     [HttpGet("routes/duplicate")]
     [Produces("application/json")]
+    [RequiresPermission(SonarrRole.Admin)]
     public Ok<Dictionary<string, List<string>>> DuplicateRoutes()
     {
         return TypedResults.Ok(_detector.GetDuplicateEndpoints(_endpointData));
     }
 
     [HttpPost("shutdown")]
+    [RequiresPermission(SonarrRole.Admin)]
     public Ok<SystemShutdownResource> Shutdown()
     {
         Task.Factory.StartNew(() => _lifecycleService.Shutdown());
@@ -124,6 +130,7 @@ public class SystemController : Controller
     }
 
     [HttpPost("restart")]
+    [RequiresPermission(SonarrRole.Admin)]
     public Ok<SystemRestartResource> Restart()
     {
         Task.Factory.StartNew(() => _lifecycleService.Restart());

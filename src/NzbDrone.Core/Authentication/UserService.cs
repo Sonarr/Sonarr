@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -14,6 +15,7 @@ namespace NzbDrone.Core.Authentication
         User FindUser();
         User FindUser(string username, string password);
         User FindUser(Guid identifier);
+        User UpsertOidcUser(string subject, string username, string groups, SonarrRole role);
     }
 
     public class UserService : IUserService
@@ -73,7 +75,23 @@ namespace NzbDrone.Core.Authentication
 
         public User FindUser()
         {
-            return _repo.SingleOrDefault();
+            var local = (_repo.All() ?? Enumerable.Empty<User>())
+                .Where(u => u.OidcSubject == null)
+                .SingleOrDefault();
+
+            if (local == null)
+            {
+                try
+                {
+                    local = _repo.FindLocalUser();
+                }
+                catch
+                {
+                    // Fall back to in-memory scan if the repository does not support FindLocalUser.
+                }
+            }
+
+            return local;
         }
 
         public User FindUser(string username, string password)
@@ -92,6 +110,11 @@ namespace NzbDrone.Core.Authentication
 
             if (user.Salt.IsNullOrWhiteSpace())
             {
+                if (user.Password.IsNullOrWhiteSpace())
+                {
+                    return null;
+                }
+
                 // If password matches stored SHA256 hash, update to salted hash and verify.
                 if (IsMatchingHash(user.Password, password.SHA256Hash()))
                 {
@@ -119,6 +142,56 @@ namespace NzbDrone.Core.Authentication
         public User FindUser(Guid identifier)
         {
             return _repo.FindUser(identifier);
+        }
+
+        public User UpsertOidcUser(string subject, string username, string groups, SonarrRole role)
+        {
+            var normalizedUsername = username == null ? null : username.ToLowerInvariant();
+
+            // 1. Subject-first lookup.
+            User user = null;
+
+            if (!subject.IsNullOrWhiteSpace())
+            {
+                user = _repo.FindBySubject(subject);
+
+                if (user == null)
+                {
+                    user = (_repo.All() ?? Enumerable.Empty<User>()).FirstOrDefault(u => u.OidcSubject == subject);
+                }
+            }
+
+            if (user != null)
+            {
+                user.Username = normalizedUsername;
+                user.OidcGroups = groups;
+                user.Role = role;
+
+                return _repo.Update(user);
+            }
+
+            // 3. Insert new OIDC user. Forms and OIDC users are kept separate;
+            // no automatic linking by username to avoid account takeover via IdP-controlled preferred_username.
+            var newUser = new User
+            {
+                Identifier = Guid.NewGuid(),
+                Username = normalizedUsername,
+                Password = "",
+                Salt = "",
+                Iterations = 0,
+                OidcSubject = subject,
+                OidcGroups = groups,
+                Role = role
+            };
+
+            try
+            {
+                return _repo.Insert(newUser);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to insert OIDC user (username may already exist): " + ex.Message, ex);
+            }
         }
 
         private User SetUserHashedPassword(User user, string password)

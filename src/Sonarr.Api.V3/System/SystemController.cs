@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Internal;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Lifecycle;
 using Sonarr.Http;
+using Sonarr.Http.Authentication;
 using Sonarr.Http.Validation;
 
 namespace Sonarr.Api.V3.System
@@ -55,6 +57,7 @@ namespace Sonarr.Api.V3.System
 
         [HttpGet("status")]
         [Produces("application/json")]
+        [RequiresPermission(SonarrRole.ReadOnly)]
         public SystemResource GetStatus()
         {
             return new SystemResource
@@ -96,6 +99,7 @@ namespace Sonarr.Api.V3.System
 
         [HttpGet("routes")]
         [Produces("application/json")]
+        [RequiresPermission(SonarrRole.Admin)]
         public IActionResult GetRoutes()
         {
             using (var sw = new StringWriter())
@@ -108,12 +112,14 @@ namespace Sonarr.Api.V3.System
 
         [HttpGet("routes/duplicate")]
         [Produces("application/json")]
+        [RequiresPermission(SonarrRole.Admin)]
         public object DuplicateRoutes()
         {
             return _detector.GetDuplicateEndpoints(_endpointData);
         }
 
         [HttpPost("shutdown")]
+        [RequiresPermission(SonarrRole.Admin)]
         public object Shutdown()
         {
             Task.Factory.StartNew(() => _lifecycleService.Shutdown());
@@ -121,6 +127,7 @@ namespace Sonarr.Api.V3.System
         }
 
         [HttpPost("restart")]
+        [RequiresPermission(SonarrRole.Admin)]
         public object Restart()
         {
             Task.Factory.StartNew(() => _lifecycleService.Restart());

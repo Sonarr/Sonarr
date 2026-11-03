@@ -2,15 +2,18 @@ using System;
 using System.Linq;
 using FluentValidation;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 using Sonarr.Http;
+using Sonarr.Http.Authentication;
 
 namespace Sonarr.Api.V3.Config
 {
     [V3ApiController("config/mediamanagement")]
+    [RequiresPermission(SonarrRole.Admin)]
     public class MediaManagementConfigController : ConfigController<MediaManagementConfigResource>
     {
         public MediaManagementConfigController(IConfigService configService,

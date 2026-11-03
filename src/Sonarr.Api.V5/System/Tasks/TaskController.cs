@@ -2,16 +2,19 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.SignalR;
 using Sonarr.Http;
+using Sonarr.Http.Authentication;
 using Sonarr.Http.REST;
 
 namespace Sonarr.Api.V5.System.Tasks;
 
 [V5ApiController("system/task")]
+[RequiresPermission(SonarrRole.Admin)]
 public class TaskController : RestControllerWithSignalR<TaskResource, ScheduledTask>, IHandle<CommandExecutedEvent>
 {
     private readonly ITaskManager _taskManager;

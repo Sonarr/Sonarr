@@ -27,6 +27,7 @@ public class GeneralSettingsResource : RestResource, ISslCertificateResource
     public string? OidcClientSecret { get; set; }
     public string? OidcUserIdentifier { get; set; }
     public string? OidcScopes { get; set; }
+    public string? OidcGroupsClaim { get; set; }
     public string? LogLevel { get; set; }
     public int LogSizeLimit { get; set; }
     public string? ConsoleLogLevel { get; set; }
@@ -75,6 +76,7 @@ public static class GeneralSettingsResourceMapper
             OidcClientId = model.OidcClientId,
             OidcUserIdentifier = model.OidcUserIdentifier,
             OidcScopes = model.OidcScopes,
+            OidcGroupsClaim = model.OidcGroupsClaim,
             LogLevel = model.LogLevel,
             LogSizeLimit = model.LogSizeLimit,
             ConsoleLogLevel = model.ConsoleLogLevel,

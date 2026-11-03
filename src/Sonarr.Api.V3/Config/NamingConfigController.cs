@@ -4,14 +4,17 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Organizer;
 using Sonarr.Http;
+using Sonarr.Http.Authentication;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 
 namespace Sonarr.Api.V3.Config
 {
     [V3ApiController("config/naming")]
+    [RequiresPermission(SonarrRole.Admin)]
     public class NamingConfigController : RestController<NamingConfigResource>
     {
         private readonly INamingConfigService _namingConfigService;

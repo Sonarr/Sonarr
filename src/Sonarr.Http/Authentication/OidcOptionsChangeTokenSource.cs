@@ -53,6 +53,7 @@ namespace Sonarr.Http.Authentication
                 _configFileProvider.OidcClientSecret,
                 _configFileProvider.OidcUserIdentifier,
                 _configFileProvider.OidcScopes,
+                _configFileProvider.OidcGroupsClaim,
                 _configFileProvider.UrlBase);
         }
     }

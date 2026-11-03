@@ -6,14 +6,17 @@ using NzbDrone.Common.Crypto;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Backup;
 using Sonarr.Http;
+using Sonarr.Http.Authentication;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 
 namespace Sonarr.Api.V3.System.Backup
 {
     [V3ApiController("system/backup")]
+    [RequiresPermission(SonarrRole.Admin)]
     public class BackupController : Controller
     {
         private readonly IBackupService _backupService;

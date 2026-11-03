@@ -2,9 +2,11 @@ using System.Linq;
 using System.Reflection;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Languages;
 using Sonarr.Http;
+using Sonarr.Http.Authentication;
 using Sonarr.Http.REST.Attributes;
 
 namespace Sonarr.Api.V3.Config
@@ -31,7 +33,16 @@ namespace Sonarr.Api.V3.Config
                            .WithMessage("The UI Language value cannot be less than 1");
         }
 
+        [HttpGet]
+        [Produces("application/json")]
+        [RequiresPermission(SonarrRole.ReadOnly)]
+        public override UiConfigResource GetConfig()
+        {
+            return base.GetConfig();
+        }
+
         [RestPutById]
+        [RequiresPermission(SonarrRole.Admin)]
         public override ActionResult<UiConfigResource> SaveConfig([FromBody] UiConfigResource resource)
         {
             var dictionary = resource.GetType()

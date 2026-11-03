@@ -24,7 +24,7 @@ namespace Sonarr.Api.V3.Config
 
         [HttpGet]
         [Produces("application/json")]
-        public TResource GetConfig()
+        public virtual TResource GetConfig()
         {
             var resource = ToResource(_configService);
             resource.Id = 1;

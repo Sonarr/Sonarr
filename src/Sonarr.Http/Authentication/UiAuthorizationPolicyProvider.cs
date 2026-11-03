@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
+using Sonarr.Http.Authentication;
 
 namespace NzbDrone.Http.Authentication
 {
@@ -12,6 +13,14 @@ namespace NzbDrone.Http.Authentication
     {
         private const string PolicyName = "UI";
         private readonly IConfigFileProvider _config;
+
+        private static readonly (string Name, SonarrRole Role)[] PermissionPolicies =
+        {
+            ("UI.Read", SonarrRole.ReadOnly),
+            ("UI.Add", SonarrRole.AddSearch),
+            ("UI.Manage", SonarrRole.Manage),
+            ("UI.Admin", SonarrRole.Admin)
+        };
 
         public DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; }
 
@@ -45,6 +54,49 @@ namespace NzbDrone.Http.Authentication
                     .AddRequirements(new BypassableDenyAnonymousAuthorizationRequirement());
 
                 return Task.FromResult(policy.Build());
+            }
+
+            foreach (var (name, role) in PermissionPolicies)
+            {
+                if (policyName.Equals(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    var authenticationMethod = _config.EffectiveAuthenticationMethod();
+
+                    var effectiveScheme = authenticationMethod switch
+                    {
+                        AuthenticationType.Oidc => CookieAuthenticationDefaults.AuthenticationScheme,
+                        _ => authenticationMethod.ToString()
+                    };
+
+                    // Only the effective scheme plus API/Bearer; do not include inactive cookie/Forms schemes
+                    var schemes = new System.Collections.Generic.List<string>
+                    {
+                        effectiveScheme,
+                        "API",
+                        "Bearer"
+                    };
+
+                    // Validate that effectiveScheme is a registered handler; otherwise PolicyEvaluator would throw
+                    var isRegistered = effectiveScheme.Equals("API", StringComparison.OrdinalIgnoreCase) ||
+                                       effectiveScheme.Equals("Bearer", StringComparison.OrdinalIgnoreCase) ||
+                                       effectiveScheme.Equals(CookieAuthenticationDefaults.AuthenticationScheme, StringComparison.OrdinalIgnoreCase) ||
+                                       effectiveScheme.Equals("Forms", StringComparison.OrdinalIgnoreCase) ||
+                                       effectiveScheme.Equals("External", StringComparison.OrdinalIgnoreCase) ||
+                                       effectiveScheme.Equals(nameof(AuthenticationType.Oidc), StringComparison.OrdinalIgnoreCase);
+
+                    if (!isRegistered)
+                    {
+                        // Fall back to default handling via FallbackPolicyProvider
+                        return FallbackPolicyProvider.GetPolicyAsync(policyName);
+                    }
+
+                    var policy = new AuthorizationPolicyBuilder()
+                        .AddAuthenticationSchemes(schemes.ToArray())
+                        .RequireAuthenticatedUser()
+                        .AddRequirements(new PermissionRequirement(role));
+
+                    return Task.FromResult(policy.Build());
+                }
             }
 
             return FallbackPolicyProvider.GetPolicyAsync(policyName);

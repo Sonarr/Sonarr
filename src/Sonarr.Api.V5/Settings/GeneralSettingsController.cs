@@ -9,11 +9,13 @@ using NzbDrone.Core.Update;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 using Sonarr.Http;
+using Sonarr.Http.Authentication;
 using Sonarr.Http.Validation;
 
 namespace Sonarr.Api.V5.Settings;
 
 [V5ApiController("settings/general")]
+[RequiresPermission(SonarrRole.Admin)]
 public class GeneralSettingsController : SettingsController<GeneralSettingsResource>
 {
     private const string PrivateValue = "********";
@@ -43,7 +45,8 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
 
         SharedValidator.RuleFor(c => c.AllowedHosts)
                        .Must(h => AllowedHostsParser.Parse(h).Any())
-                       .When(c => c.AuthenticationRequired != AuthenticationRequiredType.Enabled)
+                       .When(c => c.AuthenticationRequired != AuthenticationRequiredType.Enabled &&
+                                  c.AuthenticationMethod == AuthenticationType.Forms)
                        .WithMessage("Allowed Hosts is required when 'Authentication Required' is not 'Enabled'");
 
         SharedValidator.RuleFor(c => c.AllowedHosts)

@@ -4,14 +4,17 @@ using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Crypto;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Backup;
 using Sonarr.Http;
+using Sonarr.Http.Authentication;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 
 namespace Sonarr.Api.V5.System.Backup;
 
 [V5ApiController("system/backup")]
+[RequiresPermission(SonarrRole.Admin)]
 public class BackupController : Controller
 {
     private readonly IBackupService _backupService;
