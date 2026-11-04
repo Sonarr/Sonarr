@@ -13,9 +13,12 @@ import {
   SUCCESS,
 } from 'Helpers/Props/messageTypes';
 import { isSameCommand } from 'Utilities/Command';
+import translate from 'Utilities/String/translate';
 
 const DEFAULT_COMMANDS: Command[] = [];
 const COMMAND_REFETCH_INTERVAL = 5 * 60 * 1000;
+
+let nextCommandRequestErrorId = -1;
 
 const commandFinishedCallbacks: Record<number, (command: Command) => void> = {};
 
@@ -50,6 +53,19 @@ export const useExecuteCommand = () => {
         queryClient.setQueryData<Command[]>(['/command'], (oldCommands = []) =>
           addOrUpdateQueryClientItem(oldCommands, newCommand, 'id')
         );
+      },
+      onError: (_error, body) => {
+        if (lastCommandRef.current?.command === body) {
+          lastCommandRef.current = null;
+        }
+
+        showMessage({
+          id: nextCommandRequestErrorId--,
+          name: body.name,
+          message: translate('CommandRequestFailed'),
+          type: ERROR,
+          hideAfter: 10,
+        });
       },
     },
   });
@@ -190,12 +206,6 @@ export const useUpdateCommand = () => {
       command.status === 'completed' || command.status === 'failed';
 
     if (isFinished) {
-      if (command.name === 'EpisodeRetention') {
-        queryClient.invalidateQueries({ queryKey: ['/series'] });
-        queryClient.invalidateQueries({ queryKey: ['/episode'] });
-        queryClient.invalidateQueries({ queryKey: ['/episodeFile'] });
-      }
-
       const commandFinished = commandFinishedCallbacks[command.id];
 
       if (commandFinished) {

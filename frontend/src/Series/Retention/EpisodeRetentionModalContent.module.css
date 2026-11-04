@@ -1,31 +1,7 @@
-.body {
-  composes: innerModalBody from 'Components/Modal/ModalBody.module.css';
-}
-
 .intro {
   margin: 0 0 12px;
   color: var(--inkMuted);
   line-height: 1.5;
-}
-
-.settingRow {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 88px;
-
-  align-items: start;
-  padding: 14px 0;
-  gap: 24px;
-}
-
-.settingRow + .settingRow {
-  border-top: 1px solid var(--borderColor);
-}
-
-.settingLabel {
-  composes: label from 'Components/Form/FormLabel.module.css';
-
-  margin-bottom: 4px;
-  padding-top: 8px;
 }
 
 .helpText {
@@ -40,18 +16,6 @@
   color: var(--inkMuted);
   font-size: 13px;
   line-height: 1.5;
-}
-
-.preview {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid var(--borderColor);
-}
-
-.sectionTitle {
-  margin: 0 0 16px;
-  font-weight: 600;
-  font-size: 16px;
 }
 
 .previewHeading {
@@ -89,11 +53,6 @@
 }
 
 @media (--breakpointSmall) {
-  .settingRow {
-    grid-template-columns: minmax(0, 1fr) 64px;
-    gap: 16px;
-  }
-
   .footer {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

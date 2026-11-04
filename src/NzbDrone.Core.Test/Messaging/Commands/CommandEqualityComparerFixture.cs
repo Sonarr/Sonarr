@@ -10,7 +10,6 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
-using NzbDrone.Core.MediaFiles.Retention;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Update.Commands;
 using NzbDrone.Test.Common;
@@ -20,8 +19,8 @@ namespace NzbDrone.Core.Test.Messaging.Commands
     [TestFixture]
     public class CommandEqualityComparerFixture
     {
-        private const string PreviewToken = "4792CEB9496AADF3E3E849D2E01EF8F10517635CBD38FE3D3E2BAF129682A134";
-        private const string ChangedPreviewToken = "35D38B9644844E321300DC5B88DCA0BCCA2B31D903A34B7C7641554B7B363B5F";
+        private const string StringValue = "4792CEB9496AADF3E3E849D2E01EF8F10517635CBD38FE3D3E2BAF129682A134";
+        private const string ChangedStringValue = "35D38B9644844E321300DC5B88DCA0BCCA2B31D903A34B7C7641554B7B363B5F";
 
         private string GivenRandomPath()
         {
@@ -56,20 +55,20 @@ namespace NzbDrone.Core.Test.Messaging.Commands
         }
 
         [Test]
-        public void should_return_false_for_different_preview_tokens_with_the_same_characters()
+        public void should_return_false_for_different_strings_with_the_same_characters()
         {
-            PreviewToken.Distinct().Should().BeEquivalentTo(ChangedPreviewToken.Distinct());
-            var command1 = new EpisodeRetentionCommand { SeriesId = 1, PreviewToken = PreviewToken };
-            var command2 = new EpisodeRetentionCommand { SeriesId = 1, PreviewToken = ChangedPreviewToken };
+            StringValue.Distinct().Should().BeEquivalentTo(ChangedStringValue.Distinct());
+            var command1 = new DownloadedEpisodesScanCommand { Path = StringValue };
+            var command2 = new DownloadedEpisodesScanCommand { Path = ChangedStringValue };
 
             CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeFalse();
         }
 
         [Test]
-        public void should_return_true_for_identical_retention_preview_tokens()
+        public void should_return_true_for_identical_strings()
         {
-            var command1 = new EpisodeRetentionCommand { SeriesId = 1, PreviewToken = PreviewToken };
-            var command2 = new EpisodeRetentionCommand { SeriesId = 1, PreviewToken = PreviewToken };
+            var command1 = new DownloadedEpisodesScanCommand { Path = StringValue };
+            var command2 = new DownloadedEpisodesScanCommand { Path = StringValue };
 
             CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeTrue();
         }

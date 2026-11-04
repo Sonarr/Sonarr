@@ -1,14 +1,10 @@
-using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.MediaFiles.Retention;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
 using Sonarr.Http;
-using BadRequestException = Sonarr.Http.REST.BadRequestException;
 
 namespace Sonarr.Api.V5.Series;
 
@@ -16,12 +12,10 @@ namespace Sonarr.Api.V5.Series;
 public class EpisodeRetentionController : Controller
 {
     private readonly IEpisodeRetentionService _retentionService;
-    private readonly IManageCommandQueue _commandQueue;
 
-    public EpisodeRetentionController(IEpisodeRetentionService retentionService, IManageCommandQueue commandQueue)
+    public EpisodeRetentionController(IEpisodeRetentionService retentionService)
     {
         _retentionService = retentionService;
-        _commandQueue = commandQueue;
     }
 
     [HttpGet("{id:int}/retention")]
@@ -37,56 +31,10 @@ public class EpisodeRetentionController : Controller
             return TypedResults.NotFound();
         }
     }
-
-    [HttpPost("{id:int}/retention")]
-    [Consumes("application/json")]
-    [Produces("application/json")]
-    public Results<Accepted<EpisodeRetentionQueuedResource>, NotFound> Trim(int id, [FromBody] EpisodeRetentionRequest request)
-    {
-        if (string.IsNullOrWhiteSpace(request.PreviewToken))
-        {
-            throw new BadRequestException("Preview cleanup before trimming episodes.");
-        }
-
-        try
-        {
-            var plan = _retentionService.Preview(id);
-
-            if (!plan.Enabled || !string.Equals(plan.PreviewToken, request.PreviewToken, StringComparison.Ordinal))
-            {
-                throw new NzbDroneClientException(HttpStatusCode.Conflict, "Episode retention changed. Preview cleanup again.");
-            }
-
-            var command = _commandQueue.Push(new EpisodeRetentionCommand
-            {
-                SeriesId = id,
-                PreviewToken = request.PreviewToken,
-                SendUpdatesToClient = true
-            },
-                trigger: CommandTrigger.Manual);
-
-            return TypedResults.Accepted($"/api/v5/command/{command.Id}", new EpisodeRetentionQueuedResource { CommandId = command.Id });
-        }
-        catch (ModelNotFoundException)
-        {
-            return TypedResults.NotFound();
-        }
-    }
-}
-
-public class EpisodeRetentionRequest
-{
-    public string PreviewToken { get; set; } = string.Empty;
-}
-
-public class EpisodeRetentionQueuedResource
-{
-    public int CommandId { get; set; }
 }
 
 public class EpisodeRetentionResource
 {
-    public string PreviewToken { get; set; } = string.Empty;
     public List<RetentionFileResource> Files { get; set; } = [];
     public List<RetentionEpisodeResource> UnmonitorEpisodes { get; set; } = [];
 
@@ -96,7 +44,6 @@ public class EpisodeRetentionResource
 
         return new EpisodeRetentionResource
         {
-            PreviewToken = plan.PreviewToken,
             Files = plan.FilesToDelete.Select(file => new RetentionFileResource
             {
                 Id = file.Id,
@@ -104,7 +51,7 @@ public class EpisodeRetentionResource
                 Episodes = episodesByFileId[file.Id]
                     .Select(RetentionEpisodeResource.FromEpisode).ToList()
             }).ToList(),
-            UnmonitorEpisodes = plan.EpisodesToUnmonitor.Select(RetentionEpisodeResource.FromEpisode).ToList()
+            UnmonitorEpisodes = plan.OlderMissingEpisodesToUnmonitor.Select(RetentionEpisodeResource.FromEpisode).ToList()
         };
     }
 }

@@ -14,9 +14,6 @@ namespace NzbDrone.Core.Test.Messaging.Commands
     [TestFixture]
     public class CommandQueueManagerFixture : CoreTest<CommandQueueManager>
     {
-        private const string PreviewToken = "4792CEB9496AADF3E3E849D2E01EF8F10517635CBD38FE3D3E2BAF129682A134";
-        private const string ChangedPreviewToken = "35D38B9644844E321300DC5B88DCA0BCCA2B31D903A34B7C7641554B7B363B5F";
-
         [SetUp]
         public void Setup()
         {
@@ -43,21 +40,21 @@ namespace NzbDrone.Core.Test.Messaging.Commands
         }
 
         [Test]
-        public void should_queue_a_new_retention_command_for_a_changed_preview_token()
+        public void should_queue_a_new_retention_command_for_changed_file_selections()
         {
-            var first = Subject.Push(new EpisodeRetentionCommand { SeriesId = 1, PreviewToken = PreviewToken }, trigger: CommandTrigger.Manual);
-            var second = Subject.Push(new EpisodeRetentionCommand { SeriesId = 1, PreviewToken = ChangedPreviewToken }, trigger: CommandTrigger.Manual);
+            var first = Subject.Push(new EpisodeRetentionCommand { SeriesId = 1, Files = new List<int> { 1 }, EpisodeIds = new List<int>() }, trigger: CommandTrigger.Manual);
+            var second = Subject.Push(new EpisodeRetentionCommand { SeriesId = 1, Files = new List<int> { 2 }, EpisodeIds = new List<int>() }, trigger: CommandTrigger.Manual);
 
             second.Id.Should().NotBe(first.Id);
-            ((EpisodeRetentionCommand)second.Body).PreviewToken.Should().Be(ChangedPreviewToken);
+            ((EpisodeRetentionCommand)second.Body).Files.Should().Equal(2);
             Mocker.GetMock<ICommandRepository>().Verify(v => v.Insert(It.IsAny<CommandModel>()), Times.Exactly(2));
         }
 
         [Test]
-        public void should_reuse_a_retention_command_for_an_identical_preview_token()
+        public void should_reuse_a_retention_command_for_identical_selections()
         {
-            var first = Subject.Push(new EpisodeRetentionCommand { SeriesId = 1, PreviewToken = PreviewToken }, trigger: CommandTrigger.Manual);
-            var second = Subject.Push(new EpisodeRetentionCommand { SeriesId = 1, PreviewToken = PreviewToken }, trigger: CommandTrigger.Manual);
+            var first = Subject.Push(new EpisodeRetentionCommand { SeriesId = 1, Files = new List<int> { 1 }, EpisodeIds = new List<int>() }, trigger: CommandTrigger.Manual);
+            var second = Subject.Push(new EpisodeRetentionCommand { SeriesId = 1, Files = new List<int> { 1 }, EpisodeIds = new List<int>() }, trigger: CommandTrigger.Manual);
 
             second.Should().BeSameAs(first);
             Mocker.GetMock<ICommandRepository>().Verify(v => v.Insert(It.IsAny<CommandModel>()), Times.Once());
