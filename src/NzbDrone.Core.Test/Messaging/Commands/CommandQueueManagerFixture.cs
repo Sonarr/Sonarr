@@ -5,6 +5,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.MediaFiles.Retention;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Test.Framework;
 
@@ -36,6 +37,27 @@ namespace NzbDrone.Core.Test.Messaging.Commands
                   {
                       return commands.SingleOrDefault(e => e.Id == c);
                   });
+        }
+
+        [Test]
+        public void should_queue_a_new_retention_command_for_changed_file_selections()
+        {
+            var first = Subject.Push(new EpisodeRetentionCommand { SeriesId = 1, Files = new List<int> { 1 }, EpisodeIds = new List<int>() }, trigger: CommandTrigger.Manual);
+            var second = Subject.Push(new EpisodeRetentionCommand { SeriesId = 1, Files = new List<int> { 2 }, EpisodeIds = new List<int>() }, trigger: CommandTrigger.Manual);
+
+            second.Id.Should().NotBe(first.Id);
+            ((EpisodeRetentionCommand)second.Body).Files.Should().Equal(2);
+            Mocker.GetMock<ICommandRepository>().Verify(v => v.Insert(It.IsAny<CommandModel>()), Times.Exactly(2));
+        }
+
+        [Test]
+        public void should_reuse_a_retention_command_for_identical_selections()
+        {
+            var first = Subject.Push(new EpisodeRetentionCommand { SeriesId = 1, Files = new List<int> { 1 }, EpisodeIds = new List<int>() }, trigger: CommandTrigger.Manual);
+            var second = Subject.Push(new EpisodeRetentionCommand { SeriesId = 1, Files = new List<int> { 1 }, EpisodeIds = new List<int>() }, trigger: CommandTrigger.Manual);
+
+            second.Should().BeSameAs(first);
+            Mocker.GetMock<ICommandRepository>().Verify(v => v.Insert(It.IsAny<CommandModel>()), Times.Once());
         }
 
         [Test]

@@ -230,6 +230,11 @@ namespace Sonarr.Api.V3.Series
         {
             var updatedSeries = resource.ToModel();
 
+            // Retention is managed through v5. Legacy saves must preserve its settings.
+            updatedSeries.RetentionEnabled = series.RetentionEnabled;
+            updatedSeries.RetentionKeepEpisodes = series.RetentionKeepEpisodes;
+            updatedSeries.RetentionIncludeSpecials = series.RetentionIncludeSpecials;
+
             series.ApplyChanges(updatedSeries);
 
             return series;

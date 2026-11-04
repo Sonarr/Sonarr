@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Messaging.Commands
                     return false;
                 }
 
-                if (typeof(IEnumerable).IsAssignableFrom(xProperty.PropertyType))
+                if (xProperty.PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(xProperty.PropertyType))
                 {
                     var xValueCollection = ((IEnumerable)xValue).Cast<object>();
                     var yValueCollection = ((IEnumerable)yValue).Cast<object>();

@@ -8,6 +8,7 @@ enum CommandNames {
   DeleteSeriesFiles = 'DeleteSeriesFiles',
   DeleteUpdateLogFiles = 'DeleteUpdateLogFiles',
   DownloadedEpisodesScan = 'DownloadedEpisodesScan',
+  EpisodeRetention = 'EpisodeRetention',
   EpisodeSearch = 'EpisodeSearch',
   ManualImport = 'ManualImport',
   MissingEpisodeSearch = 'MissingEpisodeSearch',
