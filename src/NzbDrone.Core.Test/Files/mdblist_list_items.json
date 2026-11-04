@@ -1,0 +1,52 @@
+{
+  "movies": [],
+  "shows": [
+    {
+      "id": 1,
+      "rank": 1,
+      "adult": 0,
+      "title": "Breaking Bad",
+      "imdb_id": "tt0903747",
+      "tvdb_id": 81189,
+      "ids": {
+        "mdblist": "tt0903747",
+        "imdb": "tt0903747",
+        "tmdb": 1396,
+        "tvdb": 81189
+      },
+      "language": "en",
+      "mediatype": "show",
+      "release_year": 2008
+    },
+    {
+      "id": 2,
+      "rank": 2,
+      "adult": 0,
+      "title": "Show Without TVDB",
+      "imdb_id": "tt1234567",
+      "tvdb_id": null,
+      "ids": {
+        "imdb": "tt1234567",
+        "tmdb": 99999,
+        "tvdb": null
+      },
+      "mediatype": "show",
+      "release_year": 2024
+    },
+    {
+      "id": 3,
+      "rank": 3,
+      "adult": 0,
+      "title": "Show Without IDs",
+      "imdb_id": null,
+      "tvdb_id": null,
+      "ids": {
+        "imdb": null,
+        "tmdb": null,
+        "tvdb": null
+      },
+      "mediatype": "show",
+      "release_year": 2025
+    }
+  ]
+}
