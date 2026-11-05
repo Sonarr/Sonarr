@@ -14,6 +14,7 @@ namespace NzbDrone.Mono.Disk
             { "fuse.shfs", DriveType.Fixed },
             { "fuse.glusterfs", DriveType.Network },
             { "nullfs", DriveType.Fixed },
+            { "virtiofs", DriveType.Fixed },
             { "zfs", DriveType.Fixed }
         };
 
