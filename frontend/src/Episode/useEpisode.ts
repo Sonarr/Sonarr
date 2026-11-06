@@ -107,6 +107,8 @@ interface ToggleEpisodesMonitored {
   monitored: boolean;
 }
 
+type EpisodeQueryData = Episode[] | PagedQueryResponse<Episode>;
+
 export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
   const queryClient = useQueryClient();
 
@@ -118,14 +120,19 @@ export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
     method: 'PUT',
     mutationOptions: {
       onSuccess: (_data, variables) => {
-        queryClient.setQueryData<Episode[] | undefined>(
+        queryClient.setQueryData<EpisodeQueryData | undefined>(
           queryKey,
-          (oldEpisodes) => {
-            if (!oldEpisodes) {
-              return oldEpisodes;
+          (oldData) => {
+            if (!oldData) {
+              return oldData;
             }
 
-            return oldEpisodes.map((oldEpisode) => {
+            // Wanted lists cache a paged response rather than an array
+            const oldEpisodes = Array.isArray(oldData)
+              ? oldData
+              : oldData.records;
+
+            const episodes = oldEpisodes.map((oldEpisode) => {
               if (variables.episodeIds.includes(oldEpisode.id)) {
                 return {
                   ...oldEpisode,
@@ -135,6 +142,10 @@ export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
 
               return oldEpisode;
             });
+
+            return Array.isArray(oldData)
+              ? episodes
+              : { ...oldData, records: episodes };
           }
         );
 
