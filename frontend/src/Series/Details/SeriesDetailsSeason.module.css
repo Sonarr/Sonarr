@@ -184,6 +184,30 @@
   border-top: 1px solid var(--borderColor);
 }
 
+.table {
+  display: grid;
+  min-width: 100%;
+  width: fit-content;
+
+  > div {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+  }
+}
+
+.table > .sizer {
+  visibility: hidden;
+  overflow: hidden;
+  height: 0;
+
+  > div {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+  }
+}
+
 .collapseButtonContainer {
   display: flex;
   align-items: center;
