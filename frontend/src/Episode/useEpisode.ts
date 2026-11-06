@@ -139,6 +139,7 @@ export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
         );
 
         queryClient.invalidateQueries({ queryKey });
+        queryClient.invalidateQueries({ queryKey: ['/series'] });
       },
     },
   });
