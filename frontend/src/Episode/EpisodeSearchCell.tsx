@@ -13,6 +13,8 @@ import EpisodeDetailsModal from './EpisodeDetailsModal';
 import styles from './EpisodeSearchCell.module.css';
 
 interface EpisodeSearchCellProps {
+  className?: string;
+  component?: React.ElementType;
   episodeId: number;
   episodeEntity: EpisodeEntity;
   seriesId: number;
@@ -23,6 +25,8 @@ interface EpisodeSearchCellProps {
 }
 
 function EpisodeSearchCell({
+  className = styles.episodeSearchCell,
+  component: Component = TableRowCell,
   episodeId,
   episodeEntity,
   seriesId,
@@ -60,7 +64,7 @@ function EpisodeSearchCell({
   }, [episodeId, executeCommand]);
 
   return (
-    <TableRowCell className={styles.episodeSearchCell}>
+    <Component className={className}>
       <SpinnerIconButton
         name={icons.SEARCH}
         isSpinning={isSearching}
@@ -86,7 +90,7 @@ function EpisodeSearchCell({
         startInteractiveSearch={true}
         onModalClose={setDetailsModalClosed}
       />
-    </TableRowCell>
+    </Component>
   );
 }
 
