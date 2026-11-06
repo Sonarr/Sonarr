@@ -117,6 +117,7 @@ namespace NzbDrone.Core.Notifications.Ntfy
                 requestBuilder.AddQueryParam("title", title);
                 requestBuilder.AddQueryParam("message", message);
                 requestBuilder.AddQueryParam("priority", settings.Priority.ToString());
+                requestBuilder.AddQueryParam("icon", "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png");
 
                 if (settings.Tags.Any())
                 {
