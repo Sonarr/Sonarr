@@ -1,70 +1,19 @@
-.title {
-  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+.row {
+  composes: row from 'Components/Table/VirtualTableRow.module.css';
 
-  white-space: nowrap;
+  height: 46px;
+  transition: background-color 200ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  > div {
+    display: flex;
+    align-items: center;
+  }
 }
 
-.monitored {
-  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
-
-  width: 42px;
-}
-
-.episodeNumber {
-  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
-
-  width: 65px;
-}
-
-.episodeNumberAnime {
-  composes: episodeNumber;
-
-  width: 95px;
-}
-
-.runtime {
-  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
-
-  width: 80px;
-}
-
-.size {
-  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
-
-  width: 100px;
-}
-
-.languages,
-.audio,
-.video,
 .status {
-  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.module.css';
 
-  width: 100px;
-}
-
-.audioLanguages,
-.videoDynamicRangeType,
-.subtitles {
-  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
-
-  width: 165px;
-}
-
-.releaseGroup {
-  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
-
-  width: 120px;
-}
-
-.customFormatScore {
-  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
-
-  width: 55px;
-}
-
-.indexerFlags {
-  composes: cell from 'Components/Table/Cells/TableRowCell.module.css';
-
-  width: 50px;
+  > span {
+    flex: 1;
+  }
 }

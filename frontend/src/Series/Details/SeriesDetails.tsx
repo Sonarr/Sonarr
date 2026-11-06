@@ -390,6 +390,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   }, [isRefreshing, wasRefreshing, isRenaming, wasRenaming, populate]);
 
   const overviewRef = useRef<HTMLParagraphElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
   const [isOverviewClamped, setIsOverviewClamped] = useState(false);
 
   useLayoutEffect(() => {
@@ -582,7 +583,10 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
           />
         </PageToolbar>
 
-        <PageContentBody innerClassName={styles.innerContentBody}>
+        <PageContentBody
+          ref={scrollerRef}
+          innerClassName={styles.innerContentBody}
+        >
           <div className={styles.header}>
             <div
               className={styles.backdrop}
@@ -927,6 +931,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                         seriesId={seriesId}
                         {...season}
                         isExpanded={expandedState.seasons[season.seasonNumber]}
+                        scrollerRef={scrollerRef}
                         onExpandPress={handleExpandPress}
                       />
                     );

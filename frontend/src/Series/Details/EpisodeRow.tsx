@@ -1,10 +1,13 @@
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import Icon from 'Components/Icon';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
 import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
-import TableRowCell from 'Components/Table/Cells/TableRowCell';
+import VirtualTableRowCell, {
+  VirtualTableRowCellProps,
+} from 'Components/Table/Cells/VirtualTableRowCell';
+import virtualCellStyles from 'Components/Table/Cells/VirtualTableRowCell.module.css';
 import Column from 'Components/Table/Column';
-import TableRow from 'Components/Table/TableRow';
+import VirtualTableRow from 'Components/Table/VirtualTableRow';
 import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
 import EpisodeFormats from 'Episode/EpisodeFormats';
@@ -51,11 +54,16 @@ interface EpisodeRowProps {
   // indexerFlags?: number;
   mediaInfo?: MediaInfoModel;
   columns: Column[];
+  sizerColumns?: string[];
   onMonitorEpisodePress: (
     episodeId: number,
     value: boolean,
     { shiftKey }: { shiftKey: boolean }
   ) => void;
+}
+
+function RowCell(props: VirtualTableRowCellProps) {
+  return <VirtualTableRowCell role="cell" {...props} />;
 }
 
 function EpisodeRow({
@@ -83,6 +91,7 @@ function EpisodeRow({
   // customFormatScore,
   // indexerFlags = 0,
   columns,
+  sizerColumns,
   onMonitorEpisodePress,
 }: EpisodeRowProps) {
   const {
@@ -105,7 +114,7 @@ function EpisodeRow({
   );
 
   return (
-    <TableRow>
+    <VirtualTableRow className={styles.row} role="row">
       {columns.map((column) => {
         const { name, isVisible } = column;
 
@@ -113,29 +122,26 @@ function EpisodeRow({
           return null;
         }
 
+        if (sizerColumns && !sizerColumns.includes(name)) {
+          return <div key={name} />;
+        }
+
         if (name === 'monitored') {
           return (
-            <TableRowCell key={name} className={styles.monitored}>
+            <RowCell key={name}>
               <MonitorToggleButton
                 monitored={monitored}
                 isDisabled={!seriesMonitored && !monitored}
                 isSaving={isSaving}
                 onPress={handleMonitorEpisodePress}
               />
-            </TableRowCell>
+            </RowCell>
           );
         }
 
         if (name === 'episodeNumber') {
           return (
-            <TableRowCell
-              key={name}
-              className={
-                seriesType === 'anime'
-                  ? styles.episodeNumberAnime
-                  : styles.episodeNumber
-              }
-            >
+            <RowCell key={name}>
               <EpisodeNumber
                 seasonNumber={seasonNumber}
                 episodeNumber={episodeNumber}
@@ -148,13 +154,13 @@ function EpisodeRow({
                 sceneAbsoluteEpisodeNumber={sceneAbsoluteEpisodeNumber}
                 alternateTitles={alternateTitles}
               />
-            </TableRowCell>
+            </RowCell>
           );
         }
 
         if (name === 'title') {
           return (
-            <TableRowCell key={name} className={styles.title}>
+            <RowCell key={name}>
               <EpisodeTitleLink
                 episodeId={id}
                 seriesId={seriesId}
@@ -162,43 +168,44 @@ function EpisodeRow({
                 episodeEntity="episodes"
                 finaleType={finaleType}
               />
-            </TableRowCell>
+            </RowCell>
           );
         }
 
         if (name === 'path') {
-          return <TableRowCell key={name}>{episodeFile?.path}</TableRowCell>;
+          return <RowCell key={name}>{episodeFile?.path}</RowCell>;
         }
 
         if (name === 'relativePath') {
-          return (
-            <TableRowCell key={name}>{episodeFile?.relativePath}</TableRowCell>
-          );
+          return <RowCell key={name}>{episodeFile?.relativePath}</RowCell>;
         }
 
         if (name === 'airDateUtc') {
-          return <RelativeDateCell key={name} date={airDateUtc} />;
+          return (
+            <RelativeDateCell
+              key={name}
+              className={virtualCellStyles.cell}
+              date={airDateUtc}
+              component={RowCell}
+            />
+          );
         }
 
         if (name === 'runtime') {
-          return (
-            <TableRowCell key={name} className={styles.runtime}>
-              {formatRuntime(runtime)}
-            </TableRowCell>
-          );
+          return <RowCell key={name}>{formatRuntime(runtime)}</RowCell>;
         }
 
         if (name === 'customFormats') {
           return (
-            <TableRowCell key={name}>
+            <RowCell key={name}>
               <EpisodeFormats formats={customFormats} />
-            </TableRowCell>
+            </RowCell>
           );
         }
 
         if (name === 'customFormatScore') {
           return (
-            <TableRowCell key={name} className={styles.customFormatScore}>
+            <RowCell key={name}>
               <Tooltip
                 anchor={formatCustomFormatScore(
                   customFormatScore,
@@ -207,80 +214,76 @@ function EpisodeRow({
                 tooltip={<EpisodeFormats formats={customFormats} />}
                 position="left"
               />
-            </TableRowCell>
+            </RowCell>
           );
         }
 
         if (name === 'languages') {
           return (
-            <TableRowCell key={name} className={styles.languages}>
+            <RowCell key={name}>
               <EpisodeFileLanguages episodeFileId={episodeFileId} />
-            </TableRowCell>
+            </RowCell>
           );
         }
 
         if (name === 'audioInfo') {
           return (
-            <TableRowCell key={name} className={styles.audio}>
+            <RowCell key={name}>
               <MediaInfo type="audio" episodeFileId={episodeFileId} />
-            </TableRowCell>
+            </RowCell>
           );
         }
 
         if (name === 'audioLanguages') {
           return (
-            <TableRowCell key={name} className={styles.audioLanguages}>
+            <RowCell key={name}>
               <MediaInfo type="audioLanguages" episodeFileId={episodeFileId} />
-            </TableRowCell>
+            </RowCell>
           );
         }
 
         if (name === 'subtitleLanguages') {
           return (
-            <TableRowCell key={name} className={styles.subtitles}>
+            <RowCell key={name}>
               <MediaInfo type="subtitles" episodeFileId={episodeFileId} />
-            </TableRowCell>
+            </RowCell>
           );
         }
 
         if (name === 'videoCodec') {
           return (
-            <TableRowCell key={name} className={styles.video}>
+            <RowCell key={name}>
               <MediaInfo type="video" episodeFileId={episodeFileId} />
-            </TableRowCell>
+            </RowCell>
           );
         }
 
         if (name === 'videoDynamicRangeType') {
           return (
-            <TableRowCell key={name} className={styles.videoDynamicRangeType}>
+            <RowCell key={name}>
               <MediaInfo
                 type="videoDynamicRangeType"
                 episodeFileId={episodeFileId}
               />
-            </TableRowCell>
+            </RowCell>
           );
         }
 
         if (name === 'size') {
           return (
-            <TableRowCell key={name} className={styles.size}>
+            <RowCell key={name}>
               {!!episodeFile?.size && formatBytes(episodeFile?.size)}
-            </TableRowCell>
+            </RowCell>
           );
         }
 
         if (name === 'releaseGroup') {
-          return (
-            <TableRowCell key={name} className={styles.releaseGroup}>
-              {episodeFile?.releaseGroup}
-            </TableRowCell>
-          );
+          return <RowCell key={name}>{episodeFile?.releaseGroup}</RowCell>;
         }
 
         if (name === 'indexerFlags') {
           return (
-            <TableRowCell key={name} className={styles.indexerFlags}>
+            <RowCell key={name}>
               {episodeFile?.indexerFlags ? (
                 <Popover
                   anchor={<Icon name={icons.FLAG} kind="default" />}
@@ -291,15 +294,15 @@ function EpisodeRow({
                   position="left"
                 />
               ) : null}
-            </TableRowCell>
+            </RowCell>
           );
         }
 
         if (name === 'status') {
           return (
-            <TableRowCell key={name} className={styles.status}>
+            <RowCell key={name} className={styles.status}>
               <EpisodeStatus episodeId={id} episodeFileId={episodeFileId} />
-            </TableRowCell>
+            </RowCell>
           );
         }
 
@@ -307,6 +310,8 @@ function EpisodeRow({
           return (
             <EpisodeSearchCell
               key={name}
+              className={virtualCellStyles.cell}
+              component={RowCell}
               episodeId={id}
               episodeEntity="episodes"
               seriesId={seriesId}
@@ -320,8 +325,8 @@ function EpisodeRow({
 
         return null;
       })}
-    </TableRow>
+    </VirtualTableRow>
   );
 }
 
-export default EpisodeRow;
+export default memo(EpisodeRow);
