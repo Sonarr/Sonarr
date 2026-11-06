@@ -274,7 +274,7 @@ namespace NzbDrone.Core.Download.Pending
 
         public Queue.Queue FindPendingQueueItemObsolete(int queueId)
         {
-            return GetPendingQueue().SingleOrDefault(p => p.Id == queueId);
+            return GetPendingQueueObsolete().SingleOrDefault(p => p.Id == queueId);
         }
 
         public void RemovePendingQueueItems(int queueId)
