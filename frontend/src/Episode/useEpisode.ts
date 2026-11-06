@@ -2,7 +2,10 @@ import { QueryKey, useQueryClient } from '@tanstack/react-query';
 import { create } from 'zustand';
 import useApiMutation from 'Helpers/Hooks/useApiMutation';
 import { PagedQueryResponse } from 'Helpers/Hooks/usePagedApiQuery';
+import Series from 'Series/Series';
 import { CalendarItem } from 'typings/Calendar';
+import fetchJson from 'Utilities/Fetch/fetchJson';
+import getQueryPath from 'Utilities/Fetch/getQueryPath';
 import Episode from './Episode';
 
 export type EpisodeEntity =
@@ -111,13 +114,13 @@ export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
   const queryClient = useQueryClient();
 
   const { mutate, isPending, variables } = useApiMutation<
-    unknown,
+    Episode[],
     ToggleEpisodesMonitored
   >({
     path: '/episode/monitor',
     method: 'PUT',
     mutationOptions: {
-      onSuccess: (_data, variables) => {
+      onSuccess: (updatedEpisodes, variables) => {
         queryClient.setQueryData<Episode[] | undefined>(
           queryKey,
           (oldEpisodes) => {
@@ -139,7 +142,26 @@ export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
         );
 
         queryClient.invalidateQueries({ queryKey });
-        queryClient.invalidateQueries({ queryKey: ['/series'] });
+
+        const seriesIds = new Set(updatedEpisodes.map((e) => e.seriesId));
+
+        seriesIds.forEach(async (seriesId) => {
+          try {
+            const updatedSeries = await fetchJson<Series, unknown>({
+              path: getQueryPath(`/series/${seriesId}`),
+              headers: {
+                'X-Api-Key': window.Sonarr.apiKey,
+                'X-Sonarr-Client': 'Sonarr',
+              },
+            });
+
+            queryClient.setQueryData<Series[]>(['/series'], (oldSeries) =>
+              oldSeries?.map((s) => (s.id === seriesId ? updatedSeries : s))
+            );
+          } catch {
+            queryClient.invalidateQueries({ queryKey: ['/series'] });
+          }
+        });
       },
     },
   });
