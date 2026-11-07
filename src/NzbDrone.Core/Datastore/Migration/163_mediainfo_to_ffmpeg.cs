@@ -4,6 +4,7 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Dapper;
@@ -365,7 +366,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 }
             }
 
-            return VideoFileInfoReader.GetHdrFormat(mediaInfo.VideoBitDepth, mediaInfo.VideoColourPrimaries, mediaInfo.VideoTransferCharacteristics, new());
+            return VideoFileInfoReader.GetHdrFormat(mediaInfo.VideoBitDepth, mediaInfo.VideoColourPrimaries, mediaInfo.VideoTransferCharacteristics, new List<IReadOnlyDictionary<string, JsonNode>>().AsReadOnly());
         }
 
         private void MigrateAudioCodec(MediaInfo162 mediaInfo, MediaInfo163 m)
