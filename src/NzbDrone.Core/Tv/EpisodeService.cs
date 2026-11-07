@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Tv
 
             _logger.Debug("Monitored flag for Episode:{0} was set to {1}", episodeId, monitored);
 
-            _eventAggregator.PublishEvent(new EpisodesMonitoredChangedEvent(new List<int> { episode.SeriesId }));
+            _eventAggregator.PublishEvent(new SeriesEpisodesMonitoredChangedEvent([episode.SeriesId]));
         }
 
         public void SetMonitored(IEnumerable<int> ids, bool monitored)
@@ -194,7 +194,7 @@ namespace NzbDrone.Core.Tv
 
             var seriesIds = _episodeRepository.Get(episodeIds).Select(e => e.SeriesId).Distinct().ToList();
 
-            _eventAggregator.PublishEvent(new EpisodesMonitoredChangedEvent(seriesIds));
+            _eventAggregator.PublishEvent(new SeriesEpisodesMonitoredChangedEvent(seriesIds));
         }
 
         public void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)

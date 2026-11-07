@@ -35,7 +35,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
                             IHandle<SeriesRenamedEvent>,
                             IHandle<SeriesBulkEditedEvent>,
                             IHandle<MediaCoversUpdatedEvent>,
-                            IHandle<EpisodesMonitoredChangedEvent>
+                            IHandle<SeriesEpisodesMonitoredChangedEvent>
 {
     private readonly ISeriesService _seriesService;
     private readonly IAddSeriesService _addSeriesService;
@@ -444,7 +444,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
     }
 
     [NonAction]
-    public void Handle(EpisodesMonitoredChangedEvent message)
+    public void Handle(SeriesEpisodesMonitoredChangedEvent message)
     {
         foreach (var seriesId in message.SeriesIds)
         {

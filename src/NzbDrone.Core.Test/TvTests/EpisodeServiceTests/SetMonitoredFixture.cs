@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
                   .Verify(v => v.SetMonitored(It.Is<IEnumerable<int>>(i => i.SequenceEqual(ids)), false), Times.Once());
 
             Mocker.GetMock<IEventAggregator>()
-                  .Verify(v => v.PublishEvent(It.Is<EpisodesMonitoredChangedEvent>(e => e.SeriesIds.OrderBy(i => i).SequenceEqual(new[] { 1, 2 }))), Times.Once());
+                  .Verify(v => v.PublishEvent(It.Is<SeriesEpisodesMonitoredChangedEvent>(e => e.SeriesIds.OrderBy(i => i).SequenceEqual(new[] { 1, 2 }))), Times.Once());
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             Subject.SetEpisodeMonitored(10, true);
 
             Mocker.GetMock<IEventAggregator>()
-                  .Verify(v => v.PublishEvent(It.Is<EpisodesMonitoredChangedEvent>(e => e.SeriesIds.SequenceEqual(new[] { 5 }))), Times.Once());
+                  .Verify(v => v.PublishEvent(It.Is<SeriesEpisodesMonitoredChangedEvent>(e => e.SeriesIds.SequenceEqual(new[] { 5 }))), Times.Once());
         }
     }
 }

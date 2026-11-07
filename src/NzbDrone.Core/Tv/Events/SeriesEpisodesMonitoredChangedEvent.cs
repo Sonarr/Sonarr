@@ -3,11 +3,11 @@ using NzbDrone.Common.Messaging;
 
 namespace NzbDrone.Core.Tv.Events
 {
-    public class EpisodesMonitoredChangedEvent : IEvent
+    public class SeriesEpisodesMonitoredChangedEvent : IEvent
     {
         public List<int> SeriesIds { get; private set; }
 
-        public EpisodesMonitoredChangedEvent(List<int> seriesIds)
+        public SeriesEpisodesMonitoredChangedEvent(List<int> seriesIds)
         {
             SeriesIds = seriesIds;
         }
