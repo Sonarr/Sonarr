@@ -32,7 +32,6 @@ function EpisodeLanguages(props: EpisodeLanguagesProps) {
 
   return (
     <Popover
-      className={className}
       anchor={
         <Label
           className={className}
