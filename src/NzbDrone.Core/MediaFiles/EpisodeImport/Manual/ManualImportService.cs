@@ -606,7 +606,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             foreach (var groupedTrackedDownload in importedTrackedDownload.GroupBy(i => i.TrackedDownload.DownloadItem.DownloadId).ToList())
             {
                 var trackedDownload = groupedTrackedDownload.First().TrackedDownload;
-                var importedSeries = imported.First().ImportDecision.LocalEpisode.Series;
+                var importedSeries = groupedTrackedDownload.First().ImportResult.ImportDecision.LocalEpisode.Series;
                 var outputPath = trackedDownload.ImportItem.OutputPath.FullPath;
 
                 if (_diskProvider.FolderExists(outputPath))
