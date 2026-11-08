@@ -37,6 +37,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         public decimal VideoFps { get; set; }
 
+        [JsonIgnore]
         public MediaInfoAudioStreamModel PrimaryAudioStream => AudioStreams?.FirstOrDefault();
 
         public List<MediaInfoAudioStreamModel> AudioStreams { get; set; }

@@ -78,13 +78,13 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 mediaInfoModel.Height = primaryVideoStream?.Height ?? 0;
                 mediaInfoModel.Width = primaryVideoStream?.Width ?? 0;
                 mediaInfoModel.RunTime = GetBestRuntime(analysis.PrimaryAudioStream?.Duration, primaryVideoStream?.Duration, analysis.Format.Duration);
-                mediaInfoModel.VideoFps = primaryVideoStream?.FrameRate ?? 0;
+                mediaInfoModel.VideoFps = primaryVideoStream?.RealFrameRate ?? 0;
                 mediaInfoModel.ScanType = primaryVideoStream?.FieldOrder switch
                 {
                     "tt" or "bb" or "tb" or "bt" => "Interlaced",
                     _ => "Progressive"
                 };
-                mediaInfoModel.RawStreamData = string.Concat(analysis.OutputData);
+                mediaInfoModel.RawStreamData = analysis.Json;
 
                 mediaInfoModel.AudioStreams = analysis.AudioStreams?
                     .OrderBy(stream => stream.Index)
@@ -97,7 +97,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                             CodecId = stream.CodecTagString,
                             Profile = stream.Profile,
                             Bitrate = GetBitrate(stream),
-                            Channels = stream.Channels,
+                            Channels = stream.Channels ?? 0,
                             ChannelPositions = stream.ChannelLayout
                         };
 
@@ -160,12 +160,12 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 // if it looks like PQ10 or similar HDR, do a frame analysis to figure out which type it is
                 if (PqTransferFunctions.Contains(mediaInfoModel.VideoTransferCharacteristics))
                 {
-                    var videoStreamIndex = analysis.VideoStreams.FindIndex(stream => stream.Index == primaryVideoStream?.Index);
+                    var videoStreamIndex = analysis.VideoStreams.ToList().FindIndex(stream => stream.Index == primaryVideoStream?.Index);
                     frames = FFProbe.GetFrames(filename, customArguments: $"-read_intervals \"%+#1\" -select_streams v:{(videoStreamIndex == -1 ? 0 : videoStreamIndex)}");
                 }
 
-                var streamSideData = primaryVideoStream?.SideData ?? new();
-                var framesSideData = frames?.Frames.FirstOrDefault()?.SideData ?? new();
+                var streamSideData = primaryVideoStream?.SideData ?? new List<IReadOnlyDictionary<string, JsonNode>>().AsReadOnly();
+                var framesSideData = frames?.Frames.ToList().FirstOrDefault()?.SideData ?? new List<IReadOnlyDictionary<string, JsonNode>>().AsReadOnly();
 
                 var sideData = streamSideData.Concat(framesSideData).ToList();
                 mediaInfoModel.VideoHdrFormat = GetHdrFormat(mediaInfoModel.VideoBitDepth, mediaInfoModel.VideoColourPrimaries, mediaInfoModel.VideoTransferCharacteristics, sideData);
@@ -206,7 +206,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         {
             if (mediaStream?.BitRate is > 0)
             {
-                return mediaStream.BitRate;
+                return mediaStream.BitRate.Value;
             }
 
             if ((mediaStream?.Tags?.TryGetValue("BPS", out var bitratePerSecond) ?? false) && bitratePerSecond.IsNotNullOrWhiteSpace())
@@ -240,7 +240,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             return FFProbe.TryGetPixelFormat(format, out var pixelFormat) ? pixelFormat : null;
         }
 
-        public static HdrFormat GetHdrFormat(int bitDepth, string colorPrimaries, string transferFunction, List<Dictionary<string, JsonNode>> sideData)
+        public static HdrFormat GetHdrFormat(int bitDepth, string colorPrimaries, string transferFunction, IReadOnlyList<IReadOnlyDictionary<string, JsonNode>> sideData)
         {
             if (bitDepth < 10)
             {
@@ -292,7 +292,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             return HdrFormat.None;
         }
 
-        private static bool TryGetSideData(IReadOnlyList<Dictionary<string, JsonNode>> list, string name, out Dictionary<string, JsonNode> result)
+        private static bool TryGetSideData(IReadOnlyList<IReadOnlyDictionary<string, JsonNode>> list, string name, out IReadOnlyDictionary<string, JsonNode> result)
         {
             result = list?.FirstOrDefault(item =>
                 item.TryGetValue("side_data_type", out var rawSideDataType) &&
