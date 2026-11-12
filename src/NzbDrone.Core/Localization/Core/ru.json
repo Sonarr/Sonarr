@@ -24,6 +24,7 @@
     "AddDownloadClientError": "Не удалось добавить новый клиент загрузки, попробуйте еще раз.",
     "AddDownloadClientImplementation": "Добавить клиент загрузки - {implementationName}",
     "AddExclusion": "Добавить исключение",
+    "AddFavoriteFolderWithPath": "Добавить",
     "AddImportList": "Добавить список импорта",
     "AddImportListExclusion": "Добавить исключение из списка импорта",
     "AddImportListExclusionError": "Не удалось добавить новое исключение из списка импорта. Повторите попытку.",
