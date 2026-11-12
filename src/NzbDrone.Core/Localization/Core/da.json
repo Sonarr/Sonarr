@@ -13,6 +13,7 @@
     "AddConditionError": "Kan ikke tilføje en ny betingelse, prøv igen.",
     "AddConditionImplementation": "Tilføj betingelse - {implementationName}",
     "AddConnection": "Tilføj forbindelse",
+    "AddConnectionError": "Kan ikke tilføje en ny forbindelse, prøv venligst igen.",
     "AddConnectionImplementation": "Tilføj forbindelse - {implementationName}",
     "AddCustomFilter": "Tilføj tilpasset filter",
     "AddCustomFormat": "Tilføj tilpasset format",
