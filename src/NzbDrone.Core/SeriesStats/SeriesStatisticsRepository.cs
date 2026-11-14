@@ -45,7 +45,7 @@ namespace NzbDrone.Core.SeriesStats
         {
             episodesResult.ForEach(e =>
             {
-                var file = filesResult.SingleOrDefault(f => f.SeriesId == e.SeriesId & f.SeasonNumber == e.SeasonNumber);
+                var file = filesResult.SingleOrDefault(f => f.SeriesId == e.SeriesId && f.SeasonNumber == e.SeasonNumber);
 
                 e.SizeOnDisk = file?.SizeOnDisk ?? 0;
                 e.ReleaseGroupsString = file?.ReleaseGroupsString;
