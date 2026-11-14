@@ -108,7 +108,7 @@ namespace NzbDrone.Core.DecisionEngine
                 return seasonPackCompare;
             }
 
-            if (x.RemoteEpisode.Series.SeriesType == SeriesTypes.Anime &
+            if (x.RemoteEpisode.Series.SeriesType == SeriesTypes.Anime &&
                 y.RemoteEpisode.Series.SeriesType == SeriesTypes.Anime)
             {
                 return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Episodes.Count);
