@@ -249,7 +249,7 @@ namespace NzbDrone.Core.ImportLists.MDBList
                 .Accept(HttpAccept.Json)
                 .Build();
 
-            request.Headers.Add("Authorization", "Bearer " + accessToken);
+            request.Headers.Add("Authorization", $"Bearer {accessToken}");
 
             try
             {

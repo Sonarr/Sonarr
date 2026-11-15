@@ -28,7 +28,7 @@ namespace NzbDrone.Core.ImportLists.MDBList
                 .Accept(HttpAccept.Json)
                 .Build();
 
-            request.Headers.Add("Authorization", "Bearer " + Settings.AccessToken);
+            request.Headers.Add("Authorization", $"Bearer {Settings.AccessToken}");
             request.SuppressHttpErrorStatusCodes = new[] { HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden, HttpStatusCode.NotFound };
 
             yield return new ImportListRequest(request);
