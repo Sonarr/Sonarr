@@ -21,8 +21,7 @@ namespace Sonarr.Http.Authentication
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             var headers = response.Content?.Headers;
 
-            if (headers != null &&
-                headers.ContentType == null &&
+            if (headers is { ContentType: null } &&
                 headers.NonValidated.TryGetValues("Content-Type", out var values) &&
                 values.ToString().TrimStart().StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
             {
