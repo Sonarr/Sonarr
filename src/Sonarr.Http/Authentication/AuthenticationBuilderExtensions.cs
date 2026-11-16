@@ -32,7 +32,7 @@ namespace Sonarr.Http.Authentication
 
         private static readonly Lock BackchannelHttpHandlerLock = new();
 
-        private static SocketsHttpHandler _backchannelHttpHandler;
+        private static HttpMessageHandler _backchannelHttpHandler;
 
         public static AuthenticationBuilder AddAppAuthentication(this IServiceCollection services)
         {
@@ -205,17 +205,17 @@ namespace Sonarr.Http.Authentication
                 .AddOpenIdConnect(name, options => { });
         }
 
-        private static SocketsHttpHandler GetBackchannelHttpHandler(ICertificateValidationService certificateValidationService)
+        private static HttpMessageHandler GetBackchannelHttpHandler(ICertificateValidationService certificateValidationService)
         {
             lock (BackchannelHttpHandlerLock)
             {
-                return _backchannelHttpHandler ??= new SocketsHttpHandler
+                return _backchannelHttpHandler ??= new JsonContentTypeHandler(new SocketsHttpHandler
                 {
                     SslOptions = new SslClientAuthenticationOptions
                     {
                         RemoteCertificateValidationCallback = certificateValidationService.ShouldByPassValidationError
                     }
-                };
+                });
             }
         }
 
