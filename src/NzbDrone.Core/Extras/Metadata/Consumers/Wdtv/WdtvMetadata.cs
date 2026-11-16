@@ -20,14 +20,17 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Wdtv
     {
         private readonly IMapCoversToLocal _mediaCoverService;
         private readonly IDiskProvider _diskProvider;
+        private readonly IReadMetadataXmlRoot _metadataXmlRootReader;
         private readonly Logger _logger;
 
         public WdtvMetadata(IMapCoversToLocal mediaCoverService,
                             IDiskProvider diskProvider,
+                            IReadMetadataXmlRoot metadataXmlRootReader,
                             Logger logger)
         {
             _mediaCoverService = mediaCoverService;
             _diskProvider = diskProvider;
+            _metadataXmlRootReader = metadataXmlRootReader;
             _logger = logger;
         }
 
@@ -102,6 +105,11 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Wdtv
                 switch (Path.GetExtension(filename).ToLowerInvariant())
                 {
                     case ".xml":
+                        if (_metadataXmlRootReader.GetRootElementName(path) != "details")
+                        {
+                            return null;
+                        }
+
                         metadata.Type = MetadataType.EpisodeMetadata;
                         return metadata;
                     case ".metathumb":

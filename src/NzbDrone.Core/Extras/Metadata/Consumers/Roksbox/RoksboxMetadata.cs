@@ -20,14 +20,17 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
     {
         private readonly IMapCoversToLocal _mediaCoverService;
         private readonly IDiskProvider _diskProvider;
+        private readonly IReadMetadataXmlRoot _metadataXmlRootReader;
         private readonly Logger _logger;
 
         public RoksboxMetadata(IMapCoversToLocal mediaCoverService,
                             IDiskProvider diskProvider,
+                            IReadMetadataXmlRoot metadataXmlRootReader,
                             Logger logger)
         {
             _mediaCoverService = mediaCoverService;
             _diskProvider = diskProvider;
+            _metadataXmlRootReader = metadataXmlRootReader;
             _logger = logger;
         }
 
@@ -106,6 +109,11 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
 
                 if (extension == ".xml")
                 {
+                    if (_metadataXmlRootReader.GetRootElementName(path) != "video")
+                    {
+                        return null;
+                    }
+
                     metadata.Type = MetadataType.EpisodeMetadata;
                     return metadata;
                 }

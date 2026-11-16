@@ -23,6 +23,13 @@ namespace NzbDrone.Core.Test.Extras.Metadata.Consumers.Wdtv
                                      .Build();
         }
 
+        private void GivenXmlRootElement(string path, string rootElement)
+        {
+            Mocker.GetMock<IReadMetadataXmlRoot>()
+                  .Setup(s => s.GetRootElementName(path))
+                  .Returns(rootElement);
+        }
+
         [Test]
         public void should_return_null_if_filename_is_not_handled()
         {
@@ -41,13 +48,34 @@ namespace NzbDrone.Core.Test.Extras.Metadata.Consumers.Wdtv
             Subject.FindMetadataFile(_series, path).Type.Should().Be(MetadataType.SeasonImage);
         }
 
-        [TestCase(".xml", MetadataType.EpisodeMetadata)]
         [TestCase(".metathumb", MetadataType.EpisodeImage)]
         public void should_return_metadata_for_episode_if_valid_file_for_episode(string extension, MetadataType type)
         {
             var path = Path.Combine(_series.Path, "the.series.s01e01.episode" + extension);
 
             Subject.FindMetadataFile(_series, path).Type.Should().Be(type);
+        }
+
+        [Test]
+        public void should_return_episode_metadata_for_wdtv_xml()
+        {
+            var path = Path.Combine(_series.Path, "the.series.s01e01.episode.xml");
+
+            GivenXmlRootElement(path, "details");
+
+            Subject.FindMetadataFile(_series, path).Type.Should().Be(MetadataType.EpisodeMetadata);
+        }
+
+        [TestCase("Chapters")]
+        [TestCase("video")]
+        [TestCase(null)]
+        public void should_return_null_for_xml_that_is_not_wdtv_metadata(string rootElement)
+        {
+            var path = Path.Combine(_series.Path, "the.series.s01e01.episode_chapters.xml");
+
+            GivenXmlRootElement(path, rootElement);
+
+            Subject.FindMetadataFile(_series, path).Should().BeNull();
         }
 
         [TestCase(".xml")]
