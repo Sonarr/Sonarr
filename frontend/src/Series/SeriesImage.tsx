@@ -119,7 +119,9 @@ function SeriesImage({
   }, []);
 
   if (hasError || !url) {
-    return <img className={className} style={style} src={placeholder} />;
+    return (
+      <img alt={alt} className={className} style={style} src={placeholder} />
+    );
   }
 
   if (lazy) {
@@ -129,7 +131,12 @@ function SeriesImage({
         offset={100}
         overflow={overflow}
         placeholder={
-          <img className={className} style={style} src={placeholder} />
+          <img
+            alt={alt}
+            className={className}
+            style={style}
+            src={placeholder}
+          />
         }
       >
         <img
