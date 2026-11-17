@@ -43,9 +43,11 @@ namespace NzbDrone.Core.SeriesStats
 
         private List<SeasonStatistics> MapResults(List<SeasonStatistics> episodesResult, List<SeasonStatistics> filesResult)
         {
+            var filesBySeason = filesResult.ToDictionary(file => (file.SeriesId, file.SeasonNumber));
+
             episodesResult.ForEach(e =>
             {
-                var file = filesResult.SingleOrDefault(f => f.SeriesId == e.SeriesId & f.SeasonNumber == e.SeasonNumber);
+                filesBySeason.TryGetValue((e.SeriesId, e.SeasonNumber), out var file);
 
                 e.SizeOnDisk = file?.SizeOnDisk ?? 0;
                 e.ReleaseGroupsString = file?.ReleaseGroupsString;
