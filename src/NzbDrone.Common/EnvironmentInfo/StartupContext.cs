@@ -11,7 +11,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         bool UninstallService { get; }
         bool RegisterUrl { get; }
 
-        string PreservedArguments { get; }
+        List<string> PreservedArguments { get; }
     }
 
     public class StartupContext : IStartupContext
@@ -58,23 +58,23 @@ namespace NzbDrone.Common.EnvironmentInfo
         public bool RegisterUrl => Flags.Contains(REGISTER_URL);
         public bool ExitImmediately => Flags.Contains(EXIT_IMMEDIATELY);
 
-        public string PreservedArguments
+        public List<string> PreservedArguments
         {
             get
             {
-                var args = "";
+                var args = new List<string>();
 
                 if (Args.ContainsKey(APPDATA))
                 {
-                    args = "/data=" + Args[APPDATA];
+                    args.Add("/data=" + Args[APPDATA]);
                 }
 
                 if (Flags.Contains(NO_BROWSER))
                 {
-                    args += " /" + NO_BROWSER;
+                    args.Add("/" + NO_BROWSER);
                 }
 
-                return args.Trim();
+                return args;
             }
         }
     }
