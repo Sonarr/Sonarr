@@ -1213,8 +1213,6 @@
     "Menu": "Меню",
     "Message": "Съобщение",
     "Metadata": "Метаданни",
-    "MetadataKometaDeprecated": "Kometa файловете вече няма да се създават, поддръжката ще бъде премахната напълно във версия 5",
-    "MetadataKometaDeprecatedSetting": "Остаряло (Deprecated)",
     "MetadataLoadError": "Неуспешно зареждане на метаданни",
     "MetadataPlexSettingsEpisodeMappings": "Мапинг на епизоди",
     "MetadataPlexSettingsEpisodeMappingsHelpText": "Включване на мапинги на епизоди за всички файлове във файл .plexmatch",

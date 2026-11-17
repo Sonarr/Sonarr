@@ -1341,8 +1341,6 @@
     "Menu": "Menu",
     "Message": "Správa",
     "Metadata": "Metadáta",
-    "MetadataKometaDeprecated": "Súbory Kometa sa už nebudú vytvárať, podpora bude úplne odstránená vo v5",
-    "MetadataKometaDeprecatedSetting": "Zastaralé",
     "MetadataLanguage": "Jazyk metadát",
     "MetadataLoadError": "Nie je možné načítať metadáta",
     "MetadataName": "Metadáta, {name}",

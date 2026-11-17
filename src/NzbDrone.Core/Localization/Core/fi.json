@@ -1232,8 +1232,6 @@
     "Menu": "Valikko",
     "Message": "Viesti",
     "Metadata": "Metatiedot",
-    "MetadataKometaDeprecated": "Kometa-tiedostoja ei enää luoda ja tuki poistuu täysin versiossa 5.",
-    "MetadataKometaDeprecatedSetting": "Poistunut",
     "MetadataLoadError": "Metatietojen lataus epäonnistui",
     "MetadataName": "Metatiedot, {name}",
     "MetadataPlexSettingsEpisodeMappings": "Jaksojen kohdistukset",

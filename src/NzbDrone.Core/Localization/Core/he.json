@@ -1220,8 +1220,6 @@
     "Menu": "תפריט",
     "Message": "הודעה",
     "Metadata": "מטא-דאטה (Metadata)",
-    "MetadataKometaDeprecated": "קבצי Kometa לא ייווצרו יותר, התמיכה תוסר לחלוטין בגרסה v5",
-    "MetadataKometaDeprecatedSetting": "הוצא משימוש (Deprecated)",
     "MetadataLoadError": "לא ניתן לטעון מטא-דאטה",
     "MetadataPlexSettingsEpisodeMappings": "מיפויי פרקים",
     "MetadataPlexSettingsEpisodeMappingsHelpText": "כלול מיפויי פרקים עבור כל הקבצים בקובץ .plexmatch",

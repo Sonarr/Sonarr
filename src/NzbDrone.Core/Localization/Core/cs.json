@@ -24,6 +24,7 @@
     "AddDownloadClientError": "Nebylo možné přidat nového klienta pro stahování, prosím zkuste to později.",
     "AddDownloadClientImplementation": "Přidat klienta pro stahování – {implementationName}",
     "AddExclusion": "Přidat vyjímku",
+    "AddFavoriteFolderWithPath": "Přidat {path} do oblíbených adresářů",
     "AddImportList": "Přidat importované položky",
     "AddImportListExclusion": "Přidat výjimku ze seznamu k importu",
     "AddImportListExclusionError": "Nebylo možné přidat nové importované položky, prosím zkuste to později.",
@@ -542,7 +543,7 @@
     "FormatDateTime": "{formattedDate} {formattedTime}",
     "General": "Obecné",
     "GrabRelease": "Získat vydání",
-    "Grabbed": "Získáno",
+    "Grabbed": "Zachyceno",
     "HealthMessagesInfoBox": "Další informace o příčině těchto zpráv o kontrole zdraví najdete kliknutím na odkaz wiki (ikona knihy) na konci řádku nebo kontrolou [logů]({link}). Pokud máte potíže s interpretací těchto zpráv, můžete se obrátit na naši podporu, a to na níže uvedených odkazech.",
     "History": "Historie",
     "Implementation": "Implementace",
@@ -588,5 +589,6 @@
     "SkipRedownloadHelpText": "Zabraňuje {appName} zkoušet stahovat alternativní vydání pro odebrané položky",
     "TimeFormat": "Časový formát",
     "UnmonitorSelected": "Nemonitorovat vybrané",
-    "UpdateMechanismHelpText": "Použij vestavěný nástroj {appName}u pro aktualizaci nebo skript"
+    "UpdateMechanismHelpText": "Použij vestavěný nástroj {appName}u pro aktualizaci nebo skript",
+    "Wanted": "Zažádáno"
 }
