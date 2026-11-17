@@ -4,6 +4,26 @@
   height: 100%;
 }
 
+.skipLink {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: var(--popperZIndex);
+  padding: 8px 16px;
+  border: 1px solid var(--accentDeep);
+  border-radius: 6px;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-weight: 600;
+  transition: transform var(--transitionSmooth);
+  transform: translateY(calc(-100% - 12px));
+
+  &:focus {
+    color: var(--ink);
+    transform: translateY(0);
+  }
+}
+
 .main {
   position: relative; /* need this to position inner content - is this really needed? */
   display: flex;

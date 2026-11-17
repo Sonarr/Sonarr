@@ -8,9 +8,11 @@ import AuthenticationRequiredModal from 'FirstRun/AuthenticationRequiredModal';
 import useAppPage from 'Helpers/Hooks/useAppPage';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import { useSystemStatusData } from 'System/Status/useSystemStatus';
+import translate from 'Utilities/String/translate';
 import ErrorPage from './ErrorPage';
 import PageHeader from './Header/PageHeader';
 import LoadingPage from './LoadingPage';
+import { MAIN_CONTENT_ID } from './PageContent';
 import PageSidebar from './Sidebar/PageSidebar';
 import styles from './Page.module.css';
 
@@ -88,6 +90,10 @@ function Page({ children }: PageProps) {
   return (
     <div className={styles.page}>
       <SignalRListener />
+
+      <a className={styles.skipLink} href={`#${MAIN_CONTENT_ID}`}>
+        {translate('SkipToMainContent')}
+      </a>
 
       <PageHeader />
 

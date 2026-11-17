@@ -2359,6 +2359,7 @@
   "SkipFreeSpaceCheckWhenImportingHelpText": "Skip checking the root folder for enough free space for the downloaded files before importing, useful when {appName} is unable to detect free space",
   "SkipRedownload": "Skip Redownload",
   "SkipRedownloadHelpText": "Prevents {appName} from trying to download an alternative release for this item",
+  "SkipToMainContent": "Skip to main content",
   "Small": "Small",
   "SmartReplace": "Smart Replace",
   "SmartReplaceHint": "Dash or Space Dash depending on name",

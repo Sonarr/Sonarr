@@ -9,6 +9,8 @@ interface PageContentProps {
   children: React.ReactNode;
 }
 
+export const MAIN_CONTENT_ID = 'main-content';
+
 function PageContent({
   className = styles.content,
   title,
@@ -26,7 +28,12 @@ function PageContent({
 
   return (
     <ErrorBoundary errorComponent={PageContentError}>
-      <main className={className} aria-label={title}>
+      <main
+        id={MAIN_CONTENT_ID}
+        className={className}
+        aria-label={title}
+        tabIndex={-1}
+      >
         {children}
       </main>
     </ErrorBoundary>
