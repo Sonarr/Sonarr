@@ -11,6 +11,7 @@ function TheTvdb() {
   return (
     <div className={styles.container}>
       <img
+        alt=""
         className={styles.image}
         src={`${window.Sonarr.urlBase}/Content/Images/thetvdb-${theme}.png`}
       />

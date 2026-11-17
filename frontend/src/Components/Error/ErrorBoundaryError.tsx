@@ -44,6 +44,7 @@ function ErrorBoundaryError(props: ErrorBoundaryErrorProps) {
 
       <div className={styles.imageContainer}>
         <img
+          alt=""
           className={styles.image}
           src={`${window.Sonarr.urlBase}/Content/Images/error.png`}
         />

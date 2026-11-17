@@ -9,7 +9,7 @@ const sonarrLogo =
 function LoadingPage() {
   return (
     <div className={styles.page}>
-      <img className={styles.logoFull} src={sonarrLogo} />
+      <img alt="" className={styles.logoFull} src={sonarrLogo} />
       <LoadingMessage />
       <LoadingIndicator />
     </div>
