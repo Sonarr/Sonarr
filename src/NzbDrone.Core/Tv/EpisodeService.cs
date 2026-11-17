@@ -51,12 +51,14 @@ namespace NzbDrone.Core.Tv
         private readonly IEpisodeRepository _episodeRepository;
         private readonly IConfigService _configService;
         private readonly ICached<HashSet<int>> _cache;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
-        public EpisodeService(IEpisodeRepository episodeRepository, IConfigService configService, ICacheManager cacheManager, Logger logger)
+        public EpisodeService(IEpisodeRepository episodeRepository, IConfigService configService, ICacheManager cacheManager, IEventAggregator eventAggregator, Logger logger)
         {
             _episodeRepository = episodeRepository;
             _configService = configService;
+            _eventAggregator = eventAggregator;
             _cache = cacheManager.GetCache<HashSet<int>>(GetType());
             _logger = logger;
         }
@@ -180,11 +182,19 @@ namespace NzbDrone.Core.Tv
             _episodeRepository.SetMonitoredFlat(episode, monitored);
 
             _logger.Debug("Monitored flag for Episode:{0} was set to {1}", episodeId, monitored);
+
+            _eventAggregator.PublishEvent(new SeriesEpisodesMonitoredChangedEvent([episode.SeriesId]));
         }
 
         public void SetMonitored(IEnumerable<int> ids, bool monitored)
         {
-            _episodeRepository.SetMonitored(ids, monitored);
+            var episodeIds = ids.ToList();
+
+            _episodeRepository.SetMonitored(episodeIds, monitored);
+
+            var seriesIds = _episodeRepository.Get(episodeIds).Select(e => e.SeriesId).Distinct().ToList();
+
+            _eventAggregator.PublishEvent(new SeriesEpisodesMonitoredChangedEvent(seriesIds));
         }
 
         public void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)
