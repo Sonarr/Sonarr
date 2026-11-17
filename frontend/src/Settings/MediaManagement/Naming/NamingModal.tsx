@@ -468,15 +468,15 @@ function NamingModal(props: NamingModalProps) {
   const [selectionEnd, setSelectionEnd] = useState<number | null>(null);
 
   const handleTokenSeparatorChange = useCallback(
-    ({ value }: { value: TokenSeparator }) => {
-      setTokenSeparator(value);
+    ({ value }: { value: string }) => {
+      setTokenSeparator(value as TokenSeparator);
     },
     [setTokenSeparator]
   );
 
   const handleTokenCaseChange = useCallback(
-    ({ value }: { value: TokenCase }) => {
-      setTokenCase(value);
+    ({ value }: { value: string }) => {
+      setTokenCase(value as TokenCase);
     },
     [setTokenCase]
   );

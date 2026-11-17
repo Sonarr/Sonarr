@@ -192,7 +192,7 @@ function FilterBuilderRow<T>({
     : translate('RemoveFilterCondition');
 
   const handleFilterKeyChange = useCallback(
-    ({ value: key }: InputChanged<FilterBuilderTypes>) => {
+    ({ value: key }: InputChanged<string>) => {
       const selected = getselectedFilterBuilderProp(filterBuilderProps, key);
 
       if (!selected) {
@@ -202,7 +202,7 @@ function FilterBuilderRow<T>({
       const type = getDefaultFilterType(selected);
 
       const filter = {
-        key,
+        key: key as FilterBuilderTypes,
         value: getDefaultFilterValue(selected),
         type,
       };
@@ -214,7 +214,7 @@ function FilterBuilderRow<T>({
   );
 
   const handleFilterTypeChange = useCallback(
-    ({ value }: InputChanged<FilterType>) => {
+    ({ value }: InputChanged<string>) => {
       if (filterKey == null || filterValue == null || filterType == null) {
         return;
       }
@@ -222,7 +222,7 @@ function FilterBuilderRow<T>({
       const filter: PropertyFilter = {
         key: filterKey,
         value: filterValue,
-        type: value,
+        type: value as FilterType,
       };
 
       onFilterChange(index, filter);
