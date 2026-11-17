@@ -24,6 +24,9 @@ namespace NzbDrone.Common.Test.InstrumentationTests
         [TestCase(@"https://b-hd.me/torrent/download/auto.343756.is1t1pl127p1sfwur8h4kgyhg1wcsn05")]
         [TestCase(@"https://b-hd.me/torrent/download/a-slug-in-the-url.343756.is1t1pl127p1sfwur8h4kgyhg1wcsn05")]
 
+        // JSON-escaped query string
+        [TestCase(@"{""value"":""http://127.0.0.1:9696/1/api?t=caps\u0026apikey=mySecret\u0026extended=1""}")]
+
         // NzbGet
         [TestCase(@"{ ""Name"" : ""ControlUsername"", ""Value"" : ""mySecret"" }, { ""Name"" : ""ControlPassword"", ""Value"" : ""mySecret"" }, ")]
         [TestCase(@"{ ""Name"" : ""Server1.Username"", ""Value"" : ""mySecret"" }, { ""Name"" : ""Server1.Password"", ""Value"" : ""mySecret"" }, ")]
