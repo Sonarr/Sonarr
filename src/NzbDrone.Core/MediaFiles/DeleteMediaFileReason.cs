@@ -6,6 +6,7 @@ namespace NzbDrone.Core.MediaFiles
         Manual,
         Upgrade,
         NoLinkedEpisodes,
-        ManualOverride
+        ManualOverride,
+        Retention
     }
 }

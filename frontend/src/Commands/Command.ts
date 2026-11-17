@@ -56,6 +56,11 @@ export interface RenameFilesCommandBody extends BaseCommandBody {
   files: number[];
 }
 
+export interface EpisodeRetentionCommandBody extends SeriesCommandBody {
+  files: number[];
+  episodeIds: number[];
+}
+
 export interface MoveSeriesCommandBody extends BaseCommandBody {
   seriesId: number;
   destinationPath: string;
@@ -78,6 +83,7 @@ export type CommandBody =
   | SeasonCommandBody
   | EpisodeCommandBody
   | SeriesEpisodeCommandBody
+  | EpisodeRetentionCommandBody
   | RenameFilesCommandBody
   | MoveSeriesCommandBody
   | ManualImportCommandBody
@@ -103,6 +109,7 @@ export interface CommandBodyMap {
   EpisodeSearch: EpisodeCommandBody | SeriesEpisodeCommandBody;
   MissingEpisodeSearch: BaseCommandBody;
   CutoffUnmetEpisodeSearch: BaseCommandBody;
+  EpisodeRetention: EpisodeRetentionCommandBody;
   RenameFiles: RenameFilesCommandBody;
   RenameSeries: MultipleSeriesCommandBody;
   MoveSeries: MoveSeriesCommandBody;
