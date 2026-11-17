@@ -1315,8 +1315,6 @@
     "Menu": "Menu",
     "Message": "Message",
     "Metadata": "Métadonnées",
-    "MetadataKometaDeprecated": "Les fichiers Kometa ne seront plus créés, le support sera complètement supprimé dans la v5",
-    "MetadataKometaDeprecatedSetting": "Obsolète",
     "MetadataLanguage": "Langue des métadonnées",
     "MetadataLoadError": "Impossible de charger les métadonnées",
     "MetadataName": "Métadonnée, {name}",

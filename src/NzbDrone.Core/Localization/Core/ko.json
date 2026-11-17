@@ -1334,8 +1334,6 @@
     "Menu": "메뉴",
     "Message": "메시지",
     "Metadata": "메타데이터",
-    "MetadataKometaDeprecated": "Kometa 파일은 더 이상 만들지 않으며, v5에서 지원이 완전히 제거됩니다",
-    "MetadataKometaDeprecatedSetting": "지원 중단됨",
     "MetadataLanguage": "메타데이터 언어",
     "MetadataLoadError": "메타데이터를 불러오지 못했습니다",
     "MetadataName": "메타데이터, {name}",

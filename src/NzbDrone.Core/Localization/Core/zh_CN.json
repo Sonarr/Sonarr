@@ -24,6 +24,7 @@
     "AddDownloadClientError": "无法添加下载客户端，请稍后重试。",
     "AddDownloadClientImplementation": "添加下载客户端- {implementationName}",
     "AddExclusion": "添加排除",
+    "AddFavoriteFolderWithPath": "Add {path} to favorite folders",
     "AddImportList": "添加导入列表",
     "AddImportListExclusion": "添加导入排除列表",
     "AddImportListExclusionError": "无法添加新排除列表，请再试一次。",

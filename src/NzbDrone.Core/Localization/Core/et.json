@@ -1241,8 +1241,6 @@
     "Menu": "Menüü",
     "Message": "Sõnum",
     "Metadata": "Metaandmed",
-    "MetadataKometaDeprecated": "Kometa faile enam ei looda, tugi eemaldatakse versioonis 5 täielikult",
-    "MetadataKometaDeprecatedSetting": "Aegunud",
     "MetadataLoadError": "Metaandmete laadimine nurjus",
     "MetadataName": "Metaandmed, {name}",
     "MetadataPlexSettingsEpisodeMappings": "Episoodide kaardistused",

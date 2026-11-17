@@ -1215,8 +1215,6 @@
     "Menu": "Menü",
     "Message": "Mesaj",
     "Metadata": "Meta veri",
-    "MetadataKometaDeprecated": "Kometa dosyaları artık oluşturulmayacak, destek v6'da tamamen kaldırılacak",
-    "MetadataKometaDeprecatedSetting": "Kullanım Dışı",
     "MetadataLoadError": "Meta Veriler yüklenemiyor",
     "MetadataPlexSettingsEpisodeMappings": "Bölüm Eşlemeleri",
     "MetadataPlexSettingsEpisodeMappingsHelpText": ".plexmatch dosyasındaki tüm dosyalar için bölüm eşlemelerini ekleyin",

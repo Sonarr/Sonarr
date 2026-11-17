@@ -1180,8 +1180,6 @@
     "Menu": "Меню",
     "Message": "Повідомлення",
     "Metadata": "Метадані",
-    "MetadataKometaDeprecated": "Kometa файли більше не будуть створюватися, підтримка буде повністю вимкнена у 5-й версії",
-    "MetadataKometaDeprecatedSetting": "Застарілі",
     "MetadataLoadError": "Не вдалося завантажити метадані",
     "MetadataPlexSettingsEpisodeMappings": "Співставлення епізодів",
     "MetadataPlexSettingsEpisodeMappingsHelpText": "Включити співставлення епізодів для всіх файлів у файлі .plexmatch",
