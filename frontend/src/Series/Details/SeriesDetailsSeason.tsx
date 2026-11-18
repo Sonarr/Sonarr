@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  RefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useAppDimension } from 'App/appStore';
 import CommandNames from 'Commands/CommandNames';
 import { useCommands, useExecuteCommand } from 'Commands/useCommands';
@@ -12,9 +19,8 @@ import MenuButton from 'Components/Menu/MenuButton';
 import MenuContent from 'Components/Menu/MenuContent';
 import MenuItem from 'Components/Menu/MenuItem';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
+import Scroller from 'Components/Scroller/Scroller';
 import SpinnerIcon from 'Components/SpinnerIcon';
-import Table from 'Components/Table/Table';
-import TableBody from 'Components/Table/TableBody';
 import Popover from 'Components/Tooltip/Popover';
 import Episode from 'Episode/Episode';
 import {
@@ -25,7 +31,13 @@ import {
 import { getQueryKey, useToggleEpisodesMonitored } from 'Episode/useEpisode';
 import { useSeasonEpisodes } from 'Episode/useEpisodes';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import { align, icons, tooltipPositions } from 'Helpers/Props';
+import useVirtualRows from 'Helpers/Hooks/useVirtualRows';
+import {
+  align,
+  icons,
+  scrollDirections,
+  tooltipPositions,
+} from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import { manageEpisodesOptionsStore } from 'InteractiveImport/interactiveImportOptionsStore';
@@ -42,9 +54,13 @@ import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
 import getToggledRange from 'Utilities/Table/getToggledRange';
 import EpisodeRow from './EpisodeRow';
+import EpisodeTableHeader from './EpisodeTableHeader';
 import SeasonInfo from './SeasonInfo';
 import SeasonProgressLabel from './SeasonProgressLabel';
+import useEpisodeTableLayout from './useEpisodeTableLayout';
 import styles from './SeriesDetailsSeason.module.css';
+
+const EPISODE_ROW_HEIGHT = 46;
 
 function getSeasonStatistics(episodes: Episode[]) {
   let episodeCount = 0;
@@ -102,6 +118,7 @@ interface SeriesDetailsSeasonProps {
   statistics?: Statistics;
   title?: string;
   isExpanded?: boolean;
+  scrollerRef: RefObject<HTMLElement>;
   onExpandPress: (seasonNumber: number, isExpanded: boolean) => void;
 }
 
@@ -112,13 +129,38 @@ function SeriesDetailsSeason({
   statistics = {} as Statistics,
   title,
   isExpanded,
+  scrollerRef,
   onExpandPress,
 }: SeriesDetailsSeasonProps) {
   const executeCommand = useExecuteCommand();
-  const { monitored: seriesMonitored, path } = useSingleSeries(seriesId)!;
+  const {
+    monitored: seriesMonitored,
+    path,
+    seriesType,
+  } = useSingleSeries(seriesId)!;
   const { data: items } = useSeasonEpisodes(seriesId, seasonNumber);
+  const {
+    topSpacerRef,
+    isVirtual,
+    startIndex,
+    endIndex,
+    topSpacerHeight,
+    bottomSpacerHeight,
+  } = useVirtualRows(
+    items.length,
+    EPISODE_ROW_HEIGHT,
+    scrollerRef,
+    !!isExpanded
+  );
 
   const { columns, sortKey, sortDirection } = useEpisodeOptions();
+
+  const { gridTemplateColumns, sizerEpisodes } = useEpisodeTableLayout(
+    items,
+    seriesType,
+    columns,
+    isVirtual && endIndex > startIndex
+  );
 
   const isSmallScreen = useAppDimension('isSmallScreen');
   const isSearching = useIsSearching(seriesId, seasonNumber);
@@ -131,7 +173,7 @@ function SeriesDetailsSeason({
     totalEpisodeCount,
     monitoredEpisodeCount,
     hasMonitoredEpisodes,
-  } = getSeasonStatistics(items);
+  } = useMemo(() => getSeasonStatistics(items), [items]);
 
   const previousEpisodeFileCount = usePrevious(episodeFileCount);
 
@@ -534,15 +576,31 @@ function SeriesDetailsSeason({
         {isExpanded ? (
           <div className={styles.episodes}>
             {items.length ? (
-              <Table
-                columns={columns}
-                sortKey={sortKey}
-                sortDirection={sortDirection}
-                onSortPress={handleSortPress}
-                onTableOptionChange={handleTableOptionChange}
+              <Scroller
+                scrollDirection={scrollDirections.HORIZONTAL}
+                autoFocus={false}
               >
-                <TableBody>
-                  {items.map((item) => {
+                <div
+                  className={styles.table}
+                  role="table"
+                  style={{ gridTemplateColumns }}
+                >
+                  <EpisodeTableHeader
+                    columns={columns}
+                    sortKey={sortKey}
+                    sortDirection={sortDirection}
+                    onSortPress={handleSortPress}
+                    onTableOptionChange={handleTableOptionChange}
+                  />
+
+                  {isVirtual ? (
+                    <div
+                      ref={topSpacerRef}
+                      style={{ height: topSpacerHeight }}
+                    />
+                  ) : null}
+
+                  {items.slice(startIndex, endIndex).map((item) => {
                     return (
                       <EpisodeRow
                         key={item.id}
@@ -555,8 +613,29 @@ function SeriesDetailsSeason({
                       />
                     );
                   })}
-                </TableBody>
-              </Table>
+
+                  {bottomSpacerHeight ? (
+                    <div style={{ height: bottomSpacerHeight }} />
+                  ) : null}
+
+                  {sizerEpisodes.length ? (
+                    <div className={styles.sizer} aria-hidden={true}>
+                      {sizerEpisodes.map(({ episode, sizerColumns }) => {
+                        return (
+                          <EpisodeRow
+                            key={episode.id}
+                            columns={columns}
+                            sizerColumns={sizerColumns}
+                            {...episode}
+                            isSaving={false}
+                            onMonitorEpisodePress={handleMonitorEpisodePress}
+                          />
+                        );
+                      })}
+                    </div>
+                  ) : null}
+                </div>
+              </Scroller>
             ) : (
               <div className={styles.noEpisodes}>
                 {translate('NoEpisodesInThisSeason')}
