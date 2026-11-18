@@ -6,6 +6,8 @@ namespace NzbDrone.Core.Authentication
 {
     public static class AuthenticationConfigurationExtensions
     {
+        public static readonly TimeSpan OidcSessionLifetime = TimeSpan.FromDays(7);
+
         public static bool IsOidcConfigured(this IConfigFileProvider configFileProvider)
         {
             return configFileProvider.HasOidcSettings() && configFileProvider.IsOidcAuthoritySecure();
