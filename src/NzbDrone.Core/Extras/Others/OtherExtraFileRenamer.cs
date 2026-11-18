@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
@@ -60,19 +61,21 @@ namespace NzbDrone.Core.Extras.Others
 
         private void RemoveOtherExtraFile(Series series, string path)
         {
-            if (!_diskProvider.FileExists(path))
+            var relativePath = series.Path.GetRelativePath(path);
+            var otherExtraFiles = _otherExtraFileService.FindAllByPath(series.Id, relativePath);
+
+            if (otherExtraFiles.Count == 0)
             {
                 return;
             }
 
-            var relativePath = series.Path.GetRelativePath(path);
-            var otherExtraFile = _otherExtraFileService.FindByPath(series.Id, relativePath);
-
-            if (otherExtraFile != null)
+            if (_diskProvider.FileExists(path))
             {
                 var subfolder = Path.GetDirectoryName(relativePath);
                 _recycleBinProvider.DeleteFile(path, subfolder);
             }
+
+            _otherExtraFileService.DeleteMany(otherExtraFiles.Select(file => file.Id));
         }
     }
 }
