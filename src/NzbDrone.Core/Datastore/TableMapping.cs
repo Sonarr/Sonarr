@@ -162,6 +162,7 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<DelayProfile>("DelayProfiles").RegisterModel();
             Mapper.Entity<User>("Users").RegisterModel();
+            Mapper.Entity<OidcLogout>("OidcLogouts").RegisterModel();
             Mapper.Entity<CommandModel>("Commands").RegisterModel()
                 .Ignore(c => c.Message);
 
