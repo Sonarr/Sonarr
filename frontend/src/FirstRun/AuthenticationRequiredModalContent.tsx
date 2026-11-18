@@ -52,6 +52,7 @@ export default function AuthenticationRequiredModalContent() {
     oidcClientSecret,
     oidcUserIdentifier,
     oidcScopes,
+    oidcProviderName,
   } = settings;
 
   const wasSaving = usePrevious(isSaving);
@@ -138,6 +139,7 @@ export default function AuthenticationRequiredModalContent() {
               oidcClientSecret={oidcClientSecret}
               oidcUserIdentifier={oidcUserIdentifier}
               oidcScopes={oidcScopes}
+              oidcProviderName={oidcProviderName}
               showValidationWarnings={true}
               onInputChange={onInputChange}
             />

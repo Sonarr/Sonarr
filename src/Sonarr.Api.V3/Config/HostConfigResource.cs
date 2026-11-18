@@ -27,6 +27,7 @@ namespace Sonarr.Api.V3.Config
         public string OidcClientSecret { get; set; }
         public string OidcUserIdentifier { get; set; }
         public string OidcScopes { get; set; }
+        public string OidcProviderName { get; set; }
         public string LogLevel { get; set; }
         public int LogSizeLimit { get; set; }
         public string ConsoleLogLevel { get; set; }
@@ -77,6 +78,7 @@ namespace Sonarr.Api.V3.Config
                 OidcClientId = model.OidcClientId,
                 OidcUserIdentifier = model.OidcUserIdentifier,
                 OidcScopes = model.OidcScopes,
+                OidcProviderName = model.OidcProviderName,
                 LogLevel = model.LogLevel,
                 LogSizeLimit = model.LogSizeLimit,
                 ConsoleLogLevel = model.ConsoleLogLevel,

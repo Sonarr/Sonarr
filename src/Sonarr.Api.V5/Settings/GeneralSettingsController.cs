@@ -100,6 +100,11 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
             .When(c => c.AuthenticationMethod == AuthenticationType.Oidc)
             .WithName("OIDC Scopes");
 
+        SharedValidator.RuleFor(c => c.OidcProviderName)
+            .MaximumLength(64)
+            .Must(c => c is null || c.All(character => !char.IsControl(character)))
+            .WithMessage("OIDC Provider Name must not contain control characters.");
+
         SharedValidator.RuleFor(c => c.SslPort).ValidPort().When(c => c.EnableSsl);
         SharedValidator.RuleFor(c => c.SslPort).NotEqual(c => c.Port).When(c => c.EnableSsl);
 

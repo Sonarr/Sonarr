@@ -256,5 +256,17 @@ namespace NzbDrone.Common.Test
 
             Assert.Throws<InvalidConfigFileException>(() => Subject.GetValue("key", "value"));
         }
+
+        [Test]
+        public void should_read_custom_oidc_provider_name()
+        {
+            const string key = "OidcProviderName";
+            const string value = "Pocket ID";
+
+            Subject.SetValue(key, value);
+
+            var result = Subject.OidcProviderName;
+            result.Should().Be(value);
+        }
     }
 }

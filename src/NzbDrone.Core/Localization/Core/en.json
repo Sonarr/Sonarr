@@ -1816,6 +1816,8 @@
   "OidcClientSecretHelpText": "The Client Secret registered with the OIDC provider",
   "OidcDiscoveryFailedHealthCheckMessage": "Unable to retrieve the OIDC configuration from {authority}, signing in with your identity provider will fail until it is reachable",
   "OidcNotConfiguredHealthCheckMessage": "OIDC authentication is enabled, but Authority, Client ID, Client Secret, User and Scopes are not all configured",
+  "OidcProviderName": "OIDC Provider Name",
+  "OidcProviderNameHelpText": "The OIDC provider name displayed on the OIDC login button, for example 'Pocket ID'. If empty, defaults to 'OIDC'",
   "OidcScopes": "OIDC Scopes",
   "OidcScopesHelpText": "The scopes to request from the OIDC provider, must include 'openid'",
   "OidcUserIdentifier": "OIDC User",
