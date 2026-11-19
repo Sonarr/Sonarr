@@ -2213,6 +2213,7 @@
   "SeasonListToken": "Seasons {seasonNumbers}",
   "SeasonNumber": "Season Number",
   "SeasonNumberToken": "Season {seasonNumber}",
+  "SeasonNumbers": "Season Numbers",
   "SeasonPack": "Season Pack",
   "SeasonPackUpgradeAllowAnyWarning": "Allow a season pack if it upgrades any episode. This applies to all sources of automatic grabs.",
   "SeasonPackUpgradeAllowHelpText": "Require a season pack to be a quality or custom format upgrade for all episodes",
