@@ -29,7 +29,7 @@ function ParseResult(props: ParseResultProps) {
     seriesTitleInfo,
     releaseGroup,
     releaseHash,
-    seasonNumber,
+    seasonNumbers = [],
     episodeNumbers,
     absoluteEpisodeNumbers,
     special,
@@ -82,12 +82,18 @@ function ParseResult(props: ParseResultProps) {
         <div className={styles.container}>
           <div className={styles.column}>
             <ParseResultItem
-              title={translate('SeasonNumber')}
+              title={
+                seasonNumbers.length > 1
+                  ? translate('SeasonNumbers')
+                  : translate('SeasonNumber')
+              }
               data={
-                seasonNumber == null ||
-                (seasonNumber === 0 && absoluteEpisodeNumbers.length)
+                seasonNumbers.length === 0 ||
+                (seasonNumbers.length === 1 &&
+                  seasonNumbers[0] === 0 &&
+                  absoluteEpisodeNumbers.length)
                   ? '-'
-                  : seasonNumber
+                  : seasonNumbers.join(', ')
               }
             />
 
