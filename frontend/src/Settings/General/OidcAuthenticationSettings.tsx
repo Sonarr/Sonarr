@@ -15,6 +15,7 @@ interface OidcAuthenticationSettingsProps {
   oidcClientSecret: PendingSection<GeneralSettingsModel>['oidcClientSecret'];
   oidcUserIdentifier: PendingSection<GeneralSettingsModel>['oidcUserIdentifier'];
   oidcScopes: PendingSection<GeneralSettingsModel>['oidcScopes'];
+  oidcProviderName: PendingSection<GeneralSettingsModel>['oidcProviderName'];
   showValidationWarnings?: boolean;
   onInputChange: (change: InputChanged) => void;
 }
@@ -25,6 +26,7 @@ function OidcAuthenticationSettings({
   oidcClientSecret,
   oidcUserIdentifier,
   oidcScopes,
+  oidcProviderName,
   showValidationWarnings = false,
   onInputChange,
 }: OidcAuthenticationSettingsProps) {
@@ -118,6 +120,17 @@ function OidcAuthenticationSettings({
           name="oidcScopes"
           onChange={onInputChange}
           {...oidcScopes}
+        />
+      </FormRow>
+
+      <FormRow>
+        <FormLabel>{translate('OidcProviderName')}</FormLabel>
+        <FormInputHelpText text={translate('OidcProviderNameHelpText')} />
+        <FormInput
+          type={inputTypes.TEXT}
+          name="oidcProviderName"
+          onChange={onInputChange}
+          {...oidcProviderName}
         />
       </FormRow>
     </>

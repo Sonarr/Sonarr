@@ -29,6 +29,7 @@ export interface GeneralSettingsModel {
   oidcClientSecret: string;
   oidcUserIdentifier: string;
   oidcScopes: string;
+  oidcProviderName: string;
   logLevel: string;
   logSizeLimit: number;
   consoleLogLevel: string;

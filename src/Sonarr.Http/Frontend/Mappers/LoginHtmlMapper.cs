@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Net;
 using Microsoft.AspNetCore.Http;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -44,6 +45,12 @@ namespace Sonarr.Http.Frontend.Mappers
             var html = base.GetHtmlText(context);
             var theme = _configFileProvider.Theme;
             var authMethod = _configFileProvider.AuthenticationMethod.ToString().ToLowerInvariant();
+            var oidcProviderName = _configFileProvider.OidcProviderName;
+
+            if (string.IsNullOrWhiteSpace(oidcProviderName))
+            {
+                oidcProviderName = "OIDC";
+            }
 
             if (_configFileProvider.AuthenticationMethod == AuthenticationType.Oidc &&
                 !_configFileProvider.IsOidcConfigured())
@@ -53,6 +60,7 @@ namespace Sonarr.Http.Frontend.Mappers
 
             html = html.Replace("_THEME_", theme);
             html = html.Replace("_AUTH_METHOD_", authMethod);
+            html = html.Replace("__OIDC_PROVIDER_NAME__", WebUtility.HtmlEncode(oidcProviderName));
 
             return html;
         }

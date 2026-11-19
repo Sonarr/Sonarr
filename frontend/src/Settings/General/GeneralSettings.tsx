@@ -166,6 +166,7 @@ function GeneralSettings() {
                 oidcClientSecret={settings.oidcClientSecret}
                 oidcUserIdentifier={settings.oidcUserIdentifier}
                 oidcScopes={settings.oidcScopes}
+                oidcProviderName={settings.oidcProviderName}
                 apiKey={settings.apiKey}
                 certificateValidation={settings.certificateValidation}
                 trustedNetworks={settings.trustedNetworks}
