@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Languages;
@@ -616,6 +618,44 @@ namespace NzbDrone.Core.Test.ParserTests
             subtitleTitleInfo.Language.Should().Be(Language.Unknown);
             subtitleTitleInfo.LanguageTags.Should().BeEmpty();
             subtitleTitleInfo.RawTitle.Should().BeNull();
+        }
+
+        [TestCase("Title.the.Series.2009.S01E14.ICELANDIC.HDTV.XviD-LOL", "Icelandic")]
+        [TestCase("Title.the.Series.2009.S01E14.FINNISH.HDTV.XviD-LOL", "Finnish")]
+        [TestCase("Title.the.Series.2009.S01E14.VIETNAMESE.HDTV.XviD-LOL", "Vietnamese")]
+        [TestCase("Title.the.Series.2009.S01E14.Italian.HDTV.XviD-LOL", "Italian")]
+        [TestCase("Title.the.Series.S01.Irish.1080p.WEB-DL.h264-RlsGrp", "Irish")]
+        [TestCase("Title.the.Series.S01E01.FLEMISH.HDTV.x264-BRiGAND", "Flemish")]
+        public void should_parse_language_regardless_of_culture(string postTitle, string languageName)
+        {
+            var current = CultureInfo.CurrentCulture;
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("tr-TR");
+
+            try
+            {
+                var result = LanguageParser.ParseLanguages(postTitle);
+                result.Should().Contain(Language.All.Single(l => l.Name == languageName));
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = current;
+            }
+        }
+
+        [Test]
+        public void should_parse_subtitle_language_regardless_of_culture()
+        {
+            var current = CultureInfo.CurrentCulture;
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("tr-TR");
+
+            try
+            {
+                LanguageParser.ParseSubtitleLanguage("Series Title - S01E01 - Pilot.IT.sub").Should().Be(Language.Italian);
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = current;
+            }
         }
     }
 }
