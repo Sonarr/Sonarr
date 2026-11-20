@@ -107,8 +107,6 @@ interface ToggleEpisodesMonitored {
   monitored: boolean;
 }
 
-type EpisodeQueryData = Episode[] | PagedQueryResponse<Episode>;
-
 export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
   const queryClient = useQueryClient();
 
@@ -120,41 +118,40 @@ export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
     method: 'PUT',
     mutationOptions: {
       onSuccess: (_data, variables) => {
-        queryClient.setQueryData<EpisodeQueryData | undefined>(
-          queryKey,
-          (oldData) => {
-            if (!oldData) {
-              return oldData;
-            }
+        queryClient.setQueryData<
+          Episode[] | PagedQueryResponse<Episode> | undefined
+        >(queryKey, (oldData) => {
+          if (!oldData) {
+            return oldData;
+          }
 
-            if ('records' in oldData) {
+          if ('records' in oldData) {
+            return {
+              ...oldData,
+              records: oldData.records.map((record) => {
+                if (variables.episodeIds.includes(record.id)) {
+                  return {
+                    ...record,
+                    monitored: variables.monitored,
+                  };
+                }
+
+                return record;
+              }),
+            };
+          }
+
+          return oldData.map((oldEpisode) => {
+            if (variables.episodeIds.includes(oldEpisode.id)) {
               return {
-                ...oldData,
-                records: oldData.records.map((record) => {
-                  if (variables.episodeIds.includes(record.id)) {
-                    return {
-                      ...record,
-                      monitored: variables.monitored,
-                    };
-                  }
-
-                  return record;
-                }),
+                ...oldEpisode,
+                monitored: variables.monitored,
               };
             }
 
-            return oldData.map((oldEpisode) => {
-              if (variables.episodeIds.includes(oldEpisode.id)) {
-                return {
-                  ...oldEpisode,
-                  monitored: variables.monitored,
-                };
-              }
-
-              return oldEpisode;
-            });
-          }
-        );
+            return oldEpisode;
+          });
+        });
 
         queryClient.invalidateQueries({ queryKey });
       },
