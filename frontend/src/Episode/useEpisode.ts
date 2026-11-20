@@ -127,12 +127,23 @@ export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
               return oldData;
             }
 
-            // Wanted lists cache a paged response rather than an array
-            const oldEpisodes = Array.isArray(oldData)
-              ? oldData
-              : oldData.records;
+            if ('records' in oldData) {
+              return {
+                ...oldData,
+                records: oldData.records.map((record) => {
+                  if (variables.episodeIds.includes(record.id)) {
+                    return {
+                      ...record,
+                      monitored: variables.monitored,
+                    };
+                  }
 
-            const episodes = oldEpisodes.map((oldEpisode) => {
+                  return record;
+                }),
+              };
+            }
+
+            return oldData.map((oldEpisode) => {
               if (variables.episodeIds.includes(oldEpisode.id)) {
                 return {
                   ...oldEpisode,
@@ -142,10 +153,6 @@ export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
 
               return oldEpisode;
             });
-
-            return Array.isArray(oldData)
-              ? episodes
-              : { ...oldData, records: episodes };
           }
         );
 
