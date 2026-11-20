@@ -118,25 +118,40 @@ export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
     method: 'PUT',
     mutationOptions: {
       onSuccess: (_data, variables) => {
-        queryClient.setQueryData<Episode[] | undefined>(
-          queryKey,
-          (oldEpisodes) => {
-            if (!oldEpisodes) {
-              return oldEpisodes;
+        queryClient.setQueryData<
+          Episode[] | PagedQueryResponse<Episode> | undefined
+        >(queryKey, (oldData) => {
+          if (!oldData) {
+            return oldData;
+          }
+
+          if ('records' in oldData) {
+            return {
+              ...oldData,
+              records: oldData.records.map((record) => {
+                if (variables.episodeIds.includes(record.id)) {
+                  return {
+                    ...record,
+                    monitored: variables.monitored,
+                  };
+                }
+
+                return record;
+              }),
+            };
+          }
+
+          return oldData.map((oldEpisode) => {
+            if (variables.episodeIds.includes(oldEpisode.id)) {
+              return {
+                ...oldEpisode,
+                monitored: variables.monitored,
+              };
             }
 
-            return oldEpisodes.map((oldEpisode) => {
-              if (variables.episodeIds.includes(oldEpisode.id)) {
-                return {
-                  ...oldEpisode,
-                  monitored: variables.monitored,
-                };
-              }
-
-              return oldEpisode;
-            });
-          }
-        );
+            return oldEpisode;
+          });
+        });
 
         queryClient.invalidateQueries({ queryKey });
       },
