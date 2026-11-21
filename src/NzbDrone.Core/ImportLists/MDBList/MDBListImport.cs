@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using FluentValidation.Results;
 using Newtonsoft.Json;
 using NLog;
 using NzbDrone.Common.Cache;
@@ -68,22 +67,6 @@ namespace NzbDrone.Core.ImportLists.MDBList
         public override IParseImportListResponse GetParser()
         {
             return new MDBListParser();
-        }
-
-        protected override ValidationFailure TestConnection()
-        {
-            var failure = base.TestConnection();
-
-            if (failure is NzbDroneValidationFailure { IsWarning: true })
-            {
-                return new NzbDroneValidationFailure(string.Empty,
-                    "No shows were returned from this MDBList list. Sonarr only imports the shows on a list, so movie lists belong in Radarr.")
-                {
-                    IsWarning = true
-                };
-            }
-
-            return failure;
         }
 
         public override object RequestAction(string action, IDictionary<string, string> query)
