@@ -25,6 +25,7 @@ namespace NzbDrone.Core.ImportLists.MDBList
 
         private readonly IImportListRepository _importListRepository;
         private readonly ICached<MDBListTokenResponse> _deviceTokenCache;
+        private readonly ICached<string> _pendingDeviceCodes;
 
         public override string Name => _localizationService.GetLocalizedString("ImportListsMDBListSettingsName");
         public override ImportListType ListType => ImportListType.Other;
@@ -42,6 +43,7 @@ namespace NzbDrone.Core.ImportLists.MDBList
         {
             _importListRepository = importListRepository;
             _deviceTokenCache = cacheManager.GetCache<MDBListTokenResponse>(GetType(), "deviceTokens");
+            _pendingDeviceCodes = cacheManager.GetCache<string>(GetType(), "pendingDeviceCodes");
         }
 
         public override ImportListFetchResult Fetch()
@@ -102,6 +104,13 @@ namespace NzbDrone.Core.ImportLists.MDBList
             {
                 var deviceCode = GetRequiredQuery(query, "device_code");
 
+                if (!query.TryGetValue("expires_in", out var expiresIn) || !int.TryParse(expiresIn, out var expiresInSeconds))
+                {
+                    expiresInSeconds = 600;
+                }
+
+                _pendingDeviceCodes.Set(deviceCode, deviceCode, TimeSpan.FromSeconds(expiresInSeconds));
+
                 var oauthUrl = new HttpRequestBuilder(VerificationUrl)
                     .AddQueryParam("user_code", GetRequiredQuery(query, "user_code"))
                     .AddQueryParam("forward", GetRequiredQuery(query, "callbackUrl"))
@@ -119,13 +128,19 @@ namespace NzbDrone.Core.ImportLists.MDBList
             else if (action == "pollOAuth")
             {
                 var deviceCode = GetRequiredQuery(query, "deviceCode");
-                var token = RequestDeviceToken(deviceCode);
+                var token = RequestDeviceToken(deviceCode) ?? new MDBListTokenResponse { Error = "request failed" };
 
-                if (token == null || token.Error is "authorization_pending" or "slow_down")
+                if (token.Error is "authorization_pending" or "slow_down")
                 {
-                    return new { success = false };
+                    if (_pendingDeviceCodes.Find(deviceCode) != null)
+                    {
+                        return new { success = false };
+                    }
+
+                    token = new MDBListTokenResponse { Error = "expired_token" };
                 }
 
+                _pendingDeviceCodes.Remove(deviceCode);
                 _deviceTokenCache.Set(deviceCode, token, TimeSpan.FromMinutes(10));
 
                 return new { success = true };
