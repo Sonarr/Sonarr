@@ -278,7 +278,19 @@ namespace NzbDrone.Core.Update
 
         public void Execute(ApplicationUpdateCheckCommand message)
         {
-            if (GetUpdatePackage(message.Trigger, true) != null)
+            UpdatePackage latestAvailable;
+
+            try
+            {
+                latestAvailable = GetUpdatePackage(message.Trigger, true);
+            }
+            catch (Exception e)
+            {
+                _logger.Warn(e, "Unable to check for available updates");
+                return;
+            }
+
+            if (latestAvailable != null)
             {
                 _commandQueueManager.Push(new ApplicationUpdateCommand(), trigger: message.Trigger);
             }
