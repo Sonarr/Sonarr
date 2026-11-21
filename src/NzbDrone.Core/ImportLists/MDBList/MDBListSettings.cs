@@ -14,7 +14,7 @@ namespace NzbDrone.Core.ImportLists.MDBList
             RuleFor(c => c.BaseUrl).ValidRootUrl();
 
             RuleFor(c => c.ListId).Must(id => MDBListSettings.GetListPath(id) != null)
-                                  .WithMessage("Must be an MDBList list URL, 'username/list-name' or a numeric list ID");
+                                  .WithMessage("Must be an MDBList list URL");
 
             RuleFor(c => c.AccessToken).NotEmpty()
                                        .OverridePropertyName("SignIn")
@@ -26,10 +26,8 @@ namespace NzbDrone.Core.ImportLists.MDBList
     {
         private static readonly MDBListSettingsValidator Validator = new();
 
-        private static readonly Regex ListUrlRegex = new(@"^(?:https?://(?:www\.)?mdblist\.com/)?/?(?:lists/)?(?<user>[^/?#\s]+)/(?<slug>[^/?#\s]+)/?(?:[?#].*)?$",
+        private static readonly Regex ListUrlRegex = new(@"(?:^|/)lists/(?<user>[^/?#\s]+)/(?<slug>[^/?#\s]+)",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-        private static readonly Regex ListIdRegex = new(@"^\d+$", RegexOptions.Compiled);
 
         public MDBListSettings()
         {
@@ -63,13 +61,6 @@ namespace NzbDrone.Core.ImportLists.MDBList
                 return null;
             }
 
-            list = list.Trim();
-
-            if (ListIdRegex.IsMatch(list))
-            {
-                return $"lists/{list}";
-            }
-
             var match = ListUrlRegex.Match(list);
 
             if (!match.Success)
@@ -77,7 +68,7 @@ namespace NzbDrone.Core.ImportLists.MDBList
                 return null;
             }
 
-            return $"lists/{Uri.EscapeDataString(match.Groups["user"].Value)}/{Uri.EscapeDataString(match.Groups["slug"].Value)}";
+            return $"lists/{Uri.EscapeDataString(Uri.UnescapeDataString(match.Groups["user"].Value))}/{Uri.EscapeDataString(Uri.UnescapeDataString(match.Groups["slug"].Value))}";
         }
 
         public override NzbDroneValidationResult Validate()

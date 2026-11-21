@@ -1016,7 +1016,7 @@
   "ImportListsMDBListSettingsAuthUser": "Signed In As",
   "ImportListsMDBListSettingsAuthUserHelpText": "MDBList account used for this list, authenticate again to switch accounts",
   "ImportListsMDBListSettingsList": "List",
-  "ImportListsMDBListSettingsListHelpText": "MDBList list URL, 'username/list-name' or numeric list ID. Only the list's shows are imported",
+  "ImportListsMDBListSettingsListHelpText": "MDBList list URL. Only the list's shows are imported",
   "ImportListsMDBListSettingsName": "MDBList List",
   "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList": "Authenticate with MyAnimeList",
   "ImportListsMyAnimeListSettingsListStatus": "List Status",

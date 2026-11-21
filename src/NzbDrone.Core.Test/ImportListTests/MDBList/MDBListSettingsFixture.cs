@@ -8,13 +8,12 @@ namespace NzbDrone.Core.Test.ImportListTests.MDBList
     [TestFixture]
     public class MDBListSettingsFixture : CoreTest
     {
-        [TestCase("12345", "lists/12345")]
-        [TestCase(" 12345 ", "lists/12345")]
         [TestCase("https://mdblist.com/lists/username/list-name", "lists/username/list-name")]
         [TestCase("https://www.mdblist.com/lists/username/list-name/", "lists/username/list-name")]
         [TestCase("https://mdblist.com/lists/username/list-name?sort=score", "lists/username/list-name")]
         [TestCase("http://mdblist.com/lists/username/list-name", "lists/username/list-name")]
-        [TestCase("username/list-name", "lists/username/list-name")]
+        [TestCase(" https://mdblist.com/lists/username/list-name ", "lists/username/list-name")]
+        [TestCase("https://mdblist.com/lists/username/caf%C3%A9-shows", "lists/username/caf%C3%A9-shows")]
         public void should_accept_list_input(string list, string expectedPath)
         {
             MDBListSettings.GetListPath(list).Should().Be(expectedPath);
@@ -22,9 +21,10 @@ namespace NzbDrone.Core.Test.ImportListTests.MDBList
 
         [TestCase(null)]
         [TestCase("")]
-        [TestCase("list-name")]
-        [TestCase("https://example.com/lists/username/list-name")]
-        [TestCase("https://mdblist.com/lists/username/list-name/extra")]
+        [TestCase("12345")]
+        [TestCase("username/list-name")]
+        [TestCase("https://mdblist.com/lists/username")]
+        [TestCase("https://mdblist.com/likedlists/username/list-name")]
         public void should_reject_list_input(string list)
         {
             MDBListSettings.GetListPath(list).Should().BeNull();
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Test.ImportListTests.MDBList
         [Test]
         public void should_fail_validation_without_sign_in()
         {
-            var settings = new MDBListSettings { ListId = "12345" };
+            var settings = new MDBListSettings { ListId = "https://mdblist.com/lists/username/list-name" };
 
             settings.Validate().IsValid.Should().BeFalse();
         }
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.ImportListTests.MDBList
         [Test]
         public void should_pass_validation_when_signed_in()
         {
-            var settings = new MDBListSettings { ListId = "12345", AccessToken = "token" };
+            var settings = new MDBListSettings { ListId = "https://mdblist.com/lists/username/list-name", AccessToken = "token" };
 
             settings.Validate().IsValid.Should().BeTrue();
         }
