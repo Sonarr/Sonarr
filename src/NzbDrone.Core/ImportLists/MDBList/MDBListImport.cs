@@ -279,9 +279,9 @@ namespace NzbDrone.Core.ImportLists.MDBList
             {
                 return _httpClient.Get<MDBListUserResponse>(request).Resource?.Username;
             }
-            catch (HttpException)
+            catch (Exception ex) when (ex is HttpException or WebException or JsonException)
             {
-                _logger.Warn("Error fetching MDBList username");
+                _logger.Warn(ex, "Error fetching MDBList username");
             }
 
             return null;
