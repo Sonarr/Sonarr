@@ -48,7 +48,7 @@ namespace NzbDrone.Core.ImportLists.MDBList
 
         public override ImportListFetchResult Fetch()
         {
-            Settings.Validate().Filter("AccessToken").ThrowOnError();
+            Settings.Validate().Filter("SignIn", "ListId").ThrowOnError();
             RefreshTokenIfExpired();
 
             return FetchItems(g => g.GetListItems());
