@@ -22,7 +22,7 @@ namespace NzbDrone.Core.ImportLists.MDBList
         private IEnumerable<ImportListRequest> GetSeriesRequest()
         {
             var request = new HttpRequestBuilder(Settings.BaseUrl.TrimEnd('/'))
-                .Resource($"{MDBListSettings.GetListPath(Settings.ListId)}/items")
+                .Resource($"{MDBListHelper.GetListPath(Settings.ListId)}/items")
                 .AddQueryParam("mediatype", "show")
                 .AddQueryParam("limit", Limit)
                 .Accept(HttpAccept.Json)
