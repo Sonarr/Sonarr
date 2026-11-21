@@ -14,6 +14,8 @@ namespace NzbDrone.Core.ImportLists.MDBList
             RuleFor(c => c.ListId).Must(id => MDBListHelper.GetListPath(id) != null)
                                   .WithMessage("Must be an MDBList list URL");
 
+            RuleFor(c => c.Limit).InclusiveBetween(1, MDBListSettings.MaxLimit);
+
             RuleFor(c => c.AccessToken).NotEmpty()
                                        .OverridePropertyName("SignIn")
                                        .WithMessage("Must authenticate with MDBList");
@@ -22,17 +24,23 @@ namespace NzbDrone.Core.ImportLists.MDBList
 
     public class MDBListSettings : ImportListSettingsBase<MDBListSettings>
     {
+        public const int MaxLimit = 1000;
+
         private static readonly MDBListSettingsValidator Validator = new();
 
         public MDBListSettings()
         {
             SignIn = "startOAuth";
+            Limit = MaxLimit;
         }
 
         public override string BaseUrl { get; set; } = "https://api.mdblist.com";
 
         [FieldDefinition(0, Label = "ImportListsMDBListSettingsList", HelpText = "ImportListsMDBListSettingsListHelpText", Placeholder = "https://mdblist.com/lists/username/list-name")]
         public string ListId { get; set; }
+
+        [FieldDefinition(1, Label = "ImportListsMDBListSettingsLimit", HelpText = "ImportListsMDBListSettingsLimitHelpText")]
+        public int Limit { get; set; }
 
         [FieldDefinition(0, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string AccessToken { get; set; }

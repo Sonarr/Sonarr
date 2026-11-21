@@ -6,8 +6,6 @@ namespace NzbDrone.Core.ImportLists.MDBList
 {
     public class MDBListRequestGenerator : IImportListRequestGenerator
     {
-        public const int Limit = 1000;
-
         public MDBListSettings Settings { get; set; }
 
         public virtual ImportListPageableRequestChain GetListItems()
@@ -26,7 +24,7 @@ namespace NzbDrone.Core.ImportLists.MDBList
                 .AddQueryParam("mediatype", "show")
                 .AddQueryParam("sort", "added")
                 .AddQueryParam("sortorder", "asc")
-                .AddQueryParam("limit", Limit)
+                .AddQueryParam("limit", Settings.Limit)
                 .Accept(HttpAccept.Json)
                 .Build();
 

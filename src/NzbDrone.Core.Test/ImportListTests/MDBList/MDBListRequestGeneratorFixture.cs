@@ -36,5 +36,23 @@ namespace NzbDrone.Core.Test.ImportListTests.MDBList
             request.Headers["Authorization"].Should().Be("Bearer token");
             request.SuppressHttpErrorStatusCodes.Should().BeEquivalentTo(new[] { HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden, HttpStatusCode.NotFound });
         }
+
+        [Test]
+        public void should_use_limit_from_settings()
+        {
+            var generator = new MDBListRequestGenerator
+            {
+                Settings = new MDBListSettings
+                {
+                    ListId = "https://mdblist.com/lists/username/list-name",
+                    AccessToken = "token",
+                    Limit = 50
+                }
+            };
+
+            var request = generator.GetListItems().GetAllTiers().First().First().HttpRequest;
+
+            request.Url.Query.Should().Contain("limit=50");
+        }
     }
 }

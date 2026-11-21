@@ -1015,6 +1015,8 @@
   "ImportListsMDBListSettingsAuthenticateWithMDBList": "Authenticate with MDBList",
   "ImportListsMDBListSettingsAuthUser": "Signed In As",
   "ImportListsMDBListSettingsAuthUserHelpText": "MDBList account used for this list, authenticate again to switch accounts",
+  "ImportListsMDBListSettingsLimit": "Limit",
+  "ImportListsMDBListSettingsLimitHelpText": "Maximum number of shows to get, newest added first (up to 1000)",
   "ImportListsMDBListSettingsList": "List",
   "ImportListsMDBListSettingsListHelpText": "MDBList list URL. Only the list's shows are imported",
   "ImportListsMDBListSettingsName": "MDBList List",

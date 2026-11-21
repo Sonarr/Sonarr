@@ -23,5 +23,16 @@ namespace NzbDrone.Core.Test.ImportListTests.MDBList
 
             settings.Validate().IsValid.Should().BeTrue();
         }
+
+        [TestCase(1, true)]
+        [TestCase(1000, true)]
+        [TestCase(0, false)]
+        [TestCase(1001, false)]
+        public void should_validate_limit(int limit, bool isValid)
+        {
+            var settings = new MDBListSettings { ListId = "https://mdblist.com/lists/username/list-name", AccessToken = "token", Limit = limit };
+
+            settings.Validate().IsValid.Should().Be(isValid);
+        }
     }
 }
