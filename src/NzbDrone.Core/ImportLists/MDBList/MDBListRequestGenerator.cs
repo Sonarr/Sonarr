@@ -24,6 +24,8 @@ namespace NzbDrone.Core.ImportLists.MDBList
             var request = new HttpRequestBuilder(Settings.BaseUrl.TrimEnd('/'))
                 .Resource($"{MDBListHelper.GetListPath(Settings.ListId)}/items")
                 .AddQueryParam("mediatype", "show")
+                .AddQueryParam("sort", "added")
+                .AddQueryParam("sortorder", "asc")
                 .AddQueryParam("limit", Limit)
                 .Accept(HttpAccept.Json)
                 .Build();

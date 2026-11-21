@@ -30,6 +30,8 @@ namespace NzbDrone.Core.Test.ImportListTests.MDBList
             request.Url.Host.Should().Be("api.mdblist.com");
             request.Url.Path.Should().Be("/lists/username/list-name/items");
             request.Url.Query.Should().Contain("mediatype=show");
+            request.Url.Query.Should().Contain("sort=added");
+            request.Url.Query.Should().Contain("sortorder=asc");
             request.Url.Query.Should().Contain("limit=1000");
             request.Headers["Authorization"].Should().Be("Bearer token");
             request.SuppressHttpErrorStatusCodes.Should().BeEquivalentTo(new[] { HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden, HttpStatusCode.NotFound });
