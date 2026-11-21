@@ -48,6 +48,15 @@ runs:
       shell: bash
       run: $GITHUB_ACTION_PATH/package.sh
 
+    - name: Create Windows Installer (arm64)
+      if: ${{ inputs.runtime == 'win-arm64' }}
+      working-directory: distribution/windows/setup
+      shell: cmd
+      run: |
+        SET RUNTIME=win-arm64
+
+        build.bat
+
     - name: Create Windows Installer (x64)
       if: ${{ inputs.runtime == 'win-x64' }}
       working-directory: distribution/windows/setup
