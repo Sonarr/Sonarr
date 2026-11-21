@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using FluentValidation.Results;
 using Newtonsoft.Json;
 using NLog;
 using NzbDrone.Common.Cache;
@@ -46,14 +47,24 @@ namespace NzbDrone.Core.ImportLists.MDBList
         public override ImportListFetchResult Fetch()
         {
             Settings.Validate().Filter("AccessToken").ThrowOnError();
-            _logger.Trace($"Access token expires at {Settings.Expires}");
-
-            if (Settings.RefreshToken.IsNotNullOrWhiteSpace() && Settings.Expires < DateTime.UtcNow.AddMinutes(5))
-            {
-                RefreshToken();
-            }
+            RefreshTokenIfExpired();
 
             return FetchItems(g => g.GetListItems());
+        }
+
+        protected override ValidationFailure TestConnection()
+        {
+            // The form may hold tokens that were already refreshed and rotated, use the stored ones if they're newer
+            if (Definition.Id > 0 && _importListRepository.Find(Definition.Id)?.Settings is MDBListSettings stored && stored.Expires > Settings.Expires)
+            {
+                Settings.AccessToken = stored.AccessToken;
+                Settings.RefreshToken = stored.RefreshToken;
+                Settings.Expires = stored.Expires;
+            }
+
+            RefreshTokenIfExpired();
+
+            return base.TestConnection();
         }
 
         public override IImportListRequestGenerator GetRequestGenerator()
@@ -168,6 +179,16 @@ namespace NzbDrone.Core.ImportLists.MDBList
             return ExecuteTokenRequest(request);
         }
 
+        private void RefreshTokenIfExpired()
+        {
+            _logger.Trace($"Access token expires at {Settings.Expires}");
+
+            if (Settings.RefreshToken.IsNotNullOrWhiteSpace() && Settings.Expires < DateTime.UtcNow.AddMinutes(5))
+            {
+                RefreshToken();
+            }
+        }
+
         private void RefreshToken()
         {
             _logger.Trace("Refreshing Token");
@@ -189,9 +210,14 @@ namespace NzbDrone.Core.ImportLists.MDBList
             Settings.Expires = DateTime.UtcNow.AddSeconds(token.ExpiresIn);
             Settings.RefreshToken = token.RefreshToken ?? Settings.RefreshToken;
 
-            if (Definition.Id > 0)
+            // Only save the new tokens, Definition may hold unsaved edits when testing
+            if (Definition.Id > 0 && _importListRepository.Find(Definition.Id) is { Settings: MDBListSettings stored } storedDefinition)
             {
-                _importListRepository.UpdateSettings((ImportListDefinition)Definition);
+                stored.AccessToken = Settings.AccessToken;
+                stored.Expires = Settings.Expires;
+                stored.RefreshToken = Settings.RefreshToken;
+
+                _importListRepository.UpdateSettings(storedDefinition);
             }
         }
 
