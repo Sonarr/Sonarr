@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
@@ -14,9 +15,9 @@ namespace NzbDrone.Core.Test.UpdateTests
         [SetUp]
         public void Setup()
         {
-            if (OsInfo.Os == Os.LinuxMusl || OsInfo.Os == Os.Bsd)
+            if (OsInfo.Os == Os.Windows && RuntimeInformation.OSArchitecture == Architecture.Arm64)
             {
-                throw new IgnoreException("Ignore until we have musl releases");
+                Assert.Ignore("Ignore until we have win-arm64 releases");
             }
 
             Mocker.GetMock<IPlatformInfo>().SetupGet(c => c.Version).Returns(new Version("9.9.9"));
