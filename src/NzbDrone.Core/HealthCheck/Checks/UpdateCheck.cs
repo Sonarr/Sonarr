@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -19,12 +20,14 @@ namespace NzbDrone.Core.HealthCheck.Checks
         private readonly ICheckUpdateService _checkUpdateService;
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IOsInfo _osInfo;
+        private readonly Logger _logger;
 
         public UpdateCheck(IDiskProvider diskProvider,
                            IAppFolderInfo appFolderInfo,
                            ICheckUpdateService checkUpdateService,
                            IConfigFileProvider configFileProvider,
                            IOsInfo osInfo,
+                           Logger logger,
                            ILocalizationService localizationService)
             : base(localizationService)
         {
@@ -33,6 +36,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             _checkUpdateService = checkUpdateService;
             _configFileProvider = configFileProvider;
             _osInfo = osInfo;
+            _logger = logger;
         }
 
         public override HealthCheck Check()
@@ -91,18 +95,25 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             if (BuildInfo.BuildDateTime < DateTime.UtcNow.AddDays(-14))
             {
-                var latestAvailable = _checkUpdateService.AvailableUpdate();
-
-                if (latestAvailable != null)
+                try
                 {
-                    return new HealthCheck(GetType(),
-                        HealthCheckResult.Warning,
-                        HealthCheckReason.UpdateAvailable,
-                        _localizationService.GetLocalizedString("UpdateAvailableHealthCheckMessage", new Dictionary<string, object>
-                        {
-                            { "version", $"v{latestAvailable.Version}" }
-                        }),
-                        "#new-update-is-available");
+                    var latestAvailable = _checkUpdateService.AvailableUpdate();
+
+                    if (latestAvailable != null)
+                    {
+                        return new HealthCheck(GetType(),
+                            HealthCheckResult.Warning,
+                            HealthCheckReason.UpdateAvailable,
+                            _localizationService.GetLocalizedString("UpdateAvailableHealthCheckMessage", new Dictionary<string, object>
+                            {
+                                { "version", $"v{latestAvailable.Version}" }
+                            }),
+                            "#new-update-is-available");
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.Warn(e, "Unable to check for available updates");
                 }
             }
 

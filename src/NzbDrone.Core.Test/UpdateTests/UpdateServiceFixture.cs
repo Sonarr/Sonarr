@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -173,6 +174,22 @@ namespace NzbDrone.Core.Test.UpdateTests
             Subject.Execute(new ApplicationUpdateCommand());
 
             ExceptionVerification.AssertNoUnexpectedLogs();
+        }
+
+        [Test]
+        public void should_log_warning_and_not_queue_update_when_update_check_fails()
+        {
+            var request = new HttpRequest("https://services.sonarr.tv/v1/update/main");
+            var response = new HttpResponse(request, new HttpHeader(), Array.Empty<byte>(), (HttpStatusCode)521);
+
+            Mocker.GetMock<ICheckUpdateService>().Setup(c => c.AvailableUpdate()).Throws(new HttpException(request, response));
+
+            Subject.Execute(new ApplicationUpdateCheckCommand());
+
+            Mocker.GetMock<IManageCommandQueue>()
+                  .Verify(c => c.Push(It.IsAny<ApplicationUpdateCommand>(), It.IsAny<CommandPriority>(), It.IsAny<CommandTrigger>()), Times.Never());
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
