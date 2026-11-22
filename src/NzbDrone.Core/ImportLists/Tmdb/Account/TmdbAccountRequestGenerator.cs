@@ -26,19 +26,33 @@ public class TmdbAccountRequestGenerator(TmdbAccountSettings settings, int maxPa
 
     private HttpRequestBuilder CreateSeriesRequestsBuilder()
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(settings.AuthToken);
+        ArgumentException.ThrowIfNullOrWhiteSpace(settings.AccountId);
+
         var builder = new HttpRequestBuilder(settings.BaseUrl)
             .Accept(HttpAccept.Json)
             .SetHeader("Authorization", $"Bearer {settings.AuthToken}");
 
-        var accountId = Uri.EscapeDataString(settings.AccountId ?? string.Empty);
+        var accountId = Uri.EscapeDataString(settings.AccountId);
 
-        builder.ResourceUrl = (TmdbAccountListType)settings.AccountListType switch
+        switch (settings.AccountListType)
         {
-            TmdbAccountListType.Rated => $"4/account/{accountId}/tv/rated",
-            TmdbAccountListType.Recommended => $"4/account/{accountId}/tv/recommendations",
-            TmdbAccountListType.Watchlist => $"4/account/{accountId}/tv/watchlist",
-            _ => $"4/account/{accountId}/tv/favorites"
-        };
+            case (int)TmdbAccountListType.Rated:
+                builder.Resource($"4/account/{accountId}/tv/rated")
+                    .AddQueryParam("sort_by", "created_at.desc");
+                break;
+            case (int)TmdbAccountListType.Recommended:
+                builder.Resource($"4/account/{accountId}/tv/recommendations");
+                break;
+            case (int)TmdbAccountListType.Watchlist:
+                builder.Resource($"4/account/{accountId}/tv/watchlist")
+                    .AddQueryParam("sort_by", "created_at.desc");
+                break;
+            case (int)TmdbAccountListType.Favorite:
+                builder.Resource($"4/account/{accountId}/tv/favorites")
+                    .AddQueryParam("sort_by", "created_at.desc");
+                break;
+        }
 
         return builder;
     }
