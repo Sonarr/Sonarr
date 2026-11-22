@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Notifications
                     ? value
                     : new UpdateQueueItem<TItemInfo>(series);
 
+                item.Series = series;
                 item.Info.Add(info);
 
                 queue.Pending[series.Id] = item;
