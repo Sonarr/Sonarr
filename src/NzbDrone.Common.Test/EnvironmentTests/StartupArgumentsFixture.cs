@@ -42,7 +42,7 @@ namespace NzbDrone.Common.Test.EnvironmentTests
         public void should_preserver_data(string arg, string preserved)
         {
             var args = new StartupContext(new[] { arg });
-            args.PreservedArguments.Should().Be(preserved);
+            args.PreservedArguments.Should().Equal(preserved);
         }
 
         [TestCase("/nobrowser", "/nobrowser")]
@@ -51,14 +51,14 @@ namespace NzbDrone.Common.Test.EnvironmentTests
         public void should_preserver_no_browser(string arg, string preserved)
         {
             var args = new StartupContext(new[] { arg });
-            args.PreservedArguments.Should().Be(preserved);
+            args.PreservedArguments.Should().Equal(preserved);
         }
 
         [Test]
         public void should_preserver_both()
         {
             var args = new StartupContext(new[] { "/data=test", "/Nobrowser" });
-            args.PreservedArguments.Should().Be("/data=test /nobrowser");
+            args.PreservedArguments.Should().Equal("/data=test", "/nobrowser");
         }
     }
 }
