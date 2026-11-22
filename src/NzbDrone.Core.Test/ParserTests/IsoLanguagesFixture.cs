@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Languages;
@@ -87,6 +89,26 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var result = IsoLanguages.Find(isoCode);
             result.Language.Should().Be(Language.Irish);
+        }
+
+        [TestCase("IT", "Italian")]
+        [TestCase("ITA", "Italian")]
+        [TestCase("ID", "Indonesian")]
+        public void should_find_iso_language_regardless_of_culture(string isoCode, string languageName)
+        {
+            var current = CultureInfo.CurrentCulture;
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("tr-TR");
+
+            try
+            {
+                var result = IsoLanguages.Find(isoCode);
+                result.Should().NotBeNull();
+                result.Language.Should().Be(Language.All.Single(l => l.Name == languageName));
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = current;
+            }
         }
     }
 }
