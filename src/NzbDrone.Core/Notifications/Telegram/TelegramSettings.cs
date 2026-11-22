@@ -38,6 +38,14 @@ namespace NzbDrone.Core.Notifications.Telegram
                 .Must((model, field) => model.MetadataLinks.Any(link => link == field))
                 .Unless(c => c.LinkPreview == (int)MetadataLinkPreviewType.None)
                 .WithMessage("Link Preview must be one of the selected Metadata Links");
+
+            RuleFor(c => c.Image).Custom((image, context) =>
+            {
+                if (!Enum.IsDefined(typeof(TelegramImageType), image))
+                {
+                    context.AddFailure("Image", $"Selected value is not valid: {image}");
+                }
+            });
         }
     }
 
@@ -49,6 +57,8 @@ namespace NzbDrone.Core.Notifications.Telegram
         {
             MetadataLinks = Enumerable.Empty<int>();
             LinkPreview = (int)MetadataLinkPreviewType.None;
+            DetailedMessage = true;
+            Image = (int)TelegramImageType.Fanart;
         }
 
         [FieldDefinition(0, Label = "NotificationsTelegramSettingsBotToken", Privacy = PrivacyLevel.ApiKey, HelpLink = "https://core.telegram.org/bots")]
@@ -74,6 +84,12 @@ namespace NzbDrone.Core.Notifications.Telegram
 
         [FieldDefinition(7, Label = "NotificationsTelegramSettingsLinkPreview", Type = FieldType.Select, SelectOptions = typeof(MetadataLinkPreviewType), HelpText = "NotificationsTelegramSettingsLinkPreviewHelpText")]
         public int LinkPreview { get; set; }
+
+        [FieldDefinition(8, Label = "NotificationsTelegramSettingsDetailedMessage", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsDetailedMessageHelpText")]
+        public bool DetailedMessage { get; set; }
+
+        [FieldDefinition(9, Label = "NotificationsTelegramSettingsImage", Type = FieldType.Select, SelectOptions = typeof(TelegramImageType), HelpText = "NotificationsTelegramSettingsImageHelpText")]
+        public int Image { get; set; }
 
         public override NzbDroneValidationResult Validate()
         {
