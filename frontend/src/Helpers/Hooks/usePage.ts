@@ -30,7 +30,7 @@ const usePage = (kind: keyof PageStore) => {
   };
 
   useEffect(() => {
-    if (navigationType === 'POP') {
+    if (navigationType === 'PUSH') {
       pageStore.setState({ [kind]: 1 });
     }
   }, [navigationType, kind]);
