@@ -1,0 +1,64 @@
+.intro {
+  margin: 0 0 12px;
+  color: var(--inkMuted);
+  line-height: 1.5;
+}
+
+.helpText {
+  margin: 0;
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.policyNote {
+  margin: 6px 0 20px;
+  color: var(--inkMuted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.previewHeading {
+  margin: 16px 0 8px;
+  color: var(--inkSoft);
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.previewList {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.previewList > li + li {
+  margin-top: 10px;
+}
+
+.filePath {
+  margin-bottom: 2px;
+  overflow-wrap: anywhere;
+}
+
+.footer {
+  composes: modalFooter from 'Components/Modal/ModalFooter.module.css';
+
+  flex-wrap: wrap;
+}
+
+.closeButton {
+  composes: button from 'Components/Link/Button.module.css';
+
+  margin-right: auto;
+}
+
+@media (--breakpointSmall) {
+  .footer {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .closeButton {
+    margin-right: 0;
+  }
+}

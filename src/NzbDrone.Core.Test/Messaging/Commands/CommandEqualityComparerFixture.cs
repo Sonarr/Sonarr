@@ -19,6 +19,9 @@ namespace NzbDrone.Core.Test.Messaging.Commands
     [TestFixture]
     public class CommandEqualityComparerFixture
     {
+        private const string StringValue = "4792CEB9496AADF3E3E849D2E01EF8F10517635CBD38FE3D3E2BAF129682A134";
+        private const string ChangedStringValue = "35D38B9644844E321300DC5B88DCA0BCCA2B31D903A34B7C7641554B7B363B5F";
+
         private string GivenRandomPath()
         {
             return Path.Combine(@"C:\Tesst\", Guid.NewGuid().ToString()).AsOsAgnostic();
@@ -47,6 +50,25 @@ namespace NzbDrone.Core.Test.Messaging.Commands
         {
             var command1 = new SeasonSearchCommand { SeriesId = 1, SeasonNumber = 1 };
             var command2 = new SeasonSearchCommand { SeriesId = 1, SeasonNumber = 1 };
+
+            CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_false_for_different_strings_with_the_same_characters()
+        {
+            StringValue.Distinct().Should().BeEquivalentTo(ChangedStringValue.Distinct());
+            var command1 = new DownloadedEpisodesScanCommand { Path = StringValue };
+            var command2 = new DownloadedEpisodesScanCommand { Path = ChangedStringValue };
+
+            CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_true_for_identical_strings()
+        {
+            var command1 = new DownloadedEpisodesScanCommand { Path = StringValue };
+            var command2 = new DownloadedEpisodesScanCommand { Path = StringValue };
 
             CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeTrue();
         }

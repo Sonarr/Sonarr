@@ -51,7 +51,7 @@ export interface DownloadFolderImportedHistory {
 
 export interface EpisodeFileDeletedHistory {
   customFormatScore?: string;
-  reason: 'Manual' | 'MissingFromDisk' | 'Upgrade';
+  reason: 'Manual' | 'MissingFromDisk' | 'Upgrade' | 'Retention';
   size: string;
 }
 

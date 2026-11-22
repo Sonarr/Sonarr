@@ -21,6 +21,7 @@ namespace NzbDrone.Core.MediaFiles
     public interface IDeleteMediaFiles
     {
         void DeleteEpisodeFile(Series series, EpisodeFile episodeFile);
+        void DeleteEpisodeFile(Series series, EpisodeFile episodeFile, DeleteMediaFileReason reason);
     }
 
     public class MediaFileDeletionService : IDeleteMediaFiles,
@@ -61,6 +62,11 @@ namespace NzbDrone.Core.MediaFiles
 
         public void DeleteEpisodeFile(Series series, EpisodeFile episodeFile)
         {
+            DeleteEpisodeFile(series, episodeFile, DeleteMediaFileReason.Manual);
+        }
+
+        public void DeleteEpisodeFile(Series series, EpisodeFile episodeFile, DeleteMediaFileReason reason)
+        {
             var fullPath = Path.Combine(series.Path, episodeFile.RelativePath);
             var rootFolder = _rootFolderService.GetBestRootFolderPath(series.Path);
 
@@ -94,7 +100,7 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             // Delete the episode file from the database to clean it up even if the file was already deleted
-            _mediaFileService.Delete(episodeFile, DeleteMediaFileReason.Manual);
+            _mediaFileService.Delete(episodeFile, reason);
 
             _eventAggregator.PublishEvent(new DeleteCompletedEvent());
         }
