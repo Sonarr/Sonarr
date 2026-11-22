@@ -57,6 +57,8 @@ namespace NzbDrone.Core.HealthCheck
     {
         AllowedHostsNotConfigured,
         AppDataLocation,
+        BackupStale,
+        DatabaseIntegrity,
         DownloadClientCheckNoneAvailable,
         DownloadClientCheckUnableToCommunicate,
         DownloadClientRemovesCompletedDownloads,
