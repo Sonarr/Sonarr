@@ -27,6 +27,11 @@ namespace NzbDrone.Common.Test.InstrumentationTests
         // JSON-escaped query string
         [TestCase(@"{""value"":""http://127.0.0.1:9696/1/api?t=caps\u0026apikey=mySecret\u0026extended=1""}")]
 
+        // Model state of invalid requests
+        [TestCase(@"{""password"":{""rawValue"":""mySecret"",""attemptedValue"":""mySecret"",""errors"":[],""validationState"":""valid"",""isContainerNode"":false},""username"":{""rawValue"":""mySecret"",""attemptedValue"":""mySecret"",""errors"":[],""validationState"":""valid"",""isContainerNode"":false}}")]
+        [TestCase("{\n  \"password\": {\n    \"rawValue\": \"mySecret\",\n    \"attemptedValue\": \"mySecret\",\n    \"errors\": []\n  }\n}")]
+        [TestCase(@"{""Password"":{""rawValue"":""mySecret\""x"",""attemptedValue"":""mySecret\""x""}}")]
+
         // NzbGet
         [TestCase(@"{ ""Name"" : ""ControlUsername"", ""Value"" : ""mySecret"" }, { ""Name"" : ""ControlPassword"", ""Value"" : ""mySecret"" }, ")]
         [TestCase(@"{ ""Name"" : ""Server1.Username"", ""Value"" : ""mySecret"" }, { ""Name"" : ""Server1.Password"", ""Value"" : ""mySecret"" }, ")]
