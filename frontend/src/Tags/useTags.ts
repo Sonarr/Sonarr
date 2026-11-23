@@ -56,7 +56,7 @@ export const useAddTag = (onTagCreated?: (tag: Tag) => void) => {
         setError(null);
       },
       onSuccess: (data) => {
-        queryClient.setQueryData<Tag[]>(['tag'], (oldData = []) =>
+        queryClient.setQueryData<Tag[]>(['/tag'], (oldData = []) =>
           addOrUpdateQueryClientItem(oldData, data, 'id')
         );
 
@@ -89,12 +89,12 @@ export const useDeleteTag = (id: number) => {
         setError(null);
       },
       onSuccess: () => {
-        queryClient.setQueryData<Tag[]>(['tag'], (oldData) => {
+        queryClient.setQueryData<Tag[]>(['/tag'], (oldData) => {
           if (!oldData) {
             return oldData;
           }
 
-          return oldData.filter((tag) => tag.id === id);
+          return oldData.filter((tag) => tag.id !== id);
         });
       },
       onError: () => {
