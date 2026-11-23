@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Disk;
@@ -104,6 +105,12 @@ namespace Sonarr.Api.V3.Config
                 .WithMessage("OIDC Scopes must include 'openid'")
                 .When(c => c.AuthenticationMethod == AuthenticationType.Oidc)
                 .WithName("OIDC Scopes");
+
+            SharedValidator.RuleFor(c => c.OidcProviderName)
+                .NotEmpty()
+                .MaximumLength(64)
+                .Matches("^[0-9a-z _-]+$", RegexOptions.IgnoreCase)
+                .WithMessage("Allowed characters: a-z, A-Z, 0-9, space, _, and -");
 
             SharedValidator.RuleFor(c => c.SslPort).ValidPort().When(c => c.EnableSsl);
             SharedValidator.RuleFor(c => c.SslPort).NotEqual(c => c.Port).When(c => c.EnableSsl);

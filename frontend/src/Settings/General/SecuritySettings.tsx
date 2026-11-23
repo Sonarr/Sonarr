@@ -109,6 +109,7 @@ interface SecuritySettingsProps {
   oidcClientSecret: PendingSection<GeneralSettingsModel>['oidcClientSecret'];
   oidcUserIdentifier: PendingSection<GeneralSettingsModel>['oidcUserIdentifier'];
   oidcScopes: PendingSection<GeneralSettingsModel>['oidcScopes'];
+  oidcProviderName: PendingSection<GeneralSettingsModel>['oidcProviderName'];
   apiKey: PendingSection<GeneralSettingsModel>['apiKey'];
   certificateValidation: PendingSection<GeneralSettingsModel>['certificateValidation'];
   trustedNetworks: PendingSection<GeneralSettingsModel>['trustedNetworks'];
@@ -127,6 +128,7 @@ function SecuritySettings({
   oidcClientSecret,
   oidcUserIdentifier,
   oidcScopes,
+  oidcProviderName,
   apiKey,
   certificateValidation,
   trustedNetworks,
@@ -210,6 +212,7 @@ function SecuritySettings({
         oidcClientSecret={oidcClientSecret}
         oidcUserIdentifier={oidcUserIdentifier}
         oidcScopes={oidcScopes}
+        oidcProviderName={oidcProviderName}
         onInputChange={onInputChange}
       />
 

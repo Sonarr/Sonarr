@@ -77,6 +77,7 @@ namespace NzbDrone.Core.Configuration
         string OidcClientSecret { get; }
         string OidcUserIdentifier { get; }
         string OidcScopes { get; }
+        string OidcProviderName { get; }
     }
 
     public class ConfigFileProvider : IConfigFileProvider
@@ -262,6 +263,7 @@ namespace NzbDrone.Core.Configuration
         public string OidcClientSecret => _authOptions.OidcClientSecret ?? GetValue("OidcClientSecret", string.Empty, persist: false);
         public string OidcUserIdentifier => _authOptions.OidcUserIdentifier ?? GetValue("OidcUserIdentifier", string.Empty, persist: false);
         public string OidcScopes => _authOptions.OidcScopes ?? GetValue("OidcScopes", "openid profile email", persist: false);
+        public string OidcProviderName => _authOptions.OidcProviderName ?? GetValue("OidcProviderName", "OpenID Connect", persist: false);
 
         public bool AnalyticsEnabled => _logOptions.AnalyticsEnabled ?? GetValueBoolean("AnalyticsEnabled", true, persist: false);
 

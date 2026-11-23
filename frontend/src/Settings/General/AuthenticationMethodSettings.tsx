@@ -15,6 +15,7 @@ interface AuthenticationMethodSettingsProps {
   oidcClientSecret: PendingSection<GeneralSettingsModel>['oidcClientSecret'];
   oidcUserIdentifier: PendingSection<GeneralSettingsModel>['oidcUserIdentifier'];
   oidcScopes: PendingSection<GeneralSettingsModel>['oidcScopes'];
+  oidcProviderName: PendingSection<GeneralSettingsModel>['oidcProviderName'];
   showValidationWarnings?: boolean;
   onInputChange: (change: InputChanged) => void;
 }
@@ -29,6 +30,7 @@ function AuthenticationMethodSettings({
   oidcClientSecret,
   oidcUserIdentifier,
   oidcScopes,
+  oidcProviderName,
   showValidationWarnings,
   onInputChange,
 }: AuthenticationMethodSettingsProps) {
@@ -52,6 +54,7 @@ function AuthenticationMethodSettings({
           oidcClientSecret={oidcClientSecret}
           oidcUserIdentifier={oidcUserIdentifier}
           oidcScopes={oidcScopes}
+          oidcProviderName={oidcProviderName}
           showValidationWarnings={showValidationWarnings}
           onInputChange={onInputChange}
         />
