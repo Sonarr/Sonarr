@@ -47,9 +47,9 @@ namespace Sonarr.Http.Frontend.Mappers
             var authMethod = _configFileProvider.AuthenticationMethod.ToString().ToLowerInvariant();
             var oidcProviderName = _configFileProvider.OidcProviderName;
 
-            if (string.IsNullOrWhiteSpace(oidcProviderName))
+            if (oidcProviderName.IsNullOrWhiteSpace())
             {
-                oidcProviderName = "OIDC";
+                oidcProviderName = "OpenID Connect";
             }
 
             if (_configFileProvider.AuthenticationMethod == AuthenticationType.Oidc &&
