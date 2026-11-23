@@ -9,7 +9,7 @@ import translate from 'Utilities/String/translate';
 import SceneInfo from './SceneInfo';
 import styles from './EpisodeNumber.module.css';
 
-function getWarningMessage(
+export function getWarningMessage(
   unverifiedSceneNumbering: boolean,
   seriesType: SeriesType | undefined,
   absoluteEpisodeNumber: number | undefined
