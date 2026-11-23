@@ -48,9 +48,12 @@ export const useDeleteEpisodeFile = (
     mutationOptions: {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['/episodeFile'] });
-        queryClient.invalidateQueries({
-          queryKey: [getQueryKey(episodeEntity)],
-        });
+
+        const queryKey = getQueryKey(episodeEntity);
+
+        if (queryKey) {
+          queryClient.invalidateQueries({ queryKey });
+        }
       },
     },
   });
