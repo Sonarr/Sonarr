@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
+using System.Threading;
 using FFMpegCore;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -28,6 +29,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         private static readonly string[] HlgTransferFunctions = { "arib-std-b67" };
         private static readonly string[] PqTransferFunctions = { "smpte2084" };
         private static readonly string[] ValidHdrTransferFunctions = HlgTransferFunctions.Concat(PqTransferFunctions).ToArray();
+        private static readonly TimeSpan ProbeTimeout = TimeSpan.FromMinutes(5);
 
         public VideoFileInfoReader(IDiskProvider diskProvider, Logger logger)
         {
@@ -58,12 +60,14 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             {
                 _logger.Debug("Getting media info from {0}", filename);
 
-                var analysis = FFProbe.Analyse(filename, customArguments: "-probesize 50000000");
+                using var cts = new CancellationTokenSource(ProbeTimeout);
+
+                var analysis = FFProbe.AnalyseAsync(filename, customArguments: "-probesize 50000000", cancellationToken: cts.Token).GetAwaiter().GetResult();
                 var primaryVideoStream = GetPrimaryVideoStream(analysis);
 
                 if (analysis.PrimaryAudioStream?.ChannelLayout.IsNullOrWhiteSpace() ?? true)
                 {
-                    analysis = FFProbe.Analyse(filename, customArguments: "-probesize 150000000 -analyzeduration 150000000");
+                    analysis = FFProbe.AnalyseAsync(filename, customArguments: "-probesize 150000000 -analyzeduration 150000000", cancellationToken: cts.Token).GetAwaiter().GetResult();
                 }
 
                 var mediaInfoModel = new MediaInfoModel();
@@ -161,7 +165,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 if (PqTransferFunctions.Contains(mediaInfoModel.VideoTransferCharacteristics))
                 {
                     var videoStreamIndex = analysis.VideoStreams.ToList().FindIndex(stream => stream.Index == primaryVideoStream?.Index);
-                    frames = FFProbe.GetFrames(filename, customArguments: $"-read_intervals \"%+#1\" -select_streams v:{(videoStreamIndex == -1 ? 0 : videoStreamIndex)}");
+                    frames = FFProbe.GetFramesAsync(filename, customArguments: $"-read_intervals \"%+#1\" -select_streams v:{(videoStreamIndex == -1 ? 0 : videoStreamIndex)}", cancellationToken: cts.Token).GetAwaiter().GetResult();
                 }
 
                 var streamSideData = primaryVideoStream?.SideData ?? new List<IReadOnlyDictionary<string, JsonNode>>().AsReadOnly();
