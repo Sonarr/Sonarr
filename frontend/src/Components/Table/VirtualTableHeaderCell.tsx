@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons, sortDirections } from 'Helpers/Props';
@@ -9,6 +9,8 @@ import styles from './VirtualTableHeaderCell.module.css';
 interface VirtualTableHeaderCellProps {
   className?: string;
   name: string;
+  role?: string;
+  title?: string;
   isSortable?: boolean;
   sortKey?: string;
   fixedSortDirection?: SortDirection;
@@ -20,6 +22,7 @@ interface VirtualTableHeaderCellProps {
 function VirtualTableHeaderCell({
   className = styles.headerCell,
   name,
+  role,
   isSortable = false,
   sortKey,
   sortDirection,
@@ -33,6 +36,20 @@ function VirtualTableHeaderCell({
     sortDirection === sortDirections.ASCENDING
       ? icons.SORT_ASCENDING
       : icons.SORT_DESCENDING;
+
+  const ariaSortValue = useMemo(() => {
+    if (!role || !isSortable) {
+      return undefined;
+    }
+
+    if (!isSorting) {
+      return 'none';
+    }
+
+    return sortDirection === sortDirections.ASCENDING
+      ? 'ascending'
+      : 'descending';
+  }, [role, isSorting, sortDirection, isSortable]);
 
   const handlePress = useCallback(() => {
     if (fixedSortDirection) {
@@ -50,6 +67,8 @@ function VirtualTableHeaderCell({
         styles.sortable,
         isSorting && styles.sorted
       )}
+      role={role}
+      aria-sort={ariaSortValue}
       onPress={handlePress}
       {...otherProps}
     >
@@ -57,12 +76,19 @@ function VirtualTableHeaderCell({
         {children}
 
         {isSorting ? (
-          <Icon name={sortIcon} className={styles.sortIcon} size={12} />
+          <Icon
+            name={sortIcon}
+            className={styles.sortIcon}
+            size={12}
+            aria-hidden={true}
+          />
         ) : null}
       </span>
     </Link>
   ) : (
-    <div className={className}>{children}</div>
+    <div className={className} role={role}>
+      {children}
+    </div>
   );
 }
 
