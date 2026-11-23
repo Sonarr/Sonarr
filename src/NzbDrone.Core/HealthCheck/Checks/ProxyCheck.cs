@@ -55,6 +55,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 .Resource("/ping")
                 .Build();
 
+            request.SuppressHttpError = true;
+
             try
             {
                 var response = _client.Execute(request);
