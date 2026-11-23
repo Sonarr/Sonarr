@@ -19,6 +19,7 @@ namespace NzbDrone.Common.Instrumentation
         private static readonly CleansingClefLogLayout ClefLogLayout = new();
 
         private static bool _isConfigured;
+        private static Target _sentryTarget;
 
         static NzbDroneLogger()
         {
@@ -83,23 +84,28 @@ namespace NzbDrone.Common.Instrumentation
                     : "https://4ee3580e01d8407c96a7430fbc953512@sentry.sonarr.tv/10";
             }
 
-            Target target;
-            try
+            // SentrySdk.Init is global, so reuse the target when the host restarts in the same process.
+            if (_sentryTarget == null)
             {
-                target = new SentryTarget(dsn, appFolderInfo)
+                try
                 {
-                    Name = "sentryTarget",
-                    Layout = "${message}"
-                };
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Failed to load dependency, may need an OS update: " + ex.ToString());
-                LogManager.GetLogger(nameof(NzbDroneLogger)).Debug(ex, "Failed to load dependency, may need an OS update");
+                    _sentryTarget = new SentryTarget(dsn, appFolderInfo)
+                    {
+                        Name = "sentryTarget",
+                        Layout = "${message}"
+                    };
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Failed to load dependency, may need an OS update: " + ex.ToString());
+                    LogManager.GetLogger(nameof(NzbDroneLogger)).Debug(ex, "Failed to load dependency, may need an OS update");
 
-                // We still need the logging rules, so use a null target.
-                target = new NullTarget();
+                    // We still need the logging rules, so use a null target.
+                    _sentryTarget = new NullTarget();
+                }
             }
+
+            var target = _sentryTarget;
 
             var loggingRule = new LoggingRule("*", updateClient ? LogLevel.Trace : LogLevel.Warn, target);
             LogManager.Configuration.AddTarget("sentryTarget", target);

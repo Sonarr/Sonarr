@@ -50,6 +50,11 @@ namespace NzbDrone.SysTray
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
+            if (IsHandleCreated)
+            {
+                BeginInvoke(new MethodInvoker(Close));
+            }
+
             return Task.CompletedTask;
         }
 

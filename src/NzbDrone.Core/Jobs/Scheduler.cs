@@ -17,8 +17,8 @@ namespace NzbDrone.Core.Jobs
         private readonly ITaskManager _taskManager;
         private readonly IManageCommandQueue _commandQueueManager;
         private readonly Logger _logger;
-        private static readonly Timer Timer = new Timer();
-        private static CancellationTokenSource _cancellationTokenSource;
+        private readonly Timer _timer = new Timer();
+        private CancellationTokenSource _cancellationTokenSource;
 
         public Scheduler(ITaskManager taskManager, IManageCommandQueue commandQueueManager, Logger logger)
         {
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Jobs
         {
             try
             {
-                Timer.Enabled = false;
+                _timer.Enabled = false;
 
                 var tasks = _taskManager.GetPending().ToList();
 
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Jobs
             {
                 if (!_cancellationTokenSource.IsCancellationRequested)
                 {
-                    Timer.Enabled = true;
+                    _timer.Enabled = true;
                 }
             }
         }
@@ -54,18 +54,18 @@ namespace NzbDrone.Core.Jobs
         public void Handle(ApplicationStartedEvent message)
         {
             _cancellationTokenSource = new CancellationTokenSource();
-            Timer.Interval = 1000 * 30;
-            Timer.Elapsed += (o, args) => Task.Factory.StartNew(ExecuteCommands, _cancellationTokenSource.Token)
+            _timer.Interval = 1000 * 30;
+            _timer.Elapsed += (o, args) => Task.Factory.StartNew(ExecuteCommands, _cancellationTokenSource.Token)
                 .LogExceptions();
 
-            Timer.Start();
+            _timer.Start();
         }
 
         public void Handle(ApplicationShutdownRequested message)
         {
             _logger.Info("Shutting down scheduler");
             _cancellationTokenSource.Cancel(true);
-            Timer.Stop();
+            _timer.Stop();
         }
     }
 }

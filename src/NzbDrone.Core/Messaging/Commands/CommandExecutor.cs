@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Messaging.Commands
         private readonly IManageCommandQueue _commandQueueManager;
         private readonly IEventAggregator _eventAggregator;
 
-        private static CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource _cancellationTokenSource;
 
         public CommandExecutor(IServiceFactory serviceFactory,
                                IManageCommandQueue commandQueueManager,

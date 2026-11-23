@@ -90,6 +90,42 @@ namespace NzbDrone.Core.Test.Messaging.Commands
         }
 
         [Test]
+        public void should_keep_executing_after_previous_executor_shuts_down()
+        {
+            _commandQueue = new CommandQueue();
+
+            Mocker.GetMock<IManageCommandQueue>()
+                  .Setup(s => s.Queue(It.IsAny<CancellationToken>()))
+                  .Returns<CancellationToken>(token => _commandQueue.GetConsumingEnumerable(token));
+
+            var commandA = new CommandA();
+            var commandModel = new CommandModel
+            {
+                Body = commandA
+            };
+
+            var restarted = new CommandExecutor(Mocker.GetMock<IServiceFactory>().Object,
+                                                Mocker.GetMock<IManageCommandQueue>().Object,
+                                                Mocker.GetMock<IEventAggregator>().Object,
+                                                TestLogger);
+
+            Subject.Handle(new ApplicationStartedEvent());
+            restarted.Handle(new ApplicationStartedEvent());
+            Subject.Handle(new ApplicationShutdownRequested());
+
+            try
+            {
+                QueueAndWaitForExecution(commandModel);
+
+                _executorA.Verify(c => c.Execute(commandA), Times.Once());
+            }
+            finally
+            {
+                restarted.Handle(new ApplicationShutdownRequested());
+            }
+        }
+
+        [Test]
         public void should_execute_on_executor()
         {
             GivenCommandQueue();
