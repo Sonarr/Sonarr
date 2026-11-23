@@ -6,7 +6,6 @@ using System.Net.Security;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -29,10 +28,6 @@ namespace Sonarr.Http.Authentication
 
         private static readonly Regex CookieNameRegex =
             new Regex(@"[^a-z0-9]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-        private static readonly Lock BackchannelHttpHandlerLock = new();
-
-        private static HttpMessageHandler _backchannelHttpHandler;
 
         public static AuthenticationBuilder AddAppAuthentication(this IServiceCollection services)
         {
@@ -129,7 +124,7 @@ namespace Sonarr.Http.Authentication
                     options.ClientSecret = configFileProvider.OidcClientSecret;
                     options.ResponseType = "code";
                     options.ResponseMode = "query";
-                    options.BackchannelHttpHandler = GetBackchannelHttpHandler(certificateValidationService);
+                    options.BackchannelHttpHandler = CreateBackchannelHttpHandler(certificateValidationService);
                     options.Scope.Clear();
 
                     foreach (var scope in AuthenticationConfigurationExtensions.GetOidcScopes(configFileProvider.OidcScopes).Distinct(StringComparer.Ordinal))
@@ -206,18 +201,15 @@ namespace Sonarr.Http.Authentication
                 .AddOpenIdConnect(name, options => { });
         }
 
-        private static HttpMessageHandler GetBackchannelHttpHandler(ICertificateValidationService certificateValidationService)
+        private static HttpMessageHandler CreateBackchannelHttpHandler(ICertificateValidationService certificateValidationService)
         {
-            lock (BackchannelHttpHandlerLock)
+            return new JsonContentTypeHandler(new SocketsHttpHandler
             {
-                return _backchannelHttpHandler ??= new JsonContentTypeHandler(new SocketsHttpHandler
+                SslOptions = new SslClientAuthenticationOptions
                 {
-                    SslOptions = new SslClientAuthenticationOptions
-                    {
-                        RemoteCertificateValidationCallback = certificateValidationService.ShouldByPassValidationError
-                    }
-                });
-            }
+                    RemoteCertificateValidationCallback = certificateValidationService.ShouldByPassValidationError
+                }
+            });
         }
 
         private static AuthenticationBuilder AddForms(this AuthenticationBuilder authenticationBuilder, string name)
