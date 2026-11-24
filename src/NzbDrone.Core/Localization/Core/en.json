@@ -482,6 +482,8 @@
   "DisabledForLocalhost": "Disabled for Localhost",
   "Discord": "Discord",
   "DiskSpace": "Disk Space",
+  "DisplayName": "Display Name",
+  "DisplayNameHelpText": "Only changes how this custom format is shown in the UI. Renaming files still uses Name",
   "DoNotBlocklist": "Do not Blocklist",
   "DoNotBlocklistHint": "Remove without blocklisting",
   "DoNotPrefer": "Do not Prefer",

@@ -41,6 +41,7 @@ interface RawSpec {
 
 interface RawCustomFormat {
   name?: string;
+  displayName?: string;
   includeCustomFormatWhenRenaming?: boolean;
   specifications?: RawSpec[];
 }
@@ -122,6 +123,7 @@ function ImportCustomFormatModalContent({
         const customFormat: CustomFormat = {
           id: 0,
           name: parsed.name ?? '',
+          displayName: parsed.displayName ?? '',
           includeCustomFormatWhenRenaming:
             parsed.includeCustomFormatWhenRenaming ?? false,
           specifications,

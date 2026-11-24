@@ -19,6 +19,7 @@ import {
 interface CustomFormatProps {
   id: number;
   name: string;
+  displayName: string;
   specifications: CustomFormatSpecification[];
   onCloneCustomFormatPress: (id: number) => void;
 }
@@ -26,6 +27,7 @@ interface CustomFormatProps {
 function CustomFormat({
   id,
   name,
+  displayName,
   specifications,
   onCloneCustomFormatPress,
 }: CustomFormatProps) {
@@ -76,7 +78,7 @@ function CustomFormat({
 
   return (
     <SettingsCard
-      name={name}
+      name={displayName || name}
       aria-label={translate('EditCustomFormatName', { name })}
       actions={
         <>

@@ -10,6 +10,7 @@ public class CustomFormatResource : RestResource
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public override int Id { get; set; }
     public string? Name { get; set; }
+    public string? DisplayName { get; set; }
     public bool? IncludeCustomFormatWhenRenaming { get; set; }
     public List<CustomFormatSpecificationSchema>? Specifications { get; set; }
 }
@@ -21,7 +22,8 @@ public static class CustomFormatResourceMapper
         var resource = new CustomFormatResource
         {
             Id = model.Id,
-            Name = model.Name
+            Name = model.Name,
+            DisplayName = model.DisplayName,
         };
 
         if (includeDetails)
@@ -44,6 +46,7 @@ public static class CustomFormatResourceMapper
         {
             Id = resource.Id,
             Name = resource.Name,
+            DisplayName = resource.DisplayName,
             IncludeCustomFormatWhenRenaming = resource.IncludeCustomFormatWhenRenaming ?? false,
             Specifications = resource.Specifications?.Select(x => MapSpecification(x, specifications)).ToList() ?? new List<ICustomFormatSpecification>()
         };

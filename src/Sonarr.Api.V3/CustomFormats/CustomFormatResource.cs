@@ -13,6 +13,7 @@ namespace Sonarr.Api.V3.CustomFormats
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         public override int Id { get; set; }
         public string Name { get; set; }
+        public string DisplayName { get; set; } = string.Empty;
         public bool? IncludeCustomFormatWhenRenaming { get; set; }
         public List<CustomFormatSpecificationSchema> Specifications { get; set; }
     }
@@ -24,7 +25,8 @@ namespace Sonarr.Api.V3.CustomFormats
             var resource = new CustomFormatResource
             {
                 Id = model.Id,
-                Name = model.Name
+                Name = model.Name,
+                DisplayName = model.DisplayName
             };
 
             if (includeDetails)
@@ -47,6 +49,7 @@ namespace Sonarr.Api.V3.CustomFormats
             {
                 Id = resource.Id,
                 Name = resource.Name,
+                DisplayName = resource.DisplayName,
                 IncludeCustomFormatWhenRenaming = resource.IncludeCustomFormatWhenRenaming ?? false,
                 Specifications = resource.Specifications?.Select(x => MapSpecification(x, specifications)).ToList() ?? new List<ICustomFormatSpecification>()
             };
