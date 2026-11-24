@@ -13,17 +13,17 @@ export type EpisodeEntity =
   | 'wanted.missing';
 
 interface EpisodeQueryKeyStore {
-  calendar: QueryKey | null;
-  episodes: QueryKey | null;
-  cutoffUnmet: QueryKey | null;
-  missing: QueryKey | null;
+  calendar: QueryKey | undefined;
+  episodes: QueryKey | undefined;
+  cutoffUnmet: QueryKey | undefined;
+  missing: QueryKey | undefined;
 }
 
 const episodeQueryKeyStore = create<EpisodeQueryKeyStore>(() => ({
-  calendar: null,
-  episodes: null,
-  cutoffUnmet: null,
-  missing: null,
+  calendar: undefined,
+  episodes: undefined,
+  cutoffUnmet: undefined,
+  missing: undefined,
 }));
 
 export const getQueryKey = (episodeEntity: EpisodeEntity) => {
@@ -37,13 +37,13 @@ export const getQueryKey = (episodeEntity: EpisodeEntity) => {
     case 'wanted.missing':
       return episodeQueryKeyStore.getState().missing;
     default:
-      return null;
+      return undefined;
   }
 };
 
 export const setEpisodeQueryKey = (
   episodeEntity: EpisodeEntity,
-  queryKey: QueryKey | null
+  queryKey: QueryKey | undefined
 ) => {
   switch (episodeEntity) {
     case 'calendar':

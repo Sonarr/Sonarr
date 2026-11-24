@@ -49,7 +49,7 @@ export const useDeleteEpisodeFile = (
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['/episodeFile'] });
         queryClient.invalidateQueries({
-          queryKey: [getQueryKey(episodeEntity)],
+          queryKey: getQueryKey(episodeEntity),
         });
       },
     },
