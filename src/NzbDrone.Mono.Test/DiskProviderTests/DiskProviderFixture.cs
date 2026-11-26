@@ -139,7 +139,7 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
             File.ReadAllText(destination).Should().Be("Some content");
         }
 
-        private void GivenSpecialMount(string rootDir)
+        private void GivenMounts(params string[] rootDirs)
         {
             Mocker.GetMock<ISymbolicLinkResolver>()
                 .Setup(v => v.GetCompleteRealPath(It.IsAny<string>()))
@@ -147,17 +147,14 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
 
             Mocker.GetMock<IProcMountProvider>()
                 .Setup(v => v.GetMounts())
-                .Returns(new List<IMount>
-                {
-                    new ProcMount(DriveType.Fixed, rootDir, rootDir, "myfs", new MountOptions(new Dictionary<string, string>()))
-                });
+                .Returns(rootDirs.Select(r => (IMount)new ProcMount(DriveType.Fixed, r, r, "myfs", new MountOptions(new Dictionary<string, string>()))).ToList());
         }
 
         [TestCase("/snap/blaat")]
         [TestCase("/var/lib/docker/zfs-storage-mount")]
         public void should_ignore_special_mounts(string rootDir)
         {
-            GivenSpecialMount(rootDir);
+            GivenMounts(rootDir);
 
             var mounts = Subject.GetMounts();
 
@@ -168,12 +165,67 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
         [TestCase("/var/lib/docker/zfs-storage-mount")]
         public void should_return_special_mount_when_queried(string rootDir)
         {
-            GivenSpecialMount(rootDir);
+            GivenMounts(rootDir);
 
             var mount = Subject.GetMount(Path.Combine(rootDir, "dir/somefile.mkv"));
 
             mount.Should().NotBeNull();
             mount.RootDirectory.Should().Be(rootDir);
+        }
+
+        [Test]
+        public void should_get_mounts_once_for_all_paths()
+        {
+            GivenMounts("/mnt/tv1", "/mnt/tv2");
+
+            var mounts = Subject.GetMountsForPaths(new HashSet<string> { "/mnt/tv1/Series Title (2025)", "/mnt/tv2/Series Title (2025)", "/mnt/tv1/Other Series Title (2025)" });
+
+            mounts.Keys.Should().Equal("/mnt/tv1/Series Title (2025)", "/mnt/tv2/Series Title (2025)", "/mnt/tv1/Other Series Title (2025)");
+            mounts["/mnt/tv1/Series Title (2025)"].RootDirectory.Should().Be("/mnt/tv1");
+            mounts["/mnt/tv2/Series Title (2025)"].RootDirectory.Should().Be("/mnt/tv2");
+            mounts["/mnt/tv1/Other Series Title (2025)"].RootDirectory.Should().Be("/mnt/tv1");
+
+            Mocker.GetMock<IProcMountProvider>()
+                .Verify(v => v.GetMounts(), Times.Once());
+        }
+
+        [Test]
+        public void should_not_get_mounts_when_there_are_no_paths()
+        {
+            GivenMounts("/mnt/tv1");
+
+            Subject.GetMountsForPaths(new HashSet<string>()).Should().BeEmpty();
+
+            Mocker.GetMock<IProcMountProvider>()
+                .Verify(v => v.GetMounts(), Times.Never());
+        }
+
+        [Test]
+        public void should_get_mount_of_symbolic_link_target()
+        {
+            GivenMounts("/mnt/tv1", "/mnt/tv2");
+
+            Mocker.GetMock<ISymbolicLinkResolver>()
+                .Setup(v => v.GetCompleteRealPath("/mnt/tv1/Linked Series Title (2025)"))
+                .Returns("/mnt/tv2/Linked Series Title (2025)");
+
+            var mounts = Subject.GetMountsForPaths(new HashSet<string> { "/mnt/tv1/Series Title (2025)", "/mnt/tv1/Linked Series Title (2025)" });
+
+            mounts["/mnt/tv1/Series Title (2025)"].RootDirectory.Should().Be("/mnt/tv1");
+            mounts["/mnt/tv1/Linked Series Title (2025)"].RootDirectory.Should().Be("/mnt/tv2");
+        }
+
+        [TestCase("/snap/blaat")]
+        [TestCase("/var/lib/docker/zfs-storage-mount")]
+        public void should_return_special_mount_for_paths(string rootDir)
+        {
+            GivenMounts(rootDir);
+
+            var path = Path.Combine(rootDir, "dir/somefile.mkv");
+            var mounts = Subject.GetMountsForPaths(new HashSet<string> { path });
+
+            mounts[path].Should().NotBeNull();
+            mounts[path].RootDirectory.Should().Be(rootDir);
         }
 
         [Test]

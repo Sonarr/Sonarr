@@ -27,11 +27,11 @@ namespace NzbDrone.Mono.Disk
             _logger = logger;
         }
 
-        public override IMount GetMount(string path)
+        protected override IMount GetMountInternal(string path, Lazy<List<IMount>> allMounts)
         {
             path = _symLinkResolver.GetCompleteRealPath(path);
 
-            return base.GetMount(path);
+            return base.GetMountInternal(path, allMounts);
         }
 
         public override long? GetAvailableSpace(string path)

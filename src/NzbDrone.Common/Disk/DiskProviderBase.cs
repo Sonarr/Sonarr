@@ -490,11 +490,24 @@ namespace NzbDrone.Common.Disk
             return false;
         }
 
-        public virtual IMount GetMount(string path)
+        public IMount GetMount(string path)
+        {
+            return GetMountInternal(path, new Lazy<List<IMount>>(GetAllMounts));
+        }
+
+        public Dictionary<string, IMount> GetMountsForPaths(HashSet<string> paths)
+        {
+            // Getting the mounts is slow, so get them once for all the paths, and only when a path needs them
+            var mounts = new Lazy<List<IMount>>(GetAllMounts);
+
+            return paths.ToDictionary(p => p, p => GetMountInternal(p, mounts));
+        }
+
+        protected virtual IMount GetMountInternal(string path, Lazy<List<IMount>> allMounts)
         {
             try
             {
-                var mounts = GetAllMounts();
+                var mounts = allMounts.Value;
 
                 return mounts.Where(drive => drive.RootDirectory.PathEquals(path) ||
                                              drive.RootDirectory.IsParentPath(path))
