@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -27,11 +28,11 @@ namespace NzbDrone.Windows.Disk
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool CreateHardLink(string lpFileName, string lpExistingFileName, IntPtr lpSecurityAttributes);
 
-        public override IMount GetMount(string path)
+        protected override IMount GetMountInternal(string path, Lazy<List<IMount>> allMounts)
         {
             var reparsePoint = GetReparsePoint(path);
 
-            return reparsePoint ?? base.GetMount(path);
+            return reparsePoint ?? base.GetMountInternal(path, allMounts);
         }
 
         public override string GetPathRoot(string path)

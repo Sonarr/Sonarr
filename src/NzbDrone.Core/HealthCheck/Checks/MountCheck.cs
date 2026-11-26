@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Localization;
@@ -20,11 +19,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
-            // Not best for optimization but due to possible symlinks and junctions, we get mounts based on series path so internals can handle mount resolution.
-            var mounts = _seriesService.GetAllSeriesPaths()
-                .Select(p => new Tuple<IMount, string>(_diskProvider.GetMount(p.Value), p.Value))
-                .Where(m => m.Item1 is { MountOptions.IsReadOnly: true })
-                .DistinctBy(m => m.Item1.RootDirectory)
+            // Due to possible symlinks and junctions, we get mounts based on series path so internals can handle mount resolution.
+            var mounts = _diskProvider.GetMountsForPaths(_seriesService.GetAllSeriesPaths().Values.ToHashSet())
+                .Where(m => m.Value is { MountOptions.IsReadOnly: true })
+                .DistinctBy(m => m.Value.RootDirectory)
                 .ToList();
 
             if (mounts.Any())
@@ -32,7 +30,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
                     HealthCheckReason.MountSeries,
-                    $"{_localizationService.GetLocalizedString("MountSeriesHealthCheckMessage")}{string.Join(", ", mounts.Select(m => $"{m.Item1.Name} ({m.Item2})"))}",
+                    $"{_localizationService.GetLocalizedString("MountSeriesHealthCheckMessage")}{string.Join(", ", mounts.Select(m => $"{m.Value.Name} ({m.Key})"))}",
                     "#series-mount-ro");
             }
 
