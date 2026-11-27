@@ -13,7 +13,7 @@ namespace NzbDrone.Core.ThingiProvider.Status
     {
         List<TModel> GetBlockedProviders();
         void RecordSuccess(int providerId);
-        void RecordFailure(int providerId, TimeSpan minimumBackOff = default(TimeSpan));
+        void RecordFailure(int providerId, TimeSpan minimumBackOff = default(TimeSpan), bool exactRetryAfter = false);
         void RecordConnectionFailure(int providerId);
     }
 
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.ThingiProvider.Status
             }
         }
 
-        protected virtual void RecordFailure(int providerId, TimeSpan minimumBackOff, bool escalate)
+        protected virtual void RecordFailure(int providerId, TimeSpan minimumBackOff, bool escalate, bool exactRetryAfter = false)
         {
             if (providerId <= 0)
             {
@@ -111,7 +111,7 @@ namespace NzbDrone.Core.ThingiProvider.Status
                     status.EscalationLevel = Math.Min(MaximumEscalationLevel, status.EscalationLevel + 1);
                 }
 
-                if (minimumBackOff != TimeSpan.Zero)
+                if (minimumBackOff != TimeSpan.Zero && !exactRetryAfter)
                 {
                     while (status.EscalationLevel < MaximumEscalationLevel && CalculateBackOffPeriod(status) < minimumBackOff)
                     {
@@ -119,7 +119,11 @@ namespace NzbDrone.Core.ThingiProvider.Status
                     }
                 }
 
-                if (!inGracePeriod || minimumBackOff != TimeSpan.Zero)
+                if (exactRetryAfter)
+                {
+                    status.DisabledTill = now + minimumBackOff;
+                }
+                else if (!inGracePeriod || minimumBackOff != TimeSpan.Zero)
                 {
                     status.DisabledTill = now + CalculateBackOffPeriod(status);
                 }
@@ -139,9 +143,9 @@ namespace NzbDrone.Core.ThingiProvider.Status
             }
         }
 
-        public virtual void RecordFailure(int providerId, TimeSpan minimumBackOff = default(TimeSpan))
+        public virtual void RecordFailure(int providerId, TimeSpan minimumBackOff = default(TimeSpan), bool exactRetryAfter = false)
         {
-            RecordFailure(providerId, minimumBackOff, true);
+            RecordFailure(providerId, minimumBackOff, !exactRetryAfter, exactRetryAfter);
         }
 
         public virtual void RecordConnectionFailure(int providerId)

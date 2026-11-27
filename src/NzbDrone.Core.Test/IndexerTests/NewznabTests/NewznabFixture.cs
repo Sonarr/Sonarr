@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             releases.Should().BeEmpty();
 
             Mocker.GetMock<IIndexerStatusService>()
-                  .Verify(v => v.RecordFailure(It.IsAny<int>(), TimeSpan.FromMinutes(5.0)), Times.Once());
+                  .Verify(v => v.RecordFailure(It.IsAny<int>(), TimeSpan.FromMinutes(5.0), true), Times.Once());
 
             ExceptionVerification.ExpectedWarns(1);
         }

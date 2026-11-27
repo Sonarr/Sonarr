@@ -302,7 +302,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             releases.Should().BeEmpty();
 
             Mocker.GetMock<IIndexerStatusService>()
-                  .Verify(v => v.RecordFailure(It.IsAny<int>(), TimeSpan.Zero), Times.Once());
+                  .Verify(v => v.RecordFailure(It.IsAny<int>(), TimeSpan.Zero, It.IsAny<bool>()), Times.Once());
 
             ExceptionVerification.ExpectedErrors(1);
         }

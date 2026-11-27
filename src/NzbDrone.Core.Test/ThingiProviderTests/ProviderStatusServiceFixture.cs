@@ -163,5 +163,46 @@ namespace NzbDrone.Core.Test.ThingiProviderTests
             origStatus.EscalationLevel.Should().Be(3);
             status.DisabledTill.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(5), _disabledTillPrecision);
         }
+
+        [Test]
+        public void should_disable_for_exact_retry_after_without_escalating()
+        {
+            var origStatus = WithStatus(new MockProviderStatus
+            {
+                InitialFailure = _epoch - TimeSpan.FromMinutes(30),
+                MostRecentFailure = _epoch - TimeSpan.FromMinutes(10),
+                EscalationLevel = 1
+            });
+
+            Subject.RecordFailure(1, TimeSpan.FromSeconds(632), true);
+            Subject.RecordFailure(1, TimeSpan.FromSeconds(632), true);
+            Subject.RecordFailure(1, TimeSpan.FromSeconds(632), true);
+
+            var status = Subject.GetBlockedProviders().FirstOrDefault();
+            status.Should().NotBeNull();
+
+            origStatus.EscalationLevel.Should().Be(1);
+            status.DisabledTill.Should().BeCloseTo(_epoch + TimeSpan.FromSeconds(632), _disabledTillPrecision);
+        }
+
+        [Test]
+        public void should_escalate_past_minimum_backoff_on_repeated_failures()
+        {
+            var origStatus = WithStatus(new MockProviderStatus
+            {
+                InitialFailure = _epoch - TimeSpan.FromMinutes(30),
+                MostRecentFailure = _epoch - TimeSpan.FromMinutes(10),
+                EscalationLevel = 1
+            });
+
+            Subject.RecordFailure(1, TimeSpan.FromHours(1));
+            Subject.RecordFailure(1, TimeSpan.FromHours(1));
+
+            var status = Subject.GetBlockedProviders().FirstOrDefault();
+            status.Should().NotBeNull();
+
+            origStatus.EscalationLevel.Should().Be(6);
+            status.DisabledTill.Should().BeCloseTo(_epoch + TimeSpan.FromHours(3), _disabledTillPrecision);
+        }
     }
 }

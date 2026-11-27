@@ -245,7 +245,7 @@ namespace NzbDrone.Core.Indexers
             catch (TooManyRequestsException ex)
             {
                 var retryTime = ex.RetryAfter != TimeSpan.Zero ? ex.RetryAfter : minimumBackoff;
-                _indexerStatusService.RecordFailure(Definition.Id, retryTime);
+                _indexerStatusService.RecordFailure(Definition.Id, retryTime, ex.RetryAfter != TimeSpan.Zero);
 
                 _logger.Warn("API Request Limit reached for {0}. Disabled for {1}", this, retryTime);
             }
