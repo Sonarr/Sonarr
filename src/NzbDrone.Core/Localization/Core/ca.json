@@ -2359,6 +2359,7 @@
     "SkipFreeSpaceCheckWhenImportingHelpText": "Omet la comprovació de l'espai lliure de la carpeta arrel per als fitxers baixats abans d'importar-los; és útil quan {appName} no pot detectar l'espai lliure",
     "SkipRedownload": "Omet que es torni a descarregar",
     "SkipRedownloadHelpText": "Evita que {appName} intenti baixar una versió alternativa per a aquest element",
+    "SkipToMainContent": "Salta al contingut principal",
     "Small": "Petit",
     "SmartReplace": "Reemplaçament intel·ligent",
     "SmartReplaceHint": "Traç o guió d'espai depenent del nom",
