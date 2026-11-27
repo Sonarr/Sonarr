@@ -1,5 +1,5 @@
 {
-    "About": "Acerca de",
+    "About": "ESP",
     "Absolute": "Absoluto",
     "AbsoluteEpisodeNumber": "Número de Episodio Absoluto",
     "AbsoluteEpisodeNumbers": "Número(s) de Episodio Absoluto(s)",
@@ -516,7 +516,7 @@
     "DownloadClientFloodSettingsAdditionalTags": "Etiquetas adicionales",
     "DownloadClientFloodSettingsAdditionalTagsHelpText": "Añade propiedades de medios como etiquetas. Los consejos son ejemplos.",
     "DownloadClientFloodSettingsPostImportTags": "Etiquetas post-importación",
-    "DownloadClientFloodSettingsPostImportTagsHelpText": "Añade etiquetas una vez que una descarga sea importada. Los torrents con todas esas etiquetas serán filtrados de la cola y no se eliminarán automáticamente.",
+    "DownloadClientFloodSettingsPostImportTagsHelpText": "ESPAÑOL",
     "DownloadClientFloodSettingsRemovalInfo": "{appName} manejará la eliminación automática de torrents basados en los criterios de sembrado actuales en Opciones -> Indexadores",
     "DownloadClientFloodSettingsStartOnAdd": "Iniciar al añadir",
     "DownloadClientFloodSettingsTagsHelpText": "Etiquetas iniciales de una descarga. Para ser reconocida, una descarga debe tener todas las etiquetas iniciales. Esto evita conflictos con descargas no relacionadas.",

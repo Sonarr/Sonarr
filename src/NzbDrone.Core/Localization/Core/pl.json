@@ -2359,6 +2359,7 @@
     "SkipFreeSpaceCheckWhenImportingHelpText": "Przed importem pomiń sprawdzanie, czy w folderze głównym jest wystarczająco dużo wolnego miejsca na pobrane pliki; przydatne, gdy {appName} nie może wykryć wolnego miejsca",
     "SkipRedownload": "Pomiń ponowne pobieranie",
     "SkipRedownloadHelpText": "Zapobiega próbom pobrania alternatywnego wydania dla tego elementu przez {appName}",
+    "SkipToMainContent": "Przejdź do głównej treści",
     "Small": "Mały",
     "SmartReplace": "Inteligentna zamiana",
     "SmartReplaceHint": "Myślnik lub spacja-myślnik zależnie od nazwy",
