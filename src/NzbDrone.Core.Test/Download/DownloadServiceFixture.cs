@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Test.Download
             Assert.ThrowsAsync<ReleaseDownloadException>(async () => await Subject.DownloadReport(_parseResult, null));
 
             Mocker.GetMock<IIndexerStatusService>()
-                .Verify(v => v.RecordFailure(It.IsAny<int>(), It.IsAny<TimeSpan>()), Times.Once());
+                .Verify(v => v.RecordFailure(It.IsAny<int>(), It.IsAny<TimeSpan>(), It.IsAny<bool>()), Times.Once());
         }
 
         [Test]
@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Test.Download
             Assert.ThrowsAsync<ReleaseDownloadException>(async () => await Subject.DownloadReport(_parseResult, null));
 
             Mocker.GetMock<IIndexerStatusService>()
-                .Verify(v => v.RecordFailure(It.IsAny<int>(), TimeSpan.FromMinutes(5.0)), Times.Once());
+                .Verify(v => v.RecordFailure(It.IsAny<int>(), TimeSpan.FromMinutes(5.0), true), Times.Once());
         }
 
         [Test]
@@ -166,7 +166,8 @@ namespace NzbDrone.Core.Test.Download
 
             Mocker.GetMock<IIndexerStatusService>()
                 .Verify(v => v.RecordFailure(It.IsAny<int>(),
-                    It.IsInRange<TimeSpan>(TimeSpan.FromMinutes(4.9), TimeSpan.FromMinutes(5.1), Moq.Range.Inclusive)),
+                    It.IsInRange<TimeSpan>(TimeSpan.FromMinutes(4.9), TimeSpan.FromMinutes(5.1), Moq.Range.Inclusive),
+                    true),
                     Times.Once());
         }
 
@@ -180,7 +181,7 @@ namespace NzbDrone.Core.Test.Download
             Assert.ThrowsAsync<DownloadClientUnavailableException>(async () => await Subject.DownloadReport(_parseResult, null));
 
             Mocker.GetMock<IIndexerStatusService>()
-                .Verify(v => v.RecordFailure(It.IsAny<int>(), It.IsAny<TimeSpan>()), Times.Never());
+                .Verify(v => v.RecordFailure(It.IsAny<int>(), It.IsAny<TimeSpan>(), It.IsAny<bool>()), Times.Never());
         }
 
         [Test]
@@ -196,7 +197,7 @@ namespace NzbDrone.Core.Test.Download
             Assert.ThrowsAsync<ReleaseUnavailableException>(async () => await Subject.DownloadReport(_parseResult, null));
 
             Mocker.GetMock<IIndexerStatusService>()
-                .Verify(v => v.RecordFailure(It.IsAny<int>(), It.IsAny<TimeSpan>()), Times.Never());
+                .Verify(v => v.RecordFailure(It.IsAny<int>(), It.IsAny<TimeSpan>(), It.IsAny<bool>()), Times.Never());
         }
 
         [Test]

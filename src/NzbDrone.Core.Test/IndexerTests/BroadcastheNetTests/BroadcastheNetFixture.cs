@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
         private void VerifyBackOff()
         {
             Mocker.GetMock<IIndexerStatusService>()
-                .Verify(v => v.RecordFailure(It.IsAny<int>(), It.IsAny<TimeSpan>()), Times.Once());
+                .Verify(v => v.RecordFailure(It.IsAny<int>(), It.IsAny<TimeSpan>(), It.IsAny<bool>()), Times.Once());
         }
 
         [Test]

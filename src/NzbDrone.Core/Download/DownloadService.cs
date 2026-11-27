@@ -173,7 +173,7 @@ namespace NzbDrone.Core.Download
             {
                 if (ex.InnerException is TooManyRequestsException http429)
                 {
-                    _indexerStatusService.RecordFailure(remoteEpisode.Release.IndexerId, http429.RetryAfter);
+                    _indexerStatusService.RecordFailure(remoteEpisode.Release.IndexerId, http429.RetryAfter, http429.RetryAfter != TimeSpan.Zero);
                 }
                 else
                 {
