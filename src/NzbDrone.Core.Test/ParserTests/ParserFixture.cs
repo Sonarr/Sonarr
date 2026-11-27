@@ -51,6 +51,11 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("1234.2022.S03E14.720p.HDTV.X264-DIMENSION", "1234", 2022)]
         [TestCase("1234-2022-S03E14-720p-HDTV-X264-DIMENSION", "1234", 2022)]
         [TestCase("1234_2022_S03E14_720p_HDTV_X264-DIMENSION", "1234", 2022)]
+        [TestCase("Series 2099 S03E14 720p HDTV X264-DIMENSION", "Series", 2099)]
+        [TestCase("Series 2099 (2026) S03E14 720p HDTV X264-DIMENSION", "Series 2099", 2026)]
+        [TestCase("Series.2099.2026.S03E14.720p.HDTV.X264-DIMENSION", "Series 2099", 2026)]
+        [TestCase("Series (2022) (US) S03E14 720p HDTV X264-DIMENSION", "Series", 2022)]
+        [TestCase("Series 2099 (2026) {tvdb-12345} S03E14 720p HDTV X264-DIMENSION", "Series 2099", 2026)]
         public void should_parse_series_title_info(string postTitle, string titleWithoutYear, int year = 0)
         {
             var seriesTitleInfo = Parser.Parser.ParseTitle(postTitle).SeriesTitleInfo;
