@@ -234,6 +234,16 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                     tvShow.Add(xmlActor);
                 }
 
+                foreach (var season in series.Seasons)
+                {
+                    if (season.Title.IsNotNullOrWhiteSpace())
+                    {
+                        var xmlNamedSeason = new XElement("namedseason", season.Title);
+                        xmlNamedSeason.SetAttributeValue("number", season.SeasonNumber);
+                        tvShow.Add(xmlNamedSeason);
+                    }
+                }
+
                 if (Settings.SeriesMetadataEpisodeGuide)
                 {
                     var episodeGuide = new KodiEpisodeGuide(series);
