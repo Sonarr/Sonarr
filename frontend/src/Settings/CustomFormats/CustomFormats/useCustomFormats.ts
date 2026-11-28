@@ -9,7 +9,6 @@ import {
   useProviderSettings,
 } from 'Settings/useProviderSettings';
 import Field from 'typings/Field';
-import { sortByProp } from 'Utilities/Array/sortByProp';
 import { ApiError } from 'Utilities/Fetch/fetchJson';
 import translate from 'Utilities/String/translate';
 
@@ -26,6 +25,7 @@ export interface CustomFormatSpecification {
 
 export interface CustomFormat extends ModelBase {
   name: string;
+  displayName?: string;
   includeCustomFormatWhenRenaming: boolean;
   specifications: CustomFormatSpecification[];
 }
@@ -44,6 +44,7 @@ const PATH = '/customformat';
 const DEFAULT_CUSTOM_FORMAT: CustomFormat = {
   id: 0,
   name: '',
+  displayName: '',
   includeCustomFormatWhenRenaming: false,
   specifications: [],
 };
@@ -61,7 +62,14 @@ export const useSortedCustomFormats = () => {
   const result = useCustomFormats();
 
   const sortedData = useMemo(
-    () => [...result.data].sort(sortByProp('name')),
+    () =>
+      [...result.data].sort((a, b) =>
+        (a.displayName || a.name).localeCompare(
+          b.displayName || b.name,
+          undefined,
+          { numeric: true }
+        )
+      ),
     [result.data]
   );
 

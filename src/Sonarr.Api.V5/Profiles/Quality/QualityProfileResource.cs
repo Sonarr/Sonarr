@@ -73,7 +73,7 @@ public static class ProfileResourceMapper
         return new ProfileFormatItemResource
         {
             Format = model.Format.Id,
-            Name = model.Format.Name,
+            Name = string.IsNullOrEmpty(model.Format.DisplayName) ? model.Format.Name : model.Format.DisplayName,
             Score = model.Score
         };
     }

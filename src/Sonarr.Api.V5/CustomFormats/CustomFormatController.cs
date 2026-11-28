@@ -28,6 +28,9 @@ public class CustomFormatController : RestController<CustomFormatResource>
         SharedValidator.RuleFor(c => c.Name)
             .Must((v, c) => !_formatService.All().Any(f => f.Name == c && f.Id != v.Id)).WithMessage("Must be unique.");
         SharedValidator.RuleFor(c => c.Specifications).NotEmpty();
+        SharedValidator.RuleFor(c => c.DisplayName)
+            .Must(value => value == null || value == value.Trim())
+            .WithMessage("Display Name must not start or end with whitespace.");
         SharedValidator.RuleFor(c => c).Custom((customFormat, context) =>
         {
             if (customFormat.Specifications is null || !customFormat.Specifications.Any())

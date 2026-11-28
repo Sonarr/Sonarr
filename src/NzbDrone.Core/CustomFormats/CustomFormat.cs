@@ -19,6 +19,8 @@ namespace NzbDrone.Core.CustomFormats
 
         public string Name { get; set; }
 
+        public string DisplayName { get; set; }
+
         public bool IncludeCustomFormatWhenRenaming { get; set; }
 
         public List<ICustomFormatSpecification> Specifications { get; set; }

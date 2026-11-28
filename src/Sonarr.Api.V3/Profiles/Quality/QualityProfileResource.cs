@@ -90,7 +90,7 @@ namespace Sonarr.Api.V3.Profiles.Quality
             return new ProfileFormatItemResource
             {
                 Format = model.Format.Id,
-                Name = model.Format.Name,
+                Name = string.IsNullOrEmpty(model.Format.DisplayName) ? model.Format.Name : model.Format.DisplayName,
                 Score = model.Score
             };
         }

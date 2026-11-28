@@ -64,7 +64,7 @@ function EditCustomFormatModalContent({
   const [isImportCustomFormatModalOpen, setIsImportCustomFormatModalOpen] =
     useState(false);
 
-  const { name, includeCustomFormatWhenRenaming } = item;
+  const { name, displayName, includeCustomFormatWhenRenaming } = item;
   const wasSaving = usePrevious(isSaving);
 
   const handleAddSpecificationPress = useCallback(() => {
@@ -106,6 +106,7 @@ function EditCustomFormatModalContent({
   const handleImport = useCallback(
     (imported: CustomFormat) => {
       updateValue('name', imported.name);
+      updateValue('displayName', imported.displayName);
       updateValue(
         'includeCustomFormatWhenRenaming',
         imported.includeCustomFormatWhenRenaming
@@ -159,6 +160,18 @@ function EditCustomFormatModalContent({
                 type={inputTypes.TEXT}
                 name="name"
                 {...name}
+                onChange={handleInputChange}
+              />
+            </FormRow>
+
+            <FormRow>
+              <FormLabel>{translate('DisplayName')}</FormLabel>
+              <FormInputHelpText text={translate('DisplayNameHelpText')} />
+              <FormInput
+                type={inputTypes.TEXT}
+                name="displayName"
+                {...displayName}
+                value={displayName?.value ?? ''}
                 onChange={handleInputChange}
               />
             </FormRow>
