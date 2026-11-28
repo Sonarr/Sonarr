@@ -25,7 +25,7 @@ export interface CustomFormatSpecification {
 
 export interface CustomFormat extends ModelBase {
   name: string;
-  displayName: string;
+  displayName?: string;
   includeCustomFormatWhenRenaming: boolean;
   specifications: CustomFormatSpecification[];
 }

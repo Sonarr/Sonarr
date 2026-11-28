@@ -171,6 +171,7 @@ function EditCustomFormatModalContent({
                 type={inputTypes.TEXT}
                 name="displayName"
                 {...displayName}
+                value={displayName?.value ?? ''}
                 onChange={handleInputChange}
               />
             </FormRow>

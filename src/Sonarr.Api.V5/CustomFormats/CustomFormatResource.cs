@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.CustomFormats;
 using Sonarr.Http.ClientSchema;
 using Sonarr.Http.REST;
@@ -46,7 +47,7 @@ public static class CustomFormatResourceMapper
         {
             Id = resource.Id,
             Name = resource.Name,
-            DisplayName = resource.DisplayName,
+            DisplayName = resource.DisplayName.IsNullOrWhiteSpace() ? null : resource.DisplayName.Trim(),
             IncludeCustomFormatWhenRenaming = resource.IncludeCustomFormatWhenRenaming ?? false,
             Specifications = resource.Specifications?.Select(x => MapSpecification(x, specifications)).ToList() ?? new List<ICustomFormatSpecification>()
         };

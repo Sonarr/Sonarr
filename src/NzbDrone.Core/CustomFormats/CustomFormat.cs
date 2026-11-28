@@ -19,7 +19,7 @@ namespace NzbDrone.Core.CustomFormats
 
         public string Name { get; set; }
 
-        public string DisplayName { get; set; } = string.Empty;
+        public string DisplayName { get; set; }
 
         public bool IncludeCustomFormatWhenRenaming { get; set; }
 

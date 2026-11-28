@@ -19,7 +19,7 @@ import {
 interface CustomFormatProps {
   id: number;
   name: string;
-  displayName: string;
+  displayName?: string;
   specifications: CustomFormatSpecification[];
   onCloneCustomFormatPress: (id: number) => void;
 }

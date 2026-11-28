@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.CustomFormats;
 using Sonarr.Http.ClientSchema;
 using Sonarr.Http.REST;
@@ -13,7 +14,7 @@ namespace Sonarr.Api.V3.CustomFormats
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         public override int Id { get; set; }
         public string Name { get; set; }
-        public string DisplayName { get; set; } = string.Empty;
+        public string DisplayName { get; set; }
         public bool? IncludeCustomFormatWhenRenaming { get; set; }
         public List<CustomFormatSpecificationSchema> Specifications { get; set; }
     }
@@ -49,7 +50,7 @@ namespace Sonarr.Api.V3.CustomFormats
             {
                 Id = resource.Id,
                 Name = resource.Name,
-                DisplayName = resource.DisplayName,
+                DisplayName = resource.DisplayName.IsNullOrWhiteSpace() ? null : resource.DisplayName.Trim(),
                 IncludeCustomFormatWhenRenaming = resource.IncludeCustomFormatWhenRenaming ?? false,
                 Specifications = resource.Specifications?.Select(x => MapSpecification(x, specifications)).ToList() ?? new List<ICustomFormatSpecification>()
             };
