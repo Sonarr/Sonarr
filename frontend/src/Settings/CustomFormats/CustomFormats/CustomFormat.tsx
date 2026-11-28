@@ -79,7 +79,9 @@ function CustomFormat({
   return (
     <SettingsCard
       name={displayName || name}
-      aria-label={translate('EditCustomFormatName', { name })}
+      aria-label={translate('EditCustomFormatName', {
+        name: displayName || name,
+      })}
       actions={
         <>
           <SettingsCardAction
