@@ -50,7 +50,7 @@ namespace Sonarr.Api.V3.CustomFormats
             {
                 Id = resource.Id,
                 Name = resource.Name,
-                DisplayName = resource.DisplayName.IsNullOrWhiteSpace() ? null : resource.DisplayName.Trim(),
+                DisplayName = resource.DisplayName,
                 IncludeCustomFormatWhenRenaming = resource.IncludeCustomFormatWhenRenaming ?? false,
                 Specifications = resource.Specifications?.Select(x => MapSpecification(x, specifications)).ToList() ?? new List<ICustomFormatSpecification>()
             };
